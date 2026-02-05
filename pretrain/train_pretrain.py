@@ -398,7 +398,8 @@ def main() -> None:
 
     while local_step < args.max_steps:
         optim.zero_grad(set_to_none=True)
-        accum_loss = 0.0
+        accum_loss = 0.0  # scaled loss summed across micro-steps (≈ mean loss)
+        accum_loss_raw = 0.0  # unscaled CE summed across micro-steps (for logging)
 
         for _ in range(args.grad_accum):
             try:
@@ -417,10 +418,12 @@ def main() -> None:
             if ac_dtype is not None:
                 with torch.autocast("cuda", dtype=ac_dtype):
                     logits = model(input_ids)
-                    loss = masked_ce_loss(logits, labels) / args.grad_accum
+                    loss_raw = masked_ce_loss(logits, labels)  # real CE
+                    loss = loss_raw / args.grad_accum          # for backward
             else:
                 logits = model(input_ids)
-                loss = masked_ce_loss(logits, labels) / args.grad_accum
+                loss_raw = masked_ce_loss(logits, labels)
+                loss = loss_raw / args.grad_accum
 
             if use_fp16:
                 scaler.scale(loss).backward()
@@ -428,6 +431,7 @@ def main() -> None:
                 loss.backward()
 
             accum_loss += float(loss.item())
+            accum_loss_raw += float(loss_raw.detach().item())
 
         lr = get_lr(local_step, args.max_steps, args.lr, args.warmup_steps)
         for pg in optim.param_groups:
@@ -451,6 +455,7 @@ def main() -> None:
             tok_s_avg = tokens_seen / max(1e-9, dt_total)
 
             writer.add_scalar("train/loss", accum_loss, global_step)
+            writer.add_scalar("train/loss_raw", accum_loss_raw / args.grad_accum, global_step)
             writer.add_scalar("train/lr", lr, global_step)
             writer.add_scalar("train/tokens_per_s_win", tok_s_win, global_step)
             writer.add_scalar("train/tokens_per_s_avg", tok_s_avg, global_step)
