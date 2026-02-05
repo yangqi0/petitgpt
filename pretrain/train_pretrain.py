@@ -151,7 +151,7 @@ def save_ckpt(
     ckpt = {
         "global_step": global_step,
         "step": local_step,
-        "model": model.state_dict(),
+        "model": (model._orig_mod.state_dict() if hasattr(model, "_orig_mod") else model.state_dict()),
         "optim": optim.state_dict(),
         "scaler": scaler.state_dict() if scaler is not None else None,
         "cfg": cfg,
@@ -345,6 +345,17 @@ def main() -> None:
         persistent_workers=True,
         prefetch_factor=2,
     )
+
+    # ---- debug one batch ----
+    input_ids, labels = next(iter(train_dl))
+    print("input_ids shape", input_ids.shape, "labels shape", labels.shape)
+    print("labels != -100 ratio:", (labels != -100).float().mean().item())
+    print("eos in input ratio:", (input_ids == args.eos_id).float().mean().item())
+    print("eos in labels ratio:", (labels == args.eos_id).float().mean().item())
+    print("first 50 input ids:", input_ids[0, :50].tolist())
+    print("first 50 labels:", labels[0, :50].tolist())
+    raise SystemExit
+
 
     out_dir = Path(args.out_dir)
     tb_dir = Path(args.tb_dir)
