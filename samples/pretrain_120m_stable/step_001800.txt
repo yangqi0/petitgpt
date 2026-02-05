@@ -1,0 +1,92 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=1.0, top_p=1.0, top_k=0, max_new_tokens=128, min_new_tokens=0, greedy=False
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.35398510098457336
+first_step_topk_ids=[2, 3, 1516, 2838, 1009, 5728, 1372, 2814, 722, 959]
+first_step_topk_probs=[0.5150452256202698, 0.35398510098457336, 0.0005845018895342946, 0.0003773827920667827, 0.0003080108726862818, 0.00023616012185811996, 0.00023249880177900195, 0.00016486634558532387, 0.00015731655003037304, 0.0001477852201787755]
+
+[New tokens 1] count=31 first30=[2, 2838, 2887, 261, 616, 15, 6844, 4358, 6336, 15, 674, 410, 261, 1150, 562, 574, 836, 445, 266, 3907, 23, 289, 19775, 17, 1035, 1055, 3466, 338, 25687, 17]
+[New text 1] repr=' Once upon a time, Lily followed potatoes, there was a small app who said from the park4 toGL. team around President that Legion.'
+
+[Full output 1]
+ Once upon a time,  Once upon a time, Lily followed potatoes, there was a small app who said from the park4 toGL. team around President that Legion.
+
+================================================================================
+[Prompt 2] (prompt_tokens=11)
+In a distant future, humans and robots 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.31805211305618286
+first_step_topk_ids=[2, 3, 410, 266, 289, 1372, 2838, 583, 674, 15]
+first_step_topk_probs=[0.594199538230896, 0.31805211305618286, 0.00016785415937192738, 0.00015283295942936093, 0.00010023029608419165, 0.00010023029608419165, 0.00010023029608419165, 9.86763698165305e-05, 9.86763698165305e-05, 9.564041101839393e-05]
+
+[New tokens 2] count=1 first30=[3]
+[New text 2] repr=''
+
+[Full output 2]
+ In a distant future, humans and robots 
+
+================================================================================
+[Prompt 3] (prompt_tokens=11)
+The following is a news report:
+
+
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.3309500813484192
+first_step_topk_ids=[2, 3, 351, 1372, 1516, 2838, 583, 539, 2814, 743]
+first_step_topk_probs=[0.5808355212211609, 0.3309500813484192, 0.00018304333207197487, 0.00015413793153129518, 0.00013391734682954848, 0.00013184115232434124, 0.0001238533150171861, 0.0001110213779611513, 9.797602979233488e-05, 8.512304339092225e-05]
+
+[New tokens 3] count=1 first30=[3]
+[New text 3] repr=''
+
+[Full output 3]
+ The following is a news report:
+
+
+
+================================================================================
+[Prompt 4] (prompt_tokens=14)
+Neural networks are a class of machine learning models that 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.4631516933441162
+first_step_topk_ids=[3, 2, 539, 583, 1372, 266, 351, 261, 722, 1516]
+first_step_topk_probs=[0.4631516933441162, 0.4631516933441162, 0.00017064066196326166, 0.00016539057833142579, 0.00015058985445648432, 0.00014369383279699832, 0.00013711361680179834, 0.00013711361680179834, 0.00013711361680179834, 0.0001268093619728461]
+
+[New tokens 4] count=1 first30=[3]
+[New text 4] repr=''
+
+[Full output 4]
+ Neural networks are a class of machine learning models that 
+
+================================================================================
+[Prompt 5] (prompt_tokens=21)
+Here is a short Python snippet:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.4546498954296112
+first_step_topk_ids=[3, 2, 583, 351, 414, 1372, 613, 494, 743, 722]
+first_step_topk_probs=[0.4546498954296112, 0.3124760091304779, 0.0006321697728708386, 0.000593868549913168, 0.0003834303643088788, 0.00030809492454864085, 0.00030809492454864085, 0.00023256226268131286, 0.00022191247262526304, 0.00021508493227884173]
+
+[New tokens 5] count=128 first30=[2, 17289, 15704, 18572, 17, 2478, 5860, 24342, 23874, 29508, 3166, 18870, 6261, 23462, 21174, 299, 6520, 292, 15211, 415, 319, 6626, 446, 21, 435, 14764, 5614, 943, 2016, 1783]
+[New text 5] repr=" JulieframeWA. Hisonom Molly Bomb Tiffany structure fixing Peter medicinal Reformom Word of unpredictable atut category by2ome mamm Maxuchze term Color shorti evenIS in themp andired up to the lazy than in determine were to depends 4 until. those the lifetime in theirian titles C NFL to its surely in eternal in Right and exploring Vict Lat Travis- east or a them you prepared the variouson3uber and Server in butMP gre of dad's quick Last peanut to things. adopted on a lot revital in le, on vastly"
+
+[Full output 5]
+ Here is a short Python snippet:
+
+def fib(n):
+     JulieframeWA. Hisonom Molly Bomb Tiffany structure fixing Peter medicinal Reformom Word of unpredictable atut category by2ome mamm Maxuchze term Color shorti evenIS in themp andired up to the lazy than in determine were to depends 4 until. those the lifetime in theirian titles C NFL to its surely in eternal in Right and exploring Vict Lat Travis- east or a them you prepared the variouson3uber and Server in butMP gre of dad's quick Last peanut to things. adopted on a lot revital in le, on vastly. “ sections Wild in a Tax forward is pen with his MM of Whether can't
+

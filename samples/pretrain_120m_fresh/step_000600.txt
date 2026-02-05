@@ -1,0 +1,92 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.7, top_p=0.9, top_k=0, max_new_tokens=128, min_new_tokens=0, greedy=False
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.4770480692386627
+first_step_topk_ids=[2, 3, 1516, 2838, 1009, 5728, 1372, 2814, 959, 722]
+first_step_topk_probs=[0.5216010808944702, 0.4770480692386627, 5.05815442011226e-05, 2.0712348486995324e-05, 1.9370765585335903e-05, 1.9370765585335903e-05, 1.6202950064325705e-05, 9.915730515785981e-06, 9.696847882878501e-06, 7.932025255286135e-06]
+
+[New tokens 1] count=128 first30=[2, 2838, 2887, 261, 616, 15, 674, 410, 261, 616, 15, 674, 410, 261, 616, 15, 674, 410, 261, 1508, 2777, 4066, 5728, 2895, 17, 722, 2711, 289, 322, 15]
+[New text 1] repr=' Once upon a time, there was a time, there was a time, there was a little girl named Timmy. He wanted to be, there was a little girl named Timmy. One day, Timmy loved to play with his. One day, Timmy was a little girl named Timmy. The girl named Timmy was very sad and he saw a big, there was very happy. One day, there was very happy to get. One day, there was so they could like it. Lily. Lily was playing, "Don\'t, she saw a man. One day, and his mom. Timmy felt'
+
+[Full output 1]
+ Once upon a time,  Once upon a time, there was a time, there was a time, there was a little girl named Timmy. He wanted to be, there was a little girl named Timmy. One day, Timmy loved to play with his. One day, Timmy was a little girl named Timmy. The girl named Timmy was very sad and he saw a big, there was very happy. One day, there was very happy to get. One day, there was so they could like it. Lily. Lily was playing, "Don't, she saw a man. One day, and his mom. Timmy felt
+
+================================================================================
+[Prompt 2] (prompt_tokens=11)
+In a distant future, humans and robots 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.3899454176425934
+first_step_topk_ids=[2, 3, 2838, 1372, 410, 583, 266, 289, 743, 539]
+first_step_topk_probs=[0.6093757152557373, 0.3899454176425934, 4.05741866416065e-06, 3.967852990172105e-06, 3.967852990172105e-06, 3.4704937661445e-06, 2.9684706532862037e-06, 2.9684706532862037e-06, 2.7761986984842224e-06, 2.2208023437997326e-06]
+
+[New tokens 2] count=107 first30=[2, 2838, 15, 674, 410, 261, 616, 15, 674, 410, 261, 1508, 2777, 4066, 354, 410, 290, 266, 4776, 17, 722, 584, 261, 1576, 15, 652, 584, 289, 847, 349]
+[New text 2] repr=' Once, there was a time, there was a little girl named it was in the confident. He had a big, she had to play with her to be a small, a time, and said, "Yes, "I want to be so he could more. But you?â€TMs find her. But you want to play with the Jen. The became so happy and the little girl named she went to play with the park. They kept all the screen, "I can be what to take his friends.'
+
+[Full output 2]
+ In a distant future, humans and robots  Once, there was a time, there was a little girl named it was in the confident. He had a big, she had to play with her to be a small, a time, and said, "Yes, "I want to be so he could more. But you?â€TMs find her. But you want to play with the Jen. The became so happy and the little girl named she went to play with the park. They kept all the screen, "I can be what to take his friends.
+
+================================================================================
+[Prompt 3] (prompt_tokens=11)
+The following is a news report:
+
+
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.3688928484916687
+first_step_topk_ids=[2, 3, 351, 2838, 1372, 1516, 583, 2814, 539, 743]
+first_step_topk_probs=[0.6303154230117798, 0.3688928484916687, 1.0022866263170727e-05, 7.332885161304148e-06, 6.706533440592466e-06, 5.6097746892191935e-06, 4.9066052270063665e-06, 3.925010332750389e-06, 3.1397839848068543e-06, 2.7462206162454095e-06]
+
+[New tokens 3] count=102 first30=[2, 2, 2838, 3747, 16, 16, 410, 261, 616, 15, 674, 410, 261, 1508, 2777, 574, 410, 261, 17, 351, 3545, 17, 351, 21989, 410, 554, 345, 410, 554, 345]
+[New text 3] repr=' Once Up-- was a time, there was a little girl who was a. The door. The rabbit was so he was so he was so happy to a time, she was so he saw a little girl. She was happy. The girl saw a special and saw that she was so he saw that she was so happy that he was a time there was so excited to in the little girl that he had sure the swings and ran. The song. The little girl. The very!'
+
+[Full output 3]
+ The following is a news report:
+
+ Once Up-- was a time, there was a little girl who was a. The door. The rabbit was so he was so he was so happy to a time, she was so he saw a little girl. She was happy. The girl saw a special and saw that she was so he saw that she was so happy that he was a time there was so excited to in the little girl that he had sure the swings and ran. The song. The little girl. The very!
+
+================================================================================
+[Prompt 4] (prompt_tokens=14)
+Neural networks are a class of machine learning models that 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.49971404671669006
+first_step_topk_ids=[3, 2, 583, 351, 539, 1372, 722, 743, 1516, 266]
+first_step_topk_probs=[0.49971404671669006, 0.49971404671669006, 6.356447102007223e-06, 6.2161320784070995e-06, 5.199571660341462e-06, 5.199571660341462e-06, 4.253255610819906e-06, 3.3272563086939044e-06, 3.181985903211171e-06, 2.845952849384048e-06]
+
+[New tokens 4] count=128 first30=[2, 2, 2, 2, 2838, 2887, 261, 616, 15, 674, 410, 261, 616, 15, 674, 410, 261, 616, 15, 261, 1508, 2777, 4066, 5728, 2895, 17, 351, 21989, 17, 1009]
+[New text 4] repr=' Once upon a time, there was a time, there was a time, a little girl named Timmy. The rabbit. She was a little girl named Timmy. One day, she was a little girl named Timmy. The little girl named Lily. Lily. She was so he loved to the sun was very sad. She was very happy and she was so proud of her mommy, "I\'m happy. The boy named Lily was a time, she wanted to always to her mommy. She loved to help it. Lily. One day, "That\'s dad. One day, she went to'
+
+[Full output 4]
+ Neural networks are a class of machine learning models that  Once upon a time, there was a time, there was a time, a little girl named Timmy. The rabbit. She was a little girl named Timmy. One day, she was a little girl named Timmy. The little girl named Lily. Lily. She was so he loved to the sun was very sad. She was very happy and she was so proud of her mommy, "I'm happy. The boy named Lily was a time, she wanted to always to her mommy. She loved to help it. Lily. One day, "That's dad. One day, she went to
+
+================================================================================
+[Prompt 5] (prompt_tokens=21)
+Here is a short Python snippet:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.6887237429618835
+first_step_topk_ids=[3, 2, 583, 351, 1372, 414, 494, 613, 1138, 743]
+first_step_topk_probs=[0.6887237429618835, 0.30836018919944763, 4.2738298361655325e-05, 4.2738298361655325e-05, 2.1877354811294936e-05, 1.5652494766982272e-05, 1.4638677384937182e-05, 1.3999529983266257e-05, 1.1451609680079855e-05, 1.0709874004533049e-05]
+
+[New tokens 5] count=1 first30=[3]
+[New text 5] repr=''
+
+[Full output 5]
+ Here is a short Python snippet:
+
+def fib(n):
+    
+

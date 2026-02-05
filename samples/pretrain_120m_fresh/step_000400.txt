@@ -1,0 +1,92 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.7, top_p=0.9, top_k=0, max_new_tokens=128, min_new_tokens=0, greedy=False
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.552669882774353
+first_step_topk_ids=[3, 2, 261, 410, 1009, 1516, 2838, 2777, 5728, 1372]
+first_step_topk_probs=[0.552669882774353, 0.4228021204471588, 0.0003821185091510415, 0.00027956385747529566, 0.00010469881817698479, 0.00010012750135501847, 8.955364319263026e-05, 5.2411378419492394e-05, 5.125442839926109e-05, 5.012306064600125e-05]
+
+[New tokens 1] count=1 first30=[3]
+[New text 1] repr=''
+
+[Full output 1]
+ Once upon a time, 
+
+================================================================================
+[Prompt 2] (prompt_tokens=11)
+In a distant future, humans and robots 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.2372746616601944
+first_step_topk_ids=[2, 3, 410, 2838, 2895, 261, 289, 15, 266, 674]
+first_step_topk_probs=[0.7574317455291748, 0.2372746616601944, 3.14500903186854e-05, 2.2501482817460783e-05, 1.101541147363605e-05, 1.0074519195768517e-05, 8.617193998361472e-06, 7.881148121668957e-06, 7.537052169936942e-06, 7.537052169936942e-06]
+
+[New tokens 2] count=37 first30=[2, 2, 2712, 595, 15, 261, 1633, 15, 1914, 266, 822, 332, 261, 1508, 17, 351, 261, 616, 15, 261, 616, 15, 266, 8, 17, 351, 5452, 266, 2331, 15]
+[New text 2] repr='11 help, a Z,19 the way is a little. The a time, a time, the%. The ride the appear, a time, the soda.'
+
+[Full output 2]
+ In a distant future, humans and robots 11 help, a Z,19 the way is a little. The a time, a time, the%. The ride the appear, a time, the soda.
+
+================================================================================
+[Prompt 3] (prompt_tokens=11)
+The following is a news report:
+
+
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.12251875549554825
+first_step_topk_ids=[2, 3, 2838, 2777, 261, 289, 410, 266, 351, 1516]
+first_step_topk_probs=[0.8735365271568298, 0.12251875549554825, 3.547036976669915e-05, 1.4852405001875013e-05, 1.4524546713801101e-05, 9.294397386838682e-06, 9.294397386838682e-06, 7.270877176779322e-06, 6.081827450543642e-06, 5.947574663878186e-06]
+
+[New tokens 3] count=15 first30=[2, 2838, 3851, 329, 266, 17, 351, 13677, 15, 286, 1674, 15, 1687, 17, 3]
+[New text 3] repr=' Once father on the. The Eventually, and body, mom.'
+
+[Full output 3]
+ The following is a news report:
+
+ Once father on the. The Eventually, and body, mom.
+
+================================================================================
+[Prompt 4] (prompt_tokens=14)
+Neural networks are a class of machine learning models that 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.30776166915893555
+first_step_topk_ids=[2, 3, 261, 2838, 266, 414, 583, 2777, 410, 436]
+first_step_topk_probs=[0.6873869895935059, 0.30776166915893555, 2.7911677534575574e-05, 2.2831762180430815e-05, 1.6335343389073387e-05, 1.527726635686122e-05, 1.2496810086304322e-05, 1.1951191481784917e-05, 1.0930370081041474e-05, 1.0689087503124028e-05]
+
+[New tokens 4] count=128 first30=[2, 2, 2, 2, 1043, 261, 261, 595, 17, 351, 261, 7659, 349, 261, 410, 261, 616, 17, 722, 410, 261, 261, 616, 15, 286, 607, 17, 1009, 410, 261]
+[New text 4] repr=' best a a help. The a wheel with a was a time. He was a a time, and any. She was a big. She was a time and the day and his he was a trying to. The care. She. He was a time, theom, at the a sad. She was so ran to go a get Ben. She. He was a big. He was a big to go and a little girl. The, the explore. He was a little girl. He was very the. She was so playing and asked theold. He was a little girl. She had a big'
+
+[Full output 4]
+ Neural networks are a class of machine learning models that  best a a help. The a wheel with a was a time. He was a a time, and any. She was a big. She was a time and the day and his he was a trying to. The care. She. He was a time, theom, at the a sad. She was so ran to go a get Ben. She. He was a big. He was a big to go and a little girl. The, the explore. He was a little girl. He was very the. She was so playing and asked theold. He was a little girl. She had a big
+
+================================================================================
+[Prompt 5] (prompt_tokens=21)
+Here is a short Python snippet:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.5359020233154297
+first_step_topk_ids=[3, 2, 351, 414, 583, 312, 16, 289, 2777, 1372]
+first_step_topk_probs=[0.5359020233154297, 0.4482627809047699, 6.496502464869991e-05, 6.353102071443573e-05, 4.15717477153521e-05, 4.065407483722083e-05, 3.802085484494455e-05, 3.18030797643587e-05, 2.7816655347123742e-05, 2.5440669560339302e-05]
+
+[New tokens 5] count=1 first30=[3]
+[New text 5] repr=''
+
+[Full output 5]
+ Here is a short Python snippet:
+
+def fib(n):
+    
+

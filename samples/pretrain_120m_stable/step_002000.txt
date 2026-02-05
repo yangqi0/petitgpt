@@ -1,0 +1,92 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=1.0, top_p=1.0, top_k=0, max_new_tokens=128, min_new_tokens=0, greedy=False
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.499427855014801
+first_step_topk_ids=[3, 2, 1516, 1009, 2838, 722, 5728, 1372, 959, 2814]
+first_step_topk_probs=[0.499427855014801, 0.4140402376651764, 0.0005160575965419412, 0.0002940407721325755, 0.0002476071531418711, 0.00023260539455804974, 0.00022544889361597598, 0.00021851254859939218, 0.00019587337737903, 0.00018115327111445367]
+
+[New tokens 1] count=1 first30=[3]
+[New text 1] repr=''
+
+[Full output 1]
+ Once upon a time, 
+
+================================================================================
+[Prompt 2] (prompt_tokens=11)
+In a distant future, humans and robots 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.4109176695346832
+first_step_topk_ids=[2, 3, 410, 266, 289, 583, 1372, 743, 539, 15]
+first_step_topk_probs=[0.5276287198066711, 0.4109176695346832, 0.0001854941074270755, 0.0001400182954967022, 0.000105691360658966, 9.474111720919609e-05, 9.182624489767477e-05, 9.040260192705318e-05, 8.626277121948078e-05, 8.103637082967907e-05]
+
+[New tokens 2] count=67 first30=[2, 21127, 321, 266, 6098, 1167, 410, 167, 2017, 292, 266, 29156, 19315, 1657, 290, 10390, 268, 1881, 261, 1405, 729, 2841, 17, 459, 1563, 292, 266, 3449, 321, 266]
+[New text 2] repr=' bacterial for the sight though was� 15 of the Dum recreation days in measureder across a standatingvey. their air of the sav for the sameo of lots of Selected who networks became developing something more in favourite Pass, freedom, thepta from her lot, the thick that 2007 in theAny Translationam is permanent.'
+
+[Full output 2]
+ In a distant future, humans and robots  bacterial for the sight though was� 15 of the Dum recreation days in measureder across a standatingvey. their air of the sav for the sameo of lots of Selected who networks became developing something more in favourite Pass, freedom, thepta from her lot, the thick that 2007 in theAny Translationam is permanent.
+
+================================================================================
+[Prompt 3] (prompt_tokens=11)
+The following is a news report:
+
+
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.5062727332115173
+first_step_topk_ids=[3, 2, 351, 1372, 583, 539, 722, 1339, 1516, 743]
+first_step_topk_probs=[0.5062727332115173, 0.41971486806869507, 0.0005070354673080146, 0.00019244894792791456, 0.00017522674170322716, 0.00017251010285690427, 0.00016205826250370592, 0.00015707225247751921, 0.00014526807353831828, 0.0001430159027222544]
+
+[New tokens 3] count=1 first30=[3]
+[New text 3] repr=''
+
+[Full output 3]
+ The following is a news report:
+
+
+
+================================================================================
+[Prompt 4] (prompt_tokens=14)
+Neural networks are a class of machine learning models that 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.589268147945404
+first_step_topk_ids=[3, 2, 351, 722, 539, 583, 1372, 743, 959, 261]
+first_step_topk_probs=[0.589268147945404, 0.35740920901298523, 0.0002460135438013822, 0.00020395238243509084, 0.00016646110452711582, 0.00015883828746154904, 0.0001446239184588194, 0.00013375523849390447, 0.00011620857549132779, 0.00011440692469477654]
+
+[New tokens 4] count=128 first30=[2, 2, 21488, 349, 261, 4688, 445, 15288, 286, 1856, 3088, 86, 24137, 15, 1259, 4, 20534, 292, 13062, 15, 16891, 694, 763, 1591, 1021, 15, 22497, 414, 17283, 3330]
+[New text 4] repr=' Finish with a bag from Essential andidesyears ebook, point! Behind of carrier, Loc what no softional, Ages - Pump Sam Together insurg S, organizations hat closely on researching along. bowlc R emergencies fruits from listened to the file by Cabt used such marijuana- rug and Nex, antiA current) and parade proceeds, and will helphered sees aash’s Born up and be the top of the lid on his the world. This Lake what zone maintained if they should radio the bird Mia smiled and10. Thelan. AsCan autobi '
+
+[Full output 4]
+ Neural networks are a class of machine learning models that  Finish with a bag from Essential andidesyears ebook, point! Behind of carrier, Loc what no softional, Ages - Pump Sam Together insurg S, organizations hat closely on researching along. bowlc R emergencies fruits from listened to the file by Cabt used such marijuana- rug and Nex, antiA current) and parade proceeds, and will helphered sees aash’s Born up and be the top of the lid on his the world. This Lake what zone maintained if they should radio the bird Mia smiled and10. Thelan. AsCan autobi patternedit, what’ help the anticipation, if well Noise dependent
+
+================================================================================
+[Prompt 5] (prompt_tokens=21)
+Here is a short Python snippet:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.5902559757232666
+first_step_topk_ids=[3, 2, 351, 583, 1372, 414, 722, 494, 613, 539]
+first_step_topk_probs=[0.5902559757232666, 0.24605529010295868, 0.0008601110312156379, 0.0005729575059376657, 0.00030668204999528825, 0.00025424835621379316, 0.00025424835621379316, 0.00023514126951340586, 0.00021747015125583857, 0.0002140985889127478]
+
+[New tokens 5] count=1 first30=[3]
+[New text 5] repr=''
+
+[Full output 5]
+ Here is a short Python snippet:
+
+def fib(n):
+    
+

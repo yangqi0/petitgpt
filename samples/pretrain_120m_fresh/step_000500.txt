@@ -1,0 +1,92 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.7, top_p=0.9, top_k=0, max_new_tokens=128, min_new_tokens=0, greedy=False
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.6281424164772034
+first_step_topk_ids=[3, 2, 1516, 1009, 2838, 1372, 5728, 410, 959, 2814]
+first_step_topk_probs=[0.6281424164772034, 0.3676207363605499, 9.519036393612623e-05, 4.765147605212405e-05, 3.985879084211774e-05, 3.645421384135261e-05, 3.409303099033423e-05, 2.2308893676381558e-05, 1.5264367903000675e-05, 1.4927431948308367e-05]
+
+[New tokens 1] count=1 first30=[3]
+[New text 1] repr=''
+
+[Full output 1]
+ Once upon a time, 
+
+================================================================================
+[Prompt 2] (prompt_tokens=11)
+In a distant future, humans and robots 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.4769473373889923
+first_step_topk_ids=[2, 3, 410, 2838, 266, 1372, 583, 743, 1516, 289]
+first_step_topk_probs=[0.5214909315109253, 0.4769473373889923, 8.479574717057403e-06, 8.479574717057403e-06, 6.20378978055669e-06, 5.54864482182893e-06, 4.962681487086229e-06, 4.151108896621736e-06, 3.3206495118065504e-06, 3.1055667477630777e-06]
+
+[New tokens 2] count=128 first30=[2, 2838, 15, 14127, 410, 261, 397, 17, 351, 1591, 15, 674, 410, 1040, 430, 354, 410, 554, 2690, 17, 351, 6528, 17, 1009, 410, 261, 616, 15, 652, 410]
+[New text 2] repr=" Once, Lucy was a D. The soft, there was very's it was so happy. The bird. She was a time, she was a little girl named Tim. The little girl was a big and he was very happy. The fire. He was excited. He wanted to the ground. He was not the park. He was so she was so he was a time, he was a little girl was a big and it was so he saw a little girl was a up to and the very happy. The little girl. He had a big. He was very happy and he saw it. She loved the face. She"
+
+[Full output 2]
+ In a distant future, humans and robots  Once, Lucy was a D. The soft, there was very's it was so happy. The bird. She was a time, she was a little girl named Tim. The little girl was a big and he was very happy. The fire. He was excited. He wanted to the ground. He was not the park. He was so she was so he was a time, he was a little girl was a big and it was so he saw a little girl was a up to and the very happy. The little girl. He had a big. He was very happy and he saw it. She loved the face. She
+
+================================================================================
+[Prompt 3] (prompt_tokens=11)
+The following is a news report:
+
+
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.3481500446796417
+first_step_topk_ids=[2, 3, 2838, 351, 1372, 1516, 583, 266, 2814, 410]
+first_step_topk_probs=[0.650429904460907, 0.3481500446796417, 1.351957780570956e-05, 7.236508281494025e-06, 6.472298082371708e-06, 6.18971353105735e-06, 4.428527518030023e-06, 3.4643715025595156e-06, 3.3879009606607724e-06, 2.9632337827933952e-06]
+
+[New tokens 3] count=106 first30=[2, 2, 2838, 2887, 261, 1508, 289, 700, 261, 1576, 493, 266, 908, 17, 1009, 3038, 524, 289, 322, 15, 652, 410, 554, 652, 17, 351, 2478, 1687, 17, 351]
+[New text 3] repr=' Once upon a little to make a big all the life. She asked out to be, she was so she. The His mom. The little girl was a big are a little girl and then she went to play to the old. He was a time, the fun. "M he was so happy. He was a time, she asked. The little girl. The bird and. The little girl named Lily. "It\'s mom said, she saw a big, it was so happy and his mom.'
+
+[Full output 3]
+ The following is a news report:
+
+ Once upon a little to make a big all the life. She asked out to be, she was so she. The His mom. The little girl was a big are a little girl and then she went to play to the old. He was a time, the fun. "M he was so happy. He was a time, she asked. The little girl. The bird and. The little girl named Lily. "It's mom said, she saw a big, it was so happy and his mom.
+
+================================================================================
+[Prompt 4] (prompt_tokens=14)
+Neural networks are a class of machine learning models that 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.5438790321350098
+first_step_topk_ids=[3, 2, 539, 583, 266, 351, 1372, 1516, 261, 722]
+first_step_topk_probs=[0.5438790321350098, 0.4549352824687958, 9.043234967975877e-06, 8.843619980325457e-06, 8.457502190140076e-06, 7.397377885354217e-06, 6.3273118939832784e-06, 5.917479029449169e-06, 5.061487627244787e-06, 5.061487627244787e-06]
+
+[New tokens 4] count=1 first30=[3]
+[New text 4] repr=''
+
+[Full output 4]
+ Neural networks are a class of machine learning models that 
+
+================================================================================
+[Prompt 5] (prompt_tokens=21)
+Here is a short Python snippet:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.723111629486084
+first_step_topk_ids=[3, 2, 583, 351, 414, 1372, 879, 743, 613, 494]
+first_step_topk_probs=[0.723111629486084, 0.27081072330474854, 5.997915650368668e-05, 5.246094224276021e-05, 2.148191379092168e-05, 2.148191379092168e-05, 1.8789214664138854e-05, 1.8374454157310538e-05, 1.718431849440094e-05, 1.643402356421575e-05]
+
+[New tokens 5] count=1 first30=[3]
+[New text 5] repr=''
+
+[Full output 5]
+ Here is a short Python snippet:
+
+def fib(n):
+    
+

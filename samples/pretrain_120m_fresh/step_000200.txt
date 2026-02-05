@@ -1,0 +1,92 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.7, top_p=0.9, top_k=0, max_new_tokens=128, min_new_tokens=0, greedy=False
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.050596073269844055
+first_step_topk_ids=[261, 3, 2, 410, 17, 289, 15, 266, 286, 554]
+first_step_topk_probs=[0.05290598049759865, 0.050596073269844055, 0.03540067747235298, 0.033855050802230835, 0.01584983803331852, 0.01159598957747221, 0.006490257568657398, 0.005935886409133673, 0.004440815653651953, 0.001590506173670292]
+
+[New tokens 1] count=29 first30=[2, 25353, 17, 6654, 15, 21156, 17, 24025, 17, 30575, 4069, 17, 7146, 261, 17, 1550, 17, 7307, 17, 27841, 17, 6271, 4044, 17, 901, 17, 722, 17, 3]
+[New text 1] repr=' Bulld. wearing, composers.ß.bike novel. jewel a.и. logo. servicing. noise basic. They. He.'
+
+[Full output 1]
+ Once upon a time,  Bulld. wearing, composers.ß.bike novel. jewel a.и. logo. servicing. noise basic. They. He.
+
+================================================================================
+[Prompt 2] (prompt_tokens=11)
+In a distant future, humans and robots 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.045627374202013016
+first_step_topk_ids=[2, 17, 3, 289, 15, 261, 410, 286, 266, 338]
+first_step_topk_probs=[0.09320423752069473, 0.05964229255914688, 0.045627374202013016, 0.022336497902870178, 0.017087802290916443, 0.012501702643930912, 0.0119558647274971, 0.006842725444585085, 0.005597349256277084, 0.001147369621321559]
+
+[New tokens 2] count=12 first30=[2, 29021, 17, 25692, 7623, 8507, 739, 17654, 11529, 287, 17, 3]
+[New text 2] repr=' vez. winery Non strengthenwe contacting.] m.'
+
+[Full output 2]
+ In a distant future, humans and robots  vez. winery Non strengthenwe contacting.] m.
+
+================================================================================
+[Prompt 3] (prompt_tokens=11)
+The following is a news report:
+
+
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.06380543112754822
+first_step_topk_ids=[2, 3, 261, 289, 17, 410, 266, 15, 286, 554]
+first_step_topk_probs=[0.1947876662015915, 0.06380543112754822, 0.04082971438765526, 0.0238956268876791, 0.015989137813448906, 0.011187165975570679, 0.011187165975570679, 0.003831814043223858, 0.0014674359699711204, 0.0007025140221230686]
+
+[New tokens 3] count=128 first30=[2, 10794, 22697, 266, 670, 4468, 1259, 17, 24997, 17651, 266, 261, 7781, 17, 5907, 17, 22733, 4710, 17, 857, 1887, 17, 722, 286, 17, 1134, 17, 26722, 17, 351]
+[New text 3] repr=' appreciated 170 the includ efficiency point.functionalylum the astream. smell. (- prepared.hip non. He and. Here.าร. The workers. triggered to a. warfare and the swim threeardonnay. She. Commit. They. possessed. checkout.rip. She was.yc. The. She.rush. He the. The. lets. He was a Sam. workshops. charities.comput. She.ilities. She and. She having. He. tell the. She. She. They. Standard.osition. They. They.orde. alarm.have and the remembered. prot. faster. sanitation.'
+
+[Full output 3]
+ The following is a news report:
+
+ appreciated 170 the includ efficiency point.functionalylum the astream. smell. (- prepared.hip non. He and. Here.าร. The workers. triggered to a. warfare and the swim threeardonnay. She. Commit. They. possessed. checkout.rip. She was.yc. The. She.rush. He the. The. lets. He was a Sam. workshops. charities.comput. She.ilities. She and. She having. He. tell the. She. She. They. Standard.osition. They. They.orde. alarm.have and the remembered. prot. faster. sanitation.
+
+================================================================================
+[Prompt 4] (prompt_tokens=14)
+Neural networks are a class of machine learning models that 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.04325929284095764
+first_step_topk_ids=[2, 266, 261, 3, 289, 17, 410, 286, 15, 292]
+first_step_topk_probs=[0.11046642065048218, 0.06760218739509583, 0.054077934473752975, 0.04325929284095764, 0.014170188456773758, 0.013551503419876099, 0.004853558260947466, 0.004059826955199242, 0.0036310916766524315, 0.0011123751755803823]
+
+[New tokens 4] count=128 first30=[266, 28244, 2200, 286, 261, 15, 29852, 15, 31100, 27188, 261, 22697, 5728, 23731, 14512, 286, 266, 3466, 17, 18673, 17, 2925, 410, 261, 9189, 17, 410, 667, 11356, 1256]
+[New text 4] repr=' thepriced seen and a,.");,ibihin a 170 Tim thanked Beck and the President. qualifying. clients was a Fresh. was 20 tons friend. The. He. insights and was hotel. The cookbook. She mountains to the South, � buy exit hand alley. concl. outbreak and area. trainer open. commissioned �. She Repl.ellite searching. The Can. ridge. autobi. He. protein. Minimal. shaking. OK. blockchain. Gl the Abigail. Option. She. They. holistic. The.\';. He. They. hull.CON. consum. ShePack. reb.)||. She.chers'
+
+[Full output 4]
+ Neural networks are a class of machine learning models that  thepriced seen and a,.");,ibihin a 170 Tim thanked Beck and the President. qualifying. clients was a Fresh. was 20 tons friend. The. He. insights and was hotel. The cookbook. She mountains to the South, � buy exit hand alley. concl. outbreak and area. trainer open. commissioned �. She Repl.ellite searching. The Can. ridge. autobi. He. protein. Minimal. shaking. OK. blockchain. Gl the Abigail. Option. She. They. holistic. The.';. He. They. hull.CON. consum. ShePack. reb.)||. She.chers
+
+================================================================================
+[Prompt 5] (prompt_tokens=21)
+Here is a short Python snippet:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.1285051852464676
+first_step_topk_ids=[3, 2, 289, 17, 261, 15, 266, 286, 410, 292]
+first_step_topk_probs=[0.1285051852464676, 0.1285051852464676, 0.012060046195983887, 0.012060046195983887, 0.009647351689636707, 0.008438083343207836, 0.0077173360623419285, 0.003950437530875206, 0.003533253911882639, 0.0018912145169451833]
+
+[New tokens 5] count=128 first30=[2, 21959, 28859, 15, 15, 15, 17276, 559, 18188, 15, 12162, 5209, 17, 29862, 6797, 27384, 5061, 15, 21144, 15, 266, 16989, 266, 17, 23722, 5640, 28048, 30647, 1888, 15]
+[New text 5] repr='Dis方,,, pause mypub,Oh ultimately. Profit unless demeanor Texas, pillows, the Guest the. chordsait spectacle Bolt human,urally, Kaz. doom. biofuelsICH, ", and the, young, personas Race, andice. JAM and. Larry. He,, Scripturebur Deadline and failsbullying Europe. He the archiveleton, and a Lanc. They, and side, delight uncomfortable Herm,. They, reminiscent. portra, and Ash. The the,. The KPIs, P. trafficking, cover.wal displ yes lifted. therapists. The,th despair is and. She worries trust direct'
+
+[Full output 5]
+ Here is a short Python snippet:
+
+def fib(n):
+    Dis方,,, pause mypub,Oh ultimately. Profit unless demeanor Texas, pillows, the Guest the. chordsait spectacle Bolt human,urally, Kaz. doom. biofuelsICH, ", and the, young, personas Race, andice. JAM and. Larry. He,, Scripturebur Deadline and failsbullying Europe. He the archiveleton, and a Lanc. They, and side, delight uncomfortable Herm,. They, reminiscent. portra, and Ash. The the,. The KPIs, P. trafficking, cover.wal displ yes lifted. therapists. The,th despair is and. She worries trust direct,
+

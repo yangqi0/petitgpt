@@ -1,0 +1,92 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.7, top_p=0.9, top_k=0, max_new_tokens=128, min_new_tokens=0, greedy=False
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.670488715171814
+first_step_topk_ids=[3, 2, 2887, 410, 15, 5728, 2814, 674, 17, 743]
+first_step_topk_probs=[0.670488715171814, 0.32823243737220764, 0.00010624653077684343, 7.43378113838844e-05, 5.438670632429421e-05, 4.756943599204533e-05, 4.756943599204533e-05, 2.4350418243557215e-05, 1.2746125321427826e-05, 1.2189609151391778e-05]
+
+[New tokens 1] count=1 first30=[3]
+[New text 1] repr=''
+
+[Full output 1]
+ Once upon a time, 
+
+================================================================================
+[Prompt 2] (prompt_tokens=11)
+In a distant future, humans and robots 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.855998158454895
+first_step_topk_ids=[3, 2, 2814, 410, 392, 493, 494, 266, 570, 15]
+first_step_topk_probs=[0.855998158454895, 0.14353157579898834, 2.4868331820471212e-05, 1.2729889022011776e-05, 1.064810567186214e-05, 1.018319289869396e-05, 8.906758012017235e-06, 8.329847332788631e-06, 7.618353265570477e-06, 5.959720056125661e-06]
+
+[New tokens 2] count=1 first30=[3]
+[New text 2] repr=''
+
+[Full output 2]
+ In a distant future, humans and robots 
+
+================================================================================
+[Prompt 3] (prompt_tokens=11)
+The following is a news report:
+
+
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.974785566329956
+first_step_topk_ids=[3, 2, 2814, 1372, 494, 351, 2012, 917, 1217, 1441]
+first_step_topk_probs=[0.974785566329956, 0.025065751746296883, 1.3863475942343939e-05, 4.342904958321014e-06, 3.9719520827929955e-06, 2.2230967715586303e-06, 1.7783499970391858e-06, 1.5554388710370404e-06, 1.4225810218704282e-06, 1.3604689002022496e-06]
+
+[New tokens 3] count=1 first30=[3]
+[New text 3] repr=''
+
+[Full output 3]
+ The following is a news report:
+
+
+
+================================================================================
+[Prompt 4] (prompt_tokens=14)
+Neural networks are a class of machine learning models that 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.38957658410072327
+first_step_topk_ids=[2, 3, 392, 570, 332, 410, 2814, 494, 371, 583]
+first_step_topk_probs=[0.6087993383407593, 0.38957658410072327, 0.00018023184384219348, 4.72266401629895e-05, 3.304319398012012e-05, 2.472060987201985e-05, 2.3641272491659038e-05, 1.9775074179051444e-05, 1.691451689112e-05, 1.5469762729480863e-05]
+
+[New tokens 4] count=128 first30=[2, 494, 266, 1518, 17, 3255, 15, 354, 332, 261, 939, 616, 15, 674, 410, 261, 1508, 1508, 2777, 4066, 5728, 17, 1516, 979, 15, 261, 1508, 2777, 4066, 6844]
+[New text 4] repr=' In the past. First, it is a long time, there was a little little girl named Tim. One day, a little girl named Lily. She said, "I know, Lily, please, please, "Mommy, I think I love me." Her mom said, "Thank you, I found your toys." Her mom said, "I need to do you. I can do you, I\'ll play." She was scared, "I don\'t know how to see you, but I\'ll be more. I\'m like you." The little girl was happy to take her mommy. She was happy and the'
+
+[Full output 4]
+ Neural networks are a class of machine learning models that  In the past. First, it is a long time, there was a little little girl named Tim. One day, a little girl named Lily. She said, "I know, Lily, please, please, "Mommy, I think I love me." Her mom said, "Thank you, I found your toys." Her mom said, "I need to do you. I can do you, I'll play." She was scared, "I don't know how to see you, but I'll be more. I'm like you." The little girl was happy to take her mommy. She was happy and the
+
+================================================================================
+[Prompt 5] (prompt_tokens=21)
+Here is a short Python snippet:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.9959439635276794
+first_step_topk_ids=[3, 2, 2814, 494, 917, 1372, 351, 2012, 1441, 539]
+first_step_topk_probs=[0.9959439635276794, 0.003591938177123666, 5.652377876685932e-05, 2.0244346160325222e-05, 1.29545396703179e-05, 1.1330724191793706e-05, 1.0362910870753694e-05, 9.477743333263788e-06, 8.668202099215705e-06, 6.9340653681138065e-06]
+
+[New tokens 5] count=1 first30=[3]
+[New text 5] repr=''
+
+[Full output 5]
+ Here is a short Python snippet:
+
+def fib(n):
+    
+

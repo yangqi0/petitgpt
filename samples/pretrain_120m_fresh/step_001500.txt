@@ -1,0 +1,92 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.7, top_p=0.9, top_k=0, max_new_tokens=128, min_new_tokens=0, greedy=False
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.16692326962947845
+first_step_topk_ids=[2, 3, 2814, 2887, 410, 351, 15, 722, 1516, 2838]
+first_step_topk_probs=[0.8327034711837769, 0.16692326962947845, 1.184277243737597e-05, 1.1325710147502832e-05, 8.286066076834686e-06, 7.5783045758726075e-06, 7.411017122649355e-06, 6.0622155615419615e-06, 4.9588948058953974e-06, 4.241567239660071e-06]
+
+[New tokens 1] count=128 first30=[2, 2838, 2887, 261, 616, 15, 674, 410, 261, 1508, 2777, 4066, 6844, 17, 1516, 979, 15, 652, 410, 3151, 290, 266, 2373, 17, 1009, 410, 1040, 6371, 286, 3566]
+[New text 1] repr=" Once upon a time, there was a little girl named Lily. One day, she was playing in the ground. She was very curious and loved to play with her toys. One day, she was playing in the park with her mom. She was sad and loved to play with her toys. She had a new toy box of her friends. She went to the beautiful house and her friends and told her friends to help her mom. Lily was so she didn't want to share her. Lily was so happy to wear her mom to play with her friends. Lily was happy and sad and ga"
+
+[Full output 1]
+ Once upon a time,  Once upon a time, there was a little girl named Lily. One day, she was playing in the ground. She was very curious and loved to play with her toys. One day, she was playing in the park with her mom. She was sad and loved to play with her toys. She had a new toy box of her friends. She went to the beautiful house and her friends and told her friends to help her mom. Lily was so she didn't want to share her. Lily was so happy to wear her mom to play with her friends. Lily was happy and sad and gave her a nice cat a new friend.
+
+================================================================================
+[Prompt 2] (prompt_tokens=11)
+In a distant future, humans and robots 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.166952446103096
+first_step_topk_ids=[2, 3, 2814, 266, 410, 493, 351, 494, 289, 1372]
+first_step_topk_probs=[0.8328490257263184, 0.166952446103096, 6.063269665901316e-06, 2.5961642222682713e-06, 2.0767847672686912e-06, 1.942266862897668e-06, 1.698809114714095e-06, 1.5887766267042025e-06, 1.242875327989168e-06, 1.1886106676683994e-06]
+
+[New tokens 2] count=128 first30=[2, 1516, 979, 15, 266, 7586, 1227, 266, 2695, 17, 722, 410, 261, 1508, 2777, 574, 645, 1299, 2544, 261, 629, 1256, 17, 1516, 979, 15, 266, 13478, 410, 1040]
+[New text 2] repr=' One day, the Canadian & the fire. He was a little girl who were always created a new friend. One day, the monster was very scared, so excited to find a little girl. She said, "I have to see it! I have a nice gift! It\'s important to go to go out. I have a small things that I\'m so I need to find it, and I have to go." The mommy smiled and said, "I can\'t worry, I can\'t be the new friend. I\'m so we can\'t get some more." The little girl and the little girl was so excited to'
+
+[Full output 2]
+ In a distant future, humans and robots  One day, the Canadian & the fire. He was a little girl who were always created a new friend. One day, the monster was very scared, so excited to find a little girl. She said, "I have to see it! I have a nice gift! It's important to go to go out. I have a small things that I'm so I need to find it, and I have to go." The mommy smiled and said, "I can't worry, I can't be the new friend. I'm so we can't get some more." The little girl and the little girl was so excited to
+
+================================================================================
+[Prompt 3] (prompt_tokens=11)
+The following is a news report:
+
+
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.7273635268211365
+first_step_topk_ids=[3, 2, 2814, 351, 1372, 494, 917, 1217, 2638, 1454]
+first_step_topk_probs=[0.7273635268211365, 0.27240362763404846, 1.616578083485365e-05, 5.5370865084114484e-06, 5.2953291742596775e-06, 3.388532149983803e-06, 2.027905338763958e-06, 1.8137506003768067e-06, 1.6222096519413753e-06, 1.3269682312966324e-06]
+
+[New tokens 3] count=1 first30=[3]
+[New text 3] repr=''
+
+[Full output 3]
+ The following is a news report:
+
+
+
+================================================================================
+[Prompt 4] (prompt_tokens=14)
+Neural networks are a class of machine learning models that 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.29029175639152527
+first_step_topk_ids=[2, 3, 392, 351, 494, 570, 332, 583, 1217, 2814]
+first_step_topk_probs=[0.7089202404022217, 0.29029175639152527, 1.969623554032296e-05, 1.7227350326720625e-05, 1.57558770297328e-05, 1.57558770297328e-05, 1.40919928526273e-05, 1.2325589523243252e-05, 1.1023948900401592e-05, 9.859775673248805e-06]
+
+[New tokens 4] count=128 first30=[2, 1532, 266, 1411, 963, 292, 266, 1951, 415, 266, 613, 38, 16, 37, 15, 491, 17, 722, 410, 1312, 289, 266, 566, 1294, 430, 689, 289, 266, 979, 15]
+[New text 4] repr=" On the three years of the country at the “C-B, J. He was going to the his family's need to the day, was a big smile. He was the night in his family's home. He was very scared of his father. He was so proud of his brother, he saw his daughter and he had a nice tree. He was very good at his eyes. He was so he was the little boy who had to climb the race. He had a big, and he couldn't wait to play with his head. He was very happy and he could make him his eyes. He was the best of"
+
+[Full output 4]
+ Neural networks are a class of machine learning models that  On the three years of the country at the “C-B, J. He was going to the his family's need to the day, was a big smile. He was the night in his family's home. He was very scared of his father. He was so proud of his brother, he saw his daughter and he had a nice tree. He was very good at his eyes. He was so he was the little boy who had to climb the race. He had a big, and he couldn't wait to play with his head. He was very happy and he could make him his eyes. He was the best of
+
+================================================================================
+[Prompt 5] (prompt_tokens=21)
+Here is a short Python snippet:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.9870545864105225
+first_step_topk_ids=[3, 2, 2814, 351, 494, 917, 1372, 539, 1009, 2012]
+first_step_topk_probs=[0.9870545864105225, 0.012425173074007034, 7.32260596123524e-05, 2.2938971596886404e-05, 1.1742254173441324e-05, 9.821974344959017e-06, 8.983030056697316e-06, 8.590816833020654e-06, 5.497346592164831e-06, 5.257323664409341e-06]
+
+[New tokens 5] count=1 first30=[3]
+[New text 5] repr=''
+
+[Full output 5]
+ Here is a short Python snippet:
+
+def fib(n):
+    
+

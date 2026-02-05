@@ -1,5 +1,6 @@
 # pretrain/sample.py
-# A robust sampling script for petitgpt that works even when checkpoints don't store config.
+# Sampling utilities for petitgpt.
+# This file intentionally exports `generate_default_samples` because train_pretrain.py imports it.
 from __future__ import annotations
 
 import argparse
@@ -12,9 +13,9 @@ import torch
 from tokenizers import Tokenizer
 
 # Ensure project root is on sys.path so `import src.model` works no matter where you run from.
-PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-if PROJECT_ROOT not in sys.path:
-    sys.path.insert(0, PROJECT_ROOT)
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
 DEFAULT_PROMPTS: List[str] = [
     "Once upon a time, ",
@@ -49,10 +50,7 @@ def _autocast_dtype(precision: str) -> Optional[torch.dtype]:
 
 
 def _top_p_filter(probs: torch.Tensor, top_p: float) -> torch.Tensor:
-    """
-    probs: [B, V]
-    keep smallest set with cumulative prob <= top_p (nucleus), renormalize
-    """
+    """Nucleus filtering on probabilities."""
     if not (0.0 < top_p <= 1.0):
         return probs
 
@@ -72,9 +70,11 @@ def _top_p_filter(probs: torch.Tensor, top_p: float) -> torch.Tensor:
 
 
 def _top_k_filter(probs: torch.Tensor, top_k: int) -> torch.Tensor:
+    """Keep only top_k tokens by probability."""
     if top_k is None or top_k <= 0:
         return probs
     top_k = min(int(top_k), probs.size(-1))
+
     tk_probs, tk_ids = torch.topk(probs, k=top_k, dim=-1)
     filtered = torch.zeros_like(probs)
     filtered.scatter_(dim=-1, index=tk_ids, src=tk_probs)
@@ -84,30 +84,18 @@ def _top_k_filter(probs: torch.Tensor, top_k: int) -> torch.Tensor:
     return filtered
 
 
-def _sample_next_id(
-    probs: torch.Tensor,
-    top_p: float,
-    top_k: int,
-    greedy: bool,
-) -> Tuple[torch.Tensor, torch.Tensor]:
-    """
-    probs: [B, V] softmax'ed already
-    returns (next_id [B,1], filtered_probs [B,V])
-    """
+def _sample_next_id(probs: torch.Tensor, top_p: float, top_k: int, greedy: bool) -> torch.Tensor:
+    """Return next token id [B,1]."""
     filtered = probs
     filtered = _top_k_filter(filtered, top_k)
     filtered = _top_p_filter(filtered, top_p)
 
-    # Safety fallback
     row_sum = filtered.sum(dim=-1, keepdim=True)
     filtered = torch.where(row_sum > 0, filtered / row_sum, probs)
 
     if greedy:
-        nxt = torch.argmax(filtered, dim=-1, keepdim=True)
-        return nxt.long(), filtered
-
-    nxt = torch.multinomial(filtered, num_samples=1)
-    return nxt.long(), filtered
+        return torch.argmax(filtered, dim=-1, keepdim=True).long()
+    return torch.multinomial(filtered, num_samples=1).long()
 
 
 @torch.no_grad()
@@ -125,11 +113,21 @@ def generate(
     eos_id: int,
     add_bos: bool,
     bos_id: int,
-    min_new_tokens: int,
-    greedy: bool,
-    debug: bool,
+    min_new_tokens: int = 0,
+    greedy: bool = False,
+    debug: bool = True,
     debug_topk: int = 10,
 ) -> Tuple[str, str, List[int], int, Dict[str, Any]]:
+    """
+    Generate text from a prompt using nucleus sampling.
+
+    Returns:
+      full_text: decoded prompt + generated tokens
+      new_text: decoded generated tokens only
+      new_ids: generated token ids
+      prompt_len: number of prompt tokens (including optional BOS)
+      dbg: diagnostics including first-step EOS probability and top-k list
+    """
     ac_dtype = _autocast_dtype(precision)
 
     prompt_ids = encode_prompt(tok, prompt, add_bos=add_bos, bos_id=bos_id)
@@ -140,7 +138,6 @@ def generate(
 
     dbg: Dict[str, Any] = {}
     if debug:
-        dbg["first_step"] = {}
         try:
             dbg["bos_token"] = tok.id_to_token(bos_id)
         except Exception:
@@ -149,6 +146,7 @@ def generate(
             dbg["eos_token"] = tok.id_to_token(eos_id)
         except Exception:
             dbg["eos_token"] = None
+        dbg["first_step"] = {}
 
     for t in range(int(max_new_tokens)):
         if ids.size(1) > max_seq_len:
@@ -160,16 +158,11 @@ def generate(
         else:
             logits = model(ids)
 
-        if debug and (not torch.isfinite(logits).all()):
-            dbg["non_finite_logits"] = True
-
         next_logits = logits[:, -1, :].float()
-
-        if greedy or temperature == 0.0:
-            probs = torch.softmax(next_logits, dim=-1)
-        else:
+        if not greedy and temperature and temperature != 0.0:
             next_logits = next_logits / float(temperature)
-            probs = torch.softmax(next_logits, dim=-1)
+
+        probs = torch.softmax(next_logits, dim=-1)
 
         if debug and t == 0:
             eos_prob = float(probs[0, eos_id].item()) if 0 <= eos_id < probs.size(-1) else None
@@ -181,7 +174,7 @@ def generate(
                 "topk_probs": [float(x) for x in tk_probs[0].tolist()],
             }
 
-        next_id, _f = _sample_next_id(probs=probs, top_p=top_p, top_k=top_k, greedy=greedy)
+        next_id = _sample_next_id(probs=probs, top_p=top_p, top_k=top_k, greedy=greedy)
         nxt = int(next_id.item())
 
         ids = torch.cat([ids, next_id.to(ids.device)], dim=1)
@@ -215,8 +208,6 @@ def write_samples_file(
                 lines.append(f"first_step_eos_prob={fs.get('eos_prob')}\n")
                 lines.append(f"first_step_topk_ids={fs.get('topk_ids')}\n")
                 lines.append(f"first_step_topk_probs={fs.get('topk_probs')}\n")
-            if dbg.get("non_finite_logits"):
-                lines.append("WARNING: non-finite logits detected!\n")
             lines.append("\n")
 
         lines.append(f"[New tokens {i}] count={len(new_ids)} first30={new_ids[:30]}\n")
@@ -226,115 +217,120 @@ def write_samples_file(
     out_path.write_text("".join(lines), encoding="utf-8")
 
 
-def _parse_args() -> argparse.Namespace:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--ckpt", type=str, required=True, help="checkpoint .pt path")
-    ap.add_argument("--tokenizer", type=str, required=True, help="tokenizer.json path")
-    ap.add_argument("--out", type=str, required=True, help="output txt path")
-
-    ap.add_argument("--device", type=str, default="cuda")
-    ap.add_argument("--precision", type=str, default="bf16", choices=["bf16", "fp16", "fp32"])
-
-    ap.add_argument("--temperature", type=float, default=0.7)
-    ap.add_argument("--top_p", type=float, default=0.9)
-    ap.add_argument("--top_k", type=int, default=0)
-    ap.add_argument("--max_new_tokens", type=int, default=256)
-    ap.add_argument("--min_new_tokens", type=int, default=0)
-    ap.add_argument("--greedy", action="store_true")
-
-    ap.add_argument("--eos_id", type=int, default=3)
-    ap.add_argument("--bos_id", type=int, default=2)
-    ap.add_argument("--no_bos", action="store_true")
-    ap.add_argument("--no_debug", action="store_true")
-
-    # Model hyperparams fallback (matches your train_pretrain.py defaults)
-    ap.add_argument("--vocab_size", type=int, default=32000)
-    ap.add_argument("--seq_len", type=int, default=1024)
-    ap.add_argument("--layers", type=int, default=12)
-    ap.add_argument("--d_model", type=int, default=768)
-    ap.add_argument("--n_heads", type=int, default=12)
-    ap.add_argument("--d_ff", type=int, default=3072)
-    ap.add_argument("--dropout", type=float, default=0.0)
-
-    ap.add_argument("--tie_embeddings", action="store_true", default=True, help="Tie token embedding and LM head weights")
-    return ap.parse_args()
-
-
-def main() -> None:
-    args = _parse_args()
-
-    from src.model import GPT, GPTConfig  # noqa: E402
-
-    ckpt = torch.load(args.ckpt, map_location="cpu")
-
-    # Determine config: use ckpt["config"] if present, else use CLI fallback.
-    cfg_dict = ckpt.get("config", None)
-    if cfg_dict is not None:
-        cfg = GPTConfig(**cfg_dict)
-    else:
-        cfg = GPTConfig(
-            vocab_size=args.vocab_size,
-            n_layers=args.layers,
-            d_model=args.d_model,
-            n_heads=args.n_heads,
-            d_ff=args.d_ff,
-            max_seq_len=args.seq_len,
-            dropout=args.dropout,
-            tie_embeddings=bool(args.tie_embeddings),
-        )
-
-    model = GPT(cfg)
-    state = ckpt["model"] if isinstance(ckpt, dict) and "model" in ckpt else ckpt
-
-    def strip_prefix_if_present(state_dict, prefix="_orig_mod."):
-        if not isinstance(state_dict, dict):
-            return state_dict
-        # detect if any key startswith prefix
-        has = any(k.startswith(prefix) for k in state_dict.keys())
-        if not has:
-            return state_dict
-        return {k[len(prefix):] if k.startswith(prefix) else k: v for k, v in state_dict.items()}
-
-    state = strip_prefix_if_present(state, prefix="_orig_mod.")
-    model.load_state_dict(state, strict=True)
-    model.eval()
-
-    device = torch.device(args.device)
-    model.to(device)
-
-    tok = load_tokenizer(args.tokenizer)
-
+@torch.no_grad()
+def generate_default_samples(
+    model: torch.nn.Module,
+    tokenizer_path: str,
+    device: torch.device,
+    max_seq_len: int,
+    precision: str,
+    out_path: Path,
+    temperature: float = 0.7,
+    top_p: float = 0.9,
+    top_k: int = 0,
+    max_new_tokens: int = 128,
+    eos_id: int = 3,
+    add_bos: bool = False,
+    bos_id: int = 2,
+    min_new_tokens: int = 0,
+    greedy: bool = False,
+    debug: bool = True,
+) -> None:
+    """Generate a small set of fixed prompts for quick health checks."""
+    tok = load_tokenizer(tokenizer_path)
     rows: List[Tuple[str, str, str, List[int], int, Dict[str, Any]]] = []
+
     for p in DEFAULT_PROMPTS:
         full_text, new_text, new_ids, prompt_len, dbg = generate(
             model=model,
             tok=tok,
             prompt=p,
             device=device,
-            max_seq_len=args.seq_len,
-            precision=args.precision,
-            temperature=args.temperature,
-            top_p=args.top_p,
-            top_k=args.top_k,
-            max_new_tokens=args.max_new_tokens,
-            eos_id=args.eos_id,
-            add_bos=not args.no_bos,
-            bos_id=args.bos_id,
-            min_new_tokens=args.min_new_tokens,
-            greedy=args.greedy,
-            debug=not args.no_debug,
+            max_seq_len=max_seq_len,
+            precision=precision,
+            temperature=temperature,
+            top_p=top_p,
+            top_k=top_k,
+            max_new_tokens=max_new_tokens,
+            eos_id=eos_id,
+            add_bos=add_bos,
+            bos_id=bos_id,
+            min_new_tokens=min_new_tokens,
+            greedy=greedy,
+            debug=debug,
         )
         rows.append((p, full_text, new_text, new_ids, prompt_len, dbg))
 
     header = (
-        f"Samples generated with tokenizer={args.tokenizer}\n"
-        f"precision={args.precision}, temperature={args.temperature}, top_p={args.top_p}, top_k={args.top_k}, "
-        f"max_new_tokens={args.max_new_tokens}, min_new_tokens={args.min_new_tokens}, greedy={args.greedy}\n"
-        f"model: vocab_size={args.vocab_size}, seq_len={args.seq_len}, layers={args.layers}, d_model={args.d_model}, "
-        f"n_heads={args.n_heads}, d_ff={args.d_ff}, dropout={args.dropout}, tie_embeddings={bool(args.tie_embeddings)}\n"
+        f"Samples generated with tokenizer={tokenizer_path}\n"
+        f"precision={precision}, temperature={temperature}, top_p={top_p}, top_k={top_k}, "
+        f"max_new_tokens={max_new_tokens}, min_new_tokens={min_new_tokens}, greedy={greedy}\n"
     )
+    write_samples_file(out_path, header, rows)
 
-    write_samples_file(Path(args.out), header, rows)
+
+def _parse_args() -> argparse.Namespace:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--ckpt", type=str, required=True)
+    ap.add_argument("--tokenizer", type=str, required=True)
+    ap.add_argument("--out", type=str, required=True)
+    ap.add_argument("--device", type=str, default="cuda")
+    ap.add_argument("--max_seq_len", type=int, default=1024)
+    ap.add_argument("--precision", type=str, default="bf16", choices=["bf16", "fp16", "fp32"])
+    ap.add_argument("--temperature", type=float, default=0.7)
+    ap.add_argument("--top_p", type=float, default=0.9)
+    ap.add_argument("--top_k", type=int, default=0)
+    ap.add_argument("--max_new_tokens", type=int, default=128)
+    ap.add_argument("--eos_id", type=int, default=3)
+    ap.add_argument("--bos_id", type=int, default=2)
+    ap.add_argument("--add_bos", action="store_true")
+    ap.add_argument("--min_new_tokens", type=int, default=0)
+    ap.add_argument("--greedy", action="store_true")
+    ap.add_argument("--no_debug", action="store_true")
+    return ap.parse_args()
+
+
+def main() -> None:
+    # Optional CLI: load a checkpoint and produce a sample file.
+    args = _parse_args()
+
+    from src.model import GPT, GPTConfig  # noqa: E402
+
+    ckpt = torch.load(args.ckpt, map_location="cpu")
+    cfg_dict = ckpt.get("config", None)
+    if cfg_dict is None:
+        raise RuntimeError("Checkpoint missing 'config'. Train script should save ckpt['config']=asdict(cfg).")
+
+    cfg = GPTConfig(**cfg_dict)
+    model = GPT(cfg)
+
+    state = ckpt["model"]
+    if isinstance(state, dict) and any(k.startswith("_orig_mod.") for k in state.keys()):
+        state = {k[len("_orig_mod."):] if k.startswith("_orig_mod.") else k: v for k, v in state.items()}
+    model.load_state_dict(state, strict=True)
+
+    model.eval()
+    device = torch.device(args.device)
+    model.to(device)
+
+    generate_default_samples(
+        model=model,
+        tokenizer_path=args.tokenizer,
+        device=device,
+        max_seq_len=args.max_seq_len,
+        precision=args.precision,
+        out_path=Path(args.out),
+        temperature=args.temperature,
+        top_p=args.top_p,
+        top_k=args.top_k,
+        max_new_tokens=args.max_new_tokens,
+        eos_id=args.eos_id,
+        add_bos=args.add_bos,
+        bos_id=args.bos_id,
+        min_new_tokens=args.min_new_tokens,
+        greedy=args.greedy,
+        debug=not args.no_debug,
+    )
 
 
 if __name__ == "__main__":

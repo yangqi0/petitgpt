@@ -1,0 +1,92 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.7, top_p=0.9, top_k=0, max_new_tokens=128, min_new_tokens=0, greedy=False
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.8061941862106323
+first_step_topk_ids=[3, 2, 2887, 410, 15, 2814, 5728, 743, 722, 1372]
+first_step_topk_probs=[0.8061941862106323, 0.19320543110370636, 5.4700114560546353e-05, 2.6777979655889794e-05, 1.253659138455987e-05, 1.1989222912234254e-05, 7.845197615097277e-06, 6.1371829360723495e-06, 5.612969744106522e-06, 5.489067007147241e-06]
+
+[New tokens 1] count=1 first30=[3]
+[New text 1] repr=''
+
+[Full output 1]
+ Once upon a time, 
+
+================================================================================
+[Prompt 2] (prompt_tokens=11)
+In a distant future, humans and robots 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.924060583114624
+first_step_topk_ids=[3, 2, 2814, 1372, 494, 410, 570, 743, 392, 901]
+first_step_topk_probs=[0.924060583114624, 0.07585150748491287, 3.9371661841869354e-06, 1.0787661040012608e-06, 8.439027965323476e-07, 7.058950473037839e-07, 6.903127314217272e-07, 6.455996981458156e-07, 5.904557838221081e-07, 5.164437766325136e-07]
+
+[New tokens 2] count=1 first30=[3]
+[New text 2] repr=''
+
+[Full output 2]
+ In a distant future, humans and robots 
+
+================================================================================
+[Prompt 3] (prompt_tokens=11)
+The following is a news report:
+
+
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.9725789427757263
+first_step_topk_ids=[3, 2, 2814, 1372, 494, 2012, 351, 743, 1217, 901]
+first_step_topk_probs=[0.9725789427757263, 0.027344677597284317, 2.535936573622166e-06, 1.6968546105999849e-06, 6.948353643565497e-07, 5.683750714524649e-07, 5.435599632619414e-07, 5.083524570181908e-07, 5.083524570181908e-07, 4.7542579295623e-07]
+
+[New tokens 3] count=1 first30=[3]
+[New text 3] repr=''
+
+[Full output 3]
+ The following is a news report:
+
+
+
+================================================================================
+[Prompt 4] (prompt_tokens=14)
+Neural networks are a class of machine learning models that 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.6904883980751038
+first_step_topk_ids=[3, 2, 392, 570, 2814, 1372, 583, 351, 1217, 743]
+first_step_topk_probs=[0.6904883980751038, 0.3091502785682678, 1.1227516552025918e-05, 5.620408501272323e-06, 5.1403312681941316e-06, 3.845637365884613e-06, 3.0762953429075424e-06, 2.9419798011076637e-06, 2.6906880066235317e-06, 2.4608605144749163e-06]
+
+[New tokens 4] count=1 first30=[3]
+[New text 4] repr=''
+
+[Full output 4]
+ Neural networks are a class of machine learning models that 
+
+================================================================================
+[Prompt 5] (prompt_tokens=21)
+Here is a short Python snippet:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.9862511157989502
+first_step_topk_ids=[3, 2, 2814, 1372, 494, 2012, 1441, 917, 351, 1217]
+first_step_topk_probs=[0.9862511157989502, 0.013574537821114063, 7.180060492828488e-06, 3.21470656672318e-06, 2.351929424548871e-06, 1.439312086404243e-06, 1.4075415037950734e-06, 1.3460860373015748e-06, 1.1773578307838761e-06, 1.0070475582324434e-06]
+
+[New tokens 5] count=1 first30=[3]
+[New text 5] repr=''
+
+[Full output 5]
+ Here is a short Python snippet:
+
+def fib(n):
+    
+
