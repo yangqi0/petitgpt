@@ -8,11 +8,11 @@ import torch
 from tokenizers import Tokenizer
 
 DEFAULT_PROMPTS: List[str] = [
-    "Write a short story about a small robot who learns to be kind.\n\nStory:\n",
-    "Q: Why is the sky blue?\nA:",
-    "Instruction: Explain gradient descent in simple terms.\nResponse:",
-    "Write a Python function that checks if a string is a palindrome.\n\n```python\n",
-    "Summarize the following text in 3 bullet points:\n\nDeep learning has transformed many fields by learning representations from data...\n\nSummary:\n",
+    "Once upon a time, ",
+    "In a distant future, humans and robots ",
+    "The following is a news report:\n\n",
+    "Neural networks are a class of machine learning models that ",
+    "Here is a short Python snippet:\n\ndef fib(n):\n    ",
 ]
 
 
