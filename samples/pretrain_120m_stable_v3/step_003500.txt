@@ -1,0 +1,92 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.7, top_p=0.9, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.00020035085617564619
+first_step_topk_ids=[3954, 1150, 878, 7264, 4220, 1990, 1015, 7178, 1665, 10788]
+first_step_topk_probs=[0.03758818656206131, 0.028755607083439827, 0.027500104159116745, 0.023002861067652702, 0.023002861067652702, 0.018400980159640312, 0.017597582191228867, 0.015391767024993896, 0.014077065512537956, 0.012874666601419449]
+
+[New tokens 1] count=64 first30=[3954, 17, 722, 15938, 345, 15, 345, 534, 1765, 1772, 518, 1299, 261, 7503, 299, 15, 286, 5612, 17, 901, 1073, 261, 1463, 17, 901, 2711, 289, 847, 2721, 17]
+[New text 1] repr=' forest. He grabbed he, he do friends looking but always a tinyom, and enjoyed. They found a lot. They wanted to play outside. "No, he is he is back at his toys. He was very tired, but he knew that. It was pretty, Tim was very excited soon you.'
+
+[Full output 1]
+ Once upon a time,  forest. He grabbed he, he do friends looking but always a tinyom, and enjoyed. They found a lot. They wanted to play outside. "No, he is he is back at his toys. He was very tired, but he knew that. It was pretty, Tim was very excited soon you.
+
+================================================================================
+[Prompt 2] (prompt_tokens=11)
+In a distant future, humans and robots 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=2.477784910581704e-08
+first_step_topk_ids=[15, 1157, 1340, 2905, 3354, 6173, 3515, 4, 3195, 1491]
+first_step_topk_probs=[0.997848391532898, 0.00048271543346345425, 0.00015812036872375757, 5.6631753977853805e-05, 4.3324282160028815e-05, 3.4656979551073164e-05, 3.1696719815954566e-05, 2.5355586330988444e-05, 2.4248543923022225e-05, 2.3189815692603588e-05]
+
+[New tokens 2] count=135 first30=[15, 3121, 17, 722, 4531, 1863, 771, 3562, 17, 351, 1508, 2777, 410, 546, 584, 504, 554, 261, 2384, 7935, 15, 2478, 674, 17, 917, 412, 15, 539, 266, 1379]
+[New text 2] repr=', colors. He kept visit well recently. The little girl was some had has so a beautiful pink, His there. And your, " the things that the organization in the park. It was too food Joe had make a new do to help." So, he could be use what to strange, in her adventure in the 5 of the ball and we justLet\'s trees. So, A man jumped up to the little bit, the branches. After a time there and he saw the cabin back to moreney, the sameis and he had a loud awareness of the attention. And that the things that'
+
+[Full output 2]
+ In a distant future, humans and robots , colors. He kept visit well recently. The little girl was some had has so a beautiful pink, His there. And your, " the things that the organization in the park. It was too food Joe had make a new do to help." So, he could be use what to strange, in her adventure in the 5 of the ball and we justLet's trees. So, A man jumped up to the little bit, the branches. After a time there and he saw the cabin back to moreney, the sameis and he had a loud awareness of the attention. And that the things that they arrived, flew out of how said, and problem.
+
+================================================================================
+[Prompt 3] (prompt_tokens=11)
+The following is a news report:
+
+
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=4.1510789742460474e-05
+first_step_topk_ids=[410, 13850, 682, 68, 1677, 5350, 3409, 1691, 1238, 385]
+first_step_topk_probs=[0.05441446974873543, 0.034820329397916794, 0.034820329397916794, 0.01863797754049301, 0.014909328892827034, 0.011405892670154572, 0.009330020286142826, 0.009330020286142826, 0.008160524070262909, 0.007463489193469286]
+
+[New tokens 3] count=72 first30=[1766, 509, 1677, 15, 856, 524, 1400, 410, 261, 4176, 286, 1565, 1239, 266, 524, 818, 1310, 426, 1008, 17, 583, 6770, 338, 266, 7155, 4, 917, 2220, 289, 982]
+[New text 3] repr=' name they got, used out never was a bright and second try the out every company Lcom. This charges that the explained! And went to read the stone long were so long, the gig making, she tried." The hug. The space, they went to grow for friends, but he nice, the thought something special," But." The boy.'
+
+[Full output 3]
+ The following is a news report:
+
+ name they got, used out never was a bright and second try the out every company Lcom. This charges that the explained! And went to read the stone long were so long, the gig making, she tried." The hug. The space, they went to grow for friends, but he nice, the thought something special," But." The boy.
+
+================================================================================
+[Prompt 4] (prompt_tokens=14)
+Neural networks are a class of machine learning models that 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=2.8739048502757214e-05
+first_step_topk_ids=[324, 5452, 544, 2488, 914, 3028, 717, 3120, 2469, 592]
+first_step_topk_probs=[0.04679938778281212, 0.03274424001574516, 0.02738938108086586, 0.01752673089504242, 0.014660479500889778, 0.014660479500889778, 0.013408241793513298, 0.012262970209121704, 0.010257535614073277, 0.010031110607087612]
+
+[New tokens 4] count=67 first30=[8235, 1055, 266, 2384, 979, 719, 592, 292, 869, 351, 1626, 1109, 24342, 584, 2594, 17, 743, 509, 14295, 621, 350, 606, 524, 1990, 15, 539, 6351, 13850, 17, 351]
+[New text 4] repr=' reaction around the beautiful day through one of where The event because Molly had required. As they woke over as like out house, "What smiled. Theitals Anna and pulled the little!" laughing, the children felt so pretty, but he could make a new friends. It was a button. The queen was so excited to visit.'
+
+[Full output 4]
+ Neural networks are a class of machine learning models that  reaction around the beautiful day through one of where The event because Molly had required. As they woke over as like out house, "What smiled. Theitals Anna and pulled the little!" laughing, the children felt so pretty, but he could make a new friends. It was a button. The queen was so excited to visit.
+
+================================================================================
+[Prompt 5] (prompt_tokens=21)
+Here is a short Python snippet:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=3.13347700284794e-05
+first_step_topk_ids=[1027, 524, 1538, 4503, 5372, 844, 725, 4220, 613, 55]
+first_step_topk_probs=[0.034333985298871994, 0.025119280442595482, 0.017575278878211975, 0.01607406884431839, 0.012296939268708229, 0.011760041117668152, 0.011760041117668152, 0.011246584355831146, 0.009619713760912418, 0.009199706837534904]
+
+[New tokens 5] count=256 first30=[39, 2405, 266, 2846, 674, 15, 350, 592, 979, 932, 15, 533, 288, 266, 428, 1790, 4980, 289, 413, 369, 504, 1387, 13048, 1826, 464, 338, 652, 4621, 261, 4603]
+[New text 5] repr='D Us the respect there, as one day good, uped theos multverse to R or has withoutsum today this that she wrote aijkth Men the Tommy’s, which leasther post some of usingra ( thisik but age. The Man provide agreed the current strategic anub different.atoryMS except there is a I need about this list of which allred the name during this) bags and very asking before the first different and likes to with onag of intellectualproof of party of goodMvens, leader in. Thisae the specific night, agreed qual'
+
+[Full output 5]
+ Here is a short Python snippet:
+
+def fib(n):
+    D Us the respect there, as one day good, uped theos multverse to R or has withoutsum today this that she wrote aijkth Men the Tommy’s, which leasther post some of usingra ( thisik but age. The Man provide agreed the current strategic anub different.atoryMS except there is a I need about this list of which allred the name during this) bags and very asking before the first different and likes to with onag of intellectualproof of party of goodMvens, leader in. Thisae the specific night, agreed quality and ask when the edge,ford generated by a witch Jagger of an instructions-armed in eggy/ there is this deeper ones as trying to door in the close this Pricar66, or a high as current, and) on our construction of others, and keeps with the Italian he is the Philosophy, and low/22. This.) The Pro. This services that is an numbers. If you will be by a Our Ocean house told him. For ships,es in knowing this start clear - Chinam."7 was may be was are even let now penel. If you. You are just is the allow your way to be in the because the New York is or
+

@@ -1,9 +1,9 @@
 # pretrain/train_pretrain.py
 # Minimal, robust GPT pretraining script for petitgpt.
 # - MiniMind-style token-level loss_mask (explicit mask and weighted reduction)
-# - BOS is masked from loss; EOS can be down-weighted to prevent early-EOS collapse
+# - BOS masked from loss; EOS can be down-weighted early to prevent collapse
 # - grad accumulation, bf16/fp16 autocast, torch.compile, clean checkpoints
-# - periodic evaluation + sample generation + milestone checkpoints
+# - periodic evaluation + sample generation + checkpoints
 from __future__ import annotations
 
 import argparse
@@ -41,32 +41,27 @@ try:
 except Exception:
     pass
 
+
 def infer_vocab_size_from_tokenizer_json(path: str) -> int:
-    # Works for HF tokenizers' tokenizer.json (BPE/Unigram/WordPiece etc.)
+    """Infer vocab size from HF tokenizers' tokenizer.json."""
     with open(path, "r", encoding="utf-8") as f:
         obj = json.load(f)
 
     model = obj.get("model", {})
-    # BPE/WordPiece usually store vocab dict in model["vocab"]
     vocab = model.get("vocab", None)
     if isinstance(vocab, dict):
         return len(vocab)
-
-    # Some tokenizers store vocab as list of pairs
     if isinstance(vocab, list):
         return len(vocab)
 
-    # Fallback: try added_tokens
     added = obj.get("added_tokens", [])
     if isinstance(added, list) and added:
-        # not ideal, but better than nothing
-        # (still recommend setting vocab_size manually if this triggers)
         return max(t.get("id", -1) for t in added) + 1
 
     raise ValueError(f"Cannot infer vocab_size from tokenizer.json: {path}")
 
+
 def _resolve_path(p: str) -> str:
-    """Resolve a path relative to project root if needed."""
     path = Path(p)
     if path.exists():
         return str(path)
@@ -74,15 +69,6 @@ def _resolve_path(p: str) -> str:
     if alt.exists():
         return str(alt)
     return str(path)
-
-
-def lr_schedule(step: int, warmup_steps: int, base_lr: float) -> float:
-    """Simple linear warmup then constant LR (stable baseline)."""
-    if warmup_steps <= 0:
-        return base_lr
-    if step < warmup_steps:
-        return base_lr * (step + 1) / warmup_steps
-    return base_lr
 
 
 def set_seed(seed: int) -> None:
@@ -93,6 +79,15 @@ def set_seed(seed: int) -> None:
     np.random.seed(seed)
     torch.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
+
+
+def lr_schedule(step: int, warmup_steps: int, base_lr: float) -> float:
+    """Linear warmup then constant LR (stable baseline)."""
+    if warmup_steps <= 0:
+        return base_lr
+    if step < warmup_steps:
+        return base_lr * (step + 1) / warmup_steps
+    return base_lr
 
 
 def _autocast_dtype(precision: str) -> Optional[torch.dtype]:
@@ -111,28 +106,42 @@ def masked_weighted_ce_loss(
     eos_weight: float,
 ) -> torch.Tensor:
     """
-    MiniMind-style loss:
+    Token-level CE:
       - per-token CE (reduction='none')
       - multiply by loss_mask
-      - optionally down-weight EOS targets to prevent early-EOS collapse
+      - optionally down-weight EOS targets
       - normalize by sum of weights (NOT by B*T)
     """
     B, T, V = logits.shape
-    logits_2d = logits.reshape(B * T, V)
-    labels_1d = labels.reshape(B * T)
-    mask_1d = loss_mask.reshape(B * T)
+    l = logits.reshape(B * T, V)
+    y = labels.reshape(B * T)
+    m = loss_mask.reshape(B * T)
 
-    # Per-token CE, ignore_index is NOT used here (mask controls everything).
-    per_tok = F.cross_entropy(logits_2d, labels_1d, reduction="none")  # [B*T]
-
-    weights = mask_1d
+    per = F.cross_entropy(l, y, reduction="none")  # [B*T]
+    w = m
     if eos_weight != 1.0:
-        eos_m = (labels_1d == int(eos_id)).float()
-        # Scale EOS weights (mask already includes BOS removal etc.)
-        weights = weights * (1.0 + eos_m * (float(eos_weight) - 1.0))
+        eos_m = (y == int(eos_id)).float()
+        w = w * (1.0 + eos_m * (float(eos_weight) - 1.0))
 
-    denom = weights.sum().clamp_min(1.0)
-    return (per_tok * weights).sum() / denom
+    denom = w.sum().clamp_min(1.0)
+    return (per * w).sum() / denom
+
+
+@torch.no_grad()
+def masked_ce_128_debug(
+    logits: torch.Tensor,
+    labels: torch.Tensor,
+    loss_mask: torch.Tensor,
+    tt: int = 128,
+) -> float:
+    """Same mouth as training loss (mask-weighted), but only first tt tokens."""
+    B, T, V = logits.shape
+    t = min(T, tt)
+    l = logits[:, :t, :].reshape(-1, V).float()
+    y = labels[:, :t].reshape(-1)
+    m = loss_mask[:, :t].reshape(-1)
+    per = F.cross_entropy(l, y, reduction="none")
+    return float((per * m).sum().item() / m.sum().clamp_min(1.0).item())
 
 
 def save_ckpt(
@@ -141,13 +150,11 @@ def save_ckpt(
     local_step: int,
     model: torch.nn.Module,
     optim: torch.optim.Optimizer,
-    scaler: Optional[torch.cuda.amp.GradScaler],
+    scaler: Optional[torch.amp.GradScaler],
     model_config: Dict,
     train_args: Dict,
 ) -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
-
-    # Unwrap torch.compile for clean keys.
     model_to_save = model._orig_mod if hasattr(model, "_orig_mod") else model
 
     ckpt = {
@@ -160,10 +167,7 @@ def save_ckpt(
         "train_args": train_args,
     }
 
-    # Always update latest
     torch.save(ckpt, out_dir / "latest.pt")
-
-    # Also write milestone-style checkpoint by step (useful for comparing samples)
     torch.save(ckpt, out_dir / f"step_{global_step:06d}.pt")
 
 
@@ -171,23 +175,21 @@ def load_ckpt(
     resume_path: Path,
     model: torch.nn.Module,
     optim: torch.optim.Optimizer,
-    scaler: Optional[torch.cuda.amp.GradScaler],
+    scaler: Optional[torch.amp.GradScaler],
     resume_full: bool,
 ) -> Tuple[int, int]:
     ckpt = torch.load(resume_path, map_location="cpu")
     state = ckpt["model"]
 
-    # Handle legacy compiled prefixes.
     if any(k.startswith("_orig_mod.") for k in state.keys()):
         state = {k[len("_orig_mod."):]: v for k, v in state.items()}
 
     model.load_state_dict(state, strict=True)
-
     global_step = int(ckpt.get("global_step", 0))
     local_step = int(ckpt.get("local_step", 0))
 
     if resume_full:
-        if "optim" in ckpt and ckpt["optim"] is not None:
+        if ckpt.get("optim") is not None:
             optim.load_state_dict(ckpt["optim"])
         if scaler is not None and ckpt.get("scaler") is not None:
             scaler.load_state_dict(ckpt["scaler"])
@@ -216,7 +218,6 @@ def evaluate(
         except StopIteration:
             break
 
-        # Support (x,y) or (x,y,mask)
         if len(batch) == 2:
             input_u16, labels_u16 = batch
             loss_mask = torch.ones_like(labels_u16, dtype=torch.float32)
@@ -267,28 +268,10 @@ def parse_args() -> argparse.Namespace:
     ap.add_argument("--eos_id", type=int, default=3)
 
     # Loss shaping (defaults ON; use --no_xxx to disable)
-    ap.add_argument(
-        "--no_mask_bos_in_loss",
-        action="store_true",
-        help="Disable masking BOS targets in loss (NOT recommended).",
-    )
-    ap.add_argument(
-        "--no_mask_last_label_in_loss",
-        action="store_true",
-        help="Disable masking last label position in each block.",
-    )
-    ap.add_argument(
-        "--eos_weight",
-        type=float,
-        default=0.2,
-        help="Down-weight EOS targets in the loss (e.g., 0.2). Set 1.0 to disable.",
-    )
-    ap.add_argument(
-        "--eos_weight_warmup_steps",
-        type=int,
-        default=0,
-        help="If >0, use eos_weight for first N steps, then switch to 1.0.",
-    )
+    ap.add_argument("--no_mask_bos_in_loss", action="store_true")
+    ap.add_argument("--no_mask_last_label_in_loss", action="store_true")
+    ap.add_argument("--eos_weight", type=float, default=0.2)
+    ap.add_argument("--eos_weight_warmup_steps", type=int, default=0)
 
     # Train
     ap.add_argument("--precision", choices=["bf16", "fp16", "fp32"], default="bf16")
@@ -307,6 +290,7 @@ def parse_args() -> argparse.Namespace:
     ap.add_argument("--eval_every", type=int, default=1000)
     ap.add_argument("--save_every", type=int, default=1000)
     ap.add_argument("--milestone_every", type=int, default=10000)
+    ap.add_argument("--debug_every", type=int, default=500)
 
     # Sampling during training
     ap.add_argument("--add_bos_to_prompts", action="store_true")
@@ -314,12 +298,7 @@ def parse_args() -> argparse.Namespace:
     ap.add_argument("--sample_top_p", type=float, default=0.9)
     ap.add_argument("--sample_top_k", type=int, default=0)
     ap.add_argument("--sample_max_new_tokens", type=int, default=256)
-    ap.add_argument(
-        "--sample_min_new_tokens",
-        type=int,
-        default=32,
-        help="Prevent 'empty samples' by not allowing EOS before N tokens.",
-    )
+    ap.add_argument("--sample_min_new_tokens", type=int, default=32)
 
     # Resume
     ap.add_argument("--resume_path", type=str, default="")
@@ -344,13 +323,12 @@ def main() -> None:
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     assert device.type == "cuda", "This script expects a CUDA GPU."
 
-    # Always trust tokenizer.json for vocab_size to avoid embedding OOB
+    # vocab_size from tokenizer.json
     try:
         inferred_vs = infer_vocab_size_from_tokenizer_json(str(tok_path))
     except Exception as e:
         print(f"[warn] failed to infer vocab_size from tokenizer.json: {e}")
         inferred_vs = args.vocab_size
-
     if inferred_vs != args.vocab_size:
         print(f"[info] override vocab_size: args={args.vocab_size} -> tokenizer={inferred_vs}")
 
@@ -369,11 +347,16 @@ def main() -> None:
 
     use_fp16 = args.precision == "fp16"
     ac_dtype = _autocast_dtype(args.precision)
-    scaler = torch.cuda.amp.GradScaler(enabled=use_fp16)
+    scaler = torch.amp.GradScaler("cuda", enabled=use_fp16)
 
-    optim = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=args.weight_decay, betas=(0.9, 0.95))
+    optim = torch.optim.AdamW(
+        model.parameters(),
+        lr=args.lr,
+        weight_decay=args.weight_decay,
+        betas=(0.9, 0.95),
+    )
 
-    # Data (MiniMind-style loss_mask from dataset)
+    # Data
     train_ds = PackedBinDataset(
         str(train_dir),
         seq_len=args.seq_len,
@@ -408,7 +391,7 @@ def main() -> None:
         drop_last=True,
     )
 
-    # Resume (optional)
+    # Resume
     global_step = 0
     local_step = 0
     if args.resume_path:
@@ -422,7 +405,7 @@ def main() -> None:
         )
         print(f"[resume] loaded {resume_path} (global_step={global_step}, local_step={local_step})")
 
-    # Compile (after loading)
+    # Compile
     if args.compile:
         try:
             model = torch.compile(model)  # type: ignore[attr-defined]
@@ -441,24 +424,23 @@ def main() -> None:
     data_iter = iter(train_dl)
 
     t_window = time.time()
-    window_tokens = 0
+    window_sup_tokens_est = 0  # estimated supervised tokens (avoid GPU sync)
 
     while local_step < args.max_steps:
-        # LR warmup (stable baseline)
         lr = lr_schedule(global_step, args.warmup_steps, args.lr)
         for pg in optim.param_groups:
             pg["lr"] = lr
 
         optim.zero_grad(set_to_none=True)
-        accum_loss_scaled = 0.0
-        accum_loss_raw = 0.0
 
         # EOS weight schedule
         cur_eos_weight = float(args.eos_weight)
         if args.eos_weight_warmup_steps and global_step >= int(args.eos_weight_warmup_steps):
             cur_eos_weight = 1.0
 
-        for _ in range(args.grad_accum):
+        accum_loss_raw = 0.0
+
+        for micro in range(args.grad_accum):
             try:
                 batch = next(data_iter)
             except StopIteration:
@@ -467,26 +449,26 @@ def main() -> None:
 
             if len(batch) == 2:
                 input_u16, labels_u16 = batch
-                loss_mask = torch.ones_like(labels_u16, dtype=torch.float32)
+                loss_mask_cpu = torch.ones_like(labels_u16, dtype=torch.float32)
             else:
-                input_u16, labels_u16, loss_mask = batch
+                input_u16, labels_u16, loss_mask_cpu = batch
 
-            # CPU-side sanity check to prevent CUDA device-side assert
-            # only check the first 50 global_step
-            if global_step < 50:
-                max_id = int(input_u16.max().item())
-                min_id = int(input_u16.min().item())
+            # CPU-side sanity check (first 50 steps only)
+            if global_step < 50 and micro == 0:
+                tmp = input_u16.to(torch.int32)
+                max_id = int(tmp.max().item())
+                min_id = int(tmp.min().item())
                 if min_id < 0 or max_id >= cfg.vocab_size:
                     print(f"[fatal] token id out of range: min={min_id} max={max_id} vocab_size={cfg.vocab_size}")
-                    print("[fatal] first row head:", input_u16[0, :32].tolist())
+                    print("[fatal] first row head:", tmp[0, :32].tolist())
                     raise RuntimeError("Token id out of range. Fix vocab_size/tokenizer/shards.")
 
+            # token/s estimate (use CPU mask sum; cheap)
+            window_sup_tokens_est += int(loss_mask_cpu.sum().item())
 
             input_ids = input_u16.to(device, dtype=torch.long, non_blocking=True)
             labels = labels_u16.to(device, dtype=torch.long, non_blocking=True)
-            loss_mask = loss_mask.to(device, dtype=torch.float32, non_blocking=True)
-
-            window_tokens += int(loss_mask.sum().item())
+            loss_mask = loss_mask_cpu.to(device, dtype=torch.float32, non_blocking=True)
 
             if ac_dtype is not None:
                 with torch.autocast("cuda", dtype=ac_dtype):
@@ -515,10 +497,44 @@ def main() -> None:
             else:
                 loss.backward()
 
-            accum_loss_scaled += float(loss.detach().item())
             accum_loss_raw += float(loss_raw.detach().item())
 
-        # Clip and step
+            # Debug (same step, same microbatch; only once per debug interval)
+            if (global_step % args.debug_every == 0) and (micro == 0):
+                # Basic logits stats
+                lm = float(logits.float().mean().item())
+                ls = float(logits.float().std().item())
+
+                # Masked CE on the first 128 tokens (same "mouth" as training loss, but unweighted by eos_weight)
+                mce = masked_ce_128_debug(logits, labels, loss_mask, tt=128)
+
+                print(f"[dbg] step={global_step} logits_mean={lm:.4f} logits_std={ls:.4f} masked_ce_128={mce:.6f}")
+
+                # 1) How much supervision is actually active? (If this is ~0, you're training almost nothing.)
+                m = loss_mask
+                print("[dbg] mask_mean:", float(m.mean().item()), "mask_sum:", float(m.sum().item()))
+
+                # 2) Label value range (should be within [0, vocab_size-1])
+                y = labels
+                print("[dbg] labels min/max:", int(y.min().item()), int(y.max().item()))
+
+                # 3) Masked top-1 accuracy (very rough, but great for catching label/target bugs)
+                pred = logits.argmax(dim=-1)
+                hit = ((pred == y) & (m > 0)).sum().item()
+                tot = (m > 0).sum().item()
+                print("[dbg] masked_top1_acc:", float(hit / max(1.0, tot)))
+
+                # 4) Unmasked CE over the first 128 tokens (scale sanity check)
+                B, T, V = logits.shape
+                tt = min(T, 128)
+                ce_nomask = F.cross_entropy(
+                    logits[:, :tt, :].reshape(-1, V).float(),
+                    y[:, :tt].reshape(-1),
+                    reduction="mean",
+                )
+                print("[dbg] ce_nomask_128:", float(ce_nomask.item()))
+
+        # grad clip
         if args.grad_clip and args.grad_clip > 0:
             if use_fp16:
                 scaler.unscale_(optim)
@@ -536,15 +552,14 @@ def main() -> None:
         # Logging
         if global_step % args.log_every == 0:
             dt = time.time() - t_window
-            tok_s = window_tokens / max(dt, 1e-6)
-            # True CE ~= mean of loss_raw over accumulation steps
-            true_ce = accum_loss_raw / max(1, args.grad_accum)
+            tok_s = window_sup_tokens_est / max(dt, 1e-6)
+            mean_loss_raw = accum_loss_raw / max(1, args.grad_accum)
             print(
-                f"[train] step={global_step} loss_raw={true_ce:.4f} "
+                f"[train] step={global_step} loss={mean_loss_raw:.4f} "
                 f"(eos_w={cur_eos_weight:g}) lr={lr:.2e} tok/s={tok_s:.0f}"
             )
             t_window = time.time()
-            window_tokens = 0
+            window_sup_tokens_est = 0
 
         # Eval + samples
         if global_step % args.eval_every == 0:
@@ -554,7 +569,7 @@ def main() -> None:
                 device=device,
                 precision=args.precision,
                 eos_id=args.eos_id,
-                eos_weight=cur_eos_weight if args.eos_weight_warmup_steps else float(args.eos_weight),
+                eos_weight=cur_eos_weight,
                 max_batches=50,
             )
             print(f"[eval] step={global_step} val_loss={val_loss:.4f}")
@@ -598,7 +613,7 @@ def main() -> None:
             )
             print(f"[ckpt] saved latest + step_{global_step:06d}.pt to {out_dir}")
 
-        # Extra milestone (every N steps)
+        # Milestone (optional)
         if args.milestone_every > 0 and (global_step % args.milestone_every == 0):
             save_ckpt(
                 out_dir=out_dir,

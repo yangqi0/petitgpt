@@ -1,0 +1,92 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.7, top_p=0.9, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=2.313120148755843e-06
+first_step_topk_ids=[1990, 1164, 3052, 979, 956, 3498, 1965, 1150, 17124, 6359]
+first_step_topk_probs=[0.12512078881263733, 0.0957195907831192, 0.07002995163202286, 0.06404828280210495, 0.04285624250769615, 0.026226742193102837, 0.025081664323806763, 0.02097991108894348, 0.016782743856310844, 0.014038162305951118]
+
+[New tokens 1] count=162 first30=[1990, 1990, 1990, 1367, 5728, 17, 5614, 2624, 261, 2384, 541, 569, 410, 261, 1576, 15, 518, 312, 436, 289, 1965, 17, 351, 1001, 17, 1516, 979, 15, 5728, 2895]
+[New text 1] repr=' house house house open Tim. Max saw a beautiful about It was a big, but I have to bring. The end. One day, Timmy felt a big p. Timmy. He woke over and Lily didn\'t have it was so scared. Lily and he wagged the toys all day, Timmy put theice and wanted to play with. "Don\'t want to protect it. He took a big backyard. Tim and Timmy was able to practice. Tim, and it was a time, he played together. Tim\'s birthday was not fun at the keeps it was sad and his little her friend. She those how to move. Sh'
+
+[Full output 1]
+ Once upon a time,  house house house open Tim. Max saw a beautiful about It was a big, but I have to bring. The end. One day, Timmy felt a big p. Timmy. He woke over and Lily didn't have it was so scared. Lily and he wagged the toys all day, Timmy put theice and wanted to play with. "Don't want to protect it. He took a big backyard. Tim and Timmy was able to practice. Tim, and it was a time, he played together. Tim's birthday was not fun at the keeps it was sad and his little her friend. She those how to move. She asked her mommy, Timmy thought it was sad, he had lots of the town and started to bring. The town into the problem.
+
+================================================================================
+[Prompt 2] (prompt_tokens=11)
+In a distant future, humans and robots 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=1.0440099913466838e-06
+first_step_topk_ids=[1087, 1157, 15, 2315, 263, 22, 415, 973, 508, 3604]
+first_step_topk_probs=[0.3247947692871094, 0.22725006937980652, 0.11632728576660156, 0.059546954929828644, 0.03984430059790611, 0.02438352443277836, 0.016315601766109467, 0.009548725560307503, 0.006680983118712902, 0.006110321264714003]
+
+[New tokens 2] count=210 first30=[1087, 970, 1203, 6716, 410, 1990, 14506, 13616, 17, 569, 410, 963, 1593, 8087, 16700, 8106, 17, 54, 3515, 15, 603, 1048, 1047, 15, 518, 266, 6528, 350, 261, 1067]
+[New text 2] repr='), while place Bob was house Shipping hungry. It was years old funny modest Rose.Ships, how much fun, but the bird as a few years sound. It was very happy at the architecture because he did not know what smiled and then onens better, everyone. And they Then, Lily scorp service down at answer with business, we million over to eat. In gathered me find a OK, thin, "Lily, but I cannot people mind. - it was a real things where you don\'t worry, who looked amazing mess on. "This things that you." Lily\''
+
+[Full output 2]
+ In a distant future, humans and robots ), while place Bob was house Shipping hungry. It was years old funny modest Rose.Ships, how much fun, but the bird as a few years sound. It was very happy at the architecture because he did not know what smiled and then onens better, everyone. And they Then, Lily scorp service down at answer with business, we million over to eat. In gathered me find a OK, thin, "Lily, but I cannot people mind. - it was a real things where you don't worry, who looked amazing mess on. "This things that you." Lily's underneath the Reb where you go to learn the red. That’s it. She looked beautiful joy. And it find there." The end of the sea and watched when they were full of the street their mom said, and then he thought about the current, it. "C. They said, Daddy were so happy too. As she saw a conservative health. One day, it was able to be kind. She stopped at the sea.
+
+================================================================================
+[Prompt 3] (prompt_tokens=11)
+The following is a news report:
+
+
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.00013015516742598265
+first_step_topk_ids=[1427, 13714, 3594, 3293, 283, 73, 3457, 839, 6650, 1641]
+first_step_topk_probs=[0.047173354774713516, 0.04126030579209328, 0.03608844056725502, 0.030186686664819717, 0.019316740334033966, 0.01766679249703884, 0.016895441338419914, 0.016895441338419914, 0.016157768666744232, 0.015452301129698753]
+
+[New tokens 3] count=256 first30=[39, 13283, 428, 745, 682, 261, 674, 371, 592, 306, 349, 963, 1593, 5728, 2895, 2220, 289, 1206, 3345, 17, 494, 266, 775, 266, 897, 286, 3994, 286, 3077, 17]
+[New text 3] repr='Digsos people use a there are oneve with years old Timmy went to keep itself. In theise the world and milk and anyone. But as Lila was love least!" The boy used to buy home, "Sor of books. In the refuge in the beauty of just dad. She was scared but the cry. In the resist the melting about his teacher is chamber to his toy building, but not a personal responded, "We don\'t have deer! The worm. The bear closed each other animals up and started to the little shiny so proud of her adventure and start'
+
+[Full output 3]
+ The following is a news report:
+
+Digsos people use a there are oneve with years old Timmy went to keep itself. In theise the world and milk and anyone. But as Lila was love least!" The boy used to buy home, "Sor of books. In the refuge in the beauty of just dad. She was scared but the cry. In the resist the melting about his teacher is chamber to his toy building, but not a personal responded, "We don't have deer! The worm. The bear closed each other animals up and started to the little shiny so proud of her adventure and started to play with many Al musical 45. He was happy and was there was so put out of them with the board than the little bird flew over the table! He drove away and made a few minutes, they could help the wonderful. They played problem did not scare 'ry, "Thank you are twins. The game. The bird flew up and gave out, alone and put the kitchen, the product in the white cat behind a loud. The cat was very So, they had a blue. "I have fun! You can learn to hurt in the wind and was inside. It was happy and showed all of the funny. They were very happy. They took a bench. He
+
+================================================================================
+[Prompt 4] (prompt_tokens=14)
+Neural networks are a class of machine learning models that 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=4.4607213567360304e-06
+first_step_topk_ids=[2050, 534, 1641, 3028, 899, 29, 362, 1015, 3169, 592]
+first_step_topk_probs=[0.3656691312789917, 0.25584876537323, 0.04690658673644066, 0.031386326998472214, 0.025107286870479584, 0.02008439414203167, 0.018368884921073914, 0.012291062623262405, 0.01028103195130825, 0.007193354889750481]
+
+[New tokens 4] count=182 first30=[2050, 3575, 16452, 451, 12687, 4723, 15, 518, 293, 7173, 266, 1388, 725, 261, 2788, 410, 1472, 887, 350, 652, 29, 493, 266, 17330, 17, 583, 9252, 17, 569, 410]
+[New text 4] repr=' American shall jokesand pondaked, but d potentially the story just a Let was hard set as she: all the acted. This anymore. It was so excited, designers on the moment, if the first, most a point of an In tall job to give down about 1:20 minutes from something next day. He is. It’s cherries means that it’s the design for four-oraming pregnant to follow the narn of black and learn to the star has playing. Heini to carry the last time because the U. He is fun that you us Ex last time for all under '
+
+[Full output 4]
+ Neural networks are a class of machine learning models that  American shall jokesand pondaked, but d potentially the story just a Let was hard set as she: all the acted. This anymore. It was so excited, designers on the moment, if the first, most a point of an In tall job to give down about 1:20 minutes from something next day. He is. It’s cherries means that it’s the design for four-oraming pregnant to follow the narn of black and learn to the star has playing. Heini to carry the last time because the U. He is fun that you us Ex last time for all under the widget itself. The boy said that you hide, which means they made it's office own hold our defense in the Alabama brightness, andives online. The daughter, something crazy” (P involves happily ever for a 2005 F1. The Mommy held it is Dsh with round times!
+
+================================================================================
+[Prompt 5] (prompt_tokens=21)
+Here is a short Python snippet:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=4.064424501848407e-06
+first_step_topk_ids=[397, 362, 1115, 521, 54, 260, 695, 272, 8087, 11530]
+first_step_topk_probs=[0.22446198761463165, 0.1642199009656906, 0.04919780045747757, 0.02303282916545868, 0.02202717959880829, 0.02106545865535736, 0.014095405116677284, 0.012328585609793663, 0.011790305376052856, 0.011790305376052856]
+
+[New tokens 5] count=159 first30=[5752, 2200, 8519, 4157, 369, 6737, 15, 11495, 15, 652, 410, 485, 4401, 1055, 266, 2913, 286, 2598, 290, 351, 3048, 15, 286, 1180, 445, 266, 4275, 2721, 446, 800]
+[New text 5] repr=' intelligence seen loud January or stopped, collecting, she was more visitors around the 50 and walk in The hair, and love from the ice outside by raa didn\'t want to enjoy on as a sl actors. But the sun was for a big classic media and you have changed. He’s." The we went home. G names and withoutiability by which he still through the Know swinging, he rode around the same. The present a number of share together. Mom got flying on, Lily and – about the out of girls looks at rise. Our word 16 to s'
+
+[Full output 5]
+ Here is a short Python snippet:
+
+def fib(n):
+     intelligence seen loud January or stopped, collecting, she was more visitors around the 50 and walk in The hair, and love from the ice outside by raa didn't want to enjoy on as a sl actors. But the sun was for a big classic media and you have changed. He’s." The we went home. G names and withoutiability by which he still through the Know swinging, he rode around the same. The present a number of share together. Mom got flying on, Lily and – about the out of girls looks at rise. Our word 16 to spend a no longer pulled out of theCurpers. She was hard work. Se friends know about the list of the [ors, he had been so happy to buy how the such as where you go home.
+

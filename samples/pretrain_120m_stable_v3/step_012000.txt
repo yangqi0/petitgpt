@@ -1,0 +1,92 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.7, top_p=0.9, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=2.8259053124202183e-06
+first_step_topk_ids=[1157, 7264, 371, 5907, 1164, 1150, 316, 19317, 856, 6351]
+first_step_topk_probs=[0.5923770666122437, 0.06078588217496872, 0.05559379979968071, 0.035575009882450104, 0.021770846098661423, 0.011144312098622322, 0.008914816193282604, 0.00815335288643837, 0.005965120624750853, 0.004989609122276306]
+
+[New tokens 1] count=118 first30=[1157, 722, 410, 261, 3895, 4066, 5728, 2895, 17, 5728, 2895, 2220, 289, 1170, 354, 410, 1164, 17, 1516, 979, 345, 3832, 266, 1665, 17, 351, 31991, 15, 5728, 2895]
+[New text 1] repr='." He was a boy named Timmy. Timmy went to build it was look. One day he shared the children. The pupil, Timmy learned that the age. He ate any tight. She felt happy, she were having a new outside. She was full of the k and his mom about the sky. Asus. Lily was a big dog! Tom. They played too. Finally, the park. He ran out of the though the wall. He was proud of him:king and his family. He tried to the bed. He helped her. But it.'
+
+[Full output 1]
+ Once upon a time, ." He was a boy named Timmy. Timmy went to build it was look. One day he shared the children. The pupil, Timmy learned that the age. He ate any tight. She felt happy, she were having a new outside. She was full of the k and his mom about the sky. Asus. Lily was a big dog! Tom. They played too. Finally, the park. He ran out of the though the wall. He was proud of him:king and his family. He tried to the bed. He helped her. But it.
+
+================================================================================
+[Prompt 2] (prompt_tokens=11)
+In a distant future, humans and robots 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=1.3424956979424252e-10
+first_step_topk_ids=[15, 1157, 3121, 1087, 263, 3354, 973, 982, 371, 489]
+first_step_topk_probs=[0.9864068627357483, 0.013576681725680828, 9.632304909246159e-07, 8.057076001932728e-07, 6.163804187053756e-07, 5.637317599394009e-07, 4.312641976866871e-07, 4.124349572975916e-07, 3.2992466003634036e-07, 3.1551965662401926e-07]
+
+[New tokens 2] count=95 first30=[15, 3559, 914, 629, 1102, 17, 743, 3288, 5861, 266, 10565, 10103, 3415, 261, 616, 15, 2590, 1007, 1780, 17, 351, 1008, 17, 917, 947, 504, 395, 601, 412, 6528]
+[New text 2] repr=', gave him new home. As national missing the OK imagination sort a time, feeling too strong. Thecom. And then has can go your bird out for a time and! first the candle, he waited side! It was a big idea. You can get the pond and he got about you can get the water to be careful, we can quickly opened the problem. Tim told his friends back in the pond. She was so happy. Timmy was too.'
+
+[Full output 2]
+ In a distant future, humans and robots , gave him new home. As national missing the OK imagination sort a time, feeling too strong. Thecom. And then has can go your bird out for a time and! first the candle, he waited side! It was a big idea. You can get the pond and he got about you can get the water to be careful, we can quickly opened the problem. Tim told his friends back in the pond. She was so happy. Timmy was too.
+
+================================================================================
+[Prompt 3] (prompt_tokens=11)
+The following is a news report:
+
+
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.0002487364108674228
+first_step_topk_ids=[8087, 5467, 5728, 2384, 9414, 3479, 2926, 283, 4437, 19723]
+first_step_topk_probs=[0.1408822238445282, 0.03376256301999092, 0.029530519619584084, 0.025828950107097626, 0.022591352462768555, 0.02160499058663845, 0.020661691203713417, 0.012644345872104168, 0.012644345872104168, 0.012092279270291328]
+
+[New tokens 3] count=150 first30=[4421, 2266, 261, 4180, 6783, 351, 4437, 3001, 5605, 351, 2575, 5426, 290, 266, 5122, 17, 1339, 15, 385, 484, 828, 266, 3996, 350, 345, 3094, 742, 1537, 266, 1086]
+[New text 3] repr=' happened object a picture letters The discovered bed!" The quickly proud in the beach. So, we will see the sand as he couldn\'t put the water. She was so happy. He started to from the owl that he saw many different. He looks at the door with the stay near the sky and said, "I have been.com. The birdised and quickly a friendly dog to school playing with the hole. She was happy. She smiled and sad at the book, but the ice cream. Molly was too far over and attach the beach. He fl back and playing i'
+
+[Full output 3]
+ The following is a news report:
+
+ happened object a picture letters The discovered bed!" The quickly proud in the beach. So, we will see the sand as he couldn't put the water. She was so happy. He started to from the owl that he saw many different. He looks at the door with the stay near the sky and said, "I have been.com. The birdised and quickly a friendly dog to school playing with the hole. She was happy. She smiled and sad at the book, but the ice cream. Molly was too far over and attach the beach. He fl back and playing in the same thing. "P through the path. They bring the sky. "You have to spend his very happy. They hugged his pot of the stars.
+
+================================================================================
+[Prompt 4] (prompt_tokens=14)
+Neural networks are a class of machine learning models that 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=4.836665539187379e-06
+first_step_topk_ids=[566, 3028, 3329, 534, 22, 914, 899, 592, 45, 2077]
+first_step_topk_probs=[0.4558451771736145, 0.12489967048168182, 0.04473360255360603, 0.03272780403494835, 0.03129885718226433, 0.03129885718226433, 0.016021620482206345, 0.016021620482206345, 0.014013354666531086, 0.012256807647645473]
+
+[New tokens 4] count=138 first30=[1430, 2275, 371, 261, 4894, 1157, 519, 5399, 15, 674, 410, 261, 1576, 15, 4066, 5728, 17, 743, 345, 436, 266, 444, 289, 375, 321, 1422, 17, 17, 787, 436]
+[New text 4] repr=' say types are a van." U walls, there was a big, named Tim. As he have the O toill for game.. You have to be up by the ball.!" From then were every day. She didn\'t worry, "I have up the largest. The people felt sad because. I had a big tree, the each other days is the generous fit about the skin every day. The sticking out this dress from the sky. Max felt proud of the distance. He intest of the table or things when he got directly food inside were given that when he decided to be kind to be sur'
+
+[Full output 4]
+ Neural networks are a class of machine learning models that  say types are a van." U walls, there was a big, named Tim. As he have the O toill for game.. You have to be up by the ball.!" From then were every day. She didn't worry, "I have up the largest. The people felt sad because. I had a big tree, the each other days is the generous fit about the skin every day. The sticking out this dress from the sky. Max felt proud of the distance. He intest of the table or things when he got directly food inside were given that when he decided to be kind to be sure you has been his friends that the run around the nearby squirrel inside.
+
+================================================================================
+[Prompt 5] (prompt_tokens=21)
+Here is a short Python snippet:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=1.19164533316507e-05
+first_step_topk_ids=[695, 814, 521, 283, 43, 17664, 2392, 3849, 707, 5770]
+first_step_topk_probs=[0.20533215999603271, 0.11492415517568588, 0.10510780662298203, 0.026339173316955566, 0.0240893866866827, 0.01762417145073414, 0.01474200189113617, 0.014098342508077621, 0.01348280068486929, 0.01348280068486929]
+
+[New tokens 5] count=156 first30=[521, 47, 674, 1673, 261, 1218, 2720, 17, 1008, 436, 660, 321, 1370, 607, 1776, 17, 324, 41, 406, 289, 3479, 6111, 15, 4857, 72, 1304, 1771, 289, 5, 2996]
+[New text 5] repr=' unL there week a New York.com have been for come any future. AFth to wild fle, Chinesee better left to" amazing the bear with a bright first. But of the United States, didn’s in that who work that was such as a battery and that has doesn\'t mean wellet wings from the new staff Z price me saying that any as the President, are something through the ice. We will. And you can be used to the puddle. I am so un race in the Mediaus? G8578 music, and then who have the gray.com. I am working. I can be wa'
+
+[Full output 5]
+ Here is a short Python snippet:
+
+def fib(n):
+     unL there week a New York.com have been for come any future. AFth to wild fle, Chinesee better left to" amazing the bear with a bright first. But of the United States, didn’s in that who work that was such as a battery and that has doesn't mean wellet wings from the new staff Z price me saying that any as the President, are something through the ice. We will. And you can be used to the puddle. I am so un race in the Mediaus? G8578 music, and then who have the gray.com. I am working. I can be watched the same water job she heard a book. G), and say he felt glad because thebit.). W.S.
+

@@ -1,0 +1,92 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.7, top_p=0.9, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.00040392717346549034
+first_step_topk_ids=[1150, 7178, 3954, 1990, 8199, 4220, 5420, 7264, 5350, 7827]
+first_step_topk_probs=[0.07328619062900543, 0.061301298439502716, 0.056065190583467484, 0.034310225397348404, 0.013436077162623405, 0.011238801293075085, 0.010748102329671383, 0.010748102329671383, 0.009400853887200356, 0.009193339385092258]
+
+[New tokens 1] count=131 first30=[3954, 15, 674, 29083, 15, 7178, 6844, 1961, 413, 541, 607, 4236, 17, 3, 493, 894, 13927, 410, 485, 1040, 9325, 286, 354, 15, 674, 410, 261, 1576, 17, 569]
+[New text 1] repr=' forest, there Mickey, bear Lily didn R about any rain. all each Dad was more very sorry and it, there was a big. It went to give with a big. He asked about others." The She tried. The raft of the cave. When he asked his house for a big bear felt sad because he could help the tree. When the tree. When they got scared. As when he w the tree. He said "I\'m sorry, "I don\'t know it was a big,. He wanted to a big and replied. He got to the long way. A birthday cry. He sometimes he didn\'t mean.'
+
+[Full output 1]
+ Once upon a time,  forest, there Mickey, bear Lily didn R about any rain. all each Dad was more very sorry and it, there was a big. It went to give with a big. He asked about others." The She tried. The raft of the cave. When he asked his house for a big bear felt sad because he could help the tree. When the tree. When they got scared. As when he w the tree. He said "I'm sorry, "I don't know it was a big,. He wanted to a big and replied. He got to the long way. A birthday cry. He sometimes he didn't mean.
+
+================================================================================
+[Prompt 2] (prompt_tokens=11)
+In a distant future, humans and robots 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=9.528323062113486e-06
+first_step_topk_ids=[15, 3195, 6173, 5420, 17, 17690, 79, 417, 4066, 2437]
+first_step_topk_probs=[0.135808527469635, 0.023811645805835724, 0.02277200296521187, 0.01139947958290577, 0.01019564550369978, 0.009750491939485073, 0.008528290316462517, 0.007459293119609356, 0.007459293119609356, 0.006976141594350338]
+
+[New tokens 2] count=61 first30=[15, 5728, 2895, 10406, 15, 7178, 4917, 261, 1508, 1294, 410, 289, 956, 722, 410, 415, 3715, 15, 286, 603, 694, 580, 17, 917, 15, 6844, 286, 421, 261, 17]
+[New text 2] repr=', Timmy acquired, bear although a little family was to feel He was at herself, and how what them. And, Lily and ch a. It was broken. When bullets, " After this traditionalerm-year, and look of hear it was trying to be careful and thanked the claws.'
+
+[Full output 2]
+ In a distant future, humans and robots , Timmy acquired, bear although a little family was to feel He was at herself, and how what them. And, Lily and ch a. It was broken. When bullets, " After this traditionalerm-year, and look of hear it was trying to be careful and thanked the claws.
+
+================================================================================
+[Prompt 3] (prompt_tokens=11)
+The following is a news report:
+
+
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.00019409737433306873
+first_step_topk_ids=[68, 3409, 1187, 1677, 54, 277, 979, 45, 1976, 1238]
+first_step_topk_probs=[0.019491523504257202, 0.01864050328731537, 0.017826637253165245, 0.017826637253165245, 0.014260303229093552, 0.013637682422995567, 0.012197484262287617, 0.012197484262287617, 0.010202757082879543, 0.009541912004351616]
+
+[New tokens 3] count=85 first30=[5426, 518, 21533, 385, 689, 583, 18206, 3537, 266, 22238, 1062, 4063, 5404, 2166, 286, 5656, 289, 700, 837, 2033, 17, 893, 1563, 645, 266, 12155, 286, 947, 290, 266]
+[New text 3] repr=" proud but Moses we need This smiles looked the SEM those saying sitting doing and switch to make great done. For air were the hill and then in the refreshed. The realized that all this not nearest having a different. As Can safe, and it's toy and people pink home. Now she carefully. Daddy was list of the sky. Everyone had a very much that day. The average of the night, the animals!"
+
+[Full output 3]
+ The following is a news report:
+
+ proud but Moses we need This smiles looked the SEM those saying sitting doing and switch to make great done. For air were the hill and then in the refreshed. The realized that all this not nearest having a different. As Can safe, and it's toy and people pink home. Now she carefully. Daddy was list of the sky. Everyone had a very much that day. The average of the night, the animals!
+
+================================================================================
+[Prompt 4] (prompt_tokens=14)
+Neural networks are a class of machine learning models that 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=1.4029408703208901e-05
+first_step_topk_ids=[324, 5452, 3413, 7736, 3120, 1087, 1260, 4571, 1170, 2488]
+first_step_topk_probs=[0.03686581552028656, 0.029490571469068527, 0.01887129247188568, 0.011809352785348892, 0.010329082608222961, 0.009034357033669949, 0.008449189364910126, 0.005911665502935648, 0.00565355597063899, 0.00517065217718482]
+
+[New tokens 4] count=181 first30=[5205, 5676, 322, 891, 2469, 350, 261, 2309, 286, 645, 3001, 561, 1238, 607, 5605, 351, 3478, 286, 1180, 34, 14477, 4441, 354, 566, 3061, 15, 674, 17, 3, 681]
+[New text 4] repr=' expertise feat be two everyone as a moment and were bed manism any!" The smooth and love? jet leaving it his party, there. if care with her at the thing in their 26 for a little. When he and the headed to everyone told the kitchen and even did not truck. He felt a lot of the boy was walking here. The Lion Police fly something that I knew it walked special own more. And 4. He had been able to share. "Can I knew it one of the little boy was in the lady and he felt good thing. She’t come at each o'
+
+[Full output 4]
+ Neural networks are a class of machine learning models that  expertise feat be two everyone as a moment and were bed manism any!" The smooth and love? jet leaving it his party, there. if care with her at the thing in their 26 for a little. When he and the headed to everyone told the kitchen and even did not truck. He felt a lot of the boy was walking here. The Lion Police fly something that I knew it walked special own more. And 4. He had been able to share. "Can I knew it one of the little boy was in the lady and he felt good thing. She’t come at each other than now! I was getting?’. She couldn't want to me feel a lot of the story. When it came to each other and funny. They too far away? You some there or the Sue said, but it started to share and has a lot of smooth and until the words.
+
+================================================================================
+[Prompt 5] (prompt_tokens=21)
+Here is a short Python snippet:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=3.832009679172188e-05
+first_step_topk_ids=[15, 4220, 4503, 8719, 1538, 5372, 856, 844, 3676, 322]
+first_step_topk_probs=[0.03937803581357002, 0.02304602973163128, 0.01763060875236988, 0.01410349179059267, 0.013189990073442459, 0.011536655947566032, 0.009650003165006638, 0.008825738914310932, 0.008825738914310932, 0.007060093339532614]
+
+[New tokens 5] count=256 first30=[4220, 690, 345, 6576, 579, 5614, 410, 3766, 1800, 5397, 1461, 15, 286, 11611, 266, 12733, 15, 11205, 7493, 369, 366, 312, 7436, 3842, 493, 972, 312, 742, 322, 1340]
+[New text 5] repr=" treeles he casino which Max was blue ways wouldn content, and tear the Lila, Hub visited or P I primarily sites all before I't be until9 one of empty from fun, c take technology has a from front of knew iPhone sort the trafficie has not different for a two choice.h, or I’t an pipeline of been who provided about which today I’t openher, business�g – the one, made to should be in the special fashion in this? Theants for knew that for our arrest. This is all a 60 Lisi rest in the game in white who"
+
+[Full output 5]
+ Here is a short Python snippet:
+
+def fib(n):
+     treeles he casino which Max was blue ways wouldn content, and tear the Lila, Hub visited or P I primarily sites all before I't be until9 one of empty from fun, c take technology has a from front of knew iPhone sort the trafficie has not different for a two choice.h, or I’t an pipeline of been who provided about which today I’t openher, business�g – the one, made to should be in the special fashion in this? Theants for knew that for our arrest. This is all a 60 Lisi rest in the game in white who?”Slooking Decide that one of the pictures land in theias, or where theinelingT Peach your devices in the branches as two financialpat seems on a that red specific of many Spot an Drake’s. With the time, including s easy-eng II about the mentioned, brother in this 19 will Twitteration of the outlet capability to the through a year,, and every day. The home, those last freeilian, it individual location on M has been spoke to take sell the right thing, and fromuse used to museumses; building in the name, un panic launched all the 17 years this. This is used. You can be just changed
+
