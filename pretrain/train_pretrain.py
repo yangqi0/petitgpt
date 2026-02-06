@@ -197,6 +197,56 @@ def causal_leak_check(
     model.train()
     return float(diff)
 
+@torch.no_grad()
+def local_future_leak_check(model, input_ids, device, vocab_size: int, n_checks: int = 16):
+    """
+    Check whether logits at position i change when we perturb token at position i+1.
+    If they do (beyond tiny numeric noise), you have a 1-step future leak.
+    """
+    model.eval()
+    x = input_ids.to(device)
+    B, T = x.shape
+    logits1 = model(x).float()
+
+    # pick some i positions away from edges
+    # (avoid i near end; need i+1 valid)
+    idxs = torch.linspace(8, T - 10, steps=n_checks).long().tolist()
+
+    max_diff = 0.0
+    for i in idxs:
+        x2 = x.clone()
+        # perturb token at i+1 only
+        x2[:, i + 1] = (x2[:, i + 1] + 123) % vocab_size
+        logits2 = model(x2).float()
+        # compare ONLY position i
+        diff = (logits1[:, i, :] - logits2[:, i, :]).abs().max().item()
+        max_diff = max(max_diff, diff)
+
+    print(f"[dbg] local_future_leak_check max_abs_diff={max_diff:.6f} (expect ~0)")
+    model.train()
+    return max_diff
+
+@torch.no_grad()
+def label_shift_sanity(input_ids: torch.Tensor, labels: torch.Tensor, loss_mask: torch.Tensor):
+    """
+    For a standard causal LM pack:
+      labels[:, t] should equal input_ids[:, t+1] for supervised positions (except last).
+    This checks a few positions.
+    """
+    B, T = input_ids.shape
+    # compare on prefix to avoid boundary noise
+    tmax = min(T - 2, 256)
+    # positions where we have supervision and also t+1 valid
+    m = (loss_mask[:, :tmax] > 0)
+    if m.sum().item() == 0:
+        print("[dbg] label_shift_sanity: no supervised tokens in range")
+        return
+
+    target = input_ids[:, 1:tmax+1]
+    lab = labels[:, :tmax]
+    ok = ((lab == target) & m).float().sum().item()
+    tot = m.float().sum().item()
+    print(f"[dbg] label_shift_sanity next-token match over supervised: {ok/tot:.6f}")
 
 @torch.no_grad()
 def shift_sanity_check(
@@ -652,6 +702,10 @@ def main() -> None:
                         check_pos=int(args.debug_causal_prefix),
                         perturb_pos=int(args.debug_causal_pos),
                     )
+
+                _ = local_future_leak_check(model, input_ids, device, vocab_size=cfg.vocab_size, n_checks=16)
+
+                label_shift_sanity(input_ids, labels, loss_mask)
 
         if args.grad_clip and args.grad_clip > 0:
             if use_fp16:
