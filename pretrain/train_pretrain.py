@@ -223,16 +223,6 @@ def evaluate(
         else:
             input_u16, labels_u16, loss_mask = batch
 
-        # CPU-side sanity check to prevent CUDA device-side assert
-        if step < 50:  # 前几十步检查就够了
-            max_id = int(input_u16.max().item())
-            min_id = int(input_u16.min().item())
-            if min_id < 0 or max_id >= cfg.vocab_size:
-                # 打印一些上下文，直接 fail fast
-                print(f"[fatal] token id out of range: min={min_id} max={max_id} vocab_size={cfg.vocab_size}")
-                print("[fatal] first row head:", input_u16[0, :32].tolist())
-                raise RuntimeError("Token id out of range. Fix vocab_size/tokenizer/shards.")
-
         input_ids = input_u16.to(device, dtype=torch.long, non_blocking=True)
         labels = labels_u16.to(device, dtype=torch.long, non_blocking=True)
         loss_mask = loss_mask.to(device, dtype=torch.float32, non_blocking=True)
@@ -482,14 +472,15 @@ def main() -> None:
                 input_u16, labels_u16, loss_mask = batch
 
             # CPU-side sanity check to prevent CUDA device-side assert
-            if step < 50:  # 前几十步检查就够了
+            # only check the first 50 global_step
+            if global_step < 50:
                 max_id = int(input_u16.max().item())
                 min_id = int(input_u16.min().item())
                 if min_id < 0 or max_id >= cfg.vocab_size:
-                    # 打印一些上下文，直接 fail fast
                     print(f"[fatal] token id out of range: min={min_id} max={max_id} vocab_size={cfg.vocab_size}")
                     print("[fatal] first row head:", input_u16[0, :32].tolist())
                     raise RuntimeError("Token id out of range. Fix vocab_size/tokenizer/shards.")
+
 
             input_ids = input_u16.to(device, dtype=torch.long, non_blocking=True)
             labels = labels_u16.to(device, dtype=torch.long, non_blocking=True)
