@@ -1,20 +1,23 @@
 # pretrain/train_pretrain.py
 # Minimal, robust GPT pretraining script for petitgpt.
-# Key properties:
-# - MiniMind-style token-level loss_mask (explicit mask and weighted reduction)
-# - BOS masked from loss; EOS can be down-weighted early to prevent collapse
-# - IMPORTANT: cross-entropy is always computed in FP32 (even under bf16/fp16 autocast)
-# - grad accumulation, bf16/fp16 autocast, torch.compile, clean checkpoints
-# - periodic evaluation + sample generation + checkpoints
+# Key features:
+# - Causal LM next-token objective with explicit token-level loss_mask
+# - Loss is computed in FP32 for numerical stability (even under bf16/fp16)
+# - Optional EOS down-weighting early to prevent EOS collapse
+# - Gradient accumulation, bf16/fp16 autocast, optional torch.compile
+# - Atomic checkpoints (avoid partial writes) + periodic eval + sample generation
+# - Strong debug sanity checks (shift correctness + causal leakage checks)
 
 from __future__ import annotations
 
 import argparse
-from dataclasses import asdict
 import json
-from pathlib import Path
+import os
 import sys
 import time
+from dataclasses import asdict
+from pathlib import Path
+from typing import Dict, Optional, Tuple
 
 import torch
 import torch.nn.functional as F
@@ -43,25 +46,9 @@ except Exception:
     pass
 
 
-def infer_vocab_size_from_tokenizer_json(path: str) -> int:
-    """Infer vocab size from HF tokenizers' tokenizer.json."""
-    with open(path, encoding="utf-8") as f:
-        obj = json.load(f)
-
-    model = obj.get("model", {})
-    vocab = model.get("vocab", None)
-    if isinstance(vocab, dict):
-        return len(vocab)
-    if isinstance(vocab, list):
-        return len(vocab)
-
-    added = obj.get("added_tokens", [])
-    if isinstance(added, list) and added:
-        return max(t.get("id", -1) for t in added) + 1
-
-    raise ValueError(f"Cannot infer vocab_size from tokenizer.json: {path}")
-
-
+# -----------------------------------------------------------------------------
+# Utilities
+# -----------------------------------------------------------------------------
 def _resolve_path(p: str) -> str:
     path = Path(p)
     if path.exists():
@@ -91,7 +78,7 @@ def lr_schedule(step: int, warmup_steps: int, base_lr: float) -> float:
     return base_lr
 
 
-def _autocast_dtype(precision: str) -> torch.dtype | None:
+def _autocast_dtype(precision: str) -> Optional[torch.dtype]:
     if precision == "bf16":
         return torch.bfloat16
     if precision == "fp16":
@@ -99,6 +86,28 @@ def _autocast_dtype(precision: str) -> torch.dtype | None:
     return None
 
 
+def infer_vocab_size_from_tokenizer_json(path: str) -> int:
+    """Infer vocab size from HF tokenizers' tokenizer.json."""
+    with open(path, "r", encoding="utf-8") as f:
+        obj = json.load(f)
+
+    model = obj.get("model", {})
+    vocab = model.get("vocab", None)
+    if isinstance(vocab, dict):
+        return len(vocab)
+    if isinstance(vocab, list):
+        return len(vocab)
+
+    added = obj.get("added_tokens", [])
+    if isinstance(added, list) and added:
+        return max(t.get("id", -1) for t in added) + 1
+
+    raise ValueError(f"Cannot infer vocab_size from tokenizer.json: {path}")
+
+
+# -----------------------------------------------------------------------------
+# Loss
+# -----------------------------------------------------------------------------
 def masked_weighted_ce_loss(
     logits: torch.Tensor,
     labels: torch.Tensor,
@@ -107,18 +116,14 @@ def masked_weighted_ce_loss(
     eos_weight: float,
 ) -> torch.Tensor:
     """
-    Token-level CE (MiniMind style):
-      - per-token CE (reduction='none')
-      - multiply by loss_mask
+    Token-level CE:
+      - per-token CE (reduction='none') computed in FP32
+      - multiply by loss_mask (float32)
       - optionally down-weight EOS targets
       - normalize by sum of weights (NOT by B*T)
-
-    IMPORTANT:
-      - Cross-entropy is always computed in FP32 for numerical stability.
-        This prevents bf16/fp16 autocast from "shrinking" CE and giving fake near-zero loss.
     """
     B, T, V = logits.shape
-    l = logits.reshape(B * T, V).float()          # force FP32 CE
+    l = logits.reshape(B * T, V).float()  # FP32 loss math
     y = labels.reshape(B * T)
     m = loss_mask.reshape(B * T).float()
 
@@ -139,45 +144,94 @@ def masked_ce_128_debug(
     loss_mask: torch.Tensor,
     tt: int = 128,
 ) -> float:
-    """
-    Debug-only masked CE over the first tt positions, computed in FP32.
-    (This matches the "mask mouth" of training loss, but does NOT include eos_weight.)
-    """
+    """Same loss "shape" as training loss (mask-weighted), but only first tt tokens."""
     B, T, V = logits.shape
     t = min(T, tt)
     l = logits[:, :t, :].reshape(-1, V).float()
     y = labels[:, :t].reshape(-1)
     m = loss_mask[:, :t].reshape(-1).float()
     per = F.cross_entropy(l, y, reduction="none")
-    denom = m.sum().clamp_min(1.0)
-    return float((per * m).sum().item() / denom.item())
+    return float((per * m).sum().item() / m.sum().clamp_min(1.0).item())
 
 
+# -----------------------------------------------------------------------------
+# Debug sanity checks
+# -----------------------------------------------------------------------------
 @torch.no_grad()
 def causal_leak_check(
-    model,
+    model: torch.nn.Module,
     input_ids: torch.Tensor,
     device: torch.device,
     vocab_size: int,
     check_pos: int = 128,
+    perturb_pos: Optional[int] = None,
 ) -> float:
     """
-    If the model is causal, changing a future token should NOT change logits of earlier positions.
-    We check that logits[:, :check_pos] are invariant to edits in the suffix.
+    Check that changing a token at position `perturb_pos` does NOT change logits
+    for positions strictly before `check_pos`.
+
+    - For a correct causal transformer: logits[:, :check_pos, :] are a function
+      of input_ids[:, :check_pos], so perturbing at position >= check_pos should
+      not affect that prefix.
+    - To catch *local* off-by-one leakage (t can see t+1), we default:
+        perturb_pos = min(T-1, check_pos)
+      and compare logits up to check_pos-1.
     """
     model.eval()
     x = input_ids.to(device)
+    T = x.shape[1]
+    cp = int(min(max(1, check_pos), T - 1))  # compare up to cp-1
+    if perturb_pos is None:
+        perturb_pos = cp
+    p = int(min(max(0, perturb_pos), T - 1))
+
     logits1 = model(x).float()
 
     x2 = x.clone()
-    t = x2.shape[1] - 5
-    x2[:, t] = (x2[:, t] + 123) % int(vocab_size)
+    x2[:, p] = (x2[:, p] + 123) % int(vocab_size)
     logits2 = model(x2).float()
 
-    diff = (logits1[:, :check_pos, :] - logits2[:, :check_pos, :]).abs().max().item()
-    print(f"[dbg] causal_leak_check max_abs_diff(prefix_logits)={diff:.6f}")
+    diff = (logits1[:, :cp, :] - logits2[:, :cp, :]).abs().max().item()
+    print(f"[dbg] causal_leak_check pos={p} prefix<{cp} max_abs_diff={diff:.6f}")
+
     model.train()
     return float(diff)
+
+
+@torch.no_grad()
+def shift_sanity_check(
+    input_ids: torch.Tensor,
+    labels: torch.Tensor,
+    loss_mask: torch.Tensor,
+) -> Dict[str, float]:
+    """
+    Verify dataset alignment:
+      - labels should be input_ids shifted left by 1 (next-token prediction)
+      - labels should almost never equal input_ids at the same position
+    """
+    x = input_ids
+    y = labels
+    m = (loss_mask > 0).float()
+
+    same_pos = ((x == y).float() * m).sum().item() / m.sum().clamp_min(1.0).item()
+
+    if x.shape[1] > 1:
+        m2 = (loss_mask[:, :-1] > 0).float()
+        nxt = ((y[:, :-1] == x[:, 1:]).float() * m2).sum().item() / m2.sum().clamp_min(1.0).item()
+    else:
+        nxt = 0.0
+
+    return {"same_pos_frac": float(same_pos), "next_token_match_frac": float(nxt)}
+
+
+# -----------------------------------------------------------------------------
+# Checkpoint I/O (atomic save)
+# -----------------------------------------------------------------------------
+def _atomic_torch_save(obj: Dict, path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    torch.save(obj, tmp)
+    os.replace(tmp, path)
 
 
 def save_ckpt(
@@ -186,9 +240,9 @@ def save_ckpt(
     local_step: int,
     model: torch.nn.Module,
     optim: torch.optim.Optimizer,
-    scaler: torch.amp.GradScaler | None,
-    model_config: dict,
-    train_args: dict,
+    scaler: Optional[torch.amp.GradScaler],
+    model_config: Dict,
+    train_args: Dict,
 ) -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
     model_to_save = model._orig_mod if hasattr(model, "_orig_mod") else model
@@ -203,26 +257,24 @@ def save_ckpt(
         "train_args": train_args,
     }
 
-    torch.save(ckpt, out_dir / "latest.pt")
-    torch.save(ckpt, out_dir / f"step_{global_step:06d}.pt")
+    _atomic_torch_save(ckpt, out_dir / "latest.pt")
+    _atomic_torch_save(ckpt, out_dir / f"step_{global_step:06d}.pt")
 
 
 def load_ckpt(
     resume_path: Path,
     model: torch.nn.Module,
     optim: torch.optim.Optimizer,
-    scaler: torch.amp.GradScaler | None,
+    scaler: Optional[torch.amp.GradScaler],
     resume_full: bool,
-) -> tuple[int, int]:
+) -> Tuple[int, int]:
     ckpt = torch.load(resume_path, map_location="cpu")
     state = ckpt["model"]
 
-    # Handle compiled prefix if present
     if any(k.startswith("_orig_mod.") for k in state.keys()):
-        state = {k[len("_orig_mod.") :]: v for k, v in state.items()}
+        state = {k[len("_orig_mod."):]: v for k, v in state.items()}
 
     model.load_state_dict(state, strict=True)
-
     global_step = int(ckpt.get("global_step", 0))
     local_step = int(ckpt.get("local_step", 0))
 
@@ -235,6 +287,9 @@ def load_ckpt(
     return global_step, local_step
 
 
+# -----------------------------------------------------------------------------
+# Eval
+# -----------------------------------------------------------------------------
 @torch.no_grad()
 def evaluate(
     model: torch.nn.Module,
@@ -272,28 +327,69 @@ def evaluate(
         else:
             logits = model(input_ids)
 
-        loss = masked_weighted_ce_loss(
-            logits, labels, loss_mask, eos_id=eos_id, eos_weight=eos_weight
-        )
+        loss = masked_weighted_ce_loss(logits, labels, loss_mask, eos_id=eos_id, eos_weight=eos_weight)
         losses.append(float(loss.item()))
 
     model.train()
     return float(sum(losses) / max(1, len(losses)))
 
 
+# -----------------------------------------------------------------------------
+# Dataset stats (lightweight)
+# -----------------------------------------------------------------------------
+@torch.no_grad()
+def print_dataset_stats(
+    name: str,
+    ds: PackedBinDataset,
+    seq_len: int,
+    micro_bsz: int,
+    grad_accum: int,
+    sample_blocks: int = 256,
+) -> None:
+    raw_tokens = int(getattr(ds, "total_tokens", 0))
+    block = int(seq_len + 1)
+    n_blocks = int(raw_tokens // block)
+    epoch_tokens = int(n_blocks * seq_len)
+    tokens_per_step = int(micro_bsz * grad_accum * seq_len)
+    steps_per_epoch = int(epoch_tokens // max(1, tokens_per_step))
+
+    n = min(len(ds), sample_blocks)
+    sup_sum = 0.0
+    eos_sum = 0.0
+    for i in range(n):
+        _, y, m = ds[i]
+        m = m.float()
+        sup_sum += float(m.sum().item())
+        eos_sum += float(((y == ds.eos_id).float() * m).sum().item())
+
+    avg_sup = sup_sum / max(1.0, float(n))
+    eos_frac = eos_sum / max(1.0, sup_sum)
+
+    print(f"[*] {name} dataset stats:")
+    print(f"    - shards: {len(ds.shards)}")
+    print(f"    - raw tokens in .bin (sum of shard lengths): {raw_tokens:,}")
+    print(f"    - block size (seq_len+1): {block}")
+    print(f"    - full blocks (n_blocks): {n_blocks:,}")
+    print(f"    - epoch-equivalent tokens (n_blocks*seq_len): {epoch_tokens:,}")
+    print(f"    - tokens per step (micro*accum*seq): {tokens_per_step:,}")
+    print(f"    - steps per epoch (approx): {steps_per_epoch:,}")
+    print(f"    - avg supervised tokens per block (sampled): {avg_sup:.1f} / {seq_len}")
+    print(f"    - avg EOS fraction over supervised tokens (sampled): {eos_frac:.4f}")
+
+
+# -----------------------------------------------------------------------------
+# Args
+# -----------------------------------------------------------------------------
 def parse_args() -> argparse.Namespace:
     ap = argparse.ArgumentParser()
 
-    # Data
     ap.add_argument("--train_dir", required=True)
     ap.add_argument("--val_dir", required=True)
 
-    # Output
     ap.add_argument("--out_dir", required=True)
     ap.add_argument("--samples_dir", required=True)
     ap.add_argument("--tokenizer_path", required=True)
 
-    # Model
     ap.add_argument("--vocab_size", type=int, default=32000)
     ap.add_argument("--seq_len", type=int, default=1024)
     ap.add_argument("--layers", type=int, default=12)
@@ -302,17 +398,14 @@ def parse_args() -> argparse.Namespace:
     ap.add_argument("--d_ff", type=int, default=3072)
     ap.add_argument("--dropout", type=float, default=0.0)
 
-    # Special tokens
     ap.add_argument("--bos_id", type=int, default=2)
     ap.add_argument("--eos_id", type=int, default=3)
 
-    # Loss shaping
     ap.add_argument("--no_mask_bos_in_loss", action="store_true")
     ap.add_argument("--no_mask_last_label_in_loss", action="store_true")
-    ap.add_argument("--eos_weight", type=float, default=0.2)
+    ap.add_argument("--eos_weight", type=float, default=1.0)
     ap.add_argument("--eos_weight_warmup_steps", type=int, default=0)
 
-    # Train
     ap.add_argument("--precision", choices=["bf16", "fp16", "fp32"], default="bf16")
     ap.add_argument("--micro_bsz", type=int, default=4)
     ap.add_argument("--grad_accum", type=int, default=8)
@@ -324,14 +417,16 @@ def parse_args() -> argparse.Namespace:
     ap.add_argument("--num_workers", type=int, default=2)
     ap.add_argument("--seed", type=int, default=1234)
 
-    # Logging / eval / save
     ap.add_argument("--log_every", type=int, default=20)
-    ap.add_argument("--eval_every", type=int, default=1000)
-    ap.add_argument("--save_every", type=int, default=1000)
-    ap.add_argument("--milestone_every", type=int, default=10000)
+    ap.add_argument("--eval_every", type=int, default=500)
+    ap.add_argument("--save_every", type=int, default=500)
     ap.add_argument("--debug_every", type=int, default=500)
 
-    # Sampling during training
+    ap.add_argument("--debug_shift_check", action="store_true")
+    ap.add_argument("--debug_causal_check", action="store_true")
+    ap.add_argument("--debug_causal_pos", type=int, default=512)
+    ap.add_argument("--debug_causal_prefix", type=int, default=512)
+
     ap.add_argument("--add_bos_to_prompts", action="store_true")
     ap.add_argument("--sample_temperature", type=float, default=0.7)
     ap.add_argument("--sample_top_p", type=float, default=0.9)
@@ -339,11 +434,9 @@ def parse_args() -> argparse.Namespace:
     ap.add_argument("--sample_max_new_tokens", type=int, default=256)
     ap.add_argument("--sample_min_new_tokens", type=int, default=32)
 
-    # Resume
     ap.add_argument("--resume_path", type=str, default="")
     ap.add_argument("--resume_full", action="store_true")
 
-    # torch.compile
     ap.add_argument("--compile", action="store_true")
 
     return ap.parse_args()
@@ -362,14 +455,13 @@ def main() -> None:
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     assert device.type == "cuda", "This script expects a CUDA GPU."
 
-    # vocab_size from tokenizer.json
+    inferred_vs = args.vocab_size
     try:
         inferred_vs = infer_vocab_size_from_tokenizer_json(str(tok_path))
+        if inferred_vs != args.vocab_size:
+            print(f"[info] override vocab_size: args={args.vocab_size} -> tokenizer={inferred_vs}")
     except Exception as e:
         print(f"[warn] failed to infer vocab_size from tokenizer.json: {e}")
-        inferred_vs = args.vocab_size
-    if inferred_vs != args.vocab_size:
-        print(f"[info] override vocab_size: args={args.vocab_size} -> tokenizer={inferred_vs}")
 
     cfg = GPTConfig(
         vocab_size=inferred_vs,
@@ -395,7 +487,6 @@ def main() -> None:
         betas=(0.9, 0.95),
     )
 
-    # Data
     train_ds = PackedBinDataset(
         str(train_dir),
         seq_len=args.seq_len,
@@ -413,66 +504,9 @@ def main() -> None:
         mask_last_label_in_loss=not args.no_mask_last_label_in_loss,
     )
 
-    # === Dataset statistics (for PackedBinDataset) ===
-    def _dataset_stats(
-        ds: PackedBinDataset,
-        name: str,
-        seq_len: int,
-        micro_bsz: int,
-        grad_accum: int,
-        sample_blocks: int = 8,
-    ):
-        block = seq_len + 1
-
-        raw_tokens = int(sum(getattr(ds, "_lens", []))) if hasattr(ds, "_lens") else 0
-        n_blocks = int(getattr(ds, "n_blocks", len(ds)))
-        epoch_tokens = n_blocks * seq_len
-
-        tokens_per_step = micro_bsz * grad_accum * seq_len
-        steps_per_epoch = epoch_tokens // max(1, tokens_per_step)
-
-        print(f"[*] {name} dataset stats:")
-        if hasattr(ds, "shards"):
-            try:
-                print(f"    - shards: {len(ds.shards)}")
-            except Exception:
-                pass
-        if raw_tokens > 0:
-            print(f"    - raw tokens in .bin (sum of shard lengths): {raw_tokens:,}")
-            print(f"    - block size (seq_len+1): {block}")
-        print(f"    - full blocks (n_blocks): {n_blocks:,}")
-        print(f"    - epoch-equivalent tokens (n_blocks*seq_len): {epoch_tokens:,}")
-        print(f"    - tokens per step (micro*accum*seq): {tokens_per_step:,}")
-        print(f"    - steps per epoch (approx): {steps_per_epoch:,}")
-
-        # Sample a few blocks to estimate supervision density / EOS rate under the mask rules
-        kmax = min(len(ds), max(1, sample_blocks))
-        sup = []
-        eos_frac = []
-        eos_id = int(getattr(ds, "eos_id", 3))
-        for k in range(kmax):
-            x, y, m = ds[k]  # CPU
-            mpos = (m > 0).float()
-            sup_tok = float(mpos.sum().item())
-            sup.append(sup_tok)
-            if sup_tok > 0:
-                eos_frac.append(float(((y == eos_id).float() * mpos).sum().item() / sup_tok))
-
-        if sup:
-            avg_sup = sum(sup) / len(sup)
-            print(f"    - avg supervised tokens per block (sampled): {avg_sup:.1f} / {seq_len}")
-            if avg_sup < 0.5 * seq_len:
-                print("    [WARN] Supervised tokens per block is very low; check your loss_mask rules.")
-        if eos_frac:
-            avg_eos = sum(eos_frac) / len(eos_frac)
-            print(f"    - avg EOS fraction over supervised tokens (sampled): {avg_eos:.4f}")
-
-    _dataset_stats(train_ds, "train", args.seq_len, args.micro_bsz, args.grad_accum)
-    _dataset_stats(val_ds, "val", args.seq_len, args.micro_bsz, args.grad_accum)
-
-    n_params_m = sum(p.numel() for p in model.parameters()) / 1e6
-    print(f"[*] model params: {n_params_m:.2f}M")
-    # === end dataset statistics ===
+    print_dataset_stats("train", train_ds, args.seq_len, args.micro_bsz, args.grad_accum)
+    print_dataset_stats("val", val_ds, args.seq_len, args.micro_bsz, args.grad_accum)
+    print(f"[*] model params: {sum(p.numel() for p in model.parameters()) / 1e6:.2f}M")
 
     train_dl = DataLoader(
         train_ds,
@@ -491,7 +525,6 @@ def main() -> None:
         drop_last=True,
     )
 
-    # Resume
     global_step = 0
     local_step = 0
     if args.resume_path:
@@ -505,7 +538,6 @@ def main() -> None:
         )
         print(f"[resume] loaded {resume_path} (global_step={global_step}, local_step={local_step})")
 
-    # Compile
     if args.compile:
         try:
             model = torch.compile(model)  # type: ignore[attr-defined]
@@ -513,7 +545,6 @@ def main() -> None:
         except Exception as e:
             print(f"[compile] torch.compile failed: {e}")
 
-    # Save config snapshot
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "config.json").write_text(
         json.dumps({**vars(args), "model_cfg": asdict(cfg)}, indent=2),
@@ -524,20 +555,18 @@ def main() -> None:
     data_iter = iter(train_dl)
 
     t_window = time.time()
-    window_sup_tokens_est = 0  # supervised tokens estimate from CPU mask (cheap)
+    window_sup_tokens_est = 0
 
     while local_step < args.max_steps:
         lr = lr_schedule(global_step, args.warmup_steps, args.lr)
         for pg in optim.param_groups:
             pg["lr"] = lr
 
-        optim.zero_grad(set_to_none=True)
-
-        # EOS weight schedule
         cur_eos_weight = float(args.eos_weight)
         if args.eos_weight_warmup_steps and global_step >= int(args.eos_weight_warmup_steps):
             cur_eos_weight = 1.0
 
+        optim.zero_grad(set_to_none=True)
         accum_loss_raw = 0.0
 
         for micro in range(args.grad_accum):
@@ -553,25 +582,12 @@ def main() -> None:
             else:
                 input_u16, labels_u16, loss_mask_cpu = batch
 
-            # CPU-side sanity check (first 50 steps, first microbatch)
-            if global_step < 50 and micro == 0:
-                tmp = input_u16.to(torch.int32)
-                max_id = int(tmp.max().item())
-                min_id = int(tmp.min().item())
-                if min_id < 0 or max_id >= cfg.vocab_size:
-                    print(
-                        f"[fatal] token id out of range: min={min_id} max={max_id} vocab_size={cfg.vocab_size}"
-                    )
-                    print("[fatal] first row head:", tmp[0, :32].tolist())
-                    raise RuntimeError("Token id out of range. Fix vocab_size/tokenizer/shards.")
-
             window_sup_tokens_est += int(loss_mask_cpu.sum().item())
 
             input_ids = input_u16.to(device, dtype=torch.long, non_blocking=True)
             labels = labels_u16.to(device, dtype=torch.long, non_blocking=True)
             loss_mask = loss_mask_cpu.to(device, dtype=torch.float32, non_blocking=True)
 
-            # Forward under autocast, CE in FP32 inside masked_weighted_ce_loss()
             if ac_dtype is not None:
                 with torch.autocast("cuda", dtype=ac_dtype):
                     logits = model(input_ids)
@@ -594,36 +610,19 @@ def main() -> None:
 
             accum_loss_raw += float(loss_raw.detach().item())
 
-            # Debug (once per interval, micro==0)
             if (global_step % args.debug_every == 0) and (micro == 0):
                 lm = float(logits.float().mean().item())
                 ls = float(logits.float().std().item())
-
-                same = ((input_ids == labels) & (loss_mask > 0)).float().mean().item()
-                print("[dbg] frac(input_ids==labels) over supervised:", float(same))
-
                 mce = masked_ce_128_debug(logits, labels, loss_mask, tt=128)
-                print(
-                    f"[dbg] step={global_step} logits_mean={lm:.4f} logits_std={ls:.4f} masked_ce_128={mce:.6f}"
-                )
 
                 m = loss_mask
-                print("[dbg] mask_mean:", float(m.mean().item()), "mask_sum:", float(m.sum().item()))
-
                 y = labels
-                print("[dbg] labels min/max:", int(y.min().item()), int(y.max().item()))
-
-                eos = int(args.eos_id)
-                eos_frac = (
-                    ((y == eos) & (m > 0)).float().sum()
-                    / (m > 0).float().sum().clamp_min(1)
-                ).item()
-                print(f"[dbg] eos_frac_supervised: {float(eos_frac):.6f}")
-
                 pred = logits.argmax(dim=-1)
                 hit = ((pred == y) & (m > 0)).sum().item()
                 tot = (m > 0).sum().item()
-                print("[dbg] masked_top1_acc:", float(hit / max(1.0, tot)))
+                top1 = float(hit / max(1.0, tot))
+
+                eos_frac = float((((y == args.eos_id).float() * (m > 0).float()).sum().item()) / max(1.0, tot))
 
                 B, T, V = logits.shape
                 tt = min(T, 128)
@@ -632,23 +631,33 @@ def main() -> None:
                     y[:, :tt].reshape(-1),
                     reduction="mean",
                 )
-                print("[dbg] ce_nomask_128:", float(ce_nomask.item()))
 
-                _ = causal_leak_check(
-                    model=model,
-                    input_ids=input_ids,
-                    device=device,
-                    vocab_size=cfg.vocab_size,
-                    check_pos=128,
-                )
+                print(f"[dbg] step={global_step} logits_mean={lm:.4f} logits_std={ls:.4f} masked_ce_128={mce:.6f}")
+                print(f"[dbg] mask_mean={float(m.mean().item()):.6f} mask_sum={float(m.sum().item()):.1f}")
+                print(f"[dbg] labels min/max: {int(y.min().item())} {int(y.max().item())}")
+                print(f"[dbg] eos_frac_supervised: {eos_frac:.6f}")
+                print(f"[dbg] masked_top1_acc: {top1:.6f}")
+                print(f"[dbg] ce_nomask_128: {float(ce_nomask.item()):.6f}")
 
-        # Gradient clipping
+                if args.debug_shift_check:
+                    s = shift_sanity_check(input_ids, labels, loss_mask)
+                    print(f"[dbg] shift_check same_pos_frac={s['same_pos_frac']:.6f} next_token_match_frac={s['next_token_match_frac']:.6f}")
+
+                if args.debug_causal_check:
+                    _ = causal_leak_check(
+                        model=model,
+                        input_ids=input_ids,
+                        device=device,
+                        vocab_size=cfg.vocab_size,
+                        check_pos=int(args.debug_causal_prefix),
+                        perturb_pos=int(args.debug_causal_pos),
+                    )
+
         if args.grad_clip and args.grad_clip > 0:
             if use_fp16:
                 scaler.unscale_(optim)
             torch.nn.utils.clip_grad_norm_(model.parameters(), float(args.grad_clip))
 
-        # Optim step
         if use_fp16:
             scaler.step(optim)
             scaler.update()
@@ -658,7 +667,6 @@ def main() -> None:
         global_step += 1
         local_step += 1
 
-        # Logging
         if global_step % args.log_every == 0:
             dt = time.time() - t_window
             tok_s = window_sup_tokens_est / max(dt, 1e-6)
@@ -670,7 +678,6 @@ def main() -> None:
             t_window = time.time()
             window_sup_tokens_est = 0
 
-        # Eval + samples
         if global_step % args.eval_every == 0:
             val_loss = evaluate(
                 model=model,
@@ -708,35 +715,22 @@ def main() -> None:
             except Exception as e:
                 print(f"[sample] failed: {e}")
 
-        # Save checkpoints
         if global_step % args.save_every == 0:
-            save_ckpt(
-                out_dir=out_dir,
-                global_step=global_step,
-                local_step=local_step,
-                model=model,
-                optim=optim,
-                scaler=scaler if use_fp16 else None,
-                model_config=asdict(cfg),
-                train_args=vars(args),
-            )
-            print(f"[ckpt] saved latest + step_{global_step:06d}.pt to {out_dir}")
+            try:
+                save_ckpt(
+                    out_dir=out_dir,
+                    global_step=global_step,
+                    local_step=local_step,
+                    model=model,
+                    optim=optim,
+                    scaler=scaler if use_fp16 else None,
+                    model_config=asdict(cfg),
+                    train_args=vars(args),
+                )
+                print(f"[ckpt] saved latest + step_{global_step:06d}.pt to {out_dir}")
+            except Exception as e:
+                print(f"[ckpt] save failed: {e}")
 
-        # Milestone (optional)
-        if args.milestone_every > 0 and (global_step % args.milestone_every == 0):
-            save_ckpt(
-                out_dir=out_dir,
-                global_step=global_step,
-                local_step=local_step,
-                model=model,
-                optim=optim,
-                scaler=scaler if use_fp16 else None,
-                model_config=asdict(cfg),
-                train_args=vars(args),
-            )
-            print(f"[milestone] saved step_{global_step:06d}.pt")
-
-    # Final save
     save_ckpt(
         out_dir=out_dir,
         global_step=global_step,
