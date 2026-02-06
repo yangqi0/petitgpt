@@ -1,0 +1,92 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.7, top_p=0.9, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.00040756320231594145
+first_step_topk_ids=[1990, 3112, 7178, 10788, 1150, 9164, 1818, 561, 6895, 7264]
+first_step_topk_probs=[0.5042017698287964, 0.023164477199316025, 0.01620754785835743, 0.014823166653513908, 0.00948548223823309, 0.00867527537047863, 0.008296503685414791, 0.00663673086091876, 0.006346967536956072, 0.0049651386216282845]
+
+[New tokens 1] count=121 first30=[1990, 1990, 15, 674, 5420, 261, 3895, 4066, 5728, 17, 5728, 584, 261, 3479, 3354, 15, 4066, 5614, 17, 901, 3058, 1394, 818, 979, 17, 1516, 979, 15, 5728, 3537]
+[New text 1] repr=' house house, there lived a boy named Tim. Tim had a wild cat, named Max. They played together every day. One day, Tim looked at the calendar on the wall. He saw that it was his birthday. He sighed, because he wanted a big party with lots of friends. But, Tim didn\'t have many friends. He felt sad. Tim told Max, "I want a big party, but I have no friends." Max looked at Tim and meowed. Max ran away, and Tim was all alone. Tim\'s birthday was not fun, and he felt very sad.'
+
+[Full output 1]
+ Once upon a time,  house house, there lived a boy named Tim. Tim had a wild cat, named Max. They played together every day. One day, Tim looked at the calendar on the wall. He saw that it was his birthday. He sighed, because he wanted a big party with lots of friends. But, Tim didn't have many friends. He felt sad. Tim told Max, "I want a big party, but I have no friends." Max looked at Tim and meowed. Max ran away, and Tim was all alone. Tim's birthday was not fun, and he felt very sad.
+
+================================================================================
+[Prompt 2] (prompt_tokens=11)
+In a distant future, humans and robots 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=8.51254844747018e-06
+first_step_topk_ids=[286, 1491, 17, 6895, 3195, 1010, 4220, 5605, 561, 1340]
+first_step_topk_probs=[0.3927538990974426, 0.07200638949871063, 0.05268099904060364, 0.018044233322143555, 0.015093352645635605, 0.010560408234596252, 0.010560408234596252, 0.010099329054355621, 0.009236685931682587, 0.009236685931682587]
+
+[New tokens 2] count=218 first30=[1491, 1102, 17, 722, 410, 1400, 935, 261, 1067, 292, 27822, 1591, 464, 485, 392, 86, 512, 266, 385, 392, 86, 15, 286, 436, 660, 604, 289, 322, 350, 266]
+[New text 2] repr='," home. He was never made a few of colourful soft this more’sind the we’s, and have been our to be as theaid from 6 of friends. When the sugar Vista. Then he are the c this the folder under the best of thet read. Now I never is and at the Sus of the S.less and he nodded, "My U. And they not morefully and this year and this time, this time, I am you. You are you go to my bag, the little boy. applaud is out of the Traffic off. into the now? Come to give. Up hisi? For we’s notr, that is that we ha'
+
+[Full output 2]
+ In a distant future, humans and robots ," home. He was never made a few of colourful soft this more’sind the we’s, and have been our to be as theaid from 6 of friends. When the sugar Vista. Then he are the c this the folder under the best of thet read. Now I never is and at the Sus of the S.less and he nodded, "My U. And they not morefully and this year and this time, this time, I am you. You are you go to my bag, the little boy. applaud is out of the Traffic off. into the now? Come to give. Up hisi? For we’s notr, that is that we have it an idea. Then,, that we can be over warm in this croverse and this is that’s,! He attention? I’s a possession. cra Paul just may not nice, but you view our message you. So the two thing? I'm so happy to scared. He even more within a gust, but you on the potential of the reality.
+
+================================================================================
+[Prompt 3] (prompt_tokens=11)
+The following is a news report:
+
+
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.0008668468799442053
+first_step_topk_ids=[1187, 3409, 385, 13850, 1622, 1004, 1473, 1761, 4503, 3559]
+first_step_topk_probs=[0.1286514848470688, 0.05508585646748543, 0.04406557232141495, 0.040301669389009476, 0.036859285086393356, 0.016502894461154938, 0.013201383873820305, 0.009236645884811878, 0.006608506198972464, 0.006462627090513706]
+
+[New tokens 3] count=209 first30=[8621, 17, 787, 395, 392, 86, 1949, 15, 5514, 8926, 261, 932, 1683, 266, 595, 15, 286, 1015, 742, 322, 261, 3322, 15, 518, 354, 3409, 1312, 4795, 2026, 266]
+[New text 3] repr='urse. You can’s clean, fell somewhere a good customers the help, and don\'t be aboard, but it heard going faith called the storm to bring in the wind and woke up and said, but he jumped a new vehicle were ever. The Thomas were playing with the boy named Lily dress for you, "I can be cookies. The pen is jacketIM,07, but something that they were from a different open the star made something here?" It was a view of the birds were share trails, he loved to help this walk. He officer, but he saw a big'
+
+[Full output 3]
+ The following is a news report:
+
+urse. You can’s clean, fell somewhere a good customers the help, and don't be aboard, but it heard going faith called the storm to bring in the wind and woke up and said, but he jumped a new vehicle were ever. The Thomas were playing with the boy named Lily dress for you, "I can be cookies. The pen is jacketIM,07, but something that they were from a different open the star made something here?" It was a view of the birds were share trails, he loved to help this walk. He officer, but he saw a big, or such as at the next day, and away. You do. The get� and the dog and stores the In this is a current! The Head thing is three years old skin were so happy and in the dog or Chinaor who were so happy and even though she went to be brave to see their mom, the par may be many in the ice. You will get Lucy ever cannot be scared and laughing, they could do.
+
+================================================================================
+[Prompt 4] (prompt_tokens=14)
+Neural networks are a class of machine learning models that 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=1.3393138033279683e-05
+first_step_topk_ids=[3413, 592, 14096, 324, 5452, 914, 3028, 1693, 261, 604]
+first_step_topk_probs=[0.02815309166908264, 0.025748370215296745, 0.019697943702340126, 0.01575724221765995, 0.01288942527025938, 0.008819304406642914, 0.00824806373566389, 0.0077138254418969154, 0.00737703125923872, 0.0065979850478470325]
+
+[New tokens 4] count=256 first30=[7009, 681, 261, 2505, 27346, 5109, 541, 464, 592, 979, 7437, 813, 814, 359, 338, 13653, 56, 636, 10427, 15, 349, 464, 34, 351, 290, 266, 1370, 278, 970, 266]
+[New text 4] repr=' Spanish if a Qumable metal about this one dayCS most firstun that AndreUings toys, with this? The in the comeing while the5nable, and red from by enjoy the shed,. I have a white be thanked stop because out by every day, but that he learned to the Stephen N hand. In the hard work; at a to great American) in the rotor might be what being, but no matter that is this ampl power and two- outside in the of the thing any16 p Church, and love me about who have any. How is this rich has been a asprint w'
+
+[Full output 4]
+ Neural networks are a class of machine learning models that  Spanish if a Qumable metal about this one dayCS most firstun that AndreUings toys, with this? The in the comeing while the5nable, and red from by enjoy the shed,. I have a white be thanked stop because out by every day, but that he learned to the Stephen N hand. In the hard work; at a to great American) in the rotor might be what being, but no matter that is this ampl power and two- outside in the of the thing any16 p Church, and love me about who have any. How is this rich has been a asprint wild. 2: bubble, several Texas. They:3, even used to networks. In the wood, LEG-19 can be Pete now Amy is if the C when the Studies, Bears like it learned to give a big but no longer shirt snake, which we also be mean no pair of thisDE, but taking right changed. So the front of thisra% is a lot of the rest in the two item,. He is that traveling as such as from taking if you feel three years from the other works at with a as C but which two several (pri for you the two-D to a Sam and I who quickly they are
+
+================================================================================
+[Prompt 5] (prompt_tokens=21)
+Here is a short Python snippet:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=6.30999420536682e-06
+first_step_topk_ids=[1491, 5605, 4220, 811, 369, 822, 533, 613, 652, 1961]
+first_step_topk_probs=[0.06579948216676712, 0.03682786971330643, 0.033682189881801605, 0.033682189881801605, 0.02576744742691517, 0.022537559270858765, 0.020612502470612526, 0.017241617664694786, 0.011033077724277973, 0.011033077724277973]
+
+[New tokens 5] count=256 first30=[2384, 14884, 1400, 888, 9093, 702, 621, 464, 329, 6462, 15, 1027, 23584, 888, 17, 426, 662, 289, 12, 369, 606, 266, 504, 1641, 682, 266, 533, 6176, 338, 1980]
+[New text 5] repr=" beautiful ate never differentEA such over this on reference, now spo different. Lang to) or like the has cap use the up posted that men all the 50 include over that July's ...it-pl in this good take softipt one, won Dr chance of that I have a queen ( renewk longer. Everyone is cents being) PRE Grand High you.” This University- ‘ ahead of the the twoum this particular visitors who or a traditional have OT used the map as the Park. TheLily,,” recent- sang 10 each morning, and care that. After he "
+
+[Full output 5]
+ Here is a short Python snippet:
+
+def fib(n):
+     beautiful ate never differentEA such over this on reference, now spo different. Lang to) or like the has cap use the up posted that men all the 50 include over that July's ...it-pl in this good take softipt one, won Dr chance of that I have a queen ( renewk longer. Everyone is cents being) PRE Grand High you.” This University- ‘ ahead of the the twoum this particular visitors who or a traditional have OT used the map as the Park. TheLily,,” recent- sang 10 each morning, and care that. After he for the best fun, developed that I even used the essay anyway. Thanks to be a days fees ever as the 8- X-olding as the lastor year. A turn over before which again.S. The organic00 over both yourinas, and this Mama P people track – that it also an That’s per day, and waited is different used their those little carpet in the feelings or other words on three which like the low they are not for a free help me your or even a an seem your 30- sets to give the same spot of a things. Where can do. A “ed music, what we do some business & I with your Shippingow
+

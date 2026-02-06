@@ -1,14 +1,16 @@
 # pretrain/train_pretrain.py
 # Minimal, robust GPT pretraining script for petitgpt.
+# Key properties:
 # - MiniMind-style token-level loss_mask (explicit mask and weighted reduction)
 # - BOS masked from loss; EOS can be down-weighted early to prevent collapse
+# - IMPORTANT: cross-entropy is always computed in FP32 (even under bf16/fp16 autocast)
 # - grad accumulation, bf16/fp16 autocast, torch.compile, clean checkpoints
 # - periodic evaluation + sample generation + checkpoints
+
 from __future__ import annotations
 
 import argparse
 import json
-import os
 import sys
 import time
 from dataclasses import asdict
@@ -27,8 +29,8 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from dataset_pretrain import PackedBinDataset  # noqa: E402
-from src.model import GPT, GPTConfig  # noqa: E402
 from sample import generate_default_samples  # noqa: E402
+from src.model import GPT, GPTConfig  # noqa: E402
 
 # -----------------------------------------------------------------------------
 # Performance toggles
@@ -106,18 +108,23 @@ def masked_weighted_ce_loss(
     eos_weight: float,
 ) -> torch.Tensor:
     """
-    Token-level CE:
+    Token-level CE (MiniMind style):
       - per-token CE (reduction='none')
       - multiply by loss_mask
       - optionally down-weight EOS targets
       - normalize by sum of weights (NOT by B*T)
+
+    IMPORTANT:
+      - Cross-entropy is always computed in FP32 for numerical stability.
+        This prevents bf16/fp16 autocast from "shrinking" CE and giving fake near-zero loss.
     """
     B, T, V = logits.shape
-    l = logits.reshape(B * T, V)
+    # Force FP32 CE computation even under autocast
+    l = logits.reshape(B * T, V).float()
     y = labels.reshape(B * T)
-    m = loss_mask.reshape(B * T)
+    m = loss_mask.reshape(B * T).float()
 
-    per = F.cross_entropy(l, y, reduction="none")  # [B*T]
+    per = F.cross_entropy(l, y, reduction="none")  # [B*T], FP32
     w = m
     if eos_weight != 1.0:
         eos_m = (y == int(eos_id)).float()
@@ -134,15 +141,38 @@ def masked_ce_128_debug(
     loss_mask: torch.Tensor,
     tt: int = 128,
 ) -> float:
-    """Same mouth as training loss (mask-weighted), but only first tt tokens."""
+    """
+    Debug-only masked CE over the first tt positions, computed in FP32.
+    (This matches the "mask mouth" of training loss, but does NOT include eos_weight.)
+    """
     B, T, V = logits.shape
     t = min(T, tt)
     l = logits[:, :t, :].reshape(-1, V).float()
     y = labels[:, :t].reshape(-1)
-    m = loss_mask[:, :t].reshape(-1)
+    m = loss_mask[:, :t].reshape(-1).float()
     per = F.cross_entropy(l, y, reduction="none")
-    return float((per * m).sum().item() / m.sum().clamp_min(1.0).item())
+    denom = m.sum().clamp_min(1.0)
+    return float((per * m).sum().item() / denom.item())
 
+@torch.no_grad()
+def causal_leak_check(model, input_ids, device, vocab_size: int, check_pos: int = 128) -> float:
+    """
+    If the model is causal, changing a future token should NOT change logits of earlier positions.
+    We check that logits[:, :check_pos] are invariant to edits in the suffix.
+    """
+    model.eval()
+    x = input_ids.to(device)
+    logits1 = model(x).float()
+
+    x2 = x.clone()
+    t = x2.shape[1] - 5
+    x2[:, t] = (x2[:, t] + 123) % int(vocab_size)
+    logits2 = model(x2).float()
+
+    diff = (logits1[:, :check_pos, :] - logits2[:, :check_pos, :]).abs().max().item()
+    print(f"[dbg] causal_leak_check max_abs_diff(prefix_logits)={diff:.6f}")
+    model.train()
+    return float(diff)
 
 def save_ckpt(
     out_dir: Path,
@@ -181,10 +211,12 @@ def load_ckpt(
     ckpt = torch.load(resume_path, map_location="cpu")
     state = ckpt["model"]
 
+    # Handle compiled prefix if present
     if any(k.startswith("_orig_mod.") for k in state.keys()):
         state = {k[len("_orig_mod."):]: v for k, v in state.items()}
 
     model.load_state_dict(state, strict=True)
+
     global_step = int(ckpt.get("global_step", 0))
     local_step = int(ckpt.get("local_step", 0))
 
@@ -231,7 +263,8 @@ def evaluate(
         if ac_dtype is not None:
             with torch.autocast("cuda", dtype=ac_dtype):
                 logits = model(input_ids)
-                loss = masked_weighted_ce_loss(logits, labels, loss_mask, eos_id=eos_id, eos_weight=eos_weight)
+            # CE in FP32 (outside autocast doesn't hurt; function enforces FP32 anyway)
+            loss = masked_weighted_ce_loss(logits, labels, loss_mask, eos_id=eos_id, eos_weight=eos_weight)
         else:
             logits = model(input_ids)
             loss = masked_weighted_ce_loss(logits, labels, loss_mask, eos_id=eos_id, eos_weight=eos_weight)
@@ -267,7 +300,7 @@ def parse_args() -> argparse.Namespace:
     ap.add_argument("--bos_id", type=int, default=2)
     ap.add_argument("--eos_id", type=int, default=3)
 
-    # Loss shaping (defaults ON; use --no_xxx to disable)
+    # Loss shaping
     ap.add_argument("--no_mask_bos_in_loss", action="store_true")
     ap.add_argument("--no_mask_last_label_in_loss", action="store_true")
     ap.add_argument("--eos_weight", type=float, default=0.2)
@@ -424,7 +457,7 @@ def main() -> None:
     data_iter = iter(train_dl)
 
     t_window = time.time()
-    window_sup_tokens_est = 0  # estimated supervised tokens (avoid GPU sync)
+    window_sup_tokens_est = 0  # supervised tokens estimate from CPU mask (cheap)
 
     while local_step < args.max_steps:
         lr = lr_schedule(global_step, args.warmup_steps, args.lr)
@@ -453,7 +486,7 @@ def main() -> None:
             else:
                 input_u16, labels_u16, loss_mask_cpu = batch
 
-            # CPU-side sanity check (first 50 steps only)
+            # CPU-side sanity check (first 50 steps, first microbatch)
             if global_step < 50 and micro == 0:
                 tmp = input_u16.to(torch.int32)
                 max_id = int(tmp.max().item())
@@ -463,24 +496,24 @@ def main() -> None:
                     print("[fatal] first row head:", tmp[0, :32].tolist())
                     raise RuntimeError("Token id out of range. Fix vocab_size/tokenizer/shards.")
 
-            # token/s estimate (use CPU mask sum; cheap)
+            # token/s estimate (cheap CPU sum)
             window_sup_tokens_est += int(loss_mask_cpu.sum().item())
 
             input_ids = input_u16.to(device, dtype=torch.long, non_blocking=True)
             labels = labels_u16.to(device, dtype=torch.long, non_blocking=True)
             loss_mask = loss_mask_cpu.to(device, dtype=torch.float32, non_blocking=True)
 
+            # Forward under autocast, but compute CE in FP32 inside masked_weighted_ce_loss()
             if ac_dtype is not None:
                 with torch.autocast("cuda", dtype=ac_dtype):
                     logits = model(input_ids)
-                    loss_raw = masked_weighted_ce_loss(
-                        logits=logits,
-                        labels=labels,
-                        loss_mask=loss_mask,
-                        eos_id=args.eos_id,
-                        eos_weight=cur_eos_weight,
-                    )
-                    loss = loss_raw / args.grad_accum
+                loss_raw = masked_weighted_ce_loss(
+                    logits=logits,
+                    labels=labels,
+                    loss_mask=loss_mask,
+                    eos_id=args.eos_id,
+                    eos_weight=cur_eos_weight,
+                )
             else:
                 logits = model(input_ids)
                 loss_raw = masked_weighted_ce_loss(
@@ -490,7 +523,8 @@ def main() -> None:
                     eos_id=args.eos_id,
                     eos_weight=cur_eos_weight,
                 )
-                loss = loss_raw / args.grad_accum
+
+            loss = loss_raw / args.grad_accum
 
             if use_fp16:
                 scaler.scale(loss).backward()
@@ -499,32 +533,33 @@ def main() -> None:
 
             accum_loss_raw += float(loss_raw.detach().item())
 
-            # Debug (same step, same microbatch; only once per debug interval)
+            # Debug (once per interval, micro==0)
             if (global_step % args.debug_every == 0) and (micro == 0):
-                # Basic logits stats
                 lm = float(logits.float().mean().item())
                 ls = float(logits.float().std().item())
 
-                # Masked CE on the first 128 tokens (same "mouth" as training loss, but unweighted by eos_weight)
-                mce = masked_ce_128_debug(logits, labels, loss_mask, tt=128)
+                same = ((input_ids == labels) & (loss_mask > 0)).float().mean().item()
+                print("[dbg] frac(input_ids==labels) over supervised:", same)
 
+                mce = masked_ce_128_debug(logits, labels, loss_mask, tt=128)
                 print(f"[dbg] step={global_step} logits_mean={lm:.4f} logits_std={ls:.4f} masked_ce_128={mce:.6f}")
 
-                # 1) How much supervision is actually active? (If this is ~0, you're training almost nothing.)
                 m = loss_mask
                 print("[dbg] mask_mean:", float(m.mean().item()), "mask_sum:", float(m.sum().item()))
 
-                # 2) Label value range (should be within [0, vocab_size-1])
                 y = labels
                 print("[dbg] labels min/max:", int(y.min().item()), int(y.max().item()))
 
-                # 3) Masked top-1 accuracy (very rough, but great for catching label/target bugs)
+                eos = args.eos_id
+                eos_frac = (((y == eos) & (m > 0)).float().sum() / (m > 0).float().sum().clamp_min(1)).item()
+                print(f"[dbg] eos_frac_supervised: {eos_frac:.6f}")
+
                 pred = logits.argmax(dim=-1)
                 hit = ((pred == y) & (m > 0)).sum().item()
                 tot = (m > 0).sum().item()
                 print("[dbg] masked_top1_acc:", float(hit / max(1.0, tot)))
 
-                # 4) Unmasked CE over the first 128 tokens (scale sanity check)
+                # Unmasked FP32 CE over first 128 tokens (scale sanity check)
                 B, T, V = logits.shape
                 tt = min(T, 128)
                 ce_nomask = F.cross_entropy(
@@ -534,12 +569,16 @@ def main() -> None:
                 )
                 print("[dbg] ce_nomask_128:", float(ce_nomask.item()))
 
-        # grad clip
+                # Causal leak check
+                _ = causal_leak_check(model, input_ids, device, vocab_size=cfg.vocab_size, check_pos=128)
+
+        # Gradient clipping
         if args.grad_clip and args.grad_clip > 0:
             if use_fp16:
                 scaler.unscale_(optim)
             torch.nn.utils.clip_grad_norm_(model.parameters(), float(args.grad_clip))
 
+        # Optim step
         if use_fp16:
             scaler.step(optim)
             scaler.update()

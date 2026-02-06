@@ -1,9 +1,7 @@
-# src/model.py
 from __future__ import annotations
 
 import math
 from dataclasses import dataclass
-from typing import Optional, Tuple
 
 import torch
 import torch.nn as nn
@@ -49,29 +47,61 @@ class MLP(nn.Module):
 
 
 class CausalSelfAttention(nn.Module):
+    """
+    Causal self-attention with an explicit additive causal mask.
+
+    Why explicit mask?
+      - It removes any ambiguity about whether an attention kernel truly enforces causality.
+      - Even if SDPA picks a flash kernel, the additive -inf mask makes "looking ahead" impossible.
+    """
+
     def __init__(self, cfg: GPTConfig):
         super().__init__()
         assert cfg.d_model % cfg.n_heads == 0
         self.cfg = cfg
         self.head_dim = cfg.d_model // cfg.n_heads
+
         self.qkv = nn.Linear(cfg.d_model, 3 * cfg.d_model, bias=False)
-        self.out = nn.Linear(cfg.d_model, cfg.d_model, bias=False)
+        self.proj = nn.Linear(cfg.d_model, cfg.d_model, bias=False)
         self.drop = nn.Dropout(cfg.dropout)
+
+        # Precompute an additive causal mask (0 for allowed, -inf for disallowed).
+        # Shape: [1, 1, maxT, maxT] so it broadcasts to [B, nH, T, T].
+        maxT = int(cfg.max_seq_len)
+        bias = torch.full((maxT, maxT), float("-inf"))
+        bias = torch.triu(bias, diagonal=1)  # upper triangle (strictly future) = -inf
+        bias = bias.unsqueeze(0).unsqueeze(0)  # [1,1,maxT,maxT]
+        self.register_buffer("causal_bias", bias, persistent=False)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         # x: [B, T, C]
         B, T, C = x.shape
+        if T > self.cfg.max_seq_len:
+            raise ValueError(f"Sequence length T={T} exceeds max_seq_len={self.cfg.max_seq_len}")
+
         qkv = self.qkv(x)  # [B, T, 3C]
         q, k, v = qkv.chunk(3, dim=-1)
-        # [B, nh, T, hd]
+
+        # [B, nH, T, Hd]
         q = q.view(B, T, self.cfg.n_heads, self.head_dim).transpose(1, 2)
         k = k.view(B, T, self.cfg.n_heads, self.head_dim).transpose(1, 2)
         v = v.view(B, T, self.cfg.n_heads, self.head_dim).transpose(1, 2)
 
-        # PyTorch 2+: efficient attention kernels on 4090
-        y = F.scaled_dot_product_attention(q, k, v, attn_mask=None, dropout_p=0.0, is_causal=True)
-        y = y.transpose(1, 2).contiguous().view(B, T, C)
-        y = self.out(y)
+        # Slice causal bias to current T.
+        attn_bias = self.causal_bias[:, :, :T, :T]  # [1,1,T,T]
+
+        # Use SDPA with explicit additive mask. Set is_causal=False to avoid any kernel ambiguity.
+        # dropout_p should be >0 only during training.
+        dropout_p = float(self.cfg.dropout) if (self.training and self.cfg.dropout > 0) else 0.0
+        y = F.scaled_dot_product_attention(
+            q, k, v,
+            attn_mask=attn_bias,
+            dropout_p=dropout_p,
+            is_causal=False,
+        )  # [B, nH, T, Hd]
+
+        y = y.transpose(1, 2).contiguous().view(B, T, C)  # [B, T, C]
+        y = self.proj(y)
         return self.drop(y)
 
 
@@ -93,13 +123,15 @@ class GPT(nn.Module):
     def __init__(self, cfg: GPTConfig):
         super().__init__()
         self.cfg = cfg
+
         self.tok_emb = nn.Embedding(cfg.vocab_size, cfg.d_model)
         self.pos_emb = nn.Embedding(cfg.max_seq_len, cfg.d_model)
         self.drop = nn.Dropout(cfg.dropout)
+
         self.blocks = nn.ModuleList([Block(cfg) for _ in range(cfg.n_layers)])
         self.norm_f = RMSNorm(cfg.d_model)
-        self.lm_head = nn.Linear(cfg.d_model, cfg.vocab_size, bias=False)
 
+        self.lm_head = nn.Linear(cfg.d_model, cfg.vocab_size, bias=False)
         if cfg.tie_embeddings:
             self.lm_head.weight = self.tok_emb.weight
 
@@ -112,13 +144,15 @@ class GPT(nn.Module):
     def forward(self, input_ids: torch.Tensor) -> torch.Tensor:
         # input_ids: [B, T]
         B, T = input_ids.shape
-        assert T <= self.cfg.max_seq_len
-        pos = torch.arange(0, T, device=input_ids.device, dtype=torch.long).unsqueeze(0)  # [1, T]
+        if T > self.cfg.max_seq_len:
+            raise ValueError(f"T={T} exceeds max_seq_len={self.cfg.max_seq_len}")
+        if T < 1:
+            raise ValueError("Empty sequence")
 
-        x = self.tok_emb(input_ids) + self.pos_emb(pos)  # [B, T, C]
+        pos = torch.arange(0, T, device=input_ids.device, dtype=torch.long).unsqueeze(0)  # [1,T]
+        x = self.tok_emb(input_ids) + self.pos_emb(pos)  # [B,T,C]
         x = self.drop(x)
         for blk in self.blocks:
             x = blk(x)
         x = self.norm_f(x)
-        logits = self.lm_head(x)  # [B, T, V]
-        return logits
+        return self.lm_head(x)  # [B,T,V]
