@@ -19,16 +19,18 @@ def list_shards(dir_path: str) -> List[Path]:
 
 class PackedBinDataset(Dataset):
     """
-    Fast packed dataset:
-      - Each shard is a uint16 token stream (continuous).
-      - We sample fixed blocks of length (seq_len + 1) within each shard.
-      - Returns:
-          input_ids_u16: [T] uint16 (CPU)
-          labels_u16:    [T] uint16 (CPU)
-          loss_mask_f32: [T] float32 (CPU), 1.0 means "use this position in loss"
-    Notes:
-      - We intentionally build a MiniMind-style loss_mask to avoid over-training
-        BOS/EOS or boundary artifacts.
+    Robust packed dataset with EOS-collapse guards.
+
+    Returns:
+        input_ids_u16: [T] uint16
+        labels_u16:    [T] uint16
+        loss_mask_f32: [T] float32
+
+    Key anti-collapse tricks:
+      - Mask BOS targets (optional)
+      - Mask last label in block (optional)
+      - Mask *repeated EOS* targets: if labels[t]==EOS and labels[t-1]==EOS => loss_mask[t]=0
+      - Reject EOS-heavy blocks by resampling a few times
     """
 
     def __init__(
@@ -39,6 +41,10 @@ class PackedBinDataset(Dataset):
         eos_id: int = 3,
         mask_bos_in_loss: bool = True,
         mask_last_label_in_loss: bool = True,
+        # NEW:
+        mask_repeated_eos_in_loss: bool = True,
+        max_eos_frac: float = 0.20,      # if EOS fraction in labels > this, resample
+        resample_tries: int = 8,
     ):
         super().__init__()
         self.seq_len = int(seq_len)
@@ -49,8 +55,13 @@ class PackedBinDataset(Dataset):
         self.mask_bos_in_loss = bool(mask_bos_in_loss)
         self.mask_last_label_in_loss = bool(mask_last_label_in_loss)
 
+        self.mask_repeated_eos_in_loss = bool(mask_repeated_eos_in_loss)
+        self.max_eos_frac = float(max_eos_frac)
+        self.resample_tries = int(resample_tries)
+
         self.shards = list_shards(shard_dir)
         self._mms: List[np.memmap] = []
+        self._lens: List[int] = []
         self._prefix_blocks: List[int] = [0]
 
         total_blocks = 0
@@ -59,6 +70,7 @@ class PackedBinDataset(Dataset):
             n_tokens = int(mm.shape[0])
             n_blocks = n_tokens // self.block
             self._mms.append(mm)
+            self._lens.append(n_tokens)
             total_blocks += n_blocks
             self._prefix_blocks.append(total_blocks)
 
@@ -67,10 +79,11 @@ class PackedBinDataset(Dataset):
         self.n_blocks = total_blocks
 
     def __len__(self) -> int:
+        # keep a stable length; we will resample start positions internally
         return self.n_blocks
 
-    def __getitem__(self, i: int) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
-        # Find shard by prefix blocks (binary search).
+    def _pick_shard_by_index(self, i: int) -> int:
+        # binary search on prefix sums
         lo, hi = 0, len(self._prefix_blocks) - 1
         while lo < hi:
             mid = (lo + hi) // 2
@@ -78,27 +91,64 @@ class PackedBinDataset(Dataset):
                 lo = mid + 1
             else:
                 hi = mid
-        shard_i = lo
-        local_block = i - self._prefix_blocks[shard_i]
-        start = local_block * self.block
+        return lo
+
+    def _rng(self) -> np.random.Generator:
+        # worker-safe RNG
+        info = torch.utils.data.get_worker_info()
+        if info is None:
+            seed = torch.initial_seed() % (2**32)
+        else:
+            seed = info.seed % (2**32)
+        return np.random.default_rng(seed)
+
+    def _slice_block(self, shard_i: int, start: int) -> torch.Tensor:
         mm = self._mms[shard_i]
-
-        # Copy slice into writable CPU memory.
         toks_u16 = np.array(mm[start : start + self.block], dtype=np.uint16, copy=True)
-        toks_u16 = torch.from_numpy(toks_u16)  # uint16 CPU
+        return torch.from_numpy(toks_u16)  # uint16 CPU
 
-        input_ids = toks_u16[:-1].contiguous()  # [T] uint16
-        labels = toks_u16[1:].contiguous()      # [T] uint16
+    def __getitem__(self, i: int) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+        rng = self._rng()
 
-        # Build MiniMind-style loss mask: float32 [T]
+        shard_i = self._pick_shard_by_index(int(i))
+        n_tokens = self._lens[shard_i]
+        max_start = n_tokens - self.block
+        if max_start < 0:
+            raise RuntimeError("Shard too small for one block.")
+
+        # resample if EOS-heavy / bad blocks
+        last_candidate = None
+        for _ in range(max(1, self.resample_tries)):
+            # IMPORTANT: randomize start to avoid boundary artifacts
+            start = int(rng.integers(0, max_start + 1))
+            toks_u16 = self._slice_block(shard_i, start)
+            last_candidate = toks_u16
+
+            input_ids = toks_u16[:-1].contiguous()
+            labels = toks_u16[1:].contiguous()
+
+            # quick EOS-heavy check (on labels)
+            eos_frac = float((labels == self.eos_id).float().mean().item())
+            if eos_frac <= self.max_eos_frac:
+                break
+
+        toks_u16 = last_candidate
+        input_ids = toks_u16[:-1].contiguous()
+        labels = toks_u16[1:].contiguous()
+
+        # Build loss mask
         loss_mask = torch.ones_like(labels, dtype=torch.float32)
 
-        # 1) Do not train on BOS tokens if they appear in labels.
+        # 1) mask BOS targets
         if self.mask_bos_in_loss:
-            loss_mask = loss_mask * (labels != self.bos_id).float()
+            loss_mask *= (labels != self.bos_id).float()
 
-        # 2) Optionally mask the last label in each block to reduce boundary artifacts.
-        # This is a conservative stabilization trick (cheap and effective).
+        # 2) mask repeated EOS targets (VERY IMPORTANT for EOS collapse)
+        if self.mask_repeated_eos_in_loss and labels.numel() > 1:
+            rep = (labels[1:] == self.eos_id) & (labels[:-1] == self.eos_id)
+            loss_mask[1:] *= (~rep).float()
+
+        # 3) mask last label to reduce boundary artifacts
         if self.mask_last_label_in_loss and loss_mask.numel() > 0:
             loss_mask[-1] = 0.0
 

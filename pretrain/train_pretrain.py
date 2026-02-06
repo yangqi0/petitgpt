@@ -41,6 +41,29 @@ try:
 except Exception:
     pass
 
+def infer_vocab_size_from_tokenizer_json(path: str) -> int:
+    # Works for HF tokenizers' tokenizer.json (BPE/Unigram/WordPiece etc.)
+    with open(path, "r", encoding="utf-8") as f:
+        obj = json.load(f)
+
+    model = obj.get("model", {})
+    # BPE/WordPiece usually store vocab dict in model["vocab"]
+    vocab = model.get("vocab", None)
+    if isinstance(vocab, dict):
+        return len(vocab)
+
+    # Some tokenizers store vocab as list of pairs
+    if isinstance(vocab, list):
+        return len(vocab)
+
+    # Fallback: try added_tokens
+    added = obj.get("added_tokens", [])
+    if isinstance(added, list) and added:
+        # not ideal, but better than nothing
+        # (still recommend setting vocab_size manually if this triggers)
+        return max(t.get("id", -1) for t in added) + 1
+
+    raise ValueError(f"Cannot infer vocab_size from tokenizer.json: {path}")
 
 def _resolve_path(p: str) -> str:
     """Resolve a path relative to project root if needed."""
@@ -200,6 +223,16 @@ def evaluate(
         else:
             input_u16, labels_u16, loss_mask = batch
 
+        # CPU-side sanity check to prevent CUDA device-side assert
+        if step < 50:  # 前几十步检查就够了
+            max_id = int(input_u16.max().item())
+            min_id = int(input_u16.min().item())
+            if min_id < 0 or max_id >= cfg.vocab_size:
+                # 打印一些上下文，直接 fail fast
+                print(f"[fatal] token id out of range: min={min_id} max={max_id} vocab_size={cfg.vocab_size}")
+                print("[fatal] first row head:", input_u16[0, :32].tolist())
+                raise RuntimeError("Token id out of range. Fix vocab_size/tokenizer/shards.")
+
         input_ids = input_u16.to(device, dtype=torch.long, non_blocking=True)
         labels = labels_u16.to(device, dtype=torch.long, non_blocking=True)
         loss_mask = loss_mask.to(device, dtype=torch.float32, non_blocking=True)
@@ -243,9 +276,17 @@ def parse_args() -> argparse.Namespace:
     ap.add_argument("--bos_id", type=int, default=2)
     ap.add_argument("--eos_id", type=int, default=3)
 
-    # Loss shaping
-    ap.add_argument("--mask_bos_in_loss", action="store_true", help="Mask BOS targets using loss_mask (recommended).")
-    ap.add_argument("--mask_last_label_in_loss", action="store_true", help="Mask last label position in each block.")
+    # Loss shaping (defaults ON; use --no_xxx to disable)
+    ap.add_argument(
+        "--no_mask_bos_in_loss",
+        action="store_true",
+        help="Disable masking BOS targets in loss (NOT recommended).",
+    )
+    ap.add_argument(
+        "--no_mask_last_label_in_loss",
+        action="store_true",
+        help="Disable masking last label position in each block.",
+    )
     ap.add_argument(
         "--eos_weight",
         type=float,
@@ -313,8 +354,18 @@ def main() -> None:
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     assert device.type == "cuda", "This script expects a CUDA GPU."
 
+    # Always trust tokenizer.json for vocab_size to avoid embedding OOB
+    try:
+        inferred_vs = infer_vocab_size_from_tokenizer_json(str(tok_path))
+    except Exception as e:
+        print(f"[warn] failed to infer vocab_size from tokenizer.json: {e}")
+        inferred_vs = args.vocab_size
+
+    if inferred_vs != args.vocab_size:
+        print(f"[info] override vocab_size: args={args.vocab_size} -> tokenizer={inferred_vs}")
+
     cfg = GPTConfig(
-        vocab_size=args.vocab_size,
+        vocab_size=inferred_vs,
         n_layers=args.layers,
         d_model=args.d_model,
         n_heads=args.n_heads,
@@ -338,16 +389,16 @@ def main() -> None:
         seq_len=args.seq_len,
         bos_id=args.bos_id,
         eos_id=args.eos_id,
-        mask_bos_in_loss=args.mask_bos_in_loss,
-        mask_last_label_in_loss=args.mask_last_label_in_loss,
+        mask_bos_in_loss=not args.no_mask_bos_in_loss,
+        mask_last_label_in_loss=not args.no_mask_last_label_in_loss,
     )
     val_ds = PackedBinDataset(
         str(val_dir),
         seq_len=args.seq_len,
         bos_id=args.bos_id,
         eos_id=args.eos_id,
-        mask_bos_in_loss=args.mask_bos_in_loss,
-        mask_last_label_in_loss=args.mask_last_label_in_loss,
+        mask_bos_in_loss=not args.no_mask_bos_in_loss,
+        mask_last_label_in_loss=not args.no_mask_last_label_in_loss,
     )
 
     train_dl = DataLoader(
@@ -429,6 +480,16 @@ def main() -> None:
                 loss_mask = torch.ones_like(labels_u16, dtype=torch.float32)
             else:
                 input_u16, labels_u16, loss_mask = batch
+
+            # CPU-side sanity check to prevent CUDA device-side assert
+            if step < 50:  # 前几十步检查就够了
+                max_id = int(input_u16.max().item())
+                min_id = int(input_u16.min().item())
+                if min_id < 0 or max_id >= cfg.vocab_size:
+                    # 打印一些上下文，直接 fail fast
+                    print(f"[fatal] token id out of range: min={min_id} max={max_id} vocab_size={cfg.vocab_size}")
+                    print("[fatal] first row head:", input_u16[0, :32].tolist())
+                    raise RuntimeError("Token id out of range. Fix vocab_size/tokenizer/shards.")
 
             input_ids = input_u16.to(device, dtype=torch.long, non_blocking=True)
             labels = labels_u16.to(device, dtype=torch.long, non_blocking=True)
