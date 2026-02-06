@@ -1,0 +1,92 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.7, top_p=0.9, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.0009967954829335213
+first_step_topk_ids=[15, 410, 674, 430, 286, 17, 332, 979, 312, 316]
+first_step_topk_probs=[0.6454869508743286, 0.09053342789411545, 0.022686950862407684, 0.018976828083395958, 0.015873441472649574, 0.013277564197778702, 0.00928995106369257, 0.008496440947055817, 0.007431433070451021, 0.006216128822416067]
+
+[New tokens 1] count=85 first30=[15, 674, 410, 261, 1508, 2777, 4066, 6844, 17, 1009, 3566, 289, 847, 349, 544, 1294, 17, 1009, 3038, 544, 287, 13881, 836, 15, 539, 44, 1180, 286, 836, 15]
+[New text 1] repr=', there was a little girl named Lily. She loved to play with her family. She asked her mommy said, "I love and said, "I will be a big, "Mom, we can use your bird." "I want to go to get you can play with your room. We will be careful and said, "That\'s play with you. The box, "I am very tired."'
+
+[Full output 1]
+ Once upon a time, , there was a little girl named Lily. She loved to play with her family. She asked her mommy said, "I love and said, "I will be a big, "Mom, we can use your bird." "I want to go to get you can play with your room. We will be careful and said, "That's play with you. The box, "I am very tired."
+
+================================================================================
+[Prompt 2] (prompt_tokens=11)
+In a distant future, humans and robots 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.0003875397960655391
+first_step_topk_ids=[15, 17, 332, 410, 392, 286, 371, 504, 16, 645]
+first_step_topk_probs=[0.5360388159751892, 0.07518267631530762, 0.06014188751578331, 0.04207960516214371, 0.02252359129488468, 0.021540183573961258, 0.017230931669473648, 0.015759136527776718, 0.014413062483072281, 0.011026234365999699]
+
+[New tokens 2] count=256 first30=[15, 1887, 15, 2231, 266, 4148, 17, 312, 395, 322, 261, 939, 616, 15, 385, 699, 15, 312, 584, 261, 1508, 1411, 16, 7954, 16, 723, 15, 312, 1560, 606]
+[New text 2] repr=", non, While the sea. I can be a long time, we know, I had a little three-imp-ons, I'm like to find me a big window. I can’t so I can't know, I have a nice and I love to help you to do you, I’t like you can share, I can really like a your example. I will be sure to get your children. I will give you to you so my shoes. I have to your mouth. I had a lot of my broken, I am very a new noise, I could find me you in your own boy. I like you can be a place. I'm it. I can't mean. I am playing and I hav"
+
+[Full output 2]
+ In a distant future, humans and robots , non, While the sea. I can be a long time, we know, I had a little three-imp-ons, I'm like to find me a big window. I can’t so I can't know, I have a nice and I love to help you to do you, I’t like you can share, I can really like a your example. I will be sure to get your children. I will give you to you so my shoes. I have to your mouth. I had a lot of my broken, I am very a new noise, I could find me you in your own boy. I like you can be a place. I'm it. I can't mean. I am playing and I have to come on my brother. I am playing? I like you to help you can be careful. I’s my floor. I'm not like this is about your favorite? You can't want to a little. I'm sorry, I'm in a good, I do. I want to be careful. I am a bad and I will be one. I don't like you can't like it. I’s that I’s time, but I have to say my things. I was time. I have
+
+================================================================================
+[Prompt 3] (prompt_tokens=11)
+The following is a news report:
+
+
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.0025500275660306215
+first_step_topk_ids=[15, 332, 16, 17, 29, 286, 430, 18, 410, 504]
+first_step_topk_probs=[0.16944576799869537, 0.13554705679416656, 0.07586544007062912, 0.033967018127441406, 0.027171695604920387, 0.021735813468694687, 0.01901128701865673, 0.016628267243504524, 0.016628267243504524, 0.014543959870934486]
+
+[New tokens 3] count=256 first30=[28, 15, 1038, 266, 1001, 292, 266, 1518, 292, 266, 897, 17, 351, 1484, 17, 583, 332, 261, 4573, 15, 266, 1817, 286, 266, 961, 17, 351, 2900, 292, 266]
+[New text 3] repr='9, including the end of the past of the world. The website. This is a poor, the quick and the business. The general of the day, the national of the most of the 5, and the family and the TV of the people has the men, the first. He is a big side of the most of the last. We have to the skin and the day. It is an between the classroom of the court, the next to the best of the project. The 2. You are the ground of the best of the forest and the world. And we have to a few or the way to the game. It i'
+
+[Full output 3]
+ The following is a news report:
+
+9, including the end of the past of the world. The website. This is a poor, the quick and the business. The general of the day, the national of the most of the 5, and the family and the TV of the people has the men, the first. He is a big side of the most of the last. We have to the skin and the day. It is an between the classroom of the court, the next to the best of the project. The 2. You are the ground of the best of the forest and the world. And we have to a few or the way to the game. It is not like the most of the most of the culture and a very curious and the the problem. It is a big, the c, the. The next to the other and the world, the/ is the next. The three, the same of the top of the same of the people would also have to the other a small and the room. The town, it will be a few and the top of the best one. I would be careful, it are a small. The man, I found the way to be a little girl, and you are a big and the front of the truck and it to the best friends.
+
+================================================================================
+[Prompt 4] (prompt_tokens=14)
+Neural networks are a class of machine learning models that 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.0014909695601090789
+first_step_topk_ids=[332, 15, 371, 504, 17, 286, 484, 570, 385, 16]
+first_step_topk_probs=[0.25870195031166077, 0.08474145084619522, 0.04148448631167412, 0.039673227816820145, 0.0317363403737545, 0.026546310633420944, 0.02427884377539158, 0.019421694800257683, 0.01857372187077999, 0.01776278205215931]
+
+[New tokens 4] count=256 first30=[15, 332, 261, 1342, 292, 376, 289, 982, 292, 412, 2983, 17, 583, 332, 261, 979, 15, 354, 332, 261, 2905, 292, 266, 1320, 17, 351, 1674, 484, 322, 261]
+[New text 4] repr=", is a important of us to read of your weight. This is a day, it is a piece of the same. The body will be a game, it’s. I’s a very good for a big more than the first time and the best of the rest of the building, or in the movie. The first week. The next-My you can be the same. He has a lot of a help you have to be careful. I need to the next to be seen the storm and the game and for a ride on the nurse. You can't be a child is that the video. You can't know you are a few of the area. You can be"
+
+[Full output 4]
+ Neural networks are a class of machine learning models that , is a important of us to read of your weight. This is a day, it is a piece of the same. The body will be a game, it’s. I’s a very good for a big more than the first time and the best of the rest of the building, or in the movie. The first week. The next-My you can be the same. He has a lot of a help you have to be careful. I need to the next to be seen the storm and the game and for a ride on the nurse. You can't be a child is that the video. You can't know you are a few of the area. You can be the highest. Do you to touch the first, you feel the same and you will be a great and the next to be so I'm not a good and your day and you. You should not not nice to the end. I’t think to see the rules of you want to you are a new. You will go back to be a good. We need to the treasure. You need to the next time to eat it. The, you want to be the people with you are the new and your own, you. You are so much, you need to do you
+
+================================================================================
+[Prompt 5] (prompt_tokens=21)
+Here is a short Python snippet:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.012195506133139133
+first_step_topk_ids=[15, 17, 434, 16, 18, 29, 414, 332, 286, 3]
+first_step_topk_probs=[0.058181509375572205, 0.034050796180963516, 0.026049429550766945, 0.023824404925107956, 0.019058169797062874, 0.019058169797062874, 0.019058169797062874, 0.01743030548095703, 0.01666928082704544, 0.012195506133139133]
+
+[New tokens 5] count=256 first30=[3435, 4322, 292, 266, 5935, 17, 351, 682, 266, 3229, 5064, 371, 570, 261, 397, 16, 11051, 16, 26, 17, 2638, 316, 289, 436, 261, 837, 979, 332, 261, 521]
+[New text 5] repr='60 fans of the emergency. The use the latest cards are also a D-looking-7. Now you to have a great day is a unim-year-based most a essential of the 15-of-O-17-4-C-P.5/R. In the two-based-5-5-A-5-the-R-1-day-old-5--10-4-L--G-N-to-S--d--ley and the what the greatest-1-year-G-5--4-year-D-1---1--7---Well-or-H--0-3---re----, the---3-------17---------------S------------------------------------------3----------------------------'
+
+[Full output 5]
+ Here is a short Python snippet:
+
+def fib(n):
+    60 fans of the emergency. The use the latest cards are also a D-looking-7. Now you to have a great day is a unim-year-based most a essential of the 15-of-O-17-4-C-P.5/R. In the two-based-5-5-A-5-the-R-1-day-old-5--10-4-L--G-N-to-S--d--ley and the what the greatest-1-year-G-5--4-year-D-1---1--7---Well-or-H--0-3---re----, the---3-------17---------------S------------------------------------------3----------------------------
+

@@ -1,0 +1,92 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.7, top_p=0.9, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.0005400334484875202
+first_step_topk_ids=[410, 15, 261, 17, 616, 979, 674, 430, 266, 645]
+first_step_topk_probs=[0.1790110468864441, 0.14319872856140137, 0.07010173052549362, 0.04690675064921379, 0.02745223417878151, 0.016066452488303185, 0.012852247804403305, 0.012852247804403305, 0.009402904659509659, 0.008992369286715984]
+
+[New tokens 1] count=256 first30=[15, 261, 1576, 2532, 15, 674, 410, 261, 616, 15, 674, 410, 261, 1508, 2777, 4066, 6844, 410, 261, 616, 15, 286, 289, 544, 1508, 2777, 17, 722, 410, 554]
+[New text 1] repr=', a bigried, there was a time, there was a little girl named Lily was a time, and to her little girl. He was so she to. The little girl. She was a little girl. She was a. The little girl. He wanted to go and said, and said, the little girl named Lily was a time, the. She was a little girl. She was so she was so to play with her. He was happy. She went to at the blue and the little girl. She was a little girl. She was so it and she was a little girl named Lily. The little girl. He was so happy an'
+
+[Full output 1]
+ Once upon a time, , a bigried, there was a time, there was a little girl named Lily was a time, and to her little girl. He was so she to. The little girl. She was a little girl. She was a. The little girl. He wanted to go and said, and said, the little girl named Lily was a time, the. She was a little girl. She was so she was so to play with her. He was happy. She went to at the blue and the little girl. She was a little girl. She was so it and she was a little girl named Lily. The little girl. He was so happy and made it. She was a little girl named Tim. She had and fun. She was so he could that. She saw her mommy loved to the little girl and saw her. She was a little girl. She went to the little girl. She was so happy. She had to see her and said, the. She was a time, the noises. The little girl named Tim. She was a little girl. She was so happy and try the toy and wanted to the little girl. She asked her and she was so she was very happy and when she and said, she. She wanted to the bird
+
+================================================================================
+[Prompt 2] (prompt_tokens=11)
+In a distant future, humans and robots 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=9.362667333334684e-05
+first_step_topk_ids=[15, 17, 410, 332, 286, 371, 289, 16, 266, 292]
+first_step_topk_probs=[0.32339733839035034, 0.28286013007164, 0.07411860674619675, 0.03035040944814682, 0.01553611271083355, 0.012995397672057152, 0.009941702708601952, 0.009507637470960617, 0.009092522785067558, 0.00869553443044424]
+
+[New tokens 2] count=79 first30=[15, 266, 2641, 725, 266, 616, 15, 266, 5247, 266, 616, 17, 3, 15, 674, 410, 261, 1508, 2777, 410, 261, 616, 15, 518, 266, 1976, 17, 351, 5728, 410]
+[New text 2] repr=', theWe just the time, the pool the time., there was a little girl was a time, but the thing. The Tim was a time, so the ten. The boy was so excited to the dad, the inside. One day, he was a time, he was a time, she was very happy to be very sad. She was so happy and her.'
+
+[Full output 2]
+ In a distant future, humans and robots , theWe just the time, the pool the time., there was a little girl was a time, but the thing. The Tim was a time, so the ten. The boy was so excited to the dad, the inside. One day, he was a time, he was a time, she was very happy to be very sad. She was so happy and her.
+
+================================================================================
+[Prompt 3] (prompt_tokens=11)
+The following is a news report:
+
+
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.000361035781679675
+first_step_topk_ids=[17, 15, 16, 332, 410, 292, 371, 289, 266, 645]
+first_step_topk_probs=[0.18494544923305511, 0.1237514540553093, 0.03876667469739914, 0.0226882416754961, 0.021697647869586945, 0.018977908417582512, 0.018977908417582512, 0.01814931258559227, 0.01327832043170929, 0.010621901601552963]
+
+[New tokens 3] count=124 first30=[834, 350, 354, 17, 351, 3748, 410, 261, 616, 15, 286, 354, 17, 351, 6528, 410, 17, 351, 15, 261, 616, 15, 286, 266, 8940, 17, 351, 6528, 410, 261]
+[New text 3] repr=' want as it. The previous was a time, and it. The bird was. The, a time, and the introduce. The bird was a little girl named Tim was a time, the friend. The50. The little girl named The lot of the little girl was a little girl was happy. He had to the park. The little girl named Tim was so happy. The to do. He. The hat and was very happy. The end. She was very sad. He was so happy. The bird. The little girl. She had to be happy and said, "Yes, he looked.'
+
+[Full output 3]
+ The following is a news report:
+
+ want as it. The previous was a time, and it. The bird was. The, a time, and the introduce. The bird was a little girl named Tim was a time, the friend. The50. The little girl named The lot of the little girl was a little girl was happy. He had to the park. The little girl named Tim was so happy. The to do. He. The hat and was very happy. The end. She was very sad. He was so happy. The bird. The little girl. She had to be happy and said, "Yes, he looked.
+
+================================================================================
+[Prompt 4] (prompt_tokens=14)
+Neural networks are a class of machine learning models that 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.0007642378914169967
+first_step_topk_ids=[322, 436, 17, 392, 292, 266, 410, 261, 332, 15]
+first_step_topk_probs=[0.09920570999383926, 0.05310099199414253, 0.04644492641091347, 0.029720541089773178, 0.025995157659053802, 0.02486017718911171, 0.022736724466085434, 0.022736724466085434, 0.01988673023879528, 0.014549441635608673]
+
+[New tokens 4] count=32 first30=[395, 289, 266, 271, 266, 1576, 350, 261, 2361, 289, 322, 289, 322, 289, 322, 914, 17, 722, 6063, 289, 266, 354, 410, 524, 286, 621, 289, 266, 5223, 15]
+[New text 4] repr=' can to the c the big as a wide to be to be to be him. He noticed to the it was out and over to the cloud,.'
+
+[Full output 4]
+ Neural networks are a class of machine learning models that  can to the c the big as a wide to be to be to be him. He noticed to the it was out and over to the cloud,.
+
+================================================================================
+[Prompt 5] (prompt_tokens=21)
+Here is a short Python snippet:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.0014115094672888517
+first_step_topk_ids=[17, 15, 16, 292, 414, 266, 29, 12, 289, 286]
+first_step_topk_probs=[0.11466109752655029, 0.07016921043395996, 0.06137366592884064, 0.05133689567446709, 0.026278909295797348, 0.016816118732094765, 0.014066087082028389, 0.014066087082028389, 0.012864618562161922, 0.011765781790018082]
+
+[New tokens 5] count=124 first30=[266, 616, 15, 266, 418, 15, 266, 897, 292, 266, 22275, 289, 266, 16415, 290, 266, 1324, 17, 351, 597, 266, 592, 17, 3, 15, 579, 410, 1040, 266, 5171]
+[New text 5] repr=' the time, theoc, the world of the thrust to theinflammatory in the post. The off the one., which was very the Lord. The lies, and the back. "I. When the top, the time, the bite, but the find the party. He was a time, and the garden, and the little girl was a lot of the differ, the end of the sun, she was so it. The vehicle, she was a time. The little boy was so happy. The animals. The little girl was a bird. The little girl was so happy to the bird.'
+
+[Full output 5]
+ Here is a short Python snippet:
+
+def fib(n):
+     the time, theoc, the world of the thrust to theinflammatory in the post. The off the one., which was very the Lord. The lies, and the back. "I. When the top, the time, the bite, but the find the party. He was a time, and the garden, and the little girl was a lot of the differ, the end of the sun, she was so it. The vehicle, she was a time. The little boy was so happy. The animals. The little girl was a bird. The little girl was so happy to the bird.
+

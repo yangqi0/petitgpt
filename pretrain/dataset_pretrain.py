@@ -26,11 +26,11 @@ class PackedBinDataset(Dataset):
         labels_u16:    [T] uint16
         loss_mask_f32: [T] float32
 
-    Key anti-collapse tricks:
-      - Mask BOS targets (optional)
-      - Mask last label in block (optional)
-      - Mask *repeated EOS* targets: if labels[t]==EOS and labels[t-1]==EOS => loss_mask[t]=0
-      - Reject EOS-heavy blocks by resampling a few times
+    Anti-collapse + sanity:
+      - Optional BOS masked from loss
+      - Optional last label masked (boundary)
+      - Optional repeated EOS masked (EOS EOS EOS... does not get reinforced)
+      - Optional EOS-heavy block rejection by resampling
     """
 
     def __init__(
@@ -41,9 +41,9 @@ class PackedBinDataset(Dataset):
         eos_id: int = 3,
         mask_bos_in_loss: bool = True,
         mask_last_label_in_loss: bool = True,
-        # NEW:
+        # guards:
         mask_repeated_eos_in_loss: bool = True,
-        max_eos_frac: float = 0.20,      # if EOS fraction in labels > this, resample
+        max_eos_frac: float = 0.20,
         resample_tries: int = 8,
     ):
         super().__init__()
@@ -78,8 +78,12 @@ class PackedBinDataset(Dataset):
             raise RuntimeError(f"No full blocks found. seq_len={seq_len}, dir={shard_dir}")
         self.n_blocks = total_blocks
 
+        # IMPORTANT:
+        # Dataset is copied into each DataLoader worker process.
+        # So keeping RNG state on `self` is worker-local and safe.
+        self._rng_inst: np.random.Generator | None = None
+
     def __len__(self) -> int:
-        # keep a stable length; we will resample start positions internally
         return self.n_blocks
 
     def _pick_shard_by_index(self, i: int) -> int:
@@ -94,13 +98,23 @@ class PackedBinDataset(Dataset):
         return lo
 
     def _rng(self) -> np.random.Generator:
-        # worker-safe RNG
+        """
+        Worker-safe *stateful* RNG.
+
+        DO NOT create a new RNG every __getitem__ with the same seed,
+        otherwise each worker will keep returning the same samples and the
+        model will overfit in a few thousand steps.
+        """
+        if self._rng_inst is not None:
+            return self._rng_inst
+
         info = torch.utils.data.get_worker_info()
         if info is None:
-            seed = torch.initial_seed() % (2**32)
+            seed = int(torch.initial_seed() % (2**32))
         else:
-            seed = info.seed % (2**32)
-        return np.random.default_rng(seed)
+            seed = int(info.seed % (2**32))
+        self._rng_inst = np.random.default_rng(seed)
+        return self._rng_inst
 
     def _slice_block(self, shard_i: int, start: int) -> torch.Tensor:
         mm = self._mms[shard_i]
@@ -119,15 +133,11 @@ class PackedBinDataset(Dataset):
         # resample if EOS-heavy / bad blocks
         last_candidate = None
         for _ in range(max(1, self.resample_tries)):
-            # IMPORTANT: randomize start to avoid boundary artifacts
             start = int(rng.integers(0, max_start + 1))
             toks_u16 = self._slice_block(shard_i, start)
             last_candidate = toks_u16
 
-            input_ids = toks_u16[:-1].contiguous()
-            labels = toks_u16[1:].contiguous()
-
-            # quick EOS-heavy check (on labels)
+            labels = toks_u16[1:]
             eos_frac = float((labels == self.eos_id).float().mean().item())
             if eos_frac <= self.max_eos_frac:
                 break
@@ -136,19 +146,16 @@ class PackedBinDataset(Dataset):
         input_ids = toks_u16[:-1].contiguous()
         labels = toks_u16[1:].contiguous()
 
-        # Build loss mask
+        # loss mask
         loss_mask = torch.ones_like(labels, dtype=torch.float32)
 
-        # 1) mask BOS targets
         if self.mask_bos_in_loss:
             loss_mask *= (labels != self.bos_id).float()
 
-        # 2) mask repeated EOS targets (VERY IMPORTANT for EOS collapse)
         if self.mask_repeated_eos_in_loss and labels.numel() > 1:
             rep = (labels[1:] == self.eos_id) & (labels[:-1] == self.eos_id)
             loss_mask[1:] *= (~rep).float()
 
-        # 3) mask last label to reduce boundary artifacts
         if self.mask_last_label_in_loss and loss_mask.numel() > 0:
             loss_mask[-1] = 0.0
 

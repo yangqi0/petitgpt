@@ -1,0 +1,92 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.7, top_p=0.9, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.002767201280221343
+first_step_topk_ids=[15, 674, 286, 17, 385, 316, 312, 345, 410, 362]
+first_step_topk_probs=[0.35921019315719604, 0.1922713667154312, 0.0984220877289772, 0.05760164186358452, 0.018044419586658478, 0.016503140330314636, 0.012073955498635769, 0.011546792462468147, 0.01104265172034502, 0.008078972809016705]
+
+[New tokens 1] count=126 first30=[15, 674, 410, 261, 1508, 2777, 4066, 6844, 17, 1009, 3566, 289, 847, 349, 544, 1765, 17, 1516, 979, 15, 652, 410, 4596, 290, 266, 3907, 349, 544, 2977, 11697]
+[New text 1] repr=", there was a little girl named Lily. She loved to play with her friends. One day, she was walking in the park with her favorite toy. Lily loved to play with her toys. She had to play with her friends. She loved to play with her friends. One day, she found a big and tried to play with her friend. Lily's friend, she was so much. Lily was so excited that she had to use her friends. Lily was happy and her friends. She went to play with her mom. Lily was very happy and she had a new friend. She was "
+
+[Full output 1]
+ Once upon a time, , there was a little girl named Lily. She loved to play with her friends. One day, she was walking in the park with her favorite toy. Lily loved to play with her toys. She had to play with her friends. She loved to play with her friends. One day, she found a big and tried to play with her friend. Lily's friend, she was so much. Lily was so excited that she had to use her friends. Lily was happy and her friends. She went to play with her mom. Lily was very happy and she had a new friend. She was so happy to be fun.
+
+================================================================================
+[Prompt 2] (prompt_tokens=11)
+In a distant future, humans and robots 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.00014877629291731864
+first_step_topk_ids=[371, 15, 332, 17, 266, 286, 392, 645, 410, 385]
+first_step_topk_probs=[0.3516182601451874, 0.1968001127243042, 0.131683811545372, 0.04510415717959404, 0.024142514914274216, 0.02208035998046398, 0.01766304112970829, 0.014774500392377377, 0.013512535020709038, 0.0129225580021739]
+
+[New tokens 2] count=241 first30=[286, 385, 1536, 2033, 354, 34, 569, 392, 86, 261, 1508, 2777, 332, 261, 5583, 15, 574, 392, 86, 261, 1150, 3452, 286, 261, 1150, 15, 261, 1508, 2777, 17]
+[New text 2] repr=' and we\'re done it? It’s a little girl is a magic, who’s a small voice and a small, a little girl. She is very sad. She looked around and put the ball with her. She was the rabbit with her mother. She ran to the drum and said, "Look, and I don\'t know what you are too. It is this as a little girl. You are a big dog! You are a good and I know what happened. I have the mouse that would help you can do. You are so much, but you can\'t wait. You are so much fun. You are so pretty. I can help you for m'
+
+[Full output 2]
+ In a distant future, humans and robots  and we're done it? It’s a little girl is a magic, who’s a small voice and a small, a little girl. She is very sad. She looked around and put the ball with her. She was the rabbit with her mother. She ran to the drum and said, "Look, and I don't know what you are too. It is this as a little girl. You are a big dog! You are a good and I know what happened. I have the mouse that would help you can do. You are so much, but you can't wait. You are so much fun. You are so pretty. I can help you for me what you. We need to go to play with a lot of fun. And you can do with your friends. That's something else. We don't like to share, and play with you. And so they are so much. But I love to help you are very special. They are very happy. You are very careful. And I will be happy and I love you. I will have to see you. We are very much fun. We will be happy and have to be a lot of fun.
+
+================================================================================
+[Prompt 3] (prompt_tokens=11)
+The following is a news report:
+
+
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.002808652352541685
+first_step_topk_ids=[332, 15, 371, 392, 17, 430, 16, 29, 286, 34]
+first_step_topk_probs=[0.4660588502883911, 0.07147244364023209, 0.06835190206766129, 0.030602993443608284, 0.02926681749522686, 0.026766980066895485, 0.022389626130461693, 0.02047719620168209, 0.01638060063123703, 0.014327331446111202]
+
+[New tokens 3] count=256 first30=[332, 261, 932, 822, 289, 316, 329, 266, 1518, 17, 787, 371, 466, 261, 5174, 1546, 15, 606, 338, 332, 261, 1508, 2007, 292, 493, 292, 459, 1043, 15, 286]
+[New text 3] repr=' is a good way to you on the past. You are not a wonderful job, like that is a little bit of all of their best, and the best, it is too hard. But it is not a new boat. It is a good friend, but it is a lot of the sky. It is a good friend. It is a great idea. It is a great things. It is a dog. The girl says, "I don\'t worry, you are my family. You should use it. We do not want to be a favorite." The dog said, "Let\'s like the forest, it is just a rainbow. But you have to get the man who can have to '
+
+[Full output 3]
+ The following is a news report:
+
+ is a good way to you on the past. You are not a wonderful job, like that is a little bit of all of their best, and the best, it is too hard. But it is not a new boat. It is a good friend, but it is a lot of the sky. It is a good friend. It is a great idea. It is a great things. It is a dog. The girl says, "I don't worry, you are my family. You should use it. We do not want to be a favorite." The dog said, "Let's like the forest, it is just a rainbow. But you have to get the man who can have to the park. If you want to play with the man. It is a lot of the best friend. The man and the little boy says, "Can I want to keep the dog. We are not to play with the store." The man smiled and said, "You are a little boy. I don't want to eat the dog. I love you." The man smiled and said, "I'm sorry, "I am glad you, so, and I love you. I will help you and make the story of the stick. I will make you." The
+
+================================================================================
+[Prompt 4] (prompt_tokens=14)
+Neural networks are a class of machine learning models that 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.0001615091459825635
+first_step_topk_ids=[332, 371, 484, 392, 504, 570, 385, 735, 316, 15]
+first_step_topk_probs=[0.4462655186653137, 0.37328508496284485, 0.02241750992834568, 0.02050269953906536, 0.017932742834091187, 0.009598704986274242, 0.008028972893953323, 0.007022562902420759, 0.005372378509491682, 0.00491349445655942]
+
+[New tokens 4] count=256 first30=[332, 338, 332, 266, 897, 332, 2968, 289, 828, 266, 814, 616, 292, 266, 2823, 292, 266, 4879, 4291, 17, 569, 332, 466, 289, 322, 266, 1043, 1976, 17, 583]
+[New text 4] repr=' is that is the world is nothing to see the first time of the display of the Christian cells. It is not to be the best thing. This is the card, but it is not to be used to give you to the home. The book is a nice man who is to do not like the nation. I do not like the hir is to be sad and the ability to get the east. The man is a very pretty sad. The man is not like the ball. The man says: "I\'m a good dog. I will have to do it. I like to go to get the slide. The next day, the man says, "Sure, I '
+
+[Full output 4]
+ Neural networks are a class of machine learning models that  is that is the world is nothing to see the first time of the display of the Christian cells. It is not to be the best thing. This is the card, but it is not to be used to give you to the home. The book is a nice man who is to do not like the nation. I do not like the hir is to be sad and the ability to get the east. The man is a very pretty sad. The man is not like the ball. The man says: "I'm a good dog. I will have to do it. I like to go to get the slide. The next day, the man says, "Sure, I am the bird. I love to do. I will have to get to the doctor and the key to go to the bird. The rabbit is the ground. The man says, "Mom, I will be happy. I will get the pond. I am the man. I am the friend. I am a good friend. I don't want to have to do it. He takes the sea. I want to the dog. I'm sorry. I can't worry. I am happy. I am sad. I will have to be nice. You are not so kind.
+
+================================================================================
+[Prompt 5] (prompt_tokens=21)
+Here is a short Python snippet:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.016145391389727592
+first_step_topk_ids=[332, 613, 312, 434, 286, 371, 15, 385, 3, 349]
+first_step_topk_probs=[0.10068447887897491, 0.04507915675640106, 0.04122869670391083, 0.03298061341047287, 0.031540658324956894, 0.019301945343613625, 0.019301945343613625, 0.01688249036669731, 0.016145391389727592, 0.01476631686091423]
+
+[New tokens 5] count=256 first30=[434, 73, 547, 29, 613, 86, 332, 261, 2007, 292, 266, 3487, 292, 464, 1588, 292, 266, 3389, 17, 414, 351, 2287, 338, 332, 266, 1043, 292, 266, 1001, 292]
+[New text 5] repr=' (fone: “s is a bit of the threat of this book of the situation. - The problem that is the best of the end of the number of the water. “the entire way the screen is a trip with the new number of the world. The next time is the things of the team is a gift of the middle of the best way, but it is the computer is not one of the same man, and a bit. It is a good, the same time to make it to go, and the words of the point of the rest of the U. The man is not to watch the same great thing. The side o'
+
+[Full output 5]
+ Here is a short Python snippet:
+
+def fib(n):
+     (fone: “s is a bit of the threat of this book of the situation. - The problem that is the best of the end of the number of the water. “the entire way the screen is a trip with the new number of the world. The next time is the things of the team is a gift of the middle of the best way, but it is the computer is not one of the same man, and a bit. It is a good, the same time to make it to go, and the words of the point of the rest of the U. The man is not to watch the same great thing. The side of the two of the day, the next to be a lot of the stream, the puppy and the little girl to her the girl called the shop. The girl said, "What is a little girl and the old man. I did not have the perfect for a little boy. I wanted to the little girl, and said the girl, "I think, I have a lot of the girl. She was so excited, but I could not know what it was, but I'm a bit the rain. She was to see the door and the girl was so much more about the same as she tried to see the garden
+
