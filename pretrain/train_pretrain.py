@@ -58,6 +58,15 @@ def _resolve_dir(p: str) -> str:
     return str(path)
 
 
+def _mask_special_labels(labels: torch.Tensor, bos_id: int, ignore_bos: bool) -> torch.Tensor:
+    """Optionally mask BOS positions from loss by setting them to -100."""
+    if not ignore_bos:
+        return labels
+    out = labels.clone()
+    out[out == int(bos_id)] = -100
+    return out
+
+
 def masked_ce_loss(logits: torch.Tensor, labels: torch.Tensor) -> torch.Tensor:
     """
     Cross entropy over non-masked tokens.
@@ -69,6 +78,35 @@ def masked_ce_loss(logits: torch.Tensor, labels: torch.Tensor) -> torch.Tensor:
     logits_2d = logits.reshape(B * T, V)
     labels_1d = labels.reshape(B * T)
     return F.cross_entropy(logits_2d, labels_1d, ignore_index=-100, reduction="mean")
+
+
+def masked_weighted_ce_loss(
+    logits: torch.Tensor,
+    labels: torch.Tensor,
+    eos_id: int,
+    eos_weight: float,
+) -> torch.Tensor:
+    """
+    Cross entropy over non-masked tokens with an extra weight for EOS positions.
+    Useful to prevent early EOS collapse.
+    logits: [B, T, V]
+    labels: [B, T] with -100 meaning "ignore"
+    """
+    B, T, V = logits.shape
+    logits_2d = logits.reshape(B * T, V)
+    labels_1d = labels.reshape(B * T)
+
+    per_tok = F.cross_entropy(logits_2d, labels_1d, ignore_index=-100, reduction="none")
+
+    # Default weight 1.0, scale EOS tokens by eos_weight.
+    if float(eos_weight) != 1.0:
+        w = torch.ones_like(per_tok)
+        eos_mask = labels_1d == int(eos_id)
+        w = torch.where(eos_mask, w * float(eos_weight), w)
+        per_tok = per_tok * w
+
+    valid = labels_1d != -100
+    return per_tok[valid].mean()
 
 
 def save_ckpt(
@@ -156,6 +194,26 @@ def parse_args() -> argparse.Namespace:
     ap.add_argument("--bos_id", type=int, default=2)
     ap.add_argument("--eos_id", type=int, default=3)
 
+    # Loss shaping (stability)
+    ap.add_argument(
+        "--ignore_bos_in_loss",
+        action="store_true",
+        help="Mask BOS tokens from loss by setting labels==bos_id to -100.",
+    )
+    ap.add_argument(
+        "--eos_loss_weight",
+        type=float,
+        default=1.0,
+        help="Weight applied to EOS token loss (only effective during warmup if eos_loss_warmup_steps>0).",
+    )
+    ap.add_argument(
+        "--eos_loss_warmup_steps",
+        type=int,
+        default=0,
+        help="If >0, apply eos_loss_weight for steps < this value, then restore EOS weight to 1.0.",
+    )
+
+
     # Train
     ap.add_argument("--precision", type=str, default="bf16", choices=["bf16", "fp16", "fp32"])
     ap.add_argument("--micro_bsz", type=int, default=4)
@@ -214,6 +272,8 @@ def eval_one_epoch(
     dl: DataLoader,
     device: torch.device,
     precision: str,
+    bos_id: int,
+    ignore_bos_in_loss: bool,
     max_batches: int = 50,
 ) -> float:
     model.eval()
@@ -228,6 +288,7 @@ def eval_one_epoch(
             break
         input_ids = input_ids.to(device, dtype=torch.long, non_blocking=True)
         labels = labels.to(device, dtype=torch.long, non_blocking=True)
+        labels = _mask_special_labels(labels, bos_id=bos_id, ignore_bos=ignore_bos_in_loss)
 
         if ac_dtype is not None:
             with torch.autocast("cuda", dtype=ac_dtype):
@@ -348,6 +409,7 @@ def main() -> None:
 
             input_ids = input_ids.to(device, dtype=torch.long, non_blocking=True)
             labels = labels.to(device, dtype=torch.long, non_blocking=True)
+            labels = _mask_special_labels(labels, bos_id=args.bos_id, ignore_bos=args.ignore_bos_in_loss)
 
             ntok = int((labels != -100).sum().item())
             tokens_seen += ntok
@@ -356,11 +418,23 @@ def main() -> None:
             if ac_dtype is not None:
                 with torch.autocast("cuda", dtype=ac_dtype):
                     logits = model(input_ids)
-                    loss_raw = masked_ce_loss(logits, labels)
+                    eos_w = float(args.eos_loss_weight)
+                    if args.eos_loss_warmup_steps and global_step >= int(args.eos_loss_warmup_steps):
+                        eos_w = 1.0
+                    if eos_w != 1.0:
+                        loss_raw = masked_weighted_ce_loss(logits, labels, eos_id=args.eos_id, eos_weight=eos_w)
+                    else:
+                        loss_raw = masked_ce_loss(logits, labels)
                     loss = loss_raw / args.grad_accum
             else:
                 logits = model(input_ids)
-                loss_raw = masked_ce_loss(logits, labels)
+                eos_w = float(args.eos_loss_weight)
+                if args.eos_loss_warmup_steps and global_step >= int(args.eos_loss_warmup_steps):
+                    eos_w = 1.0
+                if eos_w != 1.0:
+                    loss_raw = masked_weighted_ce_loss(logits, labels, eos_id=args.eos_id, eos_weight=eos_w)
+                else:
+                    loss_raw = masked_ce_loss(logits, labels)
                 loss = loss_raw / args.grad_accum
 
             if use_fp16:
@@ -397,7 +471,7 @@ def main() -> None:
             window_tokens = 0
 
         if global_step % args.eval_every == 0:
-            val_loss = eval_one_epoch(model, val_dl, device, args.precision, max_batches=50)
+            val_loss = eval_one_epoch(model, val_dl, device, args.precision, bos_id=args.bos_id, ignore_bos_in_loss=args.ignore_bos_in_loss, max_batches=50)
             print(f"[eval] step={global_step} val_loss={val_loss:.4f}")
 
             # Write samples
