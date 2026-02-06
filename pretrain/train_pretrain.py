@@ -29,7 +29,6 @@ if str(PROJECT_ROOT) not in sys.path:
 
 from dataset_pretrain import PackedBinDataset  # noqa: E402
 from sample import generate_default_samples  # noqa: E402
-
 from src.model import GPT, GPTConfig  # noqa: E402
 
 # -----------------------------------------------------------------------------
@@ -75,7 +74,6 @@ def _resolve_path(p: str) -> str:
 
 def set_seed(seed: int) -> None:
     import random
-
     import numpy as np
 
     random.seed(seed)
@@ -120,8 +118,7 @@ def masked_weighted_ce_loss(
         This prevents bf16/fp16 autocast from "shrinking" CE and giving fake near-zero loss.
     """
     B, T, V = logits.shape
-    # Force FP32 CE computation even under autocast
-    l = logits.reshape(B * T, V).float()
+    l = logits.reshape(B * T, V).float()          # force FP32 CE
     y = labels.reshape(B * T)
     m = loss_mask.reshape(B * T).float()
 
@@ -157,7 +154,13 @@ def masked_ce_128_debug(
 
 
 @torch.no_grad()
-def causal_leak_check(model, input_ids, device, vocab_size: int, check_pos: int = 128) -> float:
+def causal_leak_check(
+    model,
+    input_ids: torch.Tensor,
+    device: torch.device,
+    vocab_size: int,
+    check_pos: int = 128,
+) -> float:
     """
     If the model is causal, changing a future token should NOT change logits of earlier positions.
     We check that logits[:, :check_pos] are invariant to edits in the suffix.
@@ -266,16 +269,12 @@ def evaluate(
         if ac_dtype is not None:
             with torch.autocast("cuda", dtype=ac_dtype):
                 logits = model(input_ids)
-            # CE in FP32 (outside autocast doesn't hurt; function enforces FP32 anyway)
-            loss = masked_weighted_ce_loss(
-                logits, labels, loss_mask, eos_id=eos_id, eos_weight=eos_weight
-            )
         else:
             logits = model(input_ids)
-            loss = masked_weighted_ce_loss(
-                logits, labels, loss_mask, eos_id=eos_id, eos_weight=eos_weight
-            )
 
+        loss = masked_weighted_ce_loss(
+            logits, labels, loss_mask, eos_id=eos_id, eos_weight=eos_weight
+        )
         losses.append(float(loss.item()))
 
     model.train()
@@ -421,16 +420,13 @@ def main() -> None:
         seq_len: int,
         micro_bsz: int,
         grad_accum: int,
-        sample_batches: int = 8,
+        sample_blocks: int = 8,
     ):
         block = seq_len + 1
 
-        # Raw token count in shards (what's stored on disk)
         raw_tokens = int(sum(getattr(ds, "_lens", []))) if hasattr(ds, "_lens") else 0
-
-        # How many full blocks exist (upper bound for "epoch" if you iterate len(ds) once)
         n_blocks = int(getattr(ds, "n_blocks", len(ds)))
-        epoch_tokens = n_blocks * seq_len  # inputs/labels length per block is seq_len
+        epoch_tokens = n_blocks * seq_len
 
         tokens_per_step = micro_bsz * grad_accum * seq_len
         steps_per_epoch = epoch_tokens // max(1, tokens_per_step)
@@ -449,37 +445,31 @@ def main() -> None:
         print(f"    - tokens per step (micro*accum*seq): {tokens_per_step:,}")
         print(f"    - steps per epoch (approx): {steps_per_epoch:,}")
 
-        # Estimate actual supervised tokens per block from loss_mask (because you mask BOS/last/repeated-EOS)
-        # We'll sample a few items from the dataset directly (CPU only; cheap).
-        if hasattr(ds, "__getitem__"):
-            sup = []
-            eos_frac = []
-            eos_id = int(getattr(ds, "eos_id", 3))
-            for k in range(sample_batches):
-                x, y, m = ds[k]  # m is float32 mask on CPU
-                mpos = (m > 0).float()
-                sup_tok = float(mpos.sum().item())
-                sup.append(sup_tok)
-                if sup_tok > 0:
-                    eos_frac.append(float(((y == eos_id).float() * mpos).sum().item() / sup_tok))
-            if sup:
-                avg_sup = sum(sup) / len(sup)
-                print(f"    - avg supervised tokens per block (sampled): {avg_sup:.1f} / {seq_len}")
-            if eos_frac:
-                avg_eos = sum(eos_frac) / len(eos_frac)
-                print(f"    - avg EOS fraction over supervised tokens (sampled): {avg_eos:.4f}")
+        # Sample a few blocks to estimate supervision density / EOS rate under the mask rules
+        kmax = min(len(ds), max(1, sample_blocks))
+        sup = []
+        eos_frac = []
+        eos_id = int(getattr(ds, "eos_id", 3))
+        for k in range(kmax):
+            x, y, m = ds[k]  # CPU
+            mpos = (m > 0).float()
+            sup_tok = float(mpos.sum().item())
+            sup.append(sup_tok)
+            if sup_tok > 0:
+                eos_frac.append(float(((y == eos_id).float() * mpos).sum().item() / sup_tok))
 
-            # Quick warning if you're effectively training on almost nothing
-            if sup and (sum(sup) / len(sup) < 0.5 * seq_len):
-                print(
-                    "    [WARN] Supervised tokens per block is very low; check your loss_mask rules."
-                )
+        if sup:
+            avg_sup = sum(sup) / len(sup)
+            print(f"    - avg supervised tokens per block (sampled): {avg_sup:.1f} / {seq_len}")
+            if avg_sup < 0.5 * seq_len:
+                print("    [WARN] Supervised tokens per block is very low; check your loss_mask rules.")
+        if eos_frac:
+            avg_eos = sum(eos_frac) / len(eos_frac)
+            print(f"    - avg EOS fraction over supervised tokens (sampled): {avg_eos:.4f}")
 
-    # Call it right after you create train_ds/val_ds, before DataLoader
     _dataset_stats(train_ds, "train", args.seq_len, args.micro_bsz, args.grad_accum)
     _dataset_stats(val_ds, "val", args.seq_len, args.micro_bsz, args.grad_accum)
 
-    # Model params (nice to print here too)
     n_params_m = sum(p.numel() for p in model.parameters()) / 1e6
     print(f"[*] model params: {n_params_m:.2f}M")
     # === end dataset statistics ===
@@ -575,34 +565,26 @@ def main() -> None:
                     print("[fatal] first row head:", tmp[0, :32].tolist())
                     raise RuntimeError("Token id out of range. Fix vocab_size/tokenizer/shards.")
 
-            # token/s estimate (cheap CPU sum)
             window_sup_tokens_est += int(loss_mask_cpu.sum().item())
 
             input_ids = input_u16.to(device, dtype=torch.long, non_blocking=True)
             labels = labels_u16.to(device, dtype=torch.long, non_blocking=True)
             loss_mask = loss_mask_cpu.to(device, dtype=torch.float32, non_blocking=True)
 
-            # Forward under autocast, but compute CE in FP32 inside masked_weighted_ce_loss()
+            # Forward under autocast, CE in FP32 inside masked_weighted_ce_loss()
             if ac_dtype is not None:
                 with torch.autocast("cuda", dtype=ac_dtype):
                     logits = model(input_ids)
-                loss_raw = masked_weighted_ce_loss(
-                    logits=logits,
-                    labels=labels,
-                    loss_mask=loss_mask,
-                    eos_id=args.eos_id,
-                    eos_weight=cur_eos_weight,
-                )
             else:
                 logits = model(input_ids)
-                loss_raw = masked_weighted_ce_loss(
-                    logits=logits,
-                    labels=labels,
-                    loss_mask=loss_mask,
-                    eos_id=args.eos_id,
-                    eos_weight=cur_eos_weight,
-                )
 
+            loss_raw = masked_weighted_ce_loss(
+                logits=logits,
+                labels=labels,
+                loss_mask=loss_mask,
+                eos_id=args.eos_id,
+                eos_weight=cur_eos_weight,
+            )
             loss = loss_raw / args.grad_accum
 
             if use_fp16:
@@ -618,7 +600,7 @@ def main() -> None:
                 ls = float(logits.float().std().item())
 
                 same = ((input_ids == labels) & (loss_mask > 0)).float().mean().item()
-                print("[dbg] frac(input_ids==labels) over supervised:", same)
+                print("[dbg] frac(input_ids==labels) over supervised:", float(same))
 
                 mce = masked_ce_128_debug(logits, labels, loss_mask, tt=128)
                 print(
@@ -626,25 +608,23 @@ def main() -> None:
                 )
 
                 m = loss_mask
-                print(
-                    "[dbg] mask_mean:", float(m.mean().item()), "mask_sum:", float(m.sum().item())
-                )
+                print("[dbg] mask_mean:", float(m.mean().item()), "mask_sum:", float(m.sum().item()))
 
                 y = labels
                 print("[dbg] labels min/max:", int(y.min().item()), int(y.max().item()))
 
-                eos = args.eos_id
+                eos = int(args.eos_id)
                 eos_frac = (
-                    ((y == eos) & (m > 0)).float().sum() / (m > 0).float().sum().clamp_min(1)
+                    ((y == eos) & (m > 0)).float().sum()
+                    / (m > 0).float().sum().clamp_min(1)
                 ).item()
-                print(f"[dbg] eos_frac_supervised: {eos_frac:.6f}")
+                print(f"[dbg] eos_frac_supervised: {float(eos_frac):.6f}")
 
                 pred = logits.argmax(dim=-1)
                 hit = ((pred == y) & (m > 0)).sum().item()
                 tot = (m > 0).sum().item()
                 print("[dbg] masked_top1_acc:", float(hit / max(1.0, tot)))
 
-                # Unmasked FP32 CE over first 128 tokens (scale sanity check)
                 B, T, V = logits.shape
                 tt = min(T, 128)
                 ce_nomask = F.cross_entropy(
@@ -654,9 +634,12 @@ def main() -> None:
                 )
                 print("[dbg] ce_nomask_128:", float(ce_nomask.item()))
 
-                # Causal leak check
                 _ = causal_leak_check(
-                    model, input_ids, device, vocab_size=cfg.vocab_size, check_pos=128
+                    model=model,
+                    input_ids=input_ids,
+                    device=device,
+                    vocab_size=cfg.vocab_size,
+                    check_pos=128,
                 )
 
         # Gradient clipping

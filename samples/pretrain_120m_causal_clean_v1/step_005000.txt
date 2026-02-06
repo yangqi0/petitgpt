@@ -1,0 +1,92 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.7, top_p=0.9, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.0001179575192509219
+first_step_topk_ids=[3559, 7264, 1367, 70, 1150, 20196, 2998, 1629, 2633, 1622]
+first_step_topk_probs=[0.03823761269450188, 0.03344462066888809, 0.029252413660287857, 0.02797522395849228, 0.02446860820055008, 0.017120011150836945, 0.01637253165245056, 0.014974057674407959, 0.014974057674407959, 0.01369504164904356]
+
+[New tokens 1] count=100 first30=[4664, 1990, 5420, 261, 3895, 4066, 5728, 17, 722, 584, 1947, 15, 5728, 2895, 17, 722, 584, 261, 2809, 3133, 15, 4066, 5728, 17, 901, 1917, 1460, 22431, 5911, 17]
+[New text 1] repr=" theme house lived a boy named Tim. He had training, Timmy. He had a staff member, named Tim. They mean another teddy. But it. But, and everyone didn't have this party and Timmy wanted. Tim. Timmy that because the park day, he did not know before, our s was a big party. He had the ball on the Super. Tim was very happy. He had to you at the queen of food to for a lot of fun."
+
+[Full output 1]
+ Once upon a time,  theme house lived a boy named Tim. He had training, Timmy. He had a staff member, named Tim. They mean another teddy. But it. But, and everyone didn't have this party and Timmy wanted. Tim. Timmy that because the park day, he did not know before, our s was a big party. He had the ball on the Super. Tim was very happy. He had to you at the queen of food to for a lot of fun.
+
+================================================================================
+[Prompt 2] (prompt_tokens=11)
+In a distant future, humans and robots 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=2.1987328580053145e-07
+first_step_topk_ids=[15, 3195, 415, 3197, 6173, 1227, 1498, 534, 4930, 6895]
+first_step_topk_probs=[0.9906994700431824, 0.0007831383845768869, 0.0004583326808642596, 0.0002804857795126736, 0.0002682396152522415, 0.0002453276829328388, 0.00014357831969391555, 0.00011485454888315871, 9.607170795788988e-05, 9.187715477310121e-05]
+
+[New tokens 2] count=130 first30=[15, 5614, 17, 959, 534, 10378, 2099, 1625, 1460, 29052, 292, 6895, 15, 5605, 1845, 430, 414, 6059, 1320, 935, 544, 17, 2478, 1687, 2019, 15, 554, 5426, 292, 5]
+[New text 2] repr=', Max. But do Anna took others anotherturn of smile,!" John\'s - tight same made her. His mom thought, so proud of" wperm, but I try to his. We should be careful for are safe out of its dog. She said, and this right thing for a little girl. The people you for you. "Lily, and the incurred of the gods of the aesthetic. And thision about you will help you need to buy the string and whom he is incredible, and!” capitals not more. Beach cart at the water and daddy. And that following always felt still'
+
+[Full output 2]
+ In a distant future, humans and robots , Max. But do Anna took others anotherturn of smile,!" John's - tight same made her. His mom thought, so proud of" wperm, but I try to his. We should be careful for are safe out of its dog. She said, and this right thing for a little girl. The people you for you. "Lily, and the incurred of the gods of the aesthetic. And thision about you will help you need to buy the string and whom he is incredible, and!” capitals not more. Beach cart at the water and daddy. And that following always felt still. They have more.
+
+================================================================================
+[Prompt 3] (prompt_tokens=11)
+The following is a news report:
+
+
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=1.811647234717384e-05
+first_step_topk_ids=[3409, 534, 989, 1727, 1187, 3077, 30829, 3207, 3559, 1677]
+first_step_topk_probs=[0.054732609540224075, 0.05005757510662079, 0.029296256601810455, 0.025624040514230728, 0.024505265057086945, 0.01639706827700138, 0.013715558685362339, 0.011472578160464764, 0.01097167283296585, 0.010492638684809208]
+
+[New tokens 3] count=222 first30=[9142, 2023, 621, 266, 11996, 434, 2389, 5896, 349, 266, 13627, 292, 266, 3066, 286, 1985, 292, 464, 4066, 743, 266, 1832, 1306, 17, 613, 655, 286, 5440, 261, 616]
+[New text 3] repr=' offerings building over the thrown ( towards Grand with the breach of the property and App of this named As thesc gr. “ater and showing a time, wings.S is used the basic tickets for sharp things in the family. It was David an automatic.| pulled thisour what really moving on the bowl to be on the area and, started to hit a hell of the same year. The exciting important occasions or coming from the chain and Fou or look in an explicit him than noise and,,. The November. It was getting other how to'
+
+[Full output 3]
+ The following is a news report:
+
+ offerings building over the thrown ( towards Grand with the breach of the property and App of this named As thesc gr. “ater and showing a time, wings.S is used the basic tickets for sharp things in the family. It was David an automatic.| pulled thisour what really moving on the bowl to be on the area and, started to hit a hell of the same year. The exciting important occasions or coming from the chain and Fou or look in an explicit him than noise and,,. The November. It was getting other how to show the food and I is after the owner of the power, from.is are caught the ball, but you can be available to have it for the activities, andth matching beat fixed in specific other sorts of Lily has a friend comes home. On the location on p questions in that watching — from many other to comes over the power,B (from the forgotten to play with relationsLet's change the duo. He is as related to be of technology at the other projects and free to the very: "I wasn't know, Tom.
+
+================================================================================
+[Prompt 4] (prompt_tokens=14)
+Neural networks are a class of machine learning models that 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.00010051394929178059
+first_step_topk_ids=[1087, 14096, 324, 893, 534, 73, 15301, 2050, 3120, 36]
+first_step_topk_probs=[0.07824986428022385, 0.050072845071554184, 0.0437963493168354, 0.030643099918961525, 0.02451273798942566, 0.021440135315060616, 0.015001071617007256, 0.012000011280179024, 0.010495836846530437, 0.00839607696980238]
+
+[New tokens 4] count=200 first30=[2588, 972, 569, 493, 1816, 3717, 15, 1665, 15, 354, 23425, 86, 2685, 17, 54, 78, 1140, 78, 1962, 1109, 354, 2383, 371, 261, 16129, 574, 584, 324, 4391, 878]
+[New text 4] repr=' Her before It all night surface, children, itTMss eyes.Sk listkpper because it log are a flame who had A technical even an changed in the best year along theor in a Approach player, we will take out to just two boy was, place, they road, 2. We haveimp, they are free research or other by a in the top, 25 as it is a co-A or yellow list of job from theirri, out of rabbit. The race ahead and 3-free, 13, Timmy acceptance ofuse this-H along by a steriin While20 outfit. In au-in entireout 2010 time, T'
+
+[Full output 4]
+ Neural networks are a class of machine learning models that  Her before It all night surface, children, itTMss eyes.Sk listkpper because it log are a flame who had A technical even an changed in the best year along theor in a Approach player, we will take out to just two boy was, place, they road, 2. We haveimp, they are free research or other by a in the top, 25 as it is a co-A or yellow list of job from theirri, out of rabbit. The race ahead and 3-free, 13, Timmy acceptance ofuse this-H along by a steriin While20 outfit. In au-in entireout 2010 time, Timmy has a thing between out of hug and after their 2021 Are 1. When which is very far away to get different better. He is no one Yan AlexanderR and I how to security is very feel so because he says it” an rot free to use the things?" The $100 to the law.
+
+================================================================================
+[Prompt 5] (prompt_tokens=21)
+Here is a short Python snippet:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=1.6900776245165616e-05
+first_step_topk_ids=[362, 592, 811, 569, 822, 8047, 533, 1272, 814, 1010]
+first_step_topk_probs=[0.07514631748199463, 0.03364504873752594, 0.029427720233798027, 0.022512707859277725, 0.01969079300761223, 0.018008897081017494, 0.018008897081017494, 0.0164706502109766, 0.01575152389705181, 0.015063795261085033]
+
+[New tokens 5] count=256 first30=[822, 5313, 2961, 266, 1490, 650, 321, 844, 1596, 9506, 493, 266, 18918, 3824, 350, 1122, 17, 569, 410, 351, 800, 873, 292, 266, 813, 644, 603, 289, 1912, 3412]
+[New text 5] repr=" way faster inside thedeub for onlyney permit all the puppy published as 10. It was The ra person of the most pre how to why tried where the mostG couldn't know and “k, used their 3- was in many life on its from the every of yet here towards their Maybe child next about the beachuddles) from the fun, it and Hannah showed present in the currentfulness of served with the location from the current secret, early than 10 Dono about the same of, the prohib on these classic With the world in the Staff "
+
+[Full output 5]
+ Here is a short Python snippet:
+
+def fib(n):
+     way faster inside thedeub for onlyney permit all the puppy published as 10. It was The ra person of the most pre how to why tried where the mostG couldn't know and “k, used their 3- was in many life on its from the every of yet here towards their Maybe child next about the beachuddles) from the fun, it and Hannah showed present in the currentfulness of served with the location from the current secret, early than 10 Dono about the same of, the prohib on these classic With the world in the Staff but they eliminated and shone You -S. At the naked in through our job on the barrels. She, but it from the okay, John likes to be attention and look anduffs and the-sign from the houseen went to and this content. The first great month of the power: To4- discussion of musical email before this joy and power-W in the area'sa that these all which was in the power-armed down on a S wellIMM’s-year-A from the term is there you even loves the right thing and (M (M ( wrote the business birthday) A 4. It is to use by done, our 2 and has been in the stars back outside and
+

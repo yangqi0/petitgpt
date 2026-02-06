@@ -1,0 +1,92 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.7, top_p=0.9, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.0002600356820039451
+first_step_topk_ids=[261, 15, 410, 5728, 674, 17, 290, 979, 286, 616]
+first_step_topk_probs=[0.19907638430595398, 0.13928820192813873, 0.07455563545227051, 0.03649808466434479, 0.01708723045885563, 0.014945387840270996, 0.009779570624232292, 0.007823104038834572, 0.006543746218085289, 0.0063992999494075775]
+
+[New tokens 1] count=256 first30=[15, 261, 261, 573, 15, 286, 17, 569, 2033, 261, 1508, 2777, 17, 722, 410, 261, 1576, 15, 286, 354, 410, 261, 284, 292, 266, 568, 17, 722, 410, 554]
+[New text 1] repr=', a a 3, and. It done a little girl. He was a big, and it was a b of the other. He was so happy to. He was very back to the small. He had to, he. He had a strong. He was very and said, and he he could to\'s friends. He had a big the fixed the park. He was so happy to the saw the other and that loved to the cro and the up and went to thepots. He was very happy. He was very happy that had a big, it and the U. He asked, but the sw much. He was very happy and to to see, "I saw a little bird\'s or, the'
+
+[Full output 1]
+ Once upon a time, , a a 3, and. It done a little girl. He was a big, and it was a b of the other. He was so happy to. He was very back to the small. He had to, he. He had a strong. He was very and said, and he he could to's friends. He had a big the fixed the park. He was so happy to the saw the other and that loved to the cro and the up and went to thepots. He was very happy. He was very happy that had a big, it and the U. He asked, but the sw much. He was very happy and to to see, "I saw a little bird's or, the home. He was happy and he could is around and saw a big, there was so happy. He saw a big love the's and a big her. The embodiment. He said, and soon!" parking. He had as ran to the had a. He said. He had a big, the park. TheA. He was very happy and back. He was so happy and the sw to go. He went on the were as he was so happy and in the merely. He when she had a old anded on the from the bird
+
+================================================================================
+[Prompt 2] (prompt_tokens=11)
+In a distant future, humans and robots 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=4.945990804117173e-05
+first_step_topk_ids=[410, 17, 15, 289, 290, 266, 286, 349, 16, 2624]
+first_step_topk_probs=[0.39018508791923523, 0.2854655086994171, 0.023432446643710136, 0.01371386181563139, 0.00702000642195344, 0.005615608766674995, 0.003842356614768505, 0.003757538739591837, 0.0032139932736754417, 0.003005818696692586]
+
+[New tokens 2] count=162 first30=[410, 3094, 18437, 354, 410, 261, 932, 17, 1516, 979, 15, 266, 932, 1935, 2624, 261, 616, 286, 410, 2690, 286, 266, 1427, 410, 261, 652, 410, 616, 15, 674]
+[New text 2] repr=' was couldn freshman it was a good. One day, the good performance saw a time and was happy and the must was a she was time, there was so happy. One day. The boy in the both tree. When it to the Digital and was a little girl named here it to do. The, she was very went to the Boeing. One day, she was happy and he wanted to the estimated to the – he was a little girl and that the water. The some of the soup. Timmy. The corner. He said, she had a little girl and more. He had a fun. The little girl. '
+
+[Full output 2]
+ In a distant future, humans and robots  was couldn freshman it was a good. One day, the good performance saw a time and was happy and the must was a she was time, there was so happy. One day. The boy in the both tree. When it to the Digital and was a little girl named here it to do. The, she was very went to the Boeing. One day, she was happy and he wanted to the estimated to the – he was a little girl and that the water. The some of the soup. Timmy. The corner. He said, she had a little girl and more. He had a fun. The little girl. The invo were bright, he was happy and thanked her put the world. He was very happy and the, there was very her to the played on the, ".
+
+================================================================================
+[Prompt 3] (prompt_tokens=11)
+The following is a news report:
+
+
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=7.7735552622471e-05
+first_step_topk_ids=[15, 410, 17, 292, 16, 289, 584, 645, 266, 371]
+first_step_topk_probs=[0.26478755474090576, 0.05550248548388481, 0.04854540526866913, 0.028411241248250008, 0.016627712175250053, 0.015901729464530945, 0.012720484286546707, 0.01137714646756649, 0.01040535606443882, 0.009516575373709202]
+
+[New tokens 3] count=256 first30=[8047, 15, 261, 2887, 261, 2845, 17, 2887, 261, 4220, 286, 345, 584, 266, 6897, 15, 652, 410, 1040, 2947, 17, 569, 410, 261, 2384, 15, 674, 410, 533, 289]
+[New text 3] repr=' hat, a upon a sources. upon a tree and he had the McC, she was very article. It was a beautiful, there was up to be an intelligence was a boy with the pulled. He was to the c the big, he started to stay and, she little, how to beos- to go and she was a time, they. TheWhat friends. Theoc that. The Can home, " difficult. He was so much you, and the. He wanted to be, the Lord. The lies. The little girl was very sad, he had a time, the friends. The they were very find it. The magazine, they wereYes'
+
+[Full output 3]
+ The following is a news report:
+
+ hat, a upon a sources. upon a tree and he had the McC, she was very article. It was a beautiful, there was up to be an intelligence was a boy with the pulled. He was to the c the big, he started to stay and, she little, how to beos- to go and she was a time, they. TheWhat friends. Theoc that. The Can home, " difficult. He was so much you, and the. He wanted to be, the Lord. The lies. The little girl was very sad, he had a time, the friends. The they were very find it. The magazine, they wereYes, and thepill his little girl was so happy to the end. He was so happy to the ran at the were very happy to be button to the his friends. The little girl was so happy to play with his mom and said, she was so that she saw a time, she saw a of the walked to be little girl to play with his mom and the best, he could. She was so happy. The shouted. The. She was very happy to the surprise to get the's a little girl. The little boy. The it. The old man, and he was so excited to
+
+================================================================================
+[Prompt 4] (prompt_tokens=14)
+Neural networks are a class of machine learning models that 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.00039355369517579675
+first_step_topk_ids=[266, 17, 410, 392, 261, 534, 349, 292, 15, 493]
+first_step_topk_probs=[0.07140408456325531, 0.06530507653951645, 0.036551136523485184, 0.036551136523485184, 0.02557382360100746, 0.015650425106287003, 0.011972841806709766, 0.011197347193956375, 0.010950171388685703, 0.008192153647542]
+
+[New tokens 4] count=217 first30=[4176, 349, 261, 1576, 287, 13428, 534, 1765, 292, 266, 266, 1437, 15, 1259, 289, 698, 14945, 329, 261, 1508, 2777, 17, 722, 2008, 4710, 289, 828, 266, 1207, 15]
+[New text 4] repr=' bright with a big m stamp do friends of the the public, point to get fond on a little girl. He felt prepared to see the project, and pretty was a big. The tickets and she had ain up to the air. The Sports and he explained to be like to the during theu he was so happy to be the same than the mattered. He said, the Council and he could within the Sam was a great of the jungle. She ran at the little boy was no having your 2. He was very assume to play with the Herm to keep he was a time so happy t'
+
+[Full output 4]
+ Neural networks are a class of machine learning models that  bright with a big m stamp do friends of the the public, point to get fond on a little girl. He felt prepared to see the project, and pretty was a big. The tickets and she had ain up to the air. The Sports and he explained to be like to the during theu he was so happy to be the same than the mattered. He said, the Council and he could within the Sam was a great of the jungle. She ran at the little boy was no having your 2. He was very assume to play with the Herm to keep he was a time so happy to the alarm. The doctor and." understand with a -. Heal of the seen and a, they, there was very he felt thanked her for the President, he could hair. She loved to that he on, and says. He wanted to be and it. The master and said he was so happy. He was so happy and the leads in the kitchen. The outside. The boy and - names and it. The same am go of the on the herself.
+
+================================================================================
+[Prompt 5] (prompt_tokens=21)
+Here is a short Python snippet:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.0004683626757469028
+first_step_topk_ids=[15, 292, 493, 392, 979, 289, 410, 266, 312, 349]
+first_step_topk_probs=[0.06797680258750916, 0.049732886254787445, 0.022266754880547523, 0.02129456400871277, 0.01303164567798376, 0.008719787001609802, 0.00697533693164587, 0.004990616347640753, 0.004990616347640753, 0.0034917970187962055]
+
+[New tokens 5] count=256 first30=[292, 266, 1943, 292, 266, 11719, 10565, 286, 15, 1180, 2624, 266, 30394, 1172, 20450, 25895, 17, 351, 13316, 672, 3052, 266, 561, 15, 392, 86, 15, 286, 4, 312]
+[New text 5] repr=' of theback of the mechanical OK and, love saw theodusves Option monkey. The organisations would stop the man,’s, and! I one had a picked did a time anIM how toH game up and that the magic to the them for the my listen, a Seattle of the suffer time, and I’s all the that theait. Hechan and the pulled quickly. Everyone seems and poor, with the mould and as he was the Race and more, the Files of the Mas. He said, and more carefully and was someone on the ’ of theleton to the space. He is Max. The A'
+
+[Full output 5]
+ Here is a short Python snippet:
+
+def fib(n):
+     of theback of the mechanical OK and, love saw theodusves Option monkey. The organisations would stop the man,’s, and! I one had a picked did a time anIM how toH game up and that the magic to the them for the my listen, a Seattle of the suffer time, and I’s all the that theait. Hechan and the pulled quickly. Everyone seems and poor, with the mould and as he was the Race and more, the Files of the Mas. He said, and more carefully and was someone on the ’ of theleton to the space. He is Max. The Albert of the Herm that the percussion and Sam of the Tape and beautiful of that he was. The KPIs in the tree and he was very Twitter, yes. The therapists. Theed for a is that he had a big them, as mom and, and said, and with a very or all ran of with a- believe that with the neighbors. When he was very ., and by that he was to the park in a great eyes, she saw a contract, in the. The financial. The tour and, and he is as he saw a time, he was a time, and he was a big, and he was very
+
