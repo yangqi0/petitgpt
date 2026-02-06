@@ -10,12 +10,11 @@
 from __future__ import annotations
 
 import argparse
+from dataclasses import asdict
 import json
+from pathlib import Path
 import sys
 import time
-from dataclasses import asdict
-from pathlib import Path
-from typing import Dict, Optional, Tuple
 
 import torch
 import torch.nn.functional as F
@@ -30,6 +29,7 @@ if str(PROJECT_ROOT) not in sys.path:
 
 from dataset_pretrain import PackedBinDataset  # noqa: E402
 from sample import generate_default_samples  # noqa: E402
+
 from src.model import GPT, GPTConfig  # noqa: E402
 
 # -----------------------------------------------------------------------------
@@ -46,7 +46,7 @@ except Exception:
 
 def infer_vocab_size_from_tokenizer_json(path: str) -> int:
     """Infer vocab size from HF tokenizers' tokenizer.json."""
-    with open(path, "r", encoding="utf-8") as f:
+    with open(path, encoding="utf-8") as f:
         obj = json.load(f)
 
     model = obj.get("model", {})
@@ -75,6 +75,7 @@ def _resolve_path(p: str) -> str:
 
 def set_seed(seed: int) -> None:
     import random
+
     import numpy as np
 
     random.seed(seed)
@@ -92,7 +93,7 @@ def lr_schedule(step: int, warmup_steps: int, base_lr: float) -> float:
     return base_lr
 
 
-def _autocast_dtype(precision: str) -> Optional[torch.dtype]:
+def _autocast_dtype(precision: str) -> torch.dtype | None:
     if precision == "bf16":
         return torch.bfloat16
     if precision == "fp16":
@@ -154,6 +155,7 @@ def masked_ce_128_debug(
     denom = m.sum().clamp_min(1.0)
     return float((per * m).sum().item() / denom.item())
 
+
 @torch.no_grad()
 def causal_leak_check(model, input_ids, device, vocab_size: int, check_pos: int = 128) -> float:
     """
@@ -174,15 +176,16 @@ def causal_leak_check(model, input_ids, device, vocab_size: int, check_pos: int 
     model.train()
     return float(diff)
 
+
 def save_ckpt(
     out_dir: Path,
     global_step: int,
     local_step: int,
     model: torch.nn.Module,
     optim: torch.optim.Optimizer,
-    scaler: Optional[torch.amp.GradScaler],
-    model_config: Dict,
-    train_args: Dict,
+    scaler: torch.amp.GradScaler | None,
+    model_config: dict,
+    train_args: dict,
 ) -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
     model_to_save = model._orig_mod if hasattr(model, "_orig_mod") else model
@@ -205,15 +208,15 @@ def load_ckpt(
     resume_path: Path,
     model: torch.nn.Module,
     optim: torch.optim.Optimizer,
-    scaler: Optional[torch.amp.GradScaler],
+    scaler: torch.amp.GradScaler | None,
     resume_full: bool,
-) -> Tuple[int, int]:
+) -> tuple[int, int]:
     ckpt = torch.load(resume_path, map_location="cpu")
     state = ckpt["model"]
 
     # Handle compiled prefix if present
     if any(k.startswith("_orig_mod.") for k in state.keys()):
-        state = {k[len("_orig_mod."):]: v for k, v in state.items()}
+        state = {k[len("_orig_mod.") :]: v for k, v in state.items()}
 
     model.load_state_dict(state, strict=True)
 
@@ -264,10 +267,14 @@ def evaluate(
             with torch.autocast("cuda", dtype=ac_dtype):
                 logits = model(input_ids)
             # CE in FP32 (outside autocast doesn't hurt; function enforces FP32 anyway)
-            loss = masked_weighted_ce_loss(logits, labels, loss_mask, eos_id=eos_id, eos_weight=eos_weight)
+            loss = masked_weighted_ce_loss(
+                logits, labels, loss_mask, eos_id=eos_id, eos_weight=eos_weight
+            )
         else:
             logits = model(input_ids)
-            loss = masked_weighted_ce_loss(logits, labels, loss_mask, eos_id=eos_id, eos_weight=eos_weight)
+            loss = masked_weighted_ce_loss(
+                logits, labels, loss_mask, eos_id=eos_id, eos_weight=eos_weight
+            )
 
         losses.append(float(loss.item()))
 
@@ -407,6 +414,76 @@ def main() -> None:
         mask_last_label_in_loss=not args.no_mask_last_label_in_loss,
     )
 
+    # === Dataset statistics (for PackedBinDataset) ===
+    def _dataset_stats(
+        ds: PackedBinDataset,
+        name: str,
+        seq_len: int,
+        micro_bsz: int,
+        grad_accum: int,
+        sample_batches: int = 8,
+    ):
+        block = seq_len + 1
+
+        # Raw token count in shards (what's stored on disk)
+        raw_tokens = int(sum(getattr(ds, "_lens", []))) if hasattr(ds, "_lens") else 0
+
+        # How many full blocks exist (upper bound for "epoch" if you iterate len(ds) once)
+        n_blocks = int(getattr(ds, "n_blocks", len(ds)))
+        epoch_tokens = n_blocks * seq_len  # inputs/labels length per block is seq_len
+
+        tokens_per_step = micro_bsz * grad_accum * seq_len
+        steps_per_epoch = epoch_tokens // max(1, tokens_per_step)
+
+        print(f"[*] {name} dataset stats:")
+        if hasattr(ds, "shards"):
+            try:
+                print(f"    - shards: {len(ds.shards)}")
+            except Exception:
+                pass
+        if raw_tokens > 0:
+            print(f"    - raw tokens in .bin (sum of shard lengths): {raw_tokens:,}")
+            print(f"    - block size (seq_len+1): {block}")
+        print(f"    - full blocks (n_blocks): {n_blocks:,}")
+        print(f"    - epoch-equivalent tokens (n_blocks*seq_len): {epoch_tokens:,}")
+        print(f"    - tokens per step (micro*accum*seq): {tokens_per_step:,}")
+        print(f"    - steps per epoch (approx): {steps_per_epoch:,}")
+
+        # Estimate actual supervised tokens per block from loss_mask (because you mask BOS/last/repeated-EOS)
+        # We'll sample a few items from the dataset directly (CPU only; cheap).
+        if hasattr(ds, "__getitem__"):
+            sup = []
+            eos_frac = []
+            eos_id = int(getattr(ds, "eos_id", 3))
+            for k in range(sample_batches):
+                x, y, m = ds[k]  # m is float32 mask on CPU
+                mpos = (m > 0).float()
+                sup_tok = float(mpos.sum().item())
+                sup.append(sup_tok)
+                if sup_tok > 0:
+                    eos_frac.append(float(((y == eos_id).float() * mpos).sum().item() / sup_tok))
+            if sup:
+                avg_sup = sum(sup) / len(sup)
+                print(f"    - avg supervised tokens per block (sampled): {avg_sup:.1f} / {seq_len}")
+            if eos_frac:
+                avg_eos = sum(eos_frac) / len(eos_frac)
+                print(f"    - avg EOS fraction over supervised tokens (sampled): {avg_eos:.4f}")
+
+            # Quick warning if you're effectively training on almost nothing
+            if sup and (sum(sup) / len(sup) < 0.5 * seq_len):
+                print(
+                    "    [WARN] Supervised tokens per block is very low; check your loss_mask rules."
+                )
+
+    # Call it right after you create train_ds/val_ds, before DataLoader
+    _dataset_stats(train_ds, "train", args.seq_len, args.micro_bsz, args.grad_accum)
+    _dataset_stats(val_ds, "val", args.seq_len, args.micro_bsz, args.grad_accum)
+
+    # Model params (nice to print here too)
+    n_params_m = sum(p.numel() for p in model.parameters()) / 1e6
+    print(f"[*] model params: {n_params_m:.2f}M")
+    # === end dataset statistics ===
+
     train_dl = DataLoader(
         train_ds,
         batch_size=args.micro_bsz,
@@ -492,7 +569,9 @@ def main() -> None:
                 max_id = int(tmp.max().item())
                 min_id = int(tmp.min().item())
                 if min_id < 0 or max_id >= cfg.vocab_size:
-                    print(f"[fatal] token id out of range: min={min_id} max={max_id} vocab_size={cfg.vocab_size}")
+                    print(
+                        f"[fatal] token id out of range: min={min_id} max={max_id} vocab_size={cfg.vocab_size}"
+                    )
                     print("[fatal] first row head:", tmp[0, :32].tolist())
                     raise RuntimeError("Token id out of range. Fix vocab_size/tokenizer/shards.")
 
@@ -542,16 +621,22 @@ def main() -> None:
                 print("[dbg] frac(input_ids==labels) over supervised:", same)
 
                 mce = masked_ce_128_debug(logits, labels, loss_mask, tt=128)
-                print(f"[dbg] step={global_step} logits_mean={lm:.4f} logits_std={ls:.4f} masked_ce_128={mce:.6f}")
+                print(
+                    f"[dbg] step={global_step} logits_mean={lm:.4f} logits_std={ls:.4f} masked_ce_128={mce:.6f}"
+                )
 
                 m = loss_mask
-                print("[dbg] mask_mean:", float(m.mean().item()), "mask_sum:", float(m.sum().item()))
+                print(
+                    "[dbg] mask_mean:", float(m.mean().item()), "mask_sum:", float(m.sum().item())
+                )
 
                 y = labels
                 print("[dbg] labels min/max:", int(y.min().item()), int(y.max().item()))
 
                 eos = args.eos_id
-                eos_frac = (((y == eos) & (m > 0)).float().sum() / (m > 0).float().sum().clamp_min(1)).item()
+                eos_frac = (
+                    ((y == eos) & (m > 0)).float().sum() / (m > 0).float().sum().clamp_min(1)
+                ).item()
                 print(f"[dbg] eos_frac_supervised: {eos_frac:.6f}")
 
                 pred = logits.argmax(dim=-1)
@@ -570,7 +655,9 @@ def main() -> None:
                 print("[dbg] ce_nomask_128:", float(ce_nomask.item()))
 
                 # Causal leak check
-                _ = causal_leak_check(model, input_ids, device, vocab_size=cfg.vocab_size, check_pos=128)
+                _ = causal_leak_check(
+                    model, input_ids, device, vocab_size=cfg.vocab_size, check_pos=128
+                )
 
         # Gradient clipping
         if args.grad_clip and args.grad_clip > 0:
