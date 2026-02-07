@@ -1,0 +1,92 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.7, top_p=0.9, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=1.5758965673740022e-05
+first_step_topk_ids=[410, 266, 72, 584, 2895, 286, 15, 436, 316, 322]
+first_step_topk_probs=[0.4196355938911438, 0.05885641649365425, 0.047081805765628815, 0.04306027665734291, 0.03294182941317558, 0.02107979543507099, 0.02107979543507099, 0.0176325011998415, 0.014748960733413696, 0.012900212779641151]
+
+[New tokens 1] count=115 first30=[410, 261, 1508, 2777, 4066, 6844, 17, 1009, 3566, 289, 847, 349, 544, 10427, 17, 1516, 979, 15, 652, 14555, 8682, 544, 2977, 11697, 17, 1009, 410, 1040, 6457, 1109]
+[New text 1] repr=' was a little girl named Lily. She loved to play with her toys. One day, she accidentally broke her favorite toy. She was very sad because she couldn\'t play with it anymore. Lily\'s mom saw what happened and asked, "What\'s wrong, Lily?" "I broke my toy," Lily said. "I\'m sorry, Lily. I didn\'t mean to break it." Her mom hugged her and said, "It\'s okay, Lily. We can play with it together." Lily was happy again and they played with the toy together. The end.'
+
+[Full output 1]
+ Once upon a time,  was a little girl named Lily. She loved to play with her toys. One day, she accidentally broke her favorite toy. She was very sad because she couldn't play with it anymore. Lily's mom saw what happened and asked, "What's wrong, Lily?" "I broke my toy," Lily said. "I'm sorry, Lily. I didn't mean to break it." Her mom hugged her and said, "It's okay, Lily. We can play with it together." Lily was happy again and they played with the toy together. The end.
+
+================================================================================
+[Prompt 2] (prompt_tokens=11)
+In a distant future, humans and robots 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=6.877717623865465e-06
+first_step_topk_ids=[15, 371, 534, 266, 694, 466, 1015, 459, 606, 286]
+first_step_topk_probs=[0.27294206619262695, 0.102218858897686, 0.05232497304677963, 0.045766137540340424, 0.043767958879470825, 0.03661032393574715, 0.03202132135629654, 0.021426236256957054, 0.018740516155958176, 0.017139779403805733]
+
+[New tokens 2] count=118 first30=[509, 371, 261, 648, 292, 266, 4171, 17, 901, 668, 1394, 289, 700, 266, 4171, 485, 2384, 17, 1516, 979, 15, 261, 1995, 2777, 4066, 6844, 2220, 289, 266, 5122]
+[New text 2] repr=' they are a part of the earth. They work together to make the earth more beautiful. One day, a young girl named Lily went to the beach. She saw a big wave coming towards her. Lily\'s face lit up and she said, "I want to go back to the beach. It\'s so pretty!" Lily\'s mom smiled and said, "Yes, you can go back to the beach. But you have to be careful, Lily. The waves are very tall and you can take a lot of your lunch." Lily nodded and they continued to play in the sand.'
+
+[Full output 2]
+ In a distant future, humans and robots  they are a part of the earth. They work together to make the earth more beautiful. One day, a young girl named Lily went to the beach. She saw a big wave coming towards her. Lily's face lit up and she said, "I want to go back to the beach. It's so pretty!" Lily's mom smiled and said, "Yes, you can go back to the beach. But you have to be careful, Lily. The waves are very tall and you can take a lot of your lunch." Lily nodded and they continued to play in the sand.
+
+================================================================================
+[Prompt 3] (prompt_tokens=11)
+The following is a news report:
+
+
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=5.301883902575355e-06
+first_step_topk_ids=[371, 484, 395, 332, 735, 15, 436, 349, 17, 672]
+first_step_topk_probs=[0.33156824111938477, 0.25365549325942993, 0.08308841288089752, 0.05813465267419815, 0.04253222420811653, 0.022765858098864555, 0.017416277900338173, 0.015233196318149567, 0.013323744758963585, 0.00974786002188921]
+
+[New tokens 3] count=256 first30=[332, 261, 629, 2013, 349, 266, 629, 873, 17, 569, 332, 261, 837, 1203, 289, 601, 289, 266, 5042, 17, 569, 332, 570, 261, 5174, 1203, 289, 973, 1115, 292]
+[New text 3] repr=' is a new site with the new person. It is a great place to go to the hospital. It is also a wonderful place to take care of the hospital. When the doctor is a lawyer, it is called a medical doctor. The doctor is a patient with a public in the hospital. The doctor says that the doctor will get to the hospital. The doctor will take care of the doctor. The doctor has a little scared of the doctor. The doctor will be able to take care of the doctor. The doctor will be back to the hospital. The docto'
+
+[Full output 3]
+ The following is a news report:
+
+ is a new site with the new person. It is a great place to go to the hospital. It is also a wonderful place to take care of the hospital. When the doctor is a lawyer, it is called a medical doctor. The doctor is a patient with a public in the hospital. The doctor says that the doctor will get to the hospital. The doctor will take care of the doctor. The doctor has a little scared of the doctor. The doctor will be able to take care of the doctor. The doctor will be back to the hospital. The doctor will take care of the doctor. The doctor will be at the hospital. The doctor will take care of the doctor. The doctor will not be able to stay with the doctor. The doctor will help the doctor feel better. The doctor will help the doctor feel better. The doctor will be able to take care of the doctor. The doctor will take care of the doctor. The doctor will take care of the doctor. The doctor will take care of the doctor. The doctor will take care of the doctor. The doctor will make sure the doctor will be able to take care of the doctor. The doctor will take care of the doctor. The doctor will be ready to take care of the doctor. The doctor will
+
+================================================================================
+[Prompt 4] (prompt_tokens=14)
+Neural networks are a class of machine learning models that 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=2.3564267394249327e-05
+first_step_topk_ids=[15, 332, 466, 694, 338, 354, 286, 17, 603, 72]
+first_step_topk_probs=[0.09978130459785461, 0.07981932908296585, 0.04272422939538956, 0.04272422939538956, 0.03907490149140358, 0.0357373021543026, 0.03268476575613022, 0.031257715076208115, 0.031257715076208115, 0.0273396335542202]
+
+[New tokens 4] count=256 first30=[266, 568, 3335, 1422, 332, 361, 8628, 17, 569, 332, 570, 2026, 266, 883, 292, 266, 3335, 289, 322, 308, 16, 87, 6002, 17, 351, 1310, 332, 261, 4560, 292]
+[New text 4] repr=' the other computer game is an attorney. It is also called the start of the computer to be re-trip. The company is a leader of the business officer. The manager of the company has been in for the first time in the U.S. is the "Northark". The company has been the fastest way to launch the company and the company has been in the middle. The company has been the fastest player in the state of the company. I have been a great member of the company and I have been a part of the company for the first '
+
+[Full output 4]
+ Neural networks are a class of machine learning models that  the other computer game is an attorney. It is also called the start of the computer to be re-trip. The company is a leader of the business officer. The manager of the company has been in for the first time in the U.S. is the "Northark". The company has been the fastest way to launch the company and the company has been in the middle. The company has been the fastest player in the state of the company. I have been a great member of the company and I have been a part of the company for the first time in the event. I am a member of the company in the team, who is one of the most important team in the country. The company has been a member of the company in the U.S. government. When I was a member of the company, the company is a leader in the team. He is a leader in the company. He is a member of the company. He is the CEO of the company and the company in the country. He is a leader of the company. He is a member of the company in the company. He is a leader in the company and he is a member of the company. He is a leader in the industry and he is the leader of the
+
+================================================================================
+[Prompt 5] (prompt_tokens=21)
+Here is a short Python snippet:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=8.241551768151112e-06
+first_step_topk_ids=[332, 534, 371, 735, 436, 410, 717, 1004, 395, 672]
+first_step_topk_probs=[0.2565736770629883, 0.12560349702835083, 0.10985945165157318, 0.04703949764370918, 0.04302157461643219, 0.04302157461643219, 0.032912228256464005, 0.0314752571284771, 0.02878676913678646, 0.022022360935807228]
+
+[New tokens 5] count=230 first30=[332, 261, 932, 321, 361, 3757, 17, 569, 332, 261, 1047, 1135, 321, 261, 1576, 1102, 17, 569, 332, 1629, 289, 898, 261, 1463, 292, 6152, 338, 504, 859, 745]
+[New text 5] repr=' is a good for an average. It is a fun experience for a big home. It is easy to find a lot of furniture that has many people who have been able to help them. You can also choose a small box of furniture. It is a very easy place to enjoy. The most powerful you can enjoy the home, but not as you are more than a good friend. You can also choose a new shoe. The best part of the company is that you can be a little bit older. There are many different ways to build the food. Some of the tools are bette'
+
+[Full output 5]
+ Here is a short Python snippet:
+
+def fib(n):
+     is a good for an average. It is a fun experience for a big home. It is easy to find a lot of furniture that has many people who have been able to help them. You can also choose a small box of furniture. It is a very easy place to enjoy. The most powerful you can enjoy the home, but not as you are more than a good friend. You can also choose a new shoe. The best part of the company is that you can be a little bit older. There are many different ways to build the food. Some of the tools are better than the help. The best part of the company is to offer is the best solution to the needs of the home. The best part of the business is to serve the best service. It is a good place to be a good friend. This is a great solution to the top of the business. It is a great place to use it. The difference between the money is the best part of the company. It is a great experience to take care of the home. You can also like to enjoy the water. You can also enjoy the food you want.
+

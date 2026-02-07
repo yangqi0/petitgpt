@@ -1,0 +1,92 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.7, top_p=0.9, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.00013174765626899898
+first_step_topk_ids=[15, 410, 92, 534, 1015, 72, 286, 322, 332, 436]
+first_step_topk_probs=[0.39361196756362915, 0.07890330255031586, 0.04038989916443825, 0.0323096364736557, 0.030898964032530785, 0.025845887139439583, 0.02067524939775467, 0.017294103279709816, 0.015126335434615612, 0.015126335434615612]
+
+[New tokens 1] count=175 first30=[15, 674, 410, 261, 1508, 2777, 4066, 6844, 17, 1009, 3566, 289, 847, 349, 544, 10427, 286, 1284, 1055, 2721, 17, 1516, 979, 15, 652, 1073, 261, 1576, 15, 16680]
+[New text 1] repr=', there was a little girl named Lily. She loved to play with her toys and run around outside. One day, she found a big, juicy fruit in the garden. She was so happy and started to eat it. But then, she saw a little bird who was very hungry. The bird was very hungry and asked, "Why are you sad?" Lily replied, "I lost my banana. I don\'t know how to eat it." The bird said, "Don\'t worry, I will help you find it." Lily and the bird became friends and they searched for the fruit together. They searched'
+
+[Full output 1]
+ Once upon a time, , there was a little girl named Lily. She loved to play with her toys and run around outside. One day, she found a big, juicy fruit in the garden. She was so happy and started to eat it. But then, she saw a little bird who was very hungry. The bird was very hungry and asked, "Why are you sad?" Lily replied, "I lost my banana. I don't know how to eat it." The bird said, "Don't worry, I will help you find it." Lily and the bird became friends and they searched for the fruit together. They searched high and low, but they couldn't find the apple. Finally, they found the apple and ate it. The bird was so happy and thanked Lily for her help. From that day on, Lily made sure to always ask for help when she needed it.
+
+================================================================================
+[Prompt 2] (prompt_tokens=11)
+In a distant future, humans and robots 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=1.1767366231651977e-05
+first_step_topk_ids=[15, 534, 371, 1015, 694, 266, 338, 395, 332, 436]
+first_step_topk_probs=[0.5536336302757263, 0.0776505246758461, 0.0776505246758461, 0.047519803047180176, 0.021275898441672325, 0.018609022721648216, 0.017796523869037628, 0.01627643220126629, 0.013020215556025505, 0.009109891019761562]
+
+[New tokens 2] count=256 first30=[15, 859, 292, 266, 1379, 371, 261, 1576, 15, 485, 1342, 1976, 17, 1138, 371, 859, 888, 3121, 15, 702, 350, 509, 371, 292, 888, 3121, 15, 286, 509, 395]
+[New text 2] repr=', many of the things are a big, more important thing. There are many different colors, such as they are of different colors, and they can make a huge mess. One day, they see a big, small fish that is very small. They are small and big and strong. They are very curious and want to see what is inside. They want to see what is inside the fish. They run to the big fish and touch it. They are very happy and proud. They see a big, green fish, a fish, a big fish, and a small fish. They want to eat it, '
+
+[Full output 2]
+ In a distant future, humans and robots , many of the things are a big, more important thing. There are many different colors, such as they are of different colors, and they can make a huge mess. One day, they see a big, small fish that is very small. They are small and big and strong. They are very curious and want to see what is inside. They want to see what is inside the fish. They run to the big fish and touch it. They are very happy and proud. They see a big, green fish, a fish, a big fish, and a small fish. They want to eat it, but they can't. They think it is a good idea. They want to taste the fish. They go closer to the big fish. They see a big fish with a long tail. The fish is green and has a long tail. It is their favorite thing. It is their favorite thing. It is the biggest fish in the world. It is yellow and has a long tail. It is very pretty. It has yellow eyes and a long tail. It is very cute. It has a long tail and a long tail. It is a good fish. It has green eyes and a tail. It is very pretty. The fish is very happy. It
+
+================================================================================
+[Prompt 3] (prompt_tokens=11)
+The following is a news report:
+
+
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=1.1201825145690236e-05
+first_step_topk_ids=[15, 17, 371, 484, 1164, 266, 395, 4, 349, 29]
+first_step_topk_probs=[0.3566039204597473, 0.1277199387550354, 0.08936215937137604, 0.07148461788892746, 0.03826295956969261, 0.02448483742773533, 0.021415729075670242, 0.021415729075670242, 0.014983991160988808, 0.01198634598404169]
+
+[New tokens 3] count=256 first30=[371, 329, 266, 1212, 2826, 292, 266, 8912, 292, 266, 6372, 17, 351, 1632, 292, 266, 4389, 332, 1367, 289, 266, 7062, 292, 266, 4867, 332, 261, 1576, 1203, 869]
+[New text 3] repr=' are on the main location of the duration of the facility. The area of the hotel is open to the doors of the church is a big place where the ground is closed. The bus is a place where the town is a dangerous place where the house is dark. The parking lot of the windows is a room with a sign that says the roof is closed. The roof is a place where the roof is so the roof is shut. The house is empty and the roof is open. The house is a window and the roof is open. The roof is open and the roof is o'
+
+[Full output 3]
+ The following is a news report:
+
+ are on the main location of the duration of the facility. The area of the hotel is open to the doors of the church is a big place where the ground is closed. The bus is a place where the town is a dangerous place where the house is dark. The parking lot of the windows is a room with a sign that says the roof is closed. The roof is a place where the roof is so the roof is shut. The house is empty and the roof is open. The house is a window and the roof is open. The roof is open and the roof is open. The roof is a place of window. The roof is the roof of the roof. The roof is very light and the roof is white. The roof is a place of space. The roof is green and has a roof. The roof is open and the roof is a place to the house. The roof is open and the roof is open. The roof is the roof is the roof. The roof is the roof and the roof is open. The roof is open and the roof is open. The roof is the roof. The roof is open and the roof is open. The roof is open and the roof is the roof. The roof is on the roof is the roof. The roof
+
+================================================================================
+[Prompt 4] (prompt_tokens=14)
+Neural networks are a class of machine learning models that 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=3.585227386793122e-05
+first_step_topk_ids=[15, 354, 338, 694, 332, 266, 1015, 17, 312, 395]
+first_step_topk_probs=[0.3801724910736084, 0.06096302717924118, 0.05575580894947052, 0.034120913594961166, 0.03263115510344505, 0.03263115510344505, 0.02283112332224846, 0.020880991593003273, 0.019969303160905838, 0.019969303160905838]
+
+[New tokens 4] count=256 first30=[332, 261, 1150, 1976, 349, 261, 3116, 286, 261, 3116, 574, 332, 466, 1040, 11740, 17, 312, 1015, 742, 834, 289, 1841, 354, 349, 316, 15, 286, 312, 834, 289]
+[New text 4] repr=" is a small thing with a woman and a woman who is not very intelligent. I don't want to share it with you, and I want to share it with you. I want to share it with you. I want to share this idea. I want to share it with you, and I want to share it with you. I have the right thing I want to share. I want to share it with you, but I want to share it with you. I want to share it with you, and I want to share it with you. I have a great idea. I want to share this question and I want to share it with"
+
+[Full output 4]
+ Neural networks are a class of machine learning models that  is a small thing with a woman and a woman who is not very intelligent. I don't want to share it with you, and I want to share it with you. I want to share it with you. I want to share this idea. I want to share it with you, and I want to share it with you. I have the right thing I want to share. I want to share it with you, but I want to share it with you. I want to share it with you, and I want to share it with you. I have a great idea. I want to share this question and I want to share it with you. I want to share it with you, and I want to share it with you. I want to share it with you, and I want to share it with you. I want to share it with you, and I want to share it with you. I want to share it with you, and I want to share it with you. I want to share it with you, and I want to share it with you. I want to share it with you, and I want to share it with you. I want to share it with you, and I want to share it with you. I want to share it
+
+================================================================================
+[Prompt 5] (prompt_tokens=21)
+Here is a short Python snippet:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=5.0756370910676196e-05
+first_step_topk_ids=[332, 15, 371, 534, 12, 395, 266, 717, 410, 354]
+first_step_topk_probs=[0.4186932146549225, 0.06140528991818428, 0.049120765179395676, 0.03757820650935173, 0.028747959062457085, 0.025144482031464577, 0.024046655744314194, 0.022996744140982628, 0.021032467484474182, 0.017592912539839745]
+
+[New tokens 5] count=256 first30=[672, 322, 261, 6486, 2574, 15, 6604, 2606, 15, 2349, 15, 2349, 15, 2349, 15, 2349, 15, 2349, 15, 2574, 15, 2349, 15, 2606, 15, 2349, 15, 2349, 15, 2349]
+[New text 5] repr=' would be a rough green, golden white, black, black, black, black, black, green, black, white, black, black, black, brown, green, white, white, white, and white, white, white, black, yellow, red, white, green, white, green, yellow, black, white, yellow, green, white, white, white, and green, blue, white, white, white, yellow, green, green, white, blue, and white, white, yellow, blue, blue, blue, green, green, black, black, green, black, white, yellow, green, black, green, blue, yellow, blue, gre'
+
+[Full output 5]
+ Here is a short Python snippet:
+
+def fib(n):
+     would be a rough green, golden white, black, black, black, black, black, green, black, white, black, black, black, brown, green, white, white, white, and white, white, white, black, yellow, red, white, green, white, green, yellow, black, white, yellow, green, white, white, white, and green, blue, white, white, white, yellow, green, green, white, blue, and white, white, yellow, blue, blue, blue, green, green, black, black, green, black, white, yellow, green, black, green, blue, yellow, blue, green, blue, green, blue, green, green, blue, yellow, green, blue, blue, blue, green, green, green, blue, blue, green, green, yellow, green, green, green, green, green, blue, green, green, blue, blue, blue, green, blue, blue, green, blue, green, red, blue, blue, green, blue, red, green, blue, green, green, green, yellow, green, yellow, green, green, green, green, yellow, blue, blue,
+

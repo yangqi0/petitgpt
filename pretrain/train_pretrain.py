@@ -8,6 +8,7 @@
 
 from __future__ import annotations
 
+import os
 import argparse
 import json
 import sys
@@ -164,6 +165,36 @@ def masked_ce_128_debug(
 # -----------------------------------------------------------------------------
 # Checkpoints
 # -----------------------------------------------------------------------------
+def _atomic_torch_save(obj: dict, final_path: Path) -> None:
+    """
+    Atomically save a torch checkpoint:
+      1) write to final_path.with_suffix(final_path.suffix + ".tmp")
+      2) flush + fsync
+      3) os.replace(tmp, final)
+    This prevents half-written latest.pt when the filesystem is flaky.
+    """
+    final_path = Path(final_path)
+    final_path.parent.mkdir(parents=True, exist_ok=True)
+
+    tmp_path = final_path.with_suffix(final_path.suffix + ".tmp")
+
+    # best effort: remove stale tmp
+    try:
+        if tmp_path.exists():
+            tmp_path.unlink()
+    except Exception:
+        pass
+
+    # Use a real file handle so we can fsync.
+    # torch.save can accept a file-like object.
+    with open(tmp_path, "wb") as f:
+        torch.save(obj, f)
+        f.flush()
+        os.fsync(f.fileno())
+
+    # Atomic replace on POSIX
+    os.replace(tmp_path, final_path)
+
 def save_ckpt(
     out_dir: Path,
     global_step: int,
@@ -174,7 +205,14 @@ def save_ckpt(
     model_config: Dict,
     train_args: Dict,
 ) -> None:
+    """
+    Robust checkpoint saving:
+      - writes latest.pt and step_XXXXXX.pt atomically
+      - avoids corrupted latest.pt on interruption / flaky disks
+    """
+    out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
+
     model_to_save = model._orig_mod if hasattr(model, "_orig_mod") else model
 
     ckpt = {
@@ -185,11 +223,25 @@ def save_ckpt(
         "local_step": int(local_step),
         "config": model_config,
         "train_args": train_args,
+        "saved_at_unix": int(time.time()),
     }
 
-    torch.save(ckpt, out_dir / "latest.pt")
-    torch.save(ckpt, out_dir / f"step_{global_step:06d}.pt")
+    latest_path = out_dir / "latest.pt"
+    step_path = out_dir / f"step_{global_step:06d}.pt"
 
+    try:
+        _atomic_torch_save(ckpt, latest_path)
+        _atomic_torch_save(ckpt, step_path)
+    except Exception as e:
+        # If saving fails, don't leave tmp files around (best effort)
+        for p in [latest_path, step_path]:
+            tmp = p.with_suffix(p.suffix + ".tmp")
+            try:
+                if tmp.exists():
+                    tmp.unlink()
+            except Exception:
+                pass
+        raise RuntimeError(f"[ckpt] save failed: {e}") from e
 
 def load_ckpt(
     resume_path: Path,
