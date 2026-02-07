@@ -1,0 +1,92 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.7, top_p=0.9, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.00028108179685659707
+first_step_topk_ids=[72, 1766, 534, 266, 30829, 836, 2549, 5969, 13195, 444]
+first_step_topk_probs=[0.2300920933485031, 0.028226619586348534, 0.013818110339343548, 0.013818110339343548, 0.012086042203009129, 0.011053702794015408, 0.010571085847914219, 0.010571085847914219, 0.009246029891073704, 0.008842337876558304]
+
+[New tokens 1] count=171 first30=[20503, 15, 356, 13881, 15, 27457, 15, 286, 27457, 17, 1516, 979, 15, 356, 13881, 286, 27457, 2220, 321, 261, 3108, 17, 901, 11240, 321, 261, 939, 616, 17, 356]
+[New text 1] repr=' passport, Mommy, Daddy, and Daddy. One day, Mommy and Daddy went for a drive. They drove for a long time. Mommy said, "We will see something very special." Daddy said, "Yes, it is. Let\'s go!" So, they drove to a big lake. Mommy and Daddy got out of the car and drove to the lake. They saw lots of fish swimming and swimming. Daddy said, "We will see that the lake looks so pretty!" Mommy and Daddy got out of the car and drove to the lake. They saw lots of fish swimming and having fun. Daddy said, '
+
+[Full output 1]
+ Once upon a time,  passport, Mommy, Daddy, and Daddy. One day, Mommy and Daddy went for a drive. They drove for a long time. Mommy said, "We will see something very special." Daddy said, "Yes, it is. Let's go!" So, they drove to a big lake. Mommy and Daddy got out of the car and drove to the lake. They saw lots of fish swimming and swimming. Daddy said, "We will see that the lake looks so pretty!" Mommy and Daddy got out of the car and drove to the lake. They saw lots of fish swimming and having fun. Daddy said, "We are so lucky!" Mommy and Daddy smiled and said, "Yes, it is. We are so lucky to have been on this adventure." They all got in the car and drove home.
+
+================================================================================
+[Prompt 2] (prompt_tokens=11)
+In a distant future, humans and robots 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.0007362235919572413
+first_step_topk_ids=[72, 15, 371, 828, 1584, 17, 3063, 988, 266, 286]
+first_step_topk_probs=[0.3647220730781555, 0.2790187895298004, 0.020032387226819992, 0.01675637997686863, 0.013404150493443012, 0.010722564533352852, 0.009378515183925629, 0.008969039656221867, 0.007174724712967873, 0.006861468777060509]
+
+[New tokens 2] count=256 first30=[72, 723, 645, 11413, 446, 266, 3740, 2738, 17, 2638, 15, 290, 266, 1001, 15, 316, 484, 699, 869, 289, 898, 354, 17, 959, 316, 484, 898, 354, 1052, 17]
+[New text 2] repr='eons were separated by the Great World. Now, in the end, you will know where to find it. But you will find it again. If you have a better idea, you will find it. You will find it soon. The best way to find it again. You will find it. But you will find it again. You will find it again. You will find it again. Just give it a try. You will find it. You will find it. You will find it again. But you will find it again. This time, you will find it again. You will find it again. You will find it again.'
+
+[Full output 2]
+ In a distant future, humans and robots eons were separated by the Great World. Now, in the end, you will know where to find it. But you will find it again. If you have a better idea, you will find it. You will find it soon. The best way to find it again. You will find it. But you will find it again. You will find it again. You will find it again. Just give it a try. You will find it. You will find it. You will find it again. But you will find it again. This time, you will find it again. You will find it again. You will find it again. But it will come back soon. You will find it again. But not on the way back. You will find it again. You will find it again. You will find it again. You will find it again. You will find it again. You will find it again. You will find it again. You will find it again. You will find it again. You will find it again. You will find it again. But not with it again. It is gone. You will find it again. You will find it again. You will find it again. You will find it again. You will find it again.
+
+================================================================================
+[Prompt 3] (prompt_tokens=11)
+The following is a news report:
+
+
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.0007314574904739857
+first_step_topk_ids=[371, 15, 672, 1584, 484, 828, 3063, 699, 392, 1573]
+first_step_topk_probs=[0.058106862008571625, 0.0486043281853199, 0.04648221284151077, 0.03718312829732895, 0.029744401574134827, 0.02488013543188572, 0.021761467680335045, 0.01903371885418892, 0.015921028330922127, 0.015921028330922127]
+
+[New tokens 3] count=42 first30=[484, 322, 2926, 290, 261, 629, 6811, 292, 266, 4737, 15, 579, 484, 322, 2926, 290, 266, 1513, 6811, 292, 266, 6862, 17, 3, 15, 266, 814, 6811, 484, 322]
+[New text 3] repr=" will be held in a new episode of the Year, which will be held in the next episode of the Week., the first episode will be held in the final episode of the week's show."
+
+[Full output 3]
+ The following is a news report:
+
+ will be held in a new episode of the Year, which will be held in the next episode of the Week., the first episode will be held in the final episode of the week's show.
+
+================================================================================
+[Prompt 4] (prompt_tokens=14)
+Neural networks are a class of machine learning models that 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.006038342136889696
+first_step_topk_ids=[15, 17, 72, 29, 1646, 3418, 34, 392, 312, 2797]
+first_step_topk_probs=[0.18784740567207336, 0.06727873533964157, 0.041172582656145096, 0.028807321563363075, 0.016859518364071846, 0.016123412176966667, 0.016123412176966667, 0.012613107450306416, 0.009024250321090221, 0.008071249350905418]
+
+[New tokens 4] count=256 first30=[15, 518, 338, 1146, 466, 1917, 338, 316, 436, 289, 322, 266, 814, 592, 289, 1337, 266, 2287, 17, 1138, 371, 261, 1365, 292, 7541, 292, 6614, 338, 371, 1416]
+[New text 4] repr=', but that does not mean that you have to be the first one to understand the problem. There are a number of categories of machines that are available for you to read and have to be the first one to do it. You can find the best one, and you can be the first one to learn. They are all very important and are very important to the other. You can find the best one and they will be the first one to understand the problem. You can also find the best one that you can learn from. You can find the best on'
+
+[Full output 4]
+ Neural networks are a class of machine learning models that , but that does not mean that you have to be the first one to understand the problem. There are a number of categories of machines that are available for you to read and have to be the first one to do it. You can find the best one, and you can be the first one to learn. They are all very important and are very important to the other. You can find the best one and they will be the first one to understand the problem. You can also find the best one that you can learn from. You can find the best one. You can also find the best one, and the second one to learn is the best. You can learn and have fun in the first one to learn. You can be the best person in the world. You can also learn the best language in the world. You can learn and have fun in the world. You can learn and have fun in the world. You can also learn and have fun. You can also learn and have fun in the world. You can also learn and have fun in the world. You can also learn and enjoy the world. You can also learn and have fun in the world. You can learn and have fun in the world. You can also learn and have fun. You can learn
+
+================================================================================
+[Prompt 5] (prompt_tokens=21)
+Here is a short Python snippet:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.00022955505119170994
+first_step_topk_ids=[603, 694, 15, 12, 266, 814, 338, 371, 312, 1569]
+first_step_topk_probs=[0.12573692202568054, 0.10058233141899109, 0.07358761131763458, 0.04923926293849945, 0.04306725412607193, 0.030132975429296494, 0.02204575575888157, 0.016865380108356476, 0.016129020601511, 0.016129020601511]
+
+[New tokens 5] count=256 first30=[1782, 292, 29, 414, 936, 289, 1708, 29, 414, 936, 289, 1708, 29, 414, 936, 289, 1708, 29, 414, 936, 289, 1708, 29, 414, 936, 289, 1708, 29, 414, 936]
+[New text 5] repr=' study of: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - What to control: - How to control: - '
+
+[Full output 5]
+ Here is a short Python snippet:
+
+def fib(n):
+     study of: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - What to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - If a number of open: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - How to control: - Another number of open: - How to control: - Cit: - How to control: - How to control: -
+

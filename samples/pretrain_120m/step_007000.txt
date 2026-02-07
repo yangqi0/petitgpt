@@ -1,0 +1,92 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.7, top_p=0.9, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.00017277237202506512
+first_step_topk_ids=[15, 979, 410, 72, 717, 286, 322, 2895, 12, 29]
+first_step_topk_probs=[0.3453873097896576, 0.07239711284637451, 0.07239711284637451, 0.03705945238471031, 0.03241415321826935, 0.02592948079109192, 0.022679293528199196, 0.01814214326441288, 0.01586807705461979, 0.01327307615429163]
+
+[New tokens 1] count=120 first30=[12, 329, 261, 3093, 15, 674, 410, 261, 3895, 4066, 5728, 2895, 17, 5728, 2895, 3566, 289, 847, 349, 566, 10427, 286, 1284, 1055, 2721, 17, 1516, 979, 15, 5728]
+[New text 1] repr=') on a farm, there was a boy named Timmy. Timmy loved to play with his toys and run around outside. One day, Timmy\'s mom asked him to go to the park to play. Timmy was so excited! Timmy got to the park and saw a big, scary monster. The monster was angry and ran away. Timmy\'s mom said, "Don\'t worry, Timmy. We can\'t get lost. Let\'s go back to the park and play together." Timmy was happy and went home, happy to have a new friend like him.'
+
+[Full output 1]
+ Once upon a time, ) on a farm, there was a boy named Timmy. Timmy loved to play with his toys and run around outside. One day, Timmy's mom asked him to go to the park to play. Timmy was so excited! Timmy got to the park and saw a big, scary monster. The monster was angry and ran away. Timmy's mom said, "Don't worry, Timmy. We can't get lost. Let's go back to the park and play together." Timmy was happy and went home, happy to have a new friend like him.
+
+================================================================================
+[Prompt 2] (prompt_tokens=11)
+In a distant future, humans and robots 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=1.2442174011084717e-05
+first_step_topk_ids=[15, 371, 266, 534, 1015, 694, 717, 395, 261, 322]
+first_step_topk_probs=[0.3572385311126709, 0.11701849102973938, 0.06549510359764099, 0.04582510516047478, 0.04382434859871864, 0.0280435960739851, 0.01569596491754055, 0.013129112310707569, 0.011483414098620415, 0.010502547957003117]
+
+[New tokens 2] count=256 first30=[371, 266, 1043, 292, 1765, 286, 436, 261, 837, 616, 17, 696, 395, 973, 261, 939, 2598, 349, 261, 7137, 369, 261, 7137, 369, 261, 7137, 17, 351, 7137, 332]
+[New text 2] repr=' are the best of friends and have a great time. We can take a long walk with a boat or a boat or a boat. The boat is a great place to take a break and a lot of energy. The boat is also special, but it is always good to go with a new friend. We can do it. We can do anything I want. We can go to the boat and see the boat and the boat. We can make it work. We can put the boat in a boat. We can drive on the boat and see the boat. We can take turns to drive on the boat. We can ride on the boat and sa'
+
+[Full output 2]
+ In a distant future, humans and robots  are the best of friends and have a great time. We can take a long walk with a boat or a boat or a boat. The boat is a great place to take a break and a lot of energy. The boat is also special, but it is always good to go with a new friend. We can do it. We can do anything I want. We can go to the boat and see the boat and the boat. We can make it work. We can put the boat in a boat. We can drive on the boat and see the boat. We can take turns to drive on the boat. We can ride on the boat and sail. We can ride up the boat and see the boat. We can ride on the boat and see the boat. We can ride on the boat and sail. We can ride up and down the boat. We can ride on the boat and see the boat. We can go on the boat and see the boat. We can ride down the boat and ride on the boat. We can ride it and the boat and have fun. We can ride our boat on the boat and see the boat. We can ride on the boat and watch the boat and the boat. We can ride on the boat and ride on the boat.
+
+================================================================================
+[Prompt 3] (prompt_tokens=11)
+The following is a news report:
+
+
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=6.936123827472329e-05
+first_step_topk_ids=[261, 266, 286, 464, 290, 15, 349, 17, 329, 1513]
+first_step_topk_probs=[0.2590496242046356, 0.15160909295082092, 0.05429974943399429, 0.04966169223189354, 0.04541978985071182, 0.03633326664566994, 0.030391471460461617, 0.02779555879533291, 0.017786646261811256, 0.01487789023667574]
+
+[New tokens 3] count=256 first30=[484, 322, 1416, 290, 261, 4093, 17, 3, 484, 322, 1367, 289, 266, 592, 15, 350, 266, 3350, 292, 266, 3834, 6731, 484, 322, 2594, 17, 613, 2641, 371, 1312]
+[New text 3] repr=' will be available in a statement. will be open to the one, as the chance of the initial election will be required. “We are going to have to be done to go to the next,” the question says. “I can’t believe that the last time I am willing to take the price to the back of the entire election.” But the truth is that the story is not going to be taken to the same time. “We are going to get the $7.5 million or more than those of us have to pay the money to the right of the New York. The World’s campai'
+
+[Full output 3]
+ The following is a news report:
+
+ will be available in a statement. will be open to the one, as the chance of the initial election will be required. “We are going to have to be done to go to the next,” the question says. “I can’t believe that the last time I am willing to take the price to the back of the entire election.” But the truth is that the story is not going to be taken to the same time. “We are going to get the $7.5 million or more than those of us have to pay the money to the right of the New York. The World’s campaign is not a good place for you. You can get it back if you want to be able to pay the money, and the right will have to be done. The New York Times will be a great job. The competition is that it is much more important to do. “I am proud of myself. I am grateful for the two and I am able to be able to pay the money to pay for it. I will not be able to pay for this kind of to pay. I will be happy with my best friend and I will be able to pay the money to pay for the money.” The students and students will be able to receive their money
+
+================================================================================
+[Prompt 4] (prompt_tokens=14)
+Neural networks are a class of machine learning models that 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=4.114039984415285e-05
+first_step_topk_ids=[332, 15, 286, 261, 395, 266, 464, 72, 338, 694]
+first_step_topk_probs=[0.33187928795814514, 0.12996579706668854, 0.029786542057991028, 0.027242310345172882, 0.023827550932765007, 0.023827550932765007, 0.020840823650360107, 0.015943588688969612, 0.015943588688969612, 0.014581751078367233]
+
+[New tokens 4] count=50 first30=[1569, 321, 493, 266, 668, 332, 289, 1066, 261, 485, 1599, 286, 485, 3274, 822, 289, 698, 289, 266, 668, 17, 787, 395, 322, 1440, 289, 698, 261, 3602, 1133]
+[New text 4] repr=' turn for all the work is to create a more effective and more efficient way to get to the work. You can be able to get a nice plan on the project. The company will be able to help you find the best work you can.'
+
+[Full output 4]
+ Neural networks are a class of machine learning models that  turn for all the work is to create a more effective and more efficient way to get to the work. You can be able to get a nice plan on the project. The company will be able to help you find the best work you can.
+
+================================================================================
+[Prompt 5] (prompt_tokens=21)
+Here is a short Python snippet:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.00010555003973422572
+first_step_topk_ids=[12, 332, 224, 15, 261, 923, 410, 29, 717, 735]
+first_step_topk_probs=[0.22814969718456268, 0.17453832924365997, 0.04000203311443329, 0.026766320690512657, 0.023411225527524948, 0.022389065474271774, 0.022389065474271774, 0.02141154557466507, 0.0204766932874918, 0.0204766932874918]
+
+[New tokens 5] count=256 first30=[12, 324, 1227, 324, 15, 362, 15, 320, 15, 377, 15, 377, 15, 372, 15, 426, 15, 320, 15, 426, 15, 426, 15, 320, 15, 426, 17, 426, 15, 426]
+[New text 5] repr=') A & A, B, S, H, H, W, L, S, L, L, S, L. L, L, L, L, L, L, L, L. L, L, L, L, L L, L, L, L L, L, L, L L, L L, L L, L L, L, L L, L L, L L, L L, L L, L L L, L L, L L L, L L, L L L L, L L L, L L L, L L L, L L L, L L L, L L L L, L L L L, L L L L, L L L L, L L L L L, L L L L L, L L L L L L, L L L L L L, L L L L L L L L, L L L L L L L, L L L L L L L L L L L, L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L'
+
+[Full output 5]
+ Here is a short Python snippet:
+
+def fib(n):
+    ) A & A, B, S, H, H, W, L, S, L, L, S, L. L, L, L, L, L, L, L, L. L, L, L, L, L L, L, L, L L, L, L, L L, L L, L L, L L, L, L L, L L, L L, L L, L L, L L L, L L, L L L, L L, L L L L, L L L, L L L, L L L, L L L, L L L, L L L L, L L L L, L L L L, L L L L, L L L L L, L L L L L, L L L L L L, L L L L L L, L L L L L L L L, L L L L L L L, L L L L L L L L L L L, L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L L
+

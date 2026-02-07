@@ -1,0 +1,92 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.7, top_p=0.9, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.0002632444375194609
+first_step_topk_ids=[72, 3602, 412, 1430, 322, 1731, 3136, 1691, 2413, 2898]
+first_step_topk_probs=[0.3045695126056671, 0.018290821462869644, 0.018290821462869644, 0.01599811762571335, 0.014631624333560467, 0.012797592207789421, 0.01223883405327797, 0.011193443089723587, 0.008563175797462463, 0.008563175797462463]
+
+[New tokens 1] count=106 first30=[2413, 286, 1672, 266, 1616, 292, 266, 6241, 17, 787, 484, 1400, 4792, 266, 3308, 292, 2549, 17, 351, 6241, 332, 554, 2384, 338, 316, 484, 1400, 4792, 354, 17]
+[New text 1] repr=' yourself and enjoy the view of the river. You will never forget the beauty of nature. The river is so beautiful that you will never forget it. your friend was so grateful that she gave me a special gift. She told me to never forget the feeling of the river and how much I love it. She said that the river was so beautiful and that it made me feel so alive. The next day, I was so grateful that I realized that I should always remember to be grateful for all the beauty of nature.'
+
+[Full output 1]
+ Once upon a time,  yourself and enjoy the view of the river. You will never forget the beauty of nature. The river is so beautiful that you will never forget it. your friend was so grateful that she gave me a special gift. She told me to never forget the feeling of the river and how much I love it. She said that the river was so beautiful and that it made me feel so alive. The next day, I was so grateful that I realized that I should always remember to be grateful for all the beauty of nature.
+
+================================================================================
+[Prompt 2] (prompt_tokens=11)
+In a distant future, humans and robots 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.00011719181202352047
+first_step_topk_ids=[72, 3063, 4079, 3413, 412, 370, 3136, 6503, 6719, 6892]
+first_step_topk_probs=[0.37857502698898315, 0.018186867237091064, 0.015212667174637318, 0.01272484939545393, 0.010179161094129086, 0.0077872322872281075, 0.007122078910470009, 0.005697261076420546, 0.005448512267321348, 0.005448512267321348]
+
+[New tokens 2] count=256 first30=[72, 15, 385, 484, 322, 1440, 289, 534, 338, 17, 696, 484, 322, 1440, 289, 534, 338, 17, 696, 484, 322, 1440, 289, 534, 354, 17, 696, 484, 322, 1440]
+[New text 2] repr='e, we will be able to do that. We will be able to do that. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do it.'
+
+[Full output 2]
+ In a distant future, humans and robots e, we will be able to do that. We will be able to do that. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do it. We will be able to do
+
+================================================================================
+[Prompt 3] (prompt_tokens=11)
+The following is a news report:
+
+
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.00013948703417554498
+first_step_topk_ids=[72, 3063, 370, 10, 6719, 5742, 10083, 485, 3136, 1731]
+first_step_topk_probs=[0.09134022891521454, 0.01674606092274189, 0.016014909371733665, 0.012811022810637951, 0.010715960524976254, 0.009800652042031288, 0.008572163060307503, 0.008197893388569355, 0.008197893388569355, 0.007839963771402836]
+
+[New tokens 3] count=256 first30=[14797, 261, 1203, 290, 412, 18031, 369, 329, 412, 2770, 17, 583, 332, 261, 837, 1203, 289, 2100, 286, 3671, 17, 2714, 3075, 1937, 286, 700, 1937, 1433, 17, 583]
+[New text 3] repr=' checkout a place in your wallet or on your phone. This is a great place to buy and sell. Just save money and make money online. This is a great place to buy and sell. There are so many options available. You can find some of the best places to buy and sell. In fact, this is a great place to buy and sell. If you want to buy a house, you can get one of the best places to buy and sell. You can also buy a house, a home, a a car, a family, a dog, a dog, a dog, and a cat. There are many options avail'
+
+[Full output 3]
+ The following is a news report:
+
+ checkout a place in your wallet or on your phone. This is a great place to buy and sell. Just save money and make money online. This is a great place to buy and sell. There are so many options available. You can find some of the best places to buy and sell. In fact, this is a great place to buy and sell. If you want to buy a house, you can get one of the best places to buy and sell. You can also buy a house, a home, a a car, a family, a dog, a dog, a dog, and a cat. There are many options available. You can find the best places to buy and sell. The best place to buy is by taking a few dollars. You can find a house that you can afford. You can also buy a house that you can buy. You can also buy a house that you can buy. You can also buy a house that you can buy. You can also buy a house that you can buy and sell it. You can also buy a house that you can buy a house that you can afford. You can also buy a house that you can buy for a house that you can afford. You can also buy a house that you can buy and sell
+
+================================================================================
+[Prompt 4] (prompt_tokens=14)
+Neural networks are a class of machine learning models that 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.00015292699390556663
+first_step_topk_ids=[72, 6719, 3063, 5742, 370, 371, 6892, 828, 1536, 4079]
+first_step_topk_probs=[0.12518534064292908, 0.028690923005342484, 0.022951116785407066, 0.020990727469325066, 0.016791395843029022, 0.012284847907721996, 0.012284847907721996, 0.009827179834246635, 0.008987786248326302, 0.008987786248326302]
+
+[New tokens 4] count=256 first30=[5415, 266, 280, 662, 15, 266, 281, 662, 15, 266, 589, 938, 332, 261, 942, 338, 2350, 321, 266, 5132, 289, 1492, 349, 266, 3489, 17, 351, 3489, 332, 1040]
+[New text 4] repr=' holding the pang, the fang, the spool is a system that allows for the reader to connect with the machine. The machine is very useful for the reader to use. The machine also allows for the reader to connect with the machine. The machine is available in different sizes and is available in different sizes. The machine is available in different sizes. The machine is available in different sizes. The machine is available in different sizes. The machine is available in different sizes. The machine ha'
+
+[Full output 4]
+ Neural networks are a class of machine learning models that  holding the pang, the fang, the spool is a system that allows for the reader to connect with the machine. The machine is very useful for the reader to use. The machine also allows for the reader to connect with the machine. The machine is available in different sizes and is available in different sizes. The machine is available in different sizes. The machine is available in different sizes. The machine is available in different sizes. The machine is available in different sizes. The machine has a system that allows for the reader to connect with the machine. The machine is available in different sizes. The machine has a system that allows for the reader to connect with the machine. The machine is available in different sizes. The machine is available in different sizes. The machine is available in different sizes. The machine is available in different sizes. The machine is available in different sizes. The machine is available in different sizes. The machine is available in different sizes. The machine is available in different sizes. The machine is available in different sizes. The machine is available in different sizes. The machine is available in different sizes. The machine is available in different sizes. The machine is available in different sizes. The machine is available in different sizes. The machine is available in different sizes.
+
+================================================================================
+[Prompt 5] (prompt_tokens=21)
+Here is a short Python snippet:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.0007053721928969026
+first_step_topk_ids=[72, 10, 3888, 15, 5742, 371, 698, 6892, 3063, 834]
+first_step_topk_probs=[0.12515363097190857, 0.06406509131193161, 0.020069172605872154, 0.016054203733801842, 0.015353260561823845, 0.014682919718325138, 0.01027323491871357, 0.01027323491871357, 0.01027323491871357, 0.009824694134294987]
+
+[New tokens 5] count=256 first30=[295, 1175, 29, 1087, 613, 58, 303, 382, 29, 38, 7169, 393, 29, 58, 303, 29, 38, 7169, 393, 29, 43, 29, 44, 717, 1187, 6503, 338, 266, 2404, 897]
+[New text 5] repr='leash:), “Wilter:Cranac:Wil:Cranac:H:I am really glad that the whole world is doing well,” said the B-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A'
+
+[Full output 5]
+ Here is a short Python snippet:
+
+def fib(n):
+    leash:), “Wilter:Cranac:Wil:Cranac:H:I am really glad that the whole world is doing well,” said the B-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A-1A
+

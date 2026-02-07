@@ -1,0 +1,92 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.7, top_p=0.9, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.0003978991007898003
+first_step_topk_ids=[15, 72, 1816, 322, 266, 2003, 982, 4410, 412, 3118]
+first_step_topk_probs=[0.06981536000967026, 0.042724937200546265, 0.032685309648513794, 0.032685309648513794, 0.02989346534013748, 0.023913070559501648, 0.023913070559501648, 0.02091563306748867, 0.015302205458283424, 0.014634094201028347]
+
+[New tokens 1] count=256 first30=[1122, 29, 2139, 261, 17, 80, 17, 289, 1122, 29, 2139, 280, 17, 80, 17, 289, 1122, 29, 2139, 280, 17, 80, 17, 286, 725, 1288, 29, 2139, 280, 17]
+[New text 1] repr=' 10:30 a.m. to 10:30 p.m. to 10:30 p.m. and just 9:30 p.m. to 10:30 p.m. and 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m.'
+
+[Full output 1]
+ Once upon a time,  10:30 a.m. to 10:30 p.m. to 10:30 p.m. and just 9:30 p.m. to 10:30 p.m. and 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m. to 10:30 p.m.
+
+================================================================================
+[Prompt 2] (prompt_tokens=11)
+In a distant future, humans and robots 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.0002285645459778607
+first_step_topk_ids=[15, 266, 72, 988, 290, 286, 292, 828, 412, 1584]
+first_step_topk_probs=[0.4418756067752838, 0.18920162320137024, 0.0495770238339901, 0.021227845922112465, 0.01941465027630329, 0.018566986545920372, 0.01623966544866562, 0.012423614971339703, 0.011362447403371334, 0.008692461997270584]
+
+[New tokens 2] count=256 first30=[15, 385, 371, 266, 897, 430, 813, 1342, 289, 604, 1951, 430, 3364, 17, 696, 371, 5426, 292, 604, 1951, 286, 604, 1951, 17, 696, 371, 5426, 292, 604, 1951]
+[New text 2] repr=", we are the world's most important to our country's values. We are proud of our country and our country. We are proud of our country. We are rich and strong and have a strong, healthy, and generous country. We are proud of our country and our country. We are proud of our country and our country. We are proud of our country and our country. We are proud of our country and our country. We are proud of our country and our country. We are proud of our country and our country. We are proud of our co"
+
+[Full output 2]
+ In a distant future, humans and robots , we are the world's most important to our country's values. We are proud of our country and our country. We are proud of our country. We are rich and strong and have a strong, healthy, and generous country. We are proud of our country and our country. We are proud of our country and our country. We are proud of our country and our country. We are proud of our country and our country. We are proud of our country and our country. We are proud of our country and our country. We are proud of our country and our country. We are proud of our country and our country. We are proud of our country and our country. We are proud of our country and our country. We are proud of our country and our country. We are proud of our country and our country. We are proud of our country and our country. We are proud of our country and our country. We are proud of our country and our country. We are proud of our country and our country. We are proud of our country and our country. We are proud of our country and our country. We are proud of our country and our country. We are proud of our country and our country. We are proud of our country and our country
+
+================================================================================
+[Prompt 3] (prompt_tokens=11)
+The following is a news report:
+
+
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=4.5945656893309206e-05
+first_step_topk_ids=[672, 15, 371, 484, 698, 988, 395, 286, 29, 392]
+first_step_topk_probs=[0.061458662152290344, 0.061458662152290344, 0.058775343000888824, 0.05620911717414856, 0.039327993988990784, 0.03761088848114014, 0.03146015852689743, 0.03146015852689743, 0.027516715228557587, 0.024067558348178864]
+
+[New tokens 3] count=116 first30=[735, 322, 261, 1040, 5927, 688, 321, 261, 6577, 2080, 688, 17, 3780, 292, 266, 2043, 371, 1210, 2398, 289, 2082, 953, 15, 554, 338, 509, 371, 466, 1312, 289]
+[New text 3] repr=" may be a very impressive year for a relatively successful year. Most of the companies are still trying to break down, so that they are not going to be able to get around the market, which is why we are going to get a better and better CEO. They are able to get a better, more successful market, and are looking to be a better place. They want to come with a better customer. They want to make sure that they are happy, and they want to get a better, more successful market. That's why they have to b"
+
+[Full output 3]
+ The following is a news report:
+
+ may be a very impressive year for a relatively successful year. Most of the companies are still trying to break down, so that they are not going to be able to get around the market, which is why we are going to get a better and better CEO. They are able to get a better, more successful market, and are looking to be a better place. They want to come with a better customer. They want to make sure that they are happy, and they want to get a better, more successful market. That's why they have to be a big help.
+
+================================================================================
+[Prompt 4] (prompt_tokens=14)
+Neural networks are a class of machine learning models that 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.0003364541626069695
+first_step_topk_ids=[15, 72, 29, 266, 828, 34, 559, 988, 4410, 290]
+first_step_topk_probs=[0.18844987452030182, 0.17235325276851654, 0.03777657076716423, 0.02210877276957035, 0.016175122931599617, 0.0154689010232687, 0.014793517999351025, 0.01237424649298191, 0.011572751216590405, 0.009898697957396507]
+
+[New tokens 4] count=256 first30=[415, 266, 413, 9, 39, 332, 266, 844, 592, 290, 266, 1422, 17, 351, 413, 9, 39, 332, 266, 844, 592, 290, 266, 1422, 15, 518, 266, 592, 290, 266]
+[New text 4] repr=' at the R&D is the only one in the game. The R&D is the only one in the game, but the one in the game has a different problem with a different device. The R&D is the only one that can be a lot more than the R&D. The R&D is the only one that can be a bit harder. The R&D is the only one that can be a bit harder and it is more likely to be a lot more difficult to play. The R&D is the only one that can be a lot more difficult to play and the R&D is the only one that can be a bit harder. This is beca'
+
+[Full output 4]
+ Neural networks are a class of machine learning models that  at the R&D is the only one in the game. The R&D is the only one in the game, but the one in the game has a different problem with a different device. The R&D is the only one that can be a lot more than the R&D. The R&D is the only one that can be a bit harder. The R&D is the only one that can be a bit harder and it is more likely to be a lot more difficult to play. The R&D is the only one that can be a lot more difficult to play and the R&D is the only one that can be a bit harder. This is because it is not the only one that can be a bit harder. The R&D is the only one that can be a lot easier to play and the R&D is the only one that can be a bit easier. The R&D is the only one that can be a bit harder than the R&D. The R&D is the only one that can be a little too. The R&D is the only one that can be a bit slower than the R&D. The R&D is the only one that can be a little too hard to play
+
+================================================================================
+[Prompt 5] (prompt_tokens=21)
+Here is a short Python snippet:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.00048236260772682726
+first_step_topk_ids=[29, 12, 15, 224, 17, 266, 434, 18, 371, 1691]
+first_step_topk_probs=[0.23896053433418274, 0.22852714359760284, 0.15291300415992737, 0.019615065306425095, 0.017939627170562744, 0.015690943226218224, 0.011479740962386131, 0.010040782392024994, 0.010040782392024994, 0.008398757316172123]
+
+[New tokens 5] count=256 first30=[29, 414, 649, 59, 29, 29, 414, 414, 414, 414, 414, 414, 414, 414, 414, 414, 414, 414, 414, 414, 414, 414, 414, 414, 414, 414, 414, 414, 414, 414]
+[New text 5] repr=': - VX:: - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -'
+
+[Full output 5]
+ Here is a short Python snippet:
+
+def fib(n):
+    : - VX:: - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+

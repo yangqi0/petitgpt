@@ -1,0 +1,92 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.7, top_p=0.9, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=3.4425287594785914e-05
+first_step_topk_ids=[286, 322, 534, 1816, 812, 694, 72, 266, 603, 15]
+first_step_topk_probs=[0.1589416265487671, 0.13901861011981964, 0.043549299240112305, 0.036427441984415054, 0.023310258984565735, 0.01864689216017723, 0.017832746729254723, 0.015597455203533173, 0.015597455203533173, 0.013642357662320137]
+
+[New tokens 1] count=55 first30=[286, 224, 2833, 787, 371, 266, 1043, 5605, 351, 561, 584, 261, 837, 979, 415, 266, 5122, 17, 722, 410, 554, 2690, 289, 322, 674, 4, 722, 410, 554, 6503]
+[New text 1] repr=' and !! You are the best!" The man had a great day at the beach. He was so happy to be there! He was so glad he had made a new friend. From then on, he was always with the man in the ocean. The end.'
+
+[Full output 1]
+ Once upon a time,  and !! You are the best!" The man had a great day at the beach. He was so happy to be there! He was so glad he had made a new friend. From then on, he was always with the man in the ocean. The end.
+
+================================================================================
+[Prompt 2] (prompt_tokens=11)
+In a distant future, humans and robots 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=3.300166645203717e-05
+first_step_topk_ids=[371, 15, 694, 606, 266, 645, 672, 286, 534, 17]
+first_step_topk_probs=[0.19477374851703644, 0.14249952137470245, 0.10425488650798798, 0.0797567218542099, 0.0638008788228035, 0.035709235817193985, 0.029869522899389267, 0.026125436648726463, 0.01827925816178322, 0.017481157556176186]
+
+[New tokens 2] count=256 first30=[15, 266, 837, 15, 2690, 745, 17, 3, 15, 509, 1180, 289, 847, 1394, 17, 1516, 979, 15, 509, 645, 3151, 290, 266, 3907, 17, 901, 2624, 261, 1576, 4220]
+[New text 2] repr=', the great, happy people., they love to play together. One day, they were playing in the park. They saw a big tree with a lot of leaves. The tree was very tall and had many leaves. "Look, a tall tree!" Lily said. "Let\'s climb it!" "No, Lily, we can\'t!" Tom said. "It\'s too high!" They started to climb the tree. It was hard, but they kept going. Suddenly, they heard a loud noise. It was a man. He was holding a branch and holding a rope. He was the tree\'s turn. "Hey, you kids!" the man shouted. "W'
+
+[Full output 2]
+ In a distant future, humans and robots , the great, happy people., they love to play together. One day, they were playing in the park. They saw a big tree with a lot of leaves. The tree was very tall and had many leaves. "Look, a tall tree!" Lily said. "Let's climb it!" "No, Lily, we can't!" Tom said. "It's too high!" They started to climb the tree. It was hard, but they kept going. Suddenly, they heard a loud noise. It was a man. He was holding a branch and holding a rope. He was the tree's turn. "Hey, you kids!" the man shouted. "What are you doing here? You can't get down!" "We are playing!" Tom and Lily were scared. They ran to the tree and tried to climb the tree. But the branch was too high. They fell down and hurt their knees. They were hurt and cried. "Help! Help!" they cried. The man heard them and came to help. He climbed down the tree and grabbed them. He grabbed them and put them back on the ground. He said, "I'm sorry, kids. The tree is too high and it's not good. It's not good to
+
+================================================================================
+[Prompt 3] (prompt_tokens=11)
+The following is a news report:
+
+
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.00010972235031658784
+first_step_topk_ids=[15, 17, 286, 29, 290, 694, 34, 1826, 338, 414]
+first_step_topk_probs=[0.21934472024440765, 0.1678023785352707, 0.10269005596637726, 0.048076190054416656, 0.035173289477825165, 0.03363757207989693, 0.023535294458270073, 0.022507715970277786, 0.021525004878640175, 0.020585209131240845]
+
+[New tokens 3] count=256 first30=[15, 574, 504, 3084, 261, 2116, 1573, 338, 484, 322, 7851, 446, 266, 2263, 2666, 17, 351, 4904, 1908, 484, 973, 261, 1463, 292, 616, 289, 7739, 289, 322, 261]
+[New text 3] repr=', who has received a news report that will be issued by the United States. The federal government will take a lot of time to prove to be a good news policy. But the government is still getting more attention. They are trying to do things right. They are not working properly, and they are being concerned. The government should be told they should not be on the ground. They should be told they should be careful and not to be on the ground. They should not be on the ground. They should not be on th'
+
+[Full output 3]
+ The following is a news report:
+
+, who has received a news report that will be issued by the United States. The federal government will take a lot of time to prove to be a good news policy. But the government is still getting more attention. They are trying to do things right. They are not working properly, and they are being concerned. The government should be told they should not be on the ground. They should be told they should be careful and not to be on the ground. They should not be on the ground. They should not be on the ground. They should be more careful and to stay on the ground. They should not be on the ground. They should be careful and not to be on the ground. They should be careful and to be on the ground. They should not be on the ground. They should be careful and not to be on the ground. They should be careful and not to step on the ground. They should be careful and stay on the ground. They should be careful and stay on the ground. They should be careful and stay on the ground. They should be careful and stay on the ground. They should be careful and listen to their parents. They should be careful and listen to their parents. They should always be careful and not to get hurt. They should
+
+================================================================================
+[Prompt 4] (prompt_tokens=14)
+Neural networks are a class of machine learning models that 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=1.8692238882067613e-05
+first_step_topk_ids=[15, 17, 286, 1646, 694, 436, 29, 266, 603, 322]
+first_step_topk_probs=[0.13752596080303192, 0.0673246756196022, 0.051504530012607574, 0.03151924908161163, 0.03151924908161163, 0.028827005997300148, 0.027568386867642403, 0.02305997721850872, 0.02305997721850872, 0.02109028957784176]
+
+[New tokens 4] count=256 first30=[15, 286, 354, 332, 1342, 289, 436, 261, 1546, 290, 266, 1610, 17, 351, 1043, 648, 292, 266, 1610, 332, 289, 698, 289, 699, 266, 1043, 2239, 17, 351, 844]
+[New text 4] repr=', and it is important to have a job in the industry. The best part of the industry is to get to know the best results. The only way to keep your own business in the future. It is very important to take care of your business. It also takes more time to take care of your business and your business. It is also important to take care of your business, and to always enjoy the business. It also gives you a lot of love and expertise. It is important to be able to do so. It is also important to be caref'
+
+[Full output 4]
+ Neural networks are a class of machine learning models that , and it is important to have a job in the industry. The best part of the industry is to get to know the best results. The only way to keep your own business in the future. It is very important to take care of your business. It also takes more time to take care of your business and your business. It is also important to take care of your business, and to always enjoy the business. It also gives you a lot of love and expertise. It is important to be able to do so. It is also important to be careful and helpful to others. It is important to know what is best for you. It is important to take care of your business and not get to know the right thing. It is important to be a good team. It helps you to be safe. It also helps you to enjoy your business and share with your business. It also allows you to have more time and experience. It also helps you to work out the business. It also allows you to achieve your business in the future. It is important to take care of your business. It also makes you happy and healthy. It also helps you to be a good team. It also helps you to be more creative and creative. It also helps you to improve your business
+
+================================================================================
+[Prompt 5] (prompt_tokens=21)
+Here is a short Python snippet:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.00028742695576511323
+first_step_topk_ids=[266, 17, 15, 34, 29, 534, 371, 694, 436, 338]
+first_step_topk_probs=[0.15396049618721008, 0.07537006586790085, 0.057659365236759186, 0.05514192208647728, 0.04411039873957634, 0.032271858304739, 0.023610597476363182, 0.01974942721426487, 0.01974942721426487, 0.01974942721426487]
+
+[New tokens 5] count=256 first30=[15, 224, 15, 224, 15, 224, 15, 224, 15, 224, 15, 224, 15, 224, 15, 224, 15, 224, 15, 224, 15, 224, 15, 224, 15, 224, 15, 224, 15, 224]
+[New text 5] repr=', , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , '
+
+[Full output 5]
+ Here is a short Python snippet:
+
+def fib(n):
+    , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , 
+
