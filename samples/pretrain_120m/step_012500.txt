@@ -1,0 +1,92 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.7, top_p=0.9, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.00012411874195095152
+first_step_topk_ids=[286, 410, 72, 15, 1816, 312, 266, 322, 979, 354]
+first_step_topk_probs=[0.12283040583133698, 0.0982573926448822, 0.06574638187885284, 0.06574638187885284, 0.06287585198879242, 0.060130588710308075, 0.03218560293316841, 0.026922112330794334, 0.026922112330794334, 0.01506825815886259]
+
+[New tokens 1] count=136 first30=[286, 312, 1560, 1312, 289, 601, 289, 266, 3907, 286, 847, 349, 559, 4416, 17, 569, 430, 1047, 5605, 1339, 15, 652, 1537, 329, 544, 4416, 286, 2220, 289, 266]
+[New text 1] repr=' and I\'m going to go to the park and play with my doll. It\'s fun!" So, she put on her doll and went to the park. There, she saw a big dog running towards her. She wanted to pet the dog, but she was scared. She started to cry. The dog was friendly and wagged its tail. It seemed to be friendly. But the dog was too strong and it was not friendly. It barked and wagged its tail. It was happy. Then, it ran away and the dog chased after it. It was so happy. It wagged its tail and licked its lips. It wa'
+
+[Full output 1]
+ Once upon a time,  and I'm going to go to the park and play with my doll. It's fun!" So, she put on her doll and went to the park. There, she saw a big dog running towards her. She wanted to pet the dog, but she was scared. She started to cry. The dog was friendly and wagged its tail. It seemed to be friendly. But the dog was too strong and it was not friendly. It barked and wagged its tail. It was happy. Then, it ran away and the dog chased after it. It was so happy. It wagged its tail and licked its lips. It was a happy day.
+
+================================================================================
+[Prompt 2] (prompt_tokens=11)
+In a distant future, humans and robots 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=3.410477074794471e-05
+first_step_topk_ids=[15, 266, 371, 694, 672, 338, 354, 350, 261, 72]
+first_step_topk_probs=[0.5139972567558289, 0.10773967206478119, 0.04823795706033707, 0.0352916419506073, 0.016522414982318878, 0.016522414982318878, 0.01580103486776352, 0.014451375231146812, 0.014451375231146812, 0.014451375231146812]
+
+[New tokens 2] count=118 first30=[15, 6709, 15, 286, 6709, 15, 371, 1299, 1772, 321, 1800, 289, 595, 894, 568, 17, 1516, 979, 15, 509, 5770, 289, 1170, 261, 15708, 321, 459, 1513, 3702, 17]
+[New text 2] repr=', scientists, and scientists, are always looking for ways to help each other. One day, they decide to build a tunnel for their next trip. They put their gear on the log and turn it on. They work hard and use their tools to find the best part of their mission. They use their tools to make a new tunnel for their own. They work hard and use their tools to make the tunnel. They work hard and have fun. They are proud of their work. They are proud of their work. They are happy with their work. They ar'
+
+[Full output 2]
+ In a distant future, humans and robots , scientists, and scientists, are always looking for ways to help each other. One day, they decide to build a tunnel for their next trip. They put their gear on the log and turn it on. They work hard and use their tools to find the best part of their mission. They use their tools to make a new tunnel for their own. They work hard and use their tools to make the tunnel. They work hard and have fun. They are proud of their work. They are proud of their work. They are happy with their work. They are ready to go.
+
+================================================================================
+[Prompt 3] (prompt_tokens=11)
+The following is a news report:
+
+
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.00012291142775211483
+first_step_topk_ids=[15, 17, 29, 286, 290, 349, 371, 321, 4, 266]
+first_step_topk_probs=[0.28092387318611145, 0.15036772191524506, 0.07361125200986862, 0.058884844183921814, 0.04504789412021637, 0.028826581314206123, 0.02636433206498623, 0.025213249027729034, 0.018446408212184906, 0.016134195029735565]
+
+[New tokens 3] count=256 first30=[17, 1008, 17, 3595, 3561, 371, 466, 1416, 15, 518, 371, 466, 3333, 289, 29, 414, 398, 17, 20, 8, 292, 266, 2904, 292, 266, 2904, 292, 266, 2904, 292]
+[New text 3] repr='.com. Other recommendations are not available, but are not limited to: - 1.1% of the date of the date of the date of the date of the date of the date. - 1.1% of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the'
+
+[Full output 3]
+ The following is a news report:
+
+.com. Other recommendations are not available, but are not limited to: - 1.1% of the date of the date of the date of the date of the date of the date. - 1.1% of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the date of the
+
+================================================================================
+[Prompt 4] (prompt_tokens=14)
+Neural networks are a class of machine learning models that 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=1.6819010852486826e-05
+first_step_topk_ids=[266, 15, 338, 694, 17, 354, 312, 261, 290, 464]
+first_step_topk_probs=[0.1994044929742813, 0.15951234102249146, 0.12760086357593536, 0.09761679172515869, 0.03496206924319267, 0.033435601741075516, 0.025578796863555908, 0.024462008848786354, 0.023393969982862473, 0.020461590960621834]
+
+[New tokens 4] count=256 first30=[15, 350, 771, 350, 851, 289, 595, 316, 1337, 266, 2684, 292, 261, 873, 574, 504, 354, 17, 893, 1351, 15, 354, 395, 322, 2098, 289, 898, 261, 873, 574]
+[New text 4] repr=', as well as information to help you understand the effects of a person who has it. For example, it can be difficult to find a person who is a person who can help. It can be difficult to find a person who is a person who is a person who will be a person who is a person who will help you. One of the people who are an agent can use a person who is a person who has a person who is a person who is a person who is a person who is a person who makes the person responsible for it. The person who is a p'
+
+[Full output 4]
+ Neural networks are a class of machine learning models that , as well as information to help you understand the effects of a person who has it. For example, it can be difficult to find a person who is a person who can help. It can be difficult to find a person who is a person who is a person who will be a person who is a person who will help you. One of the people who are an agent can use a person who is a person who has a person who is a person who is a person who is a person who is a person who makes the person responsible for it. The person who is a person who is a person who is a person who is a person who is a person who is a person who helps the person with their client. The person who is a person who is a person who can do something for a person who is a person who can help. One of the person who has a person who is a person who can help you. One of the person who can help you. One of the person who can help you find a person who can help to find a person who can help you. The person who is a person who can help you, and it can help you in doing something for a person who is a person who is a person who can help you. In fact
+
+================================================================================
+[Prompt 5] (prompt_tokens=21)
+Here is a short Python snippet:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.00012102833716198802
+first_step_topk_ids=[266, 316, 354, 694, 15, 603, 261, 332, 312, 338]
+first_step_topk_probs=[0.20465083420276642, 0.06131034716963768, 0.05863344669342041, 0.053625211119651794, 0.04485560953617096, 0.03752010688185692, 0.03588194027543068, 0.032817065715789795, 0.03138423711061478, 0.03001396544277668]
+
+[New tokens 5] count=256 first30=[354, 332, 266, 1835, 1203, 289, 1368, 329, 266, 2599, 17, 569, 332, 570, 261, 2007, 485, 606, 261, 2007, 485, 726, 261, 2007, 485, 726, 261, 2007, 485, 726]
+[New text 5] repr=' it is the perfect place to sit on the file. It is also a bit more like a bit more than a bit more than a bit more than a bit more than a bit more than a bit more than a bit more than a bit more than a bit more than a bit more than a bit more than a bit more than a bit more than a bit more than a bit more than a bit more than a bit more. This is a little more than a bit more than a bit more than a bit more than a bit more than a bit more than a bit more than a bit more than a bit more than a bit'
+
+[Full output 5]
+ Here is a short Python snippet:
+
+def fib(n):
+     it is the perfect place to sit on the file. It is also a bit more like a bit more than a bit more than a bit more than a bit more than a bit more than a bit more than a bit more than a bit more than a bit more than a bit more than a bit more than a bit more than a bit more than a bit more than a bit more than a bit more than a bit more. This is a little more than a bit more than a bit more than a bit more than a bit more than a bit more than a bit more than a bit more than a bit more than a bit more than a bit more than the first and then a bit more than a bit more than a bit more than a bit more than a bit more than a bit more than a bit more than a bit more than a bit more than a bit more than a bit more than a bit more than a bit more than a bit more than a bit more. I will get to work with the more than one more of the more than a bit more than a bit more than one. I know this is the perfect place to sit on the file. This way I have some time to sit on the file. It is a good way to sit on the file
+

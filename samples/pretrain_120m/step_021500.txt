@@ -1,0 +1,92 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.7, top_p=0.9, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.0005565114552155137
+first_step_topk_ids=[72, 15, 266, 322, 2003, 1691, 292, 1816, 3418, 4275]
+first_step_topk_probs=[0.2358132153749466, 0.045207079499959946, 0.03781411796808243, 0.022130755707621574, 0.020240437239408493, 0.0177033469080925, 0.01619119755923748, 0.01619119755923748, 0.011328542605042458, 0.011328542605042458]
+
+[New tokens 1] count=256 first30=[18337, 371, 5461, 17, 696, 395, 742, 601, 1387, 266, 1356, 292, 261, 3702, 17, 696, 371, 466, 1010, 289, 1548, 604, 4014, 17, 696, 371, 466, 1010, 289, 1548]
+[New text 1] repr=" Prices are closed. We can't go without the cost of a trip. We are not here to change our prices. We are not here to change our prices. We are here to help. We have the same problem. We are here to help. We are here to help. We will get back in time. We will get back in time. We will be here for our first time. We will be here for your first time. We will have a long journey. We will stay here for the next few weeks. We will be here for our first time. We will be here for our first time. We will"
+
+[Full output 1]
+ Once upon a time,  Prices are closed. We can't go without the cost of a trip. We are not here to change our prices. We are not here to change our prices. We are here to help. We have the same problem. We are here to help. We are here to help. We will get back in time. We will get back in time. We will be here for our first time. We will be here for your first time. We will have a long journey. We will stay here for the next few weeks. We will be here for our first time. We will be here for our first time. We will be here for the next two weeks. We will be here for the next months. We will be here for our first time. We will not be here for you. We will be here for the next months. We will be here for our next date. We will be here for our second time. We will be here for the next year. We will be here for our next trip. We will be here for the next day. We will be here for our next trip. We will have a long journey. We will have a long journey. We will go on holiday. We will have a long journey. We will be here for the
+
+================================================================================
+[Prompt 2] (prompt_tokens=11)
+In a distant future, humans and robots 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.00037410392542369664
+first_step_topk_ids=[72, 15, 338, 286, 292, 266, 290, 392, 1164, 828]
+first_step_topk_probs=[0.41393423080444336, 0.17723791301250458, 0.01818700134754181, 0.01818700134754181, 0.015212773345410824, 0.013913367874920368, 0.012169359251856804, 0.011638031341135502, 0.011129901744425297, 0.00622938945889473]
+
+[New tokens 2] count=256 first30=[15, 385, 436, 261, 1671, 2223, 292, 603, 289, 1170, 261, 2869, 292, 11740, 5814, 17, 583, 332, 261, 837, 822, 289, 1170, 261, 2869, 292, 11740, 5814, 17, 324]
+[New text 2] repr=', we have a clear idea of how to build a network of intelligent humans. This is a great way to build a network of intelligent humans. A network of intelligent humans, we have a strong team of friends to use their intelligent ones. They have a unique network of understanding and we have a great team of intelligent humans. So, we have a network of intelligent humans who can build a network of intelligent humans. We have a network of intelligent humans, and we have a network of intelligent humans. '
+
+[Full output 2]
+ In a distant future, humans and robots , we have a clear idea of how to build a network of intelligent humans. This is a great way to build a network of intelligent humans. A network of intelligent humans, we have a strong team of friends to use their intelligent ones. They have a unique network of understanding and we have a great team of intelligent humans. So, we have a network of intelligent humans who can build a network of intelligent humans. We have a network of intelligent humans, and we have a network of intelligent humans. We have a network of intelligent humans, who can build relationships with other humans. Our network of intelligent humans can build a network of intelligent humans. We have a network of intelligent humans, like humans, but we have a network of intelligent humans, who can build a network of intelligent humans. We have a network of intelligent humans. We have a network of intelligent humans and humans, and we have a network of intelligent humans. We have a network of intelligent humans, including humans, who can build and build and build their network of intelligent humans. We have a network of intelligent humans, like humans, who can build and build and build their network of intelligent humans. We have a network of intelligent humans, but we have a network of intelligent humans. We have a network of intelligent
+
+================================================================================
+[Prompt 3] (prompt_tokens=11)
+The following is a news report:
+
+
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.00034551421413198113
+first_step_topk_ids=[72, 15, 292, 392, 286, 698, 371, 1164, 672, 322]
+first_step_topk_probs=[0.07411238551139832, 0.06482258439064026, 0.036281097680330276, 0.033182114362716675, 0.030347831547260284, 0.02538488432765007, 0.02538488432765007, 0.022202949970960617, 0.01624402590095997, 0.015534792095422745]
+
+[New tokens 3] count=43 first30=[371, 466, 3603, 289, 6541, 261, 629, 1573, 17, 583, 332, 261, 668, 292, 858, 16, 591, 1753, 286, 1753, 289, 266, 2900, 1437, 17, 351, 1573, 332, 11852, 286]
+[New text 3] repr=' are not allowed to submit a new report. This is a work of high-end marketing and marketing to the general public. The report is reviewed and conducted by the Department of Marketing and Marketing for the department.'
+
+[Full output 3]
+ The following is a news report:
+
+ are not allowed to submit a new report. This is a work of high-end marketing and marketing to the general public. The report is reviewed and conducted by the Department of Marketing and Marketing for the department.
+
+================================================================================
+[Prompt 4] (prompt_tokens=14)
+Neural networks are a class of machine learning models that 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.0027202749624848366
+first_step_topk_ids=[15, 72, 266, 392, 371, 1102, 292, 1164, 828, 434]
+first_step_topk_probs=[0.23106464743614197, 0.13523085415363312, 0.019832856953144073, 0.01658947952091694, 0.015172474086284637, 0.015172474086284637, 0.012137122452259064, 0.012137122452259064, 0.011100420728325844, 0.010152267292141914]
+
+[New tokens 4] count=256 first30=[2026, 267, 2049, 17, 351, 5138, 371, 1102, 289, 891, 16, 24681, 292, 266, 4763, 15, 2249, 289, 266, 1668, 392, 86, 2820, 15, 579, 332, 261, 2464, 16, 2272]
+[New text 4] repr=' called sacks. The facilities are home to two-thirds of the mill, according to the city’s office, which is a single-time job. The facilities are at least 50 per cent of the mill, according to the city’s office. The facilities are in the best part of the system, according to the city’s office. The facilities are on the first floor of the mill, according to the city’s office. The building is in the center of the mill, according to the city’s office. The rooms are in the center of the mill, accordi'
+
+[Full output 4]
+ Neural networks are a class of machine learning models that  called sacks. The facilities are home to two-thirds of the mill, according to the city’s office, which is a single-time job. The facilities are at least 50 per cent of the mill, according to the city’s office. The facilities are in the best part of the system, according to the city’s office. The facilities are on the first floor of the mill, according to the city’s office. The building is in the center of the mill, according to the city’s office. The rooms are in the center of the mill, according to the city’s office. The mill is at the top of the mill, according to the city’s office. The building has a roof of 100 square feet. The mill is on the floor of the mill, according to the city’s office. The mill is on the floor of the mill, according to the city’s office. The mill is on the floor of the mill, according to the city’s office. The mill is on the floor of the mill, according to the city’s office. The mill is on the floor of the mill, according to the city’s office. The mill is on the floor of the mill, according to
+
+================================================================================
+[Prompt 5] (prompt_tokens=21)
+Here is a short Python snippet:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.013901735655963421
+first_step_topk_ids=[15, 72, 292, 371, 434, 17, 266, 29, 3, 392]
+first_step_topk_probs=[0.07582605630159378, 0.05305340141057968, 0.04640330746769905, 0.04243972525000572, 0.03549932315945625, 0.018171796575188637, 0.017378395423293114, 0.015200055204331875, 0.013901735655963421, 0.009301985614001751]
+
+[New tokens 5] count=256 first30=[7656, 15, 1646, 436, 1400, 660, 261, 1670, 616, 350, 1646, 436, 1400, 660, 261, 1670, 616, 350, 1646, 436, 1959, 660, 17, 312, 717, 570, 3143, 290, 266, 814]
+[New text 5] repr=' happiness, i have never been a full time as i have never been a full time as i have ever been. I am also interested in the first place and i have never been a full time. i have never been a full time when i have ever been a full time when i have ever been a full time. i have never been a full time. i have never been a full time when i have never been a full time and i have never been a full time. i have never been a full time before i have ever been a full time. i have never been a full time an'
+
+[Full output 5]
+ Here is a short Python snippet:
+
+def fib(n):
+     happiness, i have never been a full time as i have never been a full time as i have ever been. I am also interested in the first place and i have never been a full time. i have never been a full time when i have ever been a full time when i have ever been a full time. i have never been a full time. i have never been a full time when i have never been a full time and i have never been a full time. i have never been a full time before i have ever been a full time. i have never been a full time and i have never been a full time. i have never been a full time as i have never been a full time. i have never been a full time before i have never been a full time. i have never been a full time or a full time. i have never been a full time or a full time. i have never been a full time. i have never been a full time. i have never been a full time before i have ever been a full time. i have never been a full time or a full time before i have ever been a full time. i have never been a full time before i have never been a full time. i have never been
+

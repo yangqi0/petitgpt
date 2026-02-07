@@ -81,6 +81,51 @@ def _resolve_path(p: str) -> str:
     return str(path)
 
 
+
+def _resolve_resume_path(resume_path: str, out_dir: Path, resume_step: int = -1) -> Path | None:
+    """Resolve a checkpoint path.
+
+    Accepts:
+      - a direct .pt file path
+      - a directory containing latest.pt and/or step_XXXXXX.pt
+      - a relative path (resolved against PROJECT_ROOT)
+    """
+    if not resume_path:
+        return None
+
+    p = Path(_resolve_path(resume_path))
+
+    # If user passed an output directory, select a checkpoint inside it.
+    if p.is_dir():
+        if resume_step is not None and resume_step >= 0:
+            cand = p / f"step_{resume_step:06d}.pt"
+            if cand.exists():
+                return cand
+            # Sometimes users keep checkpoints under out_dir/ckpt or similar; try a shallow search.
+            cand2 = next(p.glob(f"**/step_{resume_step:06d}.pt"), None)
+            if cand2 is not None and cand2.exists():
+                return cand2
+
+        latest = p / "latest.pt"
+        if latest.exists():
+            return latest
+
+        # Fallback to the largest step_*.pt
+        steps = sorted(p.glob("step_*.pt"))
+        if steps:
+            return steps[-1]
+        return None
+
+    # If it's a file, use it.
+    if p.is_file():
+        return p
+
+    # If not found, try interpreting it relative to out_dir.
+    p2 = out_dir / resume_path
+    if p2.is_file():
+        return p2
+
+    return None
 def set_seed(seed: int) -> None:
     import random
 
@@ -497,6 +542,7 @@ def parse_args() -> argparse.Namespace:
     # Resume
     ap.add_argument("--resume_path", type=str, default="")
     ap.add_argument("--resume_full", action="store_true")
+    ap.add_argument("--resume_step", type=int, default=-1, help="If resume_path is a directory, load step_XXXXXX.pt. -1: auto (prefer latest.pt)")
 
     # torch.compile
     ap.add_argument("--compile", action="store_true")
@@ -598,15 +644,18 @@ def main() -> None:
     global_step = 0
     local_step = 0
     if args.resume_path:
-        resume_path = Path(_resolve_path(args.resume_path))
+        resolved = _resolve_resume_path(args.resume_path, out_dir=out_dir, resume_step=int(args.resume_step))
+    if resolved is None:
+        print(f"[resume] WARNING: could not resolve resume_path={args.resume_path!r} (resume_step={args.resume_step}). Starting from scratch.")
+    else:
         global_step, local_step = load_ckpt(
-            resume_path=resume_path,
+            resume_path=resolved,
             model=model,
             optim=optim,
             scaler=scaler if use_fp16 else None,
             resume_full=bool(args.resume_full),
         )
-        print(f"[resume] loaded {resume_path} (global_step={global_step}, local_step={local_step})")
+        print(f"[resume] loaded {resolved} (global_step={global_step}, local_step={local_step})")
 
     # Compile
     if args.compile:

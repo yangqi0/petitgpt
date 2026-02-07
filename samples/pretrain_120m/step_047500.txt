@@ -1,0 +1,92 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.7, top_p=0.9, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=2.8619951990549453e-05
+first_step_topk_ids=[72, 3063, 3794, 5794, 10083, 7878, 3136, 4194, 2686, 2898]
+first_step_topk_probs=[0.07313677668571472, 0.01676204614341259, 0.01533030066639185, 0.01340868417173624, 0.01121588796377182, 0.010257872752845287, 0.006863789167255163, 0.006863789167255163, 0.006564111914485693, 0.006564111914485693]
+
+[New tokens 1] count=43 first30=[7878, 466, 289, 1785, 349, 559, 1379, 1052, 17, 312, 1015, 742, 834, 289, 322, 261, 2971, 873, 9252, 17, 312, 7878, 466, 289, 1785, 349, 2415, 1052, 17, 917]
+[New text 1] repr=" promise not to mess with my things again. I don't want to be a bad person anymore. I promise not to mess with anything again. And I promise not to mess with anything again. The end."
+
+[Full output 1]
+ Once upon a time,  promise not to mess with my things again. I don't want to be a bad person anymore. I promise not to mess with anything again. And I promise not to mess with anything again. The end.
+
+================================================================================
+[Prompt 2] (prompt_tokens=11)
+In a distant future, humans and robots 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=4.8975212848745286e-05
+first_step_topk_ids=[72, 10083, 3063, 2686, 3136, 6440, 5742, 370, 2898, 3372]
+first_step_topk_probs=[0.09790579974651337, 0.020522169768810272, 0.019626159220933914, 0.012010624632239342, 0.0080365976318717, 0.007029232103377581, 0.007029232103377581, 0.00642882427200675, 0.006148134358227253, 0.005142693407833576]
+
+[New tokens 2] count=256 first30=[3063, 603, 385, 395, 700, 604, 918, 4261, 541, 603, 385, 395, 700, 604, 918, 4261, 541, 603, 385, 395, 700, 604, 918, 4261, 541, 603, 385, 395, 700, 604]
+[New text 2] repr=' wonder how we can make our own decisions about how we can make our own decisions about how we can make our own decisions about how we can make our own decisions about what we can make. We can also show us how we can make our own decisions about how we can make our own decisions about how we can make our own decisions about how we can make our own decisions about how we can make our own decisions about how we can make our own decisions about how we can make our own decisions about how we can mak'
+
+[Full output 2]
+ In a distant future, humans and robots  wonder how we can make our own decisions about how we can make our own decisions about how we can make our own decisions about how we can make our own decisions about what we can make. We can also show us how we can make our own decisions about how we can make our own decisions about how we can make our own decisions about how we can make our own decisions about how we can make our own decisions about how we can make our own decisions about how we can make our own decisions about how we can make our own decisions about how we can make our own decisions about how we can make our own decisions about how we can make our own decisions about how we can make our own decisions about how we can make our own decisions about how we can make our own decisions about how we can make our own decisions about how we can make our own decisions about how we can make our own decisions about how we can make our own decisions about how we can make our own decisions about how we can make our own decisions about how we can make our own decisions about how we can make our own decisions about how we can make our own decisions about how we can make our own decisions about how we can make our own decisions about how we can make our own decisions about how we can make our
+
+================================================================================
+[Prompt 3] (prompt_tokens=11)
+The following is a news report:
+
+
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=4.647445894079283e-05
+first_step_topk_ids=[72, 3063, 10083, 6440, 3136, 485, 392, 370, 2898, 2413]
+first_step_topk_probs=[0.053173407912254333, 0.029761062934994698, 0.023807168006896973, 0.010193727910518646, 0.00932302139699459, 0.00815440621227026, 0.007457890547811985, 0.007457890547811985, 0.0068208687007427216, 0.006523061543703079]
+
+[New tokens 3] count=256 first30=[2537, 288, 349, 261, 4688, 292, 654, 303, 478, 291, 77, 1179, 286, 266, 3197, 15, 266, 649, 2921, 80, 575, 17, 569, 430, 261, 2007, 292, 261, 539, 406]
+[New text 3] repr='rasted with a bag of Chilagarjee and the dog, the Villemia. It\'s a bit of a "thank you" moment, but it\'s a bit more so I\'m not sure. I don\'t know if I\'m going to tell you it\'s a bit more "Does it take a long time to get to the things I\'m trying to do the next week?" I don\'t know. I know what I\'m trying to do. I know it\'s not going to be a bit of a surprise, but I know I\'m not going to be trying to do it. I know I\'m trying to do it. I\'m going to try to make it a little more clear. I\'m going to go'
+
+[Full output 3]
+ The following is a news report:
+
+rasted with a bag of Chilagarjee and the dog, the Villemia. It's a bit of a "thank you" moment, but it's a bit more so I'm not sure. I don't know if I'm going to tell you it's a bit more "Does it take a long time to get to the things I'm trying to do the next week?" I don't know. I know what I'm trying to do. I know it's not going to be a bit of a surprise, but I know I'm not going to be trying to do it. I know I'm trying to do it. I'm going to try to make it a little more clear. I'm going to go to the park and get to the beach. It's going to be a little bit more fun to do it. I'm going to go to the beach. I'm going to try to do it. I'm going to try to make a little more of a little bit more of a bit more thoughtful about what I'm doing and just let me know that I'll get to the beach. I'm going to try to make it a little more thoughtful. And I'm going to try to make it a
+
+================================================================================
+[Prompt 4] (prompt_tokens=14)
+Neural networks are a class of machine learning models that 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=5.909116589464247e-05
+first_step_topk_ids=[72, 3063, 10083, 2900, 3136, 6719, 5742, 1214, 485, 1894]
+first_step_topk_probs=[0.04891460761427879, 0.032729942351579666, 0.02862733043730259, 0.010721156373620033, 0.008201864548027515, 0.007843765430152416, 0.007501298561692238, 0.0068605681881308556, 0.006561027839779854, 0.006561027839779854]
+
+[New tokens 4] count=256 first30=[12006, 289, 266, 3426, 2499, 778, 5865, 292, 266, 2738, 292, 2924, 17, 893, 485, 851, 541, 266, 5378, 15, 1833, 1863, 266, 1484, 415, 4759, 2736, 4099, 17, 81]
+[New text 4] repr=' admission to the Musisterian Museum of the World of Art. For more information about the museum, please visit the website at http://www.northamerica.org. The Museum of the World of Art is a series of works by Jim Michael, along with the use of some of the most advanced techniques and techniques to make a world of art. The collection of works by the museum is a series of works by Jim Michael, who is a master of the art and engineering of the museum, including works by the artist. The first work o'
+
+[Full output 4]
+ Neural networks are a class of machine learning models that  admission to the Musisterian Museum of the World of Art. For more information about the museum, please visit the website at http://www.northamerica.org. The Museum of the World of Art is a series of works by Jim Michael, along with the use of some of the most advanced techniques and techniques to make a world of art. The collection of works by the museum is a series of works by Jim Michael, who is a master of the art and engineering of the museum, including works by the artist. The first work of the museum is the collection of works by the museum of the World of Art. The first work of the museum is a series of works by the museum of the World of Art. The first work of the museum is by the works by the museum of the World of Art. The second work of the museum is by the work of the museum of the World of Art. The third work of the museum is by the work of the museum of the World of Art. The museum is by the work of the museum of the World of Art. The museum is by the work of the museum of the World of Art. The museum is by the work of the museum of the World of Art. The museum is by the work of
+
+================================================================================
+[Prompt 5] (prompt_tokens=21)
+Here is a short Python snippet:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=5.0664744776440784e-05
+first_step_topk_ids=[72, 3136, 3063, 10083, 2898, 6503, 1494, 3372, 3888, 4079]
+first_step_topk_probs=[0.06627515703439713, 0.024820543825626373, 0.019855033606290817, 0.015882905572652817, 0.012705421075224876, 0.010627633891999722, 0.008889633230865002, 0.008501501753926277, 0.007775342557579279, 0.007435862440615892]
+
+[New tokens 5] count=256 first30=[2331, 289, 322, 592, 292, 266, 813, 3031, 286, 813, 3031, 2794, 290, 266, 1422, 17, 351, 3578, 1107, 266, 891, 332, 338, 316, 371, 266, 813, 3031, 286, 266]
+[New text 5] repr=' appear to be one of the most powerful and most powerful players in the game. The difference between the two is that you are the most powerful and the most powerful players in the game. The only difference between the two is that you are the most powerful and the most powerful players in the game. The more powerful players in the game is that you are the most powerful and the most powerful players in the game. In the game, you are the most powerful players in the game. The most powerful players '
+
+[Full output 5]
+ Here is a short Python snippet:
+
+def fib(n):
+     appear to be one of the most powerful and most powerful players in the game. The difference between the two is that you are the most powerful and the most powerful players in the game. The only difference between the two is that you are the most powerful and the most powerful players in the game. The more powerful players in the game is that you are the most powerful and the most powerful players in the game. In the game, you are the most powerful players in the game. The most powerful players in the game are the most powerful players in the game. The more powerful players in the game are the most powerful players in the game. The more powerful players in the game are the most powerful players in the game. They are the most powerful players in the game. The more powerful players in the game are the most powerful players in the game. The more powerful players in the game are the most powerful players in the game. The more powerful players in the game are the most powerful players in the game. The more powerful players in the game are the most powerful players in the game. The more powerful players in the game are the most powerful players in the game. The more powerful players in the game are the most powerful players in the game. The more powerful players in the
+

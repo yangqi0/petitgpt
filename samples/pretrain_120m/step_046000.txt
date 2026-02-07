@@ -1,0 +1,92 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.7, top_p=0.9, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=4.49454782938119e-05
+first_step_topk_ids=[72, 3794, 3136, 3063, 10083, 1731, 3602, 2876, 2900, 558]
+first_step_topk_probs=[0.022265812382102013, 0.011918030679225922, 0.011397676542401314, 0.010900041088461876, 0.009969010017812252, 0.00871941726654768, 0.006379262078553438, 0.00610073609277606, 0.005834371317178011, 0.005579638760536909]
+
+[New tokens 1] count=33 first30=[15364, 17, 1008, 17, 1008, 17, 1217, 4074, 681, 412, 1442, 1364, 292, 1080, 332, 21631, 15, 2151, 266, 5505, 3162, 415, 434, 27, 3277, 12, 673, 6702, 16, 2340]
+[New text 1] repr='edu.com.com. To determine if your localization of data is compromised, contact the Information Center at (813) 434-1224.'
+
+[Full output 1]
+ Once upon a time, edu.com.com. To determine if your localization of data is compromised, contact the Information Center at (813) 434-1224.
+
+================================================================================
+[Prompt 2] (prompt_tokens=11)
+In a distant future, humans and robots 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=3.5499560908647254e-05
+first_step_topk_ids=[72, 3063, 10083, 370, 3136, 3372, 5742, 2876, 5092, 2900]
+first_step_topk_probs=[0.05250311642885208, 0.019662830978631973, 0.015729140490293503, 0.010065228678286076, 0.0073638781905174255, 0.006734888534992933, 0.006734888534992933, 0.006159622687846422, 0.006159622687846422, 0.00589068653061986]
+
+[New tokens 2] count=256 first30=[9622, 17, 2712, 15, 266, 8904, 338, 332, 1824, 289, 322, 266, 813, 1884, 292, 493, 15, 371, 266, 813, 1884, 292, 493, 266, 1437, 15, 286, 459, 4695, 371]
+[New text 2] repr='03.11, the gene that is known to be the most popular of all, are the most popular of all the public, and their names are the most common in the world. But most of the people who have ever encountered the gene in the past, and those who have encountered the gene, for the most part, are the most popular of the world. To them, it is more common to find them, for the most part, and to be the most popular of the world. The same gene is known to be the most popular, but in the past, there are many dif'
+
+[Full output 2]
+ In a distant future, humans and robots 03.11, the gene that is known to be the most popular of all, are the most popular of all the public, and their names are the most common in the world. But most of the people who have ever encountered the gene in the past, and those who have encountered the gene, for the most part, are the most popular of the world. To them, it is more common to find them, for the most part, and to be the most popular of the world. The same gene is known to be the most popular, but in the past, there are many different types of people who have a problem with their gene. The most popular one is the most popular of all. The most popular one is the most popular of all. The most popular one is the most popular one. The most popular one is the most popular one is the most popular one. The most popular one is the most popular one. The most popular one is the most popular one. The most popular one is the most popular one. The most popular one is the most popular one. The most popular one is the most popular one. The most popular one is the most popular one. The most popular one is the most popular one. The most popular one is the most popular one
+
+================================================================================
+[Prompt 3] (prompt_tokens=11)
+The following is a news report:
+
+
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=4.9674381443765014e-05
+first_step_topk_ids=[10083, 3063, 72, 3136, 2900, 370, 1731, 29334, 28110, 558]
+first_step_topk_probs=[0.02751408889889717, 0.016837801784276962, 0.01610265113413334, 0.010774671100080013, 0.009424096904695034, 0.007209595292806625, 0.006894816178828478, 0.006894816178828478, 0.006593781523406506, 0.00630588922649622]
+
+[New tokens 3] count=256 first30=[28110, 536, 374, 15, 290, 559, 1990, 15, 312, 1996, 584, 261, 10641, 979, 17, 312, 1996, 584, 261, 2971, 979, 15, 286, 312, 1560, 1312, 289, 601, 289, 2867]
+[New text 3] repr=" reappearant, in my house, I've had a terrible day. I've had a bad day, and I'm going to go to sleep. I'm not sure if I'm going to do this, but I'm going to go to sleep. I'm going to sleep, but I'm going to do it. I'm going to go to sleep. I'm going to sleep. I'm going to sleep, but I'm going to sleep. I'm going to sleep, so I can sleep. I'm going to sleep. I'm going to sleep. I'm going to sleep. I'm going to sleep, but I'm going to sleep. I'm going to sleep. I'm going to sleep. I'm going to sle"
+
+[Full output 3]
+ The following is a news report:
+
+ reappearant, in my house, I've had a terrible day. I've had a bad day, and I'm going to go to sleep. I'm not sure if I'm going to do this, but I'm going to go to sleep. I'm going to sleep, but I'm going to do it. I'm going to go to sleep. I'm going to sleep. I'm going to sleep, but I'm going to sleep. I'm going to sleep, so I can sleep. I'm going to sleep. I'm going to sleep. I'm going to sleep. I'm going to sleep, but I'm going to sleep. I'm going to sleep. I'm going to sleep. I'm going to sleep. I'm going to sleep. I'm going to sleep. I'm going to sleep. I'm going to sleep. I'm going to sleep. I'm going to sleep. I'm going to sleep. I'm going to sleep. I'm going to sleep. I'm going to sleep. I'm going to sleep. I'm going to sleep. I'm going to sleep. I'm going to sleep. I'm going to sleep. I'm going to sleep. I'm going to sleep. I
+
+================================================================================
+[Prompt 4] (prompt_tokens=14)
+Neural networks are a class of machine learning models that 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=7.116203050827608e-05
+first_step_topk_ids=[72, 3063, 10083, 2900, 5742, 6719, 6892, 10933, 3136, 5597]
+first_step_topk_probs=[0.028200693428516388, 0.022558962926268578, 0.020632067695260048, 0.015094750560820103, 0.010100260376930237, 0.007726871874183416, 0.007726871874183416, 0.007389508653432131, 0.007389508653432131, 0.005653100088238716]
+
+[New tokens 4] count=44 first30=[3063, 694, 266, 1043, 332, 321, 34, 351, 1043, 332, 266, 592, 338, 484, 3481, 266, 2404, 1294, 17, 696, 392, 264, 466, 1303, 2399, 266, 5225, 332, 361, 2758]
+[New text 4] repr=' wonder what the best is for? The best is the one that will serve the whole family. We’re not sure whether the package is an issue, but we’re sure there will be some for sure.'
+
+[Full output 4]
+ Neural networks are a class of machine learning models that  wonder what the best is for? The best is the one that will serve the whole family. We’re not sure whether the package is an issue, but we’re sure there will be some for sure.
+
+================================================================================
+[Prompt 5] (prompt_tokens=21)
+Here is a short Python snippet:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=5.7936205848818645e-05
+first_step_topk_ids=[3136, 72, 10083, 3372, 2876, 3063, 2898, 15104, 6892, 5742]
+first_step_topk_probs=[0.025103706866502762, 0.016064105555415154, 0.010748883709311485, 0.008223079144954681, 0.008223079144954681, 0.00786405149847269, 0.0065779960714280605, 0.0065779960714280605, 0.0065779960714280605, 0.005262025166302919]
+
+[New tokens 5] count=256 first30=[3044, 989, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7]
+[New text 5] repr=' worth $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$'
+
+[Full output 5]
+ Here is a short Python snippet:
+
+def fib(n):
+     worth $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+

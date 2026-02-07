@@ -1,0 +1,92 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.7, top_p=0.9, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.00019892460841219872
+first_step_topk_ids=[72, 15, 1816, 1766, 412, 266, 29, 354, 322, 286]
+first_step_topk_probs=[0.2877109944820404, 0.17607071995735168, 0.0369064062833786, 0.022585634142160416, 0.022585634142160416, 0.020656460896134377, 0.020656460896134377, 0.0188920721411705, 0.018067222088575363, 0.012641138397157192]
+
+[New tokens 1] count=159 first30=[4032, 286, 8984, 645, 1043, 1765, 17, 901, 3058, 1394, 818, 979, 286, 584, 5467, 292, 1047, 17, 1516, 979, 15, 266, 4032, 286, 8984, 3483, 289, 601, 321, 261]
+[New text 1] repr=' King and Queen were best friends. They played together every day and had lots of fun. One day, the King and Queen decided to go for a walk. They wanted to explore the big forest. The King and Queen started walking and soon came to a big tree. The King wanted to climb the tree, but Queen said it was too high for them. The King said he had to be patient and wait. The King said he had to go and he did not give up. He said he would have to be patient and wait. The King and Queen said goodbye to the'
+
+[Full output 1]
+ Once upon a time,  King and Queen were best friends. They played together every day and had lots of fun. One day, the King and Queen decided to go for a walk. They wanted to explore the big forest. The King and Queen started walking and soon came to a big tree. The King wanted to climb the tree, but Queen said it was too high for them. The King said he had to be patient and wait. The King said he had to go and he did not give up. He said he would have to be patient and wait. The King and Queen said goodbye to the tree and started walking home. The King and Queen were happy. They had a great day and thanked the King for giving them a hug. The King and Queen smiled and said they would be best friends forever.
+
+================================================================================
+[Prompt 2] (prompt_tokens=11)
+In a distant future, humans and robots 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=9.880687139229849e-05
+first_step_topk_ids=[72, 15, 286, 17, 694, 266, 290, 354, 369, 988]
+first_step_topk_probs=[0.637614369392395, 0.19974058866500854, 0.018745388835668564, 0.008026384748518467, 0.00671378243714571, 0.0056158397346735, 0.004911907948553562, 0.003929249010980129, 0.0037576935719698668, 0.0037576935719698668]
+
+[New tokens 2] count=256 first30=[72, 17, 901, 371, 1210, 5939, 17, 901, 436, 1576, 15, 2219, 2685, 286, 2574, 2685, 17, 901, 371, 570, 1040, 888, 17, 1516, 979, 15, 509, 371, 290, 266]
+[New text 2] repr='e. They are still alive. They have big, red eyes and green eyes. They are also very different. One day, they are in the same place. They are in the same place. They are very big and loud. They have long, blue eyes and long tails. They are very loud. "Look, we are the same ones!" Ben says. "We are so different. We are the same ones." "Yes, we are the same ones," Mia says. "But they are also very different. They are also very different. They are different. They are different. They are different. T'
+
+[Full output 2]
+ In a distant future, humans and robots e. They are still alive. They have big, red eyes and green eyes. They are also very different. One day, they are in the same place. They are in the same place. They are very big and loud. They have long, blue eyes and long tails. They are very loud. "Look, we are the same ones!" Ben says. "We are so different. We are the same ones." "Yes, we are the same ones," Mia says. "But they are also very different. They are also very different. They are different. They are different. They are different. They are different. They are different. They are different. They are different. They are different. They are different. They are different. They are different. They are different. They are different. They are different. They are different. They are different. They are different. They are different. They are different. They are different. They are different. They are different. They are different. They are different. They are different. They are different. They are different. They are different. They are different. They are different. They are different. They are different. They are different. They are different. They are different. They are different.
+
+================================================================================
+[Prompt 3] (prompt_tokens=11)
+The following is a news report:
+
+
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=7.445902156177908e-05
+first_step_topk_ids=[72, 392, 286, 698, 672, 29, 15, 17, 371, 1787]
+first_step_topk_probs=[0.10184745490550995, 0.062327608466148376, 0.049858566373586655, 0.036477308720350266, 0.036477308720350266, 0.03190496191382408, 0.03051195666193962, 0.029179785400629044, 0.020416293293237686, 0.017077496275305748]
+
+[New tokens 3] count=110 first30=[1977, 322, 361, 2876, 1203, 321, 261, 629, 1944, 17, 539, 5102, 332, 266, 814, 616, 312, 436, 261, 629, 1944, 286, 354, 430, 261, 2007, 292, 261, 1463, 292]
+[New text 3] repr='\'ll be an interesting place for a new role. "This is the first time I have a new role and it\'s a bit of a lot of the time. "You are a very good person," says Jim. "I think we are all going to be a part of this team." So, they both laughed and hugged. "We are going to have a great time and you can\'t wait to get your chance." Jim agreed and they both went back to their own company and shared the new skills they had with their new team.'
+
+[Full output 3]
+ The following is a news report:
+
+'ll be an interesting place for a new role. "This is the first time I have a new role and it's a bit of a lot of the time. "You are a very good person," says Jim. "I think we are all going to be a part of this team." So, they both laughed and hugged. "We are going to have a great time and you can't wait to get your chance." Jim agreed and they both went back to their own company and shared the new skills they had with their new team.
+
+================================================================================
+[Prompt 4] (prompt_tokens=14)
+Neural networks are a class of machine learning models that 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.00022190590971149504
+first_step_topk_ids=[72, 34, 15, 1395, 2259, 91, 4410, 264, 2463, 1646]
+first_step_topk_probs=[0.3209497332572937, 0.036009542644023895, 0.022036779671907425, 0.01685851253569126, 0.016122451052069664, 0.008629726245999336, 0.007892610505223274, 0.007718390319496393, 0.006750908214598894, 0.0064561557956039906]
+
+[New tokens 4] count=256 first30=[72, 15, 439, 17, 37, 17, 286, 439, 17, 39, 17, 434, 4307, 12, 286, 439, 17, 42, 17, 39, 17, 434, 4307, 12, 286, 439, 17, 42, 17, 39]
+[New text 4] repr='e, G.B. and G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G'
+
+[Full output 4]
+ Neural networks are a class of machine learning models that e, G.B. and G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G.G.D. (AP) and G
+
+================================================================================
+[Prompt 5] (prompt_tokens=21)
+Here is a short Python snippet:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.0001693784724920988
+first_step_topk_ids=[1691, 15, 814, 29, 266, 603, 559, 17, 72, 338]
+first_step_topk_probs=[0.10257864743471146, 0.0897207036614418, 0.04802402853965759, 0.040170393884181976, 0.03673920780420303, 0.02350977249443531, 0.022483309730887413, 0.022483309730887413, 0.020562876015901566, 0.017985370010137558]
+
+[New tokens 5] count=256 first30=[603, 289, 682, 261, 2850, 17, 2012, 948, 261, 4260, 292, 261, 2850, 15, 266, 539, 26, 5, 332, 261, 4853, 16, 16318, 1481, 1766, 15, 369, 261, 1481, 1365]
+[New text 5] repr=' how to use a source. After using a copy of a source, the "7" is a multi-dimensional text name, or a text number. In this example, it is "e-ed" that one can\'t read an image, but it\'s a "e-ed" or "e-ed" or "e-ed" or "e-ed" or "e-ed" or "e-ed" in the "e-ed" as "e-ed" in the "e-ed" as "e-ed" or "e-ed" and "e-ed" in the "e-ed" and "e-ed" in the "e-ed" as "e-ed" in the "e-ed" as "e-ed" as "e-ed" or "e-ed" or "e-ed" as "e-ed" as "e-ed" as "e-ed" as "e-ed" as "e-ed" as "e-ed" as "e-ed" as "e-ed" as "e-'
+
+[Full output 5]
+ Here is a short Python snippet:
+
+def fib(n):
+     how to use a source. After using a copy of a source, the "7" is a multi-dimensional text name, or a text number. In this example, it is "e-ed" that one can't read an image, but it's a "e-ed" or "e-ed" or "e-ed" or "e-ed" or "e-ed" or "e-ed" in the "e-ed" as "e-ed" in the "e-ed" as "e-ed" or "e-ed" and "e-ed" in the "e-ed" and "e-ed" in the "e-ed" as "e-ed" in the "e-ed" as "e-ed" as "e-ed" or "e-ed" or "e-ed" as "e-ed" as "e-ed" as "e-ed" as "e-ed" as "e-ed" as "e-ed" as "e-ed" as "e-ed" as "e-ed" as "e-ed" as "e-ed" as "e-ed"
+

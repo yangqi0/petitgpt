@@ -1,0 +1,92 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.7, top_p=0.9, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=2.750223211478442e-05
+first_step_topk_ids=[72, 3063, 3794, 1731, 3602, 3136, 2898, 7878, 1430, 4194]
+first_step_topk_probs=[0.05748942866921425, 0.026914702728390694, 0.024615762755274773, 0.021530242636799812, 0.018009275197982788, 0.017222978174686432, 0.015064119361341, 0.012600600719451904, 0.0100797638297081, 0.009218796156346798]
+
+[New tokens 1] count=126 first30=[6719, 354, 17, 1516, 979, 15, 261, 1508, 2777, 4066, 6844, 410, 3151, 290, 266, 3907, 17, 1009, 2624, 261, 1576, 4220, 286, 2711, 289, 6335, 354, 17, 959, 266]
+[New text 1] repr=' imagine it. One day, a little girl named Lily was playing in the park. She saw a big tree and wanted to climb it. But the tree was too tall for her to reach. Lily was sad. She wanted to climb the tree, but she was too small. She had an idea. She found a big stick and put it on the ground. Then, she pushed the stick up to the tree. The stick made a little hole in the tree. Lily was happy. She climbed down the tree and went back to her mom. Her mom was happy too. They had a fun day at the park.'
+
+[Full output 1]
+ Once upon a time,  imagine it. One day, a little girl named Lily was playing in the park. She saw a big tree and wanted to climb it. But the tree was too tall for her to reach. Lily was sad. She wanted to climb the tree, but she was too small. She had an idea. She found a big stick and put it on the ground. Then, she pushed the stick up to the tree. The stick made a little hole in the tree. Lily was happy. She climbed down the tree and went back to her mom. Her mom was happy too. They had a fun day at the park.
+
+================================================================================
+[Prompt 2] (prompt_tokens=11)
+In a distant future, humans and robots 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=2.3088954549166374e-05
+first_step_topk_ids=[72, 3063, 4079, 6892, 5742, 3136, 2898, 10083, 5092, 2876]
+first_step_topk_probs=[0.07213028520345688, 0.06308895349502563, 0.017286093905568123, 0.014459202997386456, 0.013827899470925331, 0.011061538010835648, 0.009674999862909317, 0.008092793636023998, 0.007739453110843897, 0.0074015408754348755]
+
+[New tokens 2] count=179 first30=[29134, 15, 3058, 1586, 894, 568, 286, 266, 1797, 15, 645, 13776, 446, 266, 4560, 292, 266, 3860, 17, 351, 3860, 645, 2026, 289, 266, 6617, 15, 4063, 266, 1797]
+[New text 2] repr=' offenses, played against each other and the law, were attacked by the leader of the police. The police were called to the crowd, saying the law was a good one. After the battle, the police got the victory, and the police gave up. The police were not the same. The police were in the fight and the police were in the fight. The police were in a hurry, but they were not ready to fight. The police were not prepared for the fight. The police were in a hurry, but they had to take the fight. The police'
+
+[Full output 2]
+ In a distant future, humans and robots  offenses, played against each other and the law, were attacked by the leader of the police. The police were called to the crowd, saying the law was a good one. After the battle, the police got the victory, and the police gave up. The police were not the same. The police were in the fight and the police were in the fight. The police were in a hurry, but they were not ready to fight. The police were not prepared for the fight. The police were in a hurry, but they had to take the fight. The police were very happy. They knew they had to fight, but they had to be quick. The police had to fight because they had to fight, so they had to fight. In the end, the police took the fight and took away the law. The police were both in the fight, and they were never seen again.
+
+================================================================================
+[Prompt 3] (prompt_tokens=11)
+The following is a news report:
+
+
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=2.2395459382096305e-05
+first_step_topk_ids=[3063, 72, 10083, 5742, 2898, 1731, 4079, 6892, 6719, 6440]
+first_step_topk_probs=[0.07397906482219696, 0.02649606764316559, 0.012970926240086555, 0.011345057748258114, 0.010376009158790112, 0.009075400419533253, 0.009075400419533253, 0.007937824353575706, 0.007591250352561474, 0.006942836567759514]
+
+[New tokens 3] count=256 first30=[4272, 31440, 290, 7431, 15, 7431, 15, 7431, 15, 7431, 15, 7431, 15, 7431, 15, 7431, 15, 7431, 15, 7431, 15, 7431, 15, 7431, 15, 7431, 15, 7431, 15, 7431]
+[New text 3] repr=' premiered in Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston'
+
+[Full output 3]
+ The following is a news report:
+
+ premiered in Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston, Boston
+
+================================================================================
+[Prompt 4] (prompt_tokens=14)
+Neural networks are a class of machine learning models that 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=2.6467665520613082e-05
+first_step_topk_ids=[3063, 72, 5742, 6719, 6892, 10083, 7878, 3136, 956, 5582]
+first_step_topk_probs=[0.08841199427843094, 0.03462263569235802, 0.02533046156167984, 0.0185321606695652, 0.01550148706883192, 0.012966442853212357, 0.011341131292283535, 0.010845969431102276, 0.009919550269842148, 0.009072263725101948]
+
+[New tokens 4] count=64 first30=[6713, 261, 629, 2869, 292, 293, 283, 378, 285, 3158, 17, 569, 332, 3448, 266, 814, 616, 290, 266, 3981, 15, 286, 354, 332, 1027, 1416, 290, 266, 3981, 17]
+[New text 4] repr=' announce a new network of danmental devices. It is currently the first time in the UK, and it is now available in the UK. We have a new network of danmental devices, and the new network of danmental devices. The new network is now available in the UK.'
+
+[Full output 4]
+ Neural networks are a class of machine learning models that  announce a new network of danmental devices. It is currently the first time in the UK, and it is now available in the UK. We have a new network of danmental devices, and the new network of danmental devices. The new network is now available in the UK.
+
+================================================================================
+[Prompt 5] (prompt_tokens=21)
+Here is a short Python snippet:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=4.952695235260762e-05
+first_step_topk_ids=[3063, 5742, 6892, 2898, 1430, 4079, 956, 10083, 3136, 3888]
+first_step_topk_probs=[0.03964758664369583, 0.034677840769290924, 0.018561718985438347, 0.0169762521982193, 0.012987123802304268, 0.0118778171017766, 0.01135922409594059, 0.009086733683943748, 0.009086733683943748, 0.008310581557452679]
+
+[New tokens 5] count=256 first30=[11614, 289, 322, 2620, 289, 266, 745, 15, 509, 371, 1062, 574, 371, 554, 932, 286, 395, 742, 878, 1214, 541, 580, 17, 959, 15, 321, 266, 745, 15, 266]
+[New text 5] repr=" remembered to be true to the people, they are those who are so good and can't even think about them. But, for the people, the things they are, they are, they are they the people they are. They are the people they are. They are the people they are, they are the people they are, they are the people they are. They are the people they are. They are the people they are and they are the people they are. They are the people they are. They are the people that they are, they are the people they are. The"
+
+[Full output 5]
+ Here is a short Python snippet:
+
+def fib(n):
+     remembered to be true to the people, they are those who are so good and can't even think about them. But, for the people, the things they are, they are, they are they the people they are. They are the people they are. They are the people they are, they are the people they are, they are the people they are. They are the people they are. They are the people they are and they are the people they are. They are the people they are. They are the people that they are, they are the people they are. They are the people that they are the people they are and they are the people they are. They are the people that they are the people they are. They are the people they are the people that they are and they are the people they are. They are the people that they are the people they are and they are the people that they are and they are the people that they are. They are the people that they are in the world. They are the people that they are in the world. They are the people that they are the people that they are and they are the people that they are in the world. They are the people that they are and they are the people that they are in
+

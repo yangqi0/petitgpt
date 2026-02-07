@@ -1,0 +1,92 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.7, top_p=0.9, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.00029961828840896487
+first_step_topk_ids=[15, 674, 316, 410, 17, 979, 286, 29, 322, 332]
+first_step_topk_probs=[0.24526596069335938, 0.0562119297683239, 0.05375765636563301, 0.05141053721308708, 0.03289809823036194, 0.03289809823036194, 0.023017894476652145, 0.02201290801167488, 0.02105179987847805, 0.019253641366958618]
+
+[New tokens 1] count=187 first30=[584, 261, 1576, 4688, 17, 569, 410, 1040, 3602, 286, 584, 5467, 292, 1379, 17, 1516, 979, 15, 266, 3895, 410, 3151, 290, 266, 3907, 17, 722, 2624, 261, 1576]
+[New text 1] repr=' had a big bag. It was very nice and had lots of things. One day, the boy was playing in the park. He saw a big, red ball. He was very excited! He wanted to play with it. But the ball was too hard to play. The boy got angry. He tried to catch the ball, but it was too hard. He ran after the ball and started to run away. But the ball was too hard. The boy was sad. He had an idea. He said, "Let\'s play with the ball and the ball." But the ball was too hard. The ball was too hard to play. The ball wa'
+
+[Full output 1]
+ Once upon a time,  had a big bag. It was very nice and had lots of things. One day, the boy was playing in the park. He saw a big, red ball. He was very excited! He wanted to play with it. But the ball was too hard to play. The boy got angry. He tried to catch the ball, but it was too hard. He ran after the ball and started to run away. But the ball was too hard. The boy was sad. He had an idea. He said, "Let's play with the ball and the ball." But the ball was too hard. The ball was too hard to play. The ball was too heavy for the ball. The ball fell down and it fell off the ground. The ball was very sad. The ball felt bad. The ball was sad. It wanted to play with the ball. The ball was happy. It went back to the park.
+
+================================================================================
+[Prompt 2] (prompt_tokens=11)
+In a distant future, humans and robots 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=3.6362143873702735e-05
+first_step_topk_ids=[15, 17, 286, 371, 332, 266, 289, 290, 509, 338]
+first_step_topk_probs=[0.25090110301971436, 0.20986975729465485, 0.10273996740579605, 0.06012869253754616, 0.05499275028705597, 0.03847692906856537, 0.01969599537551403, 0.018013646826148033, 0.016475001350045204, 0.014409898780286312]
+
+[New tokens 2] count=197 first30=[484, 322, 856, 289, 592, 1203, 321, 266, 1320, 616, 17, 583, 332, 266, 813, 1342, 1976, 15, 261, 939, 16, 2272, 873, 392, 86, 2633, 332, 289, 266, 745]
+[New text 2] repr=' will be used to one place for the same time. This is the most important thing, a long-time person’s attention is to the people who are the most important things that are not a lot of time. One day, a little girl named Lucy came to the city and said, "Hello, little girl! I am a man who is a friend. I will go back to my father. I hope you will be a good boy and I will love you. I love you and I will have a great time." Lucy was very excited and said, "Thank you, cat. You are very kind of me." The'
+
+[Full output 2]
+ In a distant future, humans and robots  will be used to one place for the same time. This is the most important thing, a long-time person’s attention is to the people who are the most important things that are not a lot of time. One day, a little girl named Lucy came to the city and said, "Hello, little girl! I am a man who is a friend. I will go back to my father. I hope you will be a good boy and I will love you. I love you and I will have a great time." Lucy was very excited and said, "Thank you, cat. You are very kind of me." The man said, "You are very kind of you. You are a good friend. You can be my friend. I will help you. I will give you a new friend. I will share my toys with you." Lucy and the man played together and played with the ball all day. They had a lot of fun. The end.
+
+================================================================================
+[Prompt 3] (prompt_tokens=11)
+The following is a news report:
+
+
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.000994427944533527
+first_step_topk_ids=[29, 332, 15, 371, 34, 17, 484, 329, 351, 541]
+first_step_topk_probs=[0.37687456607818604, 0.08637499809265137, 0.0826038122177124, 0.05285892263054848, 0.03867243230342865, 0.02587665244936943, 0.015835748985409737, 0.009691005572676659, 0.009691005572676659, 0.008476265706121922]
+
+[New tokens 3] count=256 first30=[29, 3064, 29, 324, 16, 27, 16, 1275, 16, 21, 16, 22, 16, 22, 16, 25, 16, 23, 16, 1733, 16, 21, 16, 19, 16, 21, 16, 25, 16, 24]
+[New text 3] repr=': High: A-8-20-2-3-3-6-4-10-2-0-2-6-5-0-4-10-old-1-1-2-6-2-1-2-4-2-4-0-1-4-2-0-0-2-2-6-6-7-2-0-3-2-6-2-2-3-2-3-2-0-3-8-6-2-2-1-1-2-2-5-7-1-2-6-2-2-0-9-6-2-2-2-8-2-2-0-2-0-2-1-2-2-3-1-2-2-2-2-2-3-2-2-2-1-2-1-2-3-0-2-2-0-2-3-0-2-0-3-2-4-2-0-2-2-2-0-1-2-3-2-2-1-2-4-1-2'
+
+[Full output 3]
+ The following is a news report:
+
+: High: A-8-20-2-3-3-6-4-10-2-0-2-6-5-0-4-10-old-1-1-2-6-2-1-2-4-2-4-0-1-4-2-0-0-2-2-6-6-7-2-0-3-2-6-2-2-3-2-3-2-0-3-8-6-2-2-1-1-2-2-5-7-1-2-6-2-2-0-9-6-2-2-2-8-2-2-0-2-0-2-1-2-2-3-1-2-2-2-2-2-3-2-2-2-1-2-1-2-3-0-2-2-0-2-3-0-2-0-3-2-4-2-0-2-2-2-0-1-2-3-2-2-1-2-4-1-2
+
+================================================================================
+[Prompt 4] (prompt_tokens=14)
+Neural networks are a class of machine learning models that 
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.00031813501846045256
+first_step_topk_ids=[332, 570, 15, 371, 17, 484, 504, 395, 18, 735]
+first_step_topk_probs=[0.5500879287719727, 0.04318247362971306, 0.031592972576618195, 0.027632880955934525, 0.025272594764828682, 0.021139618009328842, 0.016172168776392937, 0.016172168776392937, 0.01414503250271082, 0.012371985241770744]
+
+[New tokens 4] count=256 first30=[570, 504, 261, 1498, 292, 745, 17, 3, 412, 1173, 332, 261, 561, 17, 569, 332, 261, 1818, 292, 745, 574, 834, 289, 828, 694, 332, 533, 674, 17, 787]
+[New text 4] repr=' also has a community of people. your child is a man. It is a kind of people who want to see what is up there. You are using a small book that can make people get a little better. It is an eye of a man who can give you a book for your friends. It has a lot of changes that you can find in your house. You can also see if you want to give me a book or a message, or what the man is reading a book. You can have a book or a woman who has a book with a book, and a book. You are very pretty and kind of '
+
+[Full output 4]
+ Neural networks are a class of machine learning models that  also has a community of people. your child is a man. It is a kind of people who want to see what is up there. You are using a small book that can make people get a little better. It is an eye of a man who can give you a book for your friends. It has a lot of changes that you can find in your house. You can also see if you want to give me a book or a message, or what the man is reading a book. You can have a book or a woman who has a book with a book, and a book. You are very pretty and kind of the book that you can make a book for your book. You will be a book and a book. I love the book and the book that you are. I have a book that is a very good book, and you can make a name on the book. You can also read books on the book. You can also say: "Vas: You are the book. You are the name of the book that I like a book. You are a book." I want to read the book on the book. I have a book of a book, and a book that is a book. I have a book with a book, a
+
+================================================================================
+[Prompt 5] (prompt_tokens=21)
+Here is a short Python snippet:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=[BOS] eos_id=[EOS]
+first_step_eos_prob=0.005464889574795961
+first_step_topk_ids=[64, 332, 29, 34, 15, 12, 95, 4, 18, 66]
+first_step_topk_probs=[0.10878952592611313, 0.06961546838283539, 0.05325699597597122, 0.04260258749127388, 0.04074251279234886, 0.03896365314722061, 0.027261793613433838, 0.02607152983546257, 0.015258385799825191, 0.015258385799825191]
+
+[New tokens 5] count=256 first30=[4, 3, 266, 813, 3344, 292, 266, 2072, 292, 266, 5144, 17, 583, 332, 361, 2297, 321, 266, 2404, 906, 338, 332, 361, 2557, 292, 266, 2565, 17, 583, 332]
+[New text 5] repr='! the most cases of the record of the Sun. This is an designed for the whole product that is an application of the model. This is the same of the number of the market has been needed. It is an important role of the report of the lender. This is a good reason for the $20.0.3 of the text is the claim. You can also give the next step is that the company can be considered in the development of the future. The process is to meet the number of the data that are the first one is not a key to any other '
+
+[Full output 5]
+ Here is a short Python snippet:
+
+def fib(n):
+    ! the most cases of the record of the Sun. This is an designed for the whole product that is an application of the model. This is the same of the number of the market has been needed. It is an important role of the report of the lender. This is a good reason for the $20.0.3 of the text is the claim. You can also give the next step is that the company can be considered in the development of the future. The process is to meet the number of the data that are the first one is not a key to any other types of the task. The 3.0 is not a company. It is not a case to be provided by the “consrordal”. This is not a chance to be a whole. There is no time that the compensation is a bit of the latest information. This is the best-term to be of the Federal Association. The various cases are the leading to the following information and the information, or the company will be the best for you. There are also the key to this material that is to determine what the company has been done in the US. The tools and the risk of the software are in the right place. The assistance is that it is not a real code
+
