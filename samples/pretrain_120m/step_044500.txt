@@ -5,68 +5,62 @@ precision=bf16, temperature=0.7, top_p=0.9, top_k=0, max_new_tokens=256, min_new
 Once upon a time, 
 
 [Debug]
-bos_id=[BOS] eos_id=[EOS]
-first_step_eos_prob=3.07786904159002e-05
-first_step_topk_ids=[72, 3794, 3136, 3063, 7878, 10083, 6719, 5794, 2898, 3372]
-first_step_topk_probs=[0.05503159761428833, 0.030801087617874146, 0.030801087617874146, 0.0157668087631464, 0.012061879970133305, 0.010549950413405895, 0.008824658580124378, 0.007718508597463369, 0.007381510455161333, 0.007381510455161333]
+bos_id=2 eos_id=3
+first_step_eos_prob=2.769994353002403e-05
+first_step_topk_ids=[3136, 72, 3063, 1731, 2413, 3602, 4194, 2898, 2686, 3169]
+first_step_topk_probs=[0.03735942393541336, 0.02613937295973301, 0.013991398736834526, 0.011703302152454853, 0.010236325673758984, 0.009361980482935905, 0.009361980482935905, 0.009361980482935905, 0.00748905586078763, 0.007162075489759445]
 
-[New tokens 1] count=256 first30=[5254, 377, 3132, 9436, 884, 879, 316, 392, 264, 261, 4165, 21958, 15, 316, 392, 264, 1440, 289, 3075, 412, 616, 286, 1937, 446, 948, 266, 4380, 17, 1441, 266]
-[New text 1] repr=' Online Huge Age – If you’re a paid subscriber, you’re able to save your time and money by using the internet. With the right tools and software you can use to help you save your time and money by using the right tools and software you can save your time and money by using the online form. When you use the online form, you’ll have a great time and money. When you have the right tools and software you can use to save your time and money by using the online form. In the end, you’ll be able to save'
-
+[New tokens 1] count=98 first30=[11025, 539, 48, 13881, 15, 395, 312, 595, 4534, 2588, 287, 13881, 13850, 286, 836, 15, 539, 12974, 4, 787, 395, 595, 489, 1949, 266, 4571, 5605, 1339, 15, 509]
 [Full output 1]
- Once upon a time,  Online Huge Age – If you’re a paid subscriber, you’re able to save your time and money by using the internet. With the right tools and software you can use to help you save your time and money by using the right tools and software you can save your time and money by using the online form. When you use the online form, you’ll have a great time and money. When you have the right tools and software you can use to save your time and money by using the online form. In the end, you’ll be able to save your time and money by using the online form to save your time and money by using the online form. You can also use the online form to save your time and money by using the online form. Once you have the money, you can save your time and money by using the online form. You can also use the online form to save your time and money by using the online form. You can also use the online form to save your time and money by using the online form. You can also use the online form to save your time and money by using the online form. You can also use the online form to save your time and money by using the online form. The online form is available
+ Once upon a time, aimed "Mommy, can I help?" Her mommy smiled and said, "Yes! You can help me clean the kitchen!" So, they started to clean the kitchen together. After they finished cleaning, her mommy put on some pretty clothes. She said, "Look at my pretty dress!" The little girl was so happy she hugged her mommy tightly. She said "Thank you for helping me, Mommy." They both laughed and hugged each other. The end.
 
 ================================================================================
 [Prompt 2] (prompt_tokens=11)
 In a distant future, humans and robots 
 
 [Debug]
-bos_id=[BOS] eos_id=[EOS]
-first_step_eos_prob=1.9235600120737217e-05
-first_step_topk_ids=[72, 3063, 3136, 10083, 5742, 2686, 6892, 3372, 4079, 6719]
-first_step_topk_probs=[0.16407877206802368, 0.03145511820912361, 0.014726262539625168, 0.013468406163156033, 0.013468406163156033, 0.011780179105699062, 0.007882400415837765, 0.006894364021718502, 0.006894364021718502, 0.006593347992748022]
+bos_id=2 eos_id=3
+first_step_eos_prob=3.5532120818970725e-05
+first_step_topk_ids=[72, 3063, 3136, 2686, 2413, 2876, 4079, 2898, 10083, 5742]
+first_step_topk_probs=[0.08015447109937668, 0.03752574697136879, 0.030018452554941177, 0.01756833679974079, 0.014053676277399063, 0.011242147535085678, 0.008993081748485565, 0.007522390689700842, 0.007193954661488533, 0.006879858672618866]
 
-[New tokens 2] count=256 first30=[558, 266, 897, 446, 521, 17257, 6709, 17, 494, 266, 2161, 10350, 86, 15, 266, 897, 2342, 289, 842, 266, 1513, 5224, 292, 12059, 338, 721, 322, 856, 290, 266]
-[New text 2] repr='ated the world by unnamed scientists. In the early 1970s, the world began to provide the next generation of robots that could be used in the world. The future of the world was a dream. As such, the world began to create a new world that would have more than just the size of the world. In the early 1970s, scientists worked in the field of science, science, and technology. These engineers and engineers worked in the field, where they worked in the field and the field of science. Their work was als'
-
+[New tokens 2] count=256 first30=[1367, 533, 459, 9386, 289, 322, 3409, 541, 354, 17, 959, 674, 332, 361, 11803, 648, 292, 266, 897, 579, 504, 1400, 660, 6306, 350, 702, 15, 286, 332, 1027]
 [Full output 2]
- In a distant future, humans and robots ated the world by unnamed scientists. In the early 1970s, the world began to provide the next generation of robots that could be used in the world. The future of the world was a dream. As such, the world began to create a new world that would have more than just the size of the world. In the early 1970s, scientists worked in the field of science, science, and technology. These engineers and engineers worked in the field, where they worked in the field and the field of science. Their work was also the first to develop a new world in the field. In the early 1970s, scientists had the opportunity to become an expert in science. They were also involved in various fields of science, science, and technology. They were also involved in the field of science and technology. In the early 1980s, scientists were involved in the field of science and technology. They also were involved in the field of science and technology. In the early 1970s, scientists were involved in the field of science and technology. They also were involved in the field of science and technology. In the early 1970s, scientists were involved in the field of science and technology. They also worked in the field of science and technology. In the early 1980s, scientists
+ In a distant future, humans and robots  open up their minds to be heard about it. But there is an enormous part of the world which has never been identified as such, and is now being dismissed as an alien of the "traumatic stress disorder." The problem with this would be that it was not simply "the brain", but rather a single person or entity, that can be a very powerful force to detect anything in their lives. So what can be done? To begin with, we are going to think about what you really want to do with the whole thing that's coming out of your head. You've got to figure out where you're going to be aware of all these things you need to know before you get out of it. That way, it won't matter how much you've gotten to that sort of reality. Your goal is to put those things into perspective and move on. There is no other way to explain that when you're in some kind of culture you don't know. It just takes time and effort, so that you don't have to take any action and look at the world around you. That's what I did for years. What are some people who don't understand why they don't know how to look at the eyes of people, their parents, or the teachers.
 
 ================================================================================
-[Prompt 3] (prompt_tokens=11)
+[Prompt 3] (prompt_tokens=12)
 The following is a news report:
 
 
 
+
 [Debug]
-bos_id=[BOS] eos_id=[EOS]
-first_step_eos_prob=2.0735520593007095e-05
-first_step_topk_ids=[72, 3063, 10083, 3136, 370, 485, 2898, 2900, 5742, 3794]
-first_step_topk_probs=[0.09155597537755966, 0.03135962784290314, 0.022943193092942238, 0.016785606741905212, 0.011231652460992336, 0.010272295214235783, 0.007858477532863617, 0.006873439997434616, 0.006873439997434616, 0.0062863389030098915]
+bos_id=2 eos_id=3
+first_step_eos_prob=2.2580361473956145e-05
+first_step_topk_ids=[3136, 3063, 2413, 72, 2898, 10083, 1776, 1731, 6440, 19165]
+first_step_topk_probs=[0.02582261711359024, 0.02469518594443798, 0.016524141654372215, 0.013821851462125778, 0.0120893195271492, 0.009670768864452839, 0.006766370497643948, 0.006766370497643948, 0.006766370497643948, 0.006470946595072746]
 
-[New tokens 3] count=198 first30=[72, 75, 6925, 366, 431, 1060, 445, 266, 2094, 292, 13268, 392, 86, 5008, 15, 541, 289, 2132, 261, 629, 16, 8970, 3468, 937, 17, 351, 1573, 6675, 266, 3134]
-[New text 3] repr='ehua Pudio from the University of Alaska’s River, about to begin a new-market transportation program. The report highlights the efforts of the state’s electricians and the need to tackle this new technology program. “It’s a great opportunity to create a real-time solution to this important university community,” says Pudio. “We want to create a new learning environment that will meet the needs of our students and students in the future.” The report also covers the cost of transportation to the U'
-
+[New tokens 3] count=256 first30=[6782, 15, 369, 266, 539, 36, 1157, 434, 53, 12, 414, 494, 16, 40, 291, 414, 1122, 414, 324, 434, 37, 12, 351, 20871, 292, 266, 2263, 2666, 332, 13149]
 [Full output 3]
  The following is a news report:
 
-ehua Pudio from the University of Alaska’s River, about to begin a new-market transportation program. The report highlights the efforts of the state’s electricians and the need to tackle this new technology program. “It’s a great opportunity to create a real-time solution to this important university community,” says Pudio. “We want to create a new learning environment that will meet the needs of our students and students in the future.” The report also covers the cost of transportation to the University of Alaska’s River, the state’s speed to manage its electricians and other departments.” “We want to do this by making a quality project,” says Pudio. “The new technology program will provide a real-time solution to this important university community.” The report also covers the cost of transportation to the University of Alaska’s River, about the cost of transportation to the University of Alaska’s River, about $2 million.
+
+37, or the "A." (R) - In-Ear - 10 - A (B) The statute of the United States is invalidated by the Act of 1943. See also Hofmann v. United States, 549 U.S. 1 (1971), (C) -2 (G) -4 (R) (D) -1 (1978). A (B)(1) (R) has been filed under the Act of 1842 to determine whether or not the extent of the law applied to the Amendment. See also Washington v. United Kingdom, 677 F.3d. 277, 788, 428 (2) (D), (II) See also, e.g., at 966. U.S., at 317, 876 (5th Cir. 1962); see also Hofoff v. United Arab Emirates, 790 U.S.-N.C. 667, 269 (2). See also Haczego v. United ais v. United anis v. U. S.C. 334, 898 (1982), (iii) (vii) (l) (d) (Vii) (a
 
 ================================================================================
 [Prompt 4] (prompt_tokens=14)
 Neural networks are a class of machine learning models that 
 
 [Debug]
-bos_id=[BOS] eos_id=[EOS]
-first_step_eos_prob=2.9084261768730357e-05
-first_step_topk_ids=[72, 3063, 10083, 5742, 3136, 6719, 6892, 2900, 5597, 7878]
-first_step_topk_probs=[0.08036261051893234, 0.03598054125905037, 0.018418118357658386, 0.01610945723950863, 0.01610945723950863, 0.012886656448245049, 0.009428080171346664, 0.009428080171346664, 0.009016439318656921, 0.007886250503361225]
+bos_id=2 eos_id=3
+first_step_eos_prob=4.4239292037673295e-05
+first_step_topk_ids=[3063, 72, 3136, 10083, 2900, 4079, 6719, 10171, 5742, 2898]
+first_step_topk_probs=[0.04348372295498848, 0.03976952284574509, 0.023275161162018776, 0.01424370426684618, 0.010896677151322365, 0.00996592827141285, 0.009530805051326752, 0.009114683605730534, 0.009114683605730534, 0.009114683605730534]
 
-[New tokens 4] count=256 first30=[3793, 329, 3586, 2017, 15, 3605, 17, 414, 539, 1414, 1043, 629, 1547, 504, 660, 266, 2746, 289, 595, 1683, 349, 459, 961, 289, 1254, 286, 10705, 290, 459, 918]
-[New text 4] repr=' reported on June 15, 2011. - "The best new technology has been the opportunity to help customers with their business to grow and thrive in their own." - "The best technology is the ability to help customers in the world. The best technology is the ability to create and operate products to meet customers and to deliver products to customers." - "The best technology is the ability to provide customers with the tools to deliver products to customers in the United States." - "The best technology is'
-
+[New tokens 4] count=256 first30=[14894, 266, 1505, 292, 629, 3712, 286, 1547, 17, 1141, 53, 23624, 8929, 1296, 45, 5285, 1227, 397, 25395, 1296, 45, 5285, 15, 397, 25395, 95, 1141, 45, 5285, 286]
 [Full output 4]
- Neural networks are a class of machine learning models that  reported on June 15, 2011. - "The best new technology has been the opportunity to help customers with their business to grow and thrive in their own." - "The best technology is the ability to help customers in the world. The best technology is the ability to create and operate products to meet customers and to deliver products to customers." - "The best technology is the ability to provide customers with the tools to deliver products to customers in the United States." - "The best technology is the ability to deliver products to customers in the United States." - "The best technology is the ability to deliver products to customers in the United States." - "The best technology is the ability to deliver products to customers in the United States." - "The best technology is the ability to deliver products to customers in the United States." - "The best technology is the ability to deliver products to customers in the United States." - "The best technology is the ability to deliver products to customers in the United States." - "The best technology is the ability to deliver products to customers in the United States." - "The best technology is the ability to deliver products to customers in the United States." - "The best technology is the ability to deliver products to customers in the United States." - "The
+ Neural networks are a class of machine learning models that  advise the development of new technologies and technology. |Russian Corporation||Java & Doyle||Java, Doyle| |Java and Doyle||Megolieri| |Banklin Corporation||Banklin| |French Corporation||Certified Engineering Systems LLC||Granddard Company||Higher Corporation| |Japanese Corporation||Grandschallenglle C & Fenton Corporation||Gourds Ltd.||Smachine Corporation||Narris and Nasser| |David Wainter, Fenton Corp.||Kenner Corporation||Philical Properties Corporation||Tribble Systems Corporation||Tluva| |Safari Group||Highendal Corporation||Winster Corporation||Madde Company||Grandcrest Corporation||Chron Corporation||Mega Inc.||Bankar Corporation||German Corporation||Emerka Corporation||Island Corporation||Operation Corporation||Lawler Corporation||The North American Corporation||Wasley Company||Dymar Corporation||British Corporation||Hieve, Inc.||Yasley Corporation||Wereton Corporation||Popular Realty Corporation||Freshman Company||
 
 ================================================================================
 [Prompt 5] (prompt_tokens=21)
@@ -76,17 +70,16 @@ def fib(n):
     
 
 [Debug]
-bos_id=[BOS] eos_id=[EOS]
-first_step_eos_prob=2.914146170951426e-05
-first_step_topk_ids=[72, 3136, 3063, 2898, 3888, 10083, 5742, 6892, 4079, 2876]
-first_step_topk_probs=[0.045573119074106216, 0.030494069680571556, 0.014928113669157028, 0.011420262046158314, 0.010921642184257507, 0.010921642184257507, 0.009552639909088612, 0.009552639909088612, 0.007641572505235672, 0.006112826056778431]
+bos_id=2 eos_id=3
+first_step_eos_prob=6.669772119494155e-05
+first_step_topk_ids=[3136, 2898, 3063, 72, 4079, 5742, 3888, 10083, 6892, 14894]
+first_step_topk_probs=[0.03259585425257683, 0.022806433960795403, 0.02085840329527855, 0.01744731329381466, 0.00933887343853712, 0.008541185408830643, 0.007811632473021746, 0.007144398055970669, 0.006832465995103121, 0.006832465995103121]
 
-[New tokens 5] count=256 first30=[644, 1567, 262, 586, 1388, 15, 261, 1817, 1164, 415, 266, 1776, 292, 412, 668, 286, 266, 1224, 292, 412, 668, 17, 3992, 1004, 316, 834, 289, 3118, 464, 34]
-[New text 5] repr=' preclinical story, a quick look at the future of your work and the impact of your work. Why did you want to write this? I am a master of the work, and I really like the idea of working with a professional. I am a master of the work. I am a master of the work, and I am a master of the work. I am a master of the work. I am a master of the work. I am a master of the work. I am a master of the work. I am a master of the work. I am a master of the work. I am a master of the work. I am a master of th'
-
+[New tokens 5] count=256 first30=[10933, 338, 316, 689, 289, 628, 1460, 1818, 292, 1086, 289, 412, 3653, 17, 351, 844, 822, 289, 698, 6040, 292, 732, 1086, 332, 446, 3304, 261, 1150, 2146, 292]
 [Full output 5]
  Here is a short Python snippet:
 
 def fib(n):
-     preclinical story, a quick look at the future of your work and the impact of your work. Why did you want to write this? I am a master of the work, and I really like the idea of working with a professional. I am a master of the work. I am a master of the work, and I am a master of the work. I am a master of the work. I am a master of the work. I am a master of the work. I am a master of the work. I am a master of the work. I am a master of the work. I am a master of the work. I am a master of the work. I am a master of the work. I am a master of the work. I am a master of the work. I am a master of the work. I am a master of the work. I am a master of the work. I am a master of the work. I am a master of the work. I am a master of the work. I am a master of the work. I am a master of the work. I am a master of the work. I am a master of the work. I am a master of the work. I am a master of
+     observe that you need to add another kind of water to your TV. The only way to get rid of these water is by adding a small amount of water to the TV. It is also possible to make a big difference in your TV screen if it is not ready to use it. Once you have no problem, you can add some extra water to your television and see what will happen when you switch off your TV screen or do something else to keep the cable running. It is important for you to know what to expect from a home. You should always check the internet to find out more about how your TV screen works best for you. A remote control device will be used to monitor your TV screen so you don’t need to worry about running your TV on any day. In this case, you will have to choose between a 3rd party and a third party. If you want to add a few light, there are some ways you can add a little bit of air to your TV screen. This is a good idea to add a little more energy to your TV than it was before. There are other ways to add a lot of energy to your movies, such as mixing up the sounds of the television or showing the music or showing the language of your favorite TV screen
 
+================================================================================

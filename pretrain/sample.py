@@ -328,7 +328,7 @@ def generate_default_samples(
                 d = res['debug']
                 f.write(f"bos_id={d.get('bos_id')} eos_id={d.get('eos_id')}\n")
                 if 'first_step_eos_prob' in d:
-                    f.write(f"first_step_eos_prob={d['first_step_eos_prob']}\n")
+                    f.write(f"first_step_eos_prob={d['first_step_eos_prob']:.3e}\n")
                 if 'first_step_topk_ids' in d:
                     f.write(f"first_step_topk_ids={d['first_step_topk_ids']}\n")
                 if 'first_step_topk_probs' in d:

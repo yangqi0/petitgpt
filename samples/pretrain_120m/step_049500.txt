@@ -5,68 +5,62 @@ precision=bf16, temperature=0.7, top_p=0.9, top_k=0, max_new_tokens=256, min_new
 Once upon a time, 
 
 [Debug]
-bos_id=[BOS] eos_id=[EOS]
-first_step_eos_prob=4.134080154472031e-05
-first_step_topk_ids=[72, 3063, 3794, 3602, 1731, 3136, 6719, 2898, 5582, 7878]
-first_step_topk_probs=[0.027071194723248482, 0.016566764563322067, 0.012673858553171158, 0.010601231828331947, 0.010601231828331947, 0.008480383083224297, 0.008480383083224297, 0.007756027393043041, 0.007417390123009682, 0.007417390123009682]
+bos_id=2 eos_id=3
+first_step_eos_prob=0.0
+first_step_topk_ids=[72, 3794, 3063, 10083, 4194, 10381, 5794, 7878, 3136, 2686]
+first_step_topk_probs=[0.16787634789943695, 0.015754971653223038, 0.010081758722662926, 0.009220616891980171, 0.006169735919684172, 0.006169735919684172, 0.0053963735699653625, 0.005160762462764978, 0.004935440141707659, 0.004719953518360853]
 
-[New tokens 1] count=213 first30=[8536, 979, 15, 674, 410, 261, 1508, 2777, 4066, 6844, 17, 1009, 3566, 289, 847, 349, 544, 10427, 286, 1808, 4995, 17, 1516, 979, 15, 6844, 430, 1687, 3038, 544]
-[New text 1] repr='uous day, there was a little girl named Lily. She loved to play with her toys and sing songs. One day, Lily\'s mom asked her to help clean the house. Lily said, "I don\'t want to clean, I want to play." Her mom said, "If you don\'t clean, you will not be able to play until you clean." Lily didn\'t listen and started to clean. She picked up all the toys and put them away. Suddenly, Lily\'s little brother came in and started to cry. Lily said, "I told you to clean up your toys, but now it\'s time for di'
-
+[New tokens 1] count=156 first30=[11025, 261, 1508, 2777, 4066, 6844, 17, 1009, 3566, 289, 847, 2721, 286, 2522, 266, 897, 1055, 544, 17, 1516, 979, 15, 652, 2220, 329, 361, 5915, 290, 266, 3954]
 [Full output 1]
- Once upon a time, uous day, there was a little girl named Lily. She loved to play with her toys and sing songs. One day, Lily's mom asked her to help clean the house. Lily said, "I don't want to clean, I want to play." Her mom said, "If you don't clean, you will not be able to play until you clean." Lily didn't listen and started to clean. She picked up all the toys and put them away. Suddenly, Lily's little brother came in and started to cry. Lily said, "I told you to clean up your toys, but now it's time for dinner." Her brother said, "I'm sorry, I just wanted to play." Lily felt bad and said, "I'm sorry, I didn't mean to make you sad." They hugged and made up. Lily's mom came in and said, "It's okay, we can clean up together." They cleaned up the toys together and Lily learned that it's important to listen to her mom and clean up after herself.
+ Once upon a time, aimed a little girl named Lily. She loved to play outside and explore the world around her. One day, she went on an adventure in the forest with her mommy and daddy. They walked for a long time until they came across a big rock. Lily was scared of the rock because it looked too heavy for her to walk on. But her mommy said not to worry and that they would keep walking. As they were walking, they saw a shiny rock on the ground. Lily picked up the rock and showed it to her parents. Her parents told her that rocks are very valuable and that's why they need to be careful when they're moving. From then on, Lily was always aware of the dangers of rocks and never forgot about them. The end.
 
 ================================================================================
 [Prompt 2] (prompt_tokens=11)
 In a distant future, humans and robots 
 
 [Debug]
-bos_id=[BOS] eos_id=[EOS]
-first_step_eos_prob=5.9634767239913344e-05
-first_step_topk_ids=[72, 3063, 10083, 9200, 3136, 4164, 5742, 4079, 3372, 5092]
-first_step_topk_probs=[0.05337585136294365, 0.01748402789235115, 0.010699703358113766, 0.008949916809797287, 0.007486287970095873, 0.007159428205341101, 0.007159428205341101, 0.007159428205341101, 0.006846839562058449, 0.006846839562058449]
+bos_id=2 eos_id=3
+first_step_eos_prob=2.998236595885828e-05
+first_step_topk_ids=[72, 3063, 10083, 2686, 432, 15104, 4079, 3169, 9200, 3413]
+first_step_topk_probs=[0.1697215437889099, 0.015232708305120468, 0.009747547097504139, 0.00652232114225626, 0.0062375497072935104, 0.005455690436065197, 0.00521748885512352, 0.004989687353372574, 0.004989687353372574, 0.0041736941784620285]
 
-[New tokens 2] count=256 first30=[27097, 430, 21990, 2286, 15, 266, 1838, 16, 876, 292, 266, 3653, 2448, 15, 579, 332, 5509, 350, 266, 539, 57, 72, 711, 4167, 5, 290, 266, 3233, 9612, 86]
-[New text 2] repr=' Rings\'s flagship feature, the line-up of the TV series, which is described as the "Vegetarian" in the late 1980s, is based on the sequel to the upcoming "The Wharf." The show also featured the first-ever feature of the show, "The Wharf." The show has been set for several episodes of the show, including "Honest" and "The Wharf" and "The Wharf." The show is set for several episodes of the show, and the series is set for both episodes of the show. The series is set for the two episodes of the show'
-
+[New tokens 2] count=192 first30=[1367, 289, 266, 897, 17, 351, 897, 332, 1670, 292, 19062, 15, 629, 12780, 286, 629, 1379, 338, 2233, 818, 979, 17, 1516, 979, 15, 261, 629, 1976, 4421, 290]
 [Full output 2]
- In a distant future, humans and robots  Rings's flagship feature, the line-up of the TV series, which is described as the "Vegetarian" in the late 1980s, is based on the sequel to the upcoming "The Wharf." The show also featured the first-ever feature of the show, "The Wharf." The show has been set for several episodes of the show, including "Honest" and "The Wharf" and "The Wharf." The show is set for several episodes of the show, and the series is set for both episodes of the show. The series is set for the two episodes of the show, "The Wharf" and "The Wharf" are set for the series, "The Wharf" and "The Wharf" and "The Wharf" are set for the series, "The Wharf" and "The Wharf" are set for the series, "The Wharf" and "The Wharf" are set for the series, "The Wharf" and "The Wharf" are set for the series, "The Wharf" and "The Wharf" are set for the series, "The Wharf" and "The Wharf" are set for the series, "The Wharf
+ In a distant future, humans and robots  open to the world. The world is full of surprises, new sights and new things that happen every day. One day, a new thing happened in our lives. This amazing thing happened when we were playing with something that was really interesting. It was a big red button on the side of the screen. Everyone was curious about what it could do. So they decided to press the button. To their surprise, nothing happened. Then, something amazing happened. A bright light filled the room! All around them were beautiful lights coming from all over the screen. They were so excited and wanted to see more. But then, something even more incredible happened. One of the lights stopped working. Suddenly, there was a loud noise coming from outside. People were scared and ran away as fast as they could. But no matter how quickly they went, the dark light stayed in the sky. In the end, everyone was happy because they had gone on an adventure.
 
 ================================================================================
-[Prompt 3] (prompt_tokens=11)
+[Prompt 3] (prompt_tokens=12)
 The following is a news report:
 
 
 
+
 [Debug]
-bos_id=[BOS] eos_id=[EOS]
-first_step_eos_prob=4.55034059996251e-05
-first_step_topk_ids=[3063, 10083, 72, 1731, 485, 3136, 6440, 28110, 1776, 4079]
-first_step_topk_probs=[0.019067371264100075, 0.01667732372879982, 0.01667732372879982, 0.008164246566593647, 0.007466889917850494, 0.007466889917850494, 0.007140877190977335, 0.006829099263995886, 0.006245784927159548, 0.006245784927159548]
+bos_id=2 eos_id=3
+first_step_eos_prob=1.9383844119147398e-05
+first_step_topk_ids=[72, 3063, 10083, 432, 18765, 3794, 28110, 10381, 15104, 6440]
+first_step_topk_probs=[0.057157766073942184, 0.01309985388070345, 0.01145782321691513, 0.010957557708024979, 0.009165607392787933, 0.007666704710572958, 0.007331967819482088, 0.006412923336029053, 0.006132930982857943, 0.005129976663738489]
 
-[New tokens 3] count=256 first30=[2146, 434, 38, 5877, 12, 332, 261, 2937, 4560, 290, 266, 2516, 292, 5921, 15, 1505, 15, 286, 6436, 17, 351, 1585, 1514, 1573, 329, 266, 1224, 292, 266, 1547]
-[New text 3] repr=' amount (CMS) is a global leader in the field of engineering, development, and administration. The current research report on the impact of the technology sector, the risk of the quality of life of the nation’s people and the environment. The report, published in the journal Science and Technology, provides an overview of the impact of the technological technology sector, the impact of the technological industry, and the impact of the market. The report also examines the impact of the technology'
-
+[New tokens 3] count=206 first30=[6782, 15, 1406, 414, 539, 36, 688, 962, 666, 1040, 814, 1959, 290, 266, 1862, 292, 266, 7002, 17, 494, 266, 2685, 292, 464, 616, 266, 5486, 768, 436, 660]
 [Full output 3]
  The following is a news report:
 
- amount (CMS) is a global leader in the field of engineering, development, and administration. The current research report on the impact of the technology sector, the risk of the quality of life of the nation’s people and the environment. The report, published in the journal Science and Technology, provides an overview of the impact of the technological technology sector, the impact of the technological industry, and the impact of the market. The report also examines the impact of the technology sector, the impact of the technology sector, the impact of the industry and the environment. The report also examines the impact of the technology sector, the impact of the technology sector, the impact of the industry, and the impact of the technology sector. The report also examines the impact of the technology sector, the impact of the technology sector, the impact of the industry, and the impact of the technology sector. The report is based on the analysis of the impact of the technology sector, the impact of the industry, and the impact of the technology sector. The report discusses the impact of the technology sector, the impact of the technology sector, and the impact of the technology sector. The report also examines the impact of the technology sector, the impact of the technology sector, and the impact of the technology sector
+
+37,000 - "A year after its very first ever in the history of the era. In the eyes of this time the originals have been built into the landscape." When it comes to finding a new home, the street will be located next door, and there will be an outline on the ground floor. If you are looking for a new home in the area, you may want to consider getting some additional space or something more exciting. Asking a new home has been created by the story of a great couple who found their way back at their homes, and then they come together again with a plan. Some people might even find a home just outside the neighborhood, but the idea is to get the house started. But what if the family member would like to know about the house? Perhaps some of the owners wanted to make sure that the owner was happy when they said they were going to get it done. If you have any questions or concerns regarding this, please feel free to contact us and we can help!
 
 ================================================================================
 [Prompt 4] (prompt_tokens=14)
 Neural networks are a class of machine learning models that 
 
 [Debug]
-bos_id=[BOS] eos_id=[EOS]
-first_step_eos_prob=8.012904436327517e-05
-first_step_topk_ids=[72, 3063, 10083, 1894, 2898, 322, 5742, 2900, 1933, 6719]
-first_step_topk_probs=[0.033576611429452896, 0.029367879033088684, 0.01314879022538662, 0.010998490266501904, 0.010518289171159267, 0.010059049353003502, 0.009619860909879208, 0.009199846535921097, 0.00879817083477974, 0.00841403380036354]
+bos_id=2 eos_id=3
+first_step_eos_prob=2.811815465975087e-05
+first_step_topk_ids=[72, 3063, 6719, 10083, 432, 3169, 4079, 10933, 676, 6440]
+first_step_topk_probs=[0.11050467938184738, 0.012964311055839062, 0.010370716452598572, 0.009070776402950287, 0.007933775894343853, 0.00758737837895751, 0.00758737837895751, 0.005551044829189777, 0.005308682564646006, 0.005308682564646006]
 
-[New tokens 4] count=256 first30=[1503, 338, 266, 2549, 292, 266, 4969, 332, 261, 2464, 16, 3684, 5577, 15, 1377, 16, 2022, 16, 1704, 16, 432, 4969, 17, 2231, 266, 4969, 332, 2297, 289, 322]
-[New text 4] repr=' suggest that the nature of the Internet is a single-domestic, state-of-the-art Internet. While the Internet is designed to be used for applications that use the Internet to deal with the Internet, it is not suitable for computer computers. In fact, this website is a useful tool for web-based Internet access. It is available in a number of ways, including Google Analytics. The website is a service for the Internet. For example, the Internet is a website for the Internet, but it is a service for '
-
+[New tokens 4] count=92 first30=[23543, 332, 361, 2996, 2565, 321, 266, 2094, 292, 4119, 17, 1009, 504, 261, 1040, 1780, 4097, 321, 2105, 652, 1146, 286, 332, 570, 329, 544, 918, 1035, 17, 2588]
 [Full output 4]
- Neural networks are a class of machine learning models that  suggest that the nature of the Internet is a single-domestic, state-of-the-art Internet. While the Internet is designed to be used for applications that use the Internet to deal with the Internet, it is not suitable for computer computers. In fact, this website is a useful tool for web-based Internet access. It is available in a number of ways, including Google Analytics. The website is a service for the Internet. For example, the Internet is a website for the Internet, but it is a service for the Internet. It is the Internet. It is an application that is installed on the Internet. The Internet is a service for the Internet. The Internet is a service for the Internet. It is a service for the Internet. It is a service for the Internet. It is a service for the Internet. It is a service for the Internet. It is a service for the Internet. It is a service for the Internet. It is a service for the Internet. It is a service for the Internet. It is a service for the Internet. It is a service for the Internet. It is a service for the Internet. It is a service for the Internet. It is a service for the Internet. It is a service for the Internet.
+ Neural networks are a class of machine learning models that  Monica is an amazing model for the University of California. She has a very strong passion for everything she does and is also on her own team. Her passion for learning is to be creative, successful, and, through multiple industries. My passion for learning makes me believe that if you want to learn more about my classes, you can have the chance to learn more from her, or read more on her blog. You can learn more from my blog here.
 
 ================================================================================
 [Prompt 5] (prompt_tokens=21)
@@ -76,17 +70,16 @@ def fib(n):
     
 
 [Debug]
-bos_id=[BOS] eos_id=[EOS]
-first_step_eos_prob=4.958158024237491e-05
-first_step_topk_ids=[2898, 3136, 3063, 72, 3372, 6503, 4079, 10083, 6892, 3602]
-first_step_topk_probs=[0.014375236816704273, 0.014375236816704273, 0.01202437561005354, 0.011499377898871899, 0.010517147369682789, 0.010057956911623478, 0.009198852814733982, 0.009198852814733982, 0.008045798167586327, 0.007694510277360678]
+bos_id=2 eos_id=3
+first_step_eos_prob=2.6097908630617894e-05
+first_step_topk_ids=[72, 2898, 15104, 10083, 3063, 432, 4079, 18765, 468, 3169]
+first_step_topk_probs=[0.04434449225664139, 0.01270490325987339, 0.008501160889863968, 0.008501160889863968, 0.008501160889863968, 0.00743556022644043, 0.006800445262342691, 0.006800445262342691, 0.006219582166522741, 0.005202456843107939]
 
-[New tokens 5] count=256 first30=[22915, 288, 29, 2402, 33, 2402, 33, 2402, 33, 2402, 33, 2402, 33, 2402, 33, 2402, 33, 2402, 33, 2402, 33, 2402, 33, 2402, 33, 2402, 33, 2402, 33, 2402]
-[New text 5] repr=' Blessed: <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <'
-
+[New tokens 5] count=256 first30=[10933, 338, 266, 922, 468, 292, 666, 1518, 371, 493, 290, 592, 17, 917, 350, 261, 1236, 15, 354, 332, 266, 814, 1976, 316, 689, 289, 699, 693, 385, 3120]
 [Full output 5]
  Here is a short Python snippet:
 
 def fib(n):
-     Blessed: <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <> <
+     observe that the minions of its past are all in one. And as a result, it is the first thing you need to know when we hear a swarm of swarming and the wind of a storm. If it is not a reason to read this, we should be aware of the potential for this problem. If you do not understand what your last post is about, I will respond. This can be done by calling or reading through the following statements: 1) Please note that you may need to use the email address below to get access to the site from the other website. 2) Keep an eye on your personal computer, and stay away from any external security location with your computer. 3) Share your experience with others via email. 4) Do not use your computer. Be careful of your computer. You must be aware that your computers have been connected by many people and they are just as important as your phone. I want to help you find the information you need. Please let me know if I have any issues with my computer. Please allow me to find a solution. 6) Ask a friend about the problem. If anyone else has any problems with your computer, please send a message. If someone else has any problem with your computer or if he
 
+================================================================================
