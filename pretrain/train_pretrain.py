@@ -520,7 +520,7 @@ def parse_args() -> argparse.Namespace:
     ap.add_argument("--lr", type=float, default=5e-5)
     ap.add_argument("--weight_decay", type=float, default=0.1)
     ap.add_argument("--warmup_steps", type=int, default=1000)
-    ap.add_argument("--max_steps", type=int, default=80000)
+    ap.add_argument("--max_steps", type=int, default=100000)
     ap.add_argument("--grad_clip", type=float, default=1.0)
     ap.add_argument("--num_workers", type=int, default=2)
     ap.add_argument("--seed", type=int, default=1234)
