@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Minimal, correct SFT trainer for canonical chat messages.
+SFT trainer for canonical chat messages.
 
 Input format (jsonl), one example per line:
 {
@@ -19,14 +19,7 @@ Key properties:
 - DOES NOT manually add BOS/EOS (tokenizer may add via post-processor).
 - Builds labels so that ONLY assistant content tokens are supervised; everything else is -100.
 - Supports grad accumulation, fp16/bf16, checkpoint save/resume, eval, logging.
-
-Model import is flexible:
-- Tries to import from src.model:
-  - GPT, GPTConfig (common)
-  - or build_model(config)
-  - or Model class named "Transformer"/"GPT" etc.
-You may need to adjust the model construction part for your repo, but the SFT/data/masking logic is solid.
-
+- Can init from your pretrain ckpt (keys: model/optim/scaler/global_step/config/...).
 """
 
 from __future__ import annotations
@@ -37,21 +30,25 @@ import math
 import os
 import random
 import time
-from dataclasses import dataclass
+from dataclasses import asdict
 from typing import Any, Dict, List, Optional, Tuple
 
 import torch
-import torch.nn as nn
 import torch.nn.functional as F
 from torch.utils.data import Dataset, DataLoader
-
 from tokenizers import Tokenizer
 
+import os, sys
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if ROOT not in sys.path:
+    sys.path.insert(0, ROOT)
+
+from src.model import GPT, GPTConfig
+
 
 # -------------------------
-# Chat template (no BOS/EOS)
+# Chat template (NO BOS/EOS)
 # -------------------------
-
 SYS_OPEN = "[SYS]\n"
 SYS_CLOSE = "\n[/SYS]\n"
 USER_OPEN = "[USER]\n"
@@ -72,16 +69,15 @@ def render_segments_and_supervision(messages: List[Dict[str, str]]) -> List[Tupl
     """
     segs: List[Tuple[str, bool]] = []
 
-    # system: take first system if present, else none
     i = 0
     if messages and messages[0].get("role") == "system":
         sys_txt = clean_text(messages[0].get("content", ""))
-        segs.append((SYS_OPEN, False))
-        segs.append((sys_txt, False))
-        segs.append((SYS_CLOSE, False))
+        if sys_txt:
+            segs.append((SYS_OPEN, False))
+            segs.append((sys_txt, False))
+            segs.append((SYS_CLOSE, False))
         i = 1
 
-    # remaining turns
     for m in messages[i:]:
         role = (m.get("role") or "").strip().lower()
         txt = clean_text(m.get("content", ""))
@@ -93,56 +89,17 @@ def render_segments_and_supervision(messages: List[Dict[str, str]]) -> List[Tupl
             segs.append((USER_CLOSE, False))
         elif role == "assistant":
             segs.append((ASSIST_OPEN, False))
-            # ONLY assistant content is supervised
-            segs.append((txt, True))
+            segs.append((txt, True))   # supervise ONLY assistant content
             segs.append((ASSIST_CLOSE, False))
         else:
-            # ignore unknown roles
             continue
 
     return segs
 
 
-# ---------------------------------
-# Tokenization helpers (BOS/EOS safe)
-# ---------------------------------
-
-@dataclass
-class TokInfo:
-    tok: Tokenizer
-    bos_id: int
-    eos_id: int
-    pad_id: int
-
-
-def load_tokenizer(path: str) -> TokInfo:
-    tok = Tokenizer.from_file(path)
-    # You told earlier bos_id=2 eos_id=3; but let's read if possible, fallback:
-    # tokenizers doesn't always expose special ids; we take safe defaults.
-    bos_id = 2
-    eos_id = 3
-
-    # pad: if you didn't add PAD token, use 0 (common)
-    pad_id = 0
-    return TokInfo(tok=tok, bos_id=bos_id, eos_id=eos_id, pad_id=pad_id)
-
-
-def encode_piece(tok: Tokenizer, text: str) -> List[int]:
-    """
-    Encode a piece of text. We do NOT try to add/remove BOS/EOS here.
-    We rely on single full-text encode below, so offsets are consistent.
-    """
-    return tok.encode(text).ids
-
-
-def encode_full(tok: Tokenizer, text: str) -> List[int]:
-    return tok.encode(text).ids
-
-
 # -------------------------
-# Canonical dataset (jsonl)
+# Dataset: jsonl offsets
 # -------------------------
-
 class JsonlOffsetsDataset(Dataset):
     def __init__(self, path: str):
         self.path = path
@@ -165,123 +122,90 @@ class JsonlOffsetsDataset(Dataset):
 
 
 # -------------------------
-# Build (input_ids, labels)
+# Build example: input_ids + labels (assistant-only)
 # -------------------------
-
 def build_example(
     ex: Dict[str, Any],
-    tok_info: TokInfo,
+    tok: Tokenizer,
     seq_len: int,
+    pad_id: int,
     default_system: str,
-) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
-    """
-    Build one training example:
-    - input_ids: (T,)
-    - labels:    (T,) with -100 for non-supervised tokens
-    - attn_mask: (T,)
-    """
+) -> Tuple[torch.Tensor, torch.Tensor]:
     messages = ex.get("messages") or []
     if not messages:
         raise ValueError("missing messages")
 
-    # If no system present, inject one (not supervised)
+    # inject default system if absent
     if messages[0].get("role") != "system" and default_system:
         messages = [{"role": "system", "content": default_system}] + messages
 
     segs = render_segments_and_supervision(messages)
 
-    # Strategy for correct assistant-only mask without special-token double counting:
-    # 1) Build FULL rendered text (no manual BOS/EOS).
-    # 2) Encode full text once -> input_ids_full (tokenizer may add BOS/EOS once).
-    # 3) To find supervised token positions, we re-encode prefix lengths incrementally,
-    #    but only over segments (cheap: number of segments per chat is small).
-    #
-    # This avoids needing encode(add_special_tokens=False) which may vary across tokenizers.
+    # Render full text (NO manual BOS/EOS)
     full_text = "".join(s for s, _ in segs)
-    input_ids_full = encode_full(tok_info.tok, full_text)
+    full_ids = tok.encode(full_text).ids  # tokenizer may auto add BOS/EOS once
+    labels = [-100] * len(full_ids)
 
-    # labels initialized to -100
-    labels_full = [-100] * len(input_ids_full)
-
-    # For each supervised segment, compute its token span by prefix encoding.
-    # We compute token index boundaries using "encode_full(prefix).ids" lengths.
-    # NOTE: This is O(#segments) encodes per example; acceptable for SFT.
+    # Find supervised spans by prefix re-encode (segment count is small, OK for SFT)
     prefix = ""
     prev_len = 0
     for seg_text, supervise in segs:
         prefix += seg_text
-        cur_ids = encode_full(tok_info.tok, prefix)
+        cur_ids = tok.encode(prefix).ids
         cur_len = len(cur_ids)
-
-        # tokens contributed by this segment are [prev_len:cur_len)
         if supervise:
             for i in range(prev_len, cur_len):
-                labels_full[i] = cur_ids[i]  # label is token itself (shift handled in loss)
+                labels[i] = cur_ids[i]
         prev_len = cur_len
 
-    # Truncate/pad to seq_len (keep the tail, so assistant targets are more likely preserved)
-    if len(input_ids_full) > seq_len:
-        input_ids_full = input_ids_full[-seq_len:]
-        labels_full = labels_full[-seq_len:]
+    # Truncate/pad to seq_len (keep tail so assistant targets more likely preserved)
+    if len(full_ids) > seq_len:
+        full_ids = full_ids[-seq_len:]
+        labels = labels[-seq_len:]
     else:
-        pad_n = seq_len - len(input_ids_full)
-        input_ids_full = input_ids_full + [tok_info.pad_id] * pad_n
-        labels_full = labels_full + [-100] * pad_n
+        pad_n = seq_len - len(full_ids)
+        full_ids = full_ids + [pad_id] * pad_n
+        labels = labels + [-100] * pad_n
 
-    attn_mask = [1 if tid != tok_info.pad_id else 0 for tid in input_ids_full]
-
-    return (
-        torch.tensor(input_ids_full, dtype=torch.long),
-        torch.tensor(labels_full, dtype=torch.long),
-        torch.tensor(attn_mask, dtype=torch.long),
-    )
+    return torch.tensor(full_ids, dtype=torch.long), torch.tensor(labels, dtype=torch.long)
 
 
-def collate_fn_builder(tok_info: TokInfo, seq_len: int, default_system: str, debug_first_batch: bool):
+def collate_fn_builder(tok: Tokenizer, seq_len: int, pad_id: int, default_system: str, debug_first_batch: bool):
     printed = {"done": False}
 
     def collate(batch: List[Dict[str, Any]]):
-        xs, ys, ms = [], [], []
+        xs, ys = [], []
         for ex in batch:
-            x, y, m = build_example(ex, tok_info, seq_len, default_system)
+            x, y = build_example(ex, tok, seq_len, pad_id, default_system)
             xs.append(x)
             ys.append(y)
-            ms.append(m)
         input_ids = torch.stack(xs, dim=0)  # (B,T)
         labels = torch.stack(ys, dim=0)     # (B,T)
-        attn_mask = torch.stack(ms, dim=0)  # (B,T)
 
         if debug_first_batch and not printed["done"]:
             printed["done"] = True
             sup = (labels[0] != -100).sum().item()
             tot = labels[0].numel()
-            print(f"[dbg] supervised tokens (sample0): {sup}/{tot} ({sup/tot:.3f})")
-
+            print(f"[dbg] supervised tokens(sample0): {sup}/{tot} ({sup/tot:.3f})")
             idx = (labels[0] != -100).nonzero(as_tuple=False).squeeze(-1)
             if idx.numel() > 0:
-                # decode supervised tokens to sanity-check it's assistant-only
-                dec = tok_info.tok.decode(input_ids[0, idx].tolist())
-                print("[dbg] decoded supervised span (first 300 chars):")
+                dec = tok.decode(input_ids[0, idx].tolist())
+                print("[dbg] decoded supervised span(first 300 chars):")
                 print(dec[:300])
             else:
                 print("[dbg] WARNING: no supervised tokens in sample0")
 
-        return {"input_ids": input_ids, "labels": labels, "attention_mask": attn_mask}
+        return {"input_ids": input_ids, "labels": labels}
 
     return collate
 
 
 # -------------------------
-# Loss / training utilities
+# Loss: next-token with ignore_index=-100
 # -------------------------
-
 def masked_ce_loss(logits: torch.Tensor, labels: torch.Tensor) -> torch.Tensor:
-    """
-    logits: (B,T,V)
-    labels: (B,T) with -100 mask
-    We do next-token prediction: logits[:, :-1] vs labels[:, 1:].
-    """
-    B, T, V = logits.shape
+    # logits: [B,T,V], labels: [B,T]
+    V = logits.size(-1)
     logits = logits[:, :-1, :].contiguous().view(-1, V)
     labels = labels[:, 1:].contiguous().view(-1)
     return F.cross_entropy(logits, labels, ignore_index=-100)
@@ -293,44 +217,9 @@ def save_checkpoint_atomic(path: str, obj: Dict[str, Any]):
     os.replace(tmp, path)
 
 
-def try_build_model(vocab_size: int, ckpt_path: Optional[str]):
-    """
-    Flexible model construction. You WILL likely need to adapt this to your src/model.py.
-    """
-    # 1) Try common nanoGPT-ish API
-    try:
-        from src.model import GPT, GPTConfig  # type: ignore
-        # If ckpt exists, load config from it; else minimal config placeholder
-        if ckpt_path and os.path.exists(ckpt_path):
-            ckpt = torch.load(ckpt_path, map_location="cpu")
-            cfg_dict = ckpt.get("model_cfg") or ckpt.get("config") or ckpt.get("cfg")
-            if cfg_dict is None:
-                # fall back
-                cfg = GPTConfig(vocab_size=vocab_size)
-            else:
-                cfg_dict = dict(cfg_dict)
-                cfg_dict["vocab_size"] = vocab_size
-                cfg = GPTConfig(**cfg_dict)
-        else:
-            cfg = GPTConfig(vocab_size=vocab_size)
+def load_ckpt(path: str) -> Dict[str, Any]:
+    return torch.load(path, map_location="cpu")
 
-        model = GPT(cfg)
-        if ckpt_path and os.path.exists(ckpt_path):
-            sd = ckpt.get("model") or ckpt.get("model_state_dict") or ckpt.get("state_dict")
-            if sd:
-                model.load_state_dict(sd, strict=False)
-        return model
-    except Exception:
-        pass
-
-    raise RuntimeError(
-        "Could not construct model. Please edit try_build_model() to match your src/model.py API."
-    )
-
-
-# -------------------------
-# Main training loop
-# -------------------------
 
 def main():
     ap = argparse.ArgumentParser()
@@ -352,9 +241,18 @@ def main():
     ap.add_argument("--eval_every", type=int, default=500)
     ap.add_argument("--save_every", type=int, default=2000)
 
-    ap.add_argument("--pretrained_ckpt", default="", help="optional init ckpt from pretrain")
-    ap.add_argument("--resume", default="", help="resume SFT training checkpoint")
+    # init/resume
+    ap.add_argument("--init_from_pretrain", default="", help="init model weights from pretrain ckpt (your keys: model/optim/scaler/global_step/config)")
+    ap.add_argument("--resume", default="", help="resume SFT checkpoint (latest.pt or step_*.pt)")
     ap.add_argument("--default_system", default="You are a helpful assistant.")
+
+    # model override (only used if not init_from_pretrain)
+    ap.add_argument("--n_layers", type=int, default=12)
+    ap.add_argument("--d_model", type=int, default=768)
+    ap.add_argument("--n_heads", type=int, default=12)
+    ap.add_argument("--d_ff", type=int, default=3072)
+    ap.add_argument("--dropout", type=float, default=0.0)
+    ap.add_argument("--tie_embeddings", action="store_true")  # if omitted, will be False; pretrain config may set True
 
     ap.add_argument("--num_workers", type=int, default=2)
     ap.add_argument("--seed", type=int, default=1234)
@@ -369,34 +267,80 @@ def main():
     if device == "cuda":
         torch.cuda.manual_seed_all(args.seed)
 
-    tok_info = load_tokenizer(args.tokenizer_path)
+    tok = Tokenizer.from_file(args.tokenizer_path)
+    vocab_size = tok.get_vocab_size()
 
-    # Estimate vocab size from tokenizer (best-effort)
-    try:
-        vocab_size = tok_info.tok.get_vocab_size()
-    except Exception:
-        vocab_size = 32000
+    # PAD id: if you didn't add [PAD], use 0
+    pad_id = 0
 
-    # Build model (edit try_build_model if needed)
-    init_ckpt = args.pretrained_ckpt if args.pretrained_ckpt else None
-    model = try_build_model(vocab_size=vocab_size, ckpt_path=init_ckpt)
-    model.to(device)
+    # -------------------------
+    # Build model config
+    # -------------------------
+    cfg: Optional[GPTConfig] = None
 
-    # Optimizer
+    if args.init_from_pretrain:
+        ck = load_ckpt(args.init_from_pretrain)
+        cfg_dict = ck.get("config")
+        if not isinstance(cfg_dict, dict):
+            raise RuntimeError("pretrain ckpt missing 'config' dict")
+        # Force vocab_size/max_seq_len to match current args/tokenizer if needed
+        cfg_dict = dict(cfg_dict)
+        cfg_dict["vocab_size"] = vocab_size
+        cfg_dict["max_seq_len"] = args.seq_len
+        cfg = GPTConfig(**cfg_dict)
+        model = GPT(cfg).to(device)
+
+        sd = ck.get("model")
+        if sd is None:
+            raise RuntimeError("pretrain ckpt missing 'model' state_dict")
+        missing, unexpected = model.load_state_dict(sd, strict=False)
+        print(f"[*] initialized from pretrain: {args.init_from_pretrain}")
+        print(f"    missing keys: {len(missing)}, unexpected keys: {len(unexpected)}")
+        if (len(missing) or len(unexpected)):
+            print("    missing (first 20):", missing[:20])
+            print("    unexpected (first 20):", unexpected[:20])
+    else:
+        # build from CLI flags
+        cfg = GPTConfig(
+            vocab_size=vocab_size,
+            n_layers=args.n_layers,
+            d_model=args.d_model,
+            n_heads=args.n_heads,
+            d_ff=args.d_ff,
+            max_seq_len=args.seq_len,
+            dropout=args.dropout,
+            tie_embeddings=args.tie_embeddings,
+        )
+        model = GPT(cfg).to(device)
+
     optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 
-    # Optional resume
+    # Mixed precision
+    use_fp16 = args.precision == "fp16" and device == "cuda"
+    use_bf16 = args.precision == "bf16" and device == "cuda"
+    autocast_dtype = torch.float16 if use_fp16 else (torch.bfloat16 if use_bf16 else None)
+    scaler = torch.amp.GradScaler("cuda", enabled=use_fp16)
+
+    # Resume SFT checkpoint (note: SFT ckpt format differs from pretrain ckpt)
     start_step = 0
     if args.resume and os.path.exists(args.resume):
-        ckpt = torch.load(args.resume, map_location="cpu")
-        sd = ckpt.get("model") or ckpt.get("model_state_dict") or ckpt.get("state_dict")
-        if sd:
-            model.load_state_dict(sd, strict=False)
-        opt = ckpt.get("optimizer")
-        if opt:
+        ck = load_ckpt(args.resume)
+        sd = ck.get("model")
+        if sd is None:
+            raise RuntimeError("SFT resume ckpt missing 'model'")
+        model.load_state_dict(sd, strict=False)
+
+        opt = ck.get("optimizer") or ck.get("optim")
+        if opt is not None:
             optimizer.load_state_dict(opt)
-        start_step = int(ckpt.get("step", 0))
-        print(f"[*] Resumed from {args.resume} at step={start_step}")
+
+        # if resuming fp16 SFT, try restore scaler
+        sc = ck.get("scaler")
+        if sc is not None and use_fp16:
+            scaler.load_state_dict(sc)
+
+        start_step = int(ck.get("step", ck.get("global_step", 0)))
+        print(f"[*] resumed SFT: {args.resume} at step={start_step}")
 
     # Data
     train_ds = JsonlOffsetsDataset(args.train_jsonl)
@@ -408,7 +352,7 @@ def main():
         shuffle=True,
         num_workers=args.num_workers,
         pin_memory=(device == "cuda"),
-        collate_fn=collate_fn_builder(tok_info, args.seq_len, args.default_system, args.debug_first_batch),
+        collate_fn=collate_fn_builder(tok, args.seq_len, pad_id, args.default_system, args.debug_first_batch),
         drop_last=True,
     )
     val_loader = DataLoader(
@@ -417,17 +361,11 @@ def main():
         shuffle=False,
         num_workers=max(0, args.num_workers // 2),
         pin_memory=(device == "cuda"),
-        collate_fn=collate_fn_builder(tok_info, args.seq_len, args.default_system, False),
+        collate_fn=collate_fn_builder(tok, args.seq_len, pad_id, args.default_system, False),
         drop_last=False,
     )
 
-    # Mixed precision
-    use_fp16 = args.precision == "fp16" and device == "cuda"
-    use_bf16 = args.precision == "bf16" and device == "cuda"
-    autocast_dtype = torch.float16 if use_fp16 else (torch.bfloat16 if use_bf16 else None)
-    scaler = torch.cuda.amp.GradScaler(enabled=use_fp16)
-
-    # Simple cosine schedule
+    # Cosine schedule
     def get_lr(step: int) -> float:
         if step < args.warmup_steps:
             return args.lr * (step + 1) / max(1, args.warmup_steps)
@@ -438,11 +376,10 @@ def main():
     model.train()
     t0 = time.time()
     running_loss = 0.0
-    steps_done = start_step
-
+    step = start_step
     train_iter = iter(train_loader)
 
-    while steps_done < args.max_steps:
+    while step < args.max_steps:
         optimizer.zero_grad(set_to_none=True)
         micro_loss = 0.0
 
@@ -455,73 +392,63 @@ def main():
 
             input_ids = batch["input_ids"].to(device, non_blocking=True)
             labels = batch["labels"].to(device, non_blocking=True)
-            attn_mask = batch["attention_mask"].to(device, non_blocking=True)
 
-            lr = get_lr(steps_done)
+            lr = get_lr(step)
             for pg in optimizer.param_groups:
                 pg["lr"] = lr
 
             with torch.autocast(device_type="cuda", dtype=autocast_dtype, enabled=(autocast_dtype is not None)):
-                # Forward: adapt if your model signature differs
-                out = model(input_ids, attention_mask=attn_mask) if "attention_mask" in model.forward.__code__.co_varnames else model(input_ids)
-                logits = out if isinstance(out, torch.Tensor) else out["logits"]
+                logits = model(input_ids)  # your model forward is input_ids-only
                 loss = masked_ce_loss(logits, labels) / args.grad_accum
 
             if use_fp16:
                 scaler.scale(loss).backward()
             else:
                 loss.backward()
-
             micro_loss += loss.item()
 
-        # step
         if use_fp16:
             scaler.step(optimizer)
             scaler.update()
         else:
             optimizer.step()
 
-        steps_done += 1
+        step += 1
         running_loss += micro_loss
 
-        # log
-        if steps_done % 50 == 0:
+        if step % 50 == 0:
             dt = time.time() - t0
-            print(f"[train] step={steps_done} loss={running_loss/50:.4f} lr={get_lr(steps_done):.2e} dt={dt:.1f}s")
+            print(f"[train] step={step} loss={running_loss/50:.4f} lr={get_lr(step):.2e} dt={dt:.1f}s")
             running_loss = 0.0
             t0 = time.time()
 
-        # eval
-        if args.eval_every > 0 and steps_done % args.eval_every == 0:
+        if args.eval_every > 0 and step % args.eval_every == 0:
             model.eval()
             losses = []
             with torch.no_grad():
                 for j, vb in enumerate(val_loader):
-                    if j >= 50:  # cap eval cost
+                    if j >= 50:
                         break
                     vi = vb["input_ids"].to(device)
                     vl = vb["labels"].to(device)
-                    vm = vb["attention_mask"].to(device)
                     with torch.autocast(device_type="cuda", dtype=autocast_dtype, enabled=(autocast_dtype is not None)):
-                        out = model(vi, attention_mask=vm) if "attention_mask" in model.forward.__code__.co_varnames else model(vi)
-                        logits = out if isinstance(out, torch.Tensor) else out["logits"]
-                        vloss = masked_ce_loss(logits, vl)
-                    losses.append(vloss.item())
-            print(f"[eval] step={steps_done} val_loss={sum(losses)/max(1,len(losses)):.4f}")
+                        v_logits = model(vi)
+                        v_loss = masked_ce_loss(v_logits, vl)
+                    losses.append(v_loss.item())
+            print(f"[eval] step={step} val_loss={sum(losses)/max(1,len(losses)):.4f}")
             model.train()
 
-        # save
-        if args.save_every > 0 and steps_done % args.save_every == 0:
-            ckpt_path = os.path.join(args.out_dir, f"step_{steps_done:06d}.pt")
+        if args.save_every > 0 and step % args.save_every == 0:
+            ckpt_path = os.path.join(args.out_dir, f"step_{step:06d}.pt")
             ckpt = {
-                "step": steps_done,
+                "step": step,
                 "model": model.state_dict(),
                 "optimizer": optimizer.state_dict(),
+                "scaler": scaler.state_dict() if use_fp16 else None,
+                "cfg": asdict(cfg) if cfg is not None else None,
                 "args": vars(args),
-                "vocab_size": vocab_size,
             }
             save_checkpoint_atomic(ckpt_path, ckpt)
-            # update latest
             save_checkpoint_atomic(os.path.join(args.out_dir, "latest.pt"), ckpt)
             print(f"[ckpt] saved {ckpt_path}")
 
