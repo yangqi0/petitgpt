@@ -20,6 +20,7 @@ from tokenizers import Tokenizer
 
 # Make imports work no matter where you run from
 import sys
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
@@ -28,52 +29,20 @@ from src.model import GPT, GPTConfig  # noqa: E402
 
 
 # -------------------------
-# Chat template (NO manual BOS/EOS text)
+# Plain chat template (NO bracket tags; robust to tokenizer)
 # -------------------------
-SYS_OPEN = "[SYS]\n"
-SYS_CLOSE = "\n[/SYS]\n"
-USER_OPEN = "[USER]\n"
-USER_CLOSE = "\n[/USER]\n"
-ASSIST_OPEN = "[ASSISTANT]\n"
-ASSIST_CLOSE = "\n[/ASSISTANT]\n"
-
 BOS_ID = 2
 EOS_ID = 3
+
+SYS_PREFIX = "System: "
+USER_PREFIX = "User: "
+ASSIST_PREFIX = "Assistant: "
+SEP = "\n\n"
 
 
 def clean_text(s: str) -> str:
     s = s.replace("\r\n", "\n").replace("\r", "\n")
     return s.strip()
-
-
-def render_segments_and_supervision(messages: List[Dict[str, str]]) -> List[Tuple[str, bool]]:
-    """Return list of (text_segment, supervise) where supervise==True only for assistant content."""
-    segs: List[Tuple[str, bool]] = []
-
-    i = 0
-    if messages and (messages[0].get("role") or "").strip().lower() == "system":
-        sys_txt = clean_text(messages[0].get("content", ""))
-        if sys_txt:
-            segs.append((SYS_OPEN, False))
-            segs.append((sys_txt, False))
-            segs.append((SYS_CLOSE, False))
-        i = 1
-
-    for m in messages[i:]:
-        role = (m.get("role") or "").strip().lower()
-        txt = clean_text(m.get("content", ""))
-        if not txt:
-            continue
-        if role == "user":
-            segs.append((USER_OPEN, False))
-            segs.append((txt, False))
-            segs.append((USER_CLOSE, False))
-        elif role == "assistant":
-            segs.append((ASSIST_OPEN, False))
-            segs.append((txt, True))
-            segs.append((ASSIST_CLOSE, False))
-
-    return segs
 
 
 # -------------------------
@@ -113,17 +82,65 @@ def encode_strip_special(tok: Tokenizer, text: str, bos_id: int, eos_id: int) ->
     return ids
 
 
-def encode_full_once(tok: Tokenizer, text: str, bos_id: int, eos_id: int) -> Tuple[bool, bool]:
-    """Detect whether tokenizer auto-adds BOS/EOS for this text."""
-    ids = tok.encode(text).ids
-    has_bos = bool(ids) and ids[0] == bos_id
-    has_eos = bool(ids) and ids[-1] == eos_id
+def tokenizer_auto_bos_eos(tok: Tokenizer, bos_id: int, eos_id: int) -> Tuple[bool, bool]:
+    """Detect whether tokenizer auto-adds BOS/EOS (using a tiny probe)."""
+    probe = tok.encode("x").ids
+    has_bos = bool(probe) and probe[0] == bos_id
+    has_eos = bool(probe) and probe[-1] == eos_id
     return has_bos, has_eos
 
 
 # -------------------------
 # Build example: input_ids + labels (assistant-only, exact spans)
 # -------------------------
+def render_segments_plain(messages: List[Dict[str, str]], default_system: str) -> List[Tuple[str, bool]]:
+    """
+    Return list of (text_segment, supervise).
+    supervise=True only for assistant *content* (not the 'Assistant: ' prefix).
+    """
+    msgs = messages or []
+    segs: List[Tuple[str, bool]] = []
+
+    # Ensure a system message exists if default_system provided
+    if not msgs:
+        return segs
+
+    if (msgs[0].get("role") or "").strip().lower() != "system" and default_system:
+        msgs = [{"role": "system", "content": default_system}] + msgs
+
+    # System (optional)
+    if msgs and (msgs[0].get("role") or "").strip().lower() == "system":
+        sys_txt = clean_text(msgs[0].get("content", ""))
+        if sys_txt:
+            segs.append((SYS_PREFIX, False))
+            segs.append((sys_txt, False))
+            segs.append((SEP, False))
+        start = 1
+    else:
+        start = 0
+
+    # Conversation
+    for m in msgs[start:]:
+        role = (m.get("role") or "").strip().lower()
+        txt = clean_text(m.get("content", ""))
+        if not txt:
+            continue
+
+        if role == "user":
+            segs.append((USER_PREFIX, False))
+            segs.append((txt, False))
+            segs.append((SEP, False))
+        elif role == "assistant":
+            segs.append((ASSIST_PREFIX, False))  # prefix not supervised
+            segs.append((txt, True))             # supervise content only
+            segs.append((SEP, False))
+        else:
+            # ignore unknown roles
+            continue
+
+    return segs
+
+
 def build_example(
     ex: Dict[str, Any],
     tok: Tokenizer,
@@ -137,19 +154,16 @@ def build_example(
     if not messages:
         raise ValueError("missing messages")
 
-    if (messages[0].get("role") or "").strip().lower() != "system" and default_system:
-        messages = [{"role": "system", "content": default_system}] + messages
+    segs = render_segments_plain(messages, default_system)
+    if not segs:
+        raise ValueError("empty rendered segments")
 
-    segs = render_segments_and_supervision(messages)
-
-    # Figure out whether tokenizer auto-adds BOS/EOS (once)
-    full_text = "".join(s for s, _ in segs)
-    has_bos, has_eos = encode_full_once(tok, full_text, bos_id, eos_id)
+    # Determine tokenizer behavior
+    has_bos, has_eos = tokenizer_auto_bos_eos(tok, bos_id, eos_id)
 
     ids_all: List[int] = []
     labels_all: List[int] = []
 
-    # Add exactly one BOS/EOS IF tokenizer would have added them for full text
     if has_bos:
         ids_all.append(bos_id)
         labels_all.append(-100)
@@ -195,6 +209,7 @@ def collate_fn_builder(tok: Tokenizer, seq_len: int, pad_id: int, default_system
             sup = int((labels[0] != -100).sum().item())
             tot = labels[0].numel()
             print(f"[dbg] supervised tokens(sample0): {sup}/{tot} ({sup/tot:.3f})")
+
             idx = (labels[0] != -100).nonzero(as_tuple=False).squeeze(-1)
             if idx.numel() > 0:
                 dec = tok.decode(input_ids[0, idx].tolist())
@@ -226,7 +241,7 @@ def load_ckpt(path: str) -> Dict[str, Any]:
 
 
 # -------------------------
-# In-domain prompt building
+# In-domain prompt building (plain template)
 # -------------------------
 def find_last_user_idx(messages: List[Dict[str, str]]) -> int:
     for i in range(len(messages) - 1, -1, -1):
@@ -250,62 +265,61 @@ def extract_last_user_and_ref(messages: List[Dict[str, str]]) -> Tuple[str, str]
     return last_user, ref
 
 
-def build_prompt_from_messages(
-    messages: List[Dict[str, str]],
-    default_system: str,
-    mode: str,
-) -> str:
+def build_prompt_from_messages_plain(messages: List[Dict[str, str]], default_system: str, mode: str) -> str:
     """
     mode:
-      - 'last_user': prompt = default_system + last_user + ASSIST_OPEN
-      - 'full_context': render conversation up to the last user turn (inclusive), then append ASSIST_OPEN
+      - 'last_user': System + last user + 'Assistant:'
+      - 'full_context': render conversation up to the last user (inclusive), then append 'Assistant:'
     """
     msgs = messages or []
+    if not msgs:
+        return (SYS_PREFIX + default_system + SEP + USER_PREFIX + "" + SEP + ASSIST_PREFIX)
+
+    if (msgs[0].get("role") or "").strip().lower() != "system" and default_system:
+        msgs = [{"role": "system", "content": default_system}] + msgs
 
     if mode == "last_user":
         user_q, _ = extract_last_user_and_ref(msgs)
-        system = default_system or ""
         parts: List[str] = []
-        if system.strip():
-            parts += [SYS_OPEN, system.strip(), SYS_CLOSE]
-        parts += [USER_OPEN, user_q.strip(), USER_CLOSE, ASSIST_OPEN]
+        # system
+        if msgs and (msgs[0].get("role") or "").strip().lower() == "system":
+            sys_txt = clean_text(msgs[0].get("content", ""))
+            if sys_txt:
+                parts += [SYS_PREFIX, sys_txt, SEP]
+        # last user
+        parts += [USER_PREFIX, user_q.strip(), SEP, ASSIST_PREFIX]
         return "".join(parts)
 
     if mode != "full_context":
         raise ValueError(f"unknown in-domain prompt mode: {mode}")
 
-    # ensure system exists
-    if msgs and (msgs[0].get("role") or "").strip().lower() != "system" and default_system:
-        msgs = [{"role": "system", "content": default_system}] + msgs
-
-    # keep everything up to last user (inclusive)
     lu = find_last_user_idx(msgs)
     if lu == -1:
-        # fallback
-        return build_prompt_from_messages(msgs, default_system, "last_user")
+        return build_prompt_from_messages_plain(msgs, default_system, "last_user")
 
     trimmed = msgs[: lu + 1]
 
-    # render: system/user/assistant fully, then append ASSIST_OPEN as the next turn marker
     parts: List[str] = []
-    i = 0
+    # system
     if trimmed and (trimmed[0].get("role") or "").strip().lower() == "system":
         sys_txt = clean_text(trimmed[0].get("content", ""))
         if sys_txt:
-            parts += [SYS_OPEN, sys_txt, SYS_CLOSE]
-        i = 1
+            parts += [SYS_PREFIX, sys_txt, SEP]
+        start = 1
+    else:
+        start = 0
 
-    for m in trimmed[i:]:
+    for m in trimmed[start:]:
         role = (m.get("role") or "").strip().lower()
         txt = clean_text(m.get("content", ""))
         if not txt:
             continue
         if role == "user":
-            parts += [USER_OPEN, txt, USER_CLOSE]
+            parts += [USER_PREFIX, txt, SEP]
         elif role == "assistant":
-            parts += [ASSIST_OPEN, txt, ASSIST_CLOSE]
+            parts += [ASSIST_PREFIX, txt, SEP]
 
-    parts.append(ASSIST_OPEN)
+    parts.append(ASSIST_PREFIX)
     return "".join(parts)
 
 
@@ -349,20 +363,25 @@ def main():
     ap.add_argument("--sample_every", type=int, default=1000)
     ap.add_argument("--samples_dir", type=str, default="")
     ap.add_argument("--sample_max_new_tokens", type=int, default=192)
-    ap.add_argument("--sample_temperature", type=float, default=0.0)  # 你现在更关心可比性：默认贪心
-    ap.add_argument("--sample_top_p", type=float, default=1.0)
-    ap.add_argument("--sample_top_k", type=int, default=0)
+    ap.add_argument("--sample_temperature", type=float, default=0.7)
+    ap.add_argument("--sample_top_p", type=float, default=0.9)
+    ap.add_argument("--sample_top_k", type=int, default=50)
     ap.add_argument("--sample_seed", type=int, default=1234)
+    ap.add_argument("--sample_repetition_penalty", type=float, default=1.12,
+                    help=">1.0 discourages repeating tokens during sampling (e.g. 1.05~1.25)")
+    ap.add_argument("--sample_repetition_window", type=int, default=256,
+                    help="how many recent tokens to apply repetition penalty over")
+    ap.add_argument("--sample_no_repeat_ngram", type=int, default=3,
+                    help="disallow repeating n-grams of this size during sampling (0=off). e.g. 3")
 
     # in-domain sampling (val_jsonl)
-    ap.add_argument("--sample_in_domain_n", type=int, default=10, help="sample N prompts from val_jsonl each sample_every")
-    ap.add_argument("--sample_in_domain_seed", type=int, default=1234, help="rng seed for picking val examples")
-    ap.add_argument("--sample_in_domain_show_ref", action="store_true", help="also print reference assistant for that val example")
+    ap.add_argument("--sample_in_domain_n", type=int, default=10)
+    ap.add_argument("--sample_in_domain_seed", type=int, default=1234)
+    ap.add_argument("--sample_in_domain_show_ref", action="store_true")
     ap.add_argument(
         "--sample_in_domain_mode",
         choices=["last_user", "full_context"],
         default="full_context",
-        help="how to build in-domain prompt from val_jsonl",
     )
     ap.add_argument(
         "--sample_in_domain_dump_prompt",
@@ -401,7 +420,7 @@ def main():
 
     if args.init_from_pretrain:
         ck = load_ckpt(args.init_from_pretrain)
-        cfg_dict = ck.get("config")
+        cfg_dict = ck.get("config") or ck.get("cfg")
         if not isinstance(cfg_dict, dict):
             raise RuntimeError("pretrain ckpt missing 'config' dict")
         cfg_dict = dict(cfg_dict)
@@ -413,6 +432,9 @@ def main():
         sd = ck.get("model")
         if sd is None:
             raise RuntimeError("pretrain ckpt missing 'model'")
+        if any(k.startswith("_orig_mod.") for k in sd.keys()):
+            sd = {k[len("_orig_mod.") :]: v for k, v in sd.items()}
+
         missing, unexpected = model.load_state_dict(sd, strict=False)
         print(f"[*] initialized from pretrain: {args.init_from_pretrain}")
         print(f"    missing keys: {len(missing)}, unexpected keys: {len(unexpected)}")
@@ -442,6 +464,10 @@ def main():
         sd = ck.get("model")
         if sd is None:
             raise RuntimeError("resume ckpt missing 'model'")
+
+        if any(k.startswith("_orig_mod.") for k in sd.keys()):
+            sd = {k[len("_orig_mod.") :]: v for k, v in sd.items()}
+
         model.load_state_dict(sd, strict=False)
 
         opt = ck.get("optimizer") or ck.get("optim")
@@ -459,7 +485,10 @@ def main():
     val_ds = JsonlOffsetsDataset(args.val_jsonl)
 
     print(f"[*] dataset: train_lines={len(train_ds)} val_lines={len(val_ds)}")
-    print(f"[*] effective_tokens/step = micro_bsz({args.micro_bsz}) * grad_accum({args.grad_accum}) * seq_len({args.seq_len}) = {args.micro_bsz*args.grad_accum*args.seq_len}")
+    print(
+        f"[*] effective_tokens/step = micro_bsz({args.micro_bsz}) * grad_accum({args.grad_accum}) * seq_len({args.seq_len})"
+        f" = {args.micro_bsz*args.grad_accum*args.seq_len}"
+    )
 
     train_loader = DataLoader(
         train_ds,
@@ -489,26 +518,30 @@ def main():
 
     @torch.no_grad()
     def sample_from_prompt(prompt_text: str) -> str:
+        """
+        Generate continuation after the last 'Assistant:' in prompt_text.
+        Stop on EOS or max_new_tokens.
+        """
         model.eval()
+
         prompt_ids = tok.encode(prompt_text).ids
+        # remove trailing EOS if tokenizer adds it
         if prompt_ids and prompt_ids[-1] == EOS_ID:
             prompt_ids = prompt_ids[:-1]
         if not prompt_ids:
             return ""
 
         if len(prompt_ids) >= args.seq_len:
-            prompt_ids = prompt_ids[-(args.seq_len - 1):]
+            prompt_ids = prompt_ids[-(args.seq_len - 1) :]
 
         ids = torch.tensor(prompt_ids, device=device, dtype=torch.long)[None, :]
         g = torch.Generator(device=device)
         g.manual_seed(args.sample_seed)
 
-        stop_ids = encode_strip_special(tok, ASSIST_CLOSE, BOS_ID, EOS_ID)
-
         def top_k_top_p(logits_1d: torch.Tensor, top_k: int, top_p: float) -> torch.Tensor:
             if top_k and top_k > 0:
-                top_k = min(top_k, logits_1d.size(-1))
-                v, _ = torch.topk(logits_1d, top_k)
+                k = min(top_k, logits_1d.size(-1))
+                v, _ = torch.topk(logits_1d, k)
                 thresh = v[-1]
                 logits_1d = torch.where(logits_1d < thresh, torch.full_like(logits_1d, -float("inf")), logits_1d)
             if top_p and top_p < 1.0:
@@ -522,7 +555,48 @@ def main():
                 logits_1d = torch.where(mask, torch.full_like(logits_1d, -float("inf")), logits_1d)
             return logits_1d
 
-        gen: List[int] = []
+        def apply_repetition_penalty(logits_1d: torch.Tensor, prev_ids: List[int], penalty: float) -> torch.Tensor:
+            """
+            GPT-2 style repetition penalty:
+            for tokens that have already appeared, reduce probability by modifying logits.
+            """
+            if penalty is None or penalty <= 1.0:
+                return logits_1d
+            if not prev_ids:
+                return logits_1d
+
+            # unique tokens is enough; windowing happens outside
+            uniq = set(prev_ids)
+            for tid in uniq:
+                # skip invalid ids just in case
+                if tid < 0 or tid >= logits_1d.numel():
+                    continue
+                v = logits_1d[tid]
+                # If v>0, divide; else multiply (as in HF generate)
+                logits_1d[tid] = v / penalty if v > 0 else v * penalty
+            return logits_1d
+
+        def ban_repeat_ngrams(logits_1d: torch.Tensor, generated: List[int], n: int) -> torch.Tensor:
+            if n is None or n <= 0:
+                return logits_1d
+            if len(generated) < n - 1:
+                return logits_1d
+
+            # collect all (n-1)-prefix -> next token set from history
+            prefix = tuple(generated[-(n - 1):])
+            banned = set()
+
+            for i in range(len(generated) - n + 1):
+                if tuple(generated[i:i + n - 1]) == prefix:
+                    banned.add(generated[i + n - 1])
+
+            if banned:
+                for t in banned:
+                    if 0 <= t < logits_1d.numel():
+                        logits_1d[t] = -1e10
+            return logits_1d
+
+
         for _ in range(args.sample_max_new_tokens):
             if ids.size(1) > args.seq_len:
                 ids = ids[:, -args.seq_len:]
@@ -533,6 +607,11 @@ def main():
                 nxt = int(torch.argmax(next_logits).item())
             else:
                 next_logits = next_logits / args.sample_temperature
+                # ids: shape [1, T]
+                recent = ids[0, -args.sample_repetition_window:].tolist()
+                next_logits = apply_repetition_penalty(next_logits, recent, args.sample_repetition_penalty)
+                gen_so_far = ids[0].tolist()
+                next_logits = ban_repeat_ngrams(next_logits, gen_so_far, args.sample_no_repeat_ngram)
                 next_logits = top_k_top_p(next_logits, top_k=args.sample_top_k, top_p=args.sample_top_p)
                 probs = torch.softmax(next_logits, dim=-1)
                 if torch.isnan(probs).any() or float(probs.sum().item()) == 0.0:
@@ -540,26 +619,21 @@ def main():
                 else:
                     nxt = int(torch.multinomial(probs, num_samples=1, generator=g).item())
 
-            gen.append(nxt)
             ids = torch.cat([ids, torch.tensor([[nxt]], device=device, dtype=torch.long)], dim=1)
-
-            if stop_ids and len(gen) >= len(stop_ids) and gen[-len(stop_ids):] == stop_ids:
-                break
             if nxt == EOS_ID:
                 break
 
         text = tok.decode(ids[0].tolist())
-        pos = text.rfind(ASSIST_OPEN)
+
+        # Return only the part after last Assistant:
+        pos = text.rfind(ASSIST_PREFIX)
         if pos != -1:
-            out = text[pos + len(ASSIST_OPEN):]
-            close_pos = out.rfind(ASSIST_CLOSE)
-            if close_pos != -1:
-                out = out[:close_pos]
+            out = text[pos + len(ASSIST_PREFIX) :]
             return out.strip()
         return text.strip()
 
     def build_fixed_prompt(user_q: str) -> str:
-        return "".join([SYS_OPEN, args.default_system.strip(), SYS_CLOSE, USER_OPEN, user_q.strip(), USER_CLOSE, ASSIST_OPEN])
+        return SYS_PREFIX + args.default_system.strip() + SEP + USER_PREFIX + user_q.strip() + SEP + ASSIST_PREFIX
 
     model.train()
     t0 = time.time()
@@ -656,10 +730,13 @@ def main():
             lines.append(
                 f"sampling: temp={args.sample_temperature} top_p={args.sample_top_p} top_k={args.sample_top_k} max_new={args.sample_max_new_tokens}\n"
             )
-            lines.append(f"in_domain: n={args.sample_in_domain_n} mode={args.sample_in_domain_mode} show_ref={bool(args.sample_in_domain_show_ref)} dump_prompt={bool(args.sample_in_domain_dump_prompt)}\n")
+            lines.append(
+                f"in_domain: n={args.sample_in_domain_n} mode={args.sample_in_domain_mode} "
+                f"show_ref={bool(args.sample_in_domain_show_ref)} dump_prompt={bool(args.sample_in_domain_dump_prompt)}\n"
+            )
             lines.append("=" * 80 + "\n")
 
-            # A) fixed prompts (out-of-domain)
+            # A) fixed prompts
             lines.append("[Fixed prompts]\n")
             lines.append("-" * 80 + "\n")
             for i, q in enumerate(FIXED_PROMPTS):
@@ -669,7 +746,7 @@ def main():
                 lines.append(f"[A{i+1}] {ans}\n")
                 lines.append("-" * 80 + "\n")
 
-            # B/C) in-domain prompts from val_jsonl
+            # B) in-domain prompts from val_jsonl
             if args.sample_in_domain_n > 0 and len(val_ds) > 0:
                 lines.append("\n[In-domain prompts from val_jsonl]\n")
                 lines.append("-" * 80 + "\n")
@@ -685,7 +762,7 @@ def main():
                     if not user_q:
                         continue
 
-                    prompt = build_prompt_from_messages(msgs, args.default_system, args.sample_in_domain_mode)
+                    prompt = build_prompt_from_messages_plain(msgs, args.default_system, args.sample_in_domain_mode)
                     ans = sample_from_prompt(prompt)
 
                     lines.append(f"[V{k}] idx={idx}\n")
@@ -694,7 +771,6 @@ def main():
 
                     if args.sample_in_domain_dump_prompt:
                         lines.append("[Prompt]\n")
-                        # 防止文件爆炸：最多截断一点
                         p = prompt
                         if len(p) > 4000:
                             p = p[:4000] + "\n...[truncated]\n"
