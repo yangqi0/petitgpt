@@ -643,10 +643,16 @@ def main() -> None:
     # Resume
     global_step = 0
     local_step = 0
+    resolved = None
     if args.resume_path:
-        resolved = _resolve_resume_path(args.resume_path, out_dir=out_dir, resume_step=int(args.resume_step))
+        resolved = _resolve_resume_path(
+            args.resume_path, out_dir=out_dir, resume_step=int(args.resume_step)
+        )
+
     if resolved is None:
-        print(f"[resume] WARNING: could not resolve resume_path={args.resume_path!r} (resume_step={args.resume_step}). Starting from scratch.")
+        if args.resume_path:
+            print(f"[resume] WARNING: could not resolve resume_path={args.resume_path!r} "
+                f"(resume_step={args.resume_step}). Starting from scratch.")
     else:
         global_step, local_step = load_ckpt(
             resume_path=resolved,
