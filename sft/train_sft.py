@@ -225,6 +225,90 @@ def load_ckpt(path: str) -> Dict[str, Any]:
     return torch.load(path, map_location="cpu")
 
 
+# -------------------------
+# In-domain prompt building
+# -------------------------
+def find_last_user_idx(messages: List[Dict[str, str]]) -> int:
+    for i in range(len(messages) - 1, -1, -1):
+        if (messages[i].get("role") or "").strip().lower() == "user":
+            return i
+    return -1
+
+
+def extract_last_user_and_ref(messages: List[Dict[str, str]]) -> Tuple[str, str]:
+    """Return (last_user_text, last_assistant_text_if_any)."""
+    last_user = ""
+    ref = ""
+    for m in reversed(messages):
+        if (m.get("role") or "").strip().lower() == "user":
+            last_user = clean_text(m.get("content", ""))
+            break
+    for m in reversed(messages):
+        if (m.get("role") or "").strip().lower() == "assistant":
+            ref = clean_text(m.get("content", ""))
+            break
+    return last_user, ref
+
+
+def build_prompt_from_messages(
+    messages: List[Dict[str, str]],
+    default_system: str,
+    mode: str,
+) -> str:
+    """
+    mode:
+      - 'last_user': prompt = default_system + last_user + ASSIST_OPEN
+      - 'full_context': render conversation up to the last user turn (inclusive), then append ASSIST_OPEN
+    """
+    msgs = messages or []
+
+    if mode == "last_user":
+        user_q, _ = extract_last_user_and_ref(msgs)
+        system = default_system or ""
+        parts: List[str] = []
+        if system.strip():
+            parts += [SYS_OPEN, system.strip(), SYS_CLOSE]
+        parts += [USER_OPEN, user_q.strip(), USER_CLOSE, ASSIST_OPEN]
+        return "".join(parts)
+
+    if mode != "full_context":
+        raise ValueError(f"unknown in-domain prompt mode: {mode}")
+
+    # ensure system exists
+    if msgs and (msgs[0].get("role") or "").strip().lower() != "system" and default_system:
+        msgs = [{"role": "system", "content": default_system}] + msgs
+
+    # keep everything up to last user (inclusive)
+    lu = find_last_user_idx(msgs)
+    if lu == -1:
+        # fallback
+        return build_prompt_from_messages(msgs, default_system, "last_user")
+
+    trimmed = msgs[: lu + 1]
+
+    # render: system/user/assistant fully, then append ASSIST_OPEN as the next turn marker
+    parts: List[str] = []
+    i = 0
+    if trimmed and (trimmed[0].get("role") or "").strip().lower() == "system":
+        sys_txt = clean_text(trimmed[0].get("content", ""))
+        if sys_txt:
+            parts += [SYS_OPEN, sys_txt, SYS_CLOSE]
+        i = 1
+
+    for m in trimmed[i:]:
+        role = (m.get("role") or "").strip().lower()
+        txt = clean_text(m.get("content", ""))
+        if not txt:
+            continue
+        if role == "user":
+            parts += [USER_OPEN, txt, USER_CLOSE]
+        elif role == "assistant":
+            parts += [ASSIST_OPEN, txt, ASSIST_CLOSE]
+
+    parts.append(ASSIST_OPEN)
+    return "".join(parts)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--train_jsonl", required=True)
@@ -265,8 +349,8 @@ def main():
     ap.add_argument("--sample_every", type=int, default=1000)
     ap.add_argument("--samples_dir", type=str, default="")
     ap.add_argument("--sample_max_new_tokens", type=int, default=192)
-    ap.add_argument("--sample_temperature", type=float, default=0.7)
-    ap.add_argument("--sample_top_p", type=float, default=0.9)
+    ap.add_argument("--sample_temperature", type=float, default=0.0)  # 你现在更关心可比性：默认贪心
+    ap.add_argument("--sample_top_p", type=float, default=1.0)
     ap.add_argument("--sample_top_k", type=int, default=0)
     ap.add_argument("--sample_seed", type=int, default=1234)
 
@@ -274,6 +358,17 @@ def main():
     ap.add_argument("--sample_in_domain_n", type=int, default=10, help="sample N prompts from val_jsonl each sample_every")
     ap.add_argument("--sample_in_domain_seed", type=int, default=1234, help="rng seed for picking val examples")
     ap.add_argument("--sample_in_domain_show_ref", action="store_true", help="also print reference assistant for that val example")
+    ap.add_argument(
+        "--sample_in_domain_mode",
+        choices=["last_user", "full_context"],
+        default="full_context",
+        help="how to build in-domain prompt from val_jsonl",
+    )
+    ap.add_argument(
+        "--sample_in_domain_dump_prompt",
+        action="store_true",
+        help="also dump the rendered prompt text (for debugging inputs)",
+    )
 
     args = ap.parse_args()
 
@@ -363,6 +458,9 @@ def main():
     train_ds = JsonlOffsetsDataset(args.train_jsonl)
     val_ds = JsonlOffsetsDataset(args.val_jsonl)
 
+    print(f"[*] dataset: train_lines={len(train_ds)} val_lines={len(val_ds)}")
+    print(f"[*] effective_tokens/step = micro_bsz({args.micro_bsz}) * grad_accum({args.grad_accum}) * seq_len({args.seq_len}) = {args.micro_bsz*args.grad_accum*args.seq_len}")
+
     train_loader = DataLoader(
         train_ds,
         batch_size=args.micro_bsz,
@@ -389,36 +487,10 @@ def main():
         t = min(max(t, 0.0), 1.0)
         return args.lr * 0.5 * (1.0 + math.cos(math.pi * t))
 
-    def build_chat_prompt(system: str, user: str) -> str:
-        system = (system or "").strip()
-        user = (user or "").strip()
-        parts = []
-        if system:
-            parts += [SYS_OPEN, system, SYS_CLOSE]
-        parts += [USER_OPEN, user, USER_CLOSE, ASSIST_OPEN]
-        return "".join(parts)
-
-    def extract_last_user_and_ref(messages: List[Dict[str, str]]) -> Tuple[str, str]:
-        """Return (last_user_text, ref_assistant_text_after_it_if_any_else_last_assistant)."""
-        last_user = ""
-        ref = ""
-        # find last user
-        for m in reversed(messages):
-            if (m.get("role") or "").strip().lower() == "user":
-                last_user = clean_text(m.get("content", ""))
-                break
-        # find last assistant (best-effort)
-        for m in reversed(messages):
-            if (m.get("role") or "").strip().lower() == "assistant":
-                ref = clean_text(m.get("content", ""))
-                break
-        return last_user, ref
-
     @torch.no_grad()
-    def sample_once(user_text: str) -> str:
+    def sample_from_prompt(prompt_text: str) -> str:
         model.eval()
-        prompt = build_chat_prompt(args.default_system, user_text)
-        prompt_ids = tok.encode(prompt).ids
+        prompt_ids = tok.encode(prompt_text).ids
         if prompt_ids and prompt_ids[-1] == EOS_ID:
             prompt_ids = prompt_ids[:-1]
         if not prompt_ids:
@@ -431,7 +503,6 @@ def main():
         g = torch.Generator(device=device)
         g.manual_seed(args.sample_seed)
 
-        # stop when [/ASSISTANT] appears (token-level)
         stop_ids = encode_strip_special(tok, ASSIST_CLOSE, BOS_ID, EOS_ID)
 
         def top_k_top_p(logits_1d: torch.Tensor, top_k: int, top_p: float) -> torch.Tensor:
@@ -451,23 +522,18 @@ def main():
                 logits_1d = torch.where(mask, torch.full_like(logits_1d, -float("inf")), logits_1d)
             return logits_1d
 
-        max_new = args.sample_max_new_tokens
-        temperature = args.sample_temperature
-        top_p = args.sample_top_p
-        top_k = args.sample_top_k
-
         gen: List[int] = []
-        for _ in range(max_new):
+        for _ in range(args.sample_max_new_tokens):
             if ids.size(1) > args.seq_len:
                 ids = ids[:, -args.seq_len:]
             logits = model(ids)
             next_logits = logits[0, -1, :].float()
 
-            if temperature <= 0:
+            if args.sample_temperature <= 0:
                 nxt = int(torch.argmax(next_logits).item())
             else:
-                next_logits = next_logits / temperature
-                next_logits = top_k_top_p(next_logits, top_k=top_k, top_p=top_p)
+                next_logits = next_logits / args.sample_temperature
+                next_logits = top_k_top_p(next_logits, top_k=args.sample_top_k, top_p=args.sample_top_p)
                 probs = torch.softmax(next_logits, dim=-1)
                 if torch.isnan(probs).any() or float(probs.sum().item()) == 0.0:
                     nxt = int(torch.argmax(next_logits).item())
@@ -492,13 +558,15 @@ def main():
             return out.strip()
         return text.strip()
 
+    def build_fixed_prompt(user_q: str) -> str:
+        return "".join([SYS_OPEN, args.default_system.strip(), SYS_CLOSE, USER_OPEN, user_q.strip(), USER_CLOSE, ASSIST_OPEN])
+
     model.train()
     t0 = time.time()
     running_loss = 0.0
     step = start_step
     train_iter = iter(train_loader)
 
-    # rng for in-domain sampling (choose val items)
     in_rng = random.Random(args.sample_in_domain_seed)
 
     while step < args.max_steps:
@@ -588,36 +656,56 @@ def main():
             lines.append(
                 f"sampling: temp={args.sample_temperature} top_p={args.sample_top_p} top_k={args.sample_top_k} max_new={args.sample_max_new_tokens}\n"
             )
+            lines.append(f"in_domain: n={args.sample_in_domain_n} mode={args.sample_in_domain_mode} show_ref={bool(args.sample_in_domain_show_ref)} dump_prompt={bool(args.sample_in_domain_dump_prompt)}\n")
             lines.append("=" * 80 + "\n")
 
             # A) fixed prompts (out-of-domain)
             lines.append("[Fixed prompts]\n")
             lines.append("-" * 80 + "\n")
             for i, q in enumerate(FIXED_PROMPTS):
-                ans = sample_once(q)
+                prompt = build_fixed_prompt(q)
+                ans = sample_from_prompt(prompt)
                 lines.append(f"[Q{i+1}] {q}\n")
                 lines.append(f"[A{i+1}] {ans}\n")
                 lines.append("-" * 80 + "\n")
 
-            # B) in-domain prompts from val_jsonl
+            # B/C) in-domain prompts from val_jsonl
             if args.sample_in_domain_n > 0 and len(val_ds) > 0:
                 lines.append("\n[In-domain prompts from val_jsonl]\n")
                 lines.append("-" * 80 + "\n")
                 n = min(args.sample_in_domain_n, len(val_ds))
-                # sample indices with deterministic RNG
                 idxs = [in_rng.randrange(len(val_ds)) for _ in range(n)]
+                lines.append(f"[val idxs] {idxs}\n")
+                lines.append("-" * 80 + "\n")
+
                 for k, idx in enumerate(idxs, start=1):
                     ex = val_ds[idx]
                     msgs = ex.get("messages") or []
                     user_q, ref_a = extract_last_user_and_ref(msgs)
                     if not user_q:
                         continue
-                    ans = sample_once(user_q)
+
+                    prompt = build_prompt_from_messages(msgs, args.default_system, args.sample_in_domain_mode)
+                    ans = sample_from_prompt(prompt)
+
                     lines.append(f"[V{k}] idx={idx}\n")
-                    lines.append(f"[User]\n{user_q}\n")
+                    lines.append("[User]\n")
+                    lines.append(f"{user_q}\n")
+
+                    if args.sample_in_domain_dump_prompt:
+                        lines.append("[Prompt]\n")
+                        # 防止文件爆炸：最多截断一点
+                        p = prompt
+                        if len(p) > 4000:
+                            p = p[:4000] + "\n...[truncated]\n"
+                        lines.append(p + "\n")
+
                     if args.sample_in_domain_show_ref and ref_a:
-                        lines.append(f"[Ref assistant]\n{ref_a}\n")
-                    lines.append(f"[Model]\n{ans}\n")
+                        lines.append("[Ref assistant]\n")
+                        lines.append(ref_a + "\n")
+
+                    lines.append("[Model]\n")
+                    lines.append(ans + "\n")
                     lines.append("-" * 80 + "\n")
 
             with open(out_path, "w", encoding="utf-8") as f:
