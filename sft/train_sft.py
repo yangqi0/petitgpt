@@ -158,7 +158,7 @@ def build_example(
         seg_ids = encode_strip_special(tok, seg_text, bos_id, eos_id)
         ids_all.extend(seg_ids)
         if supervise:
-            labels_all.extend(seg_ids)      # label=target token at same position
+            labels_all.extend(seg_ids)
         else:
             labels_all.extend([-100] * len(seg_ids))
 
@@ -243,7 +243,7 @@ def main():
 
     ap.add_argument("--precision", choices=["fp16", "bf16", "fp32"], default="bf16")
     ap.add_argument("--eval_every", type=int, default=500)
-    ap.add_argument("--eval_batches", type=int, default=200)  # <- more robust val
+    ap.add_argument("--eval_batches", type=int, default=200)
     ap.add_argument("--save_every", type=int, default=2000)
 
     ap.add_argument("--init_from_pretrain", default="")
@@ -261,6 +261,7 @@ def main():
     ap.add_argument("--seed", type=int, default=1234)
     ap.add_argument("--debug_first_batch", action="store_true")
 
+    # sampling
     ap.add_argument("--sample_every", type=int, default=1000)
     ap.add_argument("--samples_dir", type=str, default="")
     ap.add_argument("--sample_max_new_tokens", type=int, default=192)
@@ -268,6 +269,12 @@ def main():
     ap.add_argument("--sample_top_p", type=float, default=0.9)
     ap.add_argument("--sample_top_k", type=int, default=0)
     ap.add_argument("--sample_seed", type=int, default=1234)
+
+    # in-domain sampling (val_jsonl)
+    ap.add_argument("--sample_in_domain_n", type=int, default=10, help="sample N prompts from val_jsonl each sample_every")
+    ap.add_argument("--sample_in_domain_seed", type=int, default=1234, help="rng seed for picking val examples")
+    ap.add_argument("--sample_in_domain_show_ref", action="store_true", help="also print reference assistant for that val example")
+
     args = ap.parse_args()
 
     os.makedirs(args.out_dir, exist_ok=True)
@@ -391,12 +398,27 @@ def main():
         parts += [USER_OPEN, user, USER_CLOSE, ASSIST_OPEN]
         return "".join(parts)
 
+    def extract_last_user_and_ref(messages: List[Dict[str, str]]) -> Tuple[str, str]:
+        """Return (last_user_text, ref_assistant_text_after_it_if_any_else_last_assistant)."""
+        last_user = ""
+        ref = ""
+        # find last user
+        for m in reversed(messages):
+            if (m.get("role") or "").strip().lower() == "user":
+                last_user = clean_text(m.get("content", ""))
+                break
+        # find last assistant (best-effort)
+        for m in reversed(messages):
+            if (m.get("role") or "").strip().lower() == "assistant":
+                ref = clean_text(m.get("content", ""))
+                break
+        return last_user, ref
+
     @torch.no_grad()
     def sample_once(user_text: str) -> str:
         model.eval()
         prompt = build_chat_prompt(args.default_system, user_text)
         prompt_ids = tok.encode(prompt).ids
-        # remove trailing EOS if any
         if prompt_ids and prompt_ids[-1] == EOS_ID:
             prompt_ids = prompt_ids[:-1]
         if not prompt_ids:
@@ -409,7 +431,7 @@ def main():
         g = torch.Generator(device=device)
         g.manual_seed(args.sample_seed)
 
-        # Stop when [/ASSISTANT] appears (pre-encode and strip specials)
+        # stop when [/ASSISTANT] appears (token-level)
         stop_ids = encode_strip_special(tok, ASSIST_CLOSE, BOS_ID, EOS_ID)
 
         def top_k_top_p(logits_1d: torch.Tensor, top_k: int, top_p: float) -> torch.Tensor:
@@ -464,7 +486,6 @@ def main():
         pos = text.rfind(ASSIST_OPEN)
         if pos != -1:
             out = text[pos + len(ASSIST_OPEN):]
-            # strip any trailing close tag for readability
             close_pos = out.rfind(ASSIST_CLOSE)
             if close_pos != -1:
                 out = out[:close_pos]
@@ -476,6 +497,9 @@ def main():
     running_loss = 0.0
     step = start_step
     train_iter = iter(train_loader)
+
+    # rng for in-domain sampling (choose val items)
+    in_rng = random.Random(args.sample_in_domain_seed)
 
     while step < args.max_steps:
         optimizer.zero_grad(set_to_none=True)
@@ -553,20 +577,48 @@ def main():
             save_checkpoint_atomic(os.path.join(args.out_dir, "latest.pt"), ckpt)
             print(f"[ckpt] saved {ckpt_path}")
 
+        # ---- Sampling (fixed + in-domain) ----
         if args.sample_every and args.sample_every > 0 and step % args.sample_every == 0:
             sdir = args.samples_dir or os.path.join(args.out_dir, "samples")
             Path(sdir).mkdir(parents=True, exist_ok=True)
             out_path = os.path.join(sdir, f"step_{step:06d}.txt")
 
-            lines = []
+            lines: List[str] = []
             lines.append(f"step={step}\n")
-            lines.append(f"sampling: temp={args.sample_temperature} top_p={args.sample_top_p} top_k={args.sample_top_k} max_new={args.sample_max_new_tokens}\n")
+            lines.append(
+                f"sampling: temp={args.sample_temperature} top_p={args.sample_top_p} top_k={args.sample_top_k} max_new={args.sample_max_new_tokens}\n"
+            )
             lines.append("=" * 80 + "\n")
+
+            # A) fixed prompts (out-of-domain)
+            lines.append("[Fixed prompts]\n")
+            lines.append("-" * 80 + "\n")
             for i, q in enumerate(FIXED_PROMPTS):
                 ans = sample_once(q)
                 lines.append(f"[Q{i+1}] {q}\n")
                 lines.append(f"[A{i+1}] {ans}\n")
                 lines.append("-" * 80 + "\n")
+
+            # B) in-domain prompts from val_jsonl
+            if args.sample_in_domain_n > 0 and len(val_ds) > 0:
+                lines.append("\n[In-domain prompts from val_jsonl]\n")
+                lines.append("-" * 80 + "\n")
+                n = min(args.sample_in_domain_n, len(val_ds))
+                # sample indices with deterministic RNG
+                idxs = [in_rng.randrange(len(val_ds)) for _ in range(n)]
+                for k, idx in enumerate(idxs, start=1):
+                    ex = val_ds[idx]
+                    msgs = ex.get("messages") or []
+                    user_q, ref_a = extract_last_user_and_ref(msgs)
+                    if not user_q:
+                        continue
+                    ans = sample_once(user_q)
+                    lines.append(f"[V{k}] idx={idx}\n")
+                    lines.append(f"[User]\n{user_q}\n")
+                    if args.sample_in_domain_show_ref and ref_a:
+                        lines.append(f"[Ref assistant]\n{ref_a}\n")
+                    lines.append(f"[Model]\n{ans}\n")
+                    lines.append("-" * 80 + "\n")
 
             with open(out_path, "w", encoding="utf-8") as f:
                 f.writelines(lines)
