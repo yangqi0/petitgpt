@@ -1,4 +1,4 @@
-# scripts/build_pretrain_shards.py
+# pretrain/build_pretrain_shards.py
 from __future__ import annotations
 
 import argparse
@@ -13,21 +13,12 @@ from tqdm import tqdm
 
 
 def guess_text(obj: dict[str, Any]) -> str | None:
-    """Best-effort extraction of text from different jsonl schemas.
-
-    Works for:
-      - {"text": "..."} (FineWeb-like)
-      - {"content": "..."} / {"message": "..."} / {"completion": "..."}
-      - instruction datasets: {"instruction","input","output"/"response"/"answer"}
-      - chat datasets: {"messages":[{"role","content"},...]} / {"conversations":[...]}
-    """
-    # most common
+    """Best-effort extraction of text from different jsonl schemas."""
     for k in ("text", "content", "message", "completion"):
         v = obj.get(k)
         if isinstance(v, str) and v.strip():
             return v.strip()
 
-    # instruction-style
     instr = obj.get("instruction")
     inp = obj.get("input")
     out = obj.get("output") or obj.get("response") or obj.get("answer")
@@ -41,7 +32,6 @@ def guess_text(obj: dict[str, Any]) -> str | None:
             parts.append(out.strip())
         return "\n\n".join(parts) if parts else None
 
-    # chat-style
     msgs = obj.get("messages") or obj.get("conversations")
     if isinstance(msgs, list) and msgs:
         parts = []
@@ -58,7 +48,6 @@ def guess_text(obj: dict[str, Any]) -> str | None:
 
 
 def iter_jsonl_texts(path: Path) -> Iterable[str]:
-    """Yield extracted texts from a jsonl file."""
     with path.open("r", encoding="utf-8") as f:
         for line in f:
             line = line.strip()
@@ -75,13 +64,42 @@ def iter_jsonl_texts(path: Path) -> Iterable[str]:
                 yield t
 
 
-class JsonlTextStream:
-    """Streaming jsonl reader that yields best-effort extracted texts."""
+def file_fingerprint(p: Path) -> dict[str, Any]:
+    """Return a stable-ish identity record to detect 'same path, different file' issues."""
+    st = p.stat()
+    return {
+        "path": str(p),
+        "resolved": str(p.resolve()),
+        "size": int(st.st_size),
+        "mtime": float(st.st_mtime),
+        "inode": int(st.st_ino),
+        "device": int(st.st_dev),
+    }
 
+
+def fast_count_lines(p: Path, max_lines: int = 300_000) -> dict[str, Any]:
+    """Count lines up to max_lines; if file is larger, return 'at_least'."""
+    n = 0
+    with p.open("r", encoding="utf-8") as f:
+        for _ in f:
+            n += 1
+            if n >= max_lines:
+                return {"lines": n, "at_least": True, "max_lines": max_lines}
+    return {"lines": n, "at_least": False, "max_lines": max_lines}
+
+
+class JsonlTextStream:
     def __init__(self, path: Path):
         self.path = path
         self._f = path.open("r", encoding="utf-8")
         self.eof = False
+
+        # counters
+        self.lines_read = 0
+        self.bad_json = 0
+        self.non_dict = 0
+        self.no_text = 0
+        self.ok_texts = 0
 
     def close(self) -> None:
         try:
@@ -97,39 +115,35 @@ class JsonlTextStream:
             if not line:
                 self.eof = True
                 return None
+            self.lines_read += 1
             line = line.strip()
             if not line:
                 continue
             try:
                 obj = json.loads(line)
             except json.JSONDecodeError:
+                self.bad_json += 1
                 continue
             if not isinstance(obj, dict):
+                self.non_dict += 1
                 continue
             t = guess_text(obj)
-            if t:
-                return t
+            if not t:
+                self.no_text += 1
+                continue
+            self.ok_texts += 1
+            return t
 
 
 def load_tokenizer(tokenizer_path: str):
-    """Load tokenizer.
-
-    Supports:
-      - tokenizers.Tokenizer from HuggingFace (tokenizer.json)
-      - a project-local Tokenizer at src.tokenizer.Tokenizer with from_file()
-    """
-    # Option A: your own tokenizer module
     try:
         from src.tokenizer import Tokenizer  # type: ignore
-
         return Tokenizer.from_file(tokenizer_path)
     except Exception:
         pass
 
-    # Option B: HuggingFace tokenizer.json
     try:
         from tokenizers import Tokenizer  # type: ignore
-
         return Tokenizer.from_file(tokenizer_path)
     except Exception as e:
         raise RuntimeError(
@@ -139,13 +153,11 @@ def load_tokenizer(tokenizer_path: str):
 
 
 def _tokenizer_vocab_size(tokenizer) -> int | None:
-    # tokenizers.Tokenizer
     if hasattr(tokenizer, "get_vocab_size"):
         try:
             return int(tokenizer.get_vocab_size())  # type: ignore
         except Exception:
             return None
-    # custom
     for attr in ("vocab_size", "n_vocab"):
         if hasattr(tokenizer, attr):
             try:
@@ -155,11 +167,7 @@ def _tokenizer_vocab_size(tokenizer) -> int | None:
     return None
 
 
-def encode(
-    tokenizer, text: str, add_bos: bool, add_eos: bool, bos_id: int, eos_id: int
-) -> list[int]:
-    """Encode a single text into token ids."""
-    ids: list[int]
+def encode(tokenizer, text: str, add_bos: bool, add_eos: bool, bos_id: int, eos_id: int) -> list[int]:
     if hasattr(tokenizer, "encode") and "tokenizers" in type(tokenizer).__module__:
         enc = tokenizer.encode(text)
         ids = enc.ids
@@ -174,7 +182,6 @@ def encode(
 
 
 def parse_sources(source_args: list[str]) -> list[tuple[Path, float]]:
-    """Parse --source path:weight entries, return normalized weights."""
     items: list[tuple[Path, float]] = []
     for s in source_args:
         if ":" not in s:
@@ -184,17 +191,12 @@ def parse_sources(source_args: list[str]) -> list[tuple[Path, float]]:
         w = w.strip()
         if not p:
             raise ValueError(f"Bad --source (empty path): {s!r}")
-        try:
-            wf = float(w)
-        except ValueError as e:
-            raise ValueError(f"Bad --source weight in {s!r}: {e}") from e
+        wf = float(w)
         if wf <= 0:
             raise ValueError(f"--source weight must be > 0, got {wf} in {s!r}")
         items.append((Path(p), wf))
-
     if not items:
         return []
-
     tot = sum(w for _, w in items)
     return [(p, w / tot) for p, w in items]
 
@@ -213,19 +215,8 @@ def write_shards(
     bos_id: int,
     eos_id: int,
     target_train_tokens: int,
+    precheck_max_lines: int,
 ) -> None:
-    """Build packed token shards.
-
-    Modes:
-      - Legacy mode: provide jsonl_paths (non-empty) and sources empty -> read in order.
-      - Mixed mode: provide sources (non-empty) -> sample documents across sources according to weights,
-        and optionally stop after ~target_train_tokens tokens have been written to train split.
-
-    Notes:
-      - val split is decided per *document* with probability val_ratio (same behavior as before).
-      - token accounting is approximate at document granularity.
-      - shards are written as uint16 by default if vocab_size <= 65535, else uint32.
-    """
     out_train = out_dir / "train"
     out_val = out_dir / "val"
     out_train.mkdir(parents=True, exist_ok=True)
@@ -234,10 +225,7 @@ def write_shards(
     rng = random.Random(seed)
     tokenizer = load_tokenizer(tokenizer_path)
     vocab_size = _tokenizer_vocab_size(tokenizer)
-    if vocab_size is not None and vocab_size > 65535:
-        dtype = np.uint32
-    else:
-        dtype = np.uint16
+    dtype = np.uint32 if (vocab_size is not None and vocab_size > 65535) else np.uint16
 
     buf_train: list[int] = []
     buf_val: list[int] = []
@@ -248,17 +236,28 @@ def write_shards(
     seen_docs = 0
     kept_docs = 0
 
-    # Per-source bookkeeping (only meaningful in mixed mode)
-    per_src = {}
+    per_src: dict[str, Any] = {}
+    source_fingerprints: dict[str, Any] = {}
+    source_line_precheck: dict[str, Any] = {}
+
     if sources:
         for p, w in sources:
-            per_src[str(p)] = {
+            sp = str(p)
+            per_src[sp] = {
                 "weight": float(w),
                 "seen_docs": 0,
                 "kept_docs": 0,
                 "train_tokens": 0,
                 "val_tokens": 0,
+                "lines_read": 0,
+                "bad_json": 0,
+                "non_dict": 0,
+                "no_text": 0,
+                "ok_texts": 0,
             }
+            # record file identity now (helps debug stale mounts)
+            source_fingerprints[sp] = file_fingerprint(p)
+            source_line_precheck[sp] = fast_count_lines(p, max_lines=precheck_max_lines)
 
     def flush(buf: list[int], out_path: Path) -> int:
         arr = np.asarray(buf, dtype=dtype)
@@ -309,9 +308,6 @@ def write_shards(
                 per_src[src_path]["train_tokens"] += len(ids)
             maybe_flush_train()
 
-    # -----------------------
-    # Legacy mode: sequential
-    # -----------------------
     if not sources:
         for jp in jsonl_paths:
             print(f"Reading: {jp}")
@@ -319,35 +315,25 @@ def write_shards(
                 ids = encode(tokenizer, text, add_bos, add_eos, bos_id, eos_id)
                 add_ids(ids, src_path=None)
 
-    # -----------------------
-    # Mixed mode: weighted + token quota
-    # -----------------------
     else:
         src_paths = [p for p, _ in sources]
-        # normalized weights already
         src_weights = [w for _, w in sources]
         streams = [JsonlTextStream(p) for p in src_paths]
         exhausted = [False for _ in sources]
 
-        # token quota is applied to *train* tokens (because that's what drives learning)
         quota = None
         used_train = None
         if target_train_tokens > 0:
             quota = [int(target_train_tokens * w) for w in src_weights]
-            # fix rounding to hit exact total
             diff = target_train_tokens - sum(quota)
-            # distribute the remainder
             for i in range(abs(diff)):
                 quota[i % len(quota)] += 1 if diff > 0 else -1
             used_train = [0 for _ in sources]
 
-        pbar = tqdm(
-            total=target_train_tokens if target_train_tokens > 0 else None,
-            desc="building (train tokens)",
-        )
+        pbar = tqdm(total=target_train_tokens if target_train_tokens > 0 else None,
+                    desc="building (train tokens)")
 
         def pick_source_idx() -> int | None:
-            # active sources: not exhausted and (if quota) not full
             active = []
             weights = []
             for i in range(len(sources)):
@@ -358,7 +344,7 @@ def write_shards(
                     if remain <= 0:
                         continue
                     active.append(i)
-                    weights.append(float(remain))  # proportional to remaining quota
+                    weights.append(float(remain))
                 else:
                     active.append(i)
                     weights.append(float(src_weights[i]))
@@ -391,35 +377,34 @@ def write_shards(
                 before_train = total_train
                 add_ids(ids, src_path=str(src_paths[i]))
 
-                # update train quota tracker
+                inc = max(total_train - before_train, 0)
                 if quota is not None and used_train is not None:
-                    used_train[i] += max(total_train - before_train, 0)  # only train tokens count
-                    # pbar uses train tokens
-                    pbar.update(max(total_train - before_train, 0))
-                else:
-                    # if no quota, still update pbar by train tokens to show progress
-                    pbar.update(max(total_train - before_train, 0))
+                    used_train[i] += inc
+                pbar.update(inc)
 
         finally:
             pbar.close()
-            for s in streams:
+            for p, s in zip(src_paths, streams):
+                sp = str(p)
+                per_src[sp]["lines_read"] = s.lines_read
+                per_src[sp]["bad_json"] = s.bad_json
+                per_src[sp]["non_dict"] = s.non_dict
+                per_src[sp]["no_text"] = s.no_text
+                per_src[sp]["ok_texts"] = s.ok_texts
                 s.close()
 
-    # flush remainders (keep them as last partial shard)
     if buf_train:
         p = out_train / f"shard_{shard_idx_train:05d}.bin"
         n = flush(buf_train, p)
         total_train += n
         shard_idx_train += 1
-        buf_train = []
     if buf_val:
         p = out_val / f"shard_{shard_idx_val:05d}.bin"
         n = flush(buf_val, p)
         total_val += n
         shard_idx_val += 1
-        buf_val = []
 
-    meta = {
+    meta: dict[str, Any] = {
         "tokenizer_path": tokenizer_path,
         "dtype": "uint32" if dtype == np.uint32 else "uint16",
         "jsonl_paths": [str(p) for p in jsonl_paths] if jsonl_paths else [],
@@ -437,72 +422,46 @@ def write_shards(
         "val_tokens": total_val,
         "train_shards": shard_idx_train,
         "val_shards": shard_idx_val,
+        "source_fingerprints": source_fingerprints,
+        "source_line_precheck": source_line_precheck,
     }
     if per_src:
         meta["per_source"] = per_src
     if sources and target_train_tokens > 0:
         meta["target_train_tokens"] = int(target_train_tokens)
 
-    (out_dir / "meta.json").write_text(
-        json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8"
-    )
+    (out_dir / "meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8")
     print("Done.")
     print(json.dumps(meta, ensure_ascii=False, indent=2))
 
 
 def main():
     ap = argparse.ArgumentParser()
-
-    # New mode: weighted sources (recommended)
-    ap.add_argument(
-        "--source",
-        action="append",
-        default=[],
-        help="Data source in form path:weight . Can be used multiple times.",
-    )
-    ap.add_argument(
-        "--target_train_tokens",
-        type=int,
-        default=0,
-        help="Stop after producing ~this many train tokens (0 means read all available data).",
-    )
-
-    # Legacy mode: sequential jsonl list (kept for backward compatibility)
-    ap.add_argument(
-        "--jsonl",
-        nargs="*",
-        default=[],
-        help="Input jsonl files (legacy mode). If --source is provided, --jsonl is ignored.",
-    )
-
-    ap.add_argument("--out_dir", required=True, help="Output dir for shards")
-    ap.add_argument(
-        "--tokenizer_path", required=True, help="Path to tokenizer.json or your tokenizer file"
-    )
-    ap.add_argument(
-        "--shard_tokens", type=int, default=10_000_000, help="Tokens per shard (uint16/uint32)"
-    )
-    ap.add_argument(
-        "--val_ratio", type=float, default=0.002, help="Probability a document goes to val"
-    )
+    ap.add_argument("--source", action="append", default=[], help="path:weight (repeatable)")
+    ap.add_argument("--target_train_tokens", type=int, default=0)
+    ap.add_argument("--jsonl", nargs="*", default=[], help="legacy sequential mode")
+    ap.add_argument("--out_dir", required=True)
+    ap.add_argument("--tokenizer_path", required=True)
+    ap.add_argument("--shard_tokens", type=int, default=10_000_000)
+    ap.add_argument("--val_ratio", type=float, default=0.002)
     ap.add_argument("--seed", type=int, default=1234)
     ap.add_argument("--add_bos", action="store_true")
     ap.add_argument("--add_eos", action="store_true")
     ap.add_argument("--bos_id", type=int, default=2)
     ap.add_argument("--eos_id", type=int, default=3)
+    ap.add_argument("--precheck_max_lines", type=int, default=300_000,
+                    help="Count up to this many lines for each source before building (debug).")
     args = ap.parse_args()
 
     out_dir = Path(args.out_dir)
-
     sources = parse_sources(args.source)
+
     if sources:
         jsonl_paths: list[Path] = []
     else:
         jsonl_paths = [Path(x) for x in (args.jsonl or [])]
         if not jsonl_paths:
-            raise SystemExit(
-                "You must provide either --source path:weight (recommended) or --jsonl file1 file2 ... (legacy)."
-            )
+            raise SystemExit("Provide either --source path:weight or --jsonl ...")
 
     write_shards(
         jsonl_paths=jsonl_paths,
@@ -517,6 +476,7 @@ def main():
         bos_id=args.bos_id,
         eos_id=args.eos_id,
         target_train_tokens=args.target_train_tokens,
+        precheck_max_lines=args.precheck_max_lines,
     )
 
 
