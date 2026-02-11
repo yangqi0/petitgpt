@@ -1,15 +1,18 @@
+cat > pretrain/extract_hf_to_jsonl.py <<'PY'
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Extract HF dataset (streaming) to simple jsonl: {"text": "..."} per line.
 
-Key features:
+Features:
 - streaming=True by default (no full download)
 - supports HF config + data_dir
 - basic text field fallback
-- mode=code: strong cleaning for code snippets (C1)
-- mode=wiki: optional template/license filtering
-- safe-ish shutdown to reduce rare C++ aborts on exit
+- mode=code: strong cleaning for code snippets
+- mode=wiki: trims boilerplate tail sections (References/External links/See also/Category etc.)
+- optional exact dedup by sha1
+- periodic flush+fsync for safer writes on network filesystems
+- --hard_exit: os._exit(0) after printing stats to avoid rare interpreter shutdown aborts
 """
 
 from __future__ import annotations
@@ -22,7 +25,7 @@ import os
 import random
 import re
 import sys
-from typing import Any, Iterable, Optional
+from typing import Any, Optional
 
 from datasets import load_dataset
 from tqdm import tqdm
@@ -32,11 +35,11 @@ from tqdm import tqdm
 # Text extraction
 # -------------------------
 def pick_text(ex: dict[str, Any], text_field: str) -> Optional[str]:
-    t = ex.get(text_field, None)
-    if isinstance(t, str):
-        return t
+    v = ex.get(text_field, None)
+    if isinstance(v, str):
+        return v
     # fallback fields (common HF schemas)
-    for k in ("content", "text", "article", "raw", "completion", "code"):
+    for k in ("text", "content", "article", "raw", "completion", "code"):
         v = ex.get(k, None)
         if isinstance(v, str):
             return v
@@ -75,8 +78,10 @@ def non_alnum_symbol_ratio(t: str) -> float:
 
 
 def looks_like_code(t: str) -> bool:
-    # cheap “code-ish” heuristics (works across languages)
-    needles = ("def ", "class ", "import ", "from ", "#include", "public ", "private ", "function ", "const ", "let ", "var ")
+    needles = (
+        "def ", "class ", "import ", "from ", "#include", "public ", "private ",
+        "function ", "const ", "let ", "var ", "package ", "namespace ", "using "
+    )
     if any(x in t for x in needles):
         return True
     if ("{" in t and "}" in t) or (";" in t and "\n" in t):
@@ -113,13 +118,11 @@ def clean_code(
 
     # trim to avoid giant files; keep head+tail structure
     if len(lines) > max_lines:
-        # keep first/last portions
         head = lines[: max_lines // 2]
         tail = lines[-(max_lines - len(head)) :]
         lines = head + ["# ... truncated ..."] + tail
         t = "\n".join(lines).strip()
 
-    # must have enough structure
     if len(lines) < min_lines:
         return None
 
@@ -132,7 +135,7 @@ def clean_code(
     if require_code_signals and (not looks_like_code(t)):
         return None
 
-    # reject some pathological patterns you showed (optional but helpful)
+    # reject some pathological patterns
     bad_substrings = ("$(N)", "core dumped", "\x00")
     if any(x in t for x in bad_substrings):
         return None
@@ -140,37 +143,63 @@ def clean_code(
     return t
 
 
+# Wiki boilerplate trimming:
+# Instead of dropping whole pages that contain "References", we cut tail sections.
+_WIKI_CUT_PATTERNS = [
+    r"\n\s*See also\s*\n",
+    r"\n\s*References\s*\n",
+    r"\n\s*External links\s*\n",
+    r"\n\s*Further reading\s*\n",
+    r"\n\s*Notes\s*\n",
+]
+_WIKI_CUT_RE = re.compile("|".join(_WIKI_CUT_PATTERNS), flags=re.IGNORECASE)
+
+def trim_wiki_tail(t: str) -> str:
+    # cut at the earliest occurrence of any boilerplate header
+    m = _WIKI_CUT_RE.search(t)
+    if m:
+        t = t[: m.start()].rstrip()
+    return t
+
 def clean_wiki(
     t: str,
     *,
     drop_templates: bool,
+    min_paragraphs: int = 2,
 ) -> Optional[str]:
     t = normalize_text(t)
     if not t:
         return None
-    if not drop_templates:
-        return t
 
-    # remove common boilerplate-ish pages/sections (lightweight)
-    low = t.lower()
-    bad = (
-        "creative commons",
-        "this article",
-        "isbn",
-        "retrieved ",
-        "category:",
-        "external links",
-        "references",
-        "see also",
-        "citation",
-        "copyright",
-    )
-    if any(x in low for x in bad):
-        return None
+    if drop_templates:
+        # Trim tail sections first (keeps main content)
+        t = trim_wiki_tail(t)
+        if not t:
+            return None
 
-    # too list-y
-    if t.count("\n- ") >= 8:
-        return None
+        low = t.lower()
+
+        # Drop very boilerplate-y stubs/licenses, but be less aggressive than "contains references"
+        bad_snippets = (
+            "creative commons",
+            "this article is",
+            "retrieved ",
+            "isbn ",
+            "citation needed",
+            "copyright",
+            "licensed under",
+        )
+        if any(x in low for x in bad_snippets):
+            return None
+
+        # drop extremely list-y pages
+        if t.count("\n- ") >= 12:
+            return None
+
+        # require some paragraph structure
+        paras = [p for p in t.split("\n\n") if p.strip()]
+        if len(paras) < min_paragraphs:
+            return None
 
     return t
 
@@ -178,7 +207,7 @@ def clean_wiki(
 # -------------------------
 # Main
 # -------------------------
-def main():
+def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--dataset", required=True, help="HF dataset name, e.g. HuggingFaceFW/fineweb-edu")
     ap.add_argument("--config", default=None, help="HF config name (optional)")
@@ -193,7 +222,7 @@ def main():
     ap.add_argument("--use_auth_token", action="store_true", help="use HF auth token (for gated datasets)")
     ap.add_argument("--mode", choices=["generic", "code", "wiki"], default="generic")
 
-    # code cleaning knobs (C1)
+    # code cleaning knobs
     ap.add_argument("--code_drop_reponame", action="store_true", help="remove '<reponame>...\\n' header if present")
     ap.add_argument("--code_require_signals", action="store_true", help="require code-like tokens (def/class/import/{})")
     ap.add_argument("--code_min_lines", type=int, default=6)
@@ -203,56 +232,62 @@ def main():
     ap.add_argument("--code_max_symbol_ratio", type=float, default=0.45)
 
     # wiki cleaning
-    ap.add_argument("--wiki_drop_templates", action="store_true", help="drop license/template/list-heavy pages")
+    ap.add_argument("--wiki_drop_templates", action="store_true", help="trim tail boilerplate and drop licensey/listy pages")
 
     # optional dedup (cheap exact hash)
     ap.add_argument("--dedup", action="store_true", help="drop exact duplicates by sha1(text)")
-    ap.add_argument("--dedup_max", type=int, default=2_000_000, help="max hashes kept in memory")
+    ap.add_argument("--dedup_max", type=int, default=2_000_000, help="max hashes kept in memory before clearing")
+
+    # IO safety
+    ap.add_argument("--flush_every", type=int, default=10_000, help="flush+fsync every N kept docs (0=disable)")
+
+    # stable exit
+    ap.add_argument("--hard_exit", action="store_true",
+                    help="force os._exit(0) after printing stats (avoids rare HF streaming shutdown crashes)")
 
     args = ap.parse_args()
     random.seed(args.seed)
 
     os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)
 
-    # load streaming dataset
-    ds = load_dataset(
-        args.dataset,
-        args.config,
-        split=args.split,
-        streaming=True,
-        data_dir=args.data_dir,
-        token=True if args.use_auth_token else None,
-    )
+    # load streaming dataset (compatible auth kwargs)
+    load_kwargs = dict(split=args.split, streaming=True)
+    if args.data_dir:
+        load_kwargs["data_dir"] = args.data_dir
+    if args.use_auth_token:
+        load_kwargs["use_auth_token"] = True
+
+    ds = load_dataset(args.dataset, args.config, **load_kwargs)
 
     seen = 0
     kept = 0
+
     dropped_short = 0
     dropped_long = 0
     dropped_empty = 0
     dropped_bad = 0
     dropped_dup = 0
+    no_text = 0
+    non_dict = 0
 
     hashes = set() if args.dedup else None
 
-    # tqdm over "kept docs" if max_docs specified, else over seen stream
     pbar_total = args.max_docs if args.max_docs > 0 else None
     pbar = tqdm(total=pbar_total, desc=f"stream {args.dataset}:{args.split} ({args.mode})")
 
     try:
         with open(args.out, "w", encoding="utf-8") as f:
-            it = iter(ds)
-            for ex in it:
+            for ex in ds:
                 seen += 1
                 if not isinstance(ex, dict):
-                    dropped_bad += 1
+                    non_dict += 1
                     continue
 
                 t = pick_text(ex, args.text_field)
                 if not isinstance(t, str):
-                    dropped_bad += 1
+                    no_text += 1
                     continue
 
-                # mode-specific cleaning
                 if args.mode == "code":
                     t2 = clean_code(
                         t,
@@ -288,34 +323,50 @@ def main():
                         continue
                     hashes.add(h)
                     if len(hashes) > args.dedup_max:
-                        # prevent unbounded memory usage
                         hashes.clear()
 
                 f.write(json.dumps({"text": t2}, ensure_ascii=False) + "\n")
                 kept += 1
                 pbar.update(1)
 
+                if args.flush_every and kept % args.flush_every == 0:
+                    f.flush()
+                    try:
+                        os.fsync(f.fileno())
+                    except Exception:
+                        pass
+
                 if args.max_docs and kept >= args.max_docs:
                     break
+
+            # final flush
+            f.flush()
+            try:
+                os.fsync(f.fileno())
+            except Exception:
+                pass
 
     finally:
         try:
             pbar.close()
         except Exception:
             pass
+        # help GC / reduce rare interpreter-exit aborts
         try:
-            # help GC / reduce rare interpreter-exit aborts
             del ds
         except Exception:
             pass
         gc.collect()
 
+    # Print stats BEFORE hard-exit
     print(f"wrote {kept} docs -> {args.out}")
     print(
         json.dumps(
             {
                 "seen": seen,
                 "kept": kept,
+                "no_text": no_text,
+                "non_dict": non_dict,
                 "dropped_empty": dropped_empty,
                 "dropped_short": dropped_short,
                 "dropped_long": dropped_long,
@@ -327,7 +378,13 @@ def main():
             indent=2,
         )
     )
+    sys.stdout.flush()
+
+    if args.hard_exit:
+        os._exit(0)
 
 
 if __name__ == "__main__":
     main()
+PY
+python -m py_compile pretrain/extract_hf_to_jsonl.py
