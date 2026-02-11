@@ -291,22 +291,25 @@ def write_shards(
             per_src[src_path]["seen_docs"] += 1
 
         if not ids:
-            return
+            return (False, 0)
 
         kept_docs += 1
         if src_path is not None:
             per_src[src_path]["kept_docs"] += 1
 
+        # decide split once per doc
         if rng.random() < val_ratio:
             buf_val.extend(ids)
             if src_path is not None:
                 per_src[src_path]["val_tokens"] += len(ids)
             maybe_flush_val()
+            return (False, 0)
         else:
             buf_train.extend(ids)
             if src_path is not None:
                 per_src[src_path]["train_tokens"] += len(ids)
             maybe_flush_train()
+            return (True, len(ids))
 
     if not sources:
         for jp in jsonl_paths:
@@ -361,7 +364,7 @@ def write_shards(
 
         try:
             while True:
-                if quota is not None and used_train is not None and total_train >= target_train_tokens:
+                if quota is not None and used_train is not None and sum(used_train) >= target_train_tokens:
                     break
 
                 i = pick_source_idx()
@@ -374,13 +377,14 @@ def write_shards(
                     continue
 
                 ids = encode(tokenizer, txt, add_bos, add_eos, bos_id, eos_id)
-                before_train = total_train
-                add_ids(ids, src_path=str(src_paths[i]))
 
-                inc = max(total_train - before_train, 0)
+                # add_ids returns "if extracted in train and how much it contributes to train tokens"
+                is_train, n_train = add_ids(ids, src_path=str(src_paths[i]))
+
                 if quota is not None and used_train is not None:
-                    used_train[i] += inc
-                pbar.update(inc)
+                    used_train[i] += n_train
+                pbar.update(n_train)
+
 
         finally:
             pbar.close()
