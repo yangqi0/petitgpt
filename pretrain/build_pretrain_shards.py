@@ -1,4 +1,21 @@
-# pretrain/build_pretrain_shards.py
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Build pretrain binary shards from one or more jsonl sources.
+
+Each jsonl line should be a JSON object containing text in one of these schemas:
+- {"text": "..."} or {"content": "..."} or {"message": "..."} or {"completion": "..."}
+- {"instruction": "...", "input": "...", "output": "..."} (will be joined)
+- {"messages":[{"role":..., "content":...}, ...]} or {"conversations":[...]} (will be joined)
+
+Key features:
+- Weighted multi-source mixing via repeated --source path:weight.
+- Deterministic split to train/val per document with --val_ratio and --seed.
+- Writes token IDs as uint16/uint32 .bin shards.
+- NEW: Separate --val_shard_tokens so you can have multiple val shards even if val tokens are small.
+- NEW: Optional tokenizer "special token leakage" check to warn about double-adding BOS/EOS.
+"""
+
 from __future__ import annotations
 
 import argparse
@@ -11,6 +28,10 @@ from typing import Any
 import numpy as np
 from tqdm import tqdm
 
+
+# -------------------------
+# Text extraction
+# -------------------------
 def guess_text(obj: dict[str, Any]) -> str | None:
     """Best-effort extraction of text from different jsonl schemas."""
     for k in ("text", "content", "message", "completion"):
@@ -63,6 +84,9 @@ def iter_jsonl_texts(path: Path) -> Iterable[str]:
                 yield t
 
 
+# -------------------------
+# Debug helpers
+# -------------------------
 def file_fingerprint(p: Path) -> dict[str, Any]:
     """Return a stable-ish identity record to detect 'same path, different file' issues."""
     st = p.stat()
@@ -87,6 +111,9 @@ def fast_count_lines(p: Path, max_lines: int = 300_000) -> dict[str, Any]:
     return {"lines": n, "at_least": False, "max_lines": max_lines}
 
 
+# -------------------------
+# Streaming reader
+# -------------------------
 class JsonlTextStream:
     def __init__(self, path: Path):
         self.path = path
@@ -134,13 +161,18 @@ class JsonlTextStream:
             return t
 
 
+# -------------------------
+# Tokenizer
+# -------------------------
 def load_tokenizer(tokenizer_path: str):
+    # project-local tokenizer wrapper
     try:
         from src.tokenizer import Tokenizer  # type: ignore
         return Tokenizer.from_file(tokenizer_path)
     except Exception:
         pass
 
+    # HF tokenizers
     try:
         from tokenizers import Tokenizer  # type: ignore
         return Tokenizer.from_file(tokenizer_path)
@@ -167,10 +199,13 @@ def _tokenizer_vocab_size(tokenizer) -> int | None:
 
 
 def encode(tokenizer, text: str, add_bos: bool, add_eos: bool, bos_id: int, eos_id: int) -> list[int]:
+    # We ALWAYS request add_special_tokens=False.
+    # For HF `tokenizers`, this should bypass any post-processor that adds BOS/EOS.
     if hasattr(tokenizer, "encode") and "tokenizers" in type(tokenizer).__module__:
         enc = tokenizer.encode(text, add_special_tokens=False)
         ids = enc.ids
     else:
+        # project tokenizer wrapper expected to support this signature
         ids = tokenizer.encode(text, add_special_tokens=False)  # type: ignore
 
     if add_bos:
@@ -180,6 +215,37 @@ def encode(tokenizer, text: str, add_bos: bool, add_eos: bool, bos_id: int, eos_
     return ids
 
 
+def _detect_special_leak(tokenizer, bos_id: int, eos_id: int) -> dict[str, Any]:
+    """
+    Detect if tokenizer adds BOS/EOS even when add_special_tokens=False.
+    This should NOT happen for HF tokenizers, but some wrappers might still do it.
+    """
+    probe = "Hello world."
+    ids = []
+    try:
+        if hasattr(tokenizer, "encode") and "tokenizers" in type(tokenizer).__module__:
+            ids = tokenizer.encode(probe, add_special_tokens=False).ids
+        else:
+            ids = tokenizer.encode(probe, add_special_tokens=False)  # type: ignore
+    except Exception as e:
+        return {"ok": False, "error": repr(e)}
+
+    leak_bos = (len(ids) >= 1 and ids[0] == bos_id)
+    leak_eos = (len(ids) >= 1 and ids[-1] == eos_id)
+    leak_any = leak_bos or leak_eos
+    return {
+        "ok": True,
+        "probe_ids_head": ids[:8],
+        "probe_ids_tail": ids[-8:] if len(ids) >= 8 else ids,
+        "leak_bos": bool(leak_bos),
+        "leak_eos": bool(leak_eos),
+        "leak_any": bool(leak_any),
+    }
+
+
+# -------------------------
+# CLI parsing
+# -------------------------
 def parse_sources(source_args: list[str]) -> list[tuple[Path, float]]:
     items: list[tuple[Path, float]] = []
     for s in source_args:
@@ -200,6 +266,9 @@ def parse_sources(source_args: list[str]) -> list[tuple[Path, float]]:
     return [(p, w / tot) for p, w in items]
 
 
+# -------------------------
+# Shard writer
+# -------------------------
 def write_shards(
     *,
     jsonl_paths: list[Path],
@@ -207,6 +276,7 @@ def write_shards(
     out_dir: Path,
     tokenizer_path: str,
     shard_tokens: int,
+    val_shard_tokens: int,
     val_ratio: float,
     seed: int,
     add_bos: bool,
@@ -215,6 +285,7 @@ def write_shards(
     eos_id: int,
     target_train_tokens: int,
     precheck_max_lines: int,
+    detect_tokenizer_special_leak: bool,
 ) -> None:
     out_train = out_dir / "train"
     out_val = out_dir / "val"
@@ -225,6 +296,19 @@ def write_shards(
     tokenizer = load_tokenizer(tokenizer_path)
     vocab_size = _tokenizer_vocab_size(tokenizer)
     dtype = np.uint32 if (vocab_size is not None and vocab_size > 65535) else np.uint16
+
+    # optional: detect BOS/EOS leakage
+    special_leak = None
+    if detect_tokenizer_special_leak:
+        special_leak = _detect_special_leak(tokenizer, bos_id=bos_id, eos_id=eos_id)
+        if special_leak.get("ok") and special_leak.get("leak_any"):
+            print(
+                "\n[WARNING] Tokenizer appears to add BOS/EOS even with add_special_tokens=False.\n"
+                "          This means using --add_bos/--add_eos here can DOUBLE-ADD special tokens.\n"
+                "          Strongly consider building shards WITHOUT --add_bos/--add_eos.\n"
+                f"          leak_bos={special_leak.get('leak_bos')} leak_eos={special_leak.get('leak_eos')}\n"
+                f"          probe_ids_head={special_leak.get('probe_ids_head')} probe_ids_tail={special_leak.get('probe_ids_tail')}\n"
+            )
 
     buf_train: list[int] = []
     buf_val: list[int] = []
@@ -254,7 +338,6 @@ def write_shards(
                 "no_text": 0,
                 "ok_texts": 0,
             }
-            # record file identity now (helps debug stale mounts)
             source_fingerprints[sp] = file_fingerprint(p)
             source_line_precheck[sp] = fast_count_lines(p, max_lines=precheck_max_lines)
 
@@ -275,9 +358,9 @@ def write_shards(
 
     def maybe_flush_val():
         nonlocal buf_val, shard_idx_val, total_val
-        while len(buf_val) >= shard_tokens:
-            chunk = buf_val[:shard_tokens]
-            buf_val = buf_val[shard_tokens:]
+        while len(buf_val) >= val_shard_tokens:
+            chunk = buf_val[:val_shard_tokens]
+            buf_val = buf_val[val_shard_tokens:]
             p = out_val / f"shard_{shard_idx_val:05d}.bin"
             n = flush(chunk, p)
             total_val += n
@@ -310,6 +393,7 @@ def write_shards(
             maybe_flush_train()
             return (True, len(ids))
 
+    # legacy sequential mode
     if not sources:
         for jp in jsonl_paths:
             print(f"Reading: {jp}")
@@ -317,6 +401,7 @@ def write_shards(
                 ids = encode(tokenizer, text, add_bos, add_eos, bos_id, eos_id)
                 add_ids(ids, src_path=None)
 
+    # weighted multi-source mode
     else:
         src_paths = [p for p, _ in sources]
         src_weights = [w for _, w in sources]
@@ -332,8 +417,10 @@ def write_shards(
                 quota[i % len(quota)] += 1 if diff > 0 else -1
             used_train = [0 for _ in sources]
 
-        pbar = tqdm(total=target_train_tokens if target_train_tokens > 0 else None,
-                    desc="building (train tokens)")
+        pbar = tqdm(
+            total=target_train_tokens if target_train_tokens > 0 else None,
+            desc="building (train tokens)",
+        )
 
         def pick_source_idx() -> int | None:
             active = []
@@ -377,13 +464,11 @@ def write_shards(
 
                 ids = encode(tokenizer, txt, add_bos, add_eos, bos_id, eos_id)
 
-                # add_ids returns "if extracted in train and how much it contributes to train tokens"
                 is_train, n_train = add_ids(ids, src_path=str(src_paths[i]))
 
                 if quota is not None and used_train is not None:
                     used_train[i] += n_train
                 pbar.update(n_train)
-
 
         finally:
             pbar.close()
@@ -396,6 +481,7 @@ def write_shards(
                 per_src[sp]["ok_texts"] = s.ok_texts
                 s.close()
 
+    # flush remainder
     if buf_train:
         p = out_train / f"shard_{shard_idx_train:05d}.bin"
         n = flush(buf_train, p)
@@ -413,6 +499,7 @@ def write_shards(
         "jsonl_paths": [str(p) for p in jsonl_paths] if jsonl_paths else [],
         "sources": [{"path": str(p), "weight": float(w)} for p, w in sources] if sources else [],
         "shard_tokens": shard_tokens,
+        "val_shard_tokens": val_shard_tokens,
         "val_ratio": val_ratio,
         "seed": seed,
         "add_bos": add_bos,
@@ -427,6 +514,7 @@ def write_shards(
         "val_shards": shard_idx_val,
         "source_fingerprints": source_fingerprints,
         "source_line_precheck": source_line_precheck,
+        "tokenizer_special_leak_check": special_leak,
     }
     if per_src:
         meta["per_source"] = per_src
@@ -445,15 +533,34 @@ def main():
     ap.add_argument("--jsonl", nargs="*", default=[], help="legacy sequential mode")
     ap.add_argument("--out_dir", required=True)
     ap.add_argument("--tokenizer_path", required=True)
-    ap.add_argument("--shard_tokens", type=int, default=10_000_000)
+
+    ap.add_argument("--shard_tokens", type=int, default=10_000_000, help="train shard size in tokens")
+    ap.add_argument(
+        "--val_shard_tokens",
+        type=int,
+        default=2_000_000,
+        help="val shard size in tokens (smaller => more val files without increasing val_ratio)",
+    )
     ap.add_argument("--val_ratio", type=float, default=0.002)
     ap.add_argument("--seed", type=int, default=1234)
+
     ap.add_argument("--add_bos", action="store_true")
     ap.add_argument("--add_eos", action="store_true")
     ap.add_argument("--bos_id", type=int, default=2)
     ap.add_argument("--eos_id", type=int, default=3)
-    ap.add_argument("--precheck_max_lines", type=int, default=300_000,
-                    help="Count up to this many lines for each source before building (debug).")
+
+    ap.add_argument(
+        "--precheck_max_lines",
+        type=int,
+        default=300_000,
+        help="Count up to this many lines for each source before building (debug).",
+    )
+    ap.add_argument(
+        "--detect_tokenizer_special_leak",
+        action="store_true",
+        help="Warn if tokenizer adds BOS/EOS even with add_special_tokens=False (avoid double-add).",
+    )
+
     args = ap.parse_args()
 
     out_dir = Path(args.out_dir)
@@ -466,12 +573,20 @@ def main():
         if not jsonl_paths:
             raise SystemExit("Provide either --source path:weight or --jsonl ...")
 
+    if args.val_shard_tokens <= 0:
+        raise SystemExit("--val_shard_tokens must be > 0")
+    if args.shard_tokens <= 0:
+        raise SystemExit("--shard_tokens must be > 0")
+    if args.val_ratio < 0 or args.val_ratio > 1:
+        raise SystemExit("--val_ratio must be in [0,1]")
+
     write_shards(
         jsonl_paths=jsonl_paths,
         sources=sources,
         out_dir=out_dir,
         tokenizer_path=args.tokenizer_path,
         shard_tokens=args.shard_tokens,
+        val_shard_tokens=args.val_shard_tokens,
         val_ratio=args.val_ratio,
         seed=args.seed,
         add_bos=args.add_bos,
@@ -480,6 +595,7 @@ def main():
         eos_id=args.eos_id,
         target_train_tokens=args.target_train_tokens,
         precheck_max_lines=args.precheck_max_lines,
+        detect_tokenizer_special_leak=args.detect_tokenizer_special_leak,
     )
 
 
