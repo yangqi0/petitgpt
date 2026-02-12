@@ -281,7 +281,10 @@ def generate_default_samples(
         "In a distant future, humans and robots ",
         "The following is a news report:\n\n\n",
         "Neural networks are a class of machine learning models that ",
-        "Here is a short Python snippet:\n\ndef fib(n):\n    ",
+        "Complete the following Python function:\n\ndef add(a, b):\n    return",
+        "Write a Python function that computes Fibonacci numbers recursively:\n\ndef fib(n):\n    ",
+        "If all cats are animals and some animals are black, can we conclude that some cats are black?\nAnswer:",
+        "John has 3 apples and buys 2 more. How many apples does he have?\nAnswer:",
     ]
 
     out_path = Path(out_path)

@@ -11,7 +11,6 @@ from typing import Any
 import numpy as np
 from tqdm import tqdm
 
-
 def guess_text(obj: dict[str, Any]) -> str | None:
     """Best-effort extraction of text from different jsonl schemas."""
     for k in ("text", "content", "message", "completion"):
@@ -169,10 +168,10 @@ def _tokenizer_vocab_size(tokenizer) -> int | None:
 
 def encode(tokenizer, text: str, add_bos: bool, add_eos: bool, bos_id: int, eos_id: int) -> list[int]:
     if hasattr(tokenizer, "encode") and "tokenizers" in type(tokenizer).__module__:
-        enc = tokenizer.encode(text)
+        enc = tokenizer.encode(text, add_special_tokens=False)
         ids = enc.ids
     else:
-        ids = tokenizer.encode(text)  # type: ignore
+        ids = tokenizer.encode(text, add_special_tokens=False)  # type: ignore
 
     if add_bos:
         ids = [bos_id] + ids
