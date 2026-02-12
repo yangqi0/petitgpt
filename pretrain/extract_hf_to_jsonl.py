@@ -1,17 +1,34 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Extract HF dataset (streaming) to simple jsonl: {"text": "..."} per line.
+Extract HF dataset (streaming) to jsonl: {"text": "..."} per line.
 
-Features:
-- streaming=True by default (no full download)
-- supports HF config + data_dir
-- basic text field fallback
-- mode=code: strong cleaning for code snippets
-- mode=wiki: trims boilerplate tail sections (References/External links/See also/Category etc.)
+Goals:
+- robust streaming extraction (no full download)
+- supports config + data_dir + gated datasets (auth)
+- mode=code: stronger cleaning for code snippets
+- mode=wiki: trim boilerplate tail sections (References/External links/See also/Category etc.)
 - optional exact dedup by sha1
 - periodic flush+fsync for safer writes on network filesystems
 - --hard_exit: os._exit(0) after printing stats to avoid rare interpreter shutdown aborts
+
+Typical usage:
+  python pretrain/extract_hf_to_jsonl.py \
+    --dataset HuggingFaceFW/fineweb-edu --split train \
+    --out datasets/tokenization/fineweb_edu.jsonl \
+    --text_field text --max_docs 3000000 --min_chars 200 --mode generic --hard_exit
+
+  python pretrain/extract_hf_to_jsonl.py \
+    --dataset wikimedia/wikipedia --config 20231101.en --split train \
+    --out datasets/tokenization/wiki.clean.jsonl \
+    --text_field text --max_docs 300000 --min_chars 200 \
+    --mode wiki --wiki_drop_templates --dedup --hard_exit
+
+  python pretrain/extract_hf_to_jsonl.py \
+    --dataset bigcode/starcoderdata --split train --data_dir python \
+    --out datasets/tokenization/code_starcoder.clean.jsonl \
+    --text_field content --max_docs 200000 --min_chars 200 \
+    --mode code --code_drop_reponame --code_require_signals --dedup --hard_exit
 """
 
 from __future__ import annotations
@@ -52,6 +69,7 @@ _RE_WS = re.compile(r"[ \t]+")
 _RE_REPONAME = re.compile(r"^\s*<reponame>.*?\n", re.IGNORECASE)
 _RE_CTRL = re.compile(r"[\x00-\x08\x0B\x0C\x0E-\x1F]")  # control chars except \n\r\t
 
+
 def normalize_text(t: str) -> str:
     t = t.replace("\r\n", "\n").replace("\r", "\n")
     t = _RE_CTRL.sub("", t)
@@ -79,17 +97,20 @@ def non_alnum_symbol_ratio(t: str) -> float:
 def looks_like_code(t: str) -> bool:
     needles = (
         "def ", "class ", "import ", "from ", "#include", "public ", "private ",
-        "function ", "const ", "let ", "var ", "package ", "namespace ", "using "
+        "function ", "const ", "let ", "var ", "package ", "namespace ", "using ",
+        "return ", "if ", "else:", "elif ", "try:", "except", "for ", "while ",
     )
     if any(x in t for x in needles):
         return True
     if ("{" in t and "}" in t) or (";" in t and "\n" in t):
         return True
+    if t.count("\n") >= 8 and (t.count("(") + t.count(")") >= 6):
+        return True
     return False
 
 
 # -------------------------
-# Mode-specific cleaning
+# Mode-specific cleaning: CODE
 # -------------------------
 def clean_code(
     t: str,
@@ -101,6 +122,7 @@ def clean_code(
     min_ascii_ratio: float,
     max_symbol_ratio: float,
     require_code_signals: bool,
+    max_non_ascii_lines_ratio: float,
 ) -> Optional[str]:
     if drop_reponame_header:
         t = _RE_REPONAME.sub("", t)
@@ -111,11 +133,20 @@ def clean_code(
 
     lines = t.split("\n")
 
-    # drop extremely long single lines (often minified / garbage)
+    # reject minified / garbage
     if any(len(line) > max_line_len for line in lines):
         return None
 
-    # trim to avoid giant files; keep head+tail structure
+    # too many non-ascii lines (often mixed-language comments/garbage)
+    if lines:
+        non_ascii_lines = 0
+        for ln in lines[: min(len(lines), 200)]:  # sample first chunk
+            if ascii_ratio(ln) < 0.85:
+                non_ascii_lines += 1
+        if non_ascii_lines / max(1, min(len(lines), 200)) > max_non_ascii_lines_ratio:
+            return None
+
+    # trim huge files: keep head+tail
     if len(lines) > max_lines:
         head = lines[: max_lines // 2]
         tail = lines[-(max_lines - len(head)) :]
@@ -134,73 +165,99 @@ def clean_code(
     if require_code_signals and (not looks_like_code(t)):
         return None
 
-    # reject some pathological patterns
-    bad_substrings = ("$(N)", "core dumped", "\x00")
+    # reject common pathological substrings
+    bad_substrings = (
+        "$(N)", "core dumped", "\x00", "PyGILState_Release",
+        "terminate called without an active exception",
+    )
     if any(x in t for x in bad_substrings):
+        return None
+
+    # reject “almost no letters” blobs
+    letters = sum(ch.isalpha() for ch in t)
+    if letters / max(1, len(t)) < 0.08:
         return None
 
     return t
 
 
-# Wiki boilerplate trimming:
-# Instead of dropping whole pages that contain "References", we cut tail sections.
+# -------------------------
+# Mode-specific cleaning: WIKI
+# -------------------------
 _WIKI_CUT_PATTERNS = [
     r"\n\s*See also\s*\n",
     r"\n\s*References\s*\n",
     r"\n\s*External links\s*\n",
     r"\n\s*Further reading\s*\n",
     r"\n\s*Notes\s*\n",
+    r"\n\s*Bibliography\s*\n",
+    r"\n\s*Sources\s*\n",
 ]
 _WIKI_CUT_RE = re.compile("|".join(_WIKI_CUT_PATTERNS), flags=re.IGNORECASE)
 
+
 def trim_wiki_tail(t: str) -> str:
-    # cut at the earliest occurrence of any boilerplate header
     m = _WIKI_CUT_RE.search(t)
     if m:
         t = t[: m.start()].rstrip()
     return t
 
-def clean_wiki(
-    t: str,
-    *,
-    drop_templates: bool,
-    min_paragraphs: int = 2,
-) -> Optional[str]:
+
+def clean_wiki(t: str, *, drop_templates: bool, min_paragraphs: int = 2) -> Optional[str]:
     t = normalize_text(t)
     if not t:
         return None
 
+    # cut tail sections (keeps main content)
+    t = trim_wiki_tail(t)
+    if not t:
+        return None
+
     if drop_templates:
-        # Trim tail sections first (keeps main content)
-        t = trim_wiki_tail(t)
-        if not t:
-            return None
-
         low = t.lower()
-
-        # Drop very boilerplate-y stubs/licenses, but be less aggressive than "contains references"
         bad_snippets = (
             "creative commons",
             "this article is",
             "retrieved ",
             "isbn ",
             "citation needed",
-            "copyright",
             "licensed under",
+            "copyright",
         )
+        # 只对“明显 license/模板页”丢弃
         if any(x in low for x in bad_snippets):
             return None
 
-        # drop extremely list-y pages
+        # extremely list-y
         if t.count("\n- ") >= 12:
             return None
 
-        # require some paragraph structure
+        # require paragraph structure
         paras = [p for p in t.split("\n\n") if p.strip()]
         if len(paras) < min_paragraphs:
             return None
 
     return t
+
+
+# -------------------------
+# HF streaming loader: auth compat
+# -------------------------
+def load_streaming_dataset(dataset: str, config: Optional[str], split: str, data_dir: Optional[str], use_auth: bool):
+    kwargs = dict(split=split, streaming=True)
+    if data_dir:
+        kwargs["data_dir"] = data_dir
+
+    # Compatibility across datasets versions:
+    # - new: token=...
+    # - old: use_auth_token=True
+    if use_auth:
+        try:
+            return load_dataset(dataset, config, token=True, **kwargs)  # type: ignore
+        except TypeError:
+            return load_dataset(dataset, config, use_auth_token=True, **kwargs)  # type: ignore
+
+    return load_dataset(dataset, config, **kwargs)
 
 
 # -------------------------
@@ -229,11 +286,12 @@ def main() -> None:
     ap.add_argument("--code_max_line_len", type=int, default=4000)
     ap.add_argument("--code_min_ascii_ratio", type=float, default=0.90)
     ap.add_argument("--code_max_symbol_ratio", type=float, default=0.45)
+    ap.add_argument("--code_max_non_ascii_lines_ratio", type=float, default=0.25)
 
     # wiki cleaning
-    ap.add_argument("--wiki_drop_templates", action="store_true", help="trim tail boilerplate and drop licensey/listy pages")
+    ap.add_argument("--wiki_drop_templates", action="store_true", help="trim tail boilerplate + drop obvious license/listy pages")
 
-    # optional dedup (cheap exact hash)
+    # optional dedup
     ap.add_argument("--dedup", action="store_true", help="drop exact duplicates by sha1(text)")
     ap.add_argument("--dedup_max", type=int, default=2_000_000, help="max hashes kept in memory before clearing")
 
@@ -247,16 +305,18 @@ def main() -> None:
     args = ap.parse_args()
     random.seed(args.seed)
 
+    # reduce HF hub background noise a bit
+    os.environ.setdefault("HF_HUB_DISABLE_TELEMETRY", "1")
+
     os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)
 
-    # load streaming dataset (compatible auth kwargs)
-    load_kwargs = dict(split=args.split, streaming=True)
-    if args.data_dir:
-        load_kwargs["data_dir"] = args.data_dir
-    if args.use_auth_token:
-        load_kwargs["use_auth_token"] = True
-
-    ds = load_dataset(args.dataset, args.config, **load_kwargs)
+    ds = load_streaming_dataset(
+        dataset=args.dataset,
+        config=args.config,
+        split=args.split,
+        data_dir=args.data_dir,
+        use_auth=args.use_auth_token,
+    )
 
     seen = 0
     kept = 0
@@ -297,6 +357,7 @@ def main() -> None:
                         min_ascii_ratio=args.code_min_ascii_ratio,
                         max_symbol_ratio=args.code_max_symbol_ratio,
                         require_code_signals=args.code_require_signals,
+                        max_non_ascii_lines_ratio=args.code_max_non_ascii_lines_ratio,
                     )
                 elif args.mode == "wiki":
                     t2 = clean_wiki(t, drop_templates=args.wiki_drop_templates)
@@ -350,7 +411,6 @@ def main() -> None:
             pbar.close()
         except Exception:
             pass
-        # help GC / reduce rare interpreter-exit aborts
         try:
             del ds
         except Exception:
