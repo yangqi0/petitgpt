@@ -1,4 +1,3 @@
-cat > pretrain/extract_hf_to_jsonl.py <<'PY'
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -386,5 +385,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-PY
-python -m py_compile pretrain/extract_hf_to_jsonl.py
