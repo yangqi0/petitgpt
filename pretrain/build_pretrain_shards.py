@@ -3,23 +3,19 @@
 """
 Build pretrain binary shards from one or more jsonl sources.
 
-Each jsonl line should be a JSON object containing text in one of these schemas:
-- {"text": "..."} or {"content": "..."} or {"message": "..."} or {"completion": "..."}
-- {"instruction": "...", "input": "...", "output": "..."} (will be joined)
-- {"messages":[{"role":..., "content":...}, ...]} or {"conversations":[...]} (will be joined)
+Enhancements:
+- Optional --doc_sep to insert a mild boundary between documents (recommended: "\\n\\n").
+- Optional first-token distribution summary written into meta.json (topK), helps debug weird first tokens.
+- Keeps: weighted multi-source mixing, deterministic train/val split, val_shard_tokens, tokenizer special leak check.
 
-Key features:
-- Weighted multi-source mixing via repeated --source path:weight.
-- Deterministic split to train/val per document with --val_ratio and --seed.
-- Writes token IDs as uint16/uint32 .bin shards.
-- NEW: Separate --val_shard_tokens so you can have multiple val shards even if val tokens are small.
-- NEW: Optional tokenizer "special token leakage" check to warn about double-adding BOS/EOS.
+Each jsonl line: supports {"text": ...} and other common schemas (see guess_text()).
 """
 
 from __future__ import annotations
 
 import argparse
 from collections.abc import Iterable
+from collections import Counter
 import json
 from pathlib import Path
 import random
@@ -33,7 +29,6 @@ from tqdm import tqdm
 # Text extraction
 # -------------------------
 def guess_text(obj: dict[str, Any]) -> str | None:
-    """Best-effort extraction of text from different jsonl schemas."""
     for k in ("text", "content", "message", "completion"):
         v = obj.get(k)
         if isinstance(v, str) and v.strip():
@@ -88,7 +83,6 @@ def iter_jsonl_texts(path: Path) -> Iterable[str]:
 # Debug helpers
 # -------------------------
 def file_fingerprint(p: Path) -> dict[str, Any]:
-    """Return a stable-ish identity record to detect 'same path, different file' issues."""
     st = p.stat()
     return {
         "path": str(p),
@@ -101,7 +95,6 @@ def file_fingerprint(p: Path) -> dict[str, Any]:
 
 
 def fast_count_lines(p: Path, max_lines: int = 300_000) -> dict[str, Any]:
-    """Count lines up to max_lines; if file is larger, return 'at_least'."""
     n = 0
     with p.open("r", encoding="utf-8") as f:
         for _ in f:
@@ -120,7 +113,6 @@ class JsonlTextStream:
         self._f = path.open("r", encoding="utf-8")
         self.eof = False
 
-        # counters
         self.lines_read = 0
         self.bad_json = 0
         self.non_dict = 0
@@ -165,14 +157,12 @@ class JsonlTextStream:
 # Tokenizer
 # -------------------------
 def load_tokenizer(tokenizer_path: str):
-    # project-local tokenizer wrapper
     try:
         from src.tokenizer import Tokenizer  # type: ignore
         return Tokenizer.from_file(tokenizer_path)
     except Exception:
         pass
 
-    # HF tokenizers
     try:
         from tokenizers import Tokenizer  # type: ignore
         return Tokenizer.from_file(tokenizer_path)
@@ -198,35 +188,39 @@ def _tokenizer_vocab_size(tokenizer) -> int | None:
     return None
 
 
-def encode(tokenizer, text: str, add_bos: bool, add_eos: bool, bos_id: int, eos_id: int) -> list[int]:
-    # We ALWAYS request add_special_tokens=False.
-    # For HF `tokenizers`, this should bypass any post-processor that adds BOS/EOS.
+def _encode_base(tokenizer, text: str) -> list[int]:
     if hasattr(tokenizer, "encode") and "tokenizers" in type(tokenizer).__module__:
-        enc = tokenizer.encode(text, add_special_tokens=False)
-        ids = enc.ids
-    else:
-        # project tokenizer wrapper expected to support this signature
-        ids = tokenizer.encode(text, add_special_tokens=False)  # type: ignore
+        return tokenizer.encode(text, add_special_tokens=False).ids
+    return tokenizer.encode(text, add_special_tokens=False)  # type: ignore
+
+
+def encode(
+    tokenizer,
+    text: str,
+    add_bos: bool,
+    add_eos: bool,
+    bos_id: int,
+    eos_id: int,
+    doc_sep_ids: list[int],
+) -> list[int]:
+    ids = _encode_base(tokenizer, text)
 
     if add_bos:
         ids = [bos_id] + ids
     if add_eos:
         ids = ids + [eos_id]
+
+    # append doc separator (boundary) if provided
+    if doc_sep_ids:
+        ids = ids + doc_sep_ids
+
     return ids
 
 
 def _detect_special_leak(tokenizer, bos_id: int, eos_id: int) -> dict[str, Any]:
-    """
-    Detect if tokenizer adds BOS/EOS even when add_special_tokens=False.
-    This should NOT happen for HF tokenizers, but some wrappers might still do it.
-    """
     probe = "Hello world."
-    ids = []
     try:
-        if hasattr(tokenizer, "encode") and "tokenizers" in type(tokenizer).__module__:
-            ids = tokenizer.encode(probe, add_special_tokens=False).ids
-        else:
-            ids = tokenizer.encode(probe, add_special_tokens=False)  # type: ignore
+        ids = _encode_base(tokenizer, probe)
     except Exception as e:
         return {"ok": False, "error": repr(e)}
 
@@ -266,6 +260,13 @@ def parse_sources(source_args: list[str]) -> list[tuple[Path, float]]:
     return [(p, w / tot) for p, w in items]
 
 
+def topk_counter(c: Counter[int], k: int) -> list[dict[str, Any]]:
+    out: list[dict[str, Any]] = []
+    for tid, cnt in c.most_common(k):
+        out.append({"id": int(tid), "count": int(cnt)})
+    return out
+
+
 # -------------------------
 # Shard writer
 # -------------------------
@@ -286,6 +287,8 @@ def write_shards(
     target_train_tokens: int,
     precheck_max_lines: int,
     detect_tokenizer_special_leak: bool,
+    doc_sep: str,
+    first_token_topk: int,
 ) -> None:
     out_train = out_dir / "train"
     out_val = out_dir / "val"
@@ -296,6 +299,11 @@ def write_shards(
     tokenizer = load_tokenizer(tokenizer_path)
     vocab_size = _tokenizer_vocab_size(tokenizer)
     dtype = np.uint32 if (vocab_size is not None and vocab_size > 65535) else np.uint16
+
+    # doc separator ids (mild boundary)
+    doc_sep_ids: list[int] = []
+    if doc_sep:
+        doc_sep_ids = _encode_base(tokenizer, doc_sep)
 
     # optional: detect BOS/EOS leakage
     special_leak = None
@@ -323,6 +331,10 @@ def write_shards(
     source_fingerprints: dict[str, Any] = {}
     source_line_precheck: dict[str, Any] = {}
 
+    # first-token distribution
+    first_tok_all: Counter[int] = Counter()
+    first_tok_per_src: dict[str, Counter[int]] = {}
+
     if sources:
         for p, w in sources:
             sp = str(p)
@@ -340,6 +352,7 @@ def write_shards(
             }
             source_fingerprints[sp] = file_fingerprint(p)
             source_line_precheck[sp] = fast_count_lines(p, max_lines=precheck_max_lines)
+            first_tok_per_src[sp] = Counter()
 
     def flush(buf: list[int], out_path: Path) -> int:
         arr = np.asarray(buf, dtype=dtype)
@@ -375,11 +388,15 @@ def write_shards(
         if not ids:
             return (False, 0)
 
+        # record first token (only if we have one)
+        first_tok_all[ids[0]] += 1
+        if src_path is not None:
+            first_tok_per_src[src_path][ids[0]] += 1
+
         kept_docs += 1
         if src_path is not None:
             per_src[src_path]["kept_docs"] += 1
 
-        # decide split once per doc
         if rng.random() < val_ratio:
             buf_val.extend(ids)
             if src_path is not None:
@@ -398,7 +415,7 @@ def write_shards(
         for jp in jsonl_paths:
             print(f"Reading: {jp}")
             for text in tqdm(iter_jsonl_texts(jp), desc=jp.name):
-                ids = encode(tokenizer, text, add_bos, add_eos, bos_id, eos_id)
+                ids = encode(tokenizer, text, add_bos, add_eos, bos_id, eos_id, doc_sep_ids)
                 add_ids(ids, src_path=None)
 
     # weighted multi-source mode
@@ -462,8 +479,7 @@ def write_shards(
                     exhausted[i] = True
                     continue
 
-                ids = encode(tokenizer, txt, add_bos, add_eos, bos_id, eos_id)
-
+                ids = encode(tokenizer, txt, add_bos, add_eos, bos_id, eos_id, doc_sep_ids)
                 is_train, n_train = add_ids(ids, src_path=str(src_paths[i]))
 
                 if quota is not None and used_train is not None:
@@ -493,6 +509,17 @@ def write_shards(
         total_val += n
         shard_idx_val += 1
 
+    # summarize first-token stats into meta
+    first_tok_meta = {
+        "topk": int(first_token_topk),
+        "global": topk_counter(first_tok_all, first_token_topk),
+    }
+    if sources:
+        per = {}
+        for sp, c in first_tok_per_src.items():
+            per[sp] = topk_counter(c, first_token_topk)
+        first_tok_meta["per_source"] = per
+
     meta: dict[str, Any] = {
         "tokenizer_path": tokenizer_path,
         "dtype": "uint32" if dtype == np.uint32 else "uint16",
@@ -506,6 +533,8 @@ def write_shards(
         "add_eos": add_eos,
         "bos_id": bos_id,
         "eos_id": eos_id,
+        "doc_sep": doc_sep,
+        "doc_sep_ids_head": doc_sep_ids[:16],
         "seen_docs": seen_docs,
         "kept_docs": kept_docs,
         "train_tokens": total_train,
@@ -515,6 +544,7 @@ def write_shards(
         "source_fingerprints": source_fingerprints,
         "source_line_precheck": source_line_precheck,
         "tokenizer_special_leak_check": special_leak,
+        "first_token_topk": first_tok_meta,
     }
     if per_src:
         meta["per_source"] = per_src
@@ -548,6 +578,9 @@ def main():
     ap.add_argument("--add_eos", action="store_true")
     ap.add_argument("--bos_id", type=int, default=2)
     ap.add_argument("--eos_id", type=int, default=3)
+
+    ap.add_argument("--doc_sep", type=str, default="", help='optional document separator, e.g. "\\n\\n"')
+    ap.add_argument("--first_token_topk", type=int, default=50, help="topK first-token ids to store in meta.json")
 
     ap.add_argument(
         "--precheck_max_lines",
@@ -596,6 +629,8 @@ def main():
         target_train_tokens=args.target_train_tokens,
         precheck_max_lines=args.precheck_max_lines,
         detect_tokenizer_special_leak=args.detect_tokenizer_special_leak,
+        doc_sep=args.doc_sep,
+        first_token_topk=args.first_token_topk,
     )
 
 

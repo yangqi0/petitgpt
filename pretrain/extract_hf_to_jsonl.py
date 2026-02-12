@@ -3,32 +3,23 @@
 """
 Extract HF dataset (streaming) to jsonl: {"text": "..."} per line.
 
-Goals:
-- robust streaming extraction (no full download)
-- supports config + data_dir + gated datasets (auth)
-- mode=code: stronger cleaning for code snippets
-- mode=wiki: trim boilerplate tail sections (References/External links/See also/Category etc.)
-- optional exact dedup by sha1
-- periodic flush+fsync for safer writes on network filesystems
-- --hard_exit: os._exit(0) after printing stats to avoid rare interpreter shutdown aborts
+Enhancements (best-effort for higher-quality English-centric pretrain):
+- Optional underscore placeholder cleanup (e.g. "____" runs).
+- Optional ASCII ratio filtering (global) + HEAD ASCII ratio filtering (first N chars).
+- Optional "leading noise" trimming.
+- Keeps existing mode=code / mode=wiki logic.
 
 Typical usage:
   python pretrain/extract_hf_to_jsonl.py \
     --dataset HuggingFaceFW/fineweb-edu --split train \
-    --out datasets/tokenization/fineweb_edu.jsonl \
-    --text_field text --max_docs 3000000 --min_chars 200 --mode generic --hard_exit
-
-  python pretrain/extract_hf_to_jsonl.py \
-    --dataset wikimedia/wikipedia --config 20231101.en --split train \
-    --out datasets/tokenization/wiki.clean.jsonl \
-    --text_field text --max_docs 300000 --min_chars 200 \
-    --mode wiki --wiki_drop_templates --dedup --hard_exit
-
-  python pretrain/extract_hf_to_jsonl.py \
-    --dataset bigcode/starcoderdata --split train --data_dir python \
-    --out datasets/tokenization/code_starcoder.clean.jsonl \
-    --text_field content --max_docs 200000 --min_chars 200 \
-    --mode code --code_drop_reponame --code_require_signals --dedup --hard_exit
+    --out datasets/tokenization/fineweb_edu.clean.jsonl \
+    --text_field text --max_docs 5000000 --min_chars 200 \
+    --mode generic \
+    --min_head_ascii_ratio 0.85 --head_chars 256 \
+    --min_ascii_ratio 0.90 \
+    --collapse_underscores \
+    --strip_leading_noise \
+    --dedup --hard_exit
 """
 
 from __future__ import annotations
@@ -54,7 +45,6 @@ def pick_text(ex: dict[str, Any], text_field: str) -> Optional[str]:
     v = ex.get(text_field, None)
     if isinstance(v, str):
         return v
-    # fallback fields (common HF schemas)
     for k in ("text", "content", "article", "raw", "completion", "code"):
         v = ex.get(k, None)
         if isinstance(v, str):
@@ -68,14 +58,8 @@ def pick_text(ex: dict[str, Any], text_field: str) -> Optional[str]:
 _RE_WS = re.compile(r"[ \t]+")
 _RE_REPONAME = re.compile(r"^\s*<reponame>.*?\n", re.IGNORECASE)
 _RE_CTRL = re.compile(r"[\x00-\x08\x0B\x0C\x0E-\x1F]")  # control chars except \n\r\t
-
-
-def normalize_text(t: str) -> str:
-    t = t.replace("\r\n", "\n").replace("\r", "\n")
-    t = _RE_CTRL.sub("", t)
-    # collapse spaces but keep newlines
-    t = "\n".join(_RE_WS.sub(" ", line).rstrip() for line in t.split("\n"))
-    return t.strip()
+_RE_UNDERSCORES = re.compile(r"_{4,}")  # collapse long "____" runs
+_RE_LEADING_NOISE = re.compile(r"^\s*([^\w<>{}\[\]().,;:'\"/\-\n]{1,32})\s*")  # conservative
 
 
 def ascii_ratio(t: str) -> float:
@@ -92,6 +76,28 @@ def non_alnum_symbol_ratio(t: str) -> float:
     n = len(t)
     sym = sum(1 for ch in t if (not ch.isalnum()) and (not ch.isspace()))
     return sym / n
+
+
+def normalize_text(
+    t: str,
+    *,
+    collapse_underscores: bool,
+    strip_leading_noise: bool,
+) -> str:
+    t = t.replace("\r\n", "\n").replace("\r", "\n")
+    t = _RE_CTRL.sub("", t)
+    t = "\n".join(_RE_WS.sub(" ", line).rstrip() for line in t.split("\n"))
+    t = t.strip()
+
+    if collapse_underscores:
+        # Replace long underscore runs with a single space (prevents '____' token becoming a "favorite" first token)
+        t = _RE_UNDERSCORES.sub(" ", t).strip()
+
+    if strip_leading_noise:
+        # Remove a short leading chunk of weird symbols (common in scraped corpora)
+        t = _RE_LEADING_NOISE.sub("", t).lstrip()
+
+    return t
 
 
 def looks_like_code(t: str) -> bool:
@@ -123,30 +129,29 @@ def clean_code(
     max_symbol_ratio: float,
     require_code_signals: bool,
     max_non_ascii_lines_ratio: float,
+    collapse_underscores: bool,
+    strip_leading_noise: bool,
 ) -> Optional[str]:
     if drop_reponame_header:
         t = _RE_REPONAME.sub("", t)
 
-    t = normalize_text(t)
+    t = normalize_text(t, collapse_underscores=collapse_underscores, strip_leading_noise=strip_leading_noise)
     if not t:
         return None
 
     lines = t.split("\n")
 
-    # reject minified / garbage
     if any(len(line) > max_line_len for line in lines):
         return None
 
-    # too many non-ascii lines (often mixed-language comments/garbage)
     if lines:
         non_ascii_lines = 0
-        for ln in lines[: min(len(lines), 200)]:  # sample first chunk
+        for ln in lines[: min(len(lines), 200)]:
             if ascii_ratio(ln) < 0.85:
                 non_ascii_lines += 1
         if non_ascii_lines / max(1, min(len(lines), 200)) > max_non_ascii_lines_ratio:
             return None
 
-    # trim huge files: keep head+tail
     if len(lines) > max_lines:
         head = lines[: max_lines // 2]
         tail = lines[-(max_lines - len(head)) :]
@@ -165,7 +170,6 @@ def clean_code(
     if require_code_signals and (not looks_like_code(t)):
         return None
 
-    # reject common pathological substrings
     bad_substrings = (
         "$(N)", "core dumped", "\x00", "PyGILState_Release",
         "terminate called without an active exception",
@@ -173,7 +177,6 @@ def clean_code(
     if any(x in t for x in bad_substrings):
         return None
 
-    # reject “almost no letters” blobs
     letters = sum(ch.isalpha() for ch in t)
     if letters / max(1, len(t)) < 0.08:
         return None
@@ -203,12 +206,18 @@ def trim_wiki_tail(t: str) -> str:
     return t
 
 
-def clean_wiki(t: str, *, drop_templates: bool, min_paragraphs: int = 2) -> Optional[str]:
-    t = normalize_text(t)
+def clean_wiki(
+    t: str,
+    *,
+    drop_templates: bool,
+    min_paragraphs: int,
+    collapse_underscores: bool,
+    strip_leading_noise: bool,
+) -> Optional[str]:
+    t = normalize_text(t, collapse_underscores=collapse_underscores, strip_leading_noise=strip_leading_noise)
     if not t:
         return None
 
-    # cut tail sections (keeps main content)
     t = trim_wiki_tail(t)
     if not t:
         return None
@@ -224,15 +233,12 @@ def clean_wiki(t: str, *, drop_templates: bool, min_paragraphs: int = 2) -> Opti
             "licensed under",
             "copyright",
         )
-        # 只对“明显 license/模板页”丢弃
         if any(x in low for x in bad_snippets):
             return None
 
-        # extremely list-y
         if t.count("\n- ") >= 12:
             return None
 
-        # require paragraph structure
         paras = [p for p in t.split("\n\n") if p.strip()]
         if len(paras) < min_paragraphs:
             return None
@@ -248,9 +254,6 @@ def load_streaming_dataset(dataset: str, config: Optional[str], split: str, data
     if data_dir:
         kwargs["data_dir"] = data_dir
 
-    # Compatibility across datasets versions:
-    # - new: token=...
-    # - old: use_auth_token=True
     if use_auth:
         try:
             return load_dataset(dataset, config, token=True, **kwargs)  # type: ignore
@@ -278,6 +281,16 @@ def main() -> None:
     ap.add_argument("--use_auth_token", action="store_true", help="use HF auth token (for gated datasets)")
     ap.add_argument("--mode", choices=["generic", "code", "wiki"], default="generic")
 
+    # global filtering knobs (generic/wiki)
+    ap.add_argument("--min_ascii_ratio", type=float, default=0.90, help="drop docs with ascii_ratio < this (generic/wiki)")
+    ap.add_argument("--min_head_ascii_ratio", type=float, default=0.85, help="drop docs if head ascii_ratio < this")
+    ap.add_argument("--head_chars", type=int, default=256, help="head chars for head-ascii check")
+    ap.add_argument("--max_symbol_ratio", type=float, default=0.55, help="drop docs if non_alnum_symbol_ratio > this")
+
+    # leading noise / placeholder cleanup
+    ap.add_argument("--collapse_underscores", action="store_true", help="collapse long ____ runs to a space")
+    ap.add_argument("--strip_leading_noise", action="store_true", help="strip a short weird-symbol prefix")
+
     # code cleaning knobs
     ap.add_argument("--code_drop_reponame", action="store_true", help="remove '<reponame>...\\n' header if present")
     ap.add_argument("--code_require_signals", action="store_true", help="require code-like tokens (def/class/import/{})")
@@ -290,6 +303,7 @@ def main() -> None:
 
     # wiki cleaning
     ap.add_argument("--wiki_drop_templates", action="store_true", help="trim tail boilerplate + drop obvious license/listy pages")
+    ap.add_argument("--wiki_min_paragraphs", type=int, default=2)
 
     # optional dedup
     ap.add_argument("--dedup", action="store_true", help="drop exact duplicates by sha1(text)")
@@ -299,15 +313,16 @@ def main() -> None:
     ap.add_argument("--flush_every", type=int, default=10_000, help="flush+fsync every N kept docs (0=disable)")
 
     # stable exit
-    ap.add_argument("--hard_exit", action="store_true",
-                    help="force os._exit(0) after printing stats (avoids rare HF streaming shutdown crashes)")
+    ap.add_argument(
+        "--hard_exit",
+        action="store_true",
+        help="force os._exit(0) after printing stats (avoids rare HF streaming shutdown crashes)",
+    )
 
     args = ap.parse_args()
     random.seed(args.seed)
 
-    # reduce HF hub background noise a bit
     os.environ.setdefault("HF_HUB_DISABLE_TELEMETRY", "1")
-
     os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)
 
     ds = load_streaming_dataset(
@@ -326,6 +341,9 @@ def main() -> None:
     dropped_empty = 0
     dropped_bad = 0
     dropped_dup = 0
+    dropped_ascii = 0
+    dropped_head_ascii = 0
+    dropped_symbol = 0
     no_text = 0
     non_dict = 0
 
@@ -333,6 +351,17 @@ def main() -> None:
 
     pbar_total = args.max_docs if args.max_docs > 0 else None
     pbar = tqdm(total=pbar_total, desc=f"stream {args.dataset}:{args.split} ({args.mode})")
+
+    def global_filters(t: str) -> bool:
+        # head-ascii first (targets weird prefixes)
+        head = t[: max(1, args.head_chars)]
+        if ascii_ratio(head) < args.min_head_ascii_ratio:
+            return False
+        if ascii_ratio(t) < args.min_ascii_ratio:
+            return False
+        if non_alnum_symbol_ratio(t) > args.max_symbol_ratio:
+            return False
+        return True
 
     try:
         with open(args.out, "w", encoding="utf-8") as f:
@@ -358,15 +387,40 @@ def main() -> None:
                         max_symbol_ratio=args.code_max_symbol_ratio,
                         require_code_signals=args.code_require_signals,
                         max_non_ascii_lines_ratio=args.code_max_non_ascii_lines_ratio,
+                        collapse_underscores=args.collapse_underscores,
+                        strip_leading_noise=args.strip_leading_noise,
                     )
                 elif args.mode == "wiki":
-                    t2 = clean_wiki(t, drop_templates=args.wiki_drop_templates)
+                    t2 = clean_wiki(
+                        t,
+                        drop_templates=args.wiki_drop_templates,
+                        min_paragraphs=args.wiki_min_paragraphs,
+                        collapse_underscores=args.collapse_underscores,
+                        strip_leading_noise=args.strip_leading_noise,
+                    )
                 else:
-                    t2 = normalize_text(t)
+                    t2 = normalize_text(
+                        t,
+                        collapse_underscores=args.collapse_underscores,
+                        strip_leading_noise=args.strip_leading_noise,
+                    )
 
                 if not t2:
                     dropped_empty += 1
                     continue
+
+                # generic/wiki filters
+                if args.mode in ("generic", "wiki"):
+                    head = t2[: max(1, args.head_chars)]
+                    if ascii_ratio(head) < args.min_head_ascii_ratio:
+                        dropped_head_ascii += 1
+                        continue
+                    if ascii_ratio(t2) < args.min_ascii_ratio:
+                        dropped_ascii += 1
+                        continue
+                    if non_alnum_symbol_ratio(t2) > args.max_symbol_ratio:
+                        dropped_symbol += 1
+                        continue
 
                 if len(t2) < args.min_chars:
                     dropped_short += 1
@@ -399,7 +453,6 @@ def main() -> None:
                 if args.max_docs and kept >= args.max_docs:
                     break
 
-            # final flush
             f.flush()
             try:
                 os.fsync(f.fileno())
@@ -417,7 +470,6 @@ def main() -> None:
             pass
         gc.collect()
 
-    # Print stats BEFORE hard-exit
     print(f"wrote {kept} docs -> {args.out}")
     print(
         json.dumps(
@@ -431,7 +483,16 @@ def main() -> None:
                 "dropped_long": dropped_long,
                 "dropped_bad": dropped_bad,
                 "dropped_dup": dropped_dup,
+                "dropped_ascii": dropped_ascii,
+                "dropped_head_ascii": dropped_head_ascii,
+                "dropped_symbol": dropped_symbol,
                 "mode": args.mode,
+                "min_ascii_ratio": args.min_ascii_ratio,
+                "min_head_ascii_ratio": args.min_head_ascii_ratio,
+                "head_chars": args.head_chars,
+                "max_symbol_ratio": args.max_symbol_ratio,
+                "collapse_underscores": bool(args.collapse_underscores),
+                "strip_leading_noise": bool(args.strip_leading_noise),
             },
             ensure_ascii=False,
             indent=2,
