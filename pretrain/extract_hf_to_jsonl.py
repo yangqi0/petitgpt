@@ -3,14 +3,25 @@
 """
 Extract HF dataset (streaming) to jsonl: {"text": "..."} per line.
 
-v4 upgrades (focus on CODE):
-- Drop "html/xml-ish" blocks that start with '<tag' (but keep C/C++ '#include <...>')
-- Drop markdown/README-ish blocks more aggressively:
-  * headings '# Title' / '### ...' at head
-  * tables / lots of pipes early
-  * fenced code blocks
-- Keep real code that starts with '#!/usr/bin/env', '# -*- coding: ... -*-', '#include', '#define', comments etc.
-- Optionally normalize fancy quotes and collapse long '____' runs.
+Goals:
+- generic/wiki/code 三种模式
+- 支持 code_only_python：尽量保证 code 数据更像“代码”，且可选只保留 Python
+- 重点防止占位符 "____" 变成高频 token（可用 --collapse_underscores）
+- 过滤 markdown/表格/README/html-ish 垃圾（可控开关）
+
+Example (code only python):
+python scripts/extract_hf_to_jsonl.py \
+  --dataset bigcode/starcoderdata \
+  --split train \
+  --out datasets/tokenization/code_starcoder.clean.v4_py200k.jsonl \
+  --mode code \
+  --code_only_python \
+  --max_docs 200000 \
+  --min_chars 80 \
+  --collapse_underscores --normalize_quotes --strip_leading_noise \
+  --code_drop_markdown --code_drop_htmlish \
+  --code_require_signals \
+  --code_min_code_line_ratio 0.45
 """
 
 from __future__ import annotations
@@ -23,7 +34,7 @@ import os
 import random
 import re
 import sys
-from typing import Any, Optional
+from typing import Any, Optional, Iterable
 
 from datasets import load_dataset
 from tqdm import tqdm
@@ -51,7 +62,7 @@ _RE_REPONAME = re.compile(r"^\s*<reponame>.*?\n", re.IGNORECASE)
 _RE_CTRL = re.compile(r"[\x00-\x08\x0B\x0C\x0E-\x1F]")  # control chars except \n\r\t
 _RE_UNDERSCORES = re.compile(r"_{4,}")
 
-# strip short weird-symbol prefix (keeps normal punctuation)
+# strip short weird-symbol prefix (keeps normal punctuation and code punctuation)
 _RE_LEADING_NOISE = re.compile(r"^\s*([^\w<>{}\[\]().,;:'\"/\-\n#|>]{1,32})\s*")
 
 # markdown-ish head patterns
@@ -62,7 +73,7 @@ _RE_STAR_LIST = re.compile(r"^\s*\*\s+\S")
 _RE_BLOCKQUOTE = re.compile(r"^\s*>\s+\S")
 _RE_FENCE = re.compile(r"^\s*```")
 
-# html/xml-ish head patterns
+# html/xml-ish head patterns (keep C/C++ include)
 _RE_HTMLISH = re.compile(r"^\s*<\s*/?\s*[a-zA-Z]{1,20}[\s>]")
 
 
@@ -100,6 +111,7 @@ def normalize_text(
 ) -> str:
     t = t.replace("\r\n", "\n").replace("\r", "\n")
     t = _RE_CTRL.sub("", t)
+
     if normalize_quotes:
         t = normalize_quotes_ascii(t)
 
@@ -156,7 +168,7 @@ def is_htmlish_head(t: str) -> bool:
     # Keep C/C++ include lines: "#include <...>"
     if ln.startswith("#include "):
         return False
-    return bool(_RE_HTMLISH.match(ln)) or ln.startswith("<")
+    return bool(_RE_HTMLISH.match(ln)) or ln.lstrip().startswith("<")
 
 
 def is_markdownish_early(t: str) -> bool:
@@ -175,6 +187,71 @@ def is_markdownish_early(t: str) -> bool:
     return False
 
 
+# -------------------------
+# Language detection for code-only-python
+# -------------------------
+def get_lang(ex: dict[str, Any], lang_field: str) -> Optional[str]:
+    v = ex.get(lang_field, None)
+    if isinstance(v, str):
+        return v.strip().lower()
+    return None
+
+
+def guess_python_by_text(t: str) -> bool:
+    """
+    Heuristic: only when dataset doesn't provide language metadata.
+    Try to identify Python-ish code and reject obvious non-python.
+    """
+    s = t.lstrip()
+
+    # strong python signals
+    if s.startswith("#!/usr/bin/env python") or s.startswith("#!/usr/bin/python"):
+        return True
+    if re.search(r"^\s*def\s+\w+\s*\(", t, flags=re.M):
+        return True
+    if re.search(r"^\s*class\s+\w+\s*[:(]", t, flags=re.M):
+        return True
+    if "if __name__ == '__main__':" in t or 'if __name__ == "__main__":' in t:
+        return True
+    if re.search(r"^\s*(from|import)\s+\w+", t, flags=re.M):
+        # but watch out for non-python "import" in other langs - use more checks below
+        pass
+
+    # obvious non-python / shell / C# / Java / XML / HTML
+    non_py_needles = (
+        "using System", "namespace ", "public class", "private ", "protected ",
+        "#include ", "BEGIN CERTIFICATE", "<!DOCTYPE html", "<html", "<?xml",
+        "package ", "public static void main", "console.log(", "function(",
+        "SELECT ", "CREATE TABLE", "echo ", "REM ", "setlocal", "::", "/*", "*/",
+    )
+    if any(x in t for x in non_py_needles):
+        # allow python with type comments containing "/*"? (rare) -> keep strict
+        return False
+
+    # braces/semicolons heavy => likely not python
+    if t.count("{") + t.count("}") > 8:
+        return False
+    if t.count(";") > 12:
+        return False
+
+    # python-ish punctuation: indentation + colons
+    lines = [ln for ln in t.split("\n") if ln.strip()]
+    if not lines:
+        return False
+
+    indented = sum(1 for ln in lines[:200] if (len(ln) - len(ln.lstrip(" "))) >= 4)
+    colon_lines = sum(1 for ln in lines[:200] if ln.rstrip().endswith(":"))
+    if indented >= 6 and colon_lines >= 2:
+        return True
+
+    # fallback: require some python keywords
+    py_kw = sum(t.count(k) for k in ("def ", "class ", "import ", "from ", "None", "True", "False"))
+    return py_kw >= 2
+
+
+# -------------------------
+# Code-ness heuristics
+# -------------------------
 def looks_like_code(t: str) -> bool:
     needles = (
         "def ", "class ", "import ", "from ", "#include", "#define",
@@ -203,13 +280,13 @@ def code_line_ratio(t: str) -> float:
         if s.startswith("#!"):  # shebang
             codey += 1
             continue
-        if s.startswith("#") and (s.startswith("#include") or s.startswith("#define") or "coding:" in s):
+        if s.startswith("#") and (s.startswith("#include") or s.startswith("#define") or "coding:" in s.lower()):
             codey += 1
             continue
-        if s.startswith("#") and len(s) < 200:  # comments can be code context
+        if s.startswith("#") and len(s) < 200:
             codey += 1
             continue
-        if any(x in s for x in (";", "{", "}", "(", ")", "=", ":", "->", "::")):
+        if any(x in s for x in (";", "{", "}", "(", ")", "=", ":", "->", "::", "=>")):
             codey += 1
             continue
         if s.startswith(("def ", "class ", "import ", "from ", "return ", "fn ", "func ")):
@@ -219,7 +296,7 @@ def code_line_ratio(t: str) -> float:
 
 
 # -------------------------
-# Mode-specific cleaning: CODE (v4)
+# Mode-specific cleaning: CODE
 # -------------------------
 def clean_code(
     t: str,
@@ -253,21 +330,21 @@ def clean_code(
     if not t:
         return None
 
-    # Head-based markdown drops (but keep real code that starts with '#!' or '#include' etc.)
     lab = head_pattern_label(t)
     head = first_nonempty_line(t)
+
+    # drop markdown headings at head (but keep python encoding headers)
     if drop_md_heading_head and lab == "md_heading":
-        # allow python encoding header like "# -*- coding: utf-8 -*-"
         if "coding" not in head.lower():
             return None
+
+    # drop obvious table/fence at head
     if drop_head_table_like and lab in ("pipes_table", "fence"):
         return None
 
-    # html/xml-ish at head
     if drop_htmlish and is_htmlish_head(t):
         return None
 
-    # markdownish overall
     if drop_markdown and is_markdownish_early(t):
         return None
 
@@ -285,6 +362,7 @@ def clean_code(
         if non_ascii_lines / max(1, headn) > max_non_ascii_lines_ratio:
             return None
 
+    # truncate very long blocks
     if len(lines) > max_lines:
         head_part = lines[: max_lines // 2]
         tail_part = lines[-(max_lines - len(head_part)) :]
@@ -300,14 +378,13 @@ def clean_code(
     if non_alnum_symbol_ratio(t) > max_symbol_ratio:
         return None
 
-    # require code signals
     if require_code_signals and (not looks_like_code(t)):
         return None
 
     if code_line_ratio(t) < min_code_line_ratio:
         return None
 
-    # drop obvious junk
+    # drop obvious crash dumps / binary-ish
     bad_substrings = (
         "core dumped", "\x00", "PyGILState_Release",
         "terminate called without an active exception",
@@ -316,7 +393,7 @@ def clean_code(
         return None
 
     letters = sum(ch.isalpha() for ch in t)
-    if letters / max(1, len(t)) < 0.05:
+    if letters / max(1, len(t)) < 0.03:
         return None
 
     return t
@@ -390,7 +467,7 @@ def clean_wiki(
 
 
 # -------------------------
-# CLI + main
+# HF streaming loader
 # -------------------------
 def load_streaming_dataset(dataset: str, config: str | None, split: str, data_dir: str | None, use_auth: bool):
     kwargs = dict(streaming=True)
@@ -403,6 +480,9 @@ def load_streaming_dataset(dataset: str, config: str | None, split: str, data_di
     return load_dataset(dataset, split=split, **kwargs)
 
 
+# -------------------------
+# main
+# -------------------------
 def main():
     ap = argparse.ArgumentParser()
 
@@ -418,7 +498,7 @@ def main():
     ap.add_argument("--mode", choices=["generic", "wiki", "code"], default="generic")
     ap.add_argument("--seed", type=int, default=1234)
 
-    ap.add_argument("--max_docs", type=int, default=0, help="0=unlimited")
+    ap.add_argument("--max_docs", type=int, default=0, help="0=unlimited (kept docs)")
     ap.add_argument("--min_chars", type=int, default=200)
     ap.add_argument("--max_chars", type=int, default=0)
 
@@ -437,20 +517,25 @@ def main():
     ap.add_argument("--drop_head_tables", action="store_true")
     ap.add_argument("--drop_head_lists", action="store_true")
 
-    # code knobs (v4)
+    # code knobs
     ap.add_argument("--code_drop_reponame", action="store_true")
     ap.add_argument("--code_require_signals", action="store_true")
     ap.add_argument("--code_min_lines", type=int, default=6)
     ap.add_argument("--code_max_lines", type=int, default=600)
     ap.add_argument("--code_max_line_len", type=int, default=4000)
     ap.add_argument("--code_min_ascii_ratio", type=float, default=0.92)
-    ap.add_argument("--code_max_symbol_ratio", type=float, default=0.70)  # code has symbols
+    ap.add_argument("--code_max_symbol_ratio", type=float, default=0.75)  # code has symbols
     ap.add_argument("--code_max_non_ascii_lines_ratio", type=float, default=0.22)
     ap.add_argument("--code_drop_markdown", action="store_true")
     ap.add_argument("--code_drop_htmlish", action="store_true")
     ap.add_argument("--code_min_code_line_ratio", type=float, default=0.35)
     ap.add_argument("--code_drop_md_heading_head", action="store_true")
     ap.add_argument("--code_drop_head_table_like", action="store_true")
+
+    # NEW: code language filtering
+    ap.add_argument("--lang_field", default="language", help="dataset language field if present")
+    ap.add_argument("--code_lang_allow", default="", help="comma-separated allow list, e.g. python,py")
+    ap.add_argument("--code_only_python", action="store_true", help="keep only python (uses lang_field if exists; else heuristic)")
 
     # wiki knobs
     ap.add_argument("--wiki_drop_templates", action="store_true")
@@ -469,13 +554,20 @@ def main():
     os.environ.setdefault("HF_HUB_DISABLE_TELEMETRY", "1")
     os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)
 
+    allow_langs = {x.strip().lower() for x in args.code_lang_allow.split(",") if x.strip()}
+    if args.code_only_python:
+        allow_langs |= {"python", "py"}
+
     ds = load_streaming_dataset(args.dataset, args.config, args.split, args.data_dir, args.use_auth_token)
 
     seen = kept = 0
     no_text = non_dict = 0
     dropped_empty = dropped_short = dropped_long = 0
-    dropped_dup = dropped_ascii = dropped_head_ascii = dropped_symbol = 0
+    dropped_dup = 0
+    dropped_ascii = dropped_head_ascii = dropped_symbol = 0
     dropped_head_pattern = 0
+    dropped_lang = 0
+    dropped_code = 0
 
     hashes = set() if args.dedup else None
 
@@ -490,10 +582,28 @@ def main():
                     non_dict += 1
                     continue
 
+                # language filter (CODE only)
+                if args.mode == "code" and (args.code_only_python or allow_langs):
+                    lang = get_lang(ex, args.lang_field)
+                    if lang is not None and allow_langs:
+                        if lang not in allow_langs:
+                            dropped_lang += 1
+                            continue
+                    elif args.code_only_python:
+                        # no language metadata -> use heuristic later after we extract text
+                        pass
+
                 t = pick_text(ex, args.text_field)
                 if not isinstance(t, str):
                     no_text += 1
                     continue
+
+                if args.mode == "code" and args.code_only_python:
+                    lang = get_lang(ex, args.lang_field)
+                    if lang is None:
+                        if not guess_python_by_text(t):
+                            dropped_lang += 1
+                            continue
 
                 if args.mode == "code":
                     t2 = clean_code(
@@ -515,6 +625,10 @@ def main():
                         drop_md_heading_head=args.code_drop_md_heading_head,
                         drop_head_table_like=args.code_drop_head_table_like,
                     )
+                    if not t2:
+                        dropped_code += 1
+                        continue
+
                 elif args.mode == "wiki":
                     t2 = clean_wiki(
                         t,
@@ -525,6 +639,10 @@ def main():
                         normalize_quotes=args.normalize_quotes,
                         drop_head_tables=args.drop_head_tables,
                     )
+                    if not t2:
+                        dropped_empty += 1
+                        continue
+
                 else:
                     t2 = normalize_text(
                         t,
@@ -532,13 +650,10 @@ def main():
                         strip_leading_noise=args.strip_leading_noise,
                         normalize_quotes=args.normalize_quotes,
                     )
+                    if not t2:
+                        dropped_empty += 1
+                        continue
 
-                if not t2:
-                    dropped_empty += 1
-                    continue
-
-                # head-pattern drops for generic/wiki
-                if args.mode in ("generic", "wiki"):
                     lab = head_pattern_label(t2)
                     if args.drop_head_tables and lab in ("pipes_table", "md_heading", "fence"):
                         dropped_head_pattern += 1
@@ -568,6 +683,7 @@ def main():
                 if hashes is not None:
                     h = hashlib.sha1(t2.encode("utf-8")).hexdigest()
                     if h in hashes:
+                        dropped_dup += 1
                         continue
                     hashes.add(h)
                     if len(hashes) > args.dedup_max:
@@ -616,15 +732,12 @@ def main():
         "dropped_head_ascii": dropped_head_ascii,
         "dropped_symbol": dropped_symbol,
         "dropped_head_pattern": dropped_head_pattern,
+        "dropped_dup": dropped_dup,
+        "dropped_lang": dropped_lang,
+        "dropped_code": dropped_code,
         "mode": args.mode,
-        "collapse_underscores": bool(args.collapse_underscores),
-        "strip_leading_noise": bool(args.strip_leading_noise),
-        "normalize_quotes": bool(args.normalize_quotes),
-        "code_min_code_line_ratio": float(args.code_min_code_line_ratio),
-        "code_drop_markdown": bool(args.code_drop_markdown),
-        "code_drop_htmlish": bool(args.code_drop_htmlish),
-        "code_drop_md_heading_head": bool(args.code_drop_md_heading_head),
-        "code_drop_head_table_like": bool(args.code_drop_head_table_like),
+        "code_only_python": bool(args.code_only_python),
+        "code_lang_allow": sorted(list(allow_langs)),
     }
     print(f"wrote {kept} docs -> {args.out}")
     print(json.dumps(stats, ensure_ascii=False, indent=2))
