@@ -3,14 +3,14 @@
 """
 Extract HF dataset (streaming) to jsonl: {"text": "..."} per line.
 
-Best-effort for better first-token behavior:
-- collapse long "____" runs
-- optional normalize fancy quotes to ASCII
-- optional strip a short weird-symbol prefix
-- stronger head-pattern filters for generic/wiki (drop markdown tables / listy boilerplate)
-- stronger filters for code (drop markdown/readme, drop html-ish, keep real code)
-
-This file is an overwrite-enhanced version of your current script.  :contentReference[oaicite:1]{index=1}
+v4 upgrades (focus on CODE):
+- Drop "html/xml-ish" blocks that start with '<tag' (but keep C/C++ '#include <...>')
+- Drop markdown/README-ish blocks more aggressively:
+  * headings '# Title' / '### ...' at head
+  * tables / lots of pipes early
+  * fenced code blocks
+- Keep real code that starts with '#!/usr/bin/env', '# -*- coding: ... -*-', '#include', '#define', comments etc.
+- Optionally normalize fancy quotes and collapse long '____' runs.
 """
 
 from __future__ import annotations
@@ -23,7 +23,7 @@ import os
 import random
 import re
 import sys
-from typing import Any, Optional, Tuple
+from typing import Any, Optional
 
 from datasets import load_dataset
 from tqdm import tqdm
@@ -50,17 +50,20 @@ _RE_WS = re.compile(r"[ \t]+")
 _RE_REPONAME = re.compile(r"^\s*<reponame>.*?\n", re.IGNORECASE)
 _RE_CTRL = re.compile(r"[\x00-\x08\x0B\x0C\x0E-\x1F]")  # control chars except \n\r\t
 _RE_UNDERSCORES = re.compile(r"_{4,}")
+
+# strip short weird-symbol prefix (keeps normal punctuation)
 _RE_LEADING_NOISE = re.compile(r"^\s*([^\w<>{}\[\]().,;:'\"/\-\n#|>]{1,32})\s*")
 
 # markdown-ish head patterns
-_RE_MD_HEADING = re.compile(r"^\s*#{1,6}\s+\S")
-_RE_MD_TABLE = re.compile(r"^\s*\|.+\|\s*$")
+_RE_MD_HEADING = re.compile(r"^\s*#{1,6}\s+\S")     # "# Title"
+_RE_MD_TABLE = re.compile(r"^\s*\|.+\|\s*$")        # "| a | b |"
 _RE_DASH_LIST = re.compile(r"^\s*-\s+\S")
 _RE_STAR_LIST = re.compile(r"^\s*\*\s+\S")
 _RE_BLOCKQUOTE = re.compile(r"^\s*>\s+\S")
+_RE_FENCE = re.compile(r"^\s*```")
 
-# html-ish head patterns
-_RE_HTMLISH = re.compile(r"^\s*<\s*/?\s*[a-zA-Z]{1,12}[\s>]")
+# html/xml-ish head patterns
+_RE_HTMLISH = re.compile(r"^\s*<\s*/?\s*[a-zA-Z]{1,20}[\s>]")
 
 
 def ascii_ratio(t: str) -> float:
@@ -80,7 +83,6 @@ def non_alnum_symbol_ratio(t: str) -> float:
 
 
 def normalize_quotes_ascii(t: str) -> str:
-    # very mild; helps reduce fancy-quote first-token attraction
     repl = {
         "“": '"', "”": '"', "„": '"', "‟": '"',
         "‘": "'", "’": "'", "‚": "'", "‛": "'",
@@ -100,11 +102,13 @@ def normalize_text(
     t = _RE_CTRL.sub("", t)
     if normalize_quotes:
         t = normalize_quotes_ascii(t)
+
     # collapse spaces but keep newlines
     t = "\n".join(_RE_WS.sub(" ", line).rstrip() for line in t.split("\n"))
     t = t.strip()
 
     if collapse_underscores:
+        # turn "____" runs into a single space, avoiding the model loving that token
         t = _RE_UNDERSCORES.sub(" ", t).strip()
 
     if strip_leading_noise:
@@ -124,6 +128,8 @@ def head_pattern_label(t: str) -> str:
     ln = first_nonempty_line(t)
     if not ln:
         return "empty"
+    if _RE_FENCE.match(ln):
+        return "fence"
     if _RE_MD_TABLE.match(ln) or ln.startswith("|"):
         return "pipes_table"
     if _RE_MD_HEADING.match(ln):
@@ -143,11 +149,40 @@ def head_pattern_label(t: str) -> str:
     return "other_symbol"
 
 
+def is_htmlish_head(t: str) -> bool:
+    ln = first_nonempty_line(t)
+    if not ln:
+        return False
+    # Keep C/C++ include lines: "#include <...>"
+    if ln.startswith("#include "):
+        return False
+    return bool(_RE_HTMLISH.match(ln)) or ln.startswith("<")
+
+
+def is_markdownish_early(t: str) -> bool:
+    # README / markdown signals
+    if "```" in t:
+        return True
+    head_lines = t.split("\n")[:60]
+    # multiple headings early => likely markdown
+    h = sum(1 for ln in head_lines if _RE_MD_HEADING.match(ln))
+    if h >= 2:
+        return True
+    # table density early
+    pipes = sum(ln.count("|") for ln in head_lines)
+    if pipes >= 24:
+        return True
+    return False
+
+
 def looks_like_code(t: str) -> bool:
     needles = (
-        "def ", "class ", "import ", "from ", "#include", "public ", "private ",
-        "function ", "const ", "let ", "var ", "package ", "namespace ", "using ",
-        "return ", "if ", "else:", "elif ", "try:", "except", "for ", "while ",
+        "def ", "class ", "import ", "from ", "#include", "#define",
+        "public ", "private ", "protected ", "template<",
+        "function ", "const ", "let ", "var ",
+        "package ", "namespace ", "using ",
+        "return ", "if ", "else", "elif ", "try", "except",
+        "for ", "while ", "switch ", "case ",
     )
     if any(x in t for x in needles):
         return True
@@ -158,49 +193,33 @@ def looks_like_code(t: str) -> bool:
     return False
 
 
-def is_markdownish(t: str) -> bool:
-    # README / markdown signals
-    if "```" in t:
-        return True
-    # lots of headings
-    head_lines = t.split("\n")[:40]
-    h = sum(1 for ln in head_lines if _RE_MD_HEADING.match(ln))
-    if h >= 2:
-        return True
-    # table density early
-    pipes = sum(ln.count("|") for ln in head_lines)
-    if pipes >= 20:
-        return True
-    return False
-
-
-def is_htmlish(t: str) -> bool:
-    ln = first_nonempty_line(t)
-    return bool(_RE_HTMLISH.match(ln))
-
-
 def code_line_ratio(t: str) -> float:
     lines = [ln for ln in t.split("\n") if ln.strip()]
     if not lines:
         return 0.0
     codey = 0
-    for ln in lines[:200]:
+    for ln in lines[:220]:
         s = ln.strip()
-        if s.startswith("#"):
-            # comments still count as code context
+        if s.startswith("#!"):  # shebang
             codey += 1
             continue
-        if any(x in s for x in (";", "{", "}", "(", ")", "=", ":", "->")):
+        if s.startswith("#") and (s.startswith("#include") or s.startswith("#define") or "coding:" in s):
             codey += 1
             continue
-        if s.startswith(("def ", "class ", "import ", "from ", "return ")):
+        if s.startswith("#") and len(s) < 200:  # comments can be code context
             codey += 1
             continue
-    return codey / max(1, min(len(lines), 200))
+        if any(x in s for x in (";", "{", "}", "(", ")", "=", ":", "->", "::")):
+            codey += 1
+            continue
+        if s.startswith(("def ", "class ", "import ", "from ", "return ", "fn ", "func ")):
+            codey += 1
+            continue
+    return codey / max(1, min(len(lines), 220))
 
 
 # -------------------------
-# Mode-specific cleaning: CODE
+# Mode-specific cleaning: CODE (v4)
 # -------------------------
 def clean_code(
     t: str,
@@ -219,6 +238,8 @@ def clean_code(
     drop_markdown: bool,
     drop_htmlish: bool,
     min_code_line_ratio: float,
+    drop_md_heading_head: bool,
+    drop_head_table_like: bool,
 ) -> Optional[str]:
     if drop_reponame_header:
         t = _RE_REPONAME.sub("", t)
@@ -232,20 +253,32 @@ def clean_code(
     if not t:
         return None
 
-    if drop_htmlish and is_htmlish(t):
+    # Head-based markdown drops (but keep real code that starts with '#!' or '#include' etc.)
+    lab = head_pattern_label(t)
+    head = first_nonempty_line(t)
+    if drop_md_heading_head and lab == "md_heading":
+        # allow python encoding header like "# -*- coding: utf-8 -*-"
+        if "coding" not in head.lower():
+            return None
+    if drop_head_table_like and lab in ("pipes_table", "fence"):
         return None
-    if drop_markdown and is_markdownish(t):
+
+    # html/xml-ish at head
+    if drop_htmlish and is_htmlish_head(t):
+        return None
+
+    # markdownish overall
+    if drop_markdown and is_markdownish_early(t):
         return None
 
     lines = t.split("\n")
-
     if any(len(line) > max_line_len for line in lines):
         return None
 
     # too many non-ascii lines in head
     if lines:
         non_ascii_lines = 0
-        headn = min(len(lines), 200)
+        headn = min(len(lines), 220)
         for ln in lines[:headn]:
             if ascii_ratio(ln) < 0.85:
                 non_ascii_lines += 1
@@ -253,9 +286,9 @@ def clean_code(
             return None
 
     if len(lines) > max_lines:
-        head = lines[: max_lines // 2]
-        tail = lines[-(max_lines - len(head)) :]
-        lines = head + ["# ... truncated ..."] + tail
+        head_part = lines[: max_lines // 2]
+        tail_part = lines[-(max_lines - len(head_part)) :]
+        lines = head_part + ["# ... truncated ..."] + tail_part
         t = "\n".join(lines).strip()
 
     if len(lines) < min_lines:
@@ -267,14 +300,16 @@ def clean_code(
     if non_alnum_symbol_ratio(t) > max_symbol_ratio:
         return None
 
+    # require code signals
     if require_code_signals and (not looks_like_code(t)):
         return None
 
     if code_line_ratio(t) < min_code_line_ratio:
         return None
 
+    # drop obvious junk
     bad_substrings = (
-        "$(N)", "core dumped", "\x00", "PyGILState_Release",
+        "core dumped", "\x00", "PyGILState_Release",
         "terminate called without an active exception",
     )
     if any(x in t for x in bad_substrings):
@@ -330,7 +365,7 @@ def clean_wiki(
 
     if drop_head_tables:
         lab = head_pattern_label(t)
-        if lab in ("pipes_table", "md_heading"):
+        if lab in ("pipes_table", "md_heading", "fence"):
             return None
 
     t = trim_wiki_tail(t)
@@ -340,20 +375,13 @@ def clean_wiki(
     if drop_templates:
         low = t.lower()
         bad_snippets = (
-            "creative commons",
-            "licensed under",
-            "copyright",
-            "citation needed",
-            "retrieved ",
-            "isbn ",
+            "creative commons", "licensed under", "copyright",
+            "citation needed", "retrieved ", "isbn ",
         )
         if any(x in low for x in bad_snippets):
             return None
-
-        # listy
         if t.count("\n- ") >= 12:
             return None
-
         paras = [p for p in t.split("\n\n") if p.strip()]
         if len(paras) < min_paragraphs:
             return None
@@ -364,13 +392,7 @@ def clean_wiki(
 # -------------------------
 # CLI + main
 # -------------------------
-def load_streaming_dataset(
-    dataset: str,
-    config: str | None,
-    split: str,
-    data_dir: str | None,
-    use_auth: bool,
-):
+def load_streaming_dataset(dataset: str, config: str | None, split: str, data_dir: str | None, use_auth: bool):
     kwargs = dict(streaming=True)
     if config:
         kwargs["name"] = config
@@ -409,24 +431,26 @@ def main():
     # placeholder / noise / quote
     ap.add_argument("--collapse_underscores", action="store_true")
     ap.add_argument("--strip_leading_noise", action="store_true")
-    ap.add_argument("--normalize_quotes", action="store_true", help='convert “ ” ‘ ’ etc to ASCII quotes')
+    ap.add_argument("--normalize_quotes", action="store_true")
 
     # head-pattern drops (generic/wiki)
-    ap.add_argument("--drop_head_tables", action="store_true", help="drop docs starting with markdown tables/headings")
-    ap.add_argument("--drop_head_lists", action="store_true", help="drop docs starting with list markers (-/*)")
+    ap.add_argument("--drop_head_tables", action="store_true")
+    ap.add_argument("--drop_head_lists", action="store_true")
 
-    # code knobs
+    # code knobs (v4)
     ap.add_argument("--code_drop_reponame", action="store_true")
     ap.add_argument("--code_require_signals", action="store_true")
     ap.add_argument("--code_min_lines", type=int, default=6)
     ap.add_argument("--code_max_lines", type=int, default=600)
     ap.add_argument("--code_max_line_len", type=int, default=4000)
     ap.add_argument("--code_min_ascii_ratio", type=float, default=0.92)
-    ap.add_argument("--code_max_symbol_ratio", type=float, default=0.65)  # code has symbols
-    ap.add_argument("--code_max_non_ascii_lines_ratio", type=float, default=0.25)
+    ap.add_argument("--code_max_symbol_ratio", type=float, default=0.70)  # code has symbols
+    ap.add_argument("--code_max_non_ascii_lines_ratio", type=float, default=0.22)
     ap.add_argument("--code_drop_markdown", action="store_true")
     ap.add_argument("--code_drop_htmlish", action="store_true")
-    ap.add_argument("--code_min_code_line_ratio", type=float, default=0.25)
+    ap.add_argument("--code_min_code_line_ratio", type=float, default=0.35)
+    ap.add_argument("--code_drop_md_heading_head", action="store_true")
+    ap.add_argument("--code_drop_head_table_like", action="store_true")
 
     # wiki knobs
     ap.add_argument("--wiki_drop_templates", action="store_true")
@@ -445,16 +469,10 @@ def main():
     os.environ.setdefault("HF_HUB_DISABLE_TELEMETRY", "1")
     os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)
 
-    ds = load_streaming_dataset(
-        dataset=args.dataset,
-        config=args.config,
-        split=args.split,
-        data_dir=args.data_dir,
-        use_auth=args.use_auth_token,
-    )
+    ds = load_streaming_dataset(args.dataset, args.config, args.split, args.data_dir, args.use_auth_token)
 
     seen = kept = 0
-    no_text = non_dict = bad_json = 0
+    no_text = non_dict = 0
     dropped_empty = dropped_short = dropped_long = 0
     dropped_dup = dropped_ascii = dropped_head_ascii = dropped_symbol = 0
     dropped_head_pattern = 0
@@ -477,7 +495,6 @@ def main():
                     no_text += 1
                     continue
 
-                # mode-specific
                 if args.mode == "code":
                     t2 = clean_code(
                         t,
@@ -495,6 +512,8 @@ def main():
                         drop_markdown=args.code_drop_markdown,
                         drop_htmlish=args.code_drop_htmlish,
                         min_code_line_ratio=args.code_min_code_line_ratio,
+                        drop_md_heading_head=args.code_drop_md_heading_head,
+                        drop_head_table_like=args.code_drop_head_table_like,
                     )
                 elif args.mode == "wiki":
                     t2 = clean_wiki(
@@ -521,7 +540,7 @@ def main():
                 # head-pattern drops for generic/wiki
                 if args.mode in ("generic", "wiki"):
                     lab = head_pattern_label(t2)
-                    if args.drop_head_tables and lab in ("pipes_table", "md_heading"):
+                    if args.drop_head_tables and lab in ("pipes_table", "md_heading", "fence"):
                         dropped_head_pattern += 1
                         continue
                     if args.drop_head_lists and lab in ("dash_list", "star_list"):
@@ -549,7 +568,6 @@ def main():
                 if hashes is not None:
                     h = hashlib.sha1(t2.encode("utf-8")).hexdigest()
                     if h in hashes:
-                        dropped_dup += 1
                         continue
                     hashes.add(h)
                     if len(hashes) > args.dedup_max:
@@ -591,28 +609,22 @@ def main():
         "kept": kept,
         "no_text": no_text,
         "non_dict": non_dict,
-        "bad_json": bad_json,
         "dropped_empty": dropped_empty,
         "dropped_short": dropped_short,
         "dropped_long": dropped_long,
-        "dropped_dup": dropped_dup,
         "dropped_ascii": dropped_ascii,
         "dropped_head_ascii": dropped_head_ascii,
         "dropped_symbol": dropped_symbol,
         "dropped_head_pattern": dropped_head_pattern,
         "mode": args.mode,
-        "min_ascii_ratio": args.min_ascii_ratio,
-        "min_head_ascii_ratio": args.min_head_ascii_ratio,
-        "head_chars": args.head_chars,
-        "max_symbol_ratio": args.max_symbol_ratio,
         "collapse_underscores": bool(args.collapse_underscores),
         "strip_leading_noise": bool(args.strip_leading_noise),
         "normalize_quotes": bool(args.normalize_quotes),
-        "drop_head_tables": bool(args.drop_head_tables),
-        "drop_head_lists": bool(args.drop_head_lists),
+        "code_min_code_line_ratio": float(args.code_min_code_line_ratio),
         "code_drop_markdown": bool(args.code_drop_markdown),
         "code_drop_htmlish": bool(args.code_drop_htmlish),
-        "code_min_code_line_ratio": float(args.code_min_code_line_ratio),
+        "code_drop_md_heading_head": bool(args.code_drop_md_heading_head),
+        "code_drop_head_table_like": bool(args.code_drop_head_table_like),
     }
     print(f"wrote {kept} docs -> {args.out}")
     print(json.dumps(stats, ensure_ascii=False, indent=2))
