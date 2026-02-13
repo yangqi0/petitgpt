@@ -3,20 +3,21 @@
 """
 Extract HF dataset (streaming) to jsonl: {"text": "..."} per line.
 
-Enhancements (best-effort for higher-quality English-centric pretrain):
-- Optional underscore placeholder cleanup (e.g. "____" runs).
+Goal: cleaner English-centric pretrain text, reduce "weird first token" artifacts:
+- Collapse long underscore placeholders (e.g. "____" runs) to a space.
 - Optional ASCII ratio filtering (global) + HEAD ASCII ratio filtering (first N chars).
-- Optional "leading noise" trimming.
-- Keeps existing mode=code / mode=wiki logic.
+- Optional stripping of a short weird-symbol prefix ("leading noise").
+- Keep existing mode=code / mode=wiki logic, with stronger trimming for wiki tails.
 
-Typical usage:
+Typical usage (FineWeb):
   python pretrain/extract_hf_to_jsonl.py \
     --dataset HuggingFaceFW/fineweb-edu --split train \
     --out datasets/tokenization/fineweb_edu.clean.jsonl \
     --text_field text --max_docs 5000000 --min_chars 200 \
     --mode generic \
-    --min_head_ascii_ratio 0.85 --head_chars 256 \
+    --min_head_ascii_ratio 0.88 --head_chars 256 \
     --min_ascii_ratio 0.90 \
+    --max_symbol_ratio 0.55 \
     --collapse_underscores \
     --strip_leading_noise \
     --dedup --hard_exit
@@ -45,6 +46,7 @@ def pick_text(ex: dict[str, Any], text_field: str) -> Optional[str]:
     v = ex.get(text_field, None)
     if isinstance(v, str):
         return v
+    # fallback fields (common HF schemas)
     for k in ("text", "content", "article", "raw", "completion", "code"):
         v = ex.get(k, None)
         if isinstance(v, str):
@@ -59,7 +61,10 @@ _RE_WS = re.compile(r"[ \t]+")
 _RE_REPONAME = re.compile(r"^\s*<reponame>.*?\n", re.IGNORECASE)
 _RE_CTRL = re.compile(r"[\x00-\x08\x0B\x0C\x0E-\x1F]")  # control chars except \n\r\t
 _RE_UNDERSCORES = re.compile(r"_{4,}")  # collapse long "____" runs
-_RE_LEADING_NOISE = re.compile(r"^\s*([^\w<>{}\[\]().,;:'\"/\-\n]{1,32})\s*")  # conservative
+
+# conservative: strip a SHORT weird prefix chunk (avoid deleting normal text)
+# note: we do NOT strip common markdown punctuation like '#', '-', '|', '>', quotes, etc.
+_RE_LEADING_NOISE = re.compile(r"^\s*([^\w<>{}\[\]().,;:'\"/\-\n#|>]{1,32})\s*")
 
 
 def ascii_ratio(t: str) -> float:
@@ -86,11 +91,13 @@ def normalize_text(
 ) -> str:
     t = t.replace("\r\n", "\n").replace("\r", "\n")
     t = _RE_CTRL.sub("", t)
+
+    # collapse spaces but keep newlines
     t = "\n".join(_RE_WS.sub(" ", line).rstrip() for line in t.split("\n"))
     t = t.strip()
 
     if collapse_underscores:
-        # Replace long underscore runs with a single space (prevents '____' token becoming a "favorite" first token)
+        # Prevent '____' token becoming a "favorite" first token
         t = _RE_UNDERSCORES.sub(" ", t).strip()
 
     if strip_leading_noise:
@@ -141,23 +148,25 @@ def clean_code(
 
     lines = t.split("\n")
 
+    # drop extremely long single lines (often minified / garbage)
     if any(len(line) > max_line_len for line in lines):
         return None
 
+    # reject samples with too many non-ascii lines early on (often mixed-language dumps)
     if lines:
-        non_ascii_lines = 0
-        for ln in lines[: min(len(lines), 200)]:
-            if ascii_ratio(ln) < 0.85:
-                non_ascii_lines += 1
-        if non_ascii_lines / max(1, min(len(lines), 200)) > max_non_ascii_lines_ratio:
+        sample_lines = lines[: min(len(lines), 200)]
+        non_ascii_lines = sum(1 for ln in sample_lines if ascii_ratio(ln) < 0.85)
+        if non_ascii_lines / max(1, len(sample_lines)) > max_non_ascii_lines_ratio:
             return None
 
+    # trim huge files; keep head+tail structure
     if len(lines) > max_lines:
         head = lines[: max_lines // 2]
         tail = lines[-(max_lines - len(head)) :]
         lines = head + ["# ... truncated ..."] + tail
         t = "\n".join(lines).strip()
 
+    # must have enough structure
     if len(lines) < min_lines:
         return None
 
@@ -170,6 +179,7 @@ def clean_code(
     if require_code_signals and (not looks_like_code(t)):
         return None
 
+    # reject some pathological patterns
     bad_substrings = (
         "$(N)", "core dumped", "\x00", "PyGILState_Release",
         "terminate called without an active exception",
@@ -177,6 +187,7 @@ def clean_code(
     if any(x in t for x in bad_substrings):
         return None
 
+    # must contain some letters
     letters = sum(ch.isalpha() for ch in t)
     if letters / max(1, len(t)) < 0.08:
         return None
@@ -218,6 +229,7 @@ def clean_wiki(
     if not t:
         return None
 
+    # remove tail sections (references/external links etc.)
     t = trim_wiki_tail(t)
     if not t:
         return None
@@ -236,9 +248,11 @@ def clean_wiki(
         if any(x in low for x in bad_snippets):
             return None
 
+        # too list-y
         if t.count("\n- ") >= 12:
             return None
 
+        # must have at least N paragraphs
         paras = [p for p in t.split("\n\n") if p.strip()]
         if len(paras) < min_paragraphs:
             return None
@@ -255,6 +269,7 @@ def load_streaming_dataset(dataset: str, config: Optional[str], split: str, data
         kwargs["data_dir"] = data_dir
 
     if use_auth:
+        # datasets.load_dataset() API changed over time: token= vs use_auth_token=
         try:
             return load_dataset(dataset, config, token=True, **kwargs)  # type: ignore
         except TypeError:
@@ -268,7 +283,7 @@ def load_streaming_dataset(dataset: str, config: Optional[str], split: str, data
 # -------------------------
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--dataset", required=True, help="HF dataset name, e.g. HuggingFaceFW/fineweb-edu")
+    ap.add_argument("--dataset", required=True, help="HF dataset name")
     ap.add_argument("--config", default=None, help="HF config name (optional)")
     ap.add_argument("--split", default="train", help="split name")
     ap.add_argument("--out", required=True, help="output jsonl path")
@@ -277,23 +292,23 @@ def main() -> None:
     ap.add_argument("--text_field", default="text", help="field to use as text if present")
     ap.add_argument("--min_chars", type=int, default=200, help="drop very short samples (after cleaning)")
     ap.add_argument("--max_chars", type=int, default=0, help="drop very long samples (0=disable)")
-    ap.add_argument("--data_dir", default=None, help="HF data_dir (subdirectory), e.g. python for starcoderdata")
+    ap.add_argument("--data_dir", default=None, help="HF data_dir (subdirectory)")
     ap.add_argument("--use_auth_token", action="store_true", help="use HF auth token (for gated datasets)")
     ap.add_argument("--mode", choices=["generic", "code", "wiki"], default="generic")
 
     # global filtering knobs (generic/wiki)
     ap.add_argument("--min_ascii_ratio", type=float, default=0.90, help="drop docs with ascii_ratio < this (generic/wiki)")
-    ap.add_argument("--min_head_ascii_ratio", type=float, default=0.85, help="drop docs if head ascii_ratio < this")
+    ap.add_argument("--min_head_ascii_ratio", type=float, default=0.88, help="drop docs if head ascii_ratio < this")
     ap.add_argument("--head_chars", type=int, default=256, help="head chars for head-ascii check")
     ap.add_argument("--max_symbol_ratio", type=float, default=0.55, help="drop docs if non_alnum_symbol_ratio > this")
 
-    # leading noise / placeholder cleanup
+    # placeholder cleanup
     ap.add_argument("--collapse_underscores", action="store_true", help="collapse long ____ runs to a space")
     ap.add_argument("--strip_leading_noise", action="store_true", help="strip a short weird-symbol prefix")
 
     # code cleaning knobs
-    ap.add_argument("--code_drop_reponame", action="store_true", help="remove '<reponame>...\\n' header if present")
-    ap.add_argument("--code_require_signals", action="store_true", help="require code-like tokens (def/class/import/{})")
+    ap.add_argument("--code_drop_reponame", action="store_true")
+    ap.add_argument("--code_require_signals", action="store_true")
     ap.add_argument("--code_min_lines", type=int, default=6)
     ap.add_argument("--code_max_lines", type=int, default=600)
     ap.add_argument("--code_max_line_len", type=int, default=4000)
@@ -307,17 +322,13 @@ def main() -> None:
 
     # optional dedup
     ap.add_argument("--dedup", action="store_true", help="drop exact duplicates by sha1(text)")
-    ap.add_argument("--dedup_max", type=int, default=2_000_000, help="max hashes kept in memory before clearing")
+    ap.add_argument("--dedup_max", type=int, default=2_000_000)
 
     # IO safety
     ap.add_argument("--flush_every", type=int, default=10_000, help="flush+fsync every N kept docs (0=disable)")
 
-    # stable exit
-    ap.add_argument(
-        "--hard_exit",
-        action="store_true",
-        help="force os._exit(0) after printing stats (avoids rare HF streaming shutdown crashes)",
-    )
+    # stable exit (HF streaming sometimes aborts at interpreter shutdown)
+    ap.add_argument("--hard_exit", action="store_true", help="force os._exit(0) after printing stats")
 
     args = ap.parse_args()
     random.seed(args.seed)
@@ -336,32 +347,21 @@ def main() -> None:
     seen = 0
     kept = 0
 
+    # counters
+    no_text = 0
+    non_dict = 0
+    dropped_empty = 0
     dropped_short = 0
     dropped_long = 0
-    dropped_empty = 0
-    dropped_bad = 0
     dropped_dup = 0
     dropped_ascii = 0
     dropped_head_ascii = 0
     dropped_symbol = 0
-    no_text = 0
-    non_dict = 0
 
     hashes = set() if args.dedup else None
 
     pbar_total = args.max_docs if args.max_docs > 0 else None
     pbar = tqdm(total=pbar_total, desc=f"stream {args.dataset}:{args.split} ({args.mode})")
-
-    def global_filters(t: str) -> bool:
-        # head-ascii first (targets weird prefixes)
-        head = t[: max(1, args.head_chars)]
-        if ascii_ratio(head) < args.min_head_ascii_ratio:
-            return False
-        if ascii_ratio(t) < args.min_ascii_ratio:
-            return False
-        if non_alnum_symbol_ratio(t) > args.max_symbol_ratio:
-            return False
-        return True
 
     try:
         with open(args.out, "w", encoding="utf-8") as f:
@@ -409,7 +409,7 @@ def main() -> None:
                     dropped_empty += 1
                     continue
 
-                # generic/wiki filters
+                # global filters only for generic/wiki
                 if args.mode in ("generic", "wiki"):
                     head = t2[: max(1, args.head_chars)]
                     if ascii_ratio(head) < args.min_head_ascii_ratio:
@@ -481,7 +481,6 @@ def main() -> None:
                 "dropped_empty": dropped_empty,
                 "dropped_short": dropped_short,
                 "dropped_long": dropped_long,
-                "dropped_bad": dropped_bad,
                 "dropped_dup": dropped_dup,
                 "dropped_ascii": dropped_ascii,
                 "dropped_head_ascii": dropped_head_ascii,
