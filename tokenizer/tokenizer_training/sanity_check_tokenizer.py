@@ -1,135 +1,172 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 """
 Sanity checks for a trained Byte-Level BPE tokenizer.
 
-This script performs three standard validations:
-1. Encode–decode consistency on a sample sentence.
-2. Average compression ratio (characters per token) on the training corpus.
-3. Presence of special tokens required for language model training.
+This script is intentionally strict about whitespace round-trip because
+newline/indentation are important for:
+- pretraining (web + code)
+- chat/SFT formatting
+- markdown and JSON/code blocks
 
-The goal is to ensure that the tokenizer is:
-- Functionally correct
-- Reasonably efficient
-- Ready to be used in downstream LLM training
+Checks
+------
+1) Strict round-trip tests on whitespace-sensitive strings.
+2) Qualitative inspection on chat/markdown/code snippets.
+3) Compression ratio (characters per token) on a sampled corpus.
+4) Special token presence + (optional) strict ID assertions.
 """
 
+from __future__ import annotations
+
+import argparse
 import json
 import random
+from typing import Any
 
 from tokenizers import Tokenizer
 
-# ---------------------------------------------------------------------
-# Load tokenizer
-# ---------------------------------------------------------------------
-# The tokenizer was trained on the TinyStories corpus using Byte-Level BPE.
-tok = Tokenizer.from_file("../tokenizer.json")
 
-# ---------------------------------------------------------------------
-# 1a. Encode–decode consistency check
-# ---------------------------------------------------------------------
-# A simple qualitative test to verify that:
-#   decode(encode(text)) ≈ text
-# Small whitespace differences are acceptable for byte-level tokenizers.
-text = "One day, a little fish named Fin was swimming near the shore."
-enc = tok.encode(text)
-
-print("Original text:")
-print(text)
-print("\nEncoded tokens:")
-print(enc.tokens)
-print("\nToken IDs:")
-print(enc.ids)
-print("\nDecoded text:")
-print(tok.decode(enc.ids))
-
-enc2 = tok.encode("Hello.")
-print("\nBOS/EOS automatically added:", enc2.tokens)
-
-# ---------------------------------------------------------------------
-# 1b. Extra qualitative checks (chat / markdown / structured text)
-# ---------------------------------------------------------------------
-# These strings are common in chat-style datasets (SFT/DPO) and are good
-# for verifying that the tokenizer behaves reasonably on:
-# - role prefixes (User/Assistant)
-# - markdown headers & bullet lists
-# - code fences and JSON snippets
-extra_texts = [
-    "User: Summarize the following.\n\nAssistant:",
-    '### Task\n- Step 1: ...\n- Step 2: ...\n\n```json\n{"a":1,"b":[2,3]}\n```',
-]
-
-for i, t in enumerate(extra_texts, start=1):
-    e = tok.encode(t)
-    print(f"\nExtra test #{i} - Original text:")
-    print(t)
-    print(f"\nExtra test #{i} - Encoded tokens:")
-    print(e.tokens)
-    print(f"\nExtra test #{i} - Token IDs:")
-    print(e.ids)
-    print(f"\nExtra test #{i} - Decoded text:")
-    print(tok.decode(e.ids))
-
-
-# ---------------------------------------------------------------------
-# 2. Compression ratio check (chars per token) on your corpus
-# ---------------------------------------------------------------------
-# Note: use the same distribution you trained the tokenizer on.
-
-jsonl_paths = [
-    "../../datasets/tokenization/fineweb_sample.jsonl",
-    "../../datasets/tokenization/ultrachat_200k.jsonl",
-    "../../datasets/tokenization/oasst1.jsonl",
-    "../../datasets/tokenization/dolly_15k.jsonl",
-]
-
-all_texts = []
-for p in jsonl_paths:
-    with open(p, encoding="utf-8") as f:
-        for line in f:
-            line = line.strip()
-            if not line:
-                continue
-            try:
-                obj = json.loads(line)
-            except json.JSONDecodeError:
-                continue
-            t = obj.get("text", "")
-            if isinstance(t, str) and t.strip():
-                all_texts.append(t)
-
-# Sample a subset to keep runtime bounded
-samples = random.sample(all_texts, min(2000, len(all_texts)))
-
-total_chars = 0
-total_tokens = 0
-for s in samples:
-    total_chars += len(s)
-    total_tokens += len(tok.encode(s).ids)
-
-print("\nAverage characters per token (mixed_v2 sample):")
-print(total_chars / total_tokens)
-
-
-# ---------------------------------------------------------------------
-# 3. Special token availability (robust to naming conventions)
-# ---------------------------------------------------------------------
-# Different projects use different naming conventions, e.g.:
-#   [BOS]/[EOS]  vs  <bos>/<eos>
-# We check both to avoid false alarms.
-candidates = {
-    "bos": ["<bos>", "[BOS]", "<s>", "[CLS]"],
-    "eos": ["<eos>", "[EOS]", "</s>", "[SEP]"],
-    "pad": ["<pad>", "[PAD]"],
-    "unk": ["<unk>", "[UNK]"],
+SPECIAL_CANDIDATES = {
+    "pad": ["[PAD]", "<pad>"],
+    "unk": ["[UNK]", "<unk>"],
+    "bos": ["[BOS]", "<bos>", "<s>"],
+    "eos": ["[EOS]", "<eos>", "</s>"],
 }
 
-print("\nSpecial token IDs (first match wins):")
-for key, names in candidates.items():
-    found = None
-    found_name = None
-    for name in names:
-        tid = tok.token_to_id(name)
-        if tid is not None:
-            found = tid
-            found_name = name
-            break
-    print(f"{key}: {found} ({found_name})")
+
+def _json_loads(line: str) -> Any | None:
+    try:
+        return json.loads(line)
+    except json.JSONDecodeError:
+        return None
+
+
+def strict_roundtrip(tok: Tokenizer, s: str) -> None:
+    enc = tok.encode(s)
+    dec = tok.decode(enc.ids)
+    if dec != s:
+        raise AssertionError(
+            "Round-trip failed!\n"
+            f"orig={repr(s)}\n"
+            f"tokens={enc.tokens}\n"
+            f"ids={enc.ids}\n"
+            f"dec ={repr(dec)}\n"
+        )
+
+
+def find_special_ids(tok: Tokenizer) -> dict[str, tuple[int | None, str | None]]:
+    out: dict[str, tuple[int | None, str | None]] = {}
+    for key, names in SPECIAL_CANDIDATES.items():
+        found_id = None
+        found_name = None
+        for name in names:
+            tid = tok.token_to_id(name)
+            if tid is not None:
+                found_id = tid
+                found_name = name
+                break
+        out[key] = (found_id, found_name)
+    return out
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--tokenizer", type=str, required=True, help="Path to tokenizer.json")
+    ap.add_argument(
+        "--jsonl",
+        nargs="*",
+        default=[],
+        help="Optional JSONL files for compression test (expects field 'text' by default).",
+    )
+    ap.add_argument("--field", type=str, default="text", help="Text field for compression test.")
+    ap.add_argument("--n_samples", type=int, default=2000, help="Max samples for compression test.")
+    ap.add_argument(
+        "--strict_special_ids",
+        action="store_true",
+        help="Assert [PAD]=0,[UNK]=1,[BOS]=2,[EOS]=3 (enable only if you require fixed IDs).",
+    )
+    args = ap.parse_args()
+
+    tok = Tokenizer.from_file(args.tokenizer)
+
+    # --- 1) Strict round-trip tests (this catches the prefix-space issue immediately) ---
+    tests = [
+        "\n",
+        "\n\n",
+        " ",
+        "  ",
+        "\t",
+        "a\nb",
+        "\nHello",
+        "Hello\n",
+        "```python\nprint('hi')\n```",
+        "{\n  \"a\": 1,\n  \"b\": [2, 3]\n}\n",
+        "User:\nHi\n\nAssistant:\nHello!\n",
+    ]
+    for s in tests:
+        strict_roundtrip(tok, s)
+    print("[OK] strict round-trip tests passed")
+
+    # --- 2) Qualitative inspection ---
+    qualitative = [
+        "Once upon a time, a robot said: \"Hello!\"",
+        "### Task\n- Step 1: ...\n- Step 2: ...\n",
+        "def fib(n):\n    a, b = 0, 1\n    for _ in range(n):\n        a, b = b, a + b\n    return a\n",
+        "User: Summarize the following.\n\nAssistant:",
+        "The following is a news report:\n\n",
+    ]
+    for i, s in enumerate(qualitative, start=1):
+        enc = tok.encode(s)
+        dec = tok.decode(enc.ids)
+        print(f"\n--- Qualitative #{i} ---")
+        print("orig:", repr(s))
+        print("tokens (first 60):", enc.tokens[:60])
+        print("ids    (first 60):", enc.ids[:60])
+        print("dec :", repr(dec))
+
+    # --- 3) Compression ratio (chars per token) ---
+    if args.jsonl:
+        texts: list[str] = []
+        for p in args.jsonl:
+            with open(p, "r", encoding="utf-8") as f:
+                for raw_line in f:
+                    line = raw_line.rstrip("\r\n")
+                    if not line:
+                        continue
+                    obj = _json_loads(line)
+                    if not isinstance(obj, dict):
+                        continue
+                    t = obj.get(args.field)
+                    if isinstance(t, str) and t != "":
+                        texts.append(t)
+
+        if texts:
+            samples = random.sample(texts, min(args.n_samples, len(texts)))
+            total_chars = 0
+            total_tokens = 0
+            for s in samples:
+                total_chars += len(s)
+                total_tokens += len(tok.encode(s).ids)
+            ratio = total_chars / max(total_tokens, 1)
+            print(f"\n[OK] avg chars/token on sample = {ratio:.3f}  (n={len(samples)})")
+        else:
+            print("\n[WARN] compression test skipped (no usable texts found)")
+
+    # --- 4) Special tokens ---
+    spec = find_special_ids(tok)
+    print("\nSpecial token IDs (first match wins):")
+    for k, (tid, name) in spec.items():
+        print(f"{k}: {tid} ({name})")
+
+    if args.strict_special_ids:
+        assert tok.token_to_id("[PAD]") == 0
+        assert tok.token_to_id("[UNK]") == 1
+        assert tok.token_to_id("[BOS]") == 2
+        assert tok.token_to_id("[EOS]") == 3
+        print("[OK] strict special token IDs verified")
+
+
+if __name__ == "__main__":
+    main()
