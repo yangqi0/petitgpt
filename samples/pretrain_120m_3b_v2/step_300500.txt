@@ -1,0 +1,302 @@
+Samples generated with tokenizer=tokenizer/tokenizer_pretrain_nospecial.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=6)
+Once upon a time, 
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=10
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[1060, 1848, 907, 168, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.603243350982666, 0.35834160447120667, 0.022670641541481018, 0.01574443094432354, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=['io', 'ump', 'erm', '�', '', '', '!', '"', '', '']
+
+[New tokens 1] count=256 first30=[1848, 540, 410, 1040, 2690, 17, 722, 584, 261, 1576, 6895, 329, 566, 1939, 286, 345, 2220, 289, 3001, 349, 261, 1576, 6895, 17, 351, 1001, 17, 224, 202, 202]
+[Full output 1]
+ Once upon a time, umpire was very happy. He had a big smile on his face and he went to bed with a big smile. The end. 
+
+ #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+from datetime import datetime
+import os
+import sys
+import json
+import logging
+import urllib2
+import requests
+import time
+import re
+import urlpb2
+import uuid
+import uutils
+import urlserver
+import urutils.exceptions
+import urlog
+import urwx
+import urp_error
+import urucb
+import urreq
+import urshutil
+import ure
+import urlib
+import urmis
+import urrec
+import urcnow
+import urctl
+import urms
+import uri
+import urary
+import urjson
+import urto
+import urptime
+import urttl
+import uint64
+import uretag
+import urts
+import urty
+import urht
+import urtc
+import urdac
+import urstr
+import urext
+import urzh
+import
+
+================================================================================
+[Prompt 2] (prompt_tokens=9)
+In a distant future, humans and robots 
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=10
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2422, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=['ó', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[2422, 371, 485, 2434, 289, 322, 1440, 289, 898, 524, 266, 2549, 292, 266, 6367, 17, 202, 2739, 1391, 15, 5814, 735, 436, 261, 3648, 2357, 289, 4286, 18427, 16468]
+[Full output 2]
+ In a distant future, humans and robots ó are more likely to be able to find out the nature of the universe.
+In addition, humans may have a greater ability to detect cosmic rays than humans do. This could lead to better understanding of how the universe works, but it is also possible that such a discovery might not be practical for many people. 
+
+ The Diaspora of the Diasporas: A Documentary History
+The Diasporan-based studies of the Diaphilosophies in the late eighteenth century provided a record of the development of the Dioscorides movement in the nineteenth century. The emphasis was on the development of a new philosophical system, which included the philosophical tradition of the Dioecon school. It was a period of intellectual growth as well as a growing influence of the Dosidians, who were well represented by the "Diasporan" school, and whose work was generally known as the "Dioecon" or "Dioeo." The Diasrenti was an important figure in the Diasputic movement, and the Diascanus was a part of the Dionysian school. Dioscoride was one of the most influential figures in the Diosceni
+
+================================================================================
+[Prompt 3] (prompt_tokens=10)
+The following is a news report:
+
+
+
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=10
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[1414, 2739, 9977, 36, 24912, 51, 39, 12363, 8826, 54]
+first_step_topk_probs=[0.26431894302368164, 0.17424990236759186, 0.14904382824897766, 0.07977741956710815, 0.038477495312690735, 0.029655778780579567, 0.028150735422968864, 0.025365931913256645, 0.017616279423236847, 0.01546555757522583]
+first_step_topk_text=['The', 'In', 'On', 'A', 'Acc', 'P', 'D', 'Res', 'Re', 'S']
+
+[New tokens 3] count=256 first30=[1414, 1310, 4665, 290, 3496, 3101, 338, 354, 584, 9036, 321, 261, 13795, 329, 266, 814, 2628, 292, 266, 4975, 335, 500, 15, 286, 329, 3586, 1051, 15, 3332, 15]
+[Full output 3]
+ The following is a news report:
+
+
+The company announced in March 2012 that it had filed for a patent on the first version of the microchip, and on June 7, 2013, the company was granted a license to manufacture the microchips. In December, the company filed for a license to produce the microchipped version of the Microchip.
+
+In April 2014, the company issued a patent on a microchip. It was later found that the microchipping was not related to the microchippy product, but was a part of the microcopy product.
+
+On September 29, 2015, the company announced that it had submitted its patent application for a microchips technology to the U.S. Patent Office. The patent was pending at the time of the application's completion. 
+
+ How to Make a Paper
+This lesson will help you make paper from scratch. You can print out your own paper using the following steps:
+- To write down your ideas on a piece of paper
+- To cut out the pieces
+- To draw the paper into a large sheet of paper
+Here are some tips for making a paper:
+- Use a pencil or pen to cut out the paper.
+- Cut out the paper with scissors.
+- Using
+
+================================================================================
+[Prompt 4] (prompt_tokens=12)
+Neural networks are a class of machine learning models that 
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=10
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[431, 479, 270, 1060, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.470671683549881, 0.3443507254123688, 0.1348496973514557, 0.05012790113687515, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=['ud', 'ie', 'nd', 'io', '', '', '!', '"', '', '']
+
+[New tokens 4] count=256 first30=[431, 1137, 317, 2801, 289, 5589, 266, 3940, 17, 202, 1414, 3940, 332, 261, 2869, 292, 18921, 286, 6224, 2215, 274, 338, 1492, 289, 1025, 261, 1614, 15, 2365, 942]
+[Full output 4]
+ Neural networks are a class of machine learning models that udderly uses to teach the brain.
+The brain is a network of neurons and synapses that connect to form a large, complex system of structures called the neural circuitry. The neural circuitry consists of a number of components connected by connections that connect to the neurons in the brain. The circuitry includes:
+- A protein called adenosine triphosphate (ATP) that helps regulate the activity of certain types of cells in the body. It has been shown to be involved in the regulation of the nervous system.
+- A receptor called the nociceptase gene that plays a key role in regulating the activity of the Nociceptases. This gene encodes for the transcription of genes that control the function of the Norepinephrine receptors.
+- The nocicepsin gene that regulates the activity of specific neurotransmitters in the brain's nociception system.
+The main functions of the NOS are to:
+- Increase the amount of protein in the blood and the level of a substance in the blood.
+- Provide a source of protein for the production of hormones.
+- Develop the ability to carry out many tasks.
+- Help the body produce new proteins that will help the body
+
+================================================================================
+[Prompt 5] (prompt_tokens=20)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=10
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[261, 434, 488, 284, 2543, 3003, 1188, 1499, 0, 1]
+first_step_topk_probs=[0.6166317462921143, 0.15919119119644165, 0.04329434037208557, 0.04128366708755493, 0.04109715670347214, 0.035152263939380646, 0.0316748172044754, 0.0316748172044754, 0.0, 0.0]
+first_step_topk_text=[' a', ' (', ' int', ' b', ' sum', ' x', ' [', ' 0', '', '']
+
+[New tokens 5] count=256 first30=[434, 68, 7643, 284, 12, 369, 434, 69, 7643, 261, 17, 9046, 3655, 923, 9046, 3655, 202, 202, 8860, 698, 66, 74, 756, 276, 66, 86, 22, 24152, 202, 224]
+[Full output 5]
+ Complete the following Python function:
+
+def add(a, b):
+    return (a == b) or (b == a.lower()).lower()
+
+def get_golden_s3():
+  
+   pass
+
+def main():
+ 
+  ##
+  #
+  # 
+  def  init (self, *args, **kwargs):
+ 
+	pass
+
+if  name  == ' main ':
+   main() 
+
+ A few weeks ago, I was at the University of Pittsburgh and the University of California, Irvine. It seemed to me that I would be a bit surprised if the students were not familiar with the concept of "acceleration." The idea is that we have a constant speed in the direction of our velocity. So, we can say that our acceleration is the same as the speed of light.
+I am not going to be able to describe what this means for you here because it's a little confusing. I think it's something that I'm not going to try to explain until you know where the concept really comes from. In fact, I think it has been found that some people are more interested in the idea than others.
+So, I will discuss the concept of acceleration and how it works.
+
+================================================================================
+[Prompt 6] (prompt_tokens=23)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=10
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[1731, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[1731, 313, 2202, 434, 20, 414, 8620, 12, 10874, 424, 2811, 434, 21, 2202, 8620, 12, 10874, 573, 202, 202, 7693, 19195, 11, 28314, 2773, 202, 224, 1123, 898, 48]
+[Full output 6]
+ Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return n * (1 - fib) ** 2 + (2 * fib) ** 3
+
+class Solution(object):
+  def findMissingGraphs(self, nums):
+ 	return sorted([])
+
+if  name  == ' main ':
+   print('Trying to find GFIs')
+   for i in range(len(nums)):
+  print('\tSaving GFIs...')
+  for j in range(i+1, len(nums)-1):
+  #print(nums[j])
+  print(nums.shape)
+  print()
+  print("\tCreating GFIs")
+  for k in range(nums-1):
+	for c in range(c):
+		#print(c,k,c)
+  	if(c==0):
+	   	print(c)
+else:
+	print()
+
+if(findMissing(None,None))<=3:
+	try:
+		f = open(os.path.join(os.getcwd(),
+
+================================================================================
+[Prompt 7] (prompt_tokens=25)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=10
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[1878, 1886, 351, 1138, 569, 494, 1432, 3626, 696, 312]
+first_step_topk_probs=[0.2830178737640381, 0.15958769619464874, 0.14759449660778046, 0.07697087526321411, 0.060888972133398056, 0.05932376906275749, 0.05932376906275749, 0.04014047235250473, 0.03810334578156471, 0.027877001091837883]
+first_step_topk_text=[' Yes', ' No', ' The', ' There', ' It', ' In', ' That', ' Black', ' We', ' I']
+
+[New tokens 7] count=256 first30=[1878, 17, 1138, 332, 763, 702, 1976, 350, 261, 539, 19264, 3354, 5, 290, 266, 1732, 292, 1041, 2606, 369, 2349, 17, 202, 6351, 1146, 464, 1917, 321, 489, 34]
+[Full output 7]
+ If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Yes. There is no such thing as a "black cat" in the sense of being white or black.
+What does this mean for me?
+I am not going to say that there is any difference between what I see in my own cat.
+There is no difference between what you see in your own cat and what you have seen in others.
+You have been looking at a black cat and you have seen that you are actually black.
+The reason why this is so important is because it tells us that it is not an animal but a human being.
+It means that if you are a person who has been looking at your own cat, then you will be able to tell that it is a human being even though you do not have any other characteristics of the same species.
+It also means that you will be looking at your family pet.
+So, if you are looking at a cat with a different skin color than your own, then you should not be looking at another person's cat.
+Why is this important?
+This is because the way you look at your own animal is very different from how you look at a child. It is very important that you look at the other people they are looking at.
+If you are looking to
+
+================================================================================
+[Prompt 8] (prompt_tokens=21)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=10
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[398, 351, 573, 1516, 424, 673, 722, 569, 494, 312]
+first_step_topk_probs=[0.3046534061431885, 0.21157751977443695, 0.06842523068189621, 0.05533720552921295, 0.050402216613292694, 0.04101617634296417, 0.03893459588289261, 0.038430918008089066, 0.03648053854703903, 0.028671208769083023]
+first_step_topk_text=[' 1', ' The', ' 3', ' One', ' 2', ' 4', ' He', ' It', ' In', ' I']
+
+[New tokens 8] count=256 first30=[673, 17, 23, 15, 369, 398, 17, 27, 18121, 434, 13368, 398, 18, 21, 1974, 12, 292, 10717, 332, 10312, 289, 398, 17, 27, 9645, 17, 292, 3521, 17, 202]
+[Full output 8]
+ John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 4.4, or 1.8 ounces (about 1/2 cup) of apples is equivalent to 1.8 oz. of sugar.
+Answers: 5.9, or 1 oz. of fruit juice equals 8 oz. of water.
+Another interesting point is that apple varieties are not the same as apples. What we see in apples is different from apples because they are different.
+The apple variety is a very important part of our food chain. Fruit is the most important food for us. The apple is the one that has been chosen by the consumers to be eaten. It is also the best choice for us when it comes to eating apples. It is the only food that you will find at your table.
+Therefore, if you want to know what apple is, please read on! 
+
+ This is the second in a series of two articles in the new issue of the journal Science.
+A team led by Dr. Klaus Winkler of the University of Southern California's School of Medicine has discovered a protein in the brain that controls the activity of the brain cells' "memory" system.
+Researchers at the University of Texas M.S. School of Medicine and the University of California, San
+
+================================================================================

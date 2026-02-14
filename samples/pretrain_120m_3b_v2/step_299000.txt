@@ -1,0 +1,272 @@
+Samples generated with tokenizer=tokenizer/tokenizer_pretrain_nospecial.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=6)
+Once upon a time, 
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=10
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[1848, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=['ump', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=256 first30=[1848, 540, 410, 1040, 2690, 17, 722, 584, 261, 1576, 6895, 329, 566, 1939, 286, 345, 3094, 742, 4003, 289, 988, 354, 597, 4, 351, 1001, 17, 224, 202, 202]
+[Full output 1]
+ Once upon a time, umpire was very happy. He had a big smile on his face and he couldn't wait to show it off! The end. 
+
+ #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Mar 13 17:37:38 2021
+
+@author: <NAME> (<EMAIL>)
+""" 
+
+ The following is an extract from the book:
+
+This is the first of two posts I wrote about this subject for the A-Z Index. It has been published in the following issue:
+
+The second post was written by the author and stated that I'm not sure how much I understand or why this is. I don't know what the answer is, but I am convinced that the author's point of view is that the A-X index is an index which can be used to find out whether an object exists within the world.
+
+I did not have any further information as to why this is such a good idea.
+
+The third post was written with the author stating that the index is an A-Z index which can only be used to search for objects outside the world. I
+
+================================================================================
+[Prompt 2] (prompt_tokens=9)
+In a distant future, humans and robots 
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=10
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2422, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=['ó', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[2422, 371, 485, 2434, 289, 322, 1440, 289, 898, 524, 541, 266, 2850, 292, 459, 918, 1260, 17, 202, 1414, 1782, 410, 3824, 290, 266, 4816, 9449, 2928, 8361, 740]
+[Full output 2]
+ In a distant future, humans and robots ó are more likely to be able to find out about the source of their own energy.
+The study was published in the journal Nature Geoscience.
+Astronomers have discovered that Earth's interior is filled with gas, which can be used as an energy source for stars, planets or even life. The gas, which contains iron, oxygen and carbon dioxide, could be used to power nuclear reactors and power electric vehicles.
+"We're still at the stage where we know how to use this energy," said lead author David Weinberg, who led the research team from the University of Maryland. "This discovery is important because it shows us that our home planet is very different than ours."
+In the study, researchers found that the energy from the sun is concentrated around a star called the red giant, which is located approximately 1,000 light-years away in the constellation of Orion.
+"It's like having a balloon on your head, but it's not really going anywhere," said Weinberg. "You just need to get up and fly in the air."
+The scientists then calculated that the energy released by the sun could be used in a variety of ways to generate electricity.
+They compared the energy produced by the sun
+
+================================================================================
+[Prompt 3] (prompt_tokens=10)
+The following is a news report:
+
+
+
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=10
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[36, 1414, 37, 54, 2739, 9977, 48, 55, 51, 8826]
+first_step_topk_probs=[0.2099369317293167, 0.11837887018918991, 0.10125481337308884, 0.08221248537302017, 0.07804020494222641, 0.07407959550619125, 0.041771914809942245, 0.041771914809942245, 0.035729408264160156, 0.035729408264160156]
+first_step_topk_text=['A', 'The', 'B', 'S', 'In', 'On', 'M', 'T', 'P', 'Re']
+
+[New tokens 3] count=256 first30=[1414, 1310, 504, 4665, 338, 354, 484, 3052, 7637, 493, 666, 1522, 290, 266, 1513, 4095, 963, 17, 569, 570, 3150, 289, 700, 485, 726, 398, 15, 1406, 629, 1522]
+[Full output 3]
+ The following is a news report:
+
+
+The company has announced that it will stop producing all its products in the next ten years. It also plans to make more than 1,000 new products from the new technology, which it said would be "not only a matter of time but also an opportunity for innovation and innovation."
+
+In May 2012, the company announced that it would start manufacturing a new product called "Catalyst" - which was intended to replace the previous car with a high-end electric engine. This car would have a single fuel tank and a radiator mounted on top of it. The system would have a heat pump, which would reduce emissions and save money. The company said the company would begin making the cars using a new technology known as "tornadoes".
+
+On June 25, 2012, the firm announced that it had announced that it planned to begin production of the new CATV's new battery. The company announced that the company would start production of the first CATV-2, which would be powered by a hybrid electric motor.
+
+On April 15, 2013, the company said it would begin production of its new battery by September 2014. In early November 2015, the company released a statement saying that it would be ready to begin production within five
+
+================================================================================
+[Prompt 4] (prompt_tokens=12)
+Neural networks are a class of machine learning models that 
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=10
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[479, 431, 1330, 270, 13077, 987, 2, 3, 1, 0]
+first_step_topk_probs=[0.6543088555335999, 0.16891784965991974, 0.06968571990728378, 0.041395094245672226, 0.03540710732340813, 0.0302853025496006, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=['ie', 'ud', 'vern', 'nd', '.....', 'ix', '', '', '', '']
+
+[New tokens 4] count=256 first30=[431, 299, 4947, 2565, 266, 7479, 292, 2365, 2075, 286, 459, 6891, 349, 568, 2075, 17, 202, 1414, 1212, 3578, 1107, 266, 891, 332, 338, 674, 332, 763, 1097, 3578]
+[Full output 4]
+ Neural networks are a class of machine learning models that udomatically model the evolution of complex systems and their interactions with other systems.
+The main difference between the two is that there is no real difference in the types of models used to understand the structure of the world, and that there is not any real difference in how the information flows from one system to another.
+However, the two types of knowledge are different:
+- The first kind of knowledge is called "the second" because it describes the conditions under which the information flow can be understood.
+- The third kind of knowledge involves the analysis of the relationships among the various systems (physical, social, or physical) in order to explain the processes involved in understanding the world.
+So, we have a distinction between the two kinds of knowledge.
+In general terms, the two kinds are equivalent. They are:
+- Knowledge of the world
+- Knowledge about the world
+As a result, the two forms of knowledge are identical:
+- Science of the world (either physics or biology)
+- Knowledge concerning the world
+The three kinds of knowledge are related by the same rules as the three kinds of science.
+One way to think about this is to think about the two kinds:
+- A priori knowledge
+- Bis
+
+================================================================================
+[Prompt 5] (prompt_tokens=20)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=10
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[261, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[261, 62, 19, 64, 2811, 284, 62, 20, 64, 2202, 434, 69, 414, 398, 12, 1685, 424, 17, 19, 202, 202, 8860, 1284, 66, 1198, 997, 1332, 11, 3607, 15]
+[Full output 5]
+ Complete the following Python function:
+
+def add(a, b):
+    return a[0] + b[1] * (b - 1) / 2.0
+
+def run_execute(name, event):
+  pass
+
+def execute():
+  try:
+   # run the code from the script file
+   t = open('python3.py', 'r')
+   for line in open('python2.py','w') as f:
+  if line == "":
+   print("\n".join([x for x in f if x != '']) )
+  else:
+  print("Executing the code...")
+   while True:
+  data = input()
+   cfg = open('data/tests/test.cfg','r')
+
+   with open(os.path.join(input(), name ), 'r') as fp:
+  for line, data in enumerate(data):
+ 	line = line.strip()
+  t.write(data)
+except Exception as e:
+  pass 
+
+ I've always known that the B-type is a fairly common and often misunderstood element of the language.
+
+================================================================================
+[Prompt 6] (prompt_tokens=23)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=10
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[1731, 681, 1582, 313, 1225, 3, 4, 2, 0, 1]
+first_step_topk_probs=[0.46267226338386536, 0.3050125539302826, 0.13255782425403595, 0.05760940909385681, 0.04214794561266899, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', ' #', ' n', ' pass', '', '!', '', '', '']
+
+[New tokens 6] count=256 first30=[681, 313, 7643, 398, 29, 1731, 1499, 202, 224, 224, 202, 224, 224, 1731, 8620, 11, 81, 12, 2811, 8620, 11, 81, 414, 398, 12, 2202, 8620, 11, 81, 1685]
+[Full output 6]
+ Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     if n == 1: return 0
+  
+   return fib(n) + fib(n - 1) * fib(n / 2)
+
+# ------------------------------------------------------
+
+class Solution:
+   def fib(self, nums):
+ 
+ 
+
+   # ------------------------------------------------------------
+   @staticmethod
+   async def fib_fn():
+   pass
+
+  def fib_golden():
+ 
+# ---------------------------
+   print "TESTING OF TESTING ----------------------------------------------------"
+   while True:
+  time.sleep(1)
+   await ctx.send("Waiting for the day...")
+   time.terminate()
+   ctx = ctx[0]
+   try:
+ 
+	while True:
+	time.sleep((2*10))
+	print time.time()
+
+if  name  == ' main ':
+   test_async def run():
+  tmpdir = os.path.join('..','tests')
+   with open(
+
+================================================================================
+[Prompt 7] (prompt_tokens=25)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=10
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[1878, 1886, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8031737208366394, 0.1968262791633606, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' No', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[1878, 17, 1403, 15, 674, 332, 763, 822, 289, 7739, 338, 261, 3354, 332, 2349, 369, 2606, 15, 554, 312, 672, 606, 289, 1352, 316, 261, 1817, 9225, 292, 694]
+[Full output 7]
+ If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Yes. However, there is no way to prove that a cat is black or white, so I would like to give you a quick definition of what this means. In fact, the word "black" was used in the Bible to describe any animal. This was an example of a cat being black, as the name implies.
+The cat is a cat, as the word "dog" is used to describe any kind of animal. The same thing applies to dogs. A dog is a dog, but it's not a dog.
+So, if you're a dog, why not a dog? Well, because a dog is a cat - which is a dog-it is a cat. So, a dog is also a cat, because it has a coat of fur.
+And then, how does a cat know what it wants from what it wants? Well, he knows what it wants, because it wants to eat meat. And it's not good for him, since he doesn't want to eat meat anymore. So, he doesn't know what it needs, because he doesn't have to.
+So if he doesn't understand what he should do, he will not be able to tell where he should go. But, he will be able to
+
+================================================================================
+[Prompt 8] (prompt_tokens=21)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=10
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[398, 573, 673, 351, 703, 424, 324, 722, 0, 1]
+first_step_topk_probs=[0.5249974131584167, 0.11898752301931381, 0.09536049515008926, 0.08592697232961655, 0.06124952435493469, 0.05764945596456528, 0.03152855485677719, 0.02430001273751259, 0.0, 0.0]
+first_step_topk_text=[' 1', ' 3', ' 4', ' The', ' 5', ' 2', ' A', ' He', '', '']
+
+[New tokens 8] count=256 first30=[673, 15, 703, 15, 899, 15, 1153, 15, 1288, 15, 1122, 15, 1739, 15, 2519, 15, 2017, 15, 2477, 15, 2687, 15, 1812, 15, 896, 15, 667, 15, 3777, 15]
+[Full output 8]
+ John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 4, 5, 6, 8, 9, 10, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 45, 46, 47, 47, 48, 50, 51, 53, 56, 57, 58, 59, 62, 61, 62, 63, 63, 66, 69, 70, 69, 68, 71, 72, 72, 73, 73, 74, 74, 75, 76, 78, 80, 81, 82, 81, 81, 79, 83, 84, 81, 84, 85, 86, 88, 86, 86, 87, 87, 89, 91, 93, 95, 96, 97, 98, 97, 99, 98, 101, 103, 102, 103, 103, 104, 103, 105, 104, 104, 106, 103, 106, 106, 107, 108, 109, 109, 111, 112, 113, 114, 116, 117, 118, 119, 118 , 118, 119,
+
+================================================================================
