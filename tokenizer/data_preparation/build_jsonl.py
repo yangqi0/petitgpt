@@ -1,25 +1,88 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+Build JSONL files for tokenizer training (and optionally pretrain text staging).
+
+Output format (one JSON per line):
+  {"text": "..."}  # whitespace preserved
+
+Why this script exists
+----------------------
+Tokenizer quality depends heavily on whitespace + punctuation + structural patterns
+(newlines, indentation, markdown, code, JSON, etc.). Therefore:
+
+- DO NOT collapse whitespace (no " ".join(split())).
+- DO NOT strip text fields aggressively.
+- Keep only minimal normalization: unify newline styles, remove invalid control chars.
+
+This script exports a mixed corpus from:
+- FineWeb (general web)
+- UltraChat (chat-style)
+- OASST1 (assistant chat)
+- Dolly (instruction)
+
+It uses streaming=True and dataset.shuffle(buffer_size=...) for approximate random sampling.
+"""
+
+from __future__ import annotations
+
 import argparse
 import json
 from pathlib import Path
-import random
+from typing import Any, Callable, Iterable
 
 from datasets import load_dataset
 from tqdm import tqdm
 
 
-def normalize_text(s: str) -> str:
-    """Normalize whitespace to make tokenizer training more stable."""
-    s = s.replace("\r\n", "\n").replace("\r", "\n").strip()
-    s = " ".join(s.split())
+# -------------------------
+# Minimal, safe normalization
+# -------------------------
+def normalize_text_preserve_ws(s: str) -> str:
+    """
+    Minimal normalization that preserves whitespace structure.
+
+    - Unify Windows/Mac newlines to '\n'
+    - Remove NUL bytes and a few problematic control chars
+    - Keep tabs/spaces/newlines exactly as-is otherwise
+    """
+    s = s.replace("\r\n", "\n").replace("\r", "\n")
+    # Remove NUL and a couple of rarely useful control chars
+    s = s.replace("\x00", "")
+    s = s.replace("\u000b", "")  # vertical tab
+    s = s.replace("\u000c", "")  # form feed
     return s
 
 
-def write_jsonl(ex_iter, out_path: Path, max_examples: int, seed: int, get_text_fn):
+def is_reasonable_text(s: str, min_chars: int, max_chars: int) -> bool:
     """
-    Stream examples, extract text, normalize, and write JSONL lines:
+    Quick filters to avoid junk and extreme outliers.
+    """
+    if not isinstance(s, str):
+        return False
+    if len(s) < min_chars:
+        return False
+    if len(s) > max_chars:
+        return False
+    # Must contain at least one non-whitespace character
+    if not any(not ch.isspace() for ch in s):
+        return False
+    return True
+
+
+def write_jsonl(
+    ex_iter: Iterable[Any],
+    out_path: Path,
+    max_examples: int,
+    get_text_fn: Callable[[Any], str],
+    min_chars: int,
+    max_chars: int,
+) -> int:
+    """
+    Stream examples, extract text, lightly normalize, filter, and write JSONL lines:
       {"text": "..."}
     """
-    rng = random.Random(seed)
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
     n = 0
@@ -27,11 +90,13 @@ def write_jsonl(ex_iter, out_path: Path, max_examples: int, seed: int, get_text_
         for ex in tqdm(ex_iter, desc=f"writing {out_path.name}"):
             if n >= max_examples:
                 break
+
             text = get_text_fn(ex)
             if not isinstance(text, str):
                 continue
-            text = normalize_text(text)
-            if not text:
+
+            text = normalize_text_preserve_ws(text)
+            if not is_reasonable_text(text, min_chars=min_chars, max_chars=max_chars):
                 continue
 
             f.write(json.dumps({"text": text}, ensure_ascii=False) + "\n")
@@ -40,142 +105,154 @@ def write_jsonl(ex_iter, out_path: Path, max_examples: int, seed: int, get_text_
     return n
 
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument(
-        "--out_dir",
-        type=str,
-        default=".",
-        help="Output directory for JSONL shards.",
-    )
-    ap.add_argument("--seed", type=int, default=42, help="Random seed (for reproducibility).")
+# -------------------------
+# Dataset-specific extractors
+# -------------------------
+def fineweb_to_text(ex: dict[str, Any]) -> str:
+    return ex.get("text", "") or ""
 
-    # Recommended sizes for tokenizer training (adjust based on your disk/time)
-    ap.add_argument(
-        "--n_fineweb", type=int, default=500_000, help="Number of FineWeb samples to export."
-    )
-    ap.add_argument(
-        "--n_ultrachat", type=int, default=200_000, help="Number of UltraChat samples to export."
-    )
-    ap.add_argument(
-        "--n_oasst1", type=int, default=80_000, help="Number of OpenAssistant samples to export."
-    )
-    ap.add_argument(
-        "--n_dolly", type=int, default=15_000, help="Number of Dolly samples to export."
-    )
+
+def ultrachat_to_text(ex: dict[str, Any]) -> str:
+    """
+    UltraChat 200k typically has 'messages': [{role, content}, ...]
+    We keep a simple stable format without stripping message content.
+    """
+    msgs = ex.get("messages", None)
+    if isinstance(msgs, list) and msgs:
+        parts: list[str] = []
+        for m in msgs:
+            if not isinstance(m, dict):
+                continue
+            role = m.get("role", "")
+            content = m.get("content", "")
+            if isinstance(content, str) and content != "":
+                parts.append(f"{role}:\n{content}")
+        if parts:
+            return "\n\n".join(parts)
+    return ex.get("text", "") or ""
+
+
+def oasst_to_text(ex: dict[str, Any]) -> str:
+    """
+    OASST1 rows are single messages. We expose role + content.
+    """
+    role = ex.get("role", "")
+    text = ex.get("text", "")
+    if isinstance(text, str) and text != "":
+        return f"{role}:\n{text}"
+    return ""
+
+
+def dolly_to_text(ex: dict[str, Any]) -> str:
+    """
+    Dolly fields: instruction / context / response
+    Keep newlines between sections; do not strip.
+    """
+    instr = ex.get("instruction", "") or ""
+    ctx = ex.get("context", "") or ""
+    resp = ex.get("response", "") or ""
+    parts: list[str] = []
+    if instr:
+        parts.append("Instruction:\n" + instr)
+    if ctx:
+        parts.append("Context:\n" + ctx)
+    if resp:
+        parts.append("Answer:\n" + resp)
+    return "\n\n".join(parts)
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--out_dir", type=str, default=".", help="Output directory for JSONL.")
+    ap.add_argument("--seed", type=int, default=42, help="Random seed for streaming shuffle.")
+
+    # Export sizes (tokenizer training)
+    ap.add_argument("--n_fineweb", type=int, default=800_000)
+    ap.add_argument("--n_ultrachat", type=int, default=200_000)
+    ap.add_argument("--n_oasst1", type=int, default=80_000)
+    ap.add_argument("--n_dolly", type=int, default=30_000)
+
+    # Streaming shuffle buffer (bigger => better randomness, more RAM)
+    ap.add_argument("--shuffle_buffer", type=int, default=50_000)
+
+    # Text filters
+    ap.add_argument("--min_chars", type=int, default=1)
+    ap.add_argument("--max_chars", type=int, default=20_000)
+
+    # FineWeb config
+    ap.add_argument("--fineweb_config", type=str, default="sample-10BT")
 
     args = ap.parse_args()
     out_dir = Path(args.out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
 
-    # -----------------------------
-    # 1) FineWeb (general English web)
-    # -----------------------------
-    # FineWeb provides multiple builder configs (e.g., sample-10BT, sample-100BT, ...).
-    # We default to a small sample config for tokenizer training.
+    # 1) FineWeb (general web)
     fineweb = load_dataset(
         "HuggingFaceFW/fineweb",
-        name="sample-10BT",
+        name=args.fineweb_config,
         split="train",
         streaming=True,
     )
+    # Approximate random order for streaming
+    fineweb = fineweb.shuffle(seed=args.seed, buffer_size=args.shuffle_buffer)
 
     n1 = write_jsonl(
         fineweb,
         out_dir / "fineweb_sample.jsonl",
         max_examples=args.n_fineweb,
-        seed=args.seed,
-        get_text_fn=lambda ex: ex.get("text", ""),
+        get_text_fn=fineweb_to_text,
+        min_chars=args.min_chars,
+        max_chars=args.max_chars,
     )
 
-    # -----------------------------
     # 2) UltraChat 200k (chat-style)
-    # -----------------------------
-    # UltraChat provides multiple splits. For chat/SFT-style text, use "train_sft".
     ultrachat = load_dataset(
         "HuggingFaceH4/ultrachat_200k",
         split="train_sft",
         streaming=True,
     )
-
-    def ultrachat_to_text(ex):
-        # Typical structure is a list of messages; we concatenate them in a simple "role: content" style.
-        # This is tokenizer-training-only; SFT formatting can be handled later with a chat template.
-        msgs = ex.get("messages", None)
-        if isinstance(msgs, list) and msgs:
-            parts = []
-            for m in msgs:
-                role = m.get("role", "")
-                content = m.get("content", "")
-                if isinstance(content, str) and content.strip():
-                    parts.append(f"{role}: {content.strip()}")
-            return "\n".join(parts)
-        # Fallback
-        return ex.get("text", "")
+    ultrachat = ultrachat.shuffle(seed=args.seed + 1, buffer_size=args.shuffle_buffer)
 
     n2 = write_jsonl(
         ultrachat,
         out_dir / "ultrachat_200k.jsonl",
         max_examples=args.n_ultrachat,
-        seed=args.seed,
         get_text_fn=ultrachat_to_text,
+        min_chars=args.min_chars,
+        max_chars=args.max_chars,
     )
 
-    # -----------------------------
-    # 3) OpenAssistant oasst1 (human chat trees)
-    # -----------------------------
-    oasst = load_dataset(
-        "OpenAssistant/oasst1", split="train", streaming=True
-    )  # :contentReference[oaicite:9]{index=9}
-
-    def oasst_to_text(ex):
-        # Each row is a single message; we use a light format to expose tokenizer to chat tokens.
-        role = ex.get("role", "")
-        text = ex.get("text", "")
-        if isinstance(text, str) and text.strip():
-            return f"{role}: {text.strip()}"
-        return ""
+    # 3) OASST1
+    oasst = load_dataset("OpenAssistant/oasst1", split="train", streaming=True)
+    oasst = oasst.shuffle(seed=args.seed + 2, buffer_size=args.shuffle_buffer)
 
     n3 = write_jsonl(
         oasst,
         out_dir / "oasst1.jsonl",
         max_examples=args.n_oasst1,
-        seed=args.seed,
         get_text_fn=oasst_to_text,
+        min_chars=args.min_chars,
+        max_chars=args.max_chars,
     )
 
-    # -----------------------------
-    # 4) Dolly 15k (instruction variety, small)
-    # -----------------------------
-    dolly = load_dataset(
-        "databricks/databricks-dolly-15k", split="train", streaming=True
-    )  # :contentReference[oaicite:10]{index=10}
-
-    def dolly_to_text(ex):
-        instr = ex.get("instruction", "")
-        ctx = ex.get("context", "")
-        resp = ex.get("response", "")
-        parts = []
-        if isinstance(instr, str) and instr.strip():
-            parts.append(f"Instruction: {instr.strip()}")
-        if isinstance(ctx, str) and ctx.strip():
-            parts.append(f"Context: {ctx.strip()}")
-        if isinstance(resp, str) and resp.strip():
-            parts.append(f"Answer: {resp.strip()}")
-        return "\n".join(parts)
+    # 4) Dolly 15k
+    dolly = load_dataset("databricks/databricks-dolly-15k", split="train", streaming=True)
+    dolly = dolly.shuffle(seed=args.seed + 3, buffer_size=args.shuffle_buffer)
 
     n4 = write_jsonl(
         dolly,
         out_dir / "dolly_15k.jsonl",
         max_examples=args.n_dolly,
-        seed=args.seed,
         get_text_fn=dolly_to_text,
+        min_chars=args.min_chars,
+        max_chars=args.max_chars,
     )
 
     print("Done. Exported examples:")
-    print("  FineWeb:", n1)
+    print("  FineWeb :", n1)
     print("  UltraChat:", n2)
-    print("  OASST1:", n3)
-    print("  Dolly:", n4)
+    print("  OASST1  :", n3)
+    print("  Dolly   :", n4)
     print("Output dir:", out_dir)
 
 
