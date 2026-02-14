@@ -89,7 +89,7 @@ def main():
     # ------------------------------------------------------------
     tokenizer = Tokenizer(BPE(unk_token="[UNK]"))
     tokenizer.normalizer = NFKC()
-    tokenizer.pre_tokenizer = ByteLevel(add_prefix_space=True)
+    tokenizer.pre_tokenizer = ByteLevel(add_prefix_space=False)
     tokenizer.decoder = ByteLevelDecoder()
 
     # Special tokens required by downstream training/inference
@@ -133,14 +133,14 @@ def main():
     # ------------------------------------------------------------
     # Post-processing: automatically add BOS/EOS for consistent train/infer behavior
     # ------------------------------------------------------------
-    tokenizer.post_processor = TemplateProcessing(
-        single="[BOS] $A [EOS]",
-        pair="[BOS] $A [EOS] $B:1 [EOS]:1",
-        special_tokens=[
-            ("[BOS]", tokenizer.token_to_id("[BOS]")),
-            ("[EOS]", tokenizer.token_to_id("[EOS]")),
-        ],
-    )
+    # tokenizer.post_processor = TemplateProcessing(
+    #     single="[BOS] $A [EOS]",
+    #     pair="[BOS] $A [EOS] $B:1 [EOS]:1",
+    #     special_tokens=[
+    #         ("[BOS]", tokenizer.token_to_id("[BOS]")),
+    #         ("[EOS]", tokenizer.token_to_id("[EOS]")),
+    #     ],
+    # )
 
     # Save tokenizer.json (the core artifact for a fast tokenizer)
     tokenizer_path = os.path.join(args.out_dir, "tokenizer.json")
