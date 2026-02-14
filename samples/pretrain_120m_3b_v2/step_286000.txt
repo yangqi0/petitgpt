@@ -1,0 +1,294 @@
+Samples generated with tokenizer=tokenizer/tokenizer_pretrain_nospecial.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+ban_first_whitespace=True, ban_first_steps=4, extra_ban_token_ids=None
+================================================================================
+[Prompt 1] (prompt_tokens=6)
+Once upon a time, 
+
+[Debug]
+bos_id=2 eos_id=3
+ban_first_whitespace=True ban_first_steps=4 banned_ids_count=11
+banned_ids_head=[2, 201, 202, 203, 204, 205, 220, 221, 222, 223, 224]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[1848, 907, 138, 833, 1929, 479, 1439, 575, 139, 2138]
+first_step_topk_probs=[0.5617992877960205, 0.08615471422672272, 0.07763191312551498, 0.05679672211408615, 0.030401095747947693, 0.030401095747947693, 0.027393661439418793, 0.024683739989995956, 0.022241918370127678, 0.022241918370127678]
+first_step_topk_text=['ump', 'erm', '�', 'urn', 'urs', 'ie', 'ery', 'ia', '�', ' init']
+
+[New tokens 1] count=256 first30=[1848, 540, 410, 261, 1040, 14305, 286, 1040, 3556, 873, 17, 722, 3566, 289, 595, 745, 693, 509, 645, 1995, 17, 1516, 979, 15, 345, 2624, 361, 1593, 561, 4596]
+[Full output 1]
+ Once upon a time, umpire was a very clever and very smart person. He loved to help people when they were young. One day, he saw an old man walking by the road. The old man said, "I have some money that I can give you." The old man asked the old man if he could give him some of his money. The old woman smiled and said, "Yes, but be careful not to hurt anyone's feelings or get into trouble." The old woman said, "That's okay, but it's important to respect your own body." The old lady smiled and said she would always keep her body safe from danger. From that day on, the old woman kept her body safe because she knew that being kind and caring was important. She also loved to take care of others who were sick and in need. 
+
+ import unittest
+from tests.base_utils import base_database
+
+class TestStatus(unittest.TestCase):
+    def test_delete(self):
+ 		db = base_databases.BaseDatabase()
+		db.create_all('db', '/api/v1')
+		user = db.create_one
+
+================================================================================
+[Prompt 2] (prompt_tokens=9)
+In a distant future, humans and robots 
+
+[Debug]
+bos_id=2 eos_id=3
+ban_first_whitespace=True ban_first_steps=4 banned_ids_count=11
+banned_ids_head=[2, 201, 202, 203, 204, 205, 220, 221, 222, 223, 224]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2422, 479, 677, 907, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.6822998523712158, 0.17614424228668213, 0.10463407635688782, 0.03692184016108513, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=['ó', 'ie', 'iff', 'erm', '', '', '!', '"', '', '']
+
+[New tokens 2] count=256 first30=[2422, 338, 395, 1615, 290, 266, 1320, 5055, 17, 202, 1414, 2223, 292, 1942, 1936, 504, 660, 1055, 321, 7937, 17, 569, 332, 1027, 856, 289, 595, 745, 349, 10491]
+[Full output 2]
+ In a distant future, humans and robots ó that can move in the same direction.
+The idea of space travel has been around for centuries. It is now used to help people with disabilities live independently or at different times. People who have disabilities are able to go to places where they can get help.
+For example, when someone has a disability, they can get assistance from their doctors or other medical professionals. They can even be helped by an adult to walk on their own.
+The human body needs oxygen so it can function properly. It needs water to keep its blood pressure within normal range.
+In this way, we can improve our lives. We can learn how to make better decisions about how we will use our bodies.
+Such a person can have a life without any problems. He or she can live without any problems because he or she can feel good about himself or herself.
+There are many ways to accomplish that. The best way is through education.
+Some people are able to do things that are not possible. Others can not. The best thing is that everyone can take part in these activities.
+This means that every person can participate in all activities that are considered "right" for them.
+It is important to learn about what makes us happy, to learn about how we
+
+================================================================================
+[Prompt 3] (prompt_tokens=10)
+The following is a news report:
+
+
+
+
+[Debug]
+bos_id=2 eos_id=3
+ban_first_whitespace=True ban_first_steps=4 banned_ids_count=11
+banned_ids_head=[2, 201, 202, 203, 204, 205, 220, 221, 222, 223, 224]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[36, 1414, 54, 9977, 2739, 48, 37, 24912, 8826, 38]
+first_step_topk_probs=[0.33417412638664246, 0.22030109167099, 0.08189289271831512, 0.08189289271831512, 0.043834105134010315, 0.043834105134010315, 0.043834105134010315, 0.023462705314159393, 0.021141652017831802, 0.020068716257810593]
+first_step_topk_text=['A', 'The', 'S', 'On', 'In', 'M', 'B', 'Acc', 'Re', 'C']
+
+[New tokens 3] count=256 first30=[37, 76, 3380, 286, 2196, 202, 5793, 410, 5000, 290, 14094, 15, 1218, 2720, 15, 329, 4744, 667, 15, 896, 3194, 17, 722, 8571, 266, 2094, 292, 4119, 415, 19759]
+[Full output 3]
+ The following is a news report:
+
+
+Biography and education
+He was born in Brooklyn, New York, on February 20, 1916. He attended the University of California at Berkeley, where he received his B.A. and M.D. degrees from the University of Chicago.
+
+He then attended the University College of the Arts and Sciences in New York City, where he earned his Ph.D. in 1938. In 1937, he was named an honorary professor emeritus by the University of Illinois. He was also elected to the U.S. Senate as a Democrat to the 21st Congress.
+
+In 1939, he married Frances Custance (1914-2004), who had three children:
+
+ Robert W. "Jack" Moyers
+ Frank J. Gorman
+ Sarah T. Freedman
+
+He died on September 6, 2003, at age 81.
+
+Works
+
+
+Theatre
+
+
+Roles
+
+Psychology
+
+Role
+
+Multiple intelligences
+
+Practice
+
+Graduates
+
+Policy
+
+Critical thinking
+
+Various models
+
+Personal life
+
+Family life
+
+Parents
+
+G
+
+================================================================================
+[Prompt 4] (prompt_tokens=12)
+Neural networks are a class of machine learning models that 
+
+[Debug]
+bos_id=2 eos_id=3
+ban_first_whitespace=True ban_first_steps=4 banned_ids_count=11
+banned_ids_head=[2, 201, 202, 203, 204, 205, 220, 221, 222, 223, 224]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[479, 987, 13077, 14691, 2812, 1330, 792, 2422, 431, 270]
+first_step_topk_probs=[0.4733176529407501, 0.1356077790260315, 0.08939813077449799, 0.05893491581082344, 0.04785137251019478, 0.0431177094578743, 0.0431177094578743, 0.038852278143167496, 0.026982372626662254, 0.023079244419932365]
+first_step_topk_text=['ie', 'ix', '.....', '�', 'í', 'vern', 'ices', 'ó', 'ud', 'nd']
+
+[New tokens 4] count=256 first30=[431, 352, 682, 289, 2565, 266, 3940, 17, 202, 1414, 3940, 332, 261, 2464, 5322, 15, 518, 354, 395, 322, 9014, 350, 261, 2464, 3166, 17, 351, 3940, 332, 266]
+[Full output 4]
+ Neural networks are a class of machine learning models that uders use to model the brain.
+The brain is a single unit, but it can be represented as a single structure. The brain is the organ and the cerebrum. The brain has a number of connections between different parts of the body, such as the cerebellum, which receives information from the central nervous system. The brain also contains many different types of neurons, including nerve cells (neurons) that carry messages to the brain via the spinal cord.
+Each neuron in the brain is connected to a network of nerves called the axons. The axons are the nerve fibers that carry information about the movement of muscles. The axon-these are the "axons" that transmit information about the movements of muscles by means of the brain. The axonal axons are small enough that they can be easily identified with a computer. They are usually found in the brainstem or at the base of the brain, where they form the base of each neuron.
+A neuron is an organization of neurons that send signals to the brain. These signals are sent to the brain through a series of nerve cells known as the synapses. The synapses have a very specific purpose: they send information about the location of the
+
+================================================================================
+[Prompt 5] (prompt_tokens=20)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+ban_first_whitespace=True ban_first_steps=4 banned_ids_count=11
+banned_ids_head=[2, 201, 202, 203, 204, 205, 220, 221, 222, 223, 224]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[261, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[261, 17, 23116, 20310, 69, 414, 261, 62, 19, 4938, 284, 6093, 202, 202, 8860, 887, 66, 24330, 3129, 11, 68, 15, 261, 2773, 202, 224, 1731, 261, 2202, 261]
+[Full output 5]
+ Complete the following Python function:
+
+def add(a, b):
+    return a.append((b - a[0], b))
+
+def set_parameter(a, a):
+  return a * a + b
+
+def get_parameter():
+  return None
+
+def check_parameters():
+   return [(a, 0) for a in [1, 2] if a is not None else a.get_value()
+   ]
+
+def remove_parameter_values():
+  # Set parameter values to 0
+  if len(a) == 1:
+   print("The value of " + str(parameter_name))
+   raise ValueError("Unknown parameter value")
+
+def clear_parameters(parameter=None):
+  """Clear parameters from parameter values."""
+  # Clear the parameters with the default values
+  param = getattr(self, "parameter", None)
+  if param is None:
+  # No parameter value is given
+   param = self._make_parameter()
+  return param
+
+def _make_parameters_and_parameters() -> list:
+  """Create a list of parameter values that match the given parameter
+
+================================================================================
+[Prompt 6] (prompt_tokens=23)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+ban_first_whitespace=True ban_first_steps=4 banned_ids_count=11
+banned_ids_head=[2, 201, 202, 203, 204, 205, 220, 221, 222, 223, 224]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[1731, 1582, 8620, 313, 681, 3, 4, 2, 0, 1]
+first_step_topk_probs=[0.7171967029571533, 0.08930139243602753, 0.06929647922515869, 0.06533429771661758, 0.05887109041213989, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' #', ' fib', ' n', ' if', '', '!', '', '', '']
+
+[New tokens 6] count=256 first30=[1731, 8620, 11, 81, 12, 681, 313, 7643, 1499, 2467, 8620, 11, 81, 15, 398, 12, 202, 202, 6, 2525, 33, 8620, 11, 20, 17, 19, 12, 2525, 33, 8620]
+[Full output 6]
+ Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return fib(n) if n == 0 else fib(n, 1)
+
+# --> fib(1.0) --> fib((1.0 - 1.0)) --> fib(-1.0, 1.0)
+
+
+if  name  == ' main ':
+  
+# ----------------------------------------------------------------
+#    This module contains the following functions:
+#  - Read and write functions (e.g., fib(1), fib(2), fib(3), fib(4), fib(5), fib(6).
+# -----------------------------------------------------------
+
+import sys
+from pathlib import Path
+
+import numpy as np
+import matplotlib.pyplot as plt
+import matplt.cm as cm
+import scipy.io as sio
+
+
+def plot_stats(fig, data_file=None, **kwargs):
+  """Plot summary statistics of a figure in a given format."""
+  fig = plt.figure()
+  # plt.title('Prediction of the distribution of mean and variance')
+  fig.add_trace(data_file)
+
+================================================================================
+[Prompt 7] (prompt_tokens=25)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+ban_first_whitespace=True ban_first_steps=4 banned_ids_count=11
+banned_ids_head=[2, 201, 202, 203, 204, 205, 220, 221, 222, 223, 224]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[1878, 351, 1886, 569, 1138, 494, 696, 312, 0, 1]
+first_step_topk_probs=[0.35564982891082764, 0.2535104751586914, 0.14672060310840607, 0.07454825192689896, 0.04788193106651306, 0.04665110260248184, 0.04428354278206825, 0.03075431101024151, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' No', ' It', ' There', ' In', ' We', ' I', '', '']
+
+[New tokens 7] count=256 first30=[351, 3637, 332, 261, 2007, 292, 261, 8058, 17, 494, 266, 1221, 1067, 963, 15, 266, 844, 822, 289, 1584, 681, 261, 3354, 332, 2349, 369, 2606, 332, 446, 9727]
+[Full output 7]
+ If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is a bit of a mystery. In the last few years, the only way to tell if a cat is black or white is by measuring its height in a box or on a table.
+The answer depends on whether you have a cat or not. There are different methods for measuring your cat's height, but the most common method is to use a slit-and-roll method.
+Sounds like a lot of fun.
+Raising your cat's head is one thing. You don't need to go into a room with your cat. It could be a little frustrating at first, but eventually it will become easier.
+You can make sure your cat is healthy and happy when you give him a positive name, or a "sick" color. Your cat should get a lot of exercise every day.
+It might also help if your cat has a breed of cat named "Dog" which is usually born in the wild. This means that they will eat much more food than other cats do.
+As always, keep in mind that there are many different breeds of cats available. Some cats are very aggressive, others are very intelligent and may bite, while others are shy and have no fear of humans.
+If your cat has
+
+================================================================================
+[Prompt 8] (prompt_tokens=21)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+ban_first_whitespace=True ban_first_steps=4 banned_ids_count=11
+banned_ids_head=[2, 201, 202, 203, 204, 205, 220, 221, 222, 223, 224]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[398, 351, 722, 573, 673, 539, 494, 324, 424, 1516]
+first_step_topk_probs=[0.26767244935035706, 0.2607917785644531, 0.09323064982891083, 0.08405537903308868, 0.043243519961833954, 0.037964027374982834, 0.03376590460538864, 0.03311281278729439, 0.02834695391356945, 0.028322890400886536]
+first_step_topk_text=[' 1', ' The', ' He', ' 3', ' 4', ' "', ' In', ' A', ' 2', ' One']
+
+[New tokens 8] count=256 first30=[351, 3637, 332, 338, 266, 7827, 332, 261, 932, 592, 15, 518, 466, 266, 7827, 17, 202, 11871, 292, 266, 4614, 1912, 385, 3990, 10717, 332, 1109, 354, 12577, 932]
+[Full output 8]
+ John has 3 apples and buys 2 more. How many apples does he have?
+Answer: The answer is that the apple is a good one, but not the apple.
+One of the reasons why we eat apples is because it tastes good, so you can't tell what your body is doing. You're going to be eating too much apples.
+I've heard this before about the apple being bad for you. I wonder if you should eat an apple every day or if you are getting too little or too much.
+I'm not sure how long you'll get an apple on the table.
+There's a lot of different ways to eat apples.
+You know that if you eat a lot of apples you will get some of the vitamins A, C, E, K and fructose. But if you eat too much apples, you'll get a lot of the nutrients that are in apples.
+If you eat too many apples you won't get enough of the nutrients in apples. So the answer is that you don't get enough vitamins A,C, E,K and fructo-rich foods.
+So if you eat all of these foods, you're getting a lot of vitamins A,c, E, and K.
+And if you eat only fruits and vegetables, you'll also get a lot less than the amount
+
+================================================================================

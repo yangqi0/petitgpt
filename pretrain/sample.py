@@ -1,27 +1,31 @@
 #!/usr/bin/env python3
 """Sampling / text generation for petitgpt.
 
-This module is used by training (train_pretrain.py) to dump periodic samples.
+Used by training (train_pretrain.py) to dump periodic samples.
 
-Enhancements:
-- repetition_penalty (default 1.10)
-- no_repeat_ngram_size (default 3)
+Key fixes:
+- Ban whitespace-only tokens at the first decoding step (optionally first N steps)
+  to avoid "first token = \\n/space" degeneracy.
+- Keep repetition_penalty / no_repeat_ngram_size / max_repeat_token as before.
 
-These only affect sampling quality (less looping), not training.
+This only affects sampling quality (not training).
 """
 
 from __future__ import annotations
 
 import argparse
-import math
-import os
 import random
 from pathlib import Path
-from typing import List, Optional
+from typing import Any, Dict, List, Optional, Sequence, Set
 
 import numpy as np
 import torch
 from tokenizers import Tokenizer
+
+import sys
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
 # NOTE: train_pretrain imports generate_default_samples from this file.
 
@@ -35,10 +39,7 @@ def _set_seed(seed: int) -> None:
 
 
 def _top_k_top_p_filtering(logits: torch.Tensor, top_k: int = 0, top_p: float = 1.0) -> torch.Tensor:
-    """Filter logits using top-k and/or nucleus (top-p).
-
-    logits: [vocab]
-    """
+    """Filter logits using top-k and/or nucleus (top-p). logits: [vocab]."""
     if top_k > 0:
         top_k = min(top_k, logits.size(-1))
         values, _ = torch.topk(logits, top_k)
@@ -50,10 +51,8 @@ def _top_k_top_p_filtering(logits: torch.Tensor, top_k: int = 0, top_p: float = 
         probs = torch.softmax(sorted_logits, dim=-1)
         cumprobs = torch.cumsum(probs, dim=-1)
 
-        # remove tokens with cumulative prob above threshold
         sorted_mask = cumprobs > top_p
-        # keep at least 1
-        sorted_mask[..., 0] = False
+        sorted_mask[..., 0] = False  # keep at least 1
 
         mask = torch.zeros_like(logits, dtype=torch.bool)
         mask.scatter_(dim=-1, index=sorted_indices, src=sorted_mask)
@@ -66,10 +65,8 @@ def _apply_repetition_penalty(logits: torch.Tensor, generated: List[int], penalt
     """Apply repetition penalty to a 1D logits tensor."""
     if penalty is None or penalty <= 1.0 or not generated:
         return logits
-    # unique tokens are enough (cheaper than iterating every time)
     for tok in set(generated):
         val = logits[tok]
-        # from CTRL paper / HF: if val < 0 multiply by penalty else divide
         logits[tok] = val * penalty if val < 0 else val / penalty
     return logits
 
@@ -81,11 +78,10 @@ def _apply_no_repeat_ngram(logits: torch.Tensor, generated: List[int], n: int) -
     if len(generated) < n - 1:
         return logits
 
-    # Build mapping: (n-1)-gram prefix -> set(next_token)
     prefix_len = n - 1
-    banned = set()
-    # current prefix
     cur_prefix = tuple(generated[-prefix_len:])
+    banned: Set[int] = set()
+
     for i in range(len(generated) - n + 1):
         prefix = tuple(generated[i : i + prefix_len])
         nxt = generated[i + prefix_len]
@@ -97,18 +93,11 @@ def _apply_no_repeat_ngram(logits: torch.Tensor, generated: List[int], n: int) -
         logits.index_fill_(0, idx, -float("inf"))
     return logits
 
-def _ban_consecutive_repeats(
-    logits: torch.Tensor,  # [vocab]
-    history: list[int],
-    max_repeat_token: int,
-) -> torch.Tensor:
-    """
-    If the last token repeats too many times consecutively, ban generating it again.
-    Example: max_repeat_token=3 will prevent 4th same-token in a row.
-    """
-    if max_repeat_token <= 0 or len(history) == 0:
-        return logits
 
+def _ban_consecutive_repeats(logits: torch.Tensor, history: List[int], max_repeat_token: int) -> torch.Tensor:
+    """If the last token repeats too many times consecutively, ban generating it again."""
+    if max_repeat_token <= 0 or not history:
+        return logits
     last = history[-1]
     k = 1
     for i in range(len(history) - 2, -1, -1):
@@ -120,6 +109,7 @@ def _ban_consecutive_repeats(
         else:
             break
     return logits
+
 
 def _sample_next_id(
     logits_1d: torch.Tensor,
@@ -134,11 +124,30 @@ def _sample_next_id(
     logits = logits_1d / max(temperature, 1e-8)
     logits = _top_k_top_p_filtering(logits, top_k=top_k, top_p=top_p)
     probs = torch.softmax(logits, dim=-1)
-    # if all -inf (can happen with aggressive filters), fall back to argmax
     if torch.isnan(probs).any() or float(probs.sum().item()) == 0.0:
         return int(torch.argmax(logits_1d).item())
     nxt = torch.multinomial(probs, num_samples=1)
     return int(nxt.item())
+
+
+def _compute_whitespace_only_token_ids(tok: Tokenizer, max_scan: Optional[int] = None) -> List[int]:
+    """
+    Return token ids whose decoded text is non-empty but strip() becomes empty.
+    This catches: " ", "\\n", "\\t", combinations, etc.
+    """
+    vocab_size = tok.get_vocab_size()
+    if max_scan is None:
+        max_scan = vocab_size
+    max_scan = min(max_scan, vocab_size)
+
+    ws_ids: List[int] = []
+    # decoding one token at a time is slow-ish but vocab is small enough (your vocab ~32k)
+    for i in range(max_scan):
+        s = tok.decode([i])
+        if s and s.strip() == "":
+            ws_ids.append(i)
+    return ws_ids
+
 
 @torch.no_grad()
 def generate(
@@ -162,10 +171,15 @@ def generate(
     no_repeat_ngram_size: int = 3,
     max_repeat_token: int = 3,
     seed: Optional[int] = 1234,
-) -> dict:
-    """Generate a completion.
+    # New: first-step hygiene
+    ban_first_whitespace: bool = True,
+    ban_first_steps: int = 1,  # apply ban on step=0..ban_first_steps-1
+    extra_ban_token_ids: Optional[Sequence[int]] = None,
+) -> Dict[str, Any]:
+    """
+    Generate a completion.
 
-    Returns a dict with:
+    Returns dict:
       - prompt_tokens
       - new_tokens
       - output_text
@@ -179,50 +193,75 @@ def generate(
 
     if add_bos:
         if bos_id is None:
-            raise ValueError('add_bos=True but bos_id is None')
+            raise ValueError("add_bos=True but bos_id is None")
         if len(prompt_ids) == 0 or prompt_ids[0] != bos_id:
             prompt_ids = [bos_id] + prompt_ids
 
-    # Truncate if prompt is too long
+    # Truncate if prompt too long
     if len(prompt_ids) >= max_seq_len:
         prompt_ids = prompt_ids[-(max_seq_len - 1) :]
 
     ids = torch.tensor(prompt_ids, device=device, dtype=torch.long)[None, :]  # [1, t]
     generated: List[int] = []
 
-    dbg = {}
+    # Prepare ban list once
+    ban_ids: List[int] = []
+    if ban_first_whitespace:
+        ban_ids.extend(_compute_whitespace_only_token_ids(tokenizer))
+    if extra_ban_token_ids:
+        ban_ids.extend(list(extra_ban_token_ids))
+    # Also avoid sampling BOS/EOS spuriously (EOS handled by stopping; BOS shouldn't appear)
+    if bos_id is not None:
+        ban_ids.append(bos_id)
+
+    # De-dup
+    ban_ids = sorted(set(int(x) for x in ban_ids if x is not None and x >= 0))
+
+    dbg: Dict[str, Any] = {}
     if debug:
-        dbg['bos_id'] = bos_id
-        dbg['eos_id'] = eos_id
+        dbg["bos_id"] = bos_id
+        dbg["eos_id"] = eos_id
+        dbg["ban_first_whitespace"] = ban_first_whitespace
+        dbg["ban_first_steps"] = ban_first_steps
+        dbg["banned_ids_count"] = len(ban_ids)
+        # show a few for sanity
+        if ban_ids:
+            dbg["banned_ids_head"] = ban_ids[:20]
 
     for step in range(max_new_tokens):
-        # keep context within max_seq_len
         if ids.size(1) > max_seq_len:
             ids = ids[:, -max_seq_len:]
 
         out = model(ids)
-        logits = out['logits'] if isinstance(out, dict) else out
+        logits = out["logits"] if isinstance(out, dict) else out
         next_logits = logits[0, -1, :].float()  # [vocab]
 
-        # Apply anti-looping guards (sampling only)
-        # IMPORTANT: use the current context "history" (prompt + generated, after truncation)
-        if step < max_new_tokens:  # always true, just to be explicit
-            history = ids[0].tolist()  # includes prompt + generated (and reflects truncation)
-            next_logits = _apply_repetition_penalty(next_logits, history, repetition_penalty)
-            next_logits = _apply_no_repeat_ngram(next_logits, history, no_repeat_ngram_size)
-            next_logits = _ban_consecutive_repeats(next_logits, history, max_repeat_token)
+        # Apply anti-looping guards
+        history = ids[0].tolist()
+        next_logits = _apply_repetition_penalty(next_logits, history, repetition_penalty)
+        next_logits = _apply_no_repeat_ngram(next_logits, history, no_repeat_ngram_size)
+        next_logits = _ban_consecutive_repeats(next_logits, history, max_repeat_token)
+
+        # NEW: prevent first token degeneracy (newline/space/etc)
+        if ban_ids and ban_first_steps > 0 and step < ban_first_steps:
+            idx = torch.tensor(ban_ids, device=next_logits.device, dtype=torch.long)
+            next_logits.index_fill_(0, idx, -float("inf"))
 
         if debug and step == 0:
-            # compute eos prob and top-k preview on the *filtered* distribution
             tmp = next_logits / max(temperature, 1e-8)
             tmp = _top_k_top_p_filtering(tmp.clone(), top_k=top_k, top_p=top_p)
             probs = torch.softmax(tmp, dim=-1)
             if eos_id is not None:
-                dbg['first_step_eos_prob'] = float(probs[eos_id].item())
+                dbg["first_step_eos_prob"] = float(probs[eos_id].item())
             k = min(debug_topk, probs.numel())
             topv, topi = torch.topk(probs, k)
-            dbg['first_step_topk_ids'] = topi.cpu().tolist()
-            dbg['first_step_topk_probs'] = topv.cpu().tolist()
+            dbg["first_step_topk_ids"] = topi.cpu().tolist()
+            dbg["first_step_topk_probs"] = topv.cpu().tolist()
+            # decode top ids to quickly spot whitespace / weird prefix
+            try:
+                dbg["first_step_topk_text"] = [tokenizer.decode([int(i)]) for i in dbg["first_step_topk_ids"]]
+            except Exception:
+                pass
 
         nxt = _sample_next_id(next_logits, temperature=temperature, top_p=top_p, top_k=top_k, greedy=greedy)
 
@@ -236,10 +275,10 @@ def generate(
     out_text = tokenizer.decode(full_ids)
 
     return {
-        'prompt_tokens': len(prompt_ids),
-        'new_tokens': generated,
-        'output_text': out_text,
-        'debug': dbg if debug else None,
+        "prompt_tokens": len(prompt_ids),
+        "new_tokens": generated,
+        "output_text": out_text,
+        "debug": dbg if debug else None,
     }
 
 
@@ -263,15 +302,18 @@ def generate_default_samples(
     repetition_penalty: float = 1.15,
     no_repeat_ngram_size: int = 4,
     max_repeat_token: int = 3,
+    # New options (safe defaults)
+    ban_first_whitespace: bool = True,
+    ban_first_steps: int = 1,
+    extra_ban_token_ids: Optional[Sequence[int]] = None,
 ) -> None:
     """Write a standard set of prompts + completions to out_path."""
     tok = Tokenizer.from_file(tokenizer_path)
 
-    # Match precision behavior in training sampling
     model.eval()
-    if precision in ('fp16', 'float16'):
+    if precision in ("fp16", "float16"):
         autocast_dtype = torch.float16
-    elif precision in ('bf16', 'bfloat16'):
+    elif precision in ("bf16", "bfloat16"):
         autocast_dtype = torch.bfloat16
     else:
         autocast_dtype = None
@@ -290,11 +332,15 @@ def generate_default_samples(
     out_path = Path(out_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
-    with out_path.open('w', encoding='utf-8') as f:
+    with out_path.open("w", encoding="utf-8") as f:
         f.write(f"Samples generated with tokenizer={tokenizer_path}\n")
         f.write(
             f"precision={precision}, temperature={temperature}, top_p={top_p}, top_k={top_k}, "
             f"max_new_tokens={max_new_tokens}, min_new_tokens={min_new_tokens}, greedy={greedy}\n"
+        )
+        f.write(
+            f"ban_first_whitespace={ban_first_whitespace}, ban_first_steps={ban_first_steps}, "
+            f"extra_ban_token_ids={list(extra_ban_token_ids) if extra_ban_token_ids else None}\n"
         )
         f.write("=" * 80 + "\n")
 
@@ -303,7 +349,11 @@ def generate_default_samples(
             f.write(f"[Prompt {i}] (prompt_tokens={len(tok.encode(prompt).ids) + (1 if add_bos else 0)})\n")
             f.write(prompt + "\n\n")
 
-            with torch.autocast('cuda', dtype=autocast_dtype, enabled=(autocast_dtype is not None and torch.cuda.is_available())):
+            with torch.autocast(
+                "cuda",
+                dtype=autocast_dtype,
+                enabled=(autocast_dtype is not None and torch.cuda.is_available()),
+            ):
                 res = generate(
                     model=model,
                     tokenizer=tok,
@@ -323,73 +373,93 @@ def generate_default_samples(
                     repetition_penalty=repetition_penalty,
                     no_repeat_ngram_size=no_repeat_ngram_size,
                     max_repeat_token=max_repeat_token,
-                    seed=base_seed + i,  # different seed per prompt
+                    seed=base_seed + i,
+                    ban_first_whitespace=ban_first_whitespace,
+                    ban_first_steps=ban_first_steps,
+                    extra_ban_token_ids=extra_ban_token_ids,
                 )
 
-            if debug and res['debug']:
+            if debug and res["debug"]:
                 f.write("[Debug]\n")
-                d = res['debug']
+                d = res["debug"]
                 f.write(f"bos_id={d.get('bos_id')} eos_id={d.get('eos_id')}\n")
-                if 'first_step_eos_prob' in d:
+                f.write(
+                    f"ban_first_whitespace={d.get('ban_first_whitespace')} "
+                    f"ban_first_steps={d.get('ban_first_steps')} "
+                    f"banned_ids_count={d.get('banned_ids_count')}\n"
+                )
+                if "banned_ids_head" in d:
+                    f.write(f"banned_ids_head={d['banned_ids_head']}\n")
+                if "first_step_eos_prob" in d:
                     f.write(f"first_step_eos_prob={d['first_step_eos_prob']:.3e}\n")
-                if 'first_step_topk_ids' in d:
+                if "first_step_topk_ids" in d:
                     f.write(f"first_step_topk_ids={d['first_step_topk_ids']}\n")
-                if 'first_step_topk_probs' in d:
+                if "first_step_topk_probs" in d:
                     f.write(f"first_step_topk_probs={d['first_step_topk_probs']}\n")
+                if "first_step_topk_text" in d:
+                    f.write(f"first_step_topk_text={d['first_step_topk_text']}\n")
                 f.write("\n")
 
-            new_tokens = res['new_tokens']
+            new_tokens = res["new_tokens"]
             f.write(f"[New tokens {i}] count={len(new_tokens)}")
-            if len(new_tokens) > 0:
+            if new_tokens:
                 f.write(f" first30={new_tokens[:30]}")
             f.write("\n")
-            # show a short preview
-            preview = tok.decode((tok.encode(prompt).ids[:0]) + ([]))  # no-op to keep consistent
             f.write(f"[Full output {i}]\n{res['output_text']}\n\n")
             f.write("=" * 80 + "\n")
 
+
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument('--ckpt', type=str, required=True, help='checkpoint .pt file')
-    parser.add_argument('--tokenizer_path', type=str, required=True)
-    parser.add_argument('--device', type=str, default='cuda')
-    parser.add_argument('--max_seq_len', type=int, default=1024)
-    parser.add_argument('--precision', type=str, default='bf16', choices=['fp32', 'fp16', 'bf16'])
-    parser.add_argument('--prompt', type=str, required=True)
-    parser.add_argument('--temperature', type=float, default=0.7)
-    parser.add_argument('--top_p', type=float, default=0.9)
-    parser.add_argument('--top_k', type=int, default=0)
-    parser.add_argument('--max_new_tokens', type=int, default=256)
-    parser.add_argument('--min_new_tokens', type=int, default=0)
-    parser.add_argument('--eos_id', type=int, default=None)
-    parser.add_argument('--add_bos', action='store_true')
-    parser.add_argument('--bos_id', type=int, default=None)
-    parser.add_argument('--greedy', action='store_true')
-    parser.add_argument('--seed', type=int, default=1234)
-    parser.add_argument('--repetition_penalty', type=float, default=1.10)
-    parser.add_argument('--no_repeat_ngram_size', type=int, default=3)
+    parser.add_argument("--ckpt", type=str, required=True, help="checkpoint .pt file")
+    parser.add_argument("--tokenizer_path", type=str, required=True)
+    parser.add_argument("--device", type=str, default="cuda")
+    parser.add_argument("--max_seq_len", type=int, default=1024)
+    parser.add_argument("--precision", type=str, default="bf16", choices=["fp32", "fp16", "bf16"])
+    parser.add_argument("--prompt", type=str, required=True)
+    parser.add_argument("--temperature", type=float, default=0.7)
+    parser.add_argument("--top_p", type=float, default=0.9)
+    parser.add_argument("--top_k", type=int, default=0)
+    parser.add_argument("--max_new_tokens", type=int, default=256)
+    parser.add_argument("--min_new_tokens", type=int, default=0)
+    parser.add_argument("--eos_id", type=int, default=None)
+    parser.add_argument("--add_bos", action="store_true")
+    parser.add_argument("--bos_id", type=int, default=None)
+    parser.add_argument("--greedy", action="store_true")
+    parser.add_argument("--seed", type=int, default=1234)
+    parser.add_argument("--repetition_penalty", type=float, default=1.10)
+    parser.add_argument("--no_repeat_ngram_size", type=int, default=3)
+
+    # New
+    parser.add_argument("--ban_first_whitespace", action="store_true", help="ban whitespace-only tokens at first step(s)")
+    parser.add_argument("--ban_first_steps", type=int, default=1, help="apply first-token ban for first N decoding steps")
+    parser.add_argument("--extra_ban_token_ids", type=str, default="", help="comma-separated token ids to ban early")
 
     args = parser.parse_args()
 
-    from src.model import GPT, GPTConfig  # local import to keep deps minimal
+    from src.model import GPT, GPTConfig  # local import
 
-    ckpt = torch.load(args.ckpt, map_location='cpu')
-    cfg = GPTConfig(**ckpt['model_config'])
+    ckpt = torch.load(args.ckpt, map_location="cpu")
+    cfg = GPTConfig(**ckpt["model_config"])
     model = GPT(cfg)
-    model.load_state_dict(ckpt['model'], strict=True)
+    model.load_state_dict(ckpt["model"], strict=True)
     model.to(args.device)
     model.eval()
 
     tok = Tokenizer.from_file(args.tokenizer_path)
 
-    if args.precision == 'fp16':
+    if args.precision == "fp16":
         dtype = torch.float16
-    elif args.precision == 'bf16':
+    elif args.precision == "bf16":
         dtype = torch.bfloat16
     else:
         dtype = None
 
-    with torch.autocast('cuda', dtype=dtype, enabled=(dtype is not None and torch.cuda.is_available())):
+    extra_ids: Optional[List[int]] = None
+    if args.extra_ban_token_ids.strip():
+        extra_ids = [int(x) for x in args.extra_ban_token_ids.split(",") if x.strip()]
+
+    with torch.autocast("cuda", dtype=dtype, enabled=(dtype is not None and torch.cuda.is_available())):
         res = generate(
             model=model,
             tokenizer=tok,
@@ -409,10 +479,15 @@ def main() -> None:
             repetition_penalty=args.repetition_penalty,
             no_repeat_ngram_size=args.no_repeat_ngram_size,
             seed=args.seed,
+            ban_first_whitespace=args.ban_first_whitespace,
+            ban_first_steps=args.ban_first_steps,
+            extra_ban_token_ids=extra_ids,
         )
 
-    print(res['output_text'])
+    print(res["output_text"])
+    if res["debug"] is not None:
+        print("\n[debug]", res["debug"])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

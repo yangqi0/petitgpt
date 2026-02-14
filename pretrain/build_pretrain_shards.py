@@ -4,11 +4,20 @@
 """
 Build fixed-size token shards from jsonl {"text": "..."} sources, with mixing weights.
 
-This overwrite version keeps your current functionality and makes two best-practice tweaks:
-- default doc separator is "\\n\\n" (if not provided), which reduces doc-glue artifacts
-- first-token stats are recorded per-document (not counting doc_sep)
+Features:
+- Mix multiple jsonl sources with weights (streaming, loops when a file ends)
+- Write train/val shards of fixed token counts (.bin, uint16/uint32 auto)
+- Optional doc separator (default "\n\n") to reduce doc-glue artifacts
+- Optional tokenizer special leak check (BOS/EOS auto-added by tokenizer post_processor)
+- Best-practice text normalization / filtering for cleaner "first token" behavior:
+  --strip_leading_noise
+  --normalize_quotes
+  --underscores_policy {keep,space,remove}
+  --min_chars
+  --min_ascii_ratio
 
-Based on your current script. :contentReference[oaicite:3]{index=3}
+Meta:
+- meta.json records fingerprints, per-source stats, first-token topK per-doc (NOT counting doc_sep)
 """
 
 from __future__ import annotations
@@ -17,10 +26,11 @@ import argparse
 import json
 import os
 import random
+import re
 from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Iterator
+from typing import Any, Iterator, Optional, Tuple
 
 import numpy as np
 from tokenizers import Tokenizer
@@ -74,7 +84,7 @@ def load_tokenizer(tokenizer_path: str):
     return Tokenizer.from_file(tokenizer_path)
 
 
-def _tokenizer_vocab_size(tok) -> int | None:
+def _tokenizer_vocab_size(tok) -> Optional[int]:
     try:
         return int(tok.get_vocab_size())
     except Exception:
@@ -82,7 +92,6 @@ def _tokenizer_vocab_size(tok) -> int | None:
 
 
 def _encode_base(tok, text: str) -> list[int]:
-    # tokenizers.Tokenizer encode
     enc = tok.encode(text)
     return list(enc.ids)
 
@@ -112,6 +121,109 @@ def _detect_special_leak(tok, bos_id: int, eos_id: int) -> dict[str, Any]:
         "leak_eos": bool(leak_eos),
         "leak_any": bool(leak_bos or leak_eos),
     }
+
+
+# -------------------------
+# Text normalization / filters
+# -------------------------
+_ZW = re.compile(r"[\u200B-\u200D\uFEFF]")  # zero-width chars + BOM
+_WS_HEAD = re.compile(r"^\s+")
+_MULTI_NL = re.compile(r"\n{4,}")  # huge blank gaps
+_UNDERS = re.compile(r"_{2,}")     # sequences of underscores
+# common “noise-y” leading markers in web text
+_LEADING_NOISE = re.compile(
+    r"""^(
+        [>\|\-#\*\+]\s+ |          # markdown quote/table/bullet/heading-ish
+        \|{1,}\s* |                # pipe tables
+        \*{1,}\s+ |                # bullet stars
+        \-{2,}\s+ |                # long dashes
+        #{1,6}\s+ |                # headings
+        \u2022\s+ |                # bullet dot
+        \(\s*\d+\s*\)\s+ |         # (1) style
+        \[\s*\d+\s*\]\s+           # [1] style
+    )+""",
+    re.VERBOSE,
+)
+
+_QUOTE_MAP = str.maketrans(
+    {
+        "“": '"',
+        "”": '"',
+        "„": '"',
+        "‟": '"',
+        "«": '"',
+        "»": '"',
+        "‘": "'",
+        "’": "'",
+        "‚": "'",
+        "‛": "'",
+        "‐": "-",   # hyphen variants
+        "-": "-",
+        "‒": "-",
+        "–": "-",
+        "—": "-",
+        "…": "...",
+    }
+)
+
+def ascii_ratio(s: str) -> float:
+    if not s:
+        return 0.0
+    # count ASCII including common whitespace
+    ascii_cnt = sum(1 for ch in s if ord(ch) < 128)
+    return ascii_cnt / max(1, len(s))
+
+def clean_text(
+    t: str,
+    *,
+    strip_leading_noise: bool,
+    normalize_quotes: bool,
+    underscores_policy: str,
+    min_chars: int,
+    min_ascii_ratio: float,
+) -> Optional[str]:
+    if not isinstance(t, str):
+        return None
+
+    # normalize newlines first
+    t = t.replace("\r\n", "\n").replace("\r", "\n")
+
+    # remove zero-width and BOM
+    t = _ZW.sub("", t)
+
+    if normalize_quotes:
+        t = t.translate(_QUOTE_MAP)
+
+    # collapse insane blank blocks (keeps some formatting)
+    t = _MULTI_NL.sub("\n\n\n", t)
+
+    if strip_leading_noise:
+        # strip head whitespace
+        t = _WS_HEAD.sub("", t)
+        # repeatedly strip common leading markers
+        for _ in range(3):
+            new_t = _LEADING_NOISE.sub("", t)
+            if new_t == t:
+                break
+            t = new_t
+        # after stripping markers, trim again
+        t = _WS_HEAD.sub("", t)
+
+    if underscores_policy != "keep":
+        if underscores_policy == "space":
+            t = _UNDERS.sub(" ", t)
+        elif underscores_policy == "remove":
+            t = _UNDERS.sub("", t)
+
+    # final trim (but don't nuke internal newlines)
+    t = t.strip()
+
+    if min_chars > 0 and len(t) < min_chars:
+        return None
+    if min_ascii_ratio > 0.0 and ascii_ratio(t) < min_ascii_ratio:
+        return None
+
+    return t if t else None
 
 
 # -------------------------
@@ -153,7 +265,6 @@ def make_mixed_stream(sources: list[tuple[Path, float]], seed: int) -> Iterator[
     for p, w in sources:
         states.append(SrcState(path=p, weight=w, it=iter_jsonl_texts(p)))
 
-    # alias method not necessary; small N. Use roulette each time.
     weights = [st.weight for st in states]
     s = sum(weights)
     weights = [w / s for w in weights]
@@ -171,7 +282,6 @@ def make_mixed_stream(sources: list[tuple[Path, float]], seed: int) -> Iterator[
         try:
             t = next(st.it)
         except StopIteration:
-            # recycle iterator if exhausted
             st.it = iter_jsonl_texts(st.path)
             t = next(st.it)
         yield (str(st.path), t)
@@ -198,6 +308,12 @@ def write_shards(
     detect_tokenizer_special_leak: bool,
     doc_sep: str,
     first_token_topk: int,
+    # filters
+    strip_leading_noise: bool,
+    normalize_quotes: bool,
+    underscores_policy: str,
+    min_chars: int,
+    min_ascii_ratio: float,
 ) -> None:
     out_train = out_dir / "train"
     out_val = out_dir / "val"
@@ -209,7 +325,7 @@ def write_shards(
     vocab_size = _tokenizer_vocab_size(tok)
     dtype = np.uint32 if (vocab_size is not None and vocab_size > 65535) else np.uint16
 
-    # default doc separator: mild boundary
+    # default doc separator
     if doc_sep == "":
         doc_sep = "\n\n"
     doc_sep_ids = _encode_base(tok, doc_sep) if doc_sep else []
@@ -219,8 +335,8 @@ def write_shards(
         special_leak = _detect_special_leak(tok, bos_id=bos_id, eos_id=eos_id)
         if special_leak.get("ok") and special_leak.get("leak_any"):
             print(
-                "\n[WARNING] Tokenizer appears to add BOS/EOS even with add_special_tokens=False.\n"
-                "          Avoid using --add_bos/--add_eos here to prevent double-add.\n"
+                "\n[WARNING] Tokenizer appears to add BOS/EOS via post_processor.\n"
+                "          You likely want tokenizer_pretrain_nospecial.json for pretrain.\n"
                 f"          leak_bos={special_leak.get('leak_bos')} leak_eos={special_leak.get('leak_eos')}\n"
             )
 
@@ -229,6 +345,9 @@ def write_shards(
     shard_idx_train = shard_idx_val = 0
     total_train = total_val = 0
     seen_docs = kept_docs = 0
+    dropped_short = 0
+    dropped_ascii = 0
+    dropped_empty = 0
 
     per_src: dict[str, Any] = {}
     source_fingerprints: dict[str, Any] = {}
@@ -250,6 +369,9 @@ def write_shards(
             "non_dict": 0,
             "no_text": 0,
             "ok_texts": 0,
+            "dropped_short": 0,
+            "dropped_ascii": 0,
+            "dropped_empty": 0,
         }
         source_fingerprints[sp] = file_fingerprint(p)
         source_line_precheck[sp] = fast_count_lines(p, max_lines=precheck_max_lines)
@@ -280,45 +402,73 @@ def write_shards(
             total_val += n
             shard_idx_val += 1
 
-    def add_doc(src_path: str, ids: list[int]) -> int:
-        nonlocal seen_docs, kept_docs
+    def add_doc(src_path: str, ids: list[int]) -> None:
+        nonlocal seen_docs, kept_docs, buf_train, buf_val
 
         seen_docs += 1
         per_src[src_path]["seen_docs"] += 1
 
         if not ids:
-            return 0
+            return
 
-        # record first token per *document*
+        # record first token per *document* (not counting doc_sep)
         first_tok_all[ids[0]] += 1
         first_tok_per_src[src_path][ids[0]] += 1
 
         kept_docs += 1
         per_src[src_path]["kept_docs"] += 1
 
-        # choose split once per doc
         if rng.random() < val_ratio:
             if doc_sep_ids and buf_val:
                 buf_val.extend(doc_sep_ids)
             buf_val.extend(ids)
             per_src[src_path]["val_tokens"] += len(ids)
             maybe_flush_val()
-            return 0
         else:
             if doc_sep_ids and buf_train:
                 buf_train.extend(doc_sep_ids)
             buf_train.extend(ids)
             per_src[src_path]["train_tokens"] += len(ids)
             maybe_flush_train()
-            return len(ids)
 
     stream = make_mixed_stream(sources, seed=seed)
 
     while total_train < target_train_tokens:
         src, text = next(stream)
-        ids = encode(tok, text, add_bos=add_bos, add_eos=add_eos, bos_id=bos_id, eos_id=eos_id)
-        if not ids:
+
+        # clean / filter
+        ct = clean_text(
+            text,
+            strip_leading_noise=strip_leading_noise,
+            normalize_quotes=normalize_quotes,
+            underscores_policy=underscores_policy,
+            min_chars=min_chars,
+            min_ascii_ratio=min_ascii_ratio,
+        )
+
+        if ct is None:
+            # best-effort categorize drops
+            per_src[src]["dropped_empty"] += 1
+            dropped_empty += 1
             continue
+
+        # categorize min_chars/min_ascii_ratio failures precisely (optional but helpful)
+        # (we do a second check here on the *cleaned* text)
+        if min_chars > 0 and len(ct) < min_chars:
+            per_src[src]["dropped_short"] += 1
+            dropped_short += 1
+            continue
+        if min_ascii_ratio > 0.0 and ascii_ratio(ct) < min_ascii_ratio:
+            per_src[src]["dropped_ascii"] += 1
+            dropped_ascii += 1
+            continue
+
+        ids = encode(tok, ct, add_bos=add_bos, add_eos=add_eos, bos_id=bos_id, eos_id=eos_id)
+        if not ids:
+            per_src[src]["dropped_empty"] += 1
+            dropped_empty += 1
+            continue
+
         add_doc(src, ids)
 
     # flush remainder
@@ -341,7 +491,6 @@ def write_shards(
     meta = {
         "tokenizer_path": tokenizer_path,
         "dtype": "uint32" if dtype == np.uint32 else "uint16",
-        "jsonl_paths": [],
         "sources": [{"path": str(p), "weight": float(w)} for p, w in sources],
         "shard_tokens": int(shard_tokens),
         "val_shard_tokens": int(val_shard_tokens),
@@ -352,8 +501,18 @@ def write_shards(
         "bos_id": int(bos_id),
         "eos_id": int(eos_id),
         "doc_sep": doc_sep,
+        "filters": {
+            "strip_leading_noise": bool(strip_leading_noise),
+            "normalize_quotes": bool(normalize_quotes),
+            "underscores_policy": underscores_policy,
+            "min_chars": int(min_chars),
+            "min_ascii_ratio": float(min_ascii_ratio),
+        },
         "seen_docs": int(seen_docs),
         "kept_docs": int(kept_docs),
+        "dropped_short": int(dropped_short),
+        "dropped_ascii": int(dropped_ascii),
+        "dropped_empty": int(dropped_empty),
         "train_tokens": int(total_train),
         "val_tokens": int(total_val),
         "train_shards": int(shard_idx_train),
@@ -388,11 +547,18 @@ def main():
     ap.add_argument("--bos_id", type=int, default=2)
     ap.add_argument("--eos_id", type=int, default=3)
 
-    ap.add_argument("--doc_sep", type=str, default="", help='optional document separator, default="\\n\\n"')
+    ap.add_argument("--doc_sep", type=str, default="", help='optional doc separator, default="\\n\\n"')
     ap.add_argument("--first_token_topk", type=int, default=50)
 
     ap.add_argument("--precheck_max_lines", type=int, default=300_000)
     ap.add_argument("--detect_tokenizer_special_leak", action="store_true")
+
+    # filters / normalization
+    ap.add_argument("--strip_leading_noise", action="store_true")
+    ap.add_argument("--normalize_quotes", action="store_true")
+    ap.add_argument("--underscores_policy", type=str, default="keep", choices=["keep", "space", "remove"])
+    ap.add_argument("--min_chars", type=int, default=0)
+    ap.add_argument("--min_ascii_ratio", type=float, default=0.0)
 
     args = ap.parse_args()
     sources = parse_sources(args.source)
@@ -426,6 +592,11 @@ def main():
         detect_tokenizer_special_leak=args.detect_tokenizer_special_leak,
         doc_sep=args.doc_sep,
         first_token_topk=args.first_token_topk,
+        strip_leading_noise=args.strip_leading_noise,
+        normalize_quotes=args.normalize_quotes,
+        underscores_policy=args.underscores_policy,
+        min_chars=args.min_chars,
+        min_ascii_ratio=args.min_ascii_ratio,
     )
 
 
