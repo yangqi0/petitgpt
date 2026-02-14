@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""Sampling / text generation for petitgpt.
+"""Sampling / text generation for petitgpt (drop-in replacement).
 
-Used by training (train_pretrain.py) to dump periodic samples.
-
-Key fixes:
-- Ban whitespace-only tokens at the first decoding step (optionally first N steps)
-  to avoid "first token = \\n/space" degeneracy.
-- Keep repetition_penalty / no_repeat_ngram_size / max_repeat_token as before.
+Key changes vs current version:
+1) Avoid first-token whitespace degeneracy via *rejection sampling* (resample if whitespace-only),
+   instead of hard-banning many tokens for multiple steps (which can force garbled starts like "ump", "ó").
+2) Make samples vary across training steps by mixing `step` parsed from out_path (e.g. step_287000.txt)
+   into the RNG seed. Still reproducible for a given step.
 
 This only affects sampling quality (not training).
 """
@@ -14,9 +13,11 @@ This only affects sampling quality (not training).
 from __future__ import annotations
 
 import argparse
+import os
 import random
+import re
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Sequence, Set
+from typing import Any, Dict, List, Optional, Sequence, Set, Tuple
 
 import numpy as np
 import torch
@@ -26,8 +27,6 @@ import sys
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
-
-# NOTE: train_pretrain imports generate_default_samples from this file.
 
 
 def _set_seed(seed: int) -> None:
@@ -111,42 +110,43 @@ def _ban_consecutive_repeats(logits: torch.Tensor, history: List[int], max_repea
     return logits
 
 
-def _sample_next_id(
+def _sample_next_id_from_logits(
     logits_1d: torch.Tensor,
     temperature: float,
     top_p: float,
     top_k: int,
     greedy: bool,
-) -> int:
+) -> Tuple[int, torch.Tensor]:
+    """Returns (token_id, probs_after_filtering)."""
     if greedy or temperature <= 0:
-        return int(torch.argmax(logits_1d).item())
+        # probs returned just for debug; compute from raw logits
+        probs = torch.softmax(logits_1d, dim=-1)
+        return int(torch.argmax(logits_1d).item()), probs
 
     logits = logits_1d / max(temperature, 1e-8)
     logits = _top_k_top_p_filtering(logits, top_k=top_k, top_p=top_p)
     probs = torch.softmax(logits, dim=-1)
     if torch.isnan(probs).any() or float(probs.sum().item()) == 0.0:
-        return int(torch.argmax(logits_1d).item())
+        probs = torch.softmax(logits_1d, dim=-1)
+        return int(torch.argmax(logits_1d).item()), probs
     nxt = torch.multinomial(probs, num_samples=1)
-    return int(nxt.item())
+    return int(nxt.item()), probs
 
 
-def _compute_whitespace_only_token_ids(tok: Tokenizer, max_scan: Optional[int] = None) -> List[int]:
+def _is_whitespace_only_token(tok: Tokenizer, tid: int) -> bool:
+    s = tok.decode([int(tid)])
+    return bool(s) and s.strip() == ""
+
+
+def _parse_step_from_out_path(out_path: Path) -> int:
     """
-    Return token ids whose decoded text is non-empty but strip() becomes empty.
-    This catches: " ", "\\n", "\\t", combinations, etc.
+    Parse step from filenames like:
+      step_287000.txt
+      samples/.../step_257000.txt
+    Returns 0 if not found.
     """
-    vocab_size = tok.get_vocab_size()
-    if max_scan is None:
-        max_scan = vocab_size
-    max_scan = min(max_scan, vocab_size)
-
-    ws_ids: List[int] = []
-    # decoding one token at a time is slow-ish but vocab is small enough (your vocab ~32k)
-    for i in range(max_scan):
-        s = tok.decode([i])
-        if s and s.strip() == "":
-            ws_ids.append(i)
-    return ws_ids
+    m = re.search(r"step_(\d+)", out_path.stem)
+    return int(m.group(1)) if m else 0
 
 
 @torch.no_grad()
@@ -171,20 +171,11 @@ def generate(
     no_repeat_ngram_size: int = 3,
     max_repeat_token: int = 3,
     seed: Optional[int] = 1234,
-    # New: first-step hygiene
-    ban_first_whitespace: bool = True,
-    ban_first_steps: int = 1,  # apply ban on step=0..ban_first_steps-1
+    # First-step hygiene (recommended)
+    avoid_first_whitespace: bool = True,
+    first_whitespace_resample_tries: int = 32,
     extra_ban_token_ids: Optional[Sequence[int]] = None,
 ) -> Dict[str, Any]:
-    """
-    Generate a completion.
-
-    Returns dict:
-      - prompt_tokens
-      - new_tokens
-      - output_text
-      - debug (optional)
-    """
     if seed is not None:
         _set_seed(seed)
 
@@ -201,32 +192,21 @@ def generate(
     if len(prompt_ids) >= max_seq_len:
         prompt_ids = prompt_ids[-(max_seq_len - 1) :]
 
-    ids = torch.tensor(prompt_ids, device=device, dtype=torch.long)[None, :]  # [1, t]
+    ids = torch.tensor(prompt_ids, device=device, dtype=torch.long)[None, :]
     generated: List[int] = []
 
-    # Prepare ban list once
-    ban_ids: List[int] = []
-    if ban_first_whitespace:
-        ban_ids.extend(_compute_whitespace_only_token_ids(tokenizer))
+    # extra ban (always applied, any step)
+    extra_ban: List[int] = []
     if extra_ban_token_ids:
-        ban_ids.extend(list(extra_ban_token_ids))
-    # Also avoid sampling BOS/EOS spuriously (EOS handled by stopping; BOS shouldn't appear)
-    if bos_id is not None:
-        ban_ids.append(bos_id)
-
-    # De-dup
-    ban_ids = sorted(set(int(x) for x in ban_ids if x is not None and x >= 0))
+        extra_ban = sorted(set(int(x) for x in extra_ban_token_ids if x is not None and int(x) >= 0))
 
     dbg: Dict[str, Any] = {}
     if debug:
         dbg["bos_id"] = bos_id
         dbg["eos_id"] = eos_id
-        dbg["ban_first_whitespace"] = ban_first_whitespace
-        dbg["ban_first_steps"] = ban_first_steps
-        dbg["banned_ids_count"] = len(ban_ids)
-        # show a few for sanity
-        if ban_ids:
-            dbg["banned_ids_head"] = ban_ids[:20]
+        dbg["avoid_first_whitespace"] = avoid_first_whitespace
+        dbg["first_whitespace_resample_tries"] = first_whitespace_resample_tries
+        dbg["extra_ban_token_ids"] = extra_ban
 
     for step in range(max_new_tokens):
         if ids.size(1) > max_seq_len:
@@ -234,41 +214,73 @@ def generate(
 
         out = model(ids)
         logits = out["logits"] if isinstance(out, dict) else out
-        next_logits = logits[0, -1, :].float()  # [vocab]
+        next_logits = logits[0, -1, :].float()
 
-        # Apply anti-looping guards
+        # Guards based on full history
         history = ids[0].tolist()
         next_logits = _apply_repetition_penalty(next_logits, history, repetition_penalty)
         next_logits = _apply_no_repeat_ngram(next_logits, history, no_repeat_ngram_size)
         next_logits = _ban_consecutive_repeats(next_logits, history, max_repeat_token)
 
-        # NEW: prevent first token degeneracy (newline/space/etc)
-        if ban_ids and ban_first_steps > 0 and step < ban_first_steps:
-            idx = torch.tensor(ban_ids, device=next_logits.device, dtype=torch.long)
+        # Always ban BOS if provided (we don't want it mid-generation)
+        if bos_id is not None and 0 <= bos_id < next_logits.numel():
+            next_logits[bos_id] = float("-inf")
+        # Optional extra bans
+        if extra_ban:
+            idx = torch.tensor(extra_ban, device=next_logits.device, dtype=torch.long)
             next_logits.index_fill_(0, idx, -float("inf"))
 
+        # Debug at step 0 (before rejection loop changes things)
         if debug and step == 0:
-            tmp = next_logits / max(temperature, 1e-8)
-            tmp = _top_k_top_p_filtering(tmp.clone(), top_k=top_k, top_p=top_p)
-            probs = torch.softmax(tmp, dim=-1)
-            if eos_id is not None:
-                dbg["first_step_eos_prob"] = float(probs[eos_id].item())
-            k = min(debug_topk, probs.numel())
-            topv, topi = torch.topk(probs, k)
+            _, probs0 = _sample_next_id_from_logits(
+                next_logits.clone(), temperature=temperature, top_p=top_p, top_k=top_k, greedy=greedy
+            )
+            if eos_id is not None and 0 <= eos_id < probs0.numel():
+                dbg["first_step_eos_prob"] = float(probs0[eos_id].item())
+            k = min(debug_topk, probs0.numel())
+            topv, topi = torch.topk(probs0, k)
             dbg["first_step_topk_ids"] = topi.cpu().tolist()
             dbg["first_step_topk_probs"] = topv.cpu().tolist()
-            # decode top ids to quickly spot whitespace / weird prefix
             try:
                 dbg["first_step_topk_text"] = [tokenizer.decode([int(i)]) for i in dbg["first_step_topk_ids"]]
             except Exception:
                 pass
 
-        nxt = _sample_next_id(next_logits, temperature=temperature, top_p=top_p, top_k=top_k, greedy=greedy)
+        # --- First token whitespace rejection sampling ---
+        if step == 0 and avoid_first_whitespace and not greedy and temperature > 0:
+            chosen = None
+            chosen_probs = None
+            # We re-sample from the same filtered distribution; if we hit whitespace-only,
+            # we try again. This avoids hard-banning a big list that can force gibberish.
+            for _ in range(max(1, first_whitespace_resample_tries)):
+                cand, probs = _sample_next_id_from_logits(
+                    next_logits, temperature=temperature, top_p=top_p, top_k=top_k, greedy=False
+                )
+                if not _is_whitespace_only_token(tokenizer, cand):
+                    chosen = cand
+                    chosen_probs = probs
+                    break
+            if chosen is None:
+                # fallback to argmax (or a single sample)
+                chosen, chosen_probs = _sample_next_id_from_logits(
+                    next_logits, temperature=temperature, top_p=top_p, top_k=top_k, greedy=True
+                )
+            nxt = int(chosen)
+            if debug:
+                dbg["first_step_chosen_id"] = nxt
+                try:
+                    dbg["first_step_chosen_text"] = tokenizer.decode([nxt])
+                except Exception:
+                    pass
+        else:
+            nxt, _ = _sample_next_id_from_logits(
+                next_logits, temperature=temperature, top_p=top_p, top_k=top_k, greedy=greedy
+            )
 
-        generated.append(nxt)
-        ids = torch.cat([ids, torch.tensor([[nxt]], device=device, dtype=torch.long)], dim=1)
+        generated.append(int(nxt))
+        ids = torch.cat([ids, torch.tensor([[int(nxt)]], device=device, dtype=torch.long)], dim=1)
 
-        if eos_id is not None and nxt == eos_id and (step + 1) >= min_new_tokens:
+        if eos_id is not None and int(nxt) == int(eos_id) and (step + 1) >= min_new_tokens:
             break
 
     full_ids = prompt_ids + generated
@@ -302,12 +314,11 @@ def generate_default_samples(
     repetition_penalty: float = 1.15,
     no_repeat_ngram_size: int = 4,
     max_repeat_token: int = 3,
-    # New options (safe defaults)
-    ban_first_whitespace: bool = True,
-    ban_first_steps: int = 1,
+    # New options
+    avoid_first_whitespace: bool = True,
+    first_whitespace_resample_tries: int = 32,
     extra_ban_token_ids: Optional[Sequence[int]] = None,
 ) -> None:
-    """Write a standard set of prompts + completions to out_path."""
     tok = Tokenizer.from_file(tokenizer_path)
 
     model.eval()
@@ -332,6 +343,10 @@ def generate_default_samples(
     out_path = Path(out_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
+    # Mix training step into seed so samples evolve across training.
+    step_tag = _parse_step_from_out_path(out_path)
+    base_seed = 1234 + (step_tag * 1_000_003)
+
     with out_path.open("w", encoding="utf-8") as f:
         f.write(f"Samples generated with tokenizer={tokenizer_path}\n")
         f.write(
@@ -339,14 +354,16 @@ def generate_default_samples(
             f"max_new_tokens={max_new_tokens}, min_new_tokens={min_new_tokens}, greedy={greedy}\n"
         )
         f.write(
-            f"ban_first_whitespace={ban_first_whitespace}, ban_first_steps={ban_first_steps}, "
+            f"avoid_first_whitespace={avoid_first_whitespace}, "
+            f"first_whitespace_resample_tries={first_whitespace_resample_tries}, "
             f"extra_ban_token_ids={list(extra_ban_token_ids) if extra_ban_token_ids else None}\n"
         )
+        f.write(f"seed_base={base_seed} (step_tag={step_tag})\n")
         f.write("=" * 80 + "\n")
 
-        base_seed = 1234
         for i, prompt in enumerate(prompts, 1):
-            f.write(f"[Prompt {i}] (prompt_tokens={len(tok.encode(prompt).ids) + (1 if add_bos else 0)})\n")
+            prompt_tok_len = len(tok.encode(prompt).ids) + (1 if add_bos else 0)
+            f.write(f"[Prompt {i}] (prompt_tokens={prompt_tok_len})\n")
             f.write(prompt + "\n\n")
 
             with torch.autocast(
@@ -374,8 +391,8 @@ def generate_default_samples(
                     no_repeat_ngram_size=no_repeat_ngram_size,
                     max_repeat_token=max_repeat_token,
                     seed=base_seed + i,
-                    ban_first_whitespace=ban_first_whitespace,
-                    ban_first_steps=ban_first_steps,
+                    avoid_first_whitespace=avoid_first_whitespace,
+                    first_whitespace_resample_tries=first_whitespace_resample_tries,
                     extra_ban_token_ids=extra_ban_token_ids,
                 )
 
@@ -384,12 +401,9 @@ def generate_default_samples(
                 d = res["debug"]
                 f.write(f"bos_id={d.get('bos_id')} eos_id={d.get('eos_id')}\n")
                 f.write(
-                    f"ban_first_whitespace={d.get('ban_first_whitespace')} "
-                    f"ban_first_steps={d.get('ban_first_steps')} "
-                    f"banned_ids_count={d.get('banned_ids_count')}\n"
+                    f"avoid_first_whitespace={d.get('avoid_first_whitespace')} "
+                    f"first_whitespace_resample_tries={d.get('first_whitespace_resample_tries')}\n"
                 )
-                if "banned_ids_head" in d:
-                    f.write(f"banned_ids_head={d['banned_ids_head']}\n")
                 if "first_step_eos_prob" in d:
                     f.write(f"first_step_eos_prob={d['first_step_eos_prob']:.3e}\n")
                 if "first_step_topk_ids" in d:
@@ -398,6 +412,10 @@ def generate_default_samples(
                     f.write(f"first_step_topk_probs={d['first_step_topk_probs']}\n")
                 if "first_step_topk_text" in d:
                     f.write(f"first_step_topk_text={d['first_step_topk_text']}\n")
+                if "first_step_chosen_id" in d:
+                    f.write(f"first_step_chosen_id={d['first_step_chosen_id']}\n")
+                if "first_step_chosen_text" in d:
+                    f.write(f"first_step_chosen_text={repr(d['first_step_chosen_text'])}\n")
                 f.write("\n")
 
             new_tokens = res["new_tokens"]
@@ -429,11 +447,12 @@ def main() -> None:
     parser.add_argument("--seed", type=int, default=1234)
     parser.add_argument("--repetition_penalty", type=float, default=1.10)
     parser.add_argument("--no_repeat_ngram_size", type=int, default=3)
+    parser.add_argument("--max_repeat_token", type=int, default=3)
 
     # New
-    parser.add_argument("--ban_first_whitespace", action="store_true", help="ban whitespace-only tokens at first step(s)")
-    parser.add_argument("--ban_first_steps", type=int, default=1, help="apply first-token ban for first N decoding steps")
-    parser.add_argument("--extra_ban_token_ids", type=str, default="", help="comma-separated token ids to ban early")
+    parser.add_argument("--avoid_first_whitespace", action="store_true")
+    parser.add_argument("--first_whitespace_resample_tries", type=int, default=32)
+    parser.add_argument("--extra_ban_token_ids", type=str, default="", help="comma-separated token ids to always ban")
 
     args = parser.parse_args()
 
@@ -478,9 +497,10 @@ def main() -> None:
             debug=True,
             repetition_penalty=args.repetition_penalty,
             no_repeat_ngram_size=args.no_repeat_ngram_size,
+            max_repeat_token=args.max_repeat_token,
             seed=args.seed,
-            ban_first_whitespace=args.ban_first_whitespace,
-            ban_first_steps=args.ban_first_steps,
+            avoid_first_whitespace=args.avoid_first_whitespace,
+            first_whitespace_resample_tries=args.first_whitespace_resample_tries,
             extra_ban_token_ids=extra_ids,
         )
 
