@@ -1,0 +1,277 @@
+Samples generated with tokenizer=tokenizer/tokenizer_pretrain_nospecial.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=6)
+Once upon a time, 
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=10
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[1848, 1330, 166, 479, 139, 2645, 1929, 1439, 168, 1060]
+first_step_topk_probs=[0.33838093280792236, 0.07871551066637039, 0.051892444491386414, 0.046758975833654404, 0.04213337600231171, 0.04213337600231171, 0.0379653237760067, 0.03420959785580635, 0.030825436115264893, 0.027776023373007774]
+first_step_topk_text=['ump', 'vern', '�', 'ie', '�', 'urch', 'urs', 'ery', '�', 'io']
+
+[New tokens 1] count=256 first30=[1848, 540, 410, 261, 1576, 3895, 574, 3566, 289, 847, 349, 566, 1765, 17, 1516, 979, 15, 345, 2220, 321, 261, 2598, 290, 266, 3907, 286, 2624, 261, 1508, 2777]
+[Full output 1]
+ Once upon a time, umpire was a big boy who loved to play with his friends. One day, he went for a walk in the park and saw a little girl named Lily. She had an idea that he could play with her too! He asked Lily if she wanted to join him on the walk. Lily said yes and gave him a big hug. The next morning, Lily and Lily played together again. They were happy and tired. They learned that playing together can make you feel better. And they lived happily ever after. 
+
+ import os
+import glob
+from urllib2 import urlopen
+from datetime import date, timedelta
+from typing import List, Optional, Tuple, TypeVar, Union
+
+from .models import *
+from .utils import *
+
+def get_file_path(name: str) -> str:
+    return os.path.join(os.path.dirname( file ), name)
+
+def parse_file_type(file: str):
+  
+   # Generate a string of the format '{}' (in-place).
+   format = "{}".format(file)
+   try:
+ 
+ 
+
+================================================================================
+[Prompt 2] (prompt_tokens=9)
+In a distant future, humans and robots 
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=10
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2422, 677, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8411310911178589, 0.1588689386844635, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=['ó', 'iff', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 2] count=256 first30=[2422, 371, 485, 2434, 289, 322, 6396, 446, 266, 1320, 1818, 292, 10356, 726, 509, 645, 290, 266, 1518, 17, 202, 1414, 813, 1342, 2510, 321, 464, 332, 338, 385]
+[Full output 2]
+ In a distant future, humans and robots ó are more likely to be killed by the same kind of bacteria than they were in the past.
+The most important reason for this is that we have already learned from our own experience that some of the bacteria that cause the disease are very similar to those found in the environment. They may not be as deadly, but they do have some very high mortality rates - up to a quarter of a million deaths per year in the US alone.
+We can only hope that the new research will help us understand the mechanisms behind these diseases. We could also learn how to better understand the genetic mechanisms of these diseases. 
+
+ The University of Southern California is a member of the National Institutes of Health (NIH). The University's mission is to provide basic and applied research, medical care, and service to the public through its research, education, and communication programs.
+The University of Southern San Francisco is home to one of the largest and most diverse academic institutions in the United States. Founded in 1885, it is the world's oldest, with more than 20,000 students enrolled each year. It is one of the nation's top universities and one of the top ten U.S. academic institutions in terms of student enrollment.
+Until recently, the University
+
+================================================================================
+[Prompt 3] (prompt_tokens=10)
+The following is a news report:
+
+
+
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=10
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[1414, 8826, 54, 36, 2739, 24912, 9977, 51, 38, 4555]
+first_step_topk_probs=[0.2711830139160156, 0.1610894650220871, 0.0956912487745285, 0.09083493053913116, 0.04862043634057045, 0.04862043634057045, 0.0438106507062912, 0.041587263345718384, 0.030425887554883957, 0.023450151085853577]
+first_step_topk_text=['The', 'Re', 'S', 'A', 'In', 'Acc', 'On', 'P', 'C', 'Ch']
+
+[New tokens 3] count=256 first30=[1414, 1310, 504, 660, 2815, 290, 266, 1505, 292, 261, 629, 1838, 292, 2879, 3158, 15, 1038, 266, 9016, 3267, 3494, 338, 721, 4425, 266, 12270, 2628, 292, 266, 1593]
+[Full output 3]
+ The following is a news report:
+
+
+The company has been involved in the development of a new line of medical devices, including the newly developed device that could replace the aging version of the old version.
+
+In May 2017, the company announced it was planning to sell its technology to an international market for the next three years. 
+
+ The Hippolytus, a Greek philosopher and poet, was born on March 27, 428, in Carthage, in what is now known as the "Hippolyta" (Spanish for "the Divine Life"). His father was a priest of the Church of Rome, and his mother was a priestess of the Church. In the early days of his life he had little formal education. He spent most of his childhood in a small church, where he read Greek and Latin. He studied at the University of Salamis, then in Rome, and later at the University, where he became a teacher. At the age of eighteen he entered the Academy of Sciences, where he received his doctorate degree in philosophy from the University of Rome. He obtained his doctorate in rhetoric and philosophy under the patronage of the Roman scholar, Tertius. He also studied law, medicine, and medicine at the University College of Paris.
+
+================================================================================
+[Prompt 4] (prompt_tokens=12)
+Neural networks are a class of machine learning models that 
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=10
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[1330, 270, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8892728090286255, 0.11072725802659988, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=['vern', 'nd', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 4] count=256 first30=[1330, 31411, 317, 856, 289, 5742, 266, 897, 17, 202, 1414, 658, 286, 6175, 202, 2739, 266, 2161, 10350, 86, 15, 16280, 24624, 4621, 541, 261, 10881, 2063, 321, 8911]
+[Full output 4]
+ Neural networks are a class of machine learning models that vernacularly used to describe the world.
+Theory and theory
+In the early 1970s, Albert Einstein wrote about a universal language for computers:
+"The word 'language' is derived from the Latin word 'languas', meaning 'language'. The term was first used in 1928 by a German philosopher, Ernst Mayr, who proposed that a language was a 'multiple language' (Latin Linguistische Hochschule der Wissenschaften). In this language, a single language is defined as one with a set of rules and concepts. For example, the rules of the language of a language can be described as:
+- The language of the language consists of two parts - the meaning of the words and the rules of speech.
+- The rules of speech are in fact simple sentences.
+- A language has rules that are not only complicated but also related to it.
+- Languages have the same rules as the languages of other languages.
+- Language structures and the structure of language are similar to those of languages.
+Evolution of language
+Hegel's theory of language was based on the idea that language has many possible properties, such as being a discrete concept or a complex
+
+================================================================================
+[Prompt 5] (prompt_tokens=20)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=10
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[261, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[261, 2811, 284, 2202, 434, 68, 2811, 284, 12, 202, 202, 8860, 887, 66, 86, 578, 66, 3607, 11, 1143, 15, 1766, 2773, 202, 224, 1123, 887, 66, 3607, 11]
+[Full output 5]
+ Complete the following Python function:
+
+def add(a, b):
+    return a + b * (a + b)
+
+def set_same_name(self, name):
+  def set_name(name):
+  pass
+
+def get_locale():
+  return locale.get('settings')
+
+def create_dataset():
+  if not self.is_active():
+   raise RuntimeError("No datasets are active")
+  return None
+
+# def load_datasets(path):
+  if path is None:
+   path = Path(os.environ['OUTPUT_DIR'])
+  if os.path.exists(path): # path exists in the directory
+   else:
+  print("No datasets exist.")
+  return path
+
+# --------------------------------------------------------------------------
+#    Create a new dataset
+  dataset = load_datastore()
+  if dataset:
+  # load dataset
+   dataset = dataset.create_datasestory()
+   # save dataset
+  try:
+ 	with open(path, 'rb') as f:
+  except IOError:
+ except IOError as e
+
+================================================================================
+[Prompt 6] (prompt_tokens=23)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=10
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[270, 1731, 313, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.5985069870948792, 0.2111925482749939, 0.19030044972896576, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=['nd', ' return', ' n', '', '#', '', '"', '!', '', '']
+
+[New tokens 6] count=256 first30=[270, 325, 1282, 313, 2202, 9828, 202, 224, 224, 202, 224, 224, 1731, 8620, 11, 81, 12, 202, 202, 8860, 698, 66, 10257, 11, 81, 15, 293, 11481, 32, 29169]
+[Full output 6]
+ Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    ndim = n * 1000
+  
+   return fib(n)
+
+def get_range(n, dtype=float):
+  n = float(dtype)
+  if n == 1:
+   n = 1
+  elif n < 1:
+#    n /= 1
+   # print n
+   if n > 1:
+	print n
+  else:
+ 	print n + 1
+  return n
+
+def find_longest_lengths(lengths, length):
+  length = len(length)
+  while length <= length and length != length:
+  length += length
+   length -= length
+  return length
+
+def calc_shortest_length(length, length): 
+  length_sample = 0.0   
+
+  for i in range(length):
+ 
+  for j in range(len(length)):
+  yield length_samples[j]
+  length /= length_sampling(length) 
+
+
+def covariance_fraction(x, y):
+  x = np.random.normal
+
+================================================================================
+[Prompt 7] (prompt_tokens=25)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=10
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[1878, 1886, 351, 494, 1138, 3, 4, 2, 0, 1]
+first_step_topk_probs=[0.6006665229797363, 0.17209385335445404, 0.155069500207901, 0.03702457621693611, 0.03514556586742401, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' No', ' The', ' In', ' There', '', '!', '', '', '']
+
+[New tokens 7] count=256 first30=[1878, 17, 1138, 332, 261, 2253, 3637, 289, 464, 2380, 17, 351, 3637, 332, 7234, 414, 518, 266, 3637, 332, 763, 17, 25431, 436, 261, 9407, 17161, 289, 14306, 349]
+[Full output 7]
+ If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Yes. There is a simple answer to this question. The answer is yes - but the answer is no. Cats have a genetic tendency to breed with their offspring, but they do not breed in the same way as other breeds of dogs. It's like the genetic tendency for a cat to be black if it has a genetic trait. But if you look at the genetic gene pool, there is a very strong correlation between the two. The reason why it's so important is because there is a genetic link between the two that leads to a breed. So if you're a dog who is genetically predisposed to breed with a genetic trait, then you would have a breed with an inherited trait. And if you were a breed with a recessive trait, then your offspring would have a genetic trait that is passed on from one generation to another. So if your offspring are genetically predispired to breed with an autosomal dominant trait, then the offspring would have an autosome.
+So there is a problem with the genetic tendency. This is what we think about the reason why we should not breed with a breed that is genetically predisposing to a disease. So we have to deal with the genetic defect. We also have to deal more with the genes that
+
+================================================================================
+[Prompt 8] (prompt_tokens=21)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=10
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[351, 722, 398, 494, 324, 787, 573, 569, 893, 539]
+first_step_topk_probs=[0.4478242099285126, 0.12179234623908997, 0.0762157067656517, 0.05503925681114197, 0.054682087153196335, 0.031238161027431488, 0.029948048293590546, 0.028331782668828964, 0.027335243299603462, 0.02487282268702984]
+first_step_topk_text=[' The', ' He', ' 1', ' In', ' A', ' You', ' 3', ' It', ' For', ' "']
+
+[New tokens 8] count=256 first30=[351, 3757, 2050, 26726, 261, 7797, 7827, 261, 979, 15, 579, 332, 266, 3757, 1365, 292, 10717, 15835, 609, 1673, 290, 266, 519, 17, 54, 1910, 2249, 289, 266, 22280]
+[Full output 8]
+ John has 3 apples and buys 2 more. How many apples does he have?
+Answer: The average American eats a typical apple a day, which is the average number of apples eaten per week in the U.S., according to the USDA. The average apple's total calories are about 40 grams.
+You might think that apples are healthy but they don't! They're not. They're good for you. But they can be unhealthy if you eat them. And if you're eating them, you're consuming less than what you've got before.
+The USDA says that apples should be whole or in large pieces and not over-cooked. That means they're not unhealthy. But the USDA says that the fruits and vegetables you buy should be fresh, not cooked.
+It doesn't matter whether you get your food from a supermarket or from home. It's better to eat those foods than it is to eat them. 
+
+ The National Park Service's (NPS) National Recreation and Parks Division is responsible for protecting and promoting the national parks and monuments across the country. NPS works with local communities to protect our nation's natural resources, promote stewardship of our nation's lands, and protect the nation's land and waters.
+Together with the National Park Service, we are working to protect and enhance America's natural resources while improving our quality
+
+================================================================================
