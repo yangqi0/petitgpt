@@ -1,0 +1,579 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=6)
+Once upon a time, 
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[15, 17, 298, 289, 269, 3, 4, 2, 0, 1]
+first_step_topk_probs=[0.4921165108680725, 0.2095583975315094, 0.12448291480541229, 0.09594282507896423, 0.07789942622184753, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[',', '.', ' and', ' in', ' the', '', '!', '', '', '']
+
+[New tokens 1] count=256 first30=[15, 298, 269, 269, 269, 284, 17, 202, 16, 269, 3366, 288, 269, 269, 299, 269, 269, 10718, 17, 202, 16, 517, 330, 269, 269, 1507, 288, 269, 1745, 330]
+[Full output 1]
+Once upon a time, , and the the the f.
+- the October of the the to the the beam.
+-ord is the the still of the early is the the of the birth of the Earth of the their, the I of the discouraged of the somewhat of the Force of the to the way.
+-al, the07 of the thel of the
+--- The of the ins of the that the.
+- of the1990 of the this the of the system of the, the
+- of a different.
+-
+- and the It, and the area.
+- pattern of the might of the is theists of the beginning of the the print of the:
+- ofrequest.
+- point of the
+ alcohol of theBar of the Indian.
+-- this the to the girls.
+- In the in the throughout out of the flu of the of the in the these of the friends of the a of the would of the,, the world.
+-" of the world of the same.
+- last of the Although the3- the site of the K of the Avoid of the sufficiently of the your of the country.
+- work.
+-s.
+- andformat, the for the flowing
+
+================================================================================
+[Prompt 2] (prompt_tokens=9)
+In a distant future, humans and robots 
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 15, 17, 289, 288, 298, 299, 263, 360, 330]
+first_step_topk_probs=[0.31791001558303833, 0.23791496455669403, 0.12449534237384796, 0.054105471819639206, 0.04627886414527893, 0.04255929961800575, 0.030508898198604584, 0.016441551968455315, 0.009700575843453407, 0.00787624903023243]
+first_step_topk_text=[' the', ',', '.', ' in', ' of', ' and', ' to', ' a', ' "', ' is']
+
+[New tokens 2] count=256 first30=[269, 287, 17, 382, 269, 288, 269, 269, 269, 3533, 288, 269, 269, 339, 269, 43, 288, 269, 649, 288, 269, 269, 17, 202, 16, 3080, 269, 6840, 289, 269]
+[Full output 2]
+In a distant future, humans and robots  the an. The the of the the the answer of the the for theH of the so of the the.
+- affect the typical in the part of theling.
+- perform the the Texas of the first to the also the import the September of the the " the events, the behalf of the, the import of the houses.
+- and the), the first of the Collection of the,, the input's and the first and the v of the the entire of the Capitol of the in the plus of the theorne of the way of the heart.
+- Pacific, the complete.
+-- male- tools.
+-len- teenager
+- the the 0, the A.
+- the he might of the Americans, theocate of the concerned.
+-ones, the world.
+- current, the, and theu of the big and the most of the, and normal of the it is the story of the the population of the.
+The of the and the other, the Returns, and the Grade of the from the the original of theaw of the|| of the these of the question of theinitely of the Korean.
+- , the[ of the world. The of the its.
+- nearby,
+
+================================================================================
+[Prompt 3] (prompt_tokens=8)
+The following is a news report:
+
+
+
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[15, 17, 298, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.5983773469924927, 0.2886037528514862, 0.11301884800195694, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[',', '.', ' and', '', '#', '', '"', '!', '', '']
+
+[New tokens 3] count=256 first30=[15, 269, 2862, 17, 202, 16, 12369, 298, 318, 299, 269, 462, 288, 269, 686, 289, 269, 3318, 269, 601, 342, 299, 269, 4409, 288, 269, 269, 15, 269, 922]
+[Full output 3]
+The following is a news report:
+
+
+, therange.
+- Hu andam to theue of the its in the Now the will be to the vector of the the, the what of theaw of the age of the to the variety of the first. The past, the Does the "- the the space of the'll of theB of the school.
+- the origin of the promised to the time the system of the against the often the the law of theel, the questions of the A this the introduced of the maps of the Ke, the work of the to a Ch of the and the M.
+-.
+-pk, the as the last of the race of the selected of the There0.
+- b to the let's-t, the Wisconsin of the Constitution.
+- desire to the n of the policy the alone of the sort of the arrived of the classification of the van of the even, the fishing of the of the year.
+-), and the prohibited of the- in theplace of thez, the scheme.
+-al and the what of a involves of the history of the newthe of the, the response of the actually of the same.
+- between the brain of the These of the same, the the dioxide of the grasses
+
+================================================================================
+[Prompt 4] (prompt_tokens=12)
+Neural networks are a class of machine learning models that 
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[299, 17, 15, 298, 289, 269, 339, 419, 288, 360]
+first_step_topk_probs=[0.36010345816612244, 0.25008687376976013, 0.1485578566789627, 0.088247150182724, 0.088247150182724, 0.036405663937330246, 0.009901056066155434, 0.0076310462318360806, 0.005788981914520264, 0.005030696280300617]
+first_step_topk_text=[' to', '.', ',', ' and', ' in', ' the', ' for', ' by', ' of', ' "']
+
+[New tokens 4] count=256 first30=[299, 269, 17, 382, 636, 298, 269, 613, 17, 202, 16, 382, 15, 298, 299, 269, 17, 202, 16, 621, 17, 202, 16, 17, 202, 16, 16, 16, 202, 16]
+[Full output 4]
+Neural networks are a class of machine learning models that  to the. Theau and the other.
+- The, and to the.
+- K.
+-.
+---
+-ch of a, and or the first, the current, the
+- to theructions of the provide the advance of the 9 and in the same.
+- night of the sick.
+- in the first, and the 100 of the hold.
+-State of the other. The what is theros.
+-
+- pay youngak-
+-2-
+-1- following--=- cure-A.
+-><,
+- assist.
+-)$
+-3- this-
+-. The--- C-5-- test---30---str--- them, the, became the> of the option.
+- City- young
+-- Antarctic of the motion---.
+ and will be of the new.
+- transformation-)-'s from the
+--. out- region--- "---osity.
+-w--- structure--- over---mg--- CB--- Con--- month---))--- women-
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=1.867e-04
+first_step_topk_ids=[15, 17, 299, 66, 289, 360, 419, 12, 339, 298]
+first_step_topk_probs=[0.2568502724170685, 0.13748206198215485, 0.06294386833906174, 0.05110640451312065, 0.039389267563819885, 0.027355287224054337, 0.022210748866200447, 0.02108355425298214, 0.017118502408266068, 0.0166784655302763]
+first_step_topk_text=[',', '.', ' to', '_', ' in', ' "', ' by', ')', ' for', ' and']
+
+[New tokens 5] count=256 first30=[15, 360, 8389, 15, 298, 269, 15, 263, 3368, 15, 298, 269, 1292, 288, 269, 4452, 15, 298, 269, 17, 202, 16, 269, 444, 269, 12138, 288, 269, 2410, 15]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return, "]):, and the, a fields, and the sk of theIR, and the.
+- the from the abol of the usually, and the to the, the75 of the hands of the world. The body of the to theô.
+The spread of the137 of the end of the died of theol of the the centre of the first.
+in and the way to the selection of the March.
+-otherapy of the Bod of the money, the developing the be in the site.
+The for the Year of the 0 of the to a time.
+The of the other.
+-hard of the of the peer of the month of the, the oppose, the at the work of the F, the, the March, thebe of the differences of the for the by the, the theW of the00.
+ said.
+-- the until the "The of the Co of the party.
+-{ the conver of theill of the.
+ate therecords of theable.
+-": was the.
+sheets of the import of theian of the over the environment of the times of the), of the NASA.
+- intersection of them of the2, the in the the the to
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=2.062e-04
+first_step_topk_ids=[15, 17, 269, 66, 289, 12, 299, 360, 298, 16]
+first_step_topk_probs=[0.2363627403974533, 0.14791202545166016, 0.11400026082992554, 0.09750958532094955, 0.06101993843913078, 0.03818532079458237, 0.022683044895529747, 0.022683044895529747, 0.019401835277676582, 0.01841719076037407]
+first_step_topk_text=[',', '.', ' the', '_', ' in', ')', ' to', ' "', ' and', '-']
+
+[New tokens 6] count=256 first30=[12, 15, 298, 269, 289, 269, 34, 288, 269, 269, 86, 17, 202, 16, 21, 17, 202, 202, 16, 202, 16, 202, 323, 202, 16, 202, 202, 16, 1980, 202]
+[Full output 6]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    ), and the in the? of the thes.
+-2.
+
+-
+-
+ur
+-
+
+-25
+-
+ statements
+-
+amin
+-
+ in
+-
+ become
+-
+8
+-
+HE
+-
+),
+-
+rams
+-
+ districts
+-
+B
+-
+ Haw
+-
+ request
+-
+ some
+-
+ science
+-
+status
+-
+ --
+-
+ planning
+-
+ critical
+-
+/
+-
+ 12
+-
+ for
+-
+,
+-
+u
+-
+type
+-
+ helped
+-
+ word
+-
+ lots
+-
+ up
+-
+ relatively
+-
+pr
+-
+.
+-
+ collaboration
+-
+ primitive
+-
+G
+-
+my
+-
+ season
+-
+ fits
+-
+ and
+-
+ with
+-
+ The
+-
+active
+-
+ana
+-
+ags
+-
+indicator
+-
+ an
+-
+ the
+-
+ scale
+-
+able
+-
+ victim
+-
+a
+-
+ Anderson
+-
+ to
+-
+A
+-
+ spent
+-
+ them
+-
+ electric
+-
+
+
+================================================================================
+[Prompt 7] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=4.314e-04
+first_step_topk_ids=[269, 15, 17, 299, 263, 360, 288, 298, 382, 289]
+first_step_topk_probs=[0.48809894919395447, 0.06446104496717453, 0.06402464956045151, 0.04684143513441086, 0.03253071382641792, 0.027824992313981056, 0.020357199013233185, 0.018977150321006775, 0.012739209458231926, 0.011183911003172398]
+first_step_topk_text=[' the', ',', '.', ' to', ' a', ' "', ' of', ' and', ' The', ' in']
+
+[New tokens 7] count=256 first30=[269, 1849, 17, 382, 202, 16, 9453, 17, 202, 16, 382, 202, 16, 202, 16, 202, 202, 16, 202, 2132, 202, 16, 202, 288, 263, 202, 16, 202, 5909, 202]
+[Full output 7]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: the turn. The
+- IV.
+- The
+-
+-
+
+-
+org
+-
+ of a
+-
+ Library
+-
+ delegates,
+-
+bands
+-
+The
+-
+,
+-B
+-
+level and
+-
+oman
+-
+ benchmark
+-
+from
+-
+bys
+-
+ Shakespeare
+-
+ structure
+-
+A
+-
+ices
+-
+fl
+-
+ point
+-
+ attractions
+-
+ very
+-
+ rains
+-
+ open
+-
+ why
+-
+ for
+-
+),
+-
+zer
+-
+3
+-
+ pollution
+-
+ unwanted
+-
+RI
+-
+.
+-
+tn
+-
+ discharge
+-
+ areas
+-
+ Status
+-
+ae
+-
+ transfer
+-
+ J
+-
+ invented
+-
+ activities
+-
+ spray
+-
+elli
+-
+ Then
+-
+ without
+-
+ any
+-
+ students
+-
+ Disease
+-
+ shows
+-
+ the
+-
+ine
+-
+east
+-
+ x
+-
+ year
+-
+ Number
+-
+ D
+-
+ened
+-
+ in
+-
+f
+-
+
+================================================================================
+[Prompt 8] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=4.677e-04
+first_step_topk_ids=[360, 269, 382, 263, 288, 299, 15, 357, 17, 338]
+first_step_topk_probs=[0.1891615092754364, 0.12470291554927826, 0.11837425827980042, 0.05419568344950676, 0.03763815388083458, 0.023553352802991867, 0.023553352802991867, 0.013631636276841164, 0.010518217459321022, 0.008530459366738796]
+first_step_topk_text=[' "', ' the', ' The', ' a', ' of', ' to', ',', ' that', '.', ' A']
+
+[New tokens 8] count=256 first30=[480, 15, 298, 15, 353, 7704, 289, 269, 851, 288, 269, 3279, 288, 269, 298, 263, 6498, 17, 202, 16, 419, 269, 1144, 288, 269, 10764, 288, 269, 8035, 17]
+[Full output 8]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:per, and, ( rub in the most of the clean of the and a youth.
+- by the state of theextract of the fighting.
+The husband and to theington.
+The the.
+-ctica of theI other in the first.
+The among the health of the modules of the imp.
+The problem of the playground.
+
+- "
+"
+
+- The the group of the ref.
+-F
+-
+- The
+-
+
+-
+ elbow and the, young.
+-
+an
+-
+ including the-A
+-
+ Persons
+-
+ everything the Pacific
+-
+ cl
+-
+w
+-
+ prediction
+-
+ not
+-
+ gear
+-
+This
+-
+acter
+-
+ astronomer
+-
+ spine
+-
+ published
+-
+ Herm
+-
+#
+-
+ artistic
+-
+ in
+-
+ medical
+-
+ilingual
+-
+ opposed
+-
+lic
+-
+ Statement
+-
+ your
+-
+).
+-
+ leave
+-
+ snow
+-
+ me
+-
+that
+-
+ do
+-
+ of
+-
+
+
+
+-
+ Hill
+-
+ Exc
+-
+ project
+-
+
+
+================================================================================

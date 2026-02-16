@@ -405,14 +405,16 @@ def generate_default_samples(
         autocast_dtype = None
 
     prompts = [
-        "Once upon a time, ",
-        "In a distant future, humans and robots ",
-        "The following is a news report:\n\n\n",
-        "Neural networks are a class of machine learning models that ",
+        "Once upon a time, a curious child",
+        "The Eiffel Tower was built",
+        "In linear algebra, an eigenvalue is",
+        "Neural networks are a class of machine learning models that",
         "Complete the following Python function:\n\ndef add(a, b):\n    return",
+        "Write a Python function that returns the factorial of n:",
         "Write a Python function that computes Fibonacci numbers recursively:\n\ndef fib(n):\n    ",
         "If all cats are animals and some animals are black, can we conclude that some cats are black?\nAnswer:",
         "John has 3 apples and buys 2 more. How many apples does he have?\nAnswer:",
+        "User: I'm feeling stressed lately.\nAssistant:",
     ]
 
     out_path = Path(out_path)
