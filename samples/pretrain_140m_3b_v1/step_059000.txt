@@ -1,0 +1,306 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 418, 2857, 4928, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.7930781245231628, 0.1095910519361496, 0.058659862726926804, 0.03867091238498688, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' was', ' went', ' lived', '', '', '!', '"', '', '']
+
+[New tokens 1] count=143 first30=[2827, 5273, 2857, 299, 269, 3843, 17, 698, 418, 263, 1114, 10389, 1584, 298, 406, 699, 2245, 2595, 4453, 916, 383, 1234, 17, 776, 3766, 299, 631, 1133, 3165, 298]
+[Full output 1]
+Once upon a time, a curious child named Jack went to the park. It was a very quiet place and he had never seen anything like it before. He wanted to go back inside and see what was there. Suddenly, he heard a voice coming from the other side of the park. "Hello! What's your name?" Jack asked. The voice said, "I'm the best boy in the world!" Jack smiled and said, "Let me help you find my name." So they went on their way, but when they got home, they saw something amazing. There were two small pieces of rock that belonged to Jack. They were big and shiny. Jack knew that he could do it and he couldn't wait to get his mom.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 419, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.811277449131012, 0.18872256577014923, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', ' by', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 2] count=206 first30=[289, 1691, 6677, 419, 269, 5057, 3092, 8737, 447, 28912, 17, 202, 202, 6880, 202, 755, 1769, 1913, 15, 269, 775, 2587, 288, 269, 3483, 16, 54, 27539, 9017, 435]
+[Full output 2]
+The Eiffel Tower was built in 1763 by the architect August van Gogh.
+
+History
+In 1616, the first building of the German-Saxon settlement at Blenheim was constructed on a hill near the present site of the castle. The tower is the oldest surviving example of the Gothic style in Germany. It has been said that it is "the oldest surviving example" of Gothic architecture and its ruins are known to have belonged to the medieval period. In addition, there were other examples of Gothic architecture from the late Middle Ages (see also the Norman era).
+
+The tower was built between 1784 and 1793 by the architect Karl Heinrich Heydrich. A second tower was added in 1810 and became the main residence of the royal family in Berlin during the Napoleonic Wars.
+
+On 7 May 1791, the castle was moved to the new location of the old castle by the architect Frederick Wurttemberg. It is now part of the Castle of the House of Leopold.
+
+Gallery
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 483, 342, 6031, 359, 269, 1701, 288, 269, 18956, 288, 269, 2189, 3823, 17, 535, 482, 1832, 15, 383, 1818, 357, 339, 833, 13742, 744, 88, 2729]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be expressed as the sum of the eigenvalues of the original matrix. In this case, it means that for any scalar $u$, we have:
+
+$$||u||v|| = \frac{1}{2}u + \frac{3}{4}u + 2\cdot u^2 + ... = 0.$$
+
+Now let's apply these concepts to solve the given equation:
+
+$$\begin{align*}
+&\text{or }v(u) &= v^2 \\
+&= v^2 - 3v - 5v + 2v - 4v + 9v\\
+&=\boxed{\frac{1}{\sqrt{5}}},
+\end{align*}$$
+
+We want to find $\text{or}V(u) = V(u+v)\times V(u)$. To do so, first note that since both sides are positive, their sum will always be negative; hence, there should exist some constant $c$ such that $|V(u)|=|V(u)+v|=0$. Now, substitute back into our previous equation:
+\begin{align*}\text{or}(v^2-3v)-V(u+vi
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 1420, 491, 330, 817, 1991, 395, 3747, 1085, 5546]
+first_step_topk_probs=[0.35046660900115967, 0.16903376579284668, 0.09047725051641464, 0.09047725051641464, 0.07346178591251373, 0.05374579504132271, 0.044435884803533554, 0.019979014992713928, 0.014616959728300571, 0.013875136151909828]
+first_step_topk_text=[' can', ' allow', ' have', ' is', ' use', ' provide', ' are', ' allows', ' model', ' describe']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 9668, 298, 9668, 17, 382, 8944, 819, 288, 269, 8944, 2269, 395, 453, 649, 1047, 7749, 15, 614, 581, 491, 9328, 339, 263, 3812]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex behaviors and behaviors. The functionalities of the functional models are not so well understood, but they have implications for a variety of real-world applications.
+The functional models provide a framework for understanding the behavior of specific kinds of information. For example, the functional models could be used to simulate the behavior of different types of people in an environment. However, this approach is rarely applicable to real-world situations. Rather, it is most useful when studying how humans learn about various kinds of information (e.g., language). It provides a framework for analyzing the behavior of individuals who share similar experiences. In contrast, the functional model also provides a framework to study how human behavior relates to our everyday lives.
+In addition to being an important part of the biological sciences, there are many other areas where we may find new insights into the behavior of living organisms. This includes exploring how life forms evolve over time and how changes in their environments affect these changes. Some of these topics include:
+A new type of function called "environmental" (or "environmental") is a theory which allows us to understand the interactions between environmental conditions. Here we show how the environment itself affects the natural processes of living things. We use this knowledge to understand how
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=224 first30=[263, 647, 286, 864, 263, 647, 286, 711, 202, 6, 5062, 269, 1992, 288, 795, 1890, 298, 3408, 780, 299, 269, 1134, 4067, 17, 202, 856, 5111, 66, 2144, 11]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b * a + b
+
+
+# Get the values of two numbers and write them to the same array.
+def generate_array(x, y):
+    for i in range(len(y)):
+        if x[i] == y[i]:
+            yield x[i], y[i]
+
+    return [0, 0, 1, 0]
+
+
+# Make sure we are able to calculate the values of the two arrays.
+def find_all_values(arr, n=1):
+    """Find all the values of an array that have a given number of rows and columns.
+
+    :param arr: A list of strings with the keys 'n' and 'b'.
+    :type arr: List[int]
+    :return: The values of the array.
+    """
+    if len(arr) != 2:
+        raise ValueError("Invalid value for `arr`.")
+
+    # If there is no index, then only return the index
+    return sorted(arr[:n], key=lambda x: x[1])
+
+
+# In[ ]:
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[311, 354, 353, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.9209939241409302, 0.05419417470693588, 0.02481190115213394, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' n', ' 1', ' (', '', '#', '', '"', '!', '', '']
+
+[New tokens 6] count=256 first30=[311, 4, 1341, 353, 81, 16, 20, 18914, 13, 21, 4, 333, 354, 17, 24, 6497, 409, 6497, 637, 6497, 798, 6497, 2784, 6497, 843, 6497, 1012, 6497, 1186, 6497]
+[Full output 6]
+Write a Python function that returns the factorial of n: n! / (n-1)!*2! = 1.5 × 2 × 3 × 4 × ... × 5 × 6 × 7 × 8 × 10 × 1 = 120,000...
+
+Now let's focus on finding the sum of these numbers. We know that the sum of any number in this sequence is equal to 1. So, our goal is to find out how many different combinations of these numbers will result in a sum of exactly 100 unique pairs of numbers.
+
+Let's start by looking at an example where we want to calculate the sum of all possible combinations of n and m using the formula:
+
+sum(A) = (1/2)^3 + (1/4)^2 + (1/(2^3))^2 + ...
+
+This equation represents the sum of two binomial coefficients - $a$ and $b$, while $\frac{a}{b}$ and $\frac{c}{d}$. To get the sum of $A$ and $B$, first divide both sides of the equation by $(1/2)^{3+1}$:
+
+Sum(A) * A*(B) = 1/2 \* \frac{1}{6} = 1/4
+
+Next, multiply
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1083, 490, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.4538147747516632, 0.3684688210487366, 0.17771640419960022, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' print', ' if', '', '#', '', '"', '!', '', '']
+
+[New tokens 7] count=190 first30=[622, 8049, 11, 81, 12, 1246, 537, 1083, 311, 17, 4203, 15, 360, 81, 330, 269, 993, 288, 16429, 5, 1246, 622, 8049, 551, 1246, 537, 1083, 353, 1813, 11]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return fib(n)
+     # print n.number, "n is the number of zeros"
+     return fib()
+     # print (len(n), len(n))
+
+
+#
+# This function does not work with any other functions but it works for all kinds of things like
+# adding, subtracting, multiplying and dividing by more than one variable.
+#
+def fib_to_num(n):
+    if n == 0:
+        return '0'
+
+    return fib(1) + fib(2) * fib(3) + fib(-4)
+
+#
+import time
+from collections import defaultdict
+from typing import List, Tuple
+
+class Solution:
+    def prime(self, nums: List[int]) -> int:
+        result = []
+
+        while nums[-1] != -1:
+            result.append(nums[-1])
+            nums[-1:] += 1
+        
+        return result
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 1541, 2590, 4619, 356, 2050, 698, 1278, 338]
+first_step_topk_probs=[0.2546447515487671, 0.21780920028686523, 0.09465951472520828, 0.09465951472520828, 0.07295694202184677, 0.05066758766770363, 0.04333828389644623, 0.03905103728175163, 0.03706919774413109, 0.03340211883187294]
+first_step_topk_text=[' The', ' Yes', ' There', ' No', ' Black', ' I', ' One', ' It', ' If', ' A']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 12052, 17, 202, 43, 587, 269, 851, 1488, 1375, 288, 3191, 289, 2311, 2574, 17, 698, 415, 263, 1875, 288, 1204, 3191, 374, 914, 1593, 4887, 15]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+Hence the most common type of cat in North America. It's a species of small cat with many large eyes, ears, and legs. There are over 100 different breeds of cats in North America, but there are only about 1,000 of them in the United States. They're considered to be a "black" breed because they have no other pets.
+The most common types of cat in the US are the red-tailed hawk (Cochontus marmoratus), which is found throughout the eastern half of the country, and the white-tailed hare (Cochoeris alpina). These cats are very active, and their movements vary from person to person.
+The average size of an adult cat is 2 to 3 feet long, but it's estimated that the average length of a single litter is around 10 inches. Cats weigh between 5 to 8 pounds, though it's estimated to weigh up to 7 pounds.
+The color of a cat's skin varies depending on its color and the breed. Some cats are dark brown or black, while others are blue or brown.
+There are also several subspecies of black cat, including the gray cat, which has been used as a model for other
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 798, 1012, 2050, 409, 744, 843, 1218, 637, 0]
+first_step_topk_probs=[0.5389442443847656, 0.13913506269454956, 0.06710631400346756, 0.054486069828271866, 0.04734906554222107, 0.04423923417925835, 0.03986286371946335, 0.035919420421123505, 0.0329577699303627, 0.0]
+first_step_topk_text=[' 1', ' 4', ' 6', ' One', ' 2', ' $', ' 5', ' 8', ' 3', '']
+
+[New tokens 9] count=253 first30=[354, 18, 21, 13032, 333, 744, 22, 7, 202, 11, 20, 18, 21, 12, 22, 10941, 333, 744, 19, 17, 3459, 7, 202, 509, 3533, 330, 354, 18, 21, 10941]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1/2 apple = $3$
+(1/2)3 apples = $0.35$
+The answer is 1/2 apples, which means the average value of a whole apple is 1.14 apples. So, when you multiply an apple by itself (let's say it's 4 apples), you get a total of 1 apples. But how do we know that?
+Answer the following questions:
+- What number did he get in the first place?
+- What percentage of the total amount he got in the second place?
+Answer these questions: 1/4 apple = $4$
+Answer the question: 1/8 apple = $5$
+Answer this question: 1 apple = $6$
+Answer: 2 apple = $7$
+Answer all answers: 1 apple + $9 = $10
+Answer all results: 1 apple / 8 apple = $12
+Answer all values: 1 apple - $15
+Answer all numbers: 1 apple
+You can find your answer at http://www.jamamedia.com/articles/2008/03/16/what-number-of-cubits-in-the-second-place-and-two-places.html
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 1278, 783, 1509, 1289, 2575, 3919, 698, 1348]
+first_step_topk_probs=[0.4591115117073059, 0.1041727066040039, 0.050243645906448364, 0.04769373685121536, 0.042975667864084244, 0.03872429206967354, 0.03312264382839203, 0.031441669911146164, 0.029845979064702988, 0.025528620928525925]
+first_step_topk_text=[' I', ' The', ' If', ' This', ' You', ' We', ' What', ' My', ' It', ' How']
+
+[New tokens 10] count=98 first30=[2575, 330, 269, 851, 1384, 3467, 357, 356, 483, 620, 299, 1005, 1284, 929, 34, 202, 44, 1755, 847, 1418, 299, 342, 263, 12580, 288, 751, 288, 760, 1943, 15]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is the most important thing that I can do to help my child?
+I don't want to be a fan of some of these things, but I think it's important for me to have some more fun and positive experiences with your child as an adult. It doesn't mean you need to take on more responsibilities than you'd like them to handle, but it does make learning fun and enjoyable. The more you practice with your child, the better he or she will become.
+
+================================================================================

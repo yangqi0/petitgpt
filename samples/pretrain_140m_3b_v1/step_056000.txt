@@ -1,0 +1,243 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 2977, 418, 3609, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.8994780778884888, 0.03952030837535858, 0.0320880152285099, 0.028913676738739014, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' saw', ' was', ' asked', '', '', '!', '"', '', '']
+
+[New tokens 1] count=154 first30=[2827, 5273, 998, 3767, 289, 269, 3843, 17, 776, 418, 649, 8763, 299, 4196, 383, 357, 406, 3109, 299, 15595, 17, 14918, 15, 406, 5052, 263, 6472, 1721, 360, 4168]
+[Full output 1]
+Once upon a time, a curious child named Jack found himself in the park. He was so excited to explore it that he started to laugh. Suddenly, he heard a voice say "No!" Jack said, "It's mine! I'm here to help you." The next day, Jack went back inside and saw a big, scary monster. He ran towards him and shouted at the monster. "What are you doing?" asked Jack. "I'm running around and I want to go home," replied the monster. Jack was scared but he knew he would never come back. He knew he could always find his way home. So, Jack put on his shoes and went back outside to play with the monster. He had lots of fun playing with the monster and soon he was out of sight.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 419, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8267117738723755, 0.17328819632530212, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', ' by', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 2] count=256 first30=[289, 1691, 1590, 419, 269, 5057, 5287, 431, 17, 404, 3172, 24766, 17, 382, 10079, 418, 3385, 419, 5693, 423, 6522, 15, 263, 5178, 288, 7603, 668, 699, 733, 16265]
+[Full output 2]
+The Eiffel Tower was built in 1718 by the architect Robert W. Hitchcock. The tower was designed by Charles Ritter, a native of Ohio who had been hired to build it since the early 1800s.
+
+It is the oldest structure in the United States and one of only two structures in the world that still exists, the largest being the "Chicago" and the tallest building in the country. It is currently used for business and entertainment purposes.
+
+History
+
+In 1828, William Hitchcock made his first appearance as a town clerk in the Federalist Society, which later became the Federalist Association. In 1832, he founded the Federalist Club in New York City. He also organized the Federalist Party (the most important political party in the United Kingdom), which lasted until 1833.
+
+Hitchcock's influence on the United States was not limited to politics; he served as a delegate from the federal government to the Congress of the United States, and he was also a member of the Federalist Committee. He helped establish the Democratic National Convention in 1848, which formed the basis of the United Nations' convention in 1851. He was also a leader of the National Association of Independent Popular Electors (NAIC) in 1859.
+
+During
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 357, 483, 342, 5454, 359, 263, 1701, 288, 795, 7527, 17, 202, 202, 2774, 1427, 415, 1936, 269, 1496, 1811, 29, 4007, 269, 18956, 288, 744, 36, 65]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector that can be represented as a sum of two vectors.
+
+Now let's consider the given problem: finding the eigenvalues of $A^2$ and $B^2$, where $A$ is a symmetric matrix with coefficients $a\_1, b\_1, c\_1,$ ... , b\_n.$ We want to find the eigenvalues of the matrix $A^3$. To do this, we first need to determine its entries in the matrix $B^3$:
+
+$$B^3 = A^3 + B^3 + C^3 + 2C^2 + \dots + (A^n)^n.$$
+
+Using our assumption about the identity matrix, we know that $A^4$ has the same characteristic when it equals zero. Therefore, we must have some information about the identity matrices. For example, if $A^5=0$ and $A^6=0$, then there are no other solutions besides those mentioned above; however, we could still apply the standard basis rule to obtain a new matrix $A$ such that $A$ contains only one unique solution ($A$) for every pair of elements from $A$. However, since we cannot get any particular value from $A$
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 491, 1420, 395, 817, 330, 1991, 5546, 1085, 9847]
+first_step_topk_probs=[0.5628376603126526, 0.0700814500451088, 0.063148632645607, 0.04878087341785431, 0.03380103036761284, 0.03380103036761284, 0.03380103036761284, 0.02744429185986519, 0.020078672096133232, 0.01630260981619358]
+first_step_topk_text=[' can', ' have', ' allow', ' are', ' use', ' is', ' provide', ' describe', ' model', ' combine']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 9668, 298, 9668, 17, 382, 8944, 819, 288, 760, 2269, 395, 453, 1047, 7749, 17, 202, 509, 851, 3193, 713, 289, 482, 1505, 330]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex behaviors and behaviors. The functionalities of these models are not well understood.
+The most recent work in this area is the discovery of the neural network, which has been shown to mimic behavioral patterns and behavior. In addition, the authors found that an individual's sense of smell was very different from those of another person. They also discovered that when they were exposed to visual stimuli, their sense of smell appeared much more similar to that of others than they did to other people.
+In their paper, the authors show that the neural network is very similar to the one in which it is expressed. The two types of neural networks are similar in their structure and function.
+These findings suggest that the neural networks may have evolved independently over time. One type of neural network is the hippocampus, which is a part of the brain. It is a large brain network that contains thousands of neurons, each with its own set of neural circuits. This system would allow us to study how the brain works at different levels and how we learn and think about our environment.
+The second type of neural networks is the amygdala, which is an organ located in the brain. This group includes the amygdalas, the brain regions involved in communication
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=53 first30=[263, 647, 286, 13, 69, 711, 202, 1052, 421, 8070, 1625, 11, 5893, 464, 346, 538, 1401, 1285, 1737, 492, 15, 5439, 464, 331, 442, 17, 4467, 333, 5439, 555]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b*b
+
+
+class DummyError(Exception):
+    def __init__(self, msg):
+        self.msg = msg
+
+    def __str__(self):
+        return "Dummy error: %s" % (self.msg)
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[311, 1700, 836, 353, 269, 555, 382, 338, 81, 263]
+first_step_topk_probs=[0.5156298875808716, 0.12896232306957245, 0.11620480567216873, 0.0895625427365303, 0.02480313926935196, 0.023121671751141548, 0.02194824442267418, 0.02083437517285347, 0.01977701112627983, 0.014403789304196835]
+first_step_topk_text=[' n', ' `', ' {', ' (', ' the', '\n\n   ', ' The', ' A', 'n', ' a']
+
+[New tokens 6] count=209 first30=[311, 4, 17, 3, 711, 4750, 2062, 263, 689, 15, 715, 418, 263, 1809, 3510, 2827, 3867, 17, 1530, 6446, 299, 1143, 3099, 289, 896, 5786, 17, 2050, 1266, 15]
+[Full output 6]
+Write a Python function that returns the factorial of n: n!.
+
+Once upon a time, there was a little girl named Lily. She loved to play outside in her garden. One day, she saw a big, scary dog on the ground. The dog was scared and ran away. Lily's mom told her about how to rescue the dog. "Mommy, can you help me get home?" asked Lily. "Yes, please," replied her mom. They went to the park with their mom. They drove into the park together. When they arrived at the park, Lily saw a big bear sitting on a branch. It was so big and scary, it looked like a bird. Lily thought for a moment, then said, "Wow, that's amazing!" Her mom smiled and said, "I know, let's go back inside." Lily hugged her mom and said, â€œThank you, Mommy! You're so brave and kind.â€ She thanked her mom and went back inside the park. From that day on, Lily never forgot her story.
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.7185943722724915, 0.28140559792518616, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=60 first30=[622, 1701, 2067, 2525, 11, 76, 12, 339, 1249, 289, 1457, 11, 19, 15, 311, 11683, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 537, 1083, 11]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return sum([sum(i) for i in range(0, n)])
+
+
+if __name__ == '__main__':
+    # print(f"function {math.floor(n)}")
+    # print("fun:", f"function {len(x)}")
+    main()
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 356, 1541, 1289, 13676, 535, 698, 338, 783, 0]
+first_step_topk_probs=[0.528982937335968, 0.12305398285388947, 0.09002821147441864, 0.08112215995788574, 0.04818863421678543, 0.04121791943907738, 0.03015567548573017, 0.028625275939702988, 0.028625275939702988, 0.0]
+first_step_topk_text=[' The', ' I', ' There', ' We', ' Yes', ' In', ' It', ' A', ' This', '']
+
+[New tokens 8] count=185 first30=[382, 3533, 330, 12052, 17, 202, 509, 2597, 356, 1645, 269, 3533, 330, 649, 2829, 330, 1091, 715, 395, 808, 1623, 7571, 299, 482, 2395, 17, 1358, 383, 415, 263]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+The reason I think the answer is so simple is because there are no real answers to this question. But it's a little bit more complicated than that. In fact, you might ask how much of your feline is black? That depends on what you're looking for. So if you're looking at cats, you'd have to look at their coloration. If they don't look at their colouration, then they aren't black. If they look at their coat, then they probably aren't black or white. And if they look at them as black, then they're black.
+But the answer is very simple. When I looked at cats in general, they were black. They were black. The answer is that they're black, and they're black in most cases.
+How do you find out if your cat has black hair?
+Answer by clicking here.
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 382, 2050, 798, 409, 1541, 637, 338, 1012, 843]
+first_step_topk_probs=[0.5486580729484558, 0.19360294938087463, 0.06155772507190704, 0.04058138281106949, 0.027365591377019882, 0.024106353521347046, 0.020854033529758453, 0.020619258284568787, 0.0185795109719038, 0.016741527244448662]
+first_step_topk_text=[' 1', ' The', ' One', ' 4', ' 2', ' There', ' 3', ' A', ' 6', ' 5']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 647, 798, 10941, 333, 1604, 10941, 333, 1012, 10941, 333, 2341, 10941, 333, 1186, 10941, 333, 1218, 10941, 333, 843, 10941, 333, 1171, 10941, 333]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples + 4 apples = 12 apples = 6 apples = 13 apples = 7 apples = 8 apples = 5 apples = 10 apples = 15 apples = 9 apples = 0 apples = 11 apples = 5 + apples = 5 = 18 apples = 1 + 2*2 = .5 = .9 = .6 = .3 = .4 = .1 = .8 = .3= .7 = .3
+Remember, there are only one way to determine the number of apples you need for a single fruit? Well, we can do that by counting the number of fruits in each basket. In this case, the number of oranges is the number of times each fruit was picked from the basket. So, if I pick one fruit, I get four apples. Then I get five apples. If I pick two apples, I get six apples. When I pick three apples, I find four apples. But when I pick three or more apples, I don't pick any apples anymore.
+So, it's time to add up all those apples and count them out. For example, let's say I put all the apples in my basket and I have four apples in my house. Now, I put all those apples in my yard and I have seven
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 360, 1289, 776, 783, 3919, 2575, 338, 1509]
+first_step_topk_probs=[0.5680904984474182, 0.09094970673322678, 0.07384539395570755, 0.0512845553457737, 0.048681870102882385, 0.03752057999372482, 0.027450645342469215, 0.0260575283318758, 0.023479782044887543, 0.019064094871282578]
+first_step_topk_text=[' I', ' The', ' "', ' We', ' He', ' This', ' My', ' What', ' A', ' You']
+
+[New tokens 10] count=256 first30=[360, 44, 4575, 6968, 20103, 741, 202, 755, 482, 1832, 15, 269, 2322, 330, 1255, 360, 309, 604, 16, 6473, 5, 5579, 298, 360, 273, 12411, 283, 5, 5579, 17]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: "I'm feeling depressed."
+In this case, the treatment is called "stress-free" therapy and "enlarged" therapy. It's a combination of therapies that work to treat depression, anxiety, stress, mood swings, and other psychological issues.
+What Is Anxiety?
+Anxiety is a persistent and unpredictable condition that can cause extreme distress in many people. If you feel anxious about your emotions, it may mean you have trouble controlling or managing them. You may be able to manage your feelings with an antidepressant medication.
+If you're experiencing these symptoms, you should seek medical attention immediately. This means taking medicine as soon as possible. You will likely need to get a prescription for a new drug if you are unable to do so.
+How Can I Help?
+If you have a history of depression, talk to your doctor. He or she will give you specific instructions. Some patients also may need to take antidepressants. They may need to stop taking medications. Talk to your doctor before starting any new medication.
+Ask your doctor how much time you spend with your medication. Your doctor may ask you to stop taking certain medications on a regular basis.
+Talk to your doctor about when to start treatment. The goal is to make
+
+================================================================================

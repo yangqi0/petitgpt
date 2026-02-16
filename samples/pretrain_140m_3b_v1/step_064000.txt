@@ -1,0 +1,295 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 2977, 2446, 2857, 3609, 12562, 2, 3, 1, 0]
+first_step_topk_probs=[0.31596866250038147, 0.2565463185310364, 0.2565463185310364, 0.07350174337625504, 0.05377501994371414, 0.043661948293447495, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' saw', ' came', ' went', ' asked', ' walked', '', '', '', '']
+
+[New tokens 1] count=121 first30=[2827, 5273, 2857, 299, 269, 3843, 374, 610, 2553, 17, 776, 2977, 914, 2918, 298, 3609, 780, 490, 581, 982, 1005, 1169, 1098, 751, 1476, 17, 1358, 1000, 406, 10227]
+[Full output 1]
+Once upon a time, a curious child named Jack went to the park with his mom. He saw many animals and asked them if they could help him find some food. But then he noticed that the boy was very hungry and wanted to eat some of the food. His mom came over and said, "Yes, you can help me! I have some food for my family!" So Jack's mom gave her a big bowl of cereal. She took it out and ate it all up. Then she put it in the oven and watched as the children started eating their food. They were so happy and excited that they had eaten something yummy.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 419, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.7391713261604309, 0.2608286738395691, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', ' by', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 2] count=107 first30=[289, 1691, 1590, 298, 269, 10079, 418, 5153, 289, 925, 955, 17, 382, 10079, 330, 2827, 994, 269, 3388, 16, 29549, 26829, 15, 668, 8775, 383, 351, 610, 15310, 888]
+[Full output 2]
+The Eiffel Tower was built in 1718 and the tower was completed in 1819. The tower is named after the French-Canadian explorer, who visited it on his travels through Canada.
+
+The Eiffels were the first European settlers to build a tower in Canada. They built the tower and built a new tower in 1769, which was used by the British for their own use during the War of 1812. In 1812, the tower was rebuilt and rebuilt. In 1909, the tower again became the property of the government of the United States.
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 483, 342, 5454, 359, 269, 1701, 288, 795, 4384, 18956, 17, 783, 1818, 357, 490, 411, 491, 795, 22542, 4672, 28069, 353, 76, 17, 72, 1155, 1010]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be represented as the sum of two distinct eigenvalues. This means that if we have two linearly independent eigenvectors (i.e., each having a unique eigenvector) and the same eigenvalue has no nonzero determinant, then the entire system is considered "non-zero."
+
+Now let's consider the given problem:
+
+* We are asked to find the eigenvalues of the following system: x = 0, y = 1, z = 0, and z = 0.
+
+To solve this problem, first note that there exists a vector v in the equation:
+
+v(x + 1) = 0
+
+We want to determine whether this vector v will always be zero or not. Since both u and v are positive real numbers, their magnitudes must be negative. Therefore, our system has a solution to the equation: x = -1, y = -1.
+
+Next, we need to determine whether these vectors are non-zero. To do so, recall that any vector v in our original system can be written as the product of its magnitude (the number of basis vectors) with itself, i.e., v = 0. Thus, the vector v must also be zero since it cannot be zero due to the existence of
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 1420, 491, 395, 817, 330, 1991, 1085, 8709, 7337]
+first_step_topk_probs=[0.39803779125213623, 0.14045412838459015, 0.08343324810266495, 0.0705607458949089, 0.06104107201099396, 0.040240779519081116, 0.032672930508852005, 0.023904025554656982, 0.02044619806110859, 0.01940855383872986]
+first_step_topk_text=[' can', ' allow', ' have', ' are', ' use', ' is', ' provide', ' model', ' operate', ' enable']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 298, 5800, 3286, 17, 382, 3355, 2877, 330, 357, 269, 10462, 1798, 419, 3573, 15, 1150, 269, 2465, 1201, 330, 263, 2079, 1993, 289, 269]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model and teach behavior. The basic idea is that the learners learn by doing, while the learning process is a single step in the development of a model.
+The main difference between a machine learning model and a computer learning model is that the learner does not have to use any other language for the learning process (see Figure 1). Instead, the learner uses an interactive game or visual representation of the learning process to represent the learning process. This is done by using the user interface (for example, a Web browser) to communicate with the learner. In this way, the learner will be able to see what the learner has learned.
+There are two different ways to make the learning process more interesting:
+- A process based on the learner's knowledge about the learning process
+- A method based on the learning process's information and/or their understanding of the learning processes
+A system like a computer education model can be very effective if it is used as a tool to develop the learner's ability to understand the learning process and then teach the learner how to do so.
+The most common way to create a learning environment is through the use of virtual worlds. These are the ones that allow the learner to interact with the learning process from one perspective. This allows
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 5427, 6649, 29, 8163, 16, 27, 5427, 202, 807, 1401, 8644, 626, 655, 15551, 66, 22513, 202, 1018, 1656, 202, 1018, 306, 202, 1018]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+import os
+import re
+import time
+import urllib.request
+import json
+import subprocess
+import sys
+import requests
+import datetime
+import argparse
+import logging
+import uuid
+import operator
+import datetime as dt
+import datetime
+
+
+class AnsibleError(Exception): pass
+class AnstagesError(Exception) :
+    """An exception is raised when an anstages run fails"""
+    def __init__(self, url, timeout=None, timeout=0.5):
+        self._url = url
+        self._timeout = timeout
+        self._time = None
+        self._path = ''
+        self._version = None
+        if timeout is not None and timeout < 0.5:
+            raise AnstagesException("Invalid timeout")
+        else:
+            self._path += '/'.join(os.environ['PATH'])
+
+    @property
+    def url(self):
+        return self._url
+
+    @property 
+    def timeout(self): 
+        return self._timeout
+
+    @property    
+    def timeout(str):
+        return str.encode('utf-8')
+
+    @property
+  def timeout(int):
+        return int.
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[311, 353, 1700, 836, 354, 81, 744, 2, 1, 0]
+first_step_topk_probs=[0.497533917427063, 0.17319370806217194, 0.14814044535160065, 0.0678236335515976, 0.06111416965723038, 0.02947601117193699, 0.022718071937561035, 0.0, 0.0, 0.0]
+first_step_topk_text=[' n', ' (', ' `', ' {', ' 1', 'n', ' $', '', '', '']
+
+[New tokens 6] count=256 first30=[311, 4, 333, 354, 6497, 353, 81, 16, 20, 12, 6497, 353, 81, 14, 21, 18914, 1341, 409, 4, 11, 81, 7136, 20, 18914, 202, 202, 4551, 415, 1137, 806]
+[Full output 6]
+Write a Python function that returns the factorial of n: n! = 1 × (n-1) × (n+2)! / 2!(n−1)!
+
+Let's see how this works in practice. First, we need to find the number of ways to choose n items from a set containing n items without regard to order. Let's call our new list {a\_1, a\_2, ..., a\_k} and its corresponding factorial of k, which is n! / {k!(n - k)!}. Then, we can write down the formula for finding the product of all possible combinations of these two values:
+
+P(n=0) = P(n!=(n-1)) * (n-2)! / ((n-1)!(n-2)).
+
+Now, let's move on to the next step—finding the factorial of each combination of n items within the sequence {a\_i}, where i ranges between 0 and n. We will also calculate the factorial of any pair of n items in the sequence {n-1, n-2, ... , n-k}. This will give us the desired result:
+
+$${a\_1 + a\_2 + ... + a\_k}{n!(n
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=150 first30=[622, 1701, 11, 2525, 11, 20, 15, 552, 20, 12, 339, 1249, 289, 1457, 11, 1813, 11, 81, 687, 490, 311, 62, 76, 64, 861, 354, 1107, 552, 20, 12]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return sum(sum(1, -1) for i in range(len(n)) if n[i] == 1 else -1)
+
+
+#    def f(x):
+#        return x * np.exp(-0.5*np.pi*(x-0.5)*np.log(2), axis=0)
+#        print("f:",f(x))
+#        #print("f:",np.exp(0.5)+np.exp(-1.5*numpy.pi/np.pi*np.log((-0.25+np.exp((-0.*np.pi/3)))*numpy.log(3)), axis=0))
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 535, 1238, 13676, 356, 1278, 338, 698, 1289]
+first_step_topk_probs=[0.3227841258049011, 0.1477813422679901, 0.0833306759595871, 0.05787200853228569, 0.05214700475335121, 0.04950055107474327, 0.04698839783668518, 0.044603701680898666, 0.04234006255865097, 0.04234006255865097]
+first_step_topk_text=[' The', ' There', ' In', ' As', ' Yes', ' I', ' If', ' A', ' It', ' We']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 12052, 17, 202, 43, 1477, 395, 269, 851, 1488, 1875, 288, 3191, 289, 269, 1560, 1705, 17, 1109, 2915, 289, 1204, 2294, 288, 795, 299, 1679, 973]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+Hats are the most common species of cat in the United States. They live in small groups of two to four years. In fact, it has been estimated that there are about 25 million cats in the U.S. Today, they are found only in California and Florida. They breed in large numbers throughout their lives.
+The reason for this is that cats have a natural instinct to make decisions and that they must rely on their parents for information and attention. Cats also need to be able to recognize when something is wrong or what is happening to them. It's important to note that cats are not alone in their social life. Some people may try to avoid being aggressive toward others as much as possible. Others may try to keep their eyes open by using their ears to catch objects and then trying to find another person who is friendly.
+In addition to having an instinctive attitude towards other cats, many cats are very intelligent and possess a sense of humor. This means that they will always speak with you and your family members if you are worried about your pet.
+Most cats are born free and open to the public. If you think that your cat might be lonely or sick, you should take steps to help him or her develop a positive
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 2050, 382, 798, 409, 338, 1012, 1541, 637, 2590]
+first_step_topk_probs=[0.5601341128349304, 0.11741048097610474, 0.1057957336306572, 0.05965590849518776, 0.0331847108900547, 0.025926358997821808, 0.024610575288534164, 0.01896812953054905, 0.014685655944049358, 0.014619309455156326]
+first_step_topk_text=[' 1', ' One', ' The', ' 4', ' 2', ' A', ' 6', ' There', ' 3', ' No']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 647, 354, 27320, 333, 1604, 10941, 333, 1012, 10941, 333, 2341, 10941, 333, 1186, 10941, 333, 925, 10941, 333, 843, 10941, 333, 2234, 10941, 333]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples + 1 banana = 12 apples = 6 apples = 13 apples = 7 apples = 18 apples = 5 apples = 14 apples = 15 apples = 17 apples = 21 apples = 26 apples = 24 apples = 25 apples = 18 oranges = 22 apples = 29 apples = 30 apples = 30 oranges = 27 apples = 40 apples = 31 apples = 32 apples = 34 apples = 35 apples = 33 apples = 36 apples = 36 bananas = 35 apples + 3 apples = 52 apples = 49 apples = 44 apples = 45 apples = 46 apples = 55 apples = 54 apples = 53 apples = 63 apples = 61 apples = 62 apples = 63 fruits = 62 apples + 3 fruits = 62 fruits = 63 apples + 3 fruit = 65 apples = 65 apples + 3 vegetables = 63 apples and not less than half of the total number of apples that are left in a bag of apples is an apple!
+What do you think about this? Is it just another matter of fact, or is there some other cause for concern? If so, what do you think happens when you consider the question "How can I get rid of all my apples?"
+Answer: You need to understand that apples are a good thing because they're good for your health. You need to know that
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 1509, 382, 1278, 2575, 698, 1289, 783, 3919, 2069]
+first_step_topk_probs=[0.6619348526000977, 0.05495365336537361, 0.049517400562763214, 0.03816455230116844, 0.032643873244524, 0.030987197533249855, 0.026504753157496452, 0.02388276718556881, 0.022670716047286987, 0.017473004758358]
+first_step_topk_text=[' I', ' You', ' The', ' If', ' What', ' It', ' We', ' This', ' My', ' So']
+
+[New tokens 10] count=256 first30=[2575, 330, 669, 2942, 34, 202, 16, 437, 3156, 42, 1012, 401, 12706, 2544, 8396, 9348, 202, 16, 20142, 17273, 6860, 601, 342, 2222, 299, 29, 202, 16, 26608, 269]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience?
+- ECOG 6th Grade English Language Arts
+- Kindergarten Students will be able to:
+- Understand the difference between "touch" and "mimic".
+- Use language in their own lives, using a variety of different words, phrases or images (e.g., "he/she likes you", "you are nice")
+- Use vocabulary in writing, speaking, listening, reading, and speaking.
+- Use and understand how these words relate to each other and to the world around them.
+- Develop vocabulary by having students use words from the same context as they do in a book.
+- Learn about how words fit together in a sentence.
+- Have students think about what it means to have different meanings in a sentence, such as "I am very happy."
+- Have a classmate complete a dictionary with all the words that can be found in a book, including those that can be seen on the inside of a desk.
+- Provide students with a list of words for the purpose of reading, discussing and discussing the meaning of the word.
+- Create a chart that shows which words are most common in a given area.
+- Include at least one word that has the
+
+================================================================================

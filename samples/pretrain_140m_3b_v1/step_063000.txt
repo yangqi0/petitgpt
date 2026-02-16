@@ -1,0 +1,282 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2446, 2827, 418, 2857, 2977, 12562, 3609, 791, 1255, 5349]
+first_step_topk_probs=[0.2989718019962311, 0.16002807021141052, 0.14419740438461304, 0.1054970771074295, 0.09506084769964218, 0.08565693348646164, 0.04131324589252472, 0.02723538875579834, 0.022113388404250145, 0.019925836473703384]
+first_step_topk_text=[' came', ' named', ' was', ' went', ' saw', ' walked', ' asked', ' would', ' called', ' appeared']
+
+[New tokens 1] count=130 first30=[1255, 5273, 418, 289, 269, 3843, 17, 1530, 2977, 7336, 288, 613, 4355, 4438, 298, 7518, 17, 2050, 1266, 15, 1024, 998, 263, 2023, 3147, 289, 896, 23712, 17, 698]
+[Full output 1]
+Once upon a time, a curious child called Jack was in the park. She saw lots of other kids playing and exploring. One day, she found a big rock in her backyard. It was very shiny and had many colors on it! Jack was so excited that he ran over to it and played with it all day long. As soon as she got home, she asked her mom if she could play too. Her mom said yes and they both went inside. When they were done playing, Jack's dad gave her a big hug and hugged her. She smiled and thanked him for being so helpful. From then on, Jack always remembered to be careful when playing with his friends.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 419, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.794809877872467, 0.20519010722637177, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', ' by', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 2] count=68 first30=[289, 269, 3750, 16, 955, 401, 2162, 419, 269, 3483, 5057, 17160, 309, 426, 5705, 75, 15058, 17, 202, 202, 509, 10079, 330, 269, 839, 15299, 2982, 289, 4616, 15]
+[Full output 2]
+The Eiffel Tower was built in the mid-19th century by the German architect Ernst Führer.
+
+The tower is the only surviving structure in Germany, but it has been restored and opened to the public for the first time since its completion in 2010. The tower also houses a museum, which will be open from March through June 2013.
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 289, 269, 2281, 6603, 357, 3399, 545, 1812, 18956, 288, 263, 1496, 3823, 17, 1220, 1373, 15, 490, 411, 491, 263, 409, 91, 21, 3823, 374, 28069, 435]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector in the complex plane that contains all possible eigenvalues of a given matrix. For example, if we have a 2x2 matrix with eigenvectors at the origin and two eigenvector vectors in the complex column, then the characteristic polynomial (the characteristic polynomial) of this matrix will be:
+
+(1/3) * (1/3)^T^n + (1/5)^T^k^n = 1/(1+0*cos(θ))^T^n
+
+Here, we assume that the determinant of the matrix is zero, so the characteristic polynomial of the second-order homogeneous matrix has only one nonzero eigenvalue. Since the eigenvectors are not zero, there exists no other solution for the determinant. Therefore, the characteristic polynomial must be zero since it cannot satisfy the equation 0 = 0. However, because the determinant is zero, there exist solutions to the quadratic equation ax^2 + bx + c = 0 where b is any real number. This means that the characteristic polynomial has no unique solution for the eigenvalue.
+
+Now let's consider some examples of eigenvalues of the form (a,b,c):
+
+1. x^2 - y^2 + 3y - 6 = 0
+2. x^3 -
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 491, 1420, 817, 395, 330, 1991, 14071, 5663, 3747]
+first_step_topk_probs=[0.27412763237953186, 0.16283883154392242, 0.13221478462219238, 0.07076947391033173, 0.06319358944892883, 0.046654101461172104, 0.04203883558511734, 0.023704806342720985, 0.021359803155064583, 0.018270008265972137]
+first_step_topk_text=[' can', ' have', ' allow', ' use', ' are', ' is', ' provide', ' incorporate', ' involve', ' allows']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 6811, 2304, 17, 202, 2573, 330, 263, 3812, 288, 4864, 288, 14457, 8119, 15, 1433, 29, 202, 16, 609, 387, 1443, 353, 72, 17]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex biological systems.
+There is a variety of classes of neural networks, including:
+- Stem cell (e.g., stem cells) and brain tissue (e. grafts).
+- Brain and spinal cord (e. hyperextensional) networks for the control of movement and cognition.
+- Neuronal networks (e. dendritic cells) for the control and other types of sensory and motor functions.
+- Neurotrophic networks (eigen-neuron neurons) for the regulation of motor function.
+- The use of neural networks in the development of cognitive skills.
+- Aging.
+- Memory loss.
+- Anxiety.
+- Vestibular disorders.
+- Cerebral palsy.
+- Rheumatic diseases.
+- Brain injury.
+- Head injuries.
+- Rehabilitation.
+- Injury prevention.
+- Physical therapy.
+- Cognitive rehabilitation.
+- Behavioral health management.
+- Recovery from trauma.
+- Disability related problems.
+- Loss of memory.
+- Uncontrolled anxiety.
+- Interpersonal and social skills.
+The neural network of a person with dementia may include:
+- Abnormalities
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=118 first30=[263, 647, 286, 3, 711, 6, 19688, 419, 18122, 409, 17, 21, 17, 26, 351, 9697, 16, 5559, 16, 2725, 1720, 29, 6974, 202, 202, 807, 5210, 17, 2541, 655]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# Generated by Django 2.2.7 on 2019-09-24 15:52
+
+from django.db import migrations, models
+
+
+class Migration(migrations.Migration):
+
+    dependencies = [
+        ('main', '0006_auto_20210516_1151'),
+    ]
+
+    operations = [
+        migrations.AlterField(
+            model_name='post',
+            name='product',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='main.Product'),
+        ),
+    ]
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[81, 311, 1700, 263, 353, 555, 354, 338, 651, 520]
+first_step_topk_probs=[0.3123184144496918, 0.273258239030838, 0.062143124639987946, 0.05599560588598251, 0.05315382778644562, 0.04315750300884247, 0.038888171315193176, 0.024335594847798347, 0.024335594847798347, 0.02310054562985897]
+first_step_topk_text=['n', ' n', ' `', ' a', ' (', '\n\n   ', ' 1', ' A', ' [', ' k']
+
+[New tokens 6] count=256 first30=[520, 4, 333, 354, 15, 913, 446, 78, 10, 3936, 269, 993, 288, 2722, 299, 4833, 520, 4282, 444, 263, 854, 17, 698, 330, 1384, 299, 4310, 357, 269, 1392]
+[Full output 6]
+Write a Python function that returns the factorial of n: k! = 1, where 'k' represents the number of ways to choose k items from a set. It is important to note that the function has two possible outcomes when calling it. The first outcome occurs when the number of unique combinations in the set gets smaller than or equal to the number of distinct permutations.
+
+In our case, since there are n options for choosing k items from the set, we can think of each option as having a different combination of permutations and then assigns them to each individual item based on its position within the list. This idea is crucial because once you select a particular element, you might want to consider how many times it is taken (in this case, there are 5 items) to generate the factorial of any given item.
+
+Next, let's discuss the concept of a "number" in the context of the problem statement. Given a set X of integers, the total number of elements in X is denoted by X^n, where n is an integer greater than or equal than 4. When dealing with sets containing more than 2, there may exist multiple ways to perform these operations while still retaining some elements in the set. However, if we wish to avoid using a bitwise operation like adding or subtracting, we need to
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1083, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.6746222376823425, 0.32537776231765747, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' print', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 8049, 11, 81, 12, 1246, 202, 856, 8049, 66, 4203, 11, 81, 464, 346, 622, 8049, 11, 20, 647, 311, 12, 202, 202, 6, 338, 993, 330, 263, 7534]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return fib(n)
+    
+def fib_number(n):
+    return fib(1 + n)
+
+# A number is a binary string with one or more digits, so it can be used to find the smallest number of digits in the string.
+# The length of each digit depends on whether the string has a 'a' or 'b'. For example, if 'a' and 'b' are integers, then the first digit is 'b', and the second digit is 'c'.
+# The number of digits is given by the binary string. If the string has three digits, then the number of digits must be less than the number of consecutive digits.
+# This function returns the number of numbers in the string as the first digit.
+
+# The longest possible value is (0, 0).
+# The shortest possible value is 1.
+#
+# The largest possible value is 2.
+#
+
+
+def fib2(n):
+
+    # The longest possible number is (0 - 1), so we have to use the number 1 for the longest possible value.
+    # If the string is not very long, then we have to find the least possible value.
+
+    # The shortest possible number is 4.
+    #
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 1289, 13676, 2050, 535, 698, 783, 2590, 338]
+first_step_topk_probs=[0.36893048882484436, 0.21915413439273834, 0.09524402022361755, 0.0773320347070694, 0.050980448722839355, 0.04839314892888069, 0.031902749091386795, 0.03028365969657898, 0.027287868782877922, 0.02590298466384411]
+first_step_topk_text=[' The', ' There', ' We', ' Yes', ' One', ' In', ' It', ' This', ' No', ' A']
+
+[New tokens 8] count=256 first30=[1289, 491, 263, 1543, 4560, 288, 1170, 672, 269, 1629, 298, 11007, 953, 17, 783, 330, 1091, 411, 1118, 357, 829, 1629, 330, 7769, 288, 6619, 9821, 2286, 1255, 10806]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: We have a great deal of information about the body and nervous system. This is because we know that our body is composed of tiny nerve cells called lymphocytes. These cells are responsible for regulating temperature, temperature, heart rate, blood pressure, metabolism, and other functions. Our bodies also contain many cells which make up the organs of the body. The immune system is very important in the development of diseases like AIDS, cancer, diabetes, arthritis, allergies, asthma, and Parkinson's disease. In addition to these organs, the body produces hormones which help us to regulate our bodily systems. For example, adrenal glands produce adrenaline, which is a hormone produced by the adrenal gland. When we eat food or drink, it makes us feel fuller and less tired. When we sleep, it makes you feel more energetic and alert. We have two types of adrenal glands. One type is the adrenal gland, which contains a hormone that helps us to get rid of toxins from our environment. Another type is the pituitary gland, which is made up of glands that store fat. They release hormones into the bloodstream. These hormones then travel through the bloodstream to your brain. All of this happens over time, and when we do not take in enough energy, our body can't get
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 382, 2050, 798, 1541, 1012, 409, 637, 2590, 3744]
+first_step_topk_probs=[0.44978421926498413, 0.1954754889011383, 0.1288653463125229, 0.04097388684749603, 0.03692053630948067, 0.029977135360240936, 0.029438933357596397, 0.02049129083752632, 0.01976213976740837, 0.017807183787226677]
+first_step_topk_text=[' 1', ' The', ' One', ' 4', ' There', ' 6', ' 2', ' 3', ' No', ' First']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 202, 1465, 330, 263, 2829, 2395, 357, 483, 342, 14531, 419, 263, 3127, 289, 269, 1173, 17, 698, 601, 1005, 780, 1557, 806, 299, 5224, 269]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4
+This is a simple question that can be answered by a student in the class. It will help them understand how to calculate the number of apples they have when they grow up from the ground up, and how to estimate the number of times each fruit grows over time.
+The student will also need to know how to calculate a value for each fruit that it grows over time based on its growth rate. The student will then use this information to find out what happens if we take into account the size of each fruit.
+We will then use the following formula to calculate the total amount of fruit given the height of each fruit you plant (or any other fruit) during your growing process.
+For example, if I grew up in a large city with lots of trees, I would measure the area of each tree by the length of the trunk and the diameter of the tree. This would give me an idea of how long my family's trees are. If I live in a small city with lots, I could make a list of all the trees that I grow in and around my house. For example, if my family had a big yard, I could count the number of trees in each yard and put it down. If my family was growing large trees
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 783, 3919, 1278, 1289, 338, 360, 2575, 1509]
+first_step_topk_probs=[0.5363578200340271, 0.08300165086984634, 0.04003257676959038, 0.03085431270301342, 0.029288457706570625, 0.02780207060277462, 0.02780207060277462, 0.02639109268784523, 0.02639109268784523, 0.025051744654774666]
+first_step_topk_text=[' I', ' The', ' This', ' My', ' If', ' We', ' A', ' "', ' What', ' You']
+
+[New tokens 10] count=256 first30=[2575, 330, 263, 360, 17350, 5, 1419, 34, 202, 43, 1640, 25205, 29, 5531, 15, 269, 2475, 360, 17350, 5, 330, 1114, 1488, 289, 914, 9420, 298, 383, 415, 2410]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is a "healthy" person?
+HARRY: Well, the word "healthy" is very common in many cultures and it's usually referred to as a healthy one. In fact, when we think about being overweight or obese, we tend to say that you have a body mass index (BMI) of 30 or higher. This means that if you are not physically active, you may be at greater risk for heart disease and diabetes. It can also mean that you are overweight or obese. You might feel sicker than normal but you might not be able to eat enough food and drink enough water. You may be more prone to developing certain conditions such as heart failure or cancer. There are other health risks associated with being overweight. But there are some things that increase your chance of getting heart disease and type 2 diabetes. These include being inactive, having too much alcohol or drug use, eating less or exercising regularly, and having high blood pressure. So if you're obese, it is important to keep track of your health history. If you're obese or have low blood sugar levels, you should know what to do. If you want to make sure you're getting enough sleep, try these simple tips:
+- Eat right. Eating well can help prevent heart
+
+================================================================================

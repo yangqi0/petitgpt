@@ -1,0 +1,273 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2446, 2827, 5349, 418, 12562, 2857, 2977, 1255, 3609, 0]
+first_step_topk_probs=[0.2180856317281723, 0.1965116560459137, 0.1295485496520996, 0.1295485496520996, 0.11673282831907272, 0.07695507258176804, 0.04571327567100525, 0.04571327567100525, 0.04119108244776726, 0.0]
+first_step_topk_text=[' came', ' named', ' appeared', ' was', ' walked', ' went', ' saw', ' called', ' asked', '']
+
+[New tokens 1] count=197 first30=[1255, 5273, 418, 7948, 289, 269, 3843, 17, 202, 5, 44, 3766, 299, 631, 1842, 961, 988, 5273, 17, 360, 1693, 415, 649, 6604, 17, 356, 1418, 299, 1143, 374]
+[Full output 1]
+Once upon a time, a curious child called Jack was walking in the park.
+"I wanted to go home," said Jack. "It's so pretty. I want to play with my friends." But when he came back from school, he saw that his parents were not watching him and they had to take turns to run away. Suddenly, Jack heard a voice behind him. It was a little girl named Lily who was playing with her. She told Jack about the boy and the dog. Jack smiled and said, "Hello, my name is Jack. Do you want to play?" The boy replied, "Yes, please!" He ran around the playground and laughed and played with his friends. They all had fun together. When it was time for Jack to go home, the boy asked Jack if he could come along. Jack said yes, but he did not get off the ground. Jack thought of himself and then went on his way. He knew that he would always be there to help his family.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 419, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8411308526992798, 0.1588691920042038, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', ' by', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 2] count=136 first30=[289, 1691, 6843, 419, 269, 5057, 4385, 12646, 3663, 15, 298, 418, 619, 288, 269, 775, 4954, 299, 342, 7713, 289, 3733, 17, 202, 755, 925, 1980, 15, 263, 719]
+[Full output 2]
+The Eiffel Tower was built in 1781 by the architect William Bradford, and was one of the first structures to be constructed in England.
+In 1825, a new building was completed at the top of the tower. It is named after the engineer who designed it. The tower was added in 1826, and is still used today as the official symbol of the city.
+By 1832, the tower had been rebuilt for use as a clock tower and also served as a museum for the English Civil War. In 1835, the tower was again demolished and replaced with the original building. This time the tower was moved to its present location in 1830.
+The tower has been restored since then.
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 483, 342, 6031, 359, 269, 1701, 288, 795, 7527, 289, 619, 4409, 1926, 17, 535, 482, 1832, 15, 411, 601, 13895, 269, 10294, 8537, 419, 2714, 4820]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be expressed as the sum of two vectors in one vector space. In this case, we will denote the eigenvector by $\lambda_1$ and the eigenvectors by $\lambda_{2}$.
+
+The eigenvalue associated with the eigenvector is given by:
+
+$$ \lambda_{2} = \frac{1}{2}\cdot\lambda_{3}$$
+
+where $F(x)$ denotes the eigenvalues of the system. This means that the eigenvector has an inverse, which we denote as $F(\lambda)$. The eigenvalues are known to be scalar multiples of each other, denoted by $\lambda$. Since there exists a nonzero vector $w$ such that $\lambda_{w}=0$, it follows that $\lambda_i=0$; thus, we have:
+
+$$\lambda_{i}=\lambda_{j}\left[\lambda_{j-1}^{i-1}(w-\lambda_{j})^2+i\lambda_{k-1}^{j-1}(z-1)\right]=\lambda_{j}-1.$$
+
+Now let us consider the second term, $\lambda_{n}$:
+
+$\lambda_{n}=0$. It should be clear that if $f:\mathbb{R}^
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 491, 1420, 395, 817, 330, 1991, 1085, 5546, 713]
+first_step_topk_probs=[0.5280540585517883, 0.11068625748157501, 0.08987022191286087, 0.048983410000801086, 0.0390574112534523, 0.035193685442209244, 0.035193685442209244, 0.022023644298315048, 0.01611284352838993, 0.015295102261006832]
+first_step_topk_text=[' can', ' have', ' allow', ' are', ' use', ' is', ' provide', ' model', ' describe', ' work']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 9668, 298, 9668, 17, 202, 509, 1549, 2613, 330, 1164, 656, 288, 7453, 288, 12473, 15, 1010, 374, 686, 1231, 854, 288, 14457, 8119]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex behaviors and behaviors.
+The human brain is made up of millions of neurons, each with its own set of neural networks. The brain is made out of thousands of neurons, which are connected together by hundreds of connections between them.
+When you move your brain around in an effort to get the right shape, you will feel more like you're sitting at your desk. This means you'll have more energy to do what you want. And when you move your body, it's more likely to be like you're standing on a hill or climbing stairs.
+It's not as if you're moving your body to make a decision about where you should go next.
+But the brain is made of neurons. It's made up of nerve cells that are connected to a network of neurons called the axon. Each neuron has two main parts: the axon itself and the axon, located in the axon's axon center.
+The axon controls the movement of the brain through the spinal cord. When you move your head, the axon sends signals from the brain to your brain.
+To create this visual system, your brain uses special light sensors to measure how much light was reflected off your head. A sensor measures how many
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 353, 284, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.8805028796195984, 0.09878967702388763, 0.020707443356513977, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', ' (', ' f', '', '#', '', '"', '!', '', '']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 6649, 32, 7165, 16, 27, 202, 1018, 1656, 202, 807, 4894, 655, 4894, 202, 202, 1018, 7632, 202, 202, 807, 5210, 17, 5099, 655]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# coding=utf-8
+import os
+from datetime import datetime
+
+import pytest
+
+from django.conf import settings
+from django_djangos.models import DjangosModel
+from django import forms
+from django._utils import timezone
+from django.__forms__ import FormField, TextInput, BooleanField, FloatField, IntegerField, StringField, Enum, CharField, DateTimeField, DateField, BooleanField
+from django2 import serializers
+from django3.contrib.auth.models import User
+from django4.db.models import Q
+from django5.core.mail import EmailMessage
+from django6.core.urlresolvers import reverse
+from django7.core.exceptions import ValidationError
+from django8.apps import apps as apps
+from django9.utils.timezone import utcnow
+from django15.views.generic import TemplateView
+from django16.utils.translation import gettext_lazy as _
+
+from .models import Comment
+from django17.utils.text import slugify
+from django18.utils.html import format_html
+from django14.utils.encoding import force_unicode
+from django19.utils
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[311, 353, 1700, 836, 338, 382, 555, 7492, 263, 269]
+first_step_topk_probs=[0.6628341674804688, 0.08538408577442169, 0.04118165373802185, 0.030129140242934227, 0.028600089251995087, 0.02714860811829567, 0.025770818814635277, 0.019862348213791847, 0.017695968970656395, 0.016163520514965057]
+first_step_topk_text=[' n', ' (', ' `', ' {', ' A', ' The', '\n\n   ', ' $$', ' a', ' the']
+
+[New tokens 6] count=256 first30=[311, 4, 333, 353, 81, 16, 20, 18914, 1341, 353, 81, 16, 21, 12739, 202, 202, 1465, 2859, 2668, 383, 3831, 299, 1557, 298, 17607, 269, 1496, 2944, 17, 3318]
+[Full output 6]
+Write a Python function that returns the factorial of n: n! = (n-1)! / (n-2!)
+
+This code makes it easy to understand and manipulate the given functions. Now, let's try another example using the function `f(x) = x^3 - 4*x + 6`. We will calculate the factorial of this function step by step:
+
+Step 1: Identify the positive integers:
+```python
+f(x)=3*x+6=5*x^3 - 5*x - 3*x + 2**x^2 - 1
+f(0)=(x - 3)/(-4)*x^2 + y^2/(-4)*(x - 3))
+f(1)=(x + 2)/(x + 3))
+
+Next, we need to find the number of ways to select two distinct prime numbers:
+
+Number of ways to choose k-1 for f(k):
+
+Number_of_prime_numbers = Number_of_f_prime_number * f(k)
+
+For k, there are three possibilities depending on whether k is odd or even:
+
+* When k is odd, both factors must be odd: f(k)^2 = 0 => f(k)(
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1083, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.6026851534843445, 0.39731481671333313, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' print', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=106 first30=[622, 1701, 11, 2525, 2067, 78, 339, 520, 289, 311, 490, 520, 3158, 643, 5592, 1246, 622, 1701, 2067, 76, 339, 1249, 289, 1457, 11, 1813, 11, 81, 687, 1122]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return sum(sum([k for k in n if k != 0]))
+     return sum([i for i in range(len(n))])
+
+
+# print(f"Splitting {number} of {n} elements from {n+1} to {n-1} nodes")
+print(f"Flattening {number} with {n} nodes.")
+print(str(f"Total {n} {n} total nodes, {n+2} nodes."))
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 13676, 1289, 356, 698, 1278, 535, 783, 1238]
+first_step_topk_probs=[0.5579761862754822, 0.12321123480796814, 0.05641021579504013, 0.05082982778549194, 0.043477050960063934, 0.04127059504389763, 0.035300612449645996, 0.03180849179625511, 0.019905243068933487, 0.019905243068933487]
+first_step_topk_text=[' The', ' There', ' Yes', ' We', ' I', ' It', ' If', ' In', ' This', ' As']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 12052, 17, 202, 43, 1477, 395, 269, 851, 1488, 1875, 288, 3191, 289, 269, 1560, 1705, 17, 1109, 395, 998, 3050, 269, 2027, 1722, 351, 7111, 5003]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+Hats are the most common species of cat in the United States. They are found throughout the country except on Long Island. Hats are one of the few breeds of cats to be listed as a subspecies of the same breed. A cat's black color ranges from yellow-brown with darker spots along the back and chests. Some cats have dark stripes on their tails which may indicate they are black or brown. A cat may also have white underparts and red legs. In the wild, cats often show no signs of being black. Cats are known for their white fur and can be seen at any time of year. The black markings on their bodies are often visible when a cat is not looking out for food. The cat's black spots on its body are caused by a fungus called Candida albicans. Other factors such as the presence of the fungus include the size of the animal and the appearance of the animal.
+The most common causes of black cat attacks are:
+In addition to black cat attacks, there are other causes of black cats, including:
+Cats who get black cats often develop a skin condition called psoriasis. This condition can cause black cat bites.
+Symptoms and Types
+There are two main types
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 382, 798, 2050, 409, 843, 1012, 744, 637, 698]
+first_step_topk_probs=[0.5048884749412537, 0.13034315407276154, 0.07742715626955032, 0.07742715626955032, 0.03872179612517357, 0.028782127425074577, 0.028782127425074577, 0.02461865544319153, 0.02461863122880459, 0.0199887715280056]
+first_step_topk_text=[' 1', ' The', ' 4', ' One', ' 2', ' 5', ' 6', ' $', ' 3', ' It']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 647, 1012, 10941, 333, 1604, 10941, 333, 1291, 10941, 333, 409, 10941, 333, 354, 13032, 333, 1218, 10941, 333, 843, 10941, 333, 354, 9105, 333]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples + 6 apples = 12 apples = 9 apples = 2 apples = 1 apple = 8 apples = 5 apples = 1 cup = 4 apples = 1 pint = 1 patt = 1 pw = 1 ph = 1 pb = 1 pc = 1 pd = 1 pdd = 1 pnd = 1 pcd = 1 prd = 1 pst = 1 pth = 1 pt = 1 ps = 1 pg = 1 pgs = 1 pcs = 1 pft = 1 pct = 1 p2 = 1 p3 = 1 p4 = 1 p5 = 1 p6 = 1 p7 = 1 p8 = 1 p9 = 1 p10 = 1 p11 = 1 p12 = 1 p13 = 1 p14 = 1 p15 = 1 p16 = 1 p17 = 1 p18 = 1 p19 = 1 p22 = 1 p23 = 1 p24 = 1 p25 = 1 p26 = 1 p27 = 1 p33 = 1 p34 = 1 p37 = 1 p38 = 1 p42 = 1 p43 = 1 p46 = 1 p48 = 1 p47 = 1 p52 = 1 p55 = 1 p56
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 338, 2766, 783, 1289, 421, 404, 360, 776]
+first_step_topk_probs=[0.41289952397346497, 0.11486589163541794, 0.06477043777704239, 0.06148328259587288, 0.04053230211138725, 0.02536446787416935, 0.02059432864189148, 0.01587267778813839, 0.014302469789981842, 0.014302469789981842]
+first_step_topk_text=[' I', ' The', ' A', ' Dr', ' This', ' We', ' D', ' H', ' "', ' He']
+
+[New tokens 10] count=76 first30=[338, 17, 408, 17, 343, 405, 81, 599, 15, 437, 17, 368, 17, 440, 1370, 85, 15, 495, 17, 423, 17, 368, 5703, 420, 15, 298, 495, 17, 447, 17]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: A. N. Cunnild, E. M. Lohr, J. R. Merrill, and J. G. Snyder. 2011. "The Impact of Self-Esteem on the Risk of Cognitive Neuroscience," Journal of Cognitive Neurology, doi: 10.1002/jama.2012.07004.
+
+================================================================================

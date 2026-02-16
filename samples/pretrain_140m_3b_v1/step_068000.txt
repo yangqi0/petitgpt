@@ -1,0 +1,290 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 2446, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8670357465744019, 0.13296423852443695, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' came', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 1] count=201 first30=[2827, 5273, 418, 4438, 374, 610, 5373, 17, 776, 699, 2245, 2595, 4453, 916, 383, 1234, 17, 2050, 1266, 15, 406, 2977, 263, 2023, 2716, 288, 5373, 289, 269, 3843]
+[Full output 1]
+Once upon a time, a curious child named Jack was playing with his toys. He had never seen anything like it before. One day, he saw a big box of toys in the park. He wanted to play with them and see what was inside. But the toy was too heavy for him. Suddenly, he heard a voice from behind him. It said: "Hey, that's my toy! You can't touch it anymore." Jack looked around and saw a big rock. He thought it was so pretty. He started to cry because he knew it was a toy. The next day, he heard something strange. He saw a shiny thing on the ground. It was a small red ball. He got closer and closer to the ball. The ball was so soft and sparkly. Jack asked the ball if it was really old. The ball smiled and said yes. Jack felt happy again. He thanked the ball for being so kind. From then on, Jack always made sure to be careful when playing with his new toys.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=217 first30=[289, 1691, 6936, 419, 269, 5057, 1966, 343, 17, 404, 3553, 15, 668, 699, 733, 263, 9004, 4201, 289, 269, 1745, 2233, 288, 269, 2317, 415, 1861, 17, 202, 755]
+[Full output 2]
+The Eiffel Tower was built in 1783 by the architect John C. Hague, who had been a prominent figure in the early days of the city's history.
+In 1786, the new town was named after the English poet and philosopher Thomas Eiffel (1715-1806). It is likely that this name was used for his famous poem "The Tale of the Maiden" in which he describes the life of his friend and fellow farmer and member of the family of the English writer George Glover. The house is now known as the National House of England.
+Eiffel's most famous work is the Royal Family's novel The Story of Elizabeth I, published in 1801. It was written to celebrate the marriage between Elizabeth and her husband, John, with the help of Edward VI, Duke of Norfolk.
+The second edition of the book was published in 1809 and appeared on the site of the original home of Elizabeth I of England, and the first edition was printed in 1814.
+|Wikimedia Commons has media related to: Eiffel|
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 483, 342, 885, 299, 1643, 269, 2492, 288, 287, 1438, 17, 1278, 269, 18956, 395, 4000, 1890, 15, 1000, 269, 4409, 353, 91, 552, 18062, 12, 330]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be used to change the position of an object. If the eigenvalues are negative numbers, then the vector (x - λ) is positive.
+
+The number of linearly independent eigenvectors (LDA) is equal to the number of linearly dependent eigenvectors (RDD). This means that for every vector x in the LDA, there exists a unique solution to this equation:
+
+|x - λ1 | = 0||x + λ2 |
+|−2x − 2λ2 | = 0 ||−2x + 2λ2 = 0 ||x + λ3 |
+
+where λ1 and λ2 represent the eigenvalue's values. The eigenvalues are given by:
+
+λ2 = 1 / (0 - λ1)
+
+Here, λ1 represents the eigenvalue, λ2 denotes the eigenvalue, and λ3 stands for the eigenvector. These eigenvalues form a basis for the linear algebra of the vector space.
+
+Now let us consider another example involving matrix multiplication. Suppose we have two vectors v and w in a row. We want to find their transpose (the inverse of matrix multiplication):
+
+V = {v1 : v2 = 0}
+
+We start with one vector v = v1.
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 817, 1420, 491, 1991, 1085, 5663, 395, 8709, 3350]
+first_step_topk_probs=[0.3363369405269623, 0.1997925341129303, 0.14617134630680084, 0.06352582573890686, 0.04187878966331482, 0.0377359576523304, 0.027608217671513557, 0.02443043142557144, 0.020198604092001915, 0.019173508509993553]
+first_step_topk_text=[' can', ' use', ' allow', ' have', ' provide', ' model', ' involve', ' are', ' operate', ' uses']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 9668, 298, 9668, 17, 382, 8944, 819, 288, 760, 2269, 395, 1384, 289, 269, 1444, 288, 2304, 339, 2179, 6245, 15, 857, 359, 806]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex behaviors and behaviors. The functionalities of these models are important in the design of systems for making decisions, such as how to reduce or eliminate environmental factors.
+The human brain is an excellent example of this type of network. A neural network is an interface between two different parts of the brain: the motor cortex (the part of the brain that controls movement) and the motor cortex of the body (the part that controls motion). The motor cortex is one of the most widely used sensory nerves in the world. It is also a component of the nervous system, which is essential for maintaining mental health. In addition, it helps in the processing of information and memory.
+In order to understand the neural networks of the brain, it is necessary to study how they interact with each other. These connections are called synapses. They include the synaptic connections between neurons and the neural circuits that control muscle action.
+There are many types of neural networks that have been studied by psychologists. For instance, the visual system is one of several network types that have been investigated by psychologists. This type of network is referred to as the visual system because it consists of the same basic units of information that we use to communicate with each other on our daily lives.
+
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 5427, 6649, 29, 8163, 16, 27, 5427, 202, 807, 1401, 8644, 626, 655, 15551, 66, 22513, 202, 1018, 306, 202, 807, 5210, 17, 2541]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+import re
+from django.db import models
+from django import forms
+from django_filters import reverse
+from django._utils import timezone
+from django__ import 'django_utils'
+from django.__main__.models import CacheItem
+from django1.contrib.auth.forms import UserCreationForm
+from django2.core.validators import MinValueValidator
+from django3.core.fields import Field
+from django4.core.models import Group
+from django5.core.serializers import CustomSerializer
+from django6.core.mail import EmailMessage
+from django7.core.exceptions import PermissionDenied
+from django8.core.urlresolvers import reverse
+
+class CacheItemAdmin(CacheItemAdminMixin, models.ModelAdmin):
+
+    list_display = ('name', 'created_date', 'last_modified', 'date_joined')
+    search_fields = ['name']
+
+    def get_queryset(self):
+        """
+        Get the user's name from the form in the request.
+
+        Returns:
+            A dict containing the user's username and email address.
+        """
+       
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[311, 744, 1700, 353, 7492, 282, 836, 263, 284, 643]
+first_step_topk_probs=[0.407696008682251, 0.14288809895515442, 0.08487917482852936, 0.06891651451587677, 0.038860518485307693, 0.038860518485307693, 0.036888349801301956, 0.025734713301062584, 0.023084141314029694, 0.023084141314029694]
+first_step_topk_text=[' n', ' $', ' `', ' (', ' $$', ' p', ' {', ' a', ' f', ' 0']
+
+[New tokens 6] count=256 first30=[744, 81, 990, 6218, 353, 81, 16, 20, 12, 990, 6218, 353, 21, 16, 22, 12, 990, 6218, 409, 65, 23, 2838, 382, 3563, 330, 299, 1098, 269, 1677, 288]
+[Full output 6]
+Write a Python function that returns the factorial of n: $n \times (n-1) \times (2-3) \times 2^4$. The goal is to find the product of all positive integers up to n.
+
+Let's first understand what we mean by "p-values." A p-value represents the number of ways to choose a certain number of items from a set of n objects, where each object has exactly one item in it. For example, consider the following p-values:
+
+* A = {1, 2, 3}
+* B = {2, 4, 5}
+* C = {3, 1, 2}, which includes all numbers between 0 and 9
+* D = {0, 1, 1}
+* E = {1 + 2, 2, 1}
+
+
+Here, `d` denotes the cardinality of the set of integers (the set containing all positive integers). It can be shown that there are two types of p-values for this set: those containing negative integers and those with positive integers. When dealing with these types of p values, you may encounter situations where you might need to determine whether the set contains more than one value within the range specified by the set. Here, we will explore how to approach solving
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=64 first30=[622, 651, 73, 62, 78, 64, 339, 520, 289, 7631, 11, 81, 3830, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 801, 9627, 269, 993, 288]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return [f[k] for k in sorted(n)]
+
+
+if __name__ == '__main__':
+    print("Using the number of Fibonacci numbers")
+
+    # Print the first number and the second number of Fibonacci number
+    n = int(input())
+    print("Number of Fibonacci numbers:", n)
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 1289, 13676, 698, 535, 338, 3987, 1278, 2590]
+first_step_topk_probs=[0.4385809898376465, 0.2605280578136444, 0.057529304176568985, 0.057529304176568985, 0.04208934307098389, 0.030793217942118645, 0.025002120062708855, 0.023733261972665787, 0.02252880111336708, 0.021385442465543747]
+first_step_topk_text=[' The', ' There', ' We', ' Yes', ' It', ' In', ' A', ' Most', ' If', ' No']
+
+[New tokens 8] count=256 first30=[1541, 330, 808, 2079, 3533, 299, 482, 2395, 17, 1278, 269, 3533, 330, 12052, 15, 1000, 269, 3533, 330, 360, 2966, 741, 783, 330, 2526, 411, 620, 453, 1118, 922]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: There is no single answer to this question. If the answer is yes, then the answer is "no." This is why we do not know what a cat is and how it behaves in its environment. It is an issue of concern for our pets, which are usually not feline species. In fact, many people believe that cats are a danger to humans because they are so difficult to breed. We have found that there are several types of cats that have been studied, including: cats with fur or long tails; cats with a short tail; cats with an unusual shape; cats with hairy ears; cats with very long tails; and cats with very short tails. Cats with very long legs and long tails may be more susceptible to diseases such as Lyme disease than cats with more long tails. These cats are especially prone to infection due to their small size and large size. They also tend to have a low birth weight and high blood pressure.
+The same can be said about dogs. Dogs with too much stress on one's body may be more prone to infections due to lack of muscle mass and muscle tone. Dogs with poor posture often experience arthritis. The bones in the knees are also more prone to infection. Cats with too little exercise or over time will develop arthritis even
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 354, 2050, 798, 1541, 338, 409, 1012, 3744, 637]
+first_step_topk_probs=[0.331543892621994, 0.2185671329498291, 0.11699055135250092, 0.06262052804231644, 0.03531038761138916, 0.030202575027942657, 0.02783806063234806, 0.025833629071712494, 0.024522554129362106, 0.021214080974459648]
+first_step_topk_text=[' The', ' 1', ' One', ' 4', ' There', ' A', ' 2', ' 6', ' First', ' 3']
+
+[New tokens 9] count=256 first30=[2050, 13032, 330, 5405, 744, 1161, 15, 614, 806, 914, 395, 715, 289, 269, 4658, 34, 202, 509, 3533, 330, 354, 12863, 21, 10941, 17, 698, 415, 269, 1134, 359]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple is worth $10, but how many are there in the store?
+The answer is 1⁄2 apples. It's the same as the number of apples in a grocery list.
+But what if we had 5 apples? Would it be better to buy 10 apples or 12 apples?
+Answer : No!
+We get 4 apples each day. We also get 5 apples every day. What do you think?
+Answer "What if I bought 10 apples?"
+It's my turn. Why don't we see that way?
+Answer Yes! There are 15 apples left.
+Answer "How many apples did you buy?"
+Answer "Why didn't you buy them all?"
+Answer ... What if you bought 50 apples?
+Question: How many apples would you need to sell for $100?
+Answer Question: What if I gave you 20 apples?
+A simple question. If we find that 100 apples (or $50) will cost $200, what about $20?
+Answer ... But what if I give you an 8-ounce can of orange juice instead?
+Answer... The answer is 11 oranges.
+Answer ... And what if I ask you to donate one banana to someone else who wants to eat?
+Answer....
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 382, 1289, 360, 783, 1509, 3919, 1348, 776]
+first_step_topk_probs=[0.5213121771812439, 0.07571687549352646, 0.06476407498121262, 0.04497775435447693, 0.031236397102475166, 0.029651153832674026, 0.029651153832674026, 0.02285303920507431, 0.02285303920507431, 0.02059231698513031]
+first_step_topk_text=[' I', ' What', ' The', ' We', ' "', ' This', ' You', ' My', ' How', ' He']
+
+[New tokens 10] count=142 first30=[2575, 330, 269, 2197, 288, 1284, 3252, 34, 202, 43, 1640, 25205, 29, 356, 491, 733, 289, 263, 1144, 913, 715, 395, 808, 8208, 339, 10944, 269, 1811, 17, 356]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is the cause of my symptoms?
+HARRY: I have been in a state where there are no medications for treating the problem. I've had many people who have had this condition. They don't know it because they don't know what to do with it. And they don't want to be treated.
+The doctor will ask about your symptoms and how you felt, such as having a hard time getting up during the day or going to bed earlier than usual. He or she may also suggest that you take medicine to help relieve the pain.
+For more information on this topic, please visit the American Academy of Pediatrics's website at www.aaas.org/pets.
+
+================================================================================

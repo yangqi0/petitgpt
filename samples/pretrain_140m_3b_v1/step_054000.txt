@@ -1,0 +1,307 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 418, 2977, 2446, 12562, 791, 2857, 1255, 3609, 0]
+first_step_topk_probs=[0.26611992716789246, 0.21607232093811035, 0.14244374632835388, 0.11565517634153366, 0.0939047634601593, 0.07624463737010956, 0.04081081598997116, 0.026904163882136345, 0.02184445410966873, 0.0]
+first_step_topk_text=[' named', ' was', ' saw', ' came', ' walked', ' would', ' went', ' called', ' asked', '']
+
+[New tokens 1] count=113 first30=[2827, 5273, 4725, 299, 1432, 610, 1231, 2208, 17, 698, 418, 287, 8508, 8238, 339, 1169, 298, 406, 4725, 299, 631, 351, 263, 8238, 17, 776, 12562, 1378, 269, 2317]
+[Full output 1]
+Once upon a time, a curious child named Jack decided to take his own bus. It was an exciting journey for him and he decided to go on a journey. He walked around the city, exploring the countryside, learning about the wonders of nature and learning how animals live in their natural environment. When Jack heard that the animals were so cute, he ran out of the bushes and started to walk back home. But when he saw the animals coming closer, he felt like he had lost something important. He knew he could always keep it safe until he finally got to see what he could do.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 419, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.7391713261604309, 0.2608286738395691, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', ' by', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 2] count=186 first30=[289, 1691, 6677, 419, 269, 9331, 18316, 15, 495, 17, 37, 17, 336, 1242, 82, 17, 202, 202, 755, 1691, 3740, 15, 269, 2587, 418, 3373, 299, 269, 9331, 1723]
+[Full output 2]
+The Eiffel Tower was built in 1763 by the Dutch builder, J.B. Sarno.
+
+In 1775, the building was sold to the Dutch government and was renamed the "Eiffel Tower" after his father, Charles V. The tower was designed by Dutch architect Alfred P. Wijn. In 1772, he purchased the tower from the Dutch government for $1 million. He later donated it to the Dutch East India Company. In 1784, he built a new tower at the eastern end of the tower with the tower still standing. It is now known as the Eiffel Gate.
+
+During World War II, the tower was used by the Germans during the German occupation of Poland. During the war, the tower served as a hospital for prisoners of war.
+
+On June 9, 1941, the tower became part of the Naval Reserve Squadron (NRS) of the United States Navy.
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 357, 483, 342, 3020, 359, 269, 1677, 288, 795, 7527, 289, 269, 1134, 3892, 17, 535, 482, 1832, 15, 411, 491, 795, 7527, 552, 269, 775, 298, 1408]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector that can be written as the product of two vectors in the same direction. In this case, we have two vectors - the first and second ones - and we want to find the eigenvalues.
+
+Let's say we have a matrix A = {1, 2, 3, 4} with columns A, B, C, and D along with entries for the first and third rows of the matrix. We could write these matrices as follows:
+
+A = [[1, 1], [2, 3]]
+B = [[1,-3], [0,-4], [1,-5]]
+C = [[1+1],[2+2],[3+1]]
+D = [[1]*(-3), [0,-3]
+E = [[1], [2], [3]]
+F = [[1],[1],[1], [1],[1]]
+L = [[1]]
+
+So, the eigenvalues are given by:
+
+|x||^2 + y||^2 = |x| + |y| + |z| + |x|
+|x - y||^3 + y||_2 + y - y = 0
+|x- y||^4 + y||\_2
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 330, 1420, 491, 1085, 817, 395, 5546, 1991, 8709]
+first_step_topk_probs=[0.3942389190196991, 0.10177761316299438, 0.09170924872159958, 0.06709591299295425, 0.05447763204574585, 0.04908842220902443, 0.04324199631810188, 0.0359138548374176, 0.029159775003790855, 0.026275139302015305]
+first_step_topk_text=[' can', ' is', ' allow', ' have', ' model', ' use', ' are', ' describe', ' provide', ' operate']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 6811, 2304, 17, 202, 2573, 330, 263, 3355, 2902, 288, 269, 14457, 2673, 15, 536, 6584, 806, 383, 2682, 298, 806, 383, 26388, 289]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex biological systems.
+There is a basic understanding of the neural network, which describes how it works and how it behaves in the brain. This is called the neural network. It has many applications including:
+- In addition to the neural network and its connections, it also provides information about the environment in which it is going (such as the environment)
+- The network itself is very simple, so it uses all the information from its inputs to create a set of patterns that describe the behavior of the system.
+- The model allows us to use the neural network to model complex systems such as the brain, muscles, and organs.
+The neural network is an essential part of our everyday life. It helps us understand how we interact with each other and with people.
+It is also important to note that the neural network is not just a collection of neurons but rather a whole group of neurons that are connected by a network of nerve cells. There are two types of nerve cells: one kind of neuron that is connected to the other type of neuron, and another kind of neuron whose function is to organize and organize information about the world around them.
+We have some interesting information about these neurons, which includes their functions in the brain and how they
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=197 first30=[263, 647, 286, 864, 353, 20, 552, 263, 12, 1319, 637, 711, 202, 856, 1271, 1714, 346, 655, 3715, 555, 1499, 29, 331, 444, 9879, 86, 17, 3106, 655, 835]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b * (1 - a) % 3
+
+
+def main():
+    import sys
+
+    try:
+        from libs.utils import get_path, get_file_name
+    except ImportError:
+        print("Error when importing the module")
+        sys.exit()
+    # open and close the file
+    os.chdir(os.getcwd())
+    if not os.path.exists(sys.path[0]:
+        print("Could not find directory '%s' for path '%s'." % (sys.path['name'], os.getcwd()))
+        sys.path[1] = os.pathsep.join(os.path.dirname(__file__), '..')
+    else:
+        print('Please install the module in your current directory. You are welcome to use this.')
+        sys.stdout.flush()
+    print('You have been called at %s.' % sys.argv[0])
+    sys.exit(2)
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[555, 1700, 311, 744, 836, 338, 353, 726, 643, 382]
+first_step_topk_probs=[0.2995653748512268, 0.20804379880428314, 0.17554785311222076, 0.05960554629564285, 0.050983328372240067, 0.03730019927024841, 0.03540721535682678, 0.025904472917318344, 0.022157272323966026, 0.017990298569202423]
+first_step_topk_text=['\n\n   ', ' `', ' n', ' $', ' {', ' A', ' (', '\n\n       ', ' 0', ' The']
+
+[New tokens 6] count=162 first30=[555, 1772, 2125, 311, 15, 993, 288, 2722, 299, 10381, 311, 11, 81, 12, 346, 1772, 2569, 287, 6222, 353, 499, 12, 346, 821, 346, 490, 453, 3834, 11, 4203]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+    @param n, number of ways to multiply n(n)
+    @return an integer (int)
+    """
+    if not isinstance(number, int):
+        raise TypeError("Number must be a positive integer")
+    return number
+
+
+def _get_all_numbers(number):
+    """
+    Get all numbers from range (range) of n:
+    
+    @param number: number of ways you can multiply n(2)
+    @param number_of_numbers: number of numbers in range(1, 2)
+    @raise ValueError: If no number is given and the value is not equal to 1.
+    """
+    for i in range(0, len(number)):
+        if number[i] == '5':
+            return number[i+1:]
+    return None
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[1083, 339, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.7391713261604309, 0.2608286738395691, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' print', ' for', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=218 first30=[1083, 801, 17593, 290, 31393, 17220, 16797, 346, 311, 333, 1804, 11, 81, 12, 3461, 339, 1249, 289, 1457, 11, 19, 15, 311, 14, 20, 464, 331, 490, 353, 76]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     print("Computing Fibonacci Numbers...")
+    n = len(n)
+    
+    for i in range(0, n+1):
+        if (i + 1) % 2 == 0 and (i - 1) % 3 == 0:
+            print("Reading Fibonacci Numbers...")
+            for j in range(3, n+2):
+                print("Reading number of Fibonacci Numbers:")
+                for k in range(j+1, n+k+1):
+                    print("Reading Number of Fibonacci Numbers: ", str(j)+":", str(k))
+                    print()
+                        print()
+                        return False
+                
+            else:
+                print("There is no Fibonacci Numbers!")
+        
+if __name__ == "__main__":
+    print("Using Fibonacci Numbers...")
+
+    for i in xrange(5):
+        print("Generating Fibonacci Numbers...")
+        n = int(input())
+        print("Using the Fibonacci Numbers...")
+
+        n += 1
+        
+        print("Setting up the Fibonacci Numbers")
+        n -= 1
+        
+        print('Starting Fibonacci Numbers...')
+        n -= 2
+        
+        print("Writing Fibonacci Numbers...")
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 13676, 338, 535, 1289, 783, 698, 356, 1278]
+first_step_topk_probs=[0.45842528343200684, 0.11834810674190521, 0.07030180096626282, 0.060132309794425964, 0.043993741273880005, 0.043993741273880005, 0.03964165225625038, 0.035720095038414, 0.03218650445342064, 0.029002448543906212]
+first_step_topk_text=[' The', ' There', ' Yes', ' A', ' In', ' We', ' This', ' It', ' I', ' If']
+
+[New tokens 8] count=256 first30=[382, 3533, 299, 482, 2395, 330, 12052, 17, 1238, 269, 993, 288, 10676, 289, 263, 3191, 415, 1629, 5196, 15, 649, 1223, 269, 2140, 288, 2053, 14800, 888, 383, 17]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer to this question is yes. As the number of cats in a cat's body increases, so does the amount of blood flowing through it. In other words, the amount of oxygen being delivered by the cat's body is increasing as well.
+In addition to these questions, the answer to this is yes. There are three main types of cats:
+- Cat-and-mouse-hair cats (dog-and-eye) – they have a white coat and their eyes are red, but not white. They don't have any hair or eye color. They also have no ears and can be found anywhere on the body.
+- Rape-bite cats (baby-bitten cats) – they cannot see each other unless they are frightened and want to touch them. They do not like to eat the baby and only look at them when they are frightening themselves.
+- Parasitic cat-and-eyelike cats (canine arthropods) – they are just as sick as humans. They live under water and sometimes become pregnant.
+The answer to this has been simple: cats love to play with their hands, even if they are young. Cats will grow up and move around in a lot of different
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 382, 2050, 798, 843, 1012, 338, 409, 2590, 744]
+first_step_topk_probs=[0.3001941740512848, 0.19790013134479523, 0.07749880850315094, 0.0698322281241417, 0.0484975129365921, 0.04148212447762489, 0.030348967760801315, 0.02953536994755268, 0.02880876138806343, 0.025958849117159843]
+first_step_topk_text=[' 1', ' The', ' One', ' 4', ' 5', ' 6', ' A', ' 2', ' No', ' $']
+
+[New tokens 9] count=256 first30=[354, 18, 21, 13032, 333, 843, 10941, 1341, 798, 10941, 333, 1604, 10941, 1341, 1012, 10941, 333, 1720, 10941, 1341, 1218, 10941, 333, 2341, 10941, 1341, 1291, 10941, 333, 2234]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1/2 apple = 5 apples / 4 apples = 12 apples / 6 apples = 15 apples / 8 apples = 13 apples / 9 apples = 14 apples / 9 apple = 12 apples * 2 = 15 apples
+The best way to estimate the number of apples is by counting the number of fruits in each fruit group, which means we can calculate the total number of fruits that are able to produce a given amount of fruit. In other words, if we know the total number (or "number") of fruits in one fruit group, then we can calculate its value by dividing the number of fruit groups by the number of trees in each fruit. For example, if we take the number of oranges from the fruit group and multiply it by 100, we get:
+Total number of oranges = 20 + 10 = 120
+This is the formula for calculating the total number in the sum of all apples. To find the total number, simply divide the number of bananas by the number that gives us the number of tree-based apples. This method makes sense because you're trying to figure out how many apples there are based on your collection of fruit.
+Here's an example of a simple method to calculate the number of grapes per fruit. The first step is to convert the number of
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 1289, 382, 2575, 698, 783, 3919, 2069, 1509, 1278]
+first_step_topk_probs=[0.2996494472026825, 0.16782188415527344, 0.08526978641748428, 0.05065242946147919, 0.05065242946147919, 0.04332532361149788, 0.039039354771375656, 0.03169747814536095, 0.027112292125821114, 0.02573631890118122]
+first_step_topk_text=[' I', ' We', ' The', ' What', ' It', ' This', ' My', ' So', ' You', ' If']
+
+[New tokens 10] count=256 first30=[2575, 330, 269, 851, 1384, 3467, 486, 483, 620, 299, 1005, 669, 929, 374, 1258, 1272, 34, 202, 7681, 17, 343, 524, 92, 29, 1289, 545, 910, 299, 342, 3758]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is the most important thing you can do to help your child with schoolwork?
+Dr. Cindy: We all need to be active and have a positive attitude about how we teach our children, what they are learning, and what they should know. It's something that has helped me in my work as a teacher and student educator for over 20 years. When I was just beginning my own teaching career, I was very excited to learn more about my teaching methods and how they were used in my classroom. My teaching experience also included some of my students who had been trained in this field. As I was able to see the results of their research, I began to feel more confident about what they learned. I realized that when I taught them, it was really fun to be involved with them. And that's why I started to use the techniques I learned so much that I felt like being an expert on my teaching.
+I am currently working on a project called "Learning About Your Child's Learning Environment" which will focus on teaching strategies to help you build the skills needed to help your children develop these skills. The project is part of the National Council on Teacher Education (NCTE) and will focus on developing the skills necessary to become teachers of children with
+
+================================================================================
