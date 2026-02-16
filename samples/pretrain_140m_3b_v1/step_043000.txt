@@ -1,0 +1,303 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 418, 2446, 2977, 2857, 3609, 10227, 12562, 4725, 791]
+first_step_topk_probs=[0.35827380418777466, 0.2361883670091629, 0.06097497418522835, 0.05494306981563568, 0.05494306981563568, 0.04950781911611557, 0.04019720479846001, 0.03622069209814072, 0.02649962529540062, 0.02387814410030842]
+first_step_topk_text=[' named', ' was', ' came', ' saw', ' went', ' asked', ' noticed', ' walked', ' decided', ' would']
+
+[New tokens 1] count=191 first30=[2827, 5273, 2857, 299, 269, 3843, 374, 610, 2553, 17, 776, 2977, 7336, 288, 1943, 351, 269, 24796, 298, 2857, 656, 299, 269, 11913, 17, 1803, 406, 3500, 715, 15]
+[Full output 1]
+Once upon a time, a curious child named Jack went to the park with his mom. He saw lots of things on the swings and went up to the slide. When he got there, he found something interesting - a big box of toys! Jack was so excited that he started playing with them all day long. But then, when he got to the top of the slide, he noticed something strange. It was a big, red toy! It was a fun game. Jack wanted to play with it too, but he knew he had to be careful not to get lost in the park. So, he decided to try again. He played with the toy for many years until it became very hard to find another toy. Then, he tried again and again, but this time, the toy was almost gone! Jack's friends were sad and angry because they couldn't wait to show him what happened. They said, "I think you can do something special!" And they all agreed.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 419, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.7587491869926453, 0.24125084280967712, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', ' by', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 2] count=256 first30=[289, 1691, 1590, 298, 269, 10079, 418, 25192, 17, 202, 755, 925, 3085, 15, 269, 2422, 418, 10083, 419, 269, 4677, 3645, 1844, 339, 744, 20, 2153, 15, 536, 330]
+[Full output 2]
+The Eiffel Tower was built in 1718 and the tower was demolished.
+In 1833, the house was purchased by the George Washington family for $1 million, which is part of the National Park Service's Historic Preservation Program. The Eiffel tower also has a large, permanent, two-story building with a total of 1,400 acres.
+On April 20, 2010, the Eiffel Bridge was completed at the top of the structure, which served as the main entrance to the former Eiffel Castle. The bridge was designed by the U.S. Army Corps of Engineers and was built on the site of the original Eiffel Cottage.
+Today, the Eiffs are located at the Eiffels' Main Building, which serves as the primary entrance for the Eiffell & Company's Historic Preservation Center.
+A short distance from the Eiffeling building, the Eifel Tower, is located just south of the Eiffelled Bridge. This tower is a major landmark for the Eiffs, because it was constructed as a museum and also housed the museum's museum.
+Eiffel Tower is one of the most popular attractions in the United States. It features the largest public library in the world, the Museo Nacional de la Rec
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 483, 342, 5454, 359, 269, 1701, 288, 795, 7527, 289, 269, 4409, 1926, 17, 535, 482, 1832, 15, 411, 1418, 299, 1098, 269, 18956, 288, 269, 1496]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be represented as the sum of two vectors in the vector space. In this case, we want to find the eigenvalues of the given matrix A and its corresponding eigenvectors.
+
+First, let's define some key terms:
+
+* **Linear Algebra**: This refers to finding the eigenvalues of a matrix for which the original matrix has been written. For example, if we have the matrix A = {1, 2}, then it will be (A - 1)2 + (B - 1).
+* **Triangle Equations**: These are equations that describe how a triangle is made by intersecting a line segment along a parallelogram. They represent angles and lengths of sides.
+* **Symmetry**: An symmetric matrix is said to be symmetry if every nonzero vector in the matrix has exactly one zero in the corresponding row or column of the matrix. The determinant of a square matrix equals the product of its diagonal elements.
+* *Matrix Symbol(s): A matrix represents a matrix whose entries are equal to each other. For example:
+```makefile
+matrix_A = [[0, 0], [0, 1]]
+matrix_B = [[0],[0],[1]]
+matrix[0] = [0, 0]
+
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 1420, 5546, 1991, 817, 491, 1085, 395, 330, 7337]
+first_step_topk_probs=[0.29698753356933594, 0.21728070080280304, 0.12907016277313232, 0.0766710415482521, 0.05054464936256409, 0.04554451256990433, 0.04103904962539673, 0.03550221771001816, 0.02196662127971649, 0.016071124002337456]
+first_step_topk_text=[' can', ' allow', ' describe', ' provide', ' use', ' have', ' model', ' are', ' is', ' enable']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 9668, 298, 9668, 17, 382, 6290, 330, 269, 851, 5181, 885, 1085, 15, 614, 383, 658, 578, 4465, 289, 263, 4187, 1457, 288, 15972]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex behaviors and behaviors. The latter is the most commonly used model, but it also has applications in a wide range of contexts including research, teaching, and education.
+The current study, "Aphasia: A Model for Anxiety and Emotional Development," was conducted by Professor Peter Widen at the University of Michigan and is one of the first to examine the relationship between an anxiety disorder and other mental disorders. It was published online in the Journal of Neuroscience on October 24, 2007.
+The authors conclude that a lack of understanding about the brain's behavior patterns and behavior does not mean that the cause or effect of these problems may be misinterpreted. They say that their findings suggest that the condition could have been caused by a loss of sense of control over the individual's daily life.
+In this study, they describe a new method for studying the neural network that provides information about the underlying psychological processes involved in thinking, memory, decision making, and self-regulation. This is similar to the previous approach, which involves applying a series of tests to a single task to determine whether a particular situation affects the way we think and process information. The results showed that the test was more effective than the previous one because of its usefulness
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 5427, 6649, 29, 8163, 16, 27, 5427, 202, 807, 1401, 8644, 626, 655, 15551, 66, 22513, 202, 202, 1018, 3266, 202, 1018, 1656, 202]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
+import json
+import os
+import re
+import shutil
+import tempfile
+import time
+import traceback
+import logging
+
+from django.conf import settings
+from django import forms
+from django_scanner.models import ScannerScanner
+from django._utils import timezone
+from django2.apps import AppConfig
+
+
+class ScannerScanners():
+
+    def _get_scanner_name(self):
+        name = self.settings['name']
+        if not name:
+            raise ValueError('name must be an integer')
+
+        scanners = [
+            'Same as ' + name for name in self.settings.scanners.keys()
+        ]
+        scanners.append(scanners[0])
+        scanners[1] = True
+        scanners[-1].save()
+
+    def _process_data(self, data):
+        # we have to extract the data from the database
+        # we are using to store the data
+        data['id'] = data['id'].replace('_', ' ').split(',')
+        # we need to use the same data to store the results of the
+        # query
+       
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[311, 836, 1700, 354, 353, 338, 382, 651, 643, 377]
+first_step_topk_probs=[0.27533555030822754, 0.18992218375205994, 0.13189822435379028, 0.10709299147129059, 0.04654243588447571, 0.04654243588447571, 0.035871658474206924, 0.035871658474206924, 0.032323047518730164, 0.02022724598646164]
+first_step_topk_text=[' n', ' {', ' `', ' 1', ' (', ' A', ' The', ' [', ' 0', ' P']
+
+[New tokens 6] count=256 first30=[520, 4, 17, 3, 711, 1018, 7632, 202, 807, 10212, 655, 21686, 15, 21686, 202, 807, 10212, 17, 5117, 17, 12495, 655, 21024, 2825, 1625, 202, 807, 10212, 66, 1072]
+[Full output 6]
+Write a Python function that returns the factorial of n: k!.
+
+import pytest
+from pandas import DataFrame, DataFrame
+from pandas.core.exceptions import InvalidDataError
+from pandas_py.utils.json_util import json_file_to_dict
+from pandas2pile.common.exceptions import NotFoundError
+from pymongo.client.db import (
+    DatabaseError,
+    DATASETS,
+    UUID,
+    UID,
+    UUID,
+    MESSAGE_DATA,
+    UPDATE_MASK,
+    UPSHA1,
+    UART_PINO,
+    UTRIAN_PINOTH,
+    UREV_NAME,
+    UBROKER_NAME,
+)
+from pytz import timezone
+from pydantic import BaseModel
+from pydaq.client.models import db
+from pydf.db.db import db
+
+from pydb.database.sqlalchemy import SQLAlchemy
+from pyddg.data.schemas import JSONSchema
+from pydsa.datagen import DatagenDataset, DatagenDataset
+from pydealer.config import Config
+from pydesk.logging import LoggingLogger
+from pyrsa.user.models import
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[1083, 622, 339, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.5139417052268982, 0.3388114869594574, 0.14724676311016083, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' print', ' return', ' for', '', '#', '', '"', '!', '', '']
+
+[New tokens 7] count=99 first30=[1083, 311, 1246, 1083, 311, 341, 1083, 311, 202, 202, 6, 426, 279, 269, 1496, 1392, 299, 5111, 263, 6984, 288, 31393, 1890, 17, 202, 856, 8049, 66, 967, 66]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     print n
+     print n
+         print n
+
+# Fit the given function to generate a dictionary of Fibonacci numbers.
+def fib_to_k(n, k):
+    for i in range(1,n+1):
+        if (i == 0 or i < n) and (i==0 or i==1 or i==2 or i==3 or i==4 or i==5 or i==6):
+            return None
+        else:
+            return True
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 338, 1541, 535, 1289, 1238, 356, 13676, 1278, 2050]
+first_step_topk_probs=[0.46882426738739014, 0.1090596541762352, 0.0647842139005661, 0.05260062217712402, 0.04739714413881302, 0.028155086562037468, 0.026726217940449715, 0.025369863957166672, 0.025369863957166672, 0.024082321673631668]
+first_step_topk_text=[' The', ' A', ' There', ' In', ' We', ' As', ' I', ' Yes', ' If', ' One']
+
+[New tokens 8] count=256 first30=[382, 1811, 374, 482, 330, 357, 289, 269, 775, 1584, 15, 411, 491, 299, 1936, 806, 914, 288, 269, 10676, 395, 2645, 17, 1783, 15, 490, 486, 1432, 263, 1313]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The problem with this is that in the first place, we have to consider how many of the cats are black. However, if you take a look at the population numbers for each cat, then you will find that most cats are black; but in the second place, it's the same as in the last place. There are several groups of cats which have a higher percentage of black than their counterparts in the population. In fact, there are two groups of cats (Hair and Hair) which are the most common, and the most common being the black-eyed-cow.
+The number of cats in the population is very small, so there is no way to determine the exact distribution of the numbers in the population based on our results. However, we do know that the population size in the population has a large effect on the overall spread of the disease. If the total number of cats is smaller than the number of cats, then the overall spread is larger than the total number in the population of the population.
+In general, if a cat is black or white, then its count should be 1. This means that the overall spread would be even though the average counts for the cat were less than 0.5. This means the number of non-
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 382, 2050, 798, 338, 409, 2590, 13676, 744, 1012]
+first_step_topk_probs=[0.4566989541053772, 0.16115351021289825, 0.08188161253929138, 0.056865643709897995, 0.04382807016372681, 0.034710127860307693, 0.03377961367368698, 0.026034990325570107, 0.022268906235694885, 0.020065952092409134]
+first_step_topk_text=[' 1', ' The', ' One', ' 4', ' A', ' 2', ' No', ' Yes', ' $', ' 6']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 17, 2069, 15, 490, 486, 395, 263, 1413, 8972, 15, 806, 914, 10941, 620, 356, 910, 299, 5964, 1010, 1266, 34, 202, 24771, 409, 29]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples. So, if you are a good consumer, how many apples do I need to buy each day?
+Answer 2: 1 apple is the number of apples you should buy per week. This means that the total amount of apples you get will be less than the whole total.
+Answer: 2 apples = 6 apples. So now we can use the formula for finding out how many apples you would receive from your own sale every year.
+Answer : 3 apples = 5 apples. So the total amount you can purchase is $6.00 / 7.00 = $7.00 / 8.00 = 3.14 / 9.00 = 10.08 / 12.00 = 0.0675 / 7.02 = -0.0775 / 6.00 = -0 .0575 / 7/10 = 0.0975 / 7 / 10 = 0.0175 / 7 = 0.0375 / 8.50 = -0/8.00 = 2.65 / 6.30 = 1.0425 / 8.70 = 0.0775
+Answer: The above equation shows the value of the sum of all the apples in one month. You can see it's calculated by dividing the number
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 338, 382, 1966, 776, 1289, 2766, 783, 360, 421]
+first_step_topk_probs=[0.46998435258865356, 0.06872721761465073, 0.045307762920856476, 0.028352875262498856, 0.026913966983556747, 0.026913966983556747, 0.025548087432980537, 0.023020736873149872, 0.018691377714276314, 0.0151761993765831]
+first_step_topk_text=[' I', ' A', ' The', ' John', ' He', ' We', ' Dr', ' This', ' "', ' D']
+
+[New tokens 10] count=256 first30=[338, 7543, 288, 4437, 3554, 15, 269, 4008, 2446, 598, 357, 269, 3257, 288, 2640, 298, 5519, 8153, 578, 453, 2726, 8242, 263, 719, 3260, 339, 269, 817, 288, 4988]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: A couple of weeks ago, the news came out that the Department of Health and Human Services has not yet approved a new policy for the use of drugs in children and adolescents. The new law would allow more than $1 billion in funding to support research into drug safety and treatment of pediatric cancers. It would also help prevent the spread of childhood cancer among children from being exposed to tobacco smoke as well as other harmful chemicals. And it would also encourage more research on the role of drugs in preventing childhood cancer.
+The Department is working with the National Institute on Drug Abuse (NIDA) to develop a new standardization process for drug development in young adults who are already at risk of developing cancer. This process will be implemented by NIDA's Health Resources and Services Administration (HHS). The new standardization is based on the premise that any change in current practice should take place within the context of an individualized approach to prevention and treatment.
+The new guidelines were developed through the NIDA Clinical Research Initiative (CRI), which is funded by the U.S. Department of Defense and the Office of Naval Research and is funded by NIH. The goal of the new standards is to increase the number of studies needed to determine whether a specific intervention can be effective or
+
+================================================================================

@@ -1,0 +1,308 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 418, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8892728090286255, 0.11072725802659988, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' was', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 1] count=79 first30=[2827, 5273, 718, 418, 7948, 289, 269, 3843, 17, 698, 418, 649, 6244, 298, 22848, 357, 1024, 4725, 299, 631, 339, 263, 3485, 374, 896, 17, 1530, 2977, 7336, 288]
+[Full output 1]
+Once upon a time, a curious child named Jackie was walking in the park. It was so bright and sunny that she decided to go for a walk with her. She saw lots of beautiful birds, including many small fish and turtles. Jack was very happy! He wanted to see them too, but he knew he had to be careful. He went home, playing with his friends. They all played together, having fun.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[289, 1691, 1699, 298, 269, 775, 2544, 12944, 6875, 289, 1769, 5559, 17, 382, 10079, 418, 7713, 289, 925, 1161, 15, 614, 383, 418, 1770, 7334, 419, 3025, 289, 925]
+[Full output 2]
+The Eiffel Tower was built in 1711 and the first English settlers arrived in 1609. The tower was constructed in 1810, but it was later destroyed by fire in 1818.
+
+The Eiffels were the last British colonies to be built, although a few of their buildings were demolished during the Great War. During the Revolutionary War, British troops occupied the tower from 1715 until the end of the American Civil War.
+
+In 1820, the Eiffels' home was moved to the Eiffel Building in New York City, where they were still located. They had a library, a school, a store, and a playground. In 1867, the Eiffs became a national holiday site for the British Empire.
+
+History
+The Eiffs were designed by John Gertrude Lummer, who died in 1866. He is considered one of the most influential figures in history. He was born in Scotland on August 12, 1723. His father was an engineer, and his mother was a merchant. He was educated at the university and studied law, and served as a clerk. He was a member of the Continental Congress and the U.S. House of Representatives from 1815-1819. He also served as the President of the United States from 1835-
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 483, 342, 5454, 359, 269, 1701, 288, 545, 1812, 9201, 288, 686, 18956, 17, 535, 482, 1832, 15, 411, 1418, 299, 1098, 269, 2056, 993, 288, 3248]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be represented as the sum of all possible combinations of its eigenvalues. In this case, we want to find the total number of unique ways to choose one of the eigenvectors in the matrix.
+
+First, let's define our variables:
+```css
+[0, 0] -> [1, 1] -> [2, 3] -> [3, 4] -> [4, 5] -> [5, 6] -> [6, 7] -> [7, 8] -> [8, 9] -> [9, 10] -> [10, 11] -> [11, 12] -> [12, 13] -> [13, 14] -> [14, 15] -> [15, 16] -> [16, 17] -> [17, 18] -> [18, 19] -> [19, 20] -> [20, 21] -> [21, 22] -> [22, 24] -> [23, 25] -> [25, 27] -> [28, 30] -> [29, 31] -> [26, 26] -> [27, 26]
+
+Now, our goal is to create a new vector consisting of these eigenvectors that will satisfy the following conditions:
+
+* If there
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 491, 330, 1420, 817, 395, 1991, 5546, 1085, 3350]
+first_step_topk_probs=[0.30557939410209656, 0.10782857239246368, 0.08754996955394745, 0.07888907194137573, 0.06405292451381683, 0.04398297891020775, 0.04222627729177475, 0.034285057336091995, 0.034285057336091995, 0.027837267145514488]
+first_step_topk_text=[' can', ' have', ' is', ' allow', ' use', ' are', ' provide', ' describe', ' model', ' uses']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 9668, 298, 9668, 17, 382, 6290, 330, 269, 851, 1488, 1375, 288, 1085, 289, 11447, 15, 614, 686, 817, 289, 9043, 2497, 578, 733]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex behaviors and behaviors. The latter is the most common type of model in psychology, but its use in cognitive science has been limited by the fact that it uses functional language for learning purposes.
+The main purpose of this article is to examine how computer programs can be used as an example of cognitive computing in the field of cognition. It is worth noting that the use of the term "computer" has become more prevalent over time due to the development of new tools and techniques that can be developed to create a machine. This article will cover the various aspects of computer programming and how they can be used in the field.
+One important aspect of computer programming is the ability to use all the information contained within a program. A program can have many different types of data structures (such as memory, memory, etc.) and then make decisions based on these data structures. Some examples of such systems include:
+- Inventor: an agent that processes a system's data using the rules of the game
+- Inheritance: a person who has the same code as another person
+- Inertia: a person whose code is not identical to other people
+- Inverter: a person with an error message (e.g., a faulty
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 5427, 6649, 29, 8163, 16, 27, 5427, 202, 1568, 202, 18688, 351, 588, 88, 2463, 2508, 1691, 29, 3451, 29, 5613, 9281, 202, 202]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Mar 11 17:34:56 2018
+
+@author: <NAME>
+@email: <EMAIL>
+"""
+import os
+from datetime import timedelta
+from time import sleep
+
+def main():
+    #print('ping')
+    #print(os.getpid())
+    print('fork')
+    sleep(0.1)
+
+    while True:
+        try:
+            sleep(0)
+            sleep(1)
+            sleep()
+            sleep(2)
+            sleep((0.015) * 60)
+            sleep(-10)
+            sleep_time()
+            sleep()
+        except Exception as e:
+            sleep_error(e)
+                raise e
+        sleep(3)
+
+        sleep(4)
+
+        sleep_time = 1.0
+        sleep(6)
+        sleep_time += 1
+
+        sleep(1.0)  # sleep
+        sleep(7)
+
+        sleep()
+        sleep_Time = 0.0000000
+        sleep(11)
+        sleep(12)
+
+        sleep("0.00")
+        sleep(13)
+
+        sleep((0) * 60 / 60)
+        sleep((0 - sleep(9)) * 60 /
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=9.271e-03
+first_step_topk_ids=[311, 377, 354, 1700, 316, 382, 651, 353, 990, 408]
+first_step_topk_probs=[0.2950029969215393, 0.08704493194818497, 0.07843408733606339, 0.07843408733606339, 0.049082789570093155, 0.049082789570093155, 0.039852075278759, 0.039852075278759, 0.035909734666347504, 0.03408728912472725]
+first_step_topk_text=[' n', ' P', ' 1', ' `', ' e', ' The', ' [', ' (', ' \\', ' N']
+
+[New tokens 6] count=256 first30=[316, 65, 81, 17, 202, 202, 2774, 15, 1427, 415, 2336, 351, 269, 3847, 354, 18, 21, 864, 353, 20, 647, 409, 13, 22, 12, 333, 637, 18, 23, 552]
+[Full output 6]
+Write a Python function that returns the factorial of n: e^n.
+
+Now, let's focus on the expression 1/2 * (1 + 2*3) = 3/4 - 4/5 * 1/6. We want to find out how many times we need to multiply by this number. To do so, we will use the formula for the factorial of a positive integer n:
+
+$$(n+1)(n-1)=2\cdot(n+2)\cdot(n)+\cdots(n+3)\cdot(2+\cdots(1))=2\cdot\cdots\cdots[n]$$
+
+To solve this equation, we can substitute the value of n into the formula:
+
+$$\frac{n}{2} \cdot(n)-\cdots(-n+1)+\cdot(1)$$
+
+We now have two possible values for n:
+$$\frac{(n+1)}{2}\cdot(n)}{2\cdot((n+1))(n)}$$
+
+At first glance, it may seem like there are only two possibilities for k. However, when dealing with complex numbers or complex expressions involving variables, we cannot directly apply the formula for factorial. Instead, we should choose the
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1083, 490, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.5731076598167419, 0.3067624568939209, 0.12012989073991776, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' print', ' if', '', '#', '', '"', '!', '', '']
+
+[New tokens 7] count=225 first30=[622, 311, 864, 353, 20, 552, 311, 12, 202, 202, 6, 426, 4548, 288, 269, 775, 11695, 289, 269, 3292, 330, 3007, 299, 354, 15, 649, 269, 897, 330, 643]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return n * (1 - n)
+
+# Fraction of the first digit in the string is equal to 1, so the result is 0.
+
+# The number of digits in the string has to be zero, so the number of digits is also equal to 2.
+def fib_number(n):
+    return n * n * (2 * n + 1)
+
+
+# This function is used for counting by two integers, and it is useful when there are more than one possible combination of these characters.
+def Fibonacci_numbers(n):
+    
+    # If the sum of all digits in the list is less than or equal to 3, then the number of unique combinations is subtracted from each other.
+    if n < 5:
+        return n * 10 + 1
+
+    # If the product of the three digits in the array is greater than or equal enough to make up the difference between them, then the sum of the four digits in the array will be smaller than the sum of their respective pairs.
+    else:
+        return 1 / ((n-1)*5 + 1)
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1289, 338, 1541, 535, 1238, 783, 356, 1278, 698]
+first_step_topk_probs=[0.5674416422843933, 0.09167245775461197, 0.06706899404525757, 0.05169209837913513, 0.04657844826579094, 0.03589944913983345, 0.032348088920116425, 0.0249316468834877, 0.021325169131159782, 0.01921558938920498]
+first_step_topk_text=[' The', ' We', ' A', ' There', ' In', ' As', ' This', ' I', ' If', ' It']
+
+[New tokens 8] count=256 first30=[382, 1811, 330, 357, 715, 395, 795, 5283, 339, 269, 3737, 288, 2645, 1200, 17, 3744, 15, 715, 330, 263, 1543, 4560, 288, 9294, 289, 269, 993, 288, 3191, 1875]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The problem is that there are two reasons for the lack of blackness. First, there is a great deal of variation in the number of cat species. Second, there is an increase in the number that does not match the general population of cats. Thirdly, it seems to be a big deal. So why do cats have a greater proportion of blackness than cats? That's because they have a bigger population, which means that there is more blackness in their environment. This is because most cats live in areas where there are less black people. And this is also true for humans. But if you look at the numbers of cats in your area, you find that they have fewer black people. They are less likely to have black cats. It would be nice to know that these cats are black. In fact, I think the biggest difference between the black cats and cats is that they have more black cats. So what happens when you take out a cat from a park or school? Well, that's not always the case. However, the black cats, as well as many other cats, tend to have more black people. These cats are also very hard to see with our eyes. Because of this, I think it is important to understand that black cats have more
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 382, 2050, 798, 1541, 409, 2590, 1278, 338, 1012]
+first_step_topk_probs=[0.4139814078807831, 0.19966763257980347, 0.08677522093057632, 0.05720573663711548, 0.05430254340171814, 0.03262435272336006, 0.02359977550804615, 0.018189074471592903, 0.017265964299440384, 0.016389716416597366]
+first_step_topk_text=[' 1', ' The', ' One', ' 4', ' There', ' 2', ' No', ' If', ' A', ' 6']
+
+[New tokens 9] count=149 first30=[354, 13032, 333, 798, 10941, 17, 202, 24771, 29, 637, 10941, 333, 1012, 10941, 17, 202, 509, 993, 288, 10941, 289, 269, 1180, 330, 3007, 299, 619, 15, 649, 715]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples.
+Answer: 3 apples = 6 apples.
+The number of apples in the list is equal to one, so there are 5 apples. The total number of apples is equal to two apples.
+So that's the answer.
+Answer : 8 apples = 6 (a 4-1-2) = 7 apples.
+Then multiply the number of apples by 10 (a 2-3-4) = 10 apples.
+That's it! A perfect square with four sides.
+Answer = 10 apples = 5 apples.
+This means that if you add up all the numbers from 1 to 10, then the sum of the first ten numbers will be equal to the sum of those three numbers.
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 356, 338, 776, 2766, 783, 1289, 1278, 2590, 343]
+first_step_topk_probs=[0.19707515835762024, 0.15466850996017456, 0.08130180835723877, 0.04351771995425224, 0.03354044631123543, 0.03183824196457863, 0.01992386393249035, 0.018912728875875473, 0.018912728875875473, 0.01795290969312191]
+first_step_topk_text=[' The', ' I', ' A', ' He', ' Dr', ' This', ' We', ' If', ' No', ' C']
+
+[New tokens 10] count=94 first30=[338, 15919, 289, 269, 5988, 668, 578, 263, 3035, 3083, 298, 330, 453, 2222, 299, 1776, 10911, 7707, 17, 202, 43, 1894, 9520, 29, 382, 1442, 288, 8175, 2640, 4257]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: A nurse in the hospital who has a medical condition and is not able to perform routine procedures.
+Hospitals: The University of Pennsylvania Health System, Philadelphia, PA, USA, U.S.A.
+School of Medicine: Methuen-Gaspar University, New York, NY, USA
+Medical Subject Headings: Immunology, Immunology, Pathophysiology, Biophysics, Immunobiology, Immunotherapy, Immunotherapy
+
+================================================================================

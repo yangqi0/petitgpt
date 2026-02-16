@@ -1,0 +1,272 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[418, 791, 2827, 2977, 2446, 288, 699, 7622, 2857, 12562]
+first_step_topk_probs=[0.4852600395679474, 0.1712319254875183, 0.1390293389558792, 0.049058765172958374, 0.02914213016629219, 0.02132083848118782, 0.02132083848118782, 0.01921169087290764, 0.01921169087290764, 0.01559865940362215]
+first_step_topk_text=[' was', ' would', ' named', ' saw', ' came', ' of', ' had', ' grew', ' went', ' walked']
+
+[New tokens 1] count=209 first30=[2827, 5273, 418, 6968, 1114, 27261, 17, 1530, 6446, 299, 1143, 3099, 298, 4196, 269, 1165, 1378, 896, 17, 2050, 1266, 15, 5273, 2977, 263, 2023, 3197, 374, 914, 8647]
+[Full output 1]
+Once upon a time, a curious child named Jack was feeling very lonely. She loved to play outside and explore the world around her. One day, Jack saw a big tree with many branches. He wanted to climb up it and see what he could do. Jack asked his mom, "Can I help you reach the top of the tree?" His mom said, "Yes, let's go!" Jack ran to the top of his tree and started to climb. But when he reached the top, he heard a loud noise. It was a bad bird! Jack had an idea. He flew down and saw that the bird was very brave. He grabbed the top of its branch and picked it up. The bird was so happy! Jack tried to jump back and forth, but the bird was too fast. He jumped and fell off the branch. Then, he heard someone coming from the tree. He looked at Jack and said, "Hi, I'm here to help you." Jack smiled and thanked him for being so smart. From then on, Jack always kept going.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[289, 1691, 6677, 419, 269, 6496, 8443, 15, 298, 383, 418, 3385, 299, 1991, 263, 6023, 2604, 339, 5255, 12766, 17, 382, 10079, 418, 2793, 374, 287, 14631, 1457, 288]
+[Full output 2]
+The Eiffel Tower was built in 1763 by the Royal Navy, and it was designed to provide a huge base for shipbuilding. The tower was built with an impressive range of heights. It is thought that the structure was constructed during the first century B.C.E. and was used as a transport centre until the early 20th century.
+
+The Eiffels Tower was built at the time of the Napoleonic Wars, but was demolished after World War I. The building has been used for many different purposes including public works, military training, and all sorts of other functions.
+
+Construction
+The tower was constructed in 1802 by the British Admiralty, Sir George Arundell, who had already given the Tower its name. The tower, which was used for shipbuilding, was built on the site of the original Eiffel tower. In addition to the tower, there were other structures, such as the small fortifications (the main entrance) and the castle (the main house).
+
+The tower's interior consisted of a large room with an enormous ceiling. This was made possible by the design of the tower. This included the roof, which was very well preserved, and the roof which was used to build the tower.
+
+There are also several smaller
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=194 first30=[263, 2000, 289, 269, 2281, 6603, 357, 578, 808, 1623, 1239, 17, 202, 202, 2774, 1427, 415, 1936, 269, 1496, 3581, 29, 202, 202, 11, 91, 552, 371, 5507, 21]
+[Full output 3]
+In linear algebra, an eigenvalue is a term in the complex plane that has no real value.
+
+Now let's consider the given equation:
+
+(x - y)^2 + (y - z)^2 = 0
+
+We want to find its eigenvalues and take the square root of both sides of the equation:
+1) x^2 - y^2 = 0 => x = 1/2
+2) x^3 - y^4 = 0 => y = 1/8
+
+To solve this equation, we can use some basic principles from linear algebra and calculus to solve for x. First, since there are two variables (x and y), we need to apply the rule for differentiation:
+
+x = x - y / 2
+y = 1/x * y
+
+Next, substitute these values into our original equation:
+x = 1/4
+y = x / 2
+
+Finally, substitute these results back into the original equation:
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 817, 491, 395, 1420, 330, 1085, 5546, 1991, 5663]
+first_step_topk_probs=[0.4192602336406708, 0.10823716968297958, 0.09752979129552841, 0.06666784733533859, 0.05220393091440201, 0.04238628223538399, 0.027942752465605736, 0.025178533047437668, 0.025178533047437668, 0.022687742486596107]
+first_step_topk_text=[' can', ' use', ' have', ' are', ' allow', ' is', ' model', ' describe', ' provide', ' involve']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 298, 5699, 3286, 17, 202, 509, 2790, 330, 299, 966, 287, 2902, 288, 269, 9043, 9410, 7040, 269, 2175, 14457, 17446, 289, 2613, 2920, 15]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model and explain behavior.
+The task is to develop an understanding of the cognitive mechanisms underlying the various neural pathways in brain activity, and how they relate to each other. This is done by studying neural circuits that control one's ability to communicate with others. It also involves developing new neural circuitry that allows for the development of new neural circuits.
+To begin, you will need to create a neural network that provides a framework for learning. The system will then use neural networks to explore the neural pathways involved in the behavior of the network. This will help you understand the neural circuitry as well as how it works.
+The neural network will then be tested on your own neural network using a simple computational algorithm called the "Telecomyculture". This is a simulation tool that helps you build a neural network. It takes about two hours to complete the simulation. Once the simulation has been completed, you have the following options:
+- Create a neural network using the "Garlic" feature of the network (a neural network).
+- Define a neural network and assign it to your network.
+- Create an abstract graph that shows the neural network, and then add it to your neural network.
+This is very similar to the project
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=42 first30=[263, 864, 353, 69, 552, 263, 12, 1341, 409, 711, 202, 856, 1083, 66, 2318, 11, 68, 15, 276, 464, 346, 1083, 801, 2318, 290, 634, 276, 12, 202, 202]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a * (b - a) / 2
+
+
+def print_print(a, c):
+    print("printing", c)
+
+if __name__ == "__main__":
+    main()
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[353, 836, 354, 643, 311, 1700, 651, 990, 316, 409]
+first_step_topk_probs=[0.3216637074947357, 0.19107645750045776, 0.15514183044433594, 0.11350417137145996, 0.0575406551361084, 0.04932872951030731, 0.04219309613108635, 0.0250637736171484, 0.018337050452828407, 0.013415672816336155]
+first_step_topk_text=[' (', ' {', ' 1', ' 0', ' n', ' `', ' [', ' \\', ' e', ' 2']
+
+[New tokens 6] count=154 first30=[316, 17, 74, 1155, 353, 81, 14, 20, 12, 21, 647, 353, 81, 16, 21, 12, 22, 333, 354, 17, 202, 202, 755, 482, 1373, 15, 411, 1418, 299, 1098]
+[Full output 6]
+Write a Python function that returns the factorial of n: e.g., (n+1)2 + (n-2)3 = 1.
+
+In this example, we want to find the factorial of a number that can be expressed as a fraction using the formula:
+
+(n+1)^2 - 2^2 - 2^(n−1)(n−2) = 0.5
+
+Using our formula, we get:
+
+((n+1)/2)^2 - 4^2 - 3^2 - 4^(n−2)(n−1) = 0
+
+Now, substitute these values back into our original expression:
+
+(-1)^2 / (-1)^2 = 1
+
+So now you have successfully calculated the factorial of 5!.
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=79 first30=[622, 8049, 11, 81, 12, 1246, 622, 8049, 551, 1246, 622, 8049, 2740, 5066, 717, 13506, 802, 1246, 622, 8049, 2067, 20, 15, 21, 1122, 1246, 622, 8049, 10254, 19]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return fib(n)
+     return fib()
+     return fib().search('abc')
+     return fib([1,2])
+     return fib()[0]
+     return fib(), fib()
+     # print(f'Fine function for {n} - {len(p)} = {len(m)}')
+     return [p.group(0), p.group(1)]
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 1289, 338, 535, 1278, 783, 698, 1238, 2050]
+first_step_topk_probs=[0.36366191506385803, 0.14241203665733337, 0.11562943458557129, 0.07235904783010483, 0.0686868354678154, 0.047702059149742126, 0.03676541522145271, 0.03144712746143341, 0.024237249046564102, 0.024237249046564102]
+first_step_topk_text=[' The', ' There', ' We', ' A', ' In', ' If', ' This', ' It', ' As', ' One']
+
+[New tokens 8] count=256 first30=[1289, 1755, 847, 1418, 299, 342, 263, 3191, 17, 1358, 411, 620, 1418, 299, 342, 1413, 10676, 17, 202, 2141, 1418, 299, 342, 2849, 357, 269, 10676, 601, 453, 491]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: We don't want to be a cat. But we do want to be good cats.
+We want to be sure that the cats will not have any color or texture. We want to be able to be in an environment where they can see colors, which is just as important for their health.
+There's no way to tell if a cat is black or white. It's a very difficult thing to know what it looks like. If you look at the cat's eyes, you'll notice that there's a lot of hair on each eye. And then when you look at your cat's eyes it feels more like a black or white, but this is not true. You can only see one eye in the dark, so that the other eye does not look like a black. So you can't see a black or a white person, but you can see something else.
+So you can see a black person, but it doesn't matter how bright it is. The black person has no color, so that they cannot see anything. They are not black, so they can't see anything. And they're not black, because they're black.
+It's not surprising that cats can still be seen with the naked eye. This is why cats can see even
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 2050, 382, 1541, 798, 2590, 338, 843, 409, 744]
+first_step_topk_probs=[0.27964499592781067, 0.20459264516830444, 0.14968319237232208, 0.06505206972360611, 0.04517776519060135, 0.036681439727544785, 0.036681439727544785, 0.029783004894852638, 0.028271492570638657, 0.022954659536480904]
+first_step_topk_text=[' 1', ' One', ' The', ' There', ' 4', ' No', ' A', ' 5', ' 2', ' $']
+
+[New tokens 9] count=256 first30=[2050, 13032, 330, 798, 1885, 269, 1986, 288, 263, 27320, 17, 1803, 486, 853, 545, 760, 1890, 1987, 15, 383, 601, 2372, 486, 287, 2877, 288, 806, 1264, 299, 1062]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple is 4 times the size of a banana. When you add all these numbers together, it will give you an idea of how much to make if you subtract 1 from each number. For example, if we multiply 5 by itself, its value would be 6 x 8 = 28. And that's exactly what happens when we combine these two numbers into one big number!
+If I were to take the whole apple out of the basket, I'd get four apples. This means that if I had four apples in my basket, I could count them like this:
+- I have 4 apples
+- I can also count them like that:
+- It takes me ten more apples than I did before.
+This is not necessarily true for any given number of apples. If I had five apples, I'd count them like the same amount. But I still have three apples left over.
+Let's try some different ways to do this:
+1. Find the number of apples that I have. You know that this number is equal to the number of fruits. So if I had 10 apples, I would write this as:
+5 + 7 = 11
+Now you have 100 apples. This is just a little bit easier to understand.
+2. Write
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 783, 1289, 338, 776, 1278, 698, 1796, 3919]
+first_step_topk_probs=[0.4261021316051483, 0.08791118115186691, 0.07921455800533295, 0.057954613119363785, 0.055013421922922134, 0.04705546796321869, 0.04705546796321869, 0.02653355523943901, 0.025186976417899132, 0.019412361085414886]
+first_step_topk_text=[' I', ' The', ' This', ' We', ' A', ' He', ' If', ' It', ' To', ' My']
+
+[New tokens 10] count=256 first30=[338, 3127, 578, 299, 342, 263, 645, 288, 269, 1173, 298, 483, 491, 263, 1929, 5369, 299, 620, 2009, 672, 383, 17, 382, 4769, 330, 2397, 299, 1005, 486, 374]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: A student has to be a part of the class and can have a special opportunity to do something about it. The teacher is going to help you with this kind of problem, so that you can get more information from the teacher. It's not as simple as it sounds. If you want to learn more about the topic, you will need to start by reading it in the classroom or at home.
+Student: I was also very surprised to hear that the students were being taught the same way. They had different types of homework assignments and they had different grades.
+Students did not have to be a good teacher. There are many ways to teach them. One is to have a teacher who gives feedback on what your child is doing. This helps the teacher to know what your child needs to know before making any decisions. Some teachers even give feedback on how their students should feel when they're learning. For example, if you want to use the name of the school where your child is teaching, you could say "I'm sorry." Then the teacher might ask you to explain the term, but he would tell you "I'm just saying that I'm sorry." This is because you can't take these steps seriously. You can't make up for the fact that you don
+
+================================================================================

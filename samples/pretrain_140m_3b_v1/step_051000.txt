@@ -1,0 +1,305 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 2857, 2446, 418, 12562, 2977, 998, 5349, 791, 1255]
+first_step_topk_probs=[0.37531551718711853, 0.18101848661899567, 0.11933480203151703, 0.10752969980239868, 0.05755649879574776, 0.042109232395887375, 0.030807772651314735, 0.030807772651314735, 0.027760110795497894, 0.027760110795497894]
+first_step_topk_text=[' named', ' went', ' came', ' was', ' walked', ' saw', ' found', ' appeared', ' would', ' called']
+
+[New tokens 1] count=62 first30=[2827, 5273, 2857, 299, 269, 3843, 374, 610, 2553, 17, 1109, 586, 1114, 8763, 299, 631, 351, 287, 13555, 1987, 17, 1803, 581, 6875, 435, 269, 3843, 15, 5273, 418]
+[Full output 1]
+Once upon a time, a curious child named Jack went to the park with his mom. They were very excited to go on an adventure together. When they arrived at the park, Jack was so happy! He ran around and laughed and had fun. At the end of the day, he found himself in a magical place full of wonderful things.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=135 first30=[289, 1691, 6843, 298, 269, 775, 2544, 16, 10427, 5057, 299, 342, 3673, 289, 3733, 17, 202, 202, 6880, 202, 202, 755, 925, 700, 15, 5338, 343, 6196, 664, 418]
+[Full output 2]
+The Eiffel Tower was built in 1781 and the first English-language architect to be born in England.
+
+History
+
+In 1801, Thomas Cranmer was appointed to the National Trust for Scotland in a bid to secure financial support from the British government for the building of the Royal City Hall in Edinburgh. He was then appointed as the Director of the Scottish Heritage Centre.
+
+In 1830, he became the head of the Royal Government's London School and later the University of Glasgow. In 1840, he was appointed as the new Dean of the University of Edinburgh. He remained at the University until his death in 1856.
+
+He died on 7 June 1858, aged 79.
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 2000, 289, 269, 2281, 6603, 357, 15353, 1939, 2242, 17, 202, 202, 509, 18956, 288, 263, 3823, 395, 1255, 28069, 298, 553, 1701, 6709, 3636, 17, 1220, 1373, 15]
+[Full output 3]
+In linear algebra, an eigenvalue is a term in the complex plane that satisfies certain conditions.
+
+The eigenvalues of a matrix are called eigenvectors and their sum equals zero. For example, consider the first eigenvector of the complex plane with a nonzero determinant of 1 - i, where i represents its eigenvalues. The second eigenvector of this matrix is called the identity matrix, which has a scalar value equal to 1 (i = 0).
+
+Now let's examine how we can solve these types of problems using matrices. We start by finding the characteristic function for each eigenvalue, which gives us the eigenvalues. Then, we find the characteristic function of the vector x = e^x + 1. Finally, we calculate the characteristic function by finding the derivative of the product of two functions on the same vector space. This process takes some time, but it doesn't take long because we want to find the characteristic functions of all possible combinations of vectors in the original system.
+
+Let's consider the given solution:
+
+1. First, we have the characteristic function, which is defined as follows:
+(e^x)2 = e^y + 1
+
+2. Next, we need to compute the characteristic function. Since there are no other solutions, we must use the property of the characteristic function
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 1420, 817, 491, 330, 395, 1085, 1991, 713, 1005]
+first_step_topk_probs=[0.5797336101531982, 0.08011015504598618, 0.08011015504598618, 0.058609843254089355, 0.04758743196725845, 0.04631166160106659, 0.0313715897500515, 0.022951945662498474, 0.022951945662498474, 0.015130849555134773]
+first_step_topk_text=[' can', ' allow', ' use', ' have', ' is', ' are', ' model', ' provide', ' work', ' help']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 6811, 2304, 17, 202, 509, 8944, 819, 288, 269, 1549, 2613, 298, 613, 10065, 491, 733, 3658, 289, 2580, 15, 1433, 29, 202, 16]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex biological systems.
+The functionalities of the human brain and other organs have been described in detail, including:
+- Aphasia (brain injury)
+- Meningitis (inflammation of the brain)
+- Anatomical structures (the brain's architecture)
+- Neurodevelopmental disorders (neurological disorders)
+- Intraoperative neuropathy (disorder)
+- Brain damage (dementia)
+- Cerebral palsy
+- Neuronal degeneration
+- Muscular dystrophy
+- Myasthenia gravis
+- Pervasive development disorder
+- Hyperacute myasthenia
+- Neurologic conditions such as multiple sclerosis, Parkinson's disease, diabetes mellitus, stroke, or even heart failure
+- Post-traumatic stress disorder
+- Depression, anxiety, and depression
+- Decreased interest in sports
+- Nerve problems such as dizziness, fainting, and tremors
+- Depression and anxiety
+- Cognitive impairment
+- Depression
+- Sensory processing disorders
+- Injury and trauma
+- Depression or anxiety
+- Impaired memory
+- Stress and depression
+If you are experiencing any of these symptoms, please consult your doctor
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 5427, 6649, 29, 8163, 16, 27, 5427, 202, 1568, 202, 18688, 351, 588, 88, 6284, 224, 843, 2234, 29, 4611, 29, 5557, 9697, 202]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Dec  5 14:44:07 2019
+
+@author: <NAME>
+"""
+import numpy as np
+from scipy.ndimage import resize_img
+from scipy import interpolate
+import matplotlib.pyplot as plt
+import seaborn as sns
+import time
+
+class Scipy:
+
+    def __init__(self, size=1, image='red', **kwargs):
+        self.size = size
+        self.image = Image.open('../images/black.png')
+        self.color = self.image.get_rgb()
+
+        # Inputs
+        self.pixel_axis = 0
+        self.height = 3
+        self.width = 3
+        for i in range(0, size+1):
+            if i % 2 == 1:
+                self.pixel = (i - 1) * 255
+            elif i % 2 != 1:
+                pass
+        # Outputs
+        self._shape = np.array([1])
+        self._num_frames = len(self._shape)
+        self._size = len(image)
+        self.set_label(self._x_box[0] / 255)
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=1.011e-02
+first_step_topk_ids=[311, 1700, 353, 836, 338, 744, 408, 377, 382, 555]
+first_step_topk_probs=[0.26543310284614563, 0.16837605834007263, 0.07317595183849335, 0.06946228444576263, 0.06593700498342514, 0.06259071081876755, 0.0482405461370945, 0.0272018201649189, 0.0272018201649189, 0.025821303948760033]
+first_step_topk_text=[' n', ' `', ' (', ' {', ' A', ' $', ' N', ' P', ' The', '\n\n   ']
+
+[New tokens 6] count=256 first30=[744, 81, 990, 6218, 311, 333, 637, 2838, 382, 897, 330, 1255, 269, 28045, 288, 744, 81, 7, 353, 272, 833, 613, 6222, 573, 202, 202, 4551, 415, 1936, 287]
+[Full output 6]
+Write a Python function that returns the factorial of n: $n \times n = 3$. The result is called the factorial of $n$ (or any other integer).
+
+Let's consider an example using a simple programming language. Suppose we have two functions, f(x) and g(x), which are just numbers and can be written as follows:
+```css
+f(x) = x + 2 * x + 4
+g(x) := -2x + 4
+```
+Now let's move on to another programming language called Mathematica. An example of this language would be Mathematica. You might want to see how Mathematica works in practice or make use of some special tools like Mathematica.
+
+First, let's define our terms:
+
+* **Finite Contains**: These represent the set of all possible values for which a given number has a certain property. For instance, if you were to write a program to calculate the sum of three numbers, then your input would be the sum of those three numbers.
+* **Complementary Functions**: A series of operations performed over a sequence of real numbers. Each operation will follow specific rules regarding addition, subtraction, multiplication, and division. Examples include addition, subtraction...and division...
+* **Addition and Subtraction**: When
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=99 first30=[622, 311, 864, 353, 20, 647, 354, 12, 1319, 409, 8169, 622, 8049, 11, 81, 12, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 537, 1083, 11]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return n * (1 + 1) % 2
+   return fib(n)
+
+
+if __name__ == '__main__':
+    # print(f"function {func.__name__}")
+    # print("function f")
+    # print()
+
+    # print(p)
+    # print('f')
+    # print([f.split('.')[0] for f in func.__sub__(), func.__sub__()])
+    # print((f.split('_'))[2])
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 338, 535, 1289, 1278, 1238, 1906, 698, 356]
+first_step_topk_probs=[0.3007814288139343, 0.1786716729402542, 0.1609967052936554, 0.05984750762581825, 0.053927142173051834, 0.039453934878110886, 0.033746737986803055, 0.033746737986803055, 0.028865117579698563, 0.023436622694134712]
+first_step_topk_text=[' The', ' There', ' A', ' In', ' We', ' If', ' As', ' All', ' It', ' I']
+
+[New tokens 8] count=256 first30=[1541, 330, 263, 1543, 4560, 288, 7839, 672, 269, 3225, 993, 288, 10676, 289, 269, 3494, 17, 1783, 15, 383, 3926, 11905, 357, 715, 601, 342, 833, 2298, 4631, 920]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: There is a great deal of debate about the exact number of cats in the wild. However, it seems unlikely that there will be any significant differences between the numbers of cats and dogs. In fact, the total number of cats is only 1,000, which means that they could have been born at a very high rate. If you look closely, you may not see a difference when you consider the population size of cats. As for the number of cats, you should also know that cats are found in many parts of the world. The average cat population is estimated to be around 2,500,000 people. This estimate is based on a lot of data, but I am sure you won't find anything like this in your own backyard.
+The data from the National Geographic Society's website shows that in most cases, cats are black. A small percentage of them are black.
+So what does this mean? Well, it means that there are a large number of cats living in the wild and in countries where there are populations of cats, such as France, Germany, Japan, Australia, Canada, New Zealand, South Africa, Australia, New Zealand and even in Asia. These countries are known as "black" or "white." It means that cats live in countries
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 382, 2050, 798, 338, 409, 5517, 2590, 637, 843]
+first_step_topk_probs=[0.28556451201438904, 0.15285168588161469, 0.11182866990566254, 0.11182866990566254, 0.11182866990566254, 0.03637126460671425, 0.03375241532921791, 0.02886996977031231, 0.02771683596074581, 0.02601400390267372]
+first_step_topk_text=[' 1', ' The', ' One', ' 4', ' A', ' 2', ' Two', ' No', ' 3', ' 5']
+
+[New tokens 9] count=155 first30=[2050, 13032, 330, 798, 1885, 8381, 702, 269, 613, 795, 17, 1803, 486, 853, 545, 1103, 1890, 1987, 15, 383, 5424, 916, 482, 29, 843, 892, 637, 333, 409, 17]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple is 4 times bigger than the other two. When you add all those numbers together, it looks like this: 5 x 3 = 2. And since the first number is smaller than the second, it's a perfect square!
+Question: Can I divide both the first and last numbers by 2 to get a total of 9?
+Answer : We can multiply 7 by itself four times. In other words, if we take the number 10 from the first and then add that number to our result, then the answer is 13.
+Answer: The same thing applies when dividing the first and second numbers. In math language, the term "a" equals "b". So if we subtract 1 from the first, then the second would be a whole number.
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 3919, 338, 360, 783, 1289, 22089, 1509, 698]
+first_step_topk_probs=[0.31031283736228943, 0.1562473028898239, 0.08363315463066101, 0.06790482252836227, 0.05233628675341606, 0.04968022555112839, 0.044765595346689224, 0.031089087948203087, 0.028013594448566437, 0.025242367759346962]
+first_step_topk_text=[' I', ' The', ' My', ' A', ' "', ' This', ' We', ' Thank', ' You', ' It']
+
+[New tokens 10] count=256 first30=[338, 7543, 288, 4437, 3554, 15, 269, 437, 3156, 42, 1640, 2070, 418, 1255, 360, 44, 4575, 6968, 18029, 741, 2340, 415, 1091, 383, 330, 649, 1264, 5468, 299, 835]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: A couple of weeks ago, the ECOGAR program was called "I'm feeling stressed." That's because it is so much easier to get in touch with people who are trying to be more physically active than they used to. And that's where I'm feeling in my head.
+So what's going on? The program was called the "It's Not Too Late" and it started out as a way to help you feel better about yourself. It was designed for adults and teens. And it has been around since. You can see it here at http://www.tinyurl.com/news/2012-02-things-you-sustaining-at-a-level-of-the-worst-of-us-and-your-students-to-be-so-sustained-at-an-immediate-to-learn-by-a-school-on-a-learning-about-it-in-all-easy-to-get-our-administrators-of-service-for-students-as-what-you-wanted-when-they-are-that-is-so-you-whats-they-is-that-
+
+================================================================================

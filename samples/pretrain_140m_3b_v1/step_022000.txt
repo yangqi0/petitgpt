@@ -1,0 +1,304 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 418, 791, 601, 2446, 2977, 699, 668, 330, 10227]
+first_step_topk_probs=[0.37152937054634094, 0.301658034324646, 0.09591495245695114, 0.05697587877511978, 0.04168443754315376, 0.03756083548069, 0.01811598800122738, 0.016323862597346306, 0.013253939338028431, 0.013253939338028431]
+first_step_topk_text=[' named', ' was', ' would', ' will', ' came', ' saw', ' had', ' who', ' is', ' noticed']
+
+[New tokens 1] count=176 first30=[2827, 5273, 418, 649, 8763, 299, 1137, 922, 406, 699, 5025, 17, 776, 2977, 7336, 288, 1943, 298, 4725, 299, 1432, 780, 1842, 17, 5273, 415, 2553, 988, 1024, 982]
+[Full output 1]
+Once upon a time, a curious child named Jack was so excited to see what he had learned. He saw lots of things and decided to take them home. Jack's mom said she could help him find some new things in the house. Jack was so happy! He started to cry, but then he heard a loud noise. It was a big cloud that made his mom feel better. "Hey, look at your mom!" said Jack. The little girl looked around and saw something strange. She wanted to explore it together again. But when they got there, it was too late. Jack found another toy, a toy that was still there. Jack put on her mom's toy and went back to play with it. She opened the toy and ran away from the toy. She gave it to Jack and he took it to the toy. Jack was very sad and didn't know how to do it anymore.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=61 first30=[289, 1691, 6843, 298, 269, 775, 2587, 418, 2793, 289, 9434, 17, 382, 10079, 330, 2827, 994, 269, 5057, 288, 269, 10079, 17, 202, 755, 14704, 15, 269, 437, 705]
+[Full output 2]
+The Eiffel Tower was built in 1781 and the first building was built in 1920. The tower is named after the architect of the tower.
+In 1938, the Eiffel was re-opened as a new building with new buildings, including a new building which opened in 1949. It is currently used for construction purposes.
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 854, 288, 7527, 374, 10614, 289, 269, 876, 29, 202, 202, 10309, 2448, 5503, 81, 63, 967, 990, 8148, 96, 284, 11, 91, 12, 333, 353, 20, 552, 892]
+[Full output 3]
+In linear algebra, an eigenvalue is a set of vectors with coefficients in the form:
+
+$$\lim\_{n\to \infty} f(x) = (1 - x)^2 + (1 - 1)^2$$
+
+where $f$ represents the magnitude of the vector. Since the vector has an eigenvalue, we can express it as follows:
+
+$$F=\lim\_{n \to \infty}\frac{1}{n}$$
+
+Now let's consider the example involving a square matrix A and its transpose, which has two dimensions: one to create a square matrix and another to create a second matrix. We will construct a new matrix A by using the same concept of eigenvalues and eigenvectors.
+
+Firstly, note that since the determinant of a matrix A is the identity matrix, there are no other eigenvalues involved. Therefore, if we have a matrix A containing all eigenvalues from A, then its eigenvalues must be positive. Consequently, we get:
+
+* If A equals zero, then the diagonal matrix A contains all eigenvalues except for the left side.
+* When A equals zero because the right side satisfies the condition, we get A = 0.
+
+Since the determinant of any matrix A is positive, it cannot be expressed as a product of the entries of A
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 1420, 491, 395, 817, 1991, 601, 1005, 330, 586]
+first_step_topk_probs=[0.4322505295276642, 0.16927173733711243, 0.11159087717533112, 0.06165420264005661, 0.053821515291929245, 0.04369961470365524, 0.021076805889606476, 0.01542012207210064, 0.011281603015959263, 0.011281603015959263]
+first_step_topk_text=[' can', ' allow', ' have', ' are', ' use', ' provide', ' will', ' help', ' is', ' were']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1005, 1397, 1798, 611, 672, 553, 1231, 6705, 17, 202, 509, 775, 1993, 330, 299, 966, 269, 3743, 298, 3743, 2858, 339, 1397, 299, 8646, 374]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to help students learn more about their own experiences.
+The first step is to develop the skills and skills needed for students to interact with each other. This will allow them to become better learners, as well as those who need assistance in order to engage in critical thinking and problem solving.
+A second approach is to use different types of communication technologies, such as mobile phones, laptops, iPads, or even computers. The second approach is based on the characteristics of the user's ability to connect with others.
+The third approach is to focus on understanding how individuals interact with each others' behavior by creating connections between themselves and their peers. This involves using multiple networks and communication systems to facilitate communication and sharing among people. It also allows users to interact with one another, thus allowing them to share information without being able to communicate.
+This approach has been implemented at several universities and colleges throughout the United States. In addition, it provides an opportunity to discuss ideas, concepts, and strategies that would be useful for students.
+For example, you might want to talk to your teacher about the importance of your own work. He might tell you that this could lead to greater success in school than other areas where children are still participating. However, if you have problems
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 62, 19, 64, 647, 286, 62, 20, 64, 864, 276, 62, 21, 64, 711, 202, 1052, 426, 639, 38, 4166, 11, 2207, 464, 555, 538, 1401, 1285, 1737, 492]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a[0] + b[1] * c[2]
+
+
+class FakeCube(object):
+
+    def __init__(self, parent=None):
+        self.parent = parent
+        self.children = []
+
+    def get_child(self):
+        return self.parent
+
+    def set_child(cls, child):
+        if isinstance(child, FakeCub) and child != 0:
+            raise ValueError("Fake Cube is not supported")
+
+        # Check if child is in the list of all possible children
+        for child in child.children:
+            child.add(child)
+
+    def get(self, x):
+        return x
+
+    def set(self, y):
+        if len(y) == 1:
+            raise TypeError("Could not find the number of children that are in the list")
+
+        # If we have a child with an unknown child, then we can check whether it's missing or not
+        # there are no valid values here
+        if len([x[0] - y[1]] > 1) or len([x[-1] - y[-1]] < 1):
+            raise ValueError('Cannot find the number that is missing')
+
+        # If our child has a child with a known child
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 643, 311, 382, 836, 353, 356, 338, 409, 413]
+first_step_topk_probs=[0.2610591650009155, 0.1397348940372467, 0.08490712195634842, 0.07879354059696198, 0.074794702231884, 0.06739567965269089, 0.04003471881151199, 0.03250565007328987, 0.02929002419114113, 0.027803558856248856]
+first_step_topk_text=[' 1', ' 0', ' n', ' The', ' {', ' (', ' I', ' A', ' 2', ' r']
+
+[New tokens 6] count=256 first30=[413, 333, 637, 17, 202, 202, 2774, 15, 1427, 415, 2336, 351, 922, 356, 1734, 419, 360, 85, 5, 353, 1044, 993, 288, 2722, 299, 8098, 311, 12, 298, 360]
+[Full output 6]
+Write a Python function that returns the factorial of n: r = 3.
+
+Now, let's focus on what I mean by "r" (the number of ways to divide n) and "n" (the first one). Since we want to find the smallest number of ways we can multiply k by itself, we will use the following formula:
+
+d(n + 1)/2 = n / 2 = n!
+
+This equation looks like this:
+
+f(n + 2)/2 = 0
+
+Now that we have found the greatest common divisor (g) of all possible combinations of numbers, let's consider what happens when we multiply each number by itself? We need to convert this expression into something called "derivative," which is just a fancy way of saying "denet" for every value of x in our sequence. The formula for calculating g is:
+
+lim (x^2 + y^2) = \frac{1}{3} * (1 - y^2)$$
+
+Using these formulas, we get:
+
+g(n + 4) = (1 - x)^2 \* (1 - (-y)^2 \* ((1 - y)^2 \* (-1))^2 \* (0 - x)^4 \* (1 + y
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 3684, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.696887731552124, 0.2459082156419754, 0.05720403045415878, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', " '''", '', '#', '', '"', '!', '', '']
+
+[New tokens 7] count=204 first30=[622, 311, 13, 81, 202, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 490, 1804, 11, 6022, 17, 8256, 12, 3158, 354, 29, 331, 1083, 717, 6429, 6230]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return n*n
+
+if __name__ == '__main__':
+    if len(sys.argv) != 1:
+        print('python python python3.7')
+        sys.exit()
+    
+    # apply the `dj` class to get the smallest number of digits in the base year, and then use it to generate the first number of digits.
+    try:
+        x = np.array([0., 0., 0., 1.], dtype=np.float32)
+        y = np.stack((x, y))
+        z = np.arange(y)
+        for i in range(z):
+            dj[i] = np.where(x==x)[1]
+            dj[(i+1)] = np.log10(dj[i])
+        except:
+            pass
+
+    if len(dj) > 1:
+        if dj[0] < 2:
+            print('dj is not valid')
+            sys.exit(1)
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 338, 1541, 1278, 356, 1289, 535, 360, 0, 1]
+first_step_topk_probs=[0.5754960775375366, 0.10869713127613068, 0.07952452450990677, 0.07165754586458206, 0.05818138271570206, 0.04723959416151047, 0.031142249703407288, 0.02806149609386921, 0.0, 0.0]
+first_step_topk_text=[' The', ' A', ' There', ' If', ' I', ' We', ' In', ' "', '', '']
+
+[New tokens 8] count=256 first30=[382, 1811, 374, 482, 330, 357, 269, 3191, 415, 1629, 3379, 11547, 444, 672, 643, 17, 24, 4962, 426, 299, 611, 702, 354, 4169, 343, 17, 783, 1818, 357, 851]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The problem with this is that the cat's body temperature varies from about 0.5 degrees F to more than 1 degree C. This means that most cats have a higher temperature for their bodies than normal cats.
+So let's go back to our discussion of the relationship between temperature and temperature. In this case, it would be clear that the heat of the sun makes a difference in temperature between the average temperature of the cat and the temperature of the house. However, if the temperature of an animal is too high or too low, then there is no need to add extra heat to the cat's diet. For example, if the cat has a hot winter day, it needs to be warm to see if its temperature falls below 50 degrees F. It may also be possible to increase the temperature by 30 degrees F because the temperature changes with each cat's temperature.
+The question is whether the cat should be able to live in an area where temperatures vary from 20 degrees F to 2 degrees F. This could lead to a reduction in temperature within a particular area. This is true even though the temperature of a cat's body is very high at 90 degrees F. A relative humidity of less than 5 percent and a relative humidity of 10 percent and a preference for a larger amount of
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1509, 1278, 1541, 356, 783, 1803, 13676, 698, 1289]
+first_step_topk_probs=[0.4789581000804901, 0.0904635563492775, 0.07345060259103775, 0.05963722988963127, 0.05373760685324669, 0.048421651124954224, 0.039315275847911835, 0.03192150965332985, 0.0287636686116457, 0.0287636686116457]
+first_step_topk_text=[' The', ' You', ' If', ' There', ' I', ' This', ' When', ' Yes', ' It', ' We']
+
+[New tokens 9] count=256 first30=[1509, 483, 2639, 419, 3934, 435, 269, 1890, 351, 669, 3128, 15, 536, 330, 269, 993, 288, 10941, 486, 491, 17, 2069, 15, 490, 486, 1990, 263, 354, 16, 11933]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: You can tell by looking at the numbers on your table, which is the number of apples you have. So, if you put a 1-inch apple in the table, it will be pretty large!
+What is the total number of apples that are left after the table?
+Answer 1: One apple is tall enough to hold for each row.
+Answer 2: Two apples are long enough to hold.
+Answer 3: A apple is tall but only one of its own.
+Answer 4: A apple has a diameter of about 0.5 inches.
+Answer 5: A apple needs a diameter of 10 feet.
+Answer 6: A apple should have an area of 50 feet.
+The average size of the apple is 7.0 x 10 inches.
+A little bit less than half a inch is the largest possible size of apples.
+Answer 7: The smallest possible size of any apple is 1/4 or smaller.
+Answer 8: One apple needs a radius of 2.5 inches to support the diameter of the apple.
+Answer 9: The smallest number of apples is 1/3.
+Answer 11: One apple has a circumference of 3 inches.
+The size of the whole apple is about 1.5 inches, or 1
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 338, 360, 1278, 1289, 783, 3919, 2766, 1509]
+first_step_topk_probs=[0.47342655062675476, 0.09570454061031342, 0.07770594954490662, 0.04159299656748772, 0.02888575941324234, 0.02470730058848858, 0.02226312644779682, 0.019042661413550377, 0.017158878967165947, 0.016288049519062042]
+first_step_topk_text=[' I', ' The', ' A', ' "', ' If', ' We', ' This', ' My', ' Dr', ' You']
+
+[New tokens 10] count=256 first30=[338, 15919, 668, 578, 699, 263, 2415, 2707, 15, 287, 16147, 388, 8354, 17, 202, 8104, 2834, 29, 382, 19309, 330, 269, 619, 668, 330, 3303, 289, 269, 1841, 288]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: A nurse who has had a heart attack, an artery or stroke.
+Assistance: The employer is the one who is involved in the risk of having a heart attack.
+Assessment: The employer's attitude toward the job can be similar to that of a doctor. However, the employer may not have the ability to give advice on how to work, as it could make some people feel more comfortable about their own health and well-being.
+Assignment: The employer will then ask questions about what they want to do with his/her needs. If he is concerned about the job, he or she will ask questions about the job. If he wants to get help, he or he should ask questions about where the job was going. If he doesn't know the job, the employer will decide whether to ask questions about how much he or she is getting back.
+Assurance: The employer must provide training for those who are not willing to go to the workplace. The employer must also provide training in areas such as health care, safety education, medical services, and other options.
+Assessments: The employer has no right to take any action, but there are no plans. There are no plans for the job because the employer cannot offer any actions.
+
+================================================================================

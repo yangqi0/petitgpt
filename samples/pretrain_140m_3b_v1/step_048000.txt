@@ -1,0 +1,300 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 418, 1255, 699, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.7276015281677246, 0.20846132934093475, 0.031968578696250916, 0.031968578696250916, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' was', ' called', ' had', '', '', '!', '"', '', '']
+
+[New tokens 1] count=169 first30=[2827, 5273, 998, 263, 1809, 3043, 17, 698, 418, 649, 6604, 4, 776, 3766, 299, 1118, 922, 383, 418, 298, 406, 4537, 847, 1118, 17, 2069, 15, 406, 3109, 299]
+[Full output 1]
+Once upon a time, a curious child named Jack found a little ball. It was so pretty! He wanted to know what it was and he didn't know. So, he started to play with the ball and then he tried to reach it by himself. But when he got there, he noticed that the ball was very small. He knew that the ball could be big and strong. He thought that if he threw the ball on the ground, it would hit the ground. The ball moved away from him and he went back home. When he finally arrived at his friend's house, he saw something else in the sky. He couldn't believe it! He decided to go back home and explore the world around him. He quickly ran out of things and made sure to keep going. After a while, he learned that it was important to find another way to stay safe.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 299, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8545611500740051, 0.14543887972831726, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', ' to', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 2] count=146 first30=[289, 1691, 1699, 419, 269, 5057, 5287, 431, 17, 321, 9990, 15, 668, 699, 733, 263, 9004, 4201, 289, 269, 1426, 7801, 298, 269, 775, 11031, 288, 1136, 2262, 3281]
+[Full output 2]
+The Eiffel Tower was built in 1711 by the architect Robert W. Tanner, who had been a prominent figure in the American Revolution and the first governor of New York City. The tower is decorated with two harpies and an octagonal star.
+A large tower is located on the south side of the tower. It has a total length of 670 feet (914 m).
+The tower is situated at the intersection of Highway 60 and Rear-Admiralty Road, and was constructed as a public park in 1833.
+The tower's original purpose was to protect the natural environment and the public from the damage caused by the wind. The tower was designed by William P. Gossett and completed in 1890.
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 2000, 2686, 374, 269, 854, 288, 545, 18956, 289, 269, 3823, 17, 202, 202, 2774, 1427, 415, 1936, 269, 1496, 3823, 338, 29, 202, 202, 36, 333, 353, 20]
+[Full output 3]
+In linear algebra, an eigenvalue is a term associated with the set of all eigenvalues in the matrix.
+
+Now let's consider the given matrix A:
+
+A = (1/2)x^3 + x^4 + ... + x^n - 1
+
+We want to find the value of A that makes the matrix A symmetric. To do this, we need to solve the system of equations:
+
+AB = (1/(2*2))x^3 - 2*(1/(2 * 2))x^2 + x^3 + ... + y^n - 2
+
+The general form of A using this information is:
+
+AC = (1 / 2)*((1/(2*(2)))x^3+2*(1/(3*(2))))(1/(2\*2))x^(3-1))
+
+Here, x and y are numbers representing the eigenvalues of A, while x and y represent the eigenvalues of B. Now, we need two solutions for A:
+- x = 0 and x = 1.
+- y = 1 and y = 1. This simplifies to:
+
+- x > 0 and x < 0.
+
+To find the values of A, we first calculate the corresponding eigenvectors:
+
+
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 1420, 1991, 330, 491, 5546, 817, 395, 1005, 3747]
+first_step_topk_probs=[0.3193110525608063, 0.12504412233829498, 0.09148424118757248, 0.07427939772605896, 0.060310106724500656, 0.04896797984838486, 0.0441238172352314, 0.03550269827246666, 0.026210671290755272, 0.021281404420733452]
+first_step_topk_text=[' can', ' allow', ' provide', ' is', ' have', ' describe', ' use', ' are', ' help', ' allows']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 9668, 289, 263, 3812, 288, 15972, 17, 202, 509, 775, 645, 288, 269, 1563, 15, 360, 47, 8673, 8485, 298, 28911, 10631, 961, 10382]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex behaviors in a variety of contexts.
+The first part of the book, "Linking Learning and Cognitive Systems," focuses on how cognitive systems can be used as a tool for the development of new skills and strategies. The second part, "Mind-Driven Lectures" introduces an introduction to how cognitive systems use cognitive processes to support learning and learning. This is a good introduction to cognitive theory, which is also useful for developing skills and strategies in the context of social interactions. The third part, "Practical Knowledge Developmental Skills: A Comprehensive Review of Cognitive Science," discusses the development of cognitive skills and how they are applied to other areas of research. The fourth part, "A Theory of Mind-Based Learning," provides an overview of cognitive science.
+This chapter includes two chapters about cognitive science. In particular, it explores the ways in which cognitive scientists have identified the possible mechanisms by which cognitive science can be applied to human behavior. These include the development of functional magnetic resonance imaging (fMRI) scans, the use of electronic computers to study brain activity, and the use of computer programs to evaluate mental states. The final section covers the development of neural circuits, including cognitive control and memory.
+The third part, titled
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=117 first30=[263, 864, 286, 3, 711, 6, 5427, 6649, 29, 8163, 16, 27, 5427, 202, 807, 1401, 8644, 626, 655, 15551, 66, 22513, 202, 202, 1018, 3266, 202, 1018, 3861, 202]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a * b
+
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
+import json
+import logging
+
+from django.db import migrations, models
+
+
+class Migration(migrations.Migration):
+
+    dependencies = [
+        ('core', '0002_auto_20160710_0326'),
+    ]
+
+    operations = [
+        migrations.AlterField(
+            model_name='usbhinx',
+            name='first_name',
+            field=models.CharField(max_length=100),
+        ),
+    ]
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[311, 836, 354, 353, 1700, 409, 643, 651, 282, 338]
+first_step_topk_probs=[0.423821359872818, 0.15934187173843384, 0.12937548756599426, 0.09465313702821732, 0.05923241376876831, 0.03706669807434082, 0.03518553450703621, 0.023195749148726463, 0.022018544375896454, 0.016109110787510872]
+first_step_topk_text=[' n', ' {', ' 1', ' (', ' `', ' 2', ' 0', ' [', ' p', ' A']
+
+[New tokens 6] count=212 first30=[836, 81, 4, 11, 81, 16, 20, 18914, 13, 81, 4, 96, 2249, 836, 81, 4, 13, 94, 4, 11, 81, 14, 20, 18914, 13, 21, 4, 13, 1334, 13]
+[Full output 6]
+Write a Python function that returns the factorial of n: {n!(n-1)!*n!} -> {n!*{!(n+1)!*2!*...*!*!*}, n!*{!) -> {n-1!*{?(n+2)!*2!)}} -> {n - 1!*{~!(n)!*2!!*2!} -> {{n!(2)}*{~.{!(2)}\*{~}!*{y!*{{!(3)}*{!*{:})}]}} -> {2!*{6!*{5!*{2!*2!})}} -> {4!*{4!*{(2)}*2!)}}$
+
+# = {n, m}
+
+def main():
+    try:
+        # print("Usage:", sys.argv)
+        print(f"Usage:", sys.__version__)
+        print("\n")
+    except:
+        print("Error:", sys.__exception())
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=256 first30=[622, 311, 13, 81, 202, 856, 1271, 1714, 346, 1083, 801, 3142, 903, 346, 537, 2318, 360, 1044, 1180, 288, 6537, 1890, 5, 346, 1083, 11, 1813, 11, 1253, 11]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return n*n
+def main():
+    print("main")
+    #print "the list of prime numbers"
+    print(len(list(set(input('Enter number of prime numbers to the list of primes for '))))))
+    #print 'number of prime numbers'
+    print(0)
+
+    #print "numbers with prime numbers"
+    
+    #print "my prime number"
+    print("my prime number is {0}".format(str(int(input('My prime number is '))))))
+    
+    #print str(len(my prime numbers))
+    print("Illegal prime numbers")
+    print(1)
+    
+    #print len(my prime number)
+    print(2)
+    
+    #add the prime number to the next list
+    print(list(map(lambda x: x[0], my prime number)) )
+    
+    #print sum(my prime_number)
+    print("The largest prime number in the list is {0}".format(sum(my prime, 1)) )
+    print(3)
+
+    #add the next prime number to list of prime integers
+    print(5)
+    print()
+    print(4)
+    
+    #f = open("my prime numbers.txt", "r")
+    f.write
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 4619, 1238, 338, 535, 1906, 698, 13676, 1278]
+first_step_topk_probs=[0.5082944631576538, 0.1122405081987381, 0.09600438922643661, 0.04877953976392746, 0.04877953976392746, 0.04395401105284691, 0.027505718171596527, 0.019102342426776886, 0.018132897093892097, 0.01721263863146305]
+first_step_topk_text=[' The', ' There', ' Black', ' As', ' A', ' In', ' All', ' It', ' Yes', ' If']
+
+[New tokens 8] count=256 first30=[382, 1811, 374, 482, 330, 357, 269, 839, 1194, 299, 3296, 490, 263, 3191, 330, 2645, 330, 419, 1191, 263, 4641, 17, 783, 330, 287, 1384, 645, 288, 2902, 269]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The problem with this is that the only way to determine if a cat is black is by using a formula. This is an important part of understanding the concept of color in terms of color.
+The first step in finding out what color you see in your cat's eyes is to try to find out which color you have. If there are no dark spots or colors on your head, then you would be wrong. In other words, if you look at the eye from above, it will be different. In the case of a dog, if there are no bright spots or colors, then you'd be wrong. If you look at a dog, you'll probably be wrong. However, if you see a dog that has white spots or colors (in the case of dogs), then you should probably be wrong!
+A second step in looking for the color you want to compare your cat's ears is to look at the color of its tail. When comparing the tail of a cat with the tail of another animal, you may notice that the tail is more green than the tail. But when looking at the tail of any animal, you might notice that the body is more red than the tail itself. That is because the tail is lighter and the tail is less blue. Thus
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 798, 409, 843, 637, 744, 382, 2, 1, 0]
+first_step_topk_probs=[0.345035582780838, 0.3109031617641449, 0.12010838091373444, 0.0651688426733017, 0.058192502707242966, 0.05291292443871498, 0.047678545117378235, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' 4', ' 2', ' 5', ' 3', ' $', ' The', '', '', '']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 202, 20, 13032, 333, 843, 10941, 1341, 409, 202, 21, 10941, 333, 1012, 10941, 1341, 409, 3, 711, 509, 507, 17, 54, 17, 3257, 288]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+1 apple = 5 apples / 2
+2 apples = 6 apples / 2
+
+The U.S. Department of Agriculture (USDA) recently released a report on the state's food security program that shows how the USDA is working to increase access to fresh, frozen, and canned foods for consumers. The report also highlights the fact that the USDA has been able to reduce its food budget by at least $50 million over the past three years.
+"We are not alone in this," said Susan Kassler, executive director of the USDA's Food Safety and Inspection Service, which has created the report. "In order to do so we need to make sure that our food supply is safe and nutritious."
+Kassler noted that the USDA is using a "superiority" approach to address these issues, but there are other reasons. For example, the USDA is trying to keep up with the growing demand for processed foods by offering them a higher-quality product. While it is difficult to find a way to meet the needs of people who are hungry or hungry, the USDA can help improve their food supplies by providing them with a lower-cost alternative.
+It also makes sense to use the USDA's food safety program
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 783, 1289, 338, 360, 776, 1278, 2766, 3919]
+first_step_topk_probs=[0.3414422571659088, 0.12380225956439972, 0.08597896993160248, 0.0698094591498375, 0.06290355324745178, 0.051073696464300156, 0.02879934385418892, 0.02879934385418892, 0.021070050075650215, 0.020000744611024857]
+first_step_topk_text=[' I', ' The', ' This', ' We', ' A', ' "', ' He', ' If', ' Dr', ' My']
+
+[New tokens 10] count=256 first30=[338, 7543, 288, 4437, 3554, 15, 269, 1902, 1266, 415, 1925, 418, 672, 299, 342, 2591, 289, 263, 11189, 16, 27800, 5000, 17, 382, 2930, 330, 13853, 360, 53, 603]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: A couple of weeks ago, the next day's post was about to be published in a peer-reviewed journal. The article is titled "Race and Religion: Ethnicity and Religion in America." It's part of a series on the Civil Rights movement that looks at race and religion in America.
+"I think it's important for people to understand how racial and gender differences affect our culture," said Dr. David Fenton, director of the Center for American Progress. "The problem with this study is that we don't know what race or religion really means, but rather what we're talking about. We can look at different groups of people in terms of their attitudes toward racism, gender inequality, and racism."
+In his book, "Racial and Ethnic Issues in America," Fenton says, "we see a lot of discrimination and discrimination against African Americans, including white men who are disproportionally black and have no family income."
+"We all have a common source of prejudice because they've been around for years," he said. "But there has been a growing recognition among whites of the anti-racist rhetoric that black Americans are less likely to suffer from racism than other Americans."
+Fenton says some of the most interesting issues
+
+================================================================================

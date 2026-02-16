@@ -1,0 +1,260 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[418, 791, 288, 2446, 699, 2977, 2827, 601, 988, 982]
+first_step_topk_probs=[0.4575251340866089, 0.14547406136989594, 0.07016375660896301, 0.046254780143499374, 0.046254780143499374, 0.0416790209710598, 0.03049302287399769, 0.03049302287399769, 0.027476519346237183, 0.02475840039551258]
+first_step_topk_text=[' was', ' would', ' of', ' came', ' had', ' saw', ' named', ' will', ' said', ' could']
+
+[New tokens 1] count=127 first30=[1255, 627, 298, 356, 418, 289, 1284, 1173, 17, 202, 509, 613, 1266, 406, 2857, 299, 269, 3843, 374, 610, 2553, 298, 11965, 17, 776, 418, 649, 8763, 357, 406]
+[Full output 1]
+Once upon a time, a curious child called me and I was in my class.
+The other day he went to the park with his mom and dad. He was so excited that he started to explore the park. He wanted to go back to the park, but he knew he had an idea. The next morning, he saw a big bird on the edge of the park. It was so bright and blue that he felt very happy. He looked around and saw lots of birds flying across the park. They were amazed by how much he had seen them. Then they heard a loud noise. It was something like this. It was a great game for kids!
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[289, 1691, 6936, 419, 269, 5057, 4385, 343, 17, 404, 625, 93, 17, 698, 330, 2827, 994, 269, 5057, 288, 269, 2587, 15, 668, 1770, 2037, 269, 775, 7850, 299]
+[Full output 2]
+The Eiffel Tower was built in 1783 by the architect William C. Hertz. It is named after the architect of the building, who later became the first artist to be awarded a award for his work in the early twentieth century.
+
+In 1929, John G. Sutherland and Robert H. Hertford were appointed as the architect of The Sutherland Library. In 1934, they built a new building, which was demolished during the 1970s and was used as a museum for the art and architectural history of the area.
+
+Early life
+W. W. J. Hertfeld was born on June 2, 1941, in Lahore, Texas, where he graduated from Columbia University in 1953. He studied architecture at the University of Texas at Austin, Texas, and then at the University at Austin, and at Yale, where he worked as an engineer and architect. His son, James H. M. Hertbach, was an important architect in the United States.
+
+He was also an architect, with the architect and architect Thomas H. H. Hetden, who founded the United States Naval Academy (now known as the National Academy of Sciences) in 1968. He was elected president of the American Museum of Natural History in 1974.
+
+
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 288, 1986, 311, 17, 1220, 1373, 15, 490, 411, 491, 263, 3823, 374, 269, 1134, 8639, 353, 19, 15, 354, 504, 383, 601, 342, 269, 1134, 359, 357]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector of size n. For example, if we have a matrix with the same dimension (0, 1), it will be the same as that for a matrix with its same dimension (1, 1).
+
+Now let's think about another scenario involving the matrix. In our case, we want to find out how many rows and columns there are in each row. We can add up all those numbers by adding them together, like this:
+
+$n = 2 * n + 1 - 1 - 1 = 0$
+
+Next, we need to calculate the number of rows and columns from the matrix. The result is $n=2$. Since we already know that there are no other rows and columns, we must account for any number of rows or columns. So, the next step is to multiply the total number of rows by the sum of these rows and columns. This means that, given any two rows and columns in the matrix, we can now use the formula to solve the equation:
+
+$\begin{align*}
+\frac{\text{array}{2} - \frac{\text{(x+y)}{3})}\cdot \frac{\left(2^2+y-1)} &= \frac{\sqrt{\pi}}{
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 491, 395, 817, 1991, 1420, 601, 330, 982, 713]
+first_step_topk_probs=[0.558300793170929, 0.1441323161125183, 0.06643843650817871, 0.045828159898519516, 0.03352859988808632, 0.027223095297813416, 0.022103408351540565, 0.016171198338270187, 0.011831101030111313, 0.010660719126462936]
+first_step_topk_text=[' can', ' have', ' are', ' use', ' provide', ' allow', ' will', ' is', ' could', ' work']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1005, 1397, 1557, 269, 1165, 1378, 780, 17, 202, 509, 1085, 330, 1728, 351, 287, 1373, 288, 263, 2969, 2070, 1255, 263, 360, 17094, 11061, 5]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to help students understand the world around them.
+The model is based on an example of a computer program called a "telephone" and it uses a computer-based tool called a "network." The computer uses this software to teach about how people think and act, and then helps them learn about their own work. It is also known as a computer program.
+The computer programs in the classroom use computer technology to create real life experiences. They have been developed by the National Science Foundation (NSF), which has published its first book on the subject of computer science. In addition to being a highly popular app for teachers, these computers are also available from the Library of Congress.
+In the past, there were many organizations in the United States including:
+- The National Association of School Labs, Inc., a non-profit organization dedicated to providing educational materials for children and young adults.
+- The American Society of Teachers of Mathematics (ASL) a leading academic institution.
+- A number of other organizations, such as the National Institute of Standards and Technology (NIAAA), are developing innovative tools for teaching mathematics and science.
+- NICHD's Center for Learning Education (NIFA) provides education services to students through the
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 864, 263, 647, 286, 3, 711, 509, 8314, 2719, 953, 330, 1728, 351, 263, 2097, 1255, 360, 1044, 993, 288, 9888, 741, 698, 415, 287, 9725, 854, 288, 1890]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a * a + b
+
+The Google Earth system is based on a concept called "the number of planets." It's an infinite set of numbers that can be written in a mathematical language. The algorithm provides a way to make sense of these numbers and their relationships with other numbers. This method helps us understand how numbers are defined by various ways of describing them.
+The first step in this process involves using a mathematical tool called the "number of planets" (or "first-order" or "last-order") to figure out what a planet is. This technique allows you to see how the numbers change over time without ever adding up all those numbers.
+You might also want to use the "number" of planets to find the value of the number of planets. For example, if we have two planets, then we would like to know how many stars are in our solar system. If we have three planets, then it means that there are no planets, but there are only two planets. In our case, we have four planets, so we could say that there are only one planet. That means that if we had two planets, which we would get from one side of the moon, we would have five planets. So, if we were to think about
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[836, 311, 354, 643, 990, 409, 353, 744, 286, 263]
+first_step_topk_probs=[0.23266194760799408, 0.1967656910419464, 0.15338031947612762, 0.10111450403928757, 0.06665876507759094, 0.06327583640813828, 0.051375966519117355, 0.03758746385574341, 0.019098056480288506, 0.01867043972015381]
+first_step_topk_text=[' {', ' n', ' 1', ' 0', ' \\', ' 2', ' (', ' $', ' b', ' a']
+
+[New tokens 6] count=256 first30=[413, 65, 81, 333, 354, 15, 913, 311, 330, 269, 993, 288, 2722, 299, 853, 656, 545, 269, 1890, 17, 202, 202, 2774, 15, 1427, 415, 1432, 751, 4084, 299]
+[Full output 6]
+Write a Python function that returns the factorial of n: r^n = 1, where n is the number of ways to add up all the numbers.
+
+Now, let's take some steps to solve this problem using something called "Ratio." You can apply these steps to find the values of Ratio and sum of all those numbers you have. You might start by finding the value of n that goes into the equation. In our case, we want to find the value of r for n that gets more than one of those numbers. To do this, we need to consider two cases – one with two consecutive integers and another with two consecutive ones. The first case involves multiplying the numerator (the denominator) by the fraction (which equals 3). This means that if we multiply the denominator by 2 and divide it by 2, then we get:
+
+r^2 = (1/3 + 1/4 - 1/3 + 0.5) / (1/4 + 1/8 - 1/8 + 0.75) / (0.5 + 1/6 + 0.25) / (5/6 + 1/7 - 1/9 + 0.35) / (10/6 + 9/8 - 0.50) / (15/6 + 10/
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8670357465744019, 0.13296423852443695, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=74 first30=[622, 311, 864, 311, 647, 354, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 655, 3715, 555, 444, 892, 74, 1072, 17, 3106, 655, 1219, 66, 4699]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return n * n + 1
+
+
+if __name__ == '__main__':
+    import sys
+
+    from xgpy.utils import read_csv, write_csv, get_csv_csv, load_csv, create_csv, save_csv, \
+        load_csv(open('../data/xgpy.txt'), 'r')
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 338, 1278, 535, 1906, 783, 356, 1289, 1803]
+first_step_topk_probs=[0.6344488859176636, 0.06414138525724411, 0.057796187698841095, 0.04228459298610687, 0.034332409501075745, 0.030936067923903465, 0.027875740081071854, 0.025118129327893257, 0.025118129327893257, 0.02263331227004528]
+first_step_topk_text=[' The', ' There', ' A', ' If', ' In', ' All', ' This', ' I', ' We', ' When']
+
+[New tokens 8] count=256 first30=[382, 1811, 288, 360, 73, 2138, 5, 388, 360, 73, 2138, 634, 330, 357, 490, 263, 3191, 578, 263, 6078, 2419, 298, 269, 3864, 1223, 453, 1137, 383, 15, 1000]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The problem of "flying" or "flying", is that if a cat has a yellow color and the animal does not see it, then its color will be red. This may be due to an over-use of chemicals and other substances, which are usually used as a treatment for pain relief.
+How do I know if my cat is a horse?
+Yes, if you look at the picture above, it might be very hard to get a good idea of what your cat is. In the case of a dog, there's no way to tell whether it was a horse or a horse. If you look at this picture, you can make sure that the horse is in the eye of the dog.
+There are two ways to treat a dog:
+1. A dog with a white skin on his face and a white skin (the skin).
+2. A dog that has a black skin on his neck and a white hair on his head.
+3. A dog who has a black hair on his neck.
+4. A dog whose eyes are gray and dark.
+5. A dog named who is about to become a white dog.
+6. A dog known as a dog who is born near a dog's back.
+
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1509, 1541, 698, 783, 356, 1278, 776, 1289, 1803]
+first_step_topk_probs=[0.518714427947998, 0.07954743504524231, 0.06458741426467896, 0.05244088172912598, 0.042578671127557755, 0.042578671127557755, 0.042578671127557755, 0.034571148455142975, 0.034571148455142975, 0.02279072068631649]
+first_step_topk_text=[' The', ' You', ' There', ' It', ' This', ' I', ' If', ' He', ' We', ' When']
+
+[New tokens 9] count=256 first30=[1509, 601, 1098, 598, 357, 269, 993, 288, 10941, 289, 669, 1844, 330, 453, 649, 1593, 15, 614, 486, 483, 847, 835, 263, 3313, 288, 780, 4, 202, 2774, 15]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: You will find out that the number of apples in your family is not so large, but you can't get a lot of them!
+Now, if you do this for $5, then you need to eat at least 5 apples. That's what we're trying to figure out.
+So there are two ways you can make it better by making sure you have a little bit of apples.
+- You want to eat twice as much fruits (and vegetables) on average.
+- If you get no apple or peeled off, you have more fruit than you can.
+- The other way is to eat something like that.
+- It takes just about 10 apples a day, which means it doesn't matter how long you've eaten.
+- So you don't get any fruit.
+- And you have a lot of apples and chili.
+- We really want to eat some fruit, but you don't want to eat it.
+- But when you take a little bit, you end up eating all the vegetables and stews.
+- Now you know why you're eating too much, because you're getting a lot of vegetables.
+- What you think is important is that you're getting some nuts, but that's pretty
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 356, 338, 2766, 1966, 360, 263, 776, 783, 1509]
+first_step_topk_probs=[0.23341938853263855, 0.1325172334909439, 0.11258064955472946, 0.10686718672513962, 0.04184979200363159, 0.02618892677128315, 0.02485981583595276, 0.020184597000479698, 0.019160229712724686, 0.01401792373508215]
+first_step_topk_text=[' The', ' I', ' A', ' Dr', ' John', ' "', ' a', ' He', ' This', ' You']
+
+[New tokens 10] count=256 first30=[338, 7543, 288, 4437, 3554, 15, 269, 1426, 6644, 288, 20185, 353, 36, 3000, 12, 3609, 339, 263, 744, 24, 2153, 5149, 299, 5800, 4355, 672, 269, 16762, 288, 3725]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: A couple of weeks ago, the American Academy of Pediatrics (AAP) asked for a $5 million grant to teach kids about the dangers of online cyberbullying. The parents and teachers were amazed at how much they had learned in their own classroom. They felt that if we could find a way to do this, it would be better to make sure everyone is safe.
+For example, the teacher said, "I think it's important to have an online video or video program where you can make it."
+"We don't want to get around this problem," she said. "But there are some kids who use it. That's not just because they're going to learn about what they're doing. It's really when people talk about it. You might think that it's pretty complicated. And that's something they've been told. We know they're going through it."
+The teacher gave her a letter from her teacher asking him to go on a computer. The teacher asked him why he was given the opportunity to do it.
+"It wasn't very long before I got into the computer, but I knew that the technology has been used by me," she said, "and I thought it made sense. Now I am able to get around it
+
+================================================================================

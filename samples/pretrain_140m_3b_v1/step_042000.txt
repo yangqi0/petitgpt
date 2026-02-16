@@ -1,0 +1,270 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 418, 2446, 10227, 3609, 2977, 12562, 1255, 0, 1]
+first_step_topk_probs=[0.6067160367965698, 0.11459370702505112, 0.08383854478597641, 0.04980228468775749, 0.04980228468775749, 0.03283168002963066, 0.03283168002963066, 0.029583796858787537, 0.0, 0.0]
+first_step_topk_text=[' named', ' was', ' came', ' noticed', ' asked', ' saw', ' walked', ' called', '', '']
+
+[New tokens 1] count=182 first30=[2827, 5273, 418, 4438, 374, 610, 6086, 6268, 17, 698, 418, 649, 1264, 958, 299, 5317, 269, 6268, 631, 1378, 269, 2422, 298, 1137, 780, 4227, 1378, 17, 2050, 1266]
+[Full output 1]
+Once upon a time, a curious child named Jack was playing with his toy cars. It was so much fun to watch the cars go around the house and see them running around. One day, Jack saw something shiny on the floor. He wanted to show it to his mom. "Hi! Can I play with you?" he asked. His mom smiled and said, "Yes, we can do it!" Jack's eyes lit up. The car stopped running and Jack ran back inside. He waved at himself and the car started to roll. Jack's mom hugged him tight and said, â€œI'm glad you like your toys.â€ She took the car home and put it in his room. When they got there, Jack had an idea. He thought of a way to make things work better. He looked at the car and said, ''You can do this today.'' He felt happy that he could help his friend.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=74 first30=[289, 1691, 6843, 419, 269, 2751, 5009, 299, 2422, 269, 775, 2751, 5797, 289, 6131, 17, 202, 202, 6880, 202, 202, 755, 925, 700, 15, 269, 437, 705, 297, 10079]
+[Full output 2]
+The Eiffel Tower was built in 1781 by the British Government to house the first British army in Britain.
+
+History
+
+In 1801, the Eiffel tower building was completed and the building was used for a fire station at the end of the 19th century. The tower is currently owned by the Royal Institute of Arts, Science and Technology. It was demolished in 2010.
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 289, 269, 2281, 6603, 357, 3399, 545, 18956, 288, 269, 2189, 4409, 17, 202, 202, 2774, 1427, 415, 4116, 482, 2097, 299, 829, 1811, 4933, 29, 202, 202]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector in the complex plane that contains all eigenvalues of the original vector.
+
+Now let's apply this concept to our problem statement:
+
+1. A nonzero vector $A$ is said to be zero if there exists some $\lambda \in A$, called the "zero eigenvalue." This means that when you have two vectors, say $A$, and another vector $B$, both have a zero eigenvalue. Since $A$ has a zero eigenvalue, it must also belong to the set of linearly independent vectors ($\mathbf{0}$) because they share the same direction as $A$.
+2. The vector $A \subseteq B$ is equal to $0$; since $A$ represents the zero eigenvalue, its transpose $A$ would correspond to the identity matrix ($A = 0$). Therefore, any scalar value between $0$ and $0$ will result in zero.
+3. Any vector $A > 0$ can be written as $A^T$ or $x^T - x^T = 0$. Since $A^Ts$ is symmetric about $0$, there must exist some $x, y ∈ A$ such that $A^t - x^t = 0$. Consequently, $A$ cannot be zero due to
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 1420, 491, 817, 1991, 1085, 330, 395, 5663, 5546]
+first_step_topk_probs=[0.2063751369714737, 0.08969029784202576, 0.08969029784202576, 0.07282283902168274, 0.06561882048845291, 0.05912746861577034, 0.053278323262929916, 0.04385034739971161, 0.035123225301504135, 0.031648654490709305]
+first_step_topk_text=[' can', ' allow', ' have', ' use', ' provide', ' model', ' is', ' are', ' involve', ' describe']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 9668, 15, 857, 359, 1103, 998, 289, 2497, 12404, 17, 202, 509, 1085, 330, 5943, 339, 817, 419, 4126, 298, 1397, 668, 491, 453]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex behaviors, such as those found in science fiction.
+The model is intended for use by teachers and students who have not yet learned how to model simple behavior or behaviour. It has been proposed that the model will allow learners to explore a set of behaviors and then relate them to their own experiences. The model could also be used to simulate a series of scenarios where participants have taken turns asking questions about themselves, whether they had actually met certain criteria (such as being able to choose between different scenarios), and how many times each scenario is asked.
+For example, one student might ask, "How do you think this game would help me understand how I'd like to see this?" Another student might ask: "How do I know if I've ever seen this game?". This would lead to a more realistic model of what it would look like when I am working on an experiment.
+Another example of this model is given below. In this case, we were looking at two different scenarios: one involving a group of kids with a similar problem, and another group of adults with similar problems. We were looking at a number of scenarios where children were shown that the same situation was true, but without having made any assumptions about the outcome.
+-
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 5427, 6649, 29, 8163, 16, 27, 5427, 202, 807, 1401, 8644, 626, 655, 15551, 66, 22513, 202, 202, 1018, 3861, 202, 202, 807, 5210]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
+import logging
+
+from django.db import models, migrations
+from django_filters.validators import MinValueValidator
+from django import forms
+from django2.contrib.auth.models import User
+from django1.contrib.admin.forms import LoginForm
+from django3.apps import AppConfig
+
+
+class Migration(migrations.Migration):
+
+    dependencies = [
+        ('app', '0004_auto_20180506_1714'),
+    ]
+
+    operations = [
+        migrations.CreateModel(
+            name='User',
+            fields=[
+                ('id', models.AutoField(primary_key=True, serialize=False)),
+                ('username', models.CharField(max_length=100)),
+                ('password', models.TextField()),
+                ('user_email', models.EmailField(blank=True, null=True)),
+                ('is_active', models.BooleanField(default=False)),
+            ],
+        ),
+        migrations.AddField(
+            model_name='user',
+            name='user_email_required',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[311, 836, 354, 643, 353, 651, 409, 990, 338, 1700]
+first_step_topk_probs=[0.17768853902816772, 0.15830828249454498, 0.12201295793056488, 0.09906678646802902, 0.08473630994558334, 0.07247880846261978, 0.0387951135635376, 0.036826226860284805, 0.031499139964580536, 0.02694264054298401]
+first_step_topk_text=[' n', ' {', ' 1', ' 0', ' (', ' [', ' 2', ' \\', ' A', ' `']
+
+[New tokens 6] count=256 first30=[836, 20, 15, 409, 15, 637, 96, 913, 311, 330, 287, 6222, 17, 202, 202, 2774, 1427, 415, 1936, 1467, 1373, 4734, 1890, 298, 8068, 1191, 751, 2829, 3677, 17]
+[Full output 6]
+Write a Python function that returns the factorial of n: {1, 2, 3} where n is an integer.
+
+Now let's consider another example involving numbers and sequences using some simple rules. Suppose we have a sequence of integers with only one outcome in total (n = 1), i.e., a sequence with all possible outcomes in this sequence. Our goal here is to find out how many ways there are to pick any number from our list of possible combinations without leaving any remainder. To do so, first notice that every time we choose a distinct combination of positive and negative numbers, we need to calculate the following:
+
+* If we know that x < y and x < y, then its product equals the sum of all positive and negative values of x.
+* If x < y or x < y then its product becomes zero because no other factors of x exist within the set.
+* When we divide both sides by zero, we get:
+ + x = 0
+* The result should be exactly one value greater than zero; hence, it must be greater than zero since the entire range contains infinitely many possibilities.
+
+So now, instead of trying to determine the exact value of x, we can try to approximate each value using a formula provided earlier. We can start by calculating the values
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[1083, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' print', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=47 first30=[1083, 801, 41, 420, 311, 444, 836, 19, 15, 20, 96, 1334, 1385, 1697, 11, 81, 687, 346, 622, 8049, 11, 81, 12, 202, 202, 350, 1401, 678, 626, 861]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     print("Fill n from {0,1}...".format(n))
+    return fib(n)
+
+if __name__ == '__main__':
+
+    import sys
+    sys.exit(app.exec_())
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1289, 535, 1541, 356, 783, 338, 1238, 698, 0]
+first_step_topk_probs=[0.5632721185684204, 0.14541560411453247, 0.05999011546373367, 0.05999011546373367, 0.05999011546373367, 0.03563562035560608, 0.027465475723147392, 0.02474844828248024, 0.023492468520998955, 0.0]
+first_step_topk_text=[' The', ' We', ' In', ' There', ' I', ' This', ' A', ' As', ' It', '']
+
+[New tokens 8] count=256 first30=[1289, 491, 263, 1114, 1204, 993, 288, 10676, 289, 269, 3494, 17, 356, 1645, 715, 330, 263, 3313, 288, 9294, 1845, 1875, 30, 339, 1373, 15, 914, 10676, 601, 342]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: We have a very small number of cats in the wild. I think there is a lot of variation among species; for example, many cats will be white or brown in color, but not all of them.
+So why do dogs and cats get so much yellow and blue? Well, it's not just dogs and cats who live in the wild, but those cats who live outside of the wild. The reason is because they are born with the same colors as their neighbors. They are really different from each other and share a common pattern of colours, like reds and oranges.
+A cat may look like an orange, but the colors are actually the same. When you see a cat, its color is white, which means that the color is white. You can also tell if a cat has a pink color, or if a cat is black and yellow.
+In general, cats tend to be darker than other cats. Some cats seem to prefer white, while others seem to prefer black. The color of a cat's skin is usually dark gray. This is true even though cats are dark gray.
+It seems like a good idea to keep cats away from other cats, since they can't be seen by people who don't like them. It might be possible
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 354, 2050, 1541, 13676, 356, 776, 409, 338, 783]
+first_step_topk_probs=[0.27674195170402527, 0.20246872305870056, 0.1643916219472885, 0.06437668204307556, 0.05800826475024223, 0.029473790898919106, 0.021563488990068436, 0.020749153569340706, 0.020469143986701965, 0.019430333748459816]
+first_step_topk_text=[' The', ' 1', ' One', ' There', ' Yes', ' I', ' He', ' 2', ' A', ' This']
+
+[New tokens 9] count=256 first30=[2050, 13032, 483, 342, 744, 1161, 15, 1086, 17, 202, 509, 1811, 330, 357, 269, 2140, 288, 3161, 486, 3637, 351, 669, 18020, 601, 342, 4879, 419, 354, 8, 1010]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple can be $10,000.
+The problem is that the amount of money you save on your expenses will be reduced by 1% each year. So, if you earn $5,000, you'll save an additional $4,000. That's because you don't have to pay for everything else in the budget. You may not even buy a car or a home.
+So what is the cost of saving on your income?
+Let's say you want to know how much you would save on your monthly earnings. The average household spends between $2,000 and $1,500 per month. To find out how much you'd save on your income, you could divide the total cost of your monthly income by the number of days that you spend with it. For example, if you had $3,000, your annual salary would be $9,000. But if you didn't own a house with $6,000, it would be $7,000. And if you bought a house with only $8,000, then your monthly salary would be 5% ($1,200). This is a big deal for you!
+What are the costs of saving on the income?
+If you saved on your income at $
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 1289, 382, 1278, 783, 3919, 776, 1906, 1238, 1509]
+first_step_topk_probs=[0.6502141952514648, 0.0831913873553276, 0.05777526646852493, 0.040124088525772095, 0.036154840141534805, 0.019352290779352188, 0.018370145931839943, 0.014915394596755505, 0.01415843702852726, 0.01275781262665987]
+first_step_topk_text=[' I', ' We', ' The', ' If', ' This', ' My', ' He', ' All', ' As', ' You']
+
+[New tokens 10] count=256 first30=[356, 873, 3934, 339, 263, 1951, 1584, 299, 2915, 298, 713, 289, 269, 2343, 15, 614, 356, 1755, 847, 491, 689, 17, 356, 3442, 733, 2997, 374, 1284, 1844, 339]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I am looking for a better place to live and work in the community, but I don't have time. I've been living with my family for a long time. I have no money to spend on things that you love. I've had a lot of fun working in the community.
+I know that there are many things that we can do together, but it's not all that easy. I know what I need to do now and again. It is hard to keep up with new things. I want to do something about it. I think I can make a difference.
+One thing I would like to do is make a plan for a more productive environment. I'd like to help people get involved. I'd love to be part of a group where everyone has some experience, but at least they feel good about themselves. They might just give up and be less likely to leave their home or work. That is what I'm trying to do.
+We could start by creating a space for our own groups. We could create a space for each group. We could make a space for ourselves, such as a classroom, a school, a city, a school. A lot of this space would be a room for everyone else. And we could start with a
+
+================================================================================

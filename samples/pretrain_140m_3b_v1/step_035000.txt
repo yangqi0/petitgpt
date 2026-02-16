@@ -1,0 +1,255 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[418, 2827, 3609, 1255, 791, 288, 2446, 699, 5349, 10227]
+first_step_topk_probs=[0.399656742811203, 0.3601202666759491, 0.049763016402721405, 0.03640739992260933, 0.03640739992260933, 0.03280582278966904, 0.03280582278966904, 0.021626925095915794, 0.01755969226360321, 0.01284694578498602]
+first_step_topk_text=[' was', ' named', ' asked', ' called', ' would', ' of', ' came', ' had', ' appeared', ' noticed']
+
+[New tokens 1] count=125 first30=[2827, 5273, 718, 418, 7948, 289, 269, 3843, 17, 202, 202, 755, 269, 4271, 288, 269, 3664, 15, 5273, 2857, 299, 610, 2553, 298, 11965, 415, 2422, 374, 553, 5774]
+[Full output 1]
+Once upon a time, a curious child named Jackie was walking in the park.
+
+In the middle of the night, Jack went to his mom and dad's house with their grandma. They saw many different things going on inside the house. It was an adventure! Jack put down some rocks and made a big mess. He said, "Wow, it's so cool!" Jack nodded and gave them a hug. They were happy that they had found something special. Then, Jack got a big smile on his face. He felt proud of himself for being so kind and happy. He hugged Jack and said, "That's great, Jack."
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[289, 1691, 6843, 298, 418, 269, 775, 1829, 10079, 289, 269, 1165, 17, 202, 755, 925, 2503, 15, 269, 437, 705, 297, 17753, 1306, 418, 5153, 17, 698, 330, 619]
+[Full output 2]
+The Eiffel Tower was built in 1781 and was the first major tower in the world.
+In 1822, the Eiffel Gateway was completed. It is one of the most interesting structures in the world and the only building to be built by a German engineer. The original Eiffel Bridge, which had been built for the London and West Coast Railway (now known as the London & South Line) was constructed in 1839, but it has since been abandoned.
+The Eiffels are very similar in design to the Eiffels, but have a different design. They are made from metal and steel, with a single piece of wood. In the middle of the structure is a "furnace" that is used to hold the shafts of the Eiffell's main locomotive. This design uses the same material as the Eiffelled Motors, which are designed with different designs. The Eiffels can also be made from aluminum, although they are not considered suitable for use in a railway line.
+There are two other towers on the Eiffelling Motors, the Brampton Bridge and the Wampanoag Bridge. The Eamon Bridge is located at the top of the tower. The Eamske Bridge is located between the Eiffells
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 2000, 357, 483, 342, 5454, 359, 744, 81, 990, 6218, 311, 7, 857, 357, 744, 81, 333, 409, 2838, 783, 1818, 357, 269, 10294, 8537, 288, 287, 28071, 330]
+[Full output 3]
+In linear algebra, an eigenvalue is a term that can be represented as $n \times n$ such that $n = 2$. This means that the eigenvector of an eigenvalue is also a term that has both its eigenvalues and eigenvectors.
+
+Now let's move on to our main topic: finding the eigenvalues of a given vector space. A matrix $A$ is said to be invertible if there exists some element $x in the original vector space $V$ that satisfies this property. For example, consider the first two matrices $A$ and $B$, which are all zero-valued vectors. Since their entries have no components, they must satisfy the following conditions:
+
+1. If $x \in V$ is not invertible, then $f(x) = f(y)$.
+2. If $f(y)$ is a matrix whose elements are linearly independent, then $F$ is invertible.
+3. If $A$ has only one component, then $g(x) \equiv 0 \pmod{0}$ for any $x \geq 1$.
+4. If $B$ is invertibility, then $E$ is invertibly non-trivial.
+
+As mentioned earlier, when working with these matrices, you may encounter
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 491, 817, 1420, 395, 330, 713, 1991, 1005, 9847]
+first_step_topk_probs=[0.23737235367298126, 0.23737235367298126, 0.08376070857048035, 0.07547466456890106, 0.07246002554893494, 0.036402229219675064, 0.02955630049109459, 0.023997843265533447, 0.023997843265533447, 0.021623853594064713]
+first_step_topk_text=[' can', ' have', ' use', ' allow', ' are', ' is', ' work', ' provide', ' help', ' combine']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 298, 5699, 269, 9668, 288, 1108, 2584, 288, 874, 17, 202, 509, 2097, 288, 360, 5756, 16, 7128, 5, 330, 263, 4869, 4379, 339, 2902]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model and explain the behaviors of different types of people.
+The concept of "real-world" is a powerful tool for understanding complex problems, and it has been around since the time of the Great Depression. It was invented by Carl Sagan in 1935, and is now available on Amazon.com. The idea behind the idea comes from the idea that an individual can understand and make sense of certain things through interaction with others. This is what makes the concept of "virtual reality" so popular. In this case, the person who created the idea of virtual reality would have to learn about their own experiences. That's why he chose the idea of "real world" as his name.
+In the 1960s, the idea of a virtual reality system (or virtual reality) developed at the University of California, Berkeley, was introduced to a group of young scientists called the "Mission Machine." They wanted to create a computer program that could communicate with other students. These students were given the opportunity to study how the human brain works. Then they created a computer program which they named the Magnetic Resonance Imaging System (MEAS).
+They then studied the effects of physical activity on the brain, including the ability to see and perceive objects and objects
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 864, 286, 647, 286, 864, 276, 711, 202, 350, 1401, 678, 626, 861, 8922, 3142, 9533, 346, 655, 620, 307, 369, 346, 620, 307, 369, 17, 1192, 2369, 551]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a * b + b * c
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
+
+The idea of using the word "cry" to describe a body of water is often used in science fiction and fantasy novels. This article will focus on the concept of "cry," which is an idea that has been around for many years now. The term "cry-based" comes from the Greek word for "water." It was invented by the Greek mathematician Hermes (a Greek philosopher who made the first water-lungs method) in his book The Natural History of Water.
+In this article, we'll explore how the term "crack" is used in science literature to describe water. In this article, I will show you some basic concepts about water and its use in scientific research. You will also find a few basic definitions of "crack":
+- A water bottle is a container with a water bottle. A bottle can be any type of container that contains water. A bottle is a small container containing water. A glass container is a container that contains a water bottle, usually a plastic or glass container. A bottle may contain more than one liquid container. An example of
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[311, 354, 353, 643, 836, 409, 990, 744, 377, 316]
+first_step_topk_probs=[0.2088887244462967, 0.19253534078598022, 0.17348875105381012, 0.09782661497592926, 0.08367554098367691, 0.04251524806022644, 0.040357597172260284, 0.020505573600530624, 0.019464898854494095, 0.01753934659063816]
+first_step_topk_text=[' n', ' 1', ' (', ' 0', ' {', ' 2', ' \\', ' $', ' P', ' e']
+
+[New tokens 6] count=256 first30=[316, 65, 81, 333, 353, 20, 647, 354, 12, 864, 311, 17, 202, 202, 2774, 15, 1427, 415, 4196, 806, 299, 1098, 269, 28045, 288, 263, 6847, 1191, 269, 4641]
+[Full output 6]
+Write a Python function that returns the factorial of n: e^n = (1 + 1) * n.
+
+Now, let's explore how to find the factorial of a polynomial using the formula provided in your text snippet. We will focus on finding the factorial of $e^n$:
+
+$$e^{n-1} = \frac{n!}{2!(n - 1)!} = \boxed{\frac{n+1}{2!}(n-1)!}$$
+
+To make things easier, consider this expression:
+
+$$(\frac{n-1}{2!)}\times\frac{n}{(n - 1)(n-1)-1}{4!}$$
+
+Here, $\frac{n}{2!}$ represents the factorial of $(n - 1)^n$. Now, we want to determine the factorial of the number $n$:
+
+$$\sum\_{n=0}^\infty a\_n = \frac{(n-1)}{2!(m-1)!} = 2\cdot 1 = 4.$$
+
+At first glance, it might seem strange at first glance; however, there seems to be some confusion regarding what happens when we add up all those terms together. Instead, we need to compare them against another rule or formula involving
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1083, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.6273422837257385, 0.3726576864719391, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' print', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=55 first30=[622, 311, 864, 311, 647, 354, 711, 202, 350, 1401, 678, 626, 861, 8922, 3142, 9533, 346, 1083, 801, 12749, 7379, 269, 8695, 903, 346, 1083, 801, 9627, 1700, 87]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return n * n + 1
+
+
+if __name__ == "__main__":
+    print("Skipping the Python")
+    print("Using `t.py`")
+    print()
+    print("Saving the Python function to a Python Python implementation.")
+    print()
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 338, 535, 1278, 1289, 1541, 1238, 1803, 783, 698]
+first_step_topk_probs=[0.541918158531189, 0.12606291472911835, 0.06747660785913467, 0.05478673055768013, 0.044483352452516556, 0.044483352452516556, 0.03611762821674347, 0.02783697098493576, 0.022601833567023277, 0.01933237351477146]
+first_step_topk_text=[' The', ' A', ' In', ' If', ' We', ' There', ' As', ' When', ' This', ' It']
+
+[New tokens 8] count=256 first30=[382, 1811, 330, 357, 715, 395, 795, 2584, 288, 10676, 17, 2050, 1375, 578, 263, 2886, 3191, 614, 269, 613, 1375, 578, 263, 2645, 3191, 17, 6194, 2584, 491, 263]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The problem is that there are two types of cats. One type has a white cat but the other type has a black cat. Both types have a black cat and only one type has a brown cat. The other type has an orange cat. If you take the cat out of your house and place it in a box, you will see the black cat. This means that if you take the box with you, you will get to see the black cats again.
+The second type of cat is the black cat or the white cat. The black cat is not black, it's black. It's black, it looks like this. You would think that if you look at the black cat, you might see the black Cat. But the black cat does not look like this. The black Cat is black, it doesn't look like this, it isn't black. So, the black cat is black.
+Answer: There are three types of cats: black cats (one type), black cats (two types), and black cats (three types). The black cat has no black cat.
+In order for cats to be considered black, they must have a white cat. They should also have a black pet. Some cats have white cats. Others have black cats.
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 382, 1541, 798, 2050, 13676, 2590, 338, 1278, 409]
+first_step_topk_probs=[0.4169715940952301, 0.3050629198551178, 0.03798476606607437, 0.02927600033581257, 0.027790244668722153, 0.023770257830619812, 0.021418780088424683, 0.0192999430000782, 0.0192999430000782, 0.01807321608066559]
+first_step_topk_text=[' 1', ' The', ' There', ' 4', ' One', ' Yes', ' No', ' A', ' If', ' 2']
+
+[New tokens 9] count=256 first30=[354, 12, 637, 10941, 333, 843, 10941, 864, 1171, 333, 1720, 10941, 202, 3016, 914, 10941, 1352, 406, 835, 34, 202, 24771, 932, 637, 12, 798, 10941, 333, 843, 24847]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1) 3 apples = 5 apples * 10 = 15 apples
+How many apples did he get?
+Answer : 3) 4 apples = 5 oranges
+What is the difference between a "5" apple and a "6"?
+Answer : 4) 3 apples + 5 apples = 6 apples
+The difference between a two-digit number and a one-digit number is that, for example, we have 2 apples. In other words, it's the same as our 2 apples. The difference between an apple and a one is the same as the difference between an orange and a one. So if you take the decimal point of the answer to make sure your apples are not too big or too small.
+Answer : 7) 4 apples + 5 bananas = 9 apples
+This means that each apple contains only one letter (1,2,3,4,5). This means that there are 4 numbers in total, so if you take this number then you get 8 letters. You can also use the first letter to calculate the sum of the three digits.
+Answer: 8) 3 apples - 2 apples = 12 letters
+A few days ago I saw that my students had to give up their math classes and see what they could do with the amount of paper they
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2766, 382, 356, 338, 776, 5395, 7193, 360, 1966, 1289]
+first_step_topk_probs=[0.18995191156864166, 0.13897179067134857, 0.1238141879439354, 0.09161582589149475, 0.03405650332570076, 0.03068745695054531, 0.02913007140159607, 0.027651695534586906, 0.02245142124593258, 0.01920371875166893]
+first_step_topk_text=[' Dr', ' The', ' I', ' A', ' He', ' Mr', ' Professor', ' "', ' John', ' We']
+
+[New tokens 10] count=161 first30=[4593, 431, 749, 274, 2116, 15, 269, 26518, 288, 269, 4134, 288, 9823, 298, 20796, 3285, 435, 269, 1442, 288, 13558, 17, 202, 509, 1759, 330, 263, 1180, 288, 269]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: Mary Wickesley, the Principal of the College of Engineering and Applied Science at the University of Toronto.
+The following is a list of the most common and interesting projects that have been done in the past year by Professor Robert Falkin, one of the founding members of the Institute for Advanced Study (IET) in Canada. The goal is to create an understanding of the research process in the human body. This will allow the student to see how the body works with respect to its environment and its function. The first project will be conducted in 2010 as part of the IET's Special Collaborative Research Program.
+For more information on this project, please contact Dr. Mark Hofer at firstname.lastname@example.org or 518-275-8704.
+
+================================================================================

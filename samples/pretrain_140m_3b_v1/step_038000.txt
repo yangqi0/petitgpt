@@ -1,0 +1,277 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 418, 2446, 1255, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.7377074956893921, 0.11313112080097198, 0.07458067685365677, 0.07458067685365677, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' was', ' came', ' called', '', '', '!', '"', '', '']
+
+[New tokens 1] count=168 first30=[2827, 5273, 2857, 299, 269, 3843, 374, 610, 2553, 17, 1109, 699, 914, 5373, 298, 3685, 351, 269, 2389, 17, 1358, 5273, 418, 1114, 4191, 1091, 406, 982, 1143, 3099]
+[Full output 1]
+Once upon a time, a curious child named Jack went to the park with his mom. They had many toys and books on the ground. But Jack was very happy because he could play outside in the sunshine. He did not like to go inside but he wanted to make sure he made everyone happy. Suddenly, Jack heard a loud noise coming from the sky. It was a big dog! The dog looked sad and ran away. Jack's mom saw that he had gone inside. She said it was important to stay safe and not touch anything. She told him to always listen to her mom and see what happened. The next day, Jack found a big tree near the park. He picked up the tree and put it back together. He said goodbye to the tree and thanked the dog for helping him. From then on, Jack played with his toy car all day long.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 419, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.811277449131012, 0.18872256577014923, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', ' by', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 2] count=174 first30=[289, 269, 3750, 16, 955, 401, 2162, 419, 263, 1440, 288, 3388, 12944, 17, 382, 10079, 330, 269, 9619, 15299, 2982, 289, 3733, 15, 298, 578, 733, 885, 359, 263]
+[Full output 2]
+The Eiffel Tower was built in the mid-19th century by a group of French settlers. The tower is the oldest surviving structure in England, and has been used as a museum for the past 20 years.
+
+It was designed by architect Charles F. Borges, who had visited the site in 1906 to build the tower, which was used as an entrance for the Royal Navy during World War II. The tower was designed by Pérez Riván and completed in 1903. It was originally constructed for the British Army Air Forces in 1945 but was replaced with a modern building. In the 1970s it was used as a memorial to the Royal Navy's first woman minister.
+
+In the 1960s, the tower was renovated and reopened to visitors after a successful upgrade. The tower remained on the original design until 2001 when it was removed from the original design.
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 483, 342, 5454, 359, 269, 1701, 288, 795, 7527, 289, 269, 4409, 1926, 17, 535, 482, 1832, 15, 411, 1418, 299, 1098, 269, 18956, 288, 263, 1496]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be represented as the sum of two vectors in the vector space. In this case, we want to find the eigenvalues of a given vector in the vector field F and the eigenvalue of F.
+
+To do so, let's consider another example: imagine you have a bag full of different colored marbles - red, blue, green, and yellow. You could represent each marble with its own color (the position of the marbles) by using their corresponding eigenvalues. The first row of marbles represents the number of marbles in the bag, while the second column shows how many marbles are in the bag. This concept plays a crucial role when studying matrices like those found in the matrix A.
+
+Now, let's focus on the problem presented earlier regarding the identity matrix A. To make things easier, let's break down the process into smaller steps:
+
+1. **Definition**: An expression involving a real number $x$ that takes some input values and returns a value between 0 and 1 based on whether x has more than one input value or not. It looks something like this:
+
+$$(x+y)^2 = \frac{1}{x}$$
+
+Here, $-1$ represents the number remaining after adding the first two elements together
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 1420, 491, 330, 1991, 395, 817, 7337, 5546, 1085]
+first_step_topk_probs=[0.4012403190135956, 0.1149572804570198, 0.09333793818950653, 0.09333793818950653, 0.07578448206186295, 0.04667887091636658, 0.040564510971307755, 0.019564691931009293, 0.017629269510507584, 0.01588529162108898]
+first_step_topk_text=[' can', ' allow', ' have', ' is', ' provide', ' are', ' use', ' enable', ' describe', ' model']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 298, 1557, 269, 1165, 1378, 500, 17, 202, 509, 851, 1488, 1375, 288, 1085, 330, 269, 2969, 1085, 15, 536, 330, 263, 2281, 953, 374]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model and understand the world around us.
+The most common type of model is the computer model, which is a complex system with many different kinds of systems, but also has many different applications. The computer model is one of the most powerful tools in computer science because it is able to simulate the world around you and work on your own computer.
+A computer model is a collection of objects or processes that are connected by a network connection. These objects are called nodes, and they can be any object or system (like a computer) that can interact with other objects, such as computers, computers, etc. In this way, computers and computers are all connected together and have an ability to communicate and interact with each other.
+A set of methods for understanding how people interact with each others' devices, and how they interact with each another's devices are discussed below.
+Computer modeling is a technique that uses the computer model to create images and charts. It works on a variety of types of hardware and software, from the hardware and software to the computer graphics system.
+An application is a program that uses the hardware to create images, graphs, and other visual representations of the world around them. For example, the computer model can show the way the world
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 5427, 6649, 29, 8163, 16, 27, 5427, 202, 807, 1401, 8644, 626, 655, 1083, 66, 6137, 202, 1018, 1656, 202, 1018, 306, 202, 1018]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# -*- coding: utf-8 -*-
+from __future__ import print_function
+import os
+import re
+import time
+import sys
+sys.path.append("../")
+import numpy as np
+import matplotlib.pyplot as plt
+
+plt.rcParams['font.size'] = 2.5
+plt.style.use('seaborn')
+plt.xlabel('Time (s)')
+plt.ylabel('Total time (s)')
+
+
+class Matlab():
+
+    def __init__(self, input_dir, output_dir, max_epochs=1, num_steps=100, n_classes=10, max_len=20, num_workers=1000, **kwargs):
+        self.input_dir = input_dir
+        self.output_dir = output_dir
+        if not isinstance(input_dir, str):
+            raise TypeError("Input directory must be of type str or int.")
+
+        self.num_layers = num_layers
+        self.max_len = max_len
+        self.num = len(input_dirs)
+        self.n_classes = n_classes
+        self.batch_size = batch_size
+        self.min_epoch
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[311, 990, 353, 836, 643, 354, 338, 17448, 377, 282]
+first_step_topk_probs=[0.1295866221189499, 0.11235759407281876, 0.08659745752811432, 0.06674326956272125, 0.06674326956272125, 0.06674326956272125, 0.06014068424701691, 0.04635228216648102, 0.04399986192584038, 0.02900651842355728]
+first_step_topk_text=[' n', ' \\', ' (', ' {', ' 0', ' 1', ' A', ' $$\\', ' P', ' p']
+
+[New tokens 6] count=217 first30=[1249, 17, 72, 1155, 353, 81, 14, 20, 12, 6497, 353, 81, 14, 21, 12, 333, 354, 647, 409, 91, 647, 637, 92, 65, 22, 647, 798, 3100, 65, 23]
+[Full output 6]
+Write a Python function that returns the factorial of n: i.e., (n+1) × (n+2) = 1 + 2x + 3y^3 + 4xy^4 + 6xy^5 + 8xy^6
+
+Now, let's explore some properties of these functions and see what happens when we add them together! We can do this by multiplying both sides of the same equation by x:
+
+a(x) = 1 - 2x + 7
+
+So, our first expression becomes:
+
+2x + 7 = 0
+
+To simplify things further, we need to find the value of 'a' that gives us the product of two whole numbers raised to the power of 1:
+
+0 = a * (1 + 2)
+
+However, there you have it! You may already know how to calculate the difference between consecutive terms on your number line without using any complex mathematical formulas or equations. It could be challenging, but don't worry; just remember that solving problems involves understanding concepts like addition, subtraction, multiplication, and division. Happy learning!
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=256 first30=[622, 311, 17, 73, 1338, 66, 967, 66, 20, 71, 11, 81, 12, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 360, 25167, 269, 1700, 87]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return n.fli_to_1d(n)
+
+
+if __name__ == '__main__':
+    print "Reading the `t` file"
+
+    # Write the function to read the input string and convert it to the form
+    # 'test1' - 1 = 0,0,1 = 1,2,3,4,5,6,7,8,9,10,11,12,13,14,20,24,23,22,22,25,27,21,22,26,27,31,33,29,30,31,32,34,42,45,46,36,43,44,45,41,47,48,49,50,54,53,55,56,57,62,68,64,65,78,60,70,70,72,75,6,2,4,3,6,6,3,7,7,2,7,6,4,7,3,5,7,4,4,6,5,5,8,7,1,7,5,3,2,2,1,1,0,0,7,0,4,
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 535, 338, 1289, 1541, 783, 1278, 1238, 1803, 4619]
+first_step_topk_probs=[0.4238223731517792, 0.12142714858055115, 0.10941494256258011, 0.07213082164525986, 0.05856560543179512, 0.05277203395962715, 0.05277203395962715, 0.04755154997110367, 0.0386088490486145, 0.022934619337320328]
+first_step_topk_text=[' The', ' In', ' A', ' We', ' There', ' This', ' If', ' As', ' When', ' Black']
+
+[New tokens 8] count=256 first30=[382, 4784, 288, 360, 10733, 5, 330, 263, 2000, 885, 299, 5546, 269, 2419, 288, 263, 3191, 415, 3630, 17, 698, 330, 658, 263, 14788, 339, 833, 3864, 388, 3864]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The definition of "black" is a term used to describe the color of a cat's skin. It is also a noun for any animal or animal. In this definition, there are no terms like "white", "white", or "white".
+The word "black" comes from the Latin black, which means "red." It may be applied to any animal or plant that has white fur on its head, such as to eat food in the form of a lion. This definition does not apply to the species of cat that is black.
+A person who eats a lot of things (like fruits, vegetables, etc.) should be able to see what they look like. If you do not have a problem with the definition, then it is OK to talk about it in your own words. However, if you do not know what the definition says, then it will be good practice to make a comment about what you mean by saying that it is OK for a dog to be brown.
+The following definitions come from the English Language Association. They are made up of four parts:
+- Black - a symbol used to represent the color of an object.
+- White - a symbol of the color of another person.
+- Red - a symbol representing the color
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 354, 2050, 338, 1541, 1278, 1803, 409, 798, 783]
+first_step_topk_probs=[0.3839177191257477, 0.1668500006198883, 0.08930837363004684, 0.055887751281261444, 0.04537726193666458, 0.03684346377849579, 0.02695525251328945, 0.026651788502931595, 0.025587275624275208, 0.02305605076253414]
+first_step_topk_text=[' The', ' 1', ' One', ' A', ' There', ' If', ' When', ' 2', ' 4', ' This']
+
+[New tokens 9] count=256 first30=[2050, 13032, 483, 342, 798, 1885, 8381, 702, 269, 613, 17, 382, 8829, 993, 288, 10941, 330, 798, 15, 536, 1818, 357, 722, 486, 853, 354, 299, 1127, 4717, 288]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple can be 4 times bigger than the other. The biggest number of apples is 4, which means that when you add 1 to both sides of the equation, it gives you a total of 8 apples. So, if you add 1 + 5 = 9, then the final answer is 6. That's what happens when we multiply each side by two.
+Answer: When you add 1, the whole number (the second part) goes up by one, while the third part comes down by three. But wait! What happens when we add 1? Well, let me tell you that we know how many apples are in our original list. Since I'm not sure exactly how many apples we need to add, we don't really know how many of those apples we want to add. We just need to figure out how many apples there are. Let's say we want to subtract 1 from the total amount of apples we already have. So, we write this as follows:
+|1||2||3||4||5||6||8||9||0||10||10||11||12||16||20||30||15||10||12||13||17||17||18||22||21||25||7||24||27
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 338, 1289, 783, 2766, 3919, 360, 535, 1278]
+first_step_topk_probs=[0.36242613196372986, 0.1250244826078415, 0.06352456659078598, 0.06030069291591644, 0.027607671916484833, 0.02487657591700554, 0.022415656596422195, 0.01727643981575966, 0.015567364171147346, 0.014777321368455887]
+first_step_topk_text=[' I', ' The', ' A', ' We', ' This', ' Dr', ' My', ' "', ' In', ' If']
+
+[New tokens 10] count=256 first30=[338, 7543, 288, 4437, 3554, 15, 269, 437, 3156, 42, 1362, 44, 330, 2397, 299, 342, 289, 263, 1144, 288, 360, 4423, 5, 4083, 298, 751, 874, 491, 733, 3968]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: A couple of weeks ago, the ECOGINI is going to be in a state of "normal" stress and some people have been told that they are having more stress than normal.
+The other day, it was obvious what had happened, but it was not until the first few days after the stress.
+It's not clear why there has been so much stress, though. People who are suffering from depression often report the stress to their doctors. They may also see a lot of weight gain as well. The doctor can tell you if your symptoms are similar to those of the previous year or last year.
+For example, the doctor might say that you have a problem with depression. He will probably do the same thing again for you. But he might feel like he just isn't making enough of the stress, so you don't know what it is.
+The doctor might ask you to check your blood pressure levels, which is usually within 10-15 minutes. Then he or she might ask you how long you've been at work or what the doctor said. You might also want to ask about your own life expectancy. It's important to remember that you're being treated differently than you thought.
+There are many ways to cope with stress, including
+
+================================================================================

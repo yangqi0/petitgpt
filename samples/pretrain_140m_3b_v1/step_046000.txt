@@ -1,0 +1,295 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 418, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.9375165104866028, 0.06248348578810692, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' was', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 1] count=80 first30=[2827, 5273, 2857, 299, 269, 3843, 374, 610, 2553, 17, 776, 2977, 914, 2918, 298, 7106, 17, 14918, 15, 406, 5052, 263, 10603, 6387, 17, 360, 2664, 395, 486, 3573]
+[Full output 1]
+Once upon a time, a curious child named Jack went to the park with his mom. He saw many animals and flowers. Suddenly, he heard a loud noise. "What are you doing?" Jack asked. "I am singing a song," her mom said. "That sounds like a big song." Jack smiled and felt happy that he had listened to his mom. From then on, Jack played with his toys all day long.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 299, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.7391713261604309, 0.2608286738395691, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', ' to', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 2] count=113 first30=[289, 1691, 1699, 419, 269, 5057, 5287, 431, 17, 404, 462, 92, 15, 668, 699, 733, 7180, 269, 775, 10533, 288, 269, 2317, 298, 263, 15322, 623, 15, 299, 5010]
+[Full output 2]
+The Eiffel Tower was built in 1711 by the architect Robert W. Huey, who had been appointed the first minister of the city and a wealthy man, to whom he was elected as secretary. He also had the right to take up arms and work in the army at the battle of St. Lawrence's Hill.
+During his lifetime, Huey helped lead the war effort with his brother-in-law William Huey. In 1821, Hueys left London for New York City and returned to England where he remained until the end of his life.
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 2000, 289, 269, 2281, 6603, 357, 3936, 269, 4409, 288, 545, 1623, 1890, 17, 202, 202, 2774, 1427, 415, 4116, 482, 2097, 299, 829, 1811, 29, 202, 202, 2141]
+[Full output 3]
+In linear algebra, an eigenvalue is a term in the complex plane that represents the vector of all real numbers.
+
+Now let's apply this concept to our problem:
+
+We have two vectors A and B with coefficients x1, y1, ..., xn, where |x| > 1. Our goal is to find the value of |A| such that |A| = |x| - 2, meaning |x| < 1. To do so, we need to calculate the eigenvalues and eigenvectors of A using the formula provided earlier:
+
+* |A|=|x2 - 2| + ||x3 - 4| = |-2| + ||−2| = 3
+* |-2||−2| + |+2| = −2| = 6
+
+Next, since |A| equals 1, we can rewrite the equation as follows:
+
+|A|=|\sqrt{|x|}{|x2-2}| = |x2 - \sqrt{|y2-2|} = |x3 - \sqrt{(|x2)-2| + (|y2)-2|^2 = 5
+
+Since |x| = |1|, we have shown that |A|\cdot |x
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 817, 1420, 491, 1991, 1085, 5546, 5663, 395, 1432]
+first_step_topk_probs=[0.19428065419197083, 0.17506156861782074, 0.14213889837265015, 0.10399103909730911, 0.05566239356994629, 0.05015597864985466, 0.04519433155655861, 0.04519433155655861, 0.04458443075418472, 0.024190783500671387]
+first_step_topk_text=[' can', ' use', ' allow', ' have', ' provide', ' model', ' describe', ' involve', ' are', ' take']
+
+[New tokens 4] count=109 first30=[483, 342, 885, 299, 1085, 2281, 9668, 298, 9668, 17, 202, 509, 1549, 2613, 330, 269, 851, 1384, 1422, 289, 829, 14424, 15, 614, 383, 415, 658, 619, 288, 269]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex behaviors and behaviors.
+The human brain is the most important organ in our brains, but it's also one of the most complex. It includes many brain regions that are involved in regulating thought processes such as language processing, memory, attention, and decision-making. The neural network, which controls movement, has been known for over 100 years and is used by many people to communicate with each other. It's also the basis of many behavioral systems including perception, emotion regulation, emotional responses, and social behavior.
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=199 first30=[263, 647, 286, 864, 353, 69, 552, 263, 12, 864, 353, 68, 552, 286, 12, 711, 202, 856, 1271, 1714, 346, 655, 3715, 555, 537, 1083, 801, 44, 873, 4227]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b * (b - a) * (a - b)
+
+
+def main():
+    import sys
+
+    # print("I am running on the script")
+    from __future__ import print_function
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-o", "--output", dest="output", type=str, default="input", help="Output file path to output")
+    parser.set_defaults(func=main)
+    args = parser.parse_args()
+    if not args.output:
+        print("Please enter your input or output.")
+        exit(1)
+    if not os.path.exists(args.output):
+        print("No input file found for this script!")
+        exit(0)
+    if len(sys.argv) < 2:
+        print("\nPlease enter your arguments and arguments as well as the arguments you are using.")
+        exit(-1)
+    sys.exit(1)
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[353, 1700, 311, 836, 555, 382, 338, 990, 651, 354]
+first_step_topk_probs=[0.17800076305866241, 0.16896724700927734, 0.16858495771884918, 0.12361906468868256, 0.07735884189605713, 0.06970609724521637, 0.06281047314405441, 0.028756732121109962, 0.023348618298768997, 0.019971132278442383]
+first_step_topk_text=[' (', ' `', ' n', ' {', '\n\n   ', ' The', ' A', ' \\', ' [', ' 1']
+
+[New tokens 6] count=256 first30=[555, 1772, 2125, 311, 29, 269, 993, 288, 7234, 289, 269, 8695, 4067, 346, 1772, 2569, 29, 287, 6222, 555, 821, 346, 622, 836, 331, 446, 81, 832, 311, 15]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+    @param n: the number of rows in the Python array
+    @return: an integer
+
+    """
+    return {
+        'n': n,
+        'n_prime': n,
+    }
+
+
+def get_number(n):
+    if n == 0 or n > 1 and n < 1:
+        return [1] * n + [0] * n
+    else:
+        return 0
+
+
+# TODO: Use the Python module to create the index of the matrix
+#     (e.g., add 2^2 to the array)
+#     >>> from scipy import stats as smf
+#     print("The matrix is not loaded")
+#     try:
+    #         print("The number of columns is %d" % n)
+    #         except:
+    #             print("The column is not loaded.")
+    #         raise ValueError('The matrix has no columns')
+    #         return (n - 1) / 2
+    #         if n <= 1:
+    #                 print("The row is not loaded!")
+    #                 return (n-1) / 2  # this is a nice way to compare data to other arrays
+    #                 continue
+    #         #print("The number is %d", n
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1083, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.6273427605628967, 0.37265726923942566, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' print', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 311, 864, 353, 81, 552, 354, 12, 1246, 622, 8049, 11, 81, 1341, 353, 81, 647, 354, 687, 711, 202, 6, 8714, 29, 3827, 263, 993, 299, 269, 7534]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return n * (n - 1)
+     return fib(n / (n + 1))
+
+
+# TODO: Add a number to the binary array, so we can't do it here.
+# In this example, we have a list of all the Fibonacci numbers in the binary array.
+# For example, let's say you want to find out how many times each day you need to add more than one hundred thousand to your binary array. The first thing you do is take the number of days and divide by ten. Then multiply by ten. So if you put in the number of weeks, then you get 1000, which means you should be able to do that!
+# If you put in 10, it will give you 100, which means that you'll have 1000, which is a very small number.
+# If someone asks you about adding up all the numbers on the binary array or just checking for a certain number, they are going to give you 1000, which represents that number you're trying to add. That's not really true, but it does tell us something about the number of months you want to add.
+# We're going to use the following code as an example. What would happen if I added 520?
+#
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 338, 1289, 535, 1278, 783, 356, 698, 1238]
+first_step_topk_probs=[0.3813249468803406, 0.10925142467021942, 0.10370692610740662, 0.10370692610740662, 0.05847807601094246, 0.0427834689617157, 0.03855111077427864, 0.03659464418888092, 0.034737467765808105, 0.025414472445845604]
+first_step_topk_text=[' The', ' There', ' A', ' We', ' In', ' If', ' This', ' I', ' It', ' As']
+
+[New tokens 8] count=256 first30=[1289, 1755, 847, 1118, 17, 1358, 289, 269, 2338, 15, 411, 491, 733, 4532, 299, 4201, 598, 806, 299, 2639, 2161, 263, 3191, 330, 2645, 388, 453, 17, 2575, 411]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: We don't know. But in the past, we have been trying to figure out how to tell whether a cat is black or not. What we do know is that it's white. So if you look at your dog's hair, what is his hair color? It's red. The hair on your dog's head is white. The hair looks like a man's hair. And the hair on your cat's head is black. You get an idea of which coat of the same color as your cat's hair. If you see a lot of different colors, you'll see a big difference.
+What about the hair on the top of your dog's face? There are many ways to tell if a cat has a hair on its back. Some people think that hair on their back is just a sign of something else. Others think that hair is only a sign of a good thing. And there are other things that might be more important than hair on the back of your dog. For example, if your dog has a hairy coat, then he has a hair. That's a sign of another type of hairy coat. This hairy coat is called a "black hair." It's also called a "sweet spot" because it's dark gray.
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 2050, 354, 338, 360, 1541, 2590, 776, 798, 13676]
+first_step_topk_probs=[0.27638739347457886, 0.22440902888774872, 0.09752769768238068, 0.05220281705260277, 0.05220281705260277, 0.04238538071513176, 0.03441423922777176, 0.029436059296131134, 0.029436059296131134, 0.026524093002080917]
+first_step_topk_text=[' The', ' One', ' 1', ' A', ' "', ' There', ' No', ' He', ' 4', ' Yes']
+
+[New tokens 9] count=256 first30=[2050, 13032, 330, 798, 10941, 15, 269, 613, 619, 330, 354, 13032, 17, 382, 2056, 993, 288, 10941, 289, 263, 16892, 288, 10941, 330, 843, 10941, 17, 202, 2774, 1427]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple is 4 apples, the other one is 1 apple. The total number of apples in a jar of apples is 5 apples.
+Now let's say you want to find out how many apples there are in a jar that contains at least 10 apples. You could try dividing each apple into two pieces by multiplying each piece by their corresponding number of apples. But instead of counting all the apples, we can divide every single apple by its corresponding number of oranges. This means finding the total number of fruits for any given apple.
+
+To calculate the total number (or "number") of apples, simply multiply the number of apples by the number of oranges (which would be 6). In our example, the number of bananas is 7. To do this, add up all the numbers from 1 to 9. Now, divide both sides of the equation by the number in question:
+
+Total Number of Fruit = Total Number of Fruit / Total Number of Sounds = (1/2) × (1/3) + (1/4) × (2/5) = (1/(2*3))
+= 2 * (1/6) × (0/12) + (2/8) × (3/16) = (11
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 338, 776, 2766, 783, 1289, 360, 1278, 1966]
+first_step_topk_probs=[0.2830216884613037, 0.19655463099479675, 0.0854223221540451, 0.07697190344333649, 0.03910918906331062, 0.030142631381750107, 0.030142631381750107, 0.02716079168021679, 0.020933641120791435, 0.018862776458263397]
+first_step_topk_text=[' I', ' The', ' A', ' He', ' Dr', ' This', ' We', ' "', ' If', ' John']
+
+[New tokens 10] count=256 first30=[338, 15919, 289, 269, 5988, 668, 330, 2222, 299, 1991, 1471, 339, 2847, 374, 7069, 2106, 298, 14715, 15, 536, 330, 263, 1488, 18268, 288, 11054, 2106, 17, 382, 15919]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: A nurse in the hospital who is able to provide care for patients with chronic pain and fatigue, which is a common symptom of acute pain. The nurse can also help people with chronic pain or anxiety.
+Chronic Pain: A chronic pain that occurs when an individual experiences symptoms of chronic pain. It may be caused by a number of physical problems such as:
+- chronic pain, such as pain that persists for more than 24 hours
+- chronic headaches
+- muscle weakness
+- nausea or vomiting
+- heartburn
+- headache (asthma)
+- urinary tract infections
+- kidney stones
+- headaches (asthmatic), a disorder in which the body's immune system attacks the body's own tissues
+- peripheral neuropathy
+- nerve damage
+- neurological disorders
+The most common cause of chronic pain is inflammation of the joints. An autoimmune disease called rheumatoid arthritis causes inflammation of the joint between the bones. The inflammation is usually caused by a virus or bacteria. People with rheumatoid arthritis have many different types of inflammation.
+A person with rheumatoid factor deficiency has fewer than 10,000 new cases of chronic arthritis. About 70% of those with rheumatoid factors are non-specific. This means they do not have any known risk factors.
+
+================================================================================

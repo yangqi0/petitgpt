@@ -1,0 +1,311 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[418, 791, 2446, 5349, 699, 2977, 2, 3, 1, 0]
+first_step_topk_probs=[0.7456229329109192, 0.08365657180547714, 0.05514980107545853, 0.04969409480690956, 0.03635697439312935, 0.029519561678171158, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' was', ' would', ' came', ' appeared', ' had', ' saw', '', '', '', '']
+
+[New tokens 1] count=256 first30=[418, 3673, 289, 269, 21152, 288, 263, 1165, 357, 791, 342, 12211, 294, 2276, 299, 1137, 17, 202, 509, 1534, 1685, 2233, 586, 5561, 351, 269, 1408, 1266, 288, 1258]
+[Full output 1]
+Once upon a time, a curious child was born in the midst of a world that would be forever daring to see.
+The last few days were spent on the second day of school, and the third day of school was spent on the fourth day of school. The fourth day was spent with the teachers' help, and so did their work. They also had an opportunity to learn from each other's experiences. The fourth night, they took off their hands, and watched them with joy.
+What happened at the beginning of school?
+"It is a very difficult day," said Mama. "I am not sure how many children are there."
+And what do you think? What are some things we can do to make our lives better for all of us?
+First, let's look at how much money we have, how much money it has.
+Second, let's take the first day of school: the third day, and then the fifth day, and finally the sixth day, and so on.
+Finally, let's say that the seventh day, and the ninth day, and even the eighth day, and everyone else has a chance to enjoy it. We know that you will pay attention to the work of your teacher, but I hope this is a good thing for you
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[289, 1691, 6843, 419, 269, 5057, 4385, 377, 17, 321, 9990, 15, 668, 699, 733, 263, 9004, 4201, 289, 269, 1831, 288, 269, 2587, 298, 1770, 2657, 383, 707, 619]
+[Full output 2]
+The Eiffel Tower was built in 1781 by the architect William P. Tanner, who had been a prominent figure in the development of the building and later developed it into one of the most important architectural buildings in the United States.
+In 1803, Charles Bolden designed the first Romanesque tower, which he called "the Domesday Book". The original structure is now on display at the National Museum of France, but was demolished to make way for a new building, which was completed in 1841. In addition to the new towers, the tower has since been used as a museum and museum site.
+On August 4, 1830, the first building on the island was completed in 1843. A large amount of materials were extracted from the building, including oil, wood, sand, limestone, stone, and iron ore.
+In the mid-1850s, a series of improvements were made to the design of the tower. These included a brick wall with a height of 20 feet, a wooden door, a sturdy roof, and a fireplace. The floor was also decorated with the old wall, which would be decorated with an eagle's eye.
+During the 1950s, the tower was renovated and expanded to include a new wall and an old church. It was
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 288, 2520, 311, 857, 357, 339, 545, 892, 289, 269, 854, 1690, 15, 715, 4280, 263, 4409, 400, 289, 269, 876, 288, 353, 91, 647, 400, 12, 78]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector of length n such that for all x in the set X, there exists a vector v in the form of (x + v)k + (y - z). The eigenvalues are represented by vectors (X1, Y2, ...), which represent the eigenvalues.
+
+Now let's consider the problem at hand: finding the eigenvalue of the square root of (x - y) using some basic algebraic manipulation techniques. We can do this using a function called `f(x)` and its derivatives. This function represents the factorial function given by the identity matrix. Since we want to find the eigenvalue of this polynomial, we need to add up all those coefficients and then multiply them together. This process involves converting the original expression into another equation involving the first term. Let's break down the solution step-by-step:
+
+Step 1: Calculate the eigenvalue of x - y = (x - x - y)
+
+Step 2: Calculate the eigenvector of the initial term inside the parentheses. It looks like this:
+
+\[
+[ \frac{1}{2} | f(x) - f(y)]| < \frac{x^2}{2}\]
+
+By applying the substitution formula, you get:
+
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 1420, 491, 817, 713, 395, 1085, 601, 1991, 5663]
+first_step_topk_probs=[0.5960479974746704, 0.0914069265127182, 0.0914069265127182, 0.060259196907281876, 0.03972533717751503, 0.03299315646290779, 0.0191599503159523, 0.01726454868912697, 0.015556665137410164, 0.015556665137410164]
+first_step_topk_text=[' can', ' allow', ' have', ' use', ' work', ' are', ' model', ' will', ' provide', ' involve']
+
+[New tokens 4] count=239 first30=[483, 342, 885, 299, 1085, 2281, 870, 298, 2673, 7177, 17, 202, 202, 509, 851, 1488, 1375, 288, 4855, 2465, 1085, 330, 269, 360, 41, 6630, 6605, 634, 536, 3350]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data and network traffic.
+
+The most common type of machine learning model is the "Fitness Model", which uses the tools of mathematical modeling, algorithm design, and computational analysis to predict how people will live in an environment where they can't have access to information. This means that people who work at the computer will not only get access to information but also will have access to it.
+
+A model is a group of numbers (called a "faster" or "faster") that are used to model the number of computers in a given machine. The "faster," or "fuzzy" model is often used for this purpose.
+
+One example of a model is the Fusion Model, which uses the "Fiber Model" to simulate the operation of a computer's storage system. It takes two or more machines to run on a single machine. Each machine has its own set of instructions:
+
+- The machine is responsible for the process of storing and copying information from the machine.
+- The hardware is responsible for processing information from the computer's memory.
+- A machine is responsible to store information about the machine.
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 864, 353, 69, 647, 276, 12, 1341, 353, 70, 647, 276, 12, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1271, 551, 3, 711, 1018, 4160]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a * (b + c) / (c + c)
+
+
+if __name__ == '__main__':
+    main()
+
+import numpy as np
+from scipy.stats import dd2
+from sklearn.model_selection import train_test_split
+from sklearn import preprocessing
+from sklearn_model_selection.text import word_count
+from sklearn._model_selection_score import score_score
+from sklearn['feature_model_count'] import feature_count
+
+# load data and generate a dataset
+train_data = np.loadtxt('../data/train.npy')
+# load the dataset
+with open("../data/test.npy") as f:
+    for line in f:
+        # data
+        data = np.array([line[0] for line in line])
+        data = data[1:]
+
+    # define the standard deviation of the mean
+    mean = data[:, 0]
+    std = data[:, 1]
+    variance = data[:, 2]
+    variance_ratio = data[:, 3]
+    variance += mean * variance
+
+    # calculate the mean
+    median = mean / variance
+    variance = variance / variance
+
+    # compute the mean
+    std = mean / mean
+    std_mean = std
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 353, 643, 990, 311, 409, 413, 263, 836, 744]
+first_step_topk_probs=[0.2867485582828522, 0.1534854620695114, 0.14569607377052307, 0.08215484023094177, 0.07302864640951157, 0.04880207031965256, 0.02751842699944973, 0.023537755012512207, 0.023537755012512207, 0.02013290859758854]
+first_step_topk_text=[' 1', ' (', ' 0', ' \\', ' n', ' 2', ' r', ' a', ' {', ' $']
+
+[New tokens 6] count=256 first30=[413, 21, 333, 353, 81, 552, 354, 12, 1341, 409, 17, 783, 1392, 330, 1255, 419, 269, 864, 5756, 13, 1239, 15, 536, 330, 1496, 419, 269, 3581, 29, 202]
+[Full output 6]
+Write a Python function that returns the factorial of n: r2 = (n - 1) / 2. This function is called by the *real* value, which is given by the equation:
+
+$$r^3 + r^4 = r^6 + ... + r^7$$
+
+Now let's consider the problem at hand: we want to find the number of ways to multiply this function by itself. To do so, we need to create an integer sum of numbers from 0 to 100, which can be written as follows:
+
+1. First, divide both sides by 10:
+
+* r2 = r2
+* r3 = r2 = 3/5
+* r4 = 9/5
+
+Since r3 is divisible by 10, we have:
+
+r3 = r3 × r4 = 3/10
+
+Thus, the first few terms are equivalent to the second, while the last two terms are equivalent. However, since r3 is not divisible by 10 and r3 is indeed divisible by 10. Thus, our goal becomes finding the square root of the factorial of x: r2y = r2y + r3.
+
+To summarize, we explored several mathematical concepts related to the cube root of 5. They were developed through
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 339, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8892725706100464, 0.1107274517416954, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' for', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=218 first30=[622, 311, 864, 353, 81, 552, 354, 12, 202, 202, 6, 291, 538, 835, 66, 2525, 11, 81, 15, 271, 464, 202, 6, 317, 622, 1701, 11, 86, 17, 2525]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return n * (n - 1)
+
+#    def get_sum(n, s):
+#        return sum(s.sum())
+#        else:
+#            print("The sum of the first two terms is equal to the second one")
+#        #print(len(s))
+#        for i in range(len(n)):
+#        if i == 0:
+#        raise Exception('An integer value is not equal to the first one')
+#        print(i)
+#        elif i == 1:
+#                raise Exception('The sum of `(n + 1)` is greater than the first one")
+
+#        assert len(s) == 2
+#        except Exception as e:
+#                    print(e)
+#
+#        try:
+#             return sum(n - 1 for n in range(n))
+#         except Exception as err:
+#                 print(err)
+#           print(err.total_seconds() - 1)
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 338, 1541, 1278, 535, 783, 1803, 1289, 1906, 3987]
+first_step_topk_probs=[0.4947475492954254, 0.1573094129562378, 0.0934458002448082, 0.0683664083480835, 0.06160324811935425, 0.032973840832710266, 0.032973840832710266, 0.026772670447826385, 0.015903634950518608, 0.015903634950518608]
+first_step_topk_text=[' The', ' A', ' There', ' If', ' In', ' This', ' When', ' We', ' All', ' Most']
+
+[New tokens 8] count=256 first30=[382, 1811, 330, 357, 715, 395, 795, 1271, 2584, 288, 10676, 29, 269, 2886, 298, 269, 2886, 17, 202, 509, 2886, 3191, 330, 658, 1414, 359, 263, 2645, 3191, 17]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The problem is that there are two main types of cats: the white and the white.
+The white cat is also known as a black cat. In fact, it is a white cat with many different characteristics in common. This means that if you have one or more dogs on your skin you will notice they are red. If the brown cat is black, it will be green. However, if the brown cat's hair is black, its color is red. If you see a black dog on your skin, it will look like yellow.
+So when you see a white cat, you want to see it again. When you see a red cat, you need to see it first.
+Answer: All cats in the world are black. The white cat in the world is black. It has a black eye, and it has dark eyes.
+A black cat is a black cat with a dark eyes. They are black. They are very light and do not know what color their eyes are. They will always look for other things, such as a light bulb, water bottle, and dark nose. They can tell which part of the body is white.
+When you see a gray cat, you will notice the white light coming from your eyes. You will notice
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 354, 2050, 1278, 338, 1509, 783, 2590, 776]
+first_step_topk_probs=[0.49515393376350403, 0.14186398684978485, 0.09352246671915054, 0.045106880366802216, 0.04064471274614334, 0.033000897616147995, 0.033000897616147995, 0.02973630465567112, 0.026794636622071266, 0.02175554633140564]
+first_step_topk_text=[' The', ' There', ' 1', ' One', ' If', ' A', ' You', ' This', ' No', ' He']
+
+[New tokens 9] count=256 first30=[1541, 395, 637, 10941, 289, 269, 1180, 15, 649, 715, 330, 263, 1012, 351, 1010, 288, 780, 17, 535, 482, 1180, 15, 411, 601, 940, 269, 993, 354, 353, 1044]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: There are 3 apples in the list, so there is a 6 on each of them. In this list, we will call the number 1 (the first number), which is 5. The second number is 7. This number is 4.
+If you use the numbers 0 to 9, then 12 = 4.5 + 8.5 + 10.6 + 10.8 + 11.2 + 13.7 + 12.4 + 12.8 + 12.9 + 12.3 + 13.8 + 14.8 + 15.8 + 16.2 + 17.8 + 18.8 + 19.8 + 22.8 + 24.8 + 25.8 + 27.8 + 29.8 + 26.8 + 21.8 + 31.8 + 33.8 + 32.8 + 34.8 + 36.8 + 38.8 + 41.8 + 37.8 + 39.8 + 42.8 + 43.8 + 52.8 + 44.8 + 54.8 + 53.8 + 48.8 + 49.8 + 46.8 + 47.8 + 63.8 + 64.8 + 51.8 + 72.8 + 68.8 + 76.8
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 338, 360, 2766, 1966, 783, 7193, 1289, 3919]
+first_step_topk_probs=[0.1700253188610077, 0.1681111454963684, 0.10520128160715103, 0.0624922439455986, 0.030140666291117668, 0.025780677795410156, 0.022051382809877396, 0.016995681449770927, 0.016133137047290802, 0.015314381569623947]
+first_step_topk_text=[' I', ' The', ' A', ' "', ' Dr', ' John', ' This', ' Professor', ' We', ' My']
+
+[New tokens 10] count=169 first30=[338, 15919, 289, 269, 5988, 668, 330, 658, 263, 3365, 288, 269, 16187, 2361, 15, 668, 578, 263, 2466, 3335, 288, 7216, 339, 553, 2847, 298, 330, 435, 1841, 288]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: A nurse in the hospital who is also a member of the nursing team, who has a strong sense of responsibility for their patients and is at risk of having problems with their condition.
+The nurse's office was located in the hospital's middle school home, where it had been used by the nurses and other staff as well as the nursing staff. The nurse's office provided the nurses with information about the care they needed to manage their patients.
+A nurse is an adult or girl who is trained to be a doctor. The nurse can provide a special nurse practitioner who provides advice on how to treat and prevent complications from infection and infection.
+At the hospital, doctors are trained to assist the nurse in treating a variety of diseases including HIV/AIDS, cancer, cardiovascular disease, stroke, diabetes, heart disease, arthritis, and lung cancer.
+
+================================================================================

@@ -1,0 +1,271 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[418, 2446, 2827, 5349, 699, 791, 2, 3, 1, 0]
+first_step_topk_probs=[0.4254791736602783, 0.2804928123950958, 0.10984256863594055, 0.07241272181272507, 0.05879448354244232, 0.0529782809317112, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' was', ' came', ' named', ' appeared', ' had', ' would', '', '', '', '']
+
+[New tokens 1] count=120 first30=[5349, 299, 342, 289, 269, 3843, 17, 1530, 418, 1114, 8763, 298, 3766, 299, 631, 351, 287, 13555, 17, 1530, 3609, 896, 2553, 922, 1024, 791, 620, 1902, 15, 614]
+[Full output 1]
+Once upon a time, a curious child appeared to be in the park. She was very excited and wanted to go on an adventure. She asked her mom what she would do next, but it was too late. The little girl started to cry. Her mom said that if she could have a surprise for her, she would be so happy. But then, something amazing happened! The little boy had no idea what to do. He looked around and saw a big pile of sand. It was so pretty! She felt like she was trying to take out all the sand from the grass. She ran back home, feeling happy again.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=61 first30=[289, 269, 3750, 16, 1590, 429, 86, 419, 263, 1440, 288, 3388, 12944, 444, 269, 1505, 17, 202, 202, 755, 15368, 15, 269, 2587, 418, 3373, 299, 269, 2751, 1723]
+[Full output 2]
+The Eiffel Tower was built in the mid-1800s by a group of French settlers from the area.
+
+In 1913, the building was sold to the British government and was rebuilt as a church, but it was abandoned after being demolished. The tower has since been restored, and is currently used for commercial purposes.
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1099, 289, 269, 2281, 6603, 357, 578, 1127, 3097, 298, 4000, 1992, 17, 202, 202, 2774, 1427, 415, 4116, 482, 2097, 299, 829, 1811, 29, 202, 202, 11, 68]
+[Full output 3]
+In linear algebra, an eigenvalue is a point in the complex plane that has both positive and negative values.
+
+Now let's apply this concept to our problem:
+
+(a + b)^2 = (b - a)(c - b)
+
+Here, 'a' represents the eigenvalue, 'b' denotes the eigenvalue, and 'c' stands for the eigenvalue. Since we want to find the eigenvalue of the eigenvector x^n, we can do this using the following formula:
+
+A = A*((a + b) * (-a)) / (3a * (a + b)))
+
+The determinant of this eigenvalue is equal to 1 because it equals 2 when the matrix A becomes a square matrix with its eigenvectors. Therefore, we have:
+
+B = A*(1/2) = A*(0-4)
+
+This means that if we multiply the matrix A by itself, then we get A*A = A\*B. So, we get A * B = A * A. Now, since A is symmetric around zero, there are no eigenvalues of A; hence, A*A must be symmetric around zero. Thus, the eigenvalue of A is also symmetric about zero!
+
+To sum up, the determinant of A is
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 1420, 491, 817, 1991, 5663, 395, 330, 1432, 20993]
+first_step_topk_probs=[0.38195982575416565, 0.16599927842617035, 0.10943333059549332, 0.08006320893764496, 0.05278090015053749, 0.04285474494099617, 0.03949975222349167, 0.022938493639230728, 0.018624600023031235, 0.016782158985733986]
+first_step_topk_text=[' can', ' allow', ' have', ' use', ' provide', ' involve', ' are', ' is', ' take', ' simulate']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 9668, 857, 359, 20709, 15, 9792, 298, 5233, 17, 202, 509, 3207, 330, 357, 269, 1549, 2613, 483, 1798, 444, 482, 2281, 3286, 289]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex behaviors such as aggression, anxiety and fear.
+The theory is that the human brain can learn from this complex behavior in a way that enables us to better understand how our brains work. The theory suggests that humans have an innate ability to learn from each other's environment, which means they must learn from the environment themselves.
+This approach was first proposed by Sigmund Freud, who was involved with the theory at the University of California, San Francisco, and the University of Chicago. He developed the idea in 1972 by following his own research and subsequent experiments. He showed that humans acquire new neural connections through the use of their brains, but this could not be confirmed by modern computer simulations.
+"We've seen for some time that we can make sense of things," he said. "We now know that we can change our brains."
+The theory was first presented by Robert F. Jones in his book, The Brain: A History of Cognitive Development.
+In 1976, Sigmund worked on the development of cognitive-behavioral models based on neural networks. They were able to simulate the structure of social interactions using a computer program. In the same year, he published his theory in his book Human Memory: A History.
+For decades
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 353, 853, 284, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.8155953884124756, 0.12507560849189758, 0.031710073351860046, 0.027618929743766785, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', ' (', ' add', ' f', '', '', '!', '"', '', '']
+
+[New tokens 5] count=119 first30=[263, 647, 286, 3, 711, 6, 19688, 419, 18122, 409, 17, 21, 351, 9281, 16, 5187, 16, 5559, 21816, 29, 4436, 202, 807, 5210, 17, 2541, 655, 8167, 15, 2269]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# Generated by Django 2.2 on 2018-08-09 08:48
+from django.db import migrations, models
+
+
+class Migration(migrations.Migration):
+
+    dependencies = [
+        ('bugs', '0004_auto_20200512_1643'),
+    ]
+
+    operations = [
+        migrations.AddField(
+            model_name='bugs',
+            name='user',
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE),
+        ),
+    ]
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[311, 353, 354, 338, 409, 377, 990, 282, 836, 651]
+first_step_topk_probs=[0.4946011006832123, 0.11401859670877457, 0.08341779559850693, 0.052201516926288605, 0.04238428175449371, 0.0362531952559948, 0.0362531952559948, 0.0362531952559948, 0.032666873186826706, 0.02794145792722702]
+first_step_topk_text=[' n', ' (', ' 1', ' A', ' 2', ' P', ' \\', ' p', ' {', ' [']
+
+[New tokens 6] count=256 first30=[316, 11622, 81, 16, 20, 12, 864, 353, 81, 552, 354, 5467, 21, 864, 316, 11622, 81, 14, 20, 504, 913, 316, 330, 287, 6222, 17, 202, 202, 2774, 15]
+[Full output 6]
+Write a Python function that returns the factorial of n: e^(n-1) * (n - 1)/2 * e^(n+1), where e is an integer.
+
+Now, let's consider the problem statement provided: "The first term in this sequence is 2^3 + 4^4 + 6^5 = 5, and we want to find the remainder when dividing both sides by 3." To do so, recall that the quotient of two integers is equal to the product of their product and product of products of factors of three: 3x + 2y + 4z = 0. Thus, our goal is to isolate 'a' from our original expression; hence, we need to integrate both sides of the equation:
+
+(a - b)^(-1) = a^2 + b^2
+
+This simplifies further since adding any pair of numbers results in a new number within the parentheses. Now, substitute these values back into our previous formula:
+
+((a - b)(a - b))^(-1) / ((b - c)(a - c))
+
+To solve for 'a', we will follow these steps:
+
+Step 1: Find the remainder when multiplying both sides by 2. This means finding the remainder when divided by 3. For example,
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=103 first30=[622, 311, 864, 353, 81, 552, 354, 12, 1341, 409, 17, 19, 711, 202, 350, 1401, 678, 626, 861, 8922, 3142, 9533, 346, 1083, 801, 21089, 269, 8695, 1392, 903]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return n * (n - 1) / 2.0
+
+
+if __name__ == "__main__":
+    print("Starting the Python function")
+    print()
+
+    # Get the first number of the function and then compute its Fibonacci number.
+    # The second number is the Fibonacci number, which will be used to calculate the Fibonacci number. For example, if you have a list of numbers in your array, the Fibonacci number would be:
+    for i in range(n):
+        print(i)
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 338, 1541, 535, 1238, 783, 1289, 1278, 1803, 356]
+first_step_topk_probs=[0.4965817928314209, 0.0937921553850174, 0.08451374620199203, 0.08451374620199203, 0.061831578612327576, 0.04076191410422325, 0.03869321569800377, 0.029822053387761116, 0.020710984244942665, 0.01965990476310253]
+first_step_topk_text=[' The', ' A', ' There', ' In', ' As', ' This', ' We', ' If', ' When', ' I']
+
+[New tokens 8] count=256 first30=[382, 1811, 330, 357, 715, 395, 795, 5283, 339, 482, 17, 3744, 15, 383, 415, 453, 269, 775, 2597, 2526, 10676, 395, 2645, 388, 2886, 15, 614, 383, 415, 658]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The problem is that there are two reasons for this. First, it's not the first reason why cats are black or white, but it's also a factor in how many of these cats are brown or white. Second, because they're usually black, cats are usually black and white. For example, if you have a cat with a white coat, it's probably a black or white coat. But, the second reason is that cats may be black or white too. If you live in a place where you don't have a black coat, your cat will never have to go anywhere.
+The second reason is because cats tend to get red as well. When cats are born, their bodies become darker and less white, which helps them find new ways to hide from predators. This makes them more likely to eat food while still being able to locate prey.
+So what should I do?
+1. Don't try to tell someone about your cat by his name. In fact, it's important to know that you'll want to make sure everyone knows that cats are black. Keep a list of the names and the number of cats that you want to pick out. Try to keep track of the number of times each cat has been picked up on a regular basis.
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 354, 2050, 1541, 798, 338, 409, 783, 2590, 1278]
+first_step_topk_probs=[0.4033845365047455, 0.1282595843076706, 0.07618947327136993, 0.07618947327136993, 0.03871164098381996, 0.0348820835351944, 0.03480316326022148, 0.03143136575818062, 0.029836228117346764, 0.026884673163294792]
+first_step_topk_text=[' The', ' 1', ' One', ' There', ' 4', ' A', ' 2', ' This', ' No', ' If']
+
+[New tokens 9] count=256 first30=[2050, 13032, 483, 342, 885, 339, 263, 3812, 288, 6110, 15, 1433, 2179, 263, 3383, 360, 456, 5, 13032, 388, 16301, 656, 263, 1508, 17, 698, 330, 1384, 299, 817]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple can be used for a variety of purposes, including making a regular "red" apple or picking up a treat. It is important to use the correct number of apples when making a special decision that you make about your options. For example, if you choose a fruit and don't want to eat it, then you need to buy apples with a different number of apples than you would if you wanted them. If you decide to buy apples instead of apples, then you will want to buy apples without the whole apple. The apple can also be bought from a person who wants to buy apples.
+What's the difference between a "good" apple and a "bad" apple?
+Answer 1 - Why are apples made of fruits?
+Answer 2 - What is the amount of money they have?
+Question #1 - What is an apple?
+Question 1 - Which apple is the best?
+Question 2 - Which apple do I like most?
+Question 3 - What is my favorite apple?
+|1||5||6||8||9||10||13||14||15||16||17||20||19||21||22||23||24||25||27||24||28||26||25||29||24||27
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 338, 2766, 776, 1966, 783, 1289, 1220, 360]
+first_step_topk_probs=[0.23290018737316132, 0.19168703258037567, 0.0750657171010971, 0.046974923461675644, 0.04459095001220703, 0.03262343630194664, 0.030967770144343376, 0.023867815732955933, 0.022656504064798355, 0.015734629705548286]
+first_step_topk_text=[' I', ' The', ' A', ' Dr', ' He', ' John', ' This', ' We', ' For', ' "']
+
+[New tokens 10] count=248 first30=[4593, 431, 749, 3621, 15, 7765, 288, 269, 4424, 3257, 435, 269, 1442, 288, 8916, 5865, 3011, 202, 509, 7603, 2374, 1442, 330, 619, 288, 1237, 6379, 357, 4395, 4962]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: Mary Wickham, Director of the Education Department at the University of Massachusetts Medical Center
+The Ohio State University is one of three institutions that offer degrees in education and a doctorate degree in business administration. The university also offers courses on business management, business management, and information technology for the state's public schools.
+In addition to its athletic programs, the university has two private-sector sports teams, basketball and football. There are also many professional golf clubs. For example, the Illinois State University has several sports teams which compete in the state's international golf team. These include the Chicago Black and White Hockey League (1915–1955), the Cincinnati Reds (1959–1962), the Cincinnati Finschhawers (1964–1963), the Pittsburgh Pirates (1965–1968), the St. Louis Browns (1966–1969), the Pittsburgh Steelers (1970–1975), the New York Rangers (1978–1982), the Buffalo Bears (1980–1983), the Detroit Red Sox (1981–1984) and the San Francisco Giants (1985–1988).
+For more information about the campus visit www.hortenschools.org or call 1-800-822-8636.
+
+================================================================================

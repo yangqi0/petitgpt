@@ -1,0 +1,321 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[418, 791, 288, 2827, 699, 601, 15, 3968, 330, 374]
+first_step_topk_probs=[0.5206900835037231, 0.1211247593164444, 0.09834562242031097, 0.0385127030313015, 0.0385127030313015, 0.02817649394273758, 0.024485718458890915, 0.02287752740085125, 0.02287752740085125, 0.01857508346438408]
+first_step_topk_text=[' was', ' would', ' of', ' named', ' had', ' will', ',', ' told', ' is', ' with']
+
+[New tokens 1] count=203 first30=[418, 3673, 298, 7622, 656, 289, 269, 1844, 17, 382, 3804, 288, 269, 929, 418, 1114, 1608, 298, 699, 2245, 733, 6096, 1234, 17, 776, 418, 2126, 649, 8763, 357]
+[Full output 1]
+Once upon a time, a curious child was born and grew up in the family. The father of the child was very old and had never been married before. He was always so excited that he could take care of his parents' house. When he came to see his mother, he saw that the child was having trouble with him. He knew that if he wanted to stay for long, he would not have to go into the family's house. The child was so happy that he asked the father why he would be able to go home.
+The family started out as a little girl who lived there until they were three years old. They had no children but the younger sister had an opportunity to become friends. They had many friends, including one who loved their first birthday, and they were all friends. They were very sad. They learned that if they got to work, they would get more money. They were also very good at thinking about what happened. It is important to remember that the family was very proud of her own personal feelings.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=113 first30=[289, 1691, 6936, 419, 269, 6496, 5009, 288, 3733, 298, 1770, 299, 5184, 359, 263, 8492, 339, 269, 16947, 17, 382, 10079, 418, 2793, 289, 925, 1980, 15, 614, 418]
+[Full output 2]
+The Eiffel Tower was built in 1783 by the Royal Government of England and later to serve as a seat for the Crown. The tower was built in 1825, but was subsequently restored.
+
+Eiffel Tower is still an old house with a very small structure. It has been added to the House of Commons Building.
+
+A new building is built on the wall and was completed in 1786. The building was completed in 1831 and is now a part of the Eiffel Bridge.
+
+The building was opened in 2001, and is still being constructed.
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 3823, 374, 795, 4487, 289, 269, 1134, 3074, 17, 382, 3823, 3399, 545, 1812, 9201, 288, 760, 4487, 298, 330, 3821, 359, 269, 897, 288, 269, 4409, 4337, 351]
+[Full output 3]
+In linear algebra, an eigenvalue is a matrix with two variables in the same column. The matrix contains all possible combinations of these variables and is defined as the result of the vector operation on the matrix.
+
+The original problem presented here was that there exists only one way to find the matrix containing the determinant of its matrix:
+
+$$\begin{align*}
+&=\frac{\partial}{\partial} &= \sum_{i=1}^{n}}{\sum_{i=\infty}\left[\frac{\partial}{2}}^{-\infty}\right]\\
+&= \sum_{j=1}^{k} \\
+&= \int_0^2 \sum_{k=1}^{m} \frac{\partial^{\partial} + \infty}\sqrt{(n+1)}^2.$$
+
+Now let's examine how this works. Given that $f(x) = x$, we can define a new matrix $X$ such that $\partial f(x)=x$. To do so, consider the case when $f(y)$ has been applied to $X$. Since $f(z) = x$ for some arbitrary positive integer $p$, we can rewrite it as follows:
+
+$$f(x)=\sum_{i=-1}^{n} \frac{
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 601, 491, 395, 1991, 817, 1420, 5546, 1005, 1207]
+first_step_topk_probs=[0.4976389408111572, 0.11576251685619354, 0.11576251685619354, 0.07666174322366714, 0.050310198217630386, 0.050310198217630386, 0.029885541647672653, 0.024265140295028687, 0.015996579080820084, 0.01170334592461586]
+first_step_topk_text=[' can', ' will', ' have', ' are', ' provide', ' use', ' allow', ' describe', ' help', ' show']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1005, 1397, 1798, 298, 713, 374, 2091, 17, 202, 509, 851, 1488, 1375, 288, 4855, 2465, 1085, 330, 269, 360, 41, 5, 353, 1044, 993, 288]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to help students learn and work with others.
+The most common type of machine learning model is the "F" (the number of items that a student receives), which has been shown to be important for students who have not yet had access to a computer. It also makes it possible to use the Internet to provide the information needed to make an individual's own computer experience.
+This is a great way to create computers. The most popular types of machines in the world are the computer, the computer, and the internet. These machines can be used as a tool for computing applications such as computers or computers.
+A computer is a computer that is designed to take a computer from another person's home and then send it back to a computer using an electronic device. This is called a computer, and is made by a computer that uses different technologies to make a computer.
+An example of a computer is the computer. A computer will be able to communicate with other people on the Internet to share their computers and receive information. This means that the computer will be sent to a computer without having to do anything.
+You may want to find out what happens when you connect your computer to something else. You might want to search for a computer that looks like this:
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 5427, 6649, 29, 8163, 16, 27, 5427, 202, 1568, 202, 18688, 351, 588, 88, 8458, 1769, 2508, 29, 3451, 29, 3990, 10343, 202, 202]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Nov 16 11:34:39 2021
+
+@author: <NAME>
+"""
+import numpy as np
+from scipy.sparse import cpl.SGD
+from matplotlib.pyplot import plot_plot
+from matplotlib import pyplot as plt
+from matplotlib_utils import data_to_dict
+from matplotlib2d import PXP
+from matplotlib3d import Mest
+from matplotlib4d import MixedData
+from matplotlib5d import Moderator
+from matplotlib6d import Mothor(Mothor)
+from matplotlib7d import Mothsit
+from matplotlib9d import Ment
+from matplotlib1d import Mist
+from matplotlib10d import Methor
+from matplotlib11d import Muller
+from matplotlib12d import MMR
+from matplotlib13d import Misc
+from matplotlib14d import Mate
+from matplotlib36d import Mobilet
+from matplotlib37d import Mimic
+from matplotlib29d import MCRN
+from matplotlib27d import MCT
+from matplotlib30d import MIRD
+from matplotlib32d import MEDICY_TEMP
+from
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[836, 311, 354, 643, 409, 651, 353, 2, 1, 0]
+first_step_topk_probs=[0.3449840545654297, 0.33879056572914124, 0.12173325568437576, 0.06515911221504211, 0.047671422362327576, 0.04295551776885986, 0.038706135004758835, 0.0, 0.0, 0.0]
+first_step_topk_text=[' {', ' n', ' 1', ' 0', ' 2', ' [', ' (', '', '', '']
+
+[New tokens 6] count=256 first30=[836, 81, 4, 85, 4, 85, 4, 11, 81, 4, 85, 12739, 6347, 202, 202, 2774, 15, 1427, 415, 4116, 482, 2097, 299, 829, 1811, 4933, 17, 1289, 483, 3408]
+[Full output 6]
+Write a Python function that returns the factorial of n: {n!r!r!(n!r!)}.
+
+Now, let's apply this concept to our problem statement. We can write it as follows:
+
+$${a\_1 + b\_2 + c\_3} = \frac{\partial x^2 - 2x^2 + 3x^2 - 4x^2}.$$
+
+This results in the following expression:
+
+$$\begin{align*}
+\boxed{\frac{\partial y^2 - 1}{4}} \\
+&= \frac{\text{right}}{\partial x}$$
+
+To find out if there are two possible values for $x$ and $y$, we need to compute the product of these two variables:
+
+* **Example:**
+* **Returning from your given expression to `b`, notice that both $a\_1, b\_2, ... , a\_n$ represent the first term ($a\_1$) and $b\_2$.
+* **```
+The solution is:
+
+**Step 1:**
+* Let $a\_2$ be the number of terms used to perform the division of the numerator (the denominator) into the numerator (where $a\_i < b\_1 < n
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8991213440895081, 0.10087861120700836, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 311, 864, 353, 81, 552, 354, 12, 202, 202, 6, 22154, 29, 783, 330, 269, 839, 1194, 299, 1098, 269, 3356, 288, 269, 1392, 17, 202, 6, 1278, 486]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return n * (n - 1)
+
+# NOTE: This is the only way to find the root of the function.
+# If you want to find the roots of the function, then let's try to compute the root of this function.
+
+# Example:
+# 
+# Input:
+#  
+#   *
+#    *
+#     *
+#   **
+#       *
+#
+#   = [1, 2, 3]
+#
+
+# ## Calculate the root of each root of the functions.
+#
+import numpy as np
+from scipy import stats
+from scipy.stats import lv_count
+
+# TODO: this will be useful here because it can't be done by typing in one or more ways.
+
+"""
+
+import numpy.random as rd
+import matplotlib.pyplot as plt
+import matplotlib as mpl
+
+from mpl.lib.data.datasets.utils import data_data
+
+
+class RMSData(object):
+    """
+    A class for the SPDX dataset and a pandas Data object.
+
+    Args:
+        data_path (str): The path to the data file.
+        data_name (str): Name of the
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1278, 338, 1541, 356, 783, 1803, 1289, 1906, 535]
+first_step_topk_probs=[0.6035722494125366, 0.07515358179807663, 0.0677189975976944, 0.0677189975976944, 0.04954427480697632, 0.04022681340575218, 0.03266159072518349, 0.026519140228629112, 0.01940181851387024, 0.017482489347457886]
+first_step_topk_text=[' The', ' If', ' A', ' There', ' I', ' This', ' When', ' We', ' All', ' In']
+
+[New tokens 8] count=256 first30=[382, 1811, 330, 357, 715, 395, 795, 2584, 288, 10676, 17, 2050, 1375, 330, 269, 613, 17, 783, 330, 1255, 263, 360, 83, 830, 741, 535, 482, 1832, 15, 269]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The problem is that there are two types of cats. One type is the other. This is called a "pink." In this case, the first type is the one that was born or raised in an animal's body. So if you're looking for cats to be black, it will probably not look like a cat. If you have any of these, you'll want to check out these three methods:
+1. Pink (or pink)
+2. Pink is usually red, but if your cat has a white color, then it is also yellow. It may be blue, but if it is green, it will be orange. When it is green it is brown. It is white. It is yellow, and if it is white, it will also be yellow.
+3. Pink means the cat is black. It is purple. It is brown.
+4. Pink refers to the color of the cat's skin. It is black.
+5. Pink represents the color of your cat's skin, and the color of its skin is dark. It is dark.
+6. Pink indicates the color of a cat's skin; it is black. That color is white.
+7. Pink suggests the
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1509, 1278, 1541, 783, 356, 1803, 2050, 354, 338]
+first_step_topk_probs=[0.37601810693740845, 0.14725080132484436, 0.05766424536705017, 0.0519598014652729, 0.04681966453790665, 0.04681966453790665, 0.04444356635212898, 0.03608536347746849, 0.030865445733070374, 0.029298998415470123]
+first_step_topk_text=[' The', ' You', ' If', ' There', ' This', ' I', ' When', ' One', ' 1', ' A']
+
+[New tokens 9] count=256 first30=[1509, 483, 1098, 598, 806, 914, 10941, 486, 491, 289, 263, 2819, 15, 388, 806, 914, 10941, 395, 289, 269, 3074, 17, 202, 509, 3128, 330, 263, 3128, 357, 3056]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: You can find out how many apples you have in a row, or how many apples are in the column.
+The table is a table that shows the number of apples in a row. The table is a list of all possible values for each color in a row (which is the order of the marbles).
+If you want to know what a value is, then click on the "Save" button. If you want to check whether it's a value, then click here.
+If you have an idea about this, you may also need to check if there is a value for the index. This will be called when you want to look at the data, but not for the index itself. For example, if you want to find the value of $x$, the column must contain either a value for $x$ or a value for some value.
+If your data is in a row with 1, then click now. If you do not have an idea of which columns are the same size, then click to see the menu below.
+Note that if you want a value from 0 to 10, then clicking on the "Ask" button gives you a full length of time. When you're looking at the table, it looks like you're using the
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 1278, 1509, 382, 338, 783, 360, 1289, 1541, 1796]
+first_step_topk_probs=[0.33147212862968445, 0.14735662937164307, 0.10780841112136841, 0.09714344143867493, 0.08753351122140884, 0.06404087692499161, 0.030887626111507416, 0.030887626111507416, 0.027832062914967537, 0.022597873583436012]
+first_step_topk_text=[' I', ' If', ' You', ' The', ' A', ' This', ' "', ' We', ' There', ' To']
+
+[New tokens 10] count=61 first30=[1278, 486, 491, 833, 3048, 672, 269, 5826, 15, 5601, 5021, 500, 669, 7369, 435, 269, 5019, 288, 482, 2674, 17, 8151, 940, 500, 435, 354, 16, 27, 4961, 16]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: If you have any questions about the topic, please send us your comments at the bottom of this page. Please call us at 1-877-432-5657 or firstname.lastname@example.org to learn more about how to apply for a free copy of The Daily Mail.
+
+================================================================================

@@ -1,0 +1,301 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 2446, 418, 2977, 2857, 791, 1255, 2, 1, 0]
+first_step_topk_probs=[0.49021247029304504, 0.14044822752475739, 0.10275411605834961, 0.08342982828617096, 0.07517652213573456, 0.06773973256349564, 0.04023909196257591, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' came', ' was', ' saw', ' went', ' would', ' called', '', '', '']
+
+[New tokens 1] count=148 first30=[2827, 5273, 2857, 299, 269, 3843, 374, 610, 2553, 17, 776, 2977, 914, 2918, 298, 3609, 780, 490, 581, 586, 4438, 374, 553, 5373, 17, 5273, 988, 12052, 15, 614]
+[Full output 1]
+Once upon a time, a curious child named Jack went to the park with his mom. He saw many animals and asked them if they were playing with their toys. Jack said yes, but he didn't know how to use them. Suddenly, Jack heard a noise outside the park. It was a big dog! Jack felt sad for him and decided to go back inside. But then, Jack found some apples in the grass. He picked up the apples and put them in his pocket. The next day, Jack got very tired and started to cry. His mom came running towards him and told him that they had lost their toy. Jack was happy again and thanked the man for helping him. From that day on, Jack always looked forward to having fun with his toys.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[289, 1691, 6843, 298, 269, 775, 2544, 12944, 299, 269, 1505, 586, 9331, 12944, 17, 382, 437, 705, 297, 14150, 15, 2793, 920, 1691, 7134, 298, 1691, 4298, 15, 330]
+[Full output 2]
+The Eiffel Tower was built in 1781 and the first English settlers to the area were Dutch settlers. The Eiffel Castle, built between 1782 and 1788, is now the oldest building in England.
+
+The Eiffels are one of the few French buildings that can be seen in London, although they are still used by many people. In 1797, the house was sold for £1,000. After the decline of the Eiffel House, it became a major tourist attraction. In 1802, the Eiffels made their way from the country to Britain. They are said to have been the first British to live on the site. The Eiffs are also known as the "Mother of the Lord". The Eiffels' home was built in 1604, but this did not change until 1799 when the castle was demolished.
+
+In 1798, the Eiffs moved into the new home of the Eiffs, making it the largest dwelling in England. However, in 1798, an attempt was made to restore the house. This attempt failed because the original structure had been damaged during the First World War. The Efsell family resided there for over three decades. A number of years later, the Efsells were rebuilt.
+
+
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 2000, 289, 269, 2281, 6603, 357, 3936, 263, 4409, 1926, 17, 202, 202, 2774, 1427, 415, 1936, 269, 775, 1373, 288, 263, 4409, 1926, 374, 269, 8639, 353, 81]
+[Full output 3]
+In linear algebra, an eigenvalue is a term in the complex plane that represents a vector space.
+
+Now let's consider the first example of a vector space with the dimension (n) being 2. To find the second eigenvalue, we need to compute the scalar multiplication between them:
+
+1 + 2 + 1 = 0
+2 + 3 + 4 = 6
+3 + 5 + 7 = 10
+4 + 9 + 12 = 11
+5 + 9 + 13 = 20
+6 + 10 + 14 = 20
+7 + 8 + 15 = 21
+8 + 12 + 16 = 25
+9 + 18 + 17 = 22
+10 + 20 + 19 = 23
+11 + 24 + 32 = 30
+12 + 24 + 31 = 35
+13 + 36 + 48 = 53
+15 + 33 + 34 = 38
+16 + 49 + 46 = 37
+17 + 54 + 47 = 41
+18 + 55 + 47 = 42
+19 + 58 + 47 = 39
+20 + 60 + 48 = 40
+21 + 62 + 48 = 52
+22 + 63 + 50 = 61
+23 + 64 + 45 = 62
+24 + 67 + 59 = 92
+25 + 71 + 78 = 91
+26 + 69 + 57 = 81
+27 + 76 +
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 1420, 491, 817, 395, 5546, 1991, 1085, 330, 1005]
+first_step_topk_probs=[0.3785184621810913, 0.1084473580121994, 0.1084473580121994, 0.09771917760372162, 0.07514472305774689, 0.038267381489276886, 0.038267381489276886, 0.031070686876773834, 0.02522740513086319, 0.020483052358031273]
+first_step_topk_text=[' can', ' allow', ' have', ' use', ' are', ' describe', ' provide', ' model', ' is', ' help']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 9668, 298, 9668, 17, 382, 3859, 330, 1882, 339, 5957, 290, 15, 298, 269, 3859, 330, 1882, 289, 24949, 3708, 301, 8618, 353, 3579]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex behaviors and behaviors. The software is available for downloading, and the software is available in Adobe Acrobat (see the Adobe Acrology section).
+The most common type of software program that you will find on your computer is an operating system program called an Operating System (OS) program. OS programs are written by computers with a built-in set of instructions that help them run their programs. The OS program is also known as an "app" or "web" program. It helps you understand what it is like to run your program, but it does not provide any information about how the program works. This is where you get started:
+In general, OS programs have several features that make them useful for different kinds of tasks. Some of these include:
+An application's main purpose is to teach the program to its users. An application's main goal is to learn about the program and then use that knowledge to teach it. The following examples illustrate some of the many different types of applications that you may find at the Internet:
+You can download a file from the web browser. If you want to see this file, you should have a copy of the file. You can download the file from the internet using the Mac
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 13, 69, 647, 263, 13, 70, 711, 202, 6, 783, 330, 287, 1373, 288, 806, 299, 620, 482, 17, 202, 202, 6, 783, 5758, 2869, 263, 2829]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b*b + a*c
+
+
+# This is an example of how to do this.
+
+# This script provides a simple method for creating a new function
+def main():
+
+    # Create a new function
+    import sys
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--n-problems", help="Number of problems")
+    args = parser.parse_args()
+
+    print("Creating new function...")
+    print("Setting up the function")
+    print("Using variables.")
+    print("Next time you want to start the function with variables.")
+    exit(1)
+
+    # Print the function
+    print("Starting the function")
+
+    # Write the function
+    write_file(args.n_problems, args.n_problem)
+    write_data(args.num_problems, "The number of problems in the problem.")
+
+    # Set up the function
+    init_function(args.type, args.number, args.num_problem)
+
+    # The function will be called once more than if it was called.
+    print("The function will be named after the function.")
+    print('The function will run')
+
+    # Add the function to the list of all possible solutions
+    print("Adding
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=1.624e-02
+first_step_topk_ids=[353, 311, 382, 1700, 338, 354, 836, 643, 520, 408]
+first_step_topk_probs=[0.3162115216255188, 0.21371735632419586, 0.08163395524024963, 0.06291775405406952, 0.046031612902879715, 0.04147792607545853, 0.027343951165676117, 0.0246389452368021, 0.023388521745800972, 0.02000526152551174]
+first_step_topk_text=[' (', ' n', ' The', ' `', ' A', ' 1', ' {', ' 0', ' k', ' N']
+
+[New tokens 6] count=138 first30=[520, 4, 1341, 651, 81, 4, 11, 81, 16, 20, 3830, 202, 202, 5288, 415, 806, 486, 483, 1062, 669, 1231, 2944, 1191, 482, 2859, 29, 202, 8001, 6429, 202]
+[Full output 6]
+Write a Python function that returns the factorial of n: k! / [n!(n-1)]
+
+Here's how you can make your own functions using this code:
+```python
+def get_number():
+ return int(input("Enter number: "))
+
+ # for i in range(len(input())):
+ #     print(input("The number is %d" % input().getNumber()))
+ #     if input() == 1:
+ #         return 0.0
+ #     else:
+ #             print('Please enter number: ' + str(input().getNumber()) + ',')
+ #     return (input("Enter the number") - input("Enter the answer"))
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=53 first30=[622, 1701, 11, 2525, 11, 20, 339, 1249, 289, 1457, 11, 81, 3943, 711, 202, 6, 11101, 299, 5224, 269, 993, 288, 31393, 1890, 202, 856, 8049, 66, 4203, 11]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return sum(sum(1 for i in range(n)))
+
+
+# Function to calculate the number of Fibonacci numbers
+def fib_number(n):
+    n = len(n)
+    while n < n:
+        n += 1
+
+    return n
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 1289, 1278, 535, 338, 356, 783, 2050, 698]
+first_step_topk_probs=[0.4059499502182007, 0.129075288772583, 0.0944335013628006, 0.085091732442379, 0.0655827596783638, 0.062254440039396286, 0.053249042481184006, 0.035103920847177505, 0.02850215695798397, 0.02196747250854969]
+first_step_topk_text=[' The', ' There', ' We', ' If', ' In', ' A', ' I', ' This', ' One', ' It']
+
+[New tokens 8] count=256 first30=[382, 1811, 330, 357, 715, 395, 795, 2584, 288, 10676, 17, 2050, 1375, 578, 263, 2645, 3191, 374, 263, 2886, 12153, 298, 269, 613, 1375, 578, 263, 2886, 12153, 17]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The problem is that there are two types of cats. One type has a black cat with a white coat and the other type has a white coat. Another type has a gray coat but no black coat. There are three types of cats that have blue eyes. A cat that has yellow eyes also has red hair.
+The second type of cats are black or grey cats. When the cats are black they have brown eyes. If one cat is black then the other cat is black. However if the cats are dark and gray, the color of the cat is not black.
+The third type of cats is called black or grey. This is a colorless, odorless, tasteless, odorless gas. It's been used in many countries for its medicinal properties.
+Some cats do not have black skin, while others have white coats. Some cats may be black, but they usually have a white coat but not black. They cannot be seen by humans.
+A cat is black because it has black skin. It does not have any black coat. In fact, it does not have black hair.
+There are several different types of cats, each of which have black fur. Most of them have a white or grey coat. Other than black cats, most
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 2050, 354, 338, 1541, 1278, 798, 13676, 2590, 409]
+first_step_topk_probs=[0.2744736075401306, 0.11928576976060867, 0.11928576976060867, 0.057532791048288345, 0.05184139683842659, 0.046712975949048996, 0.036003097891807556, 0.036003097891807556, 0.027748700231313705, 0.026400158181786537]
+first_step_topk_text=[' The', ' One', ' 1', ' A', ' There', ' If', ' 4', ' Yes', ' No', ' 2']
+
+[New tokens 9] count=48 first30=[2050, 13032, 330, 798, 1885, 8381, 702, 269, 613, 795, 10941, 17, 382, 1408, 13032, 330, 1012, 1885, 3529, 702, 269, 3123, 13032, 17, 382, 3123, 13032, 330, 409, 1885]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple is 4 times bigger than the other two apples. The second apple is 6 times smaller than the third apple. The third apple is 2 times larger than the first apple. What do you think is the answer to this question?
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 1289, 783, 382, 3919, 1278, 2575, 338, 698, 1509]
+first_step_topk_probs=[0.32834720611572266, 0.14998850226402283, 0.11560064554214478, 0.08909690380096436, 0.05873633548617363, 0.04769013449549675, 0.03312014043331146, 0.024231214076280594, 0.020726054906845093, 0.017727933824062347]
+first_step_topk_text=[' I', ' We', ' This', ' The', ' My', ' If', ' What', ' A', ' It', ' You']
+
+[New tokens 10] count=256 first30=[783, 330, 263, 1114, 1384, 3467, 299, 4283, 672, 269, 1271, 3467, 357, 486, 395, 3573, 289, 669, 2780, 15, 2665, 722, 383, 3022, 299, 12609, 669, 2780, 17, 202]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: This is a very important thing to remember about the main thing that you are doing in your job, especially when it comes to managing your job.
+We have two people who work for us. One of them is the CEO of the company and they are very close friends. They have been working on their business since we started the business. We are working with other companies because they are like us.
+The second person is the boss of the company. He is also very close friends and he has worked on his job for over 25 years. He has always had some kind of relationship with the corporate manager. The boss of the firm is the boss at the top level. The boss at the bottom level is the boss from the top level where he is working. There is usually a lot of work going on around the job.
+In fact, the boss at top level is just the boss at all levels. It's the guy who runs the company and then they go out and get into the job. So if you look at the top tier or if you see the boss at a higher level than the top tier, you will see that the boss at lower levels.
+There are many different ways to manage the company. Some of the most common are:
+- A
+
+================================================================================

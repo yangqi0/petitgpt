@@ -1,0 +1,307 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[418, 2827, 2446, 699, 791, 3, 4, 2, 0, 1]
+first_step_topk_probs=[0.5172352194786072, 0.3409820795059204, 0.07932059466838837, 0.03447256609797478, 0.02798953838646412, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' was', ' named', ' came', ' had', ' would', '', '!', '', '', '']
+
+[New tokens 1] count=197 first30=[2827, 5273, 418, 2126, 10846, 299, 1798, 357, 406, 699, 733, 2449, 351, 269, 1134, 2780, 339, 914, 973, 17, 776, 4404, 374, 610, 3804, 415, 11965, 298, 5594, 1169]
+[Full output 1]
+Once upon a time, a curious child named Jack was always surprised to learn that he had been working on the same job for many years. He worked with his father's dad and helped him find a way to make it easier for them to work together. When they arrived at the hospital, Jack found out that there were only three people in the room. They wanted to know what would happen if they got into trouble. The next day, Jack's mom told her that she needed help because she knew that it wasn't possible to keep her friends safe. She started to feel very happy and worried about how much fun she had done. She said, "I'm sorry, Jack. I didn't want to do it again." So, Jack and his dad went to their house and gave them a big hug. They said goodbye to Jack and hugged him tight. They thanked him for being so careful when they finished their jobs. From then on, Jack loved to play with his friends and have fun together every night.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=204 first30=[289, 269, 3750, 16, 955, 401, 2162, 419, 263, 1440, 288, 22579, 17, 382, 10079, 418, 7713, 289, 17936, 298, 330, 1244, 885, 339, 263, 993, 288, 613, 5392, 15]
+[Full output 2]
+The Eiffel Tower was built in the mid-19th century by a group of architects. The tower was constructed in 1925 and is now used for a number of other buildings, including the Wooden Tower, which is located on the north side of the tower.
+In the late 1960s, the Eiffel tower became the first building to be constructed in London. It was demolished in 1991 when it was rebuilt and replaced with the new Eiffel towers. The tower has been used as a museum for art and literature.
+A new structure was designed in the 1940s by L.W. Stanton, who also founded the Eiffels Hall Group. This building was named after William "Eiffel" Dixon, the founder of the Eiffeling School, which later became the Eiffelling School.
+The Eiffels Tower was built at the same time as the Eiffelled Tower, but was removed from the original design until 1999 when it was demolished in 2014. The tower remains in use today.
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 357, 483, 342, 5454, 359, 269, 1701, 288, 269, 10689, 288, 686, 18956, 17, 1220, 1373, 15, 490, 411, 491, 263, 3823, 338, 374, 269, 21129, 288, 269]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector that can be represented as the sum of the squares of its eigenvalues. For example, if we have a matrix A with the determinant of the size of the eigenvector of A and the eigenvalues of B are given by the equation:
+
+A = \begin{bmatrix} 0 & 1 \\ 0 & 2 \\ 0 & 3 \end{bmatrix}$$
+
+This means that the eigenvectors of A and their eigenvalues must also be included in the matrix. However, this may not always be possible due to the fact that the eigenvalues of A and its eigenvalues are known. To understand why this happens, let's consider a simple example involving matrices. We know that the determinant of a matrix A is given by the identity matrix A:
+
+(a + b) * (b - c)^2 = (a + b)^2 \* (b - d)^2
+
+where 'a' denotes the identity matrix, 'c' stands for the identity matrix or 'd' represents the original matrix. This relationship allows us to simplify expressions like these to obtain more accurate results. It may seem challenging initially but once you get closer to solving problems like this one, you'll notice something interesting about the structure behind this expression. Let me show you how it works step
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 491, 1420, 330, 395, 3350, 817, 5663, 3747, 5546]
+first_step_topk_probs=[0.4603620767593384, 0.10709114372730255, 0.07834955304861069, 0.05732175335288048, 0.05283417925238609, 0.04193749651312828, 0.03778881952166557, 0.024911941960453987, 0.020226897671818733, 0.01822596602141857]
+first_step_topk_text=[' can', ' have', ' allow', ' is', ' are', ' uses', ' use', ' involve', ' allows', ' describe']
+
+[New tokens 4] count=157 first30=[483, 342, 885, 299, 1085, 2281, 870, 298, 9668, 17, 382, 1481, 418, 10601, 419, 269, 1740, 3285, 5931, 15, 269, 507, 17, 54, 17, 3257, 288, 5857, 415, 6102]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data and behaviors. The research was funded by the National Science Foundation, the U.S. Department of Energy's Office of Technology Information, and the University of South Carolina at Chapel Hill.
+The study is published in the March 8 issue of Nature Communications.
+- Why do people think they have the ability to control their behavior?
+- How does this work?
+- What is the role of computer programming?
+- Why is it important for computers to learn to use computers?
+- Can you think about how computers will interact with other computers?
+What is the purpose of computer programming in the future?
+- Do we have the ability or capability to control our behavior?
+What are some of the problems associated with computer programming?
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 864, 353, 69, 552, 286, 12, 647, 353, 70, 864, 276, 12, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1271, 551, 3, 711, 1018, 1656]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a * (b - b) + (c * c)
+
+
+if __name__ == '__main__':
+    main()
+
+import os
+from typing import List, Tuple
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib
+import matplotlib as mpl
+import matplotlib_matplotlib.figure
+import matplotlib import pyplot
+from matplotlib.colors import Polygon
+from matplotlib import cm
+from matplotlib_plot import fig_scatter
+from matplotlib._figure import Figure
+from matplotlib.__version__ import version
+from matplotlib["colors"] = [float, float]
+from matplotlib['interpolate'] import convert_to_rgb
+
+def plot_data(data: pd.DataFrame, data: pd.Series, **kwargs):
+    """Plot data and plot the data in a dataframe.
+
+    Parameters
+    ----------
+    data : DataFrame
+        Data to be converted to as data
+    kwargs : dict
+        Data to have used for generating the data.
+    kwargs : list
+        Data to use for plotting.
+    kwargs: dict
+        Data used for plotting.
+
+    Returns
+    -------
+    None
+    """
+    # Parse data with a single line of data
+    if data is not None:
+        data = pd.read
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[353, 408, 990, 311, 836, 382, 377, 338, 354, 744]
+first_step_topk_probs=[0.1544407606124878, 0.1391628086566925, 0.1321001946926117, 0.09774701297283173, 0.054496943950653076, 0.051731176674366, 0.049105823040008545, 0.034103311598300934, 0.030729638412594795, 0.030729638412594795]
+first_step_topk_text=[' (', ' N', ' \\', ' n', ' {', ' The', ' P', ' A', ' 1', ' $']
+
+[New tokens 6] count=256 first30=[408, 4, 333, 353, 81, 16, 20, 12, 864, 353, 81, 14, 20, 12, 864, 8407, 81, 16, 20, 6801, 81, 12, 864, 353, 49, 4, 647, 311, 13, 81]
+[Full output 6]
+Write a Python function that returns the factorial of n: N! = (n-1) * (n+1) * ((n-1)*n) * (N! + n*n!) * (N!) * (2*N! - 1) * (3*N! + 2*n!)
+
+The number of ways to choose n is given by dividing the first number by the second number, then multiplying it by the third number, and finally multiplying it by n. This process results in the product of all possible combinations of n and n, while still having no effect on the result. Let's see how this works step by step.
+
+**Example 3:** A method for solving the equation P(x=0, y=0, z=0):
+```python
+import math
+
+def solve_k(a, b):
+    if not a == 0:
+        return False
+    else:
+        return True
+
+if __name__ == '__main__':
+    print("Playing with k()")
+
+    # Write the solution using the following code:
+    #   [5, 6] -> [4, 5, 7] -> [6, 8, 9, 10] -> [7, 9, 11, 12, 13, 14, 15, 16
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1083, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8267117738723755, 0.17328819632530212, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' print', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 311, 864, 353, 81, 552, 354, 12, 202, 202, 6, 5167, 269, 2604, 1239, 299, 342, 885, 339, 11030, 6537, 1890, 17, 202, 856, 835, 66, 3611, 66, 1637]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return n * (n - 1)
+
+# Set the base value to be used for generating prime numbers.
+def get_base_value():
+    # Get the base value of the base value, which is not valid in the Python implementation.
+    # In this case, it's going to be used as an example.
+    # The base value will be returned by the base value after loading the base value.
+    # If there are no valid base values, then we have to make sure that the base value is equal to the base value before loading the base.
+    # Then we can use the base value as a dictionary to determine the base value and its corresponding base value.
+
+    # See if the base value can be calculated correctly.
+    # Note that this method has to be called with a "base" argument.
+    # To avoid having more than one base value, you can use the 'base' argument instead.
+    # This is very important because the base value may not be valid in the python implementation.
+    base = base()
+    base[0] = base[1].replace('', '')
+    base[2] = base[-1].replace('\r', '')
+    return base
+
+
+if __name__ == '__main__':
+   
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 338, 1289, 1278, 1541, 535, 783, 1803, 698, 2050]
+first_step_topk_probs=[0.36094191670417786, 0.15686476230621338, 0.11476471275091171, 0.10341159999370575, 0.08396366238594055, 0.04494250565767288, 0.04049656167626381, 0.04049656167626381, 0.019531939178705215, 0.019531939178705215]
+first_step_topk_text=[' The', ' A', ' We', ' If', ' There', ' In', ' This', ' When', ' It', ' One']
+
+[New tokens 8] count=156 first30=[1289, 1755, 847, 1118, 17, 1358, 383, 330, 1812, 357, 269, 795, 1875, 288, 10676, 491, 263, 2645, 12153, 298, 2886, 12153, 17, 1783, 15, 490, 486, 1313, 435, 269]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: We don't know. But it is possible that the two species of cats have a black coat and white coat. However, if you look at the ears of these cats, they are not black. It's possible that cats may be black or gray, but the ears of dogs are brown. In fact, dogs with black-tailed cats have black eyes. They do not have any black ears.
+That's why we recommend that cats use the same color to make sure their ears are red. If there's a black head on your back, then you should never give up. The dog has no black hair. If you're having trouble getting the ears of cats out, you might want to check out the website for a free download of the dog information section.
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 2050, 776, 1541, 354, 1278, 2590, 783, 338, 1509]
+first_step_topk_probs=[0.3172867000102997, 0.11195968091487885, 0.10088404268026352, 0.10088404268026352, 0.053999338299036026, 0.04384404420852661, 0.04384404420852661, 0.04384404420852661, 0.03207698464393616, 0.03044908307492733]
+first_step_topk_text=[' The', ' One', ' He', ' There', ' 1', ' If', ' No', ' This', ' A', ' You']
+
+[New tokens 9] count=256 first30=[2050, 13032, 483, 342, 885, 299, 1062, 263, 16772, 339, 669, 1844, 17, 1278, 486, 2068, 14348, 263, 719, 2422, 15, 1000, 486, 910, 299, 5964, 619, 288, 269, 10941]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple can be used to make a cake for your family. If you're buying a new house, then you need to buy one of the apples from a family. The second way to get started is by eating apples that are not eaten or put in the oven.
+If you're buying apples that are grown on trees, try adding them back into the oven. These will help keep the temperature at 60 degrees Fahrenheit. In addition, if you want to see a small amount of fruit you could use the apple cider. It's best to start with the apple ciders first.
+- Add the apple cid to the table. This will give the apple to the tree so it will stick to the tree.
+- When you purchase a new tree, add the apple coder to the tree and store it in the refrigerator.
+- Choose the tree with the apple as an apple. A little bit of apple can be found here.
+- Fill the apple cone with the apple and let it dry out. Then, after using the apple, cut off the apple and store it on the tree. Do this until the apple is gone.
+- Bring the apple to a location where it will be placed in the oven again. Make sure to place
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 338, 783, 1289, 3919, 698, 1509, 1278, 535]
+first_step_topk_probs=[0.3662666082382202, 0.20008502900600433, 0.10166259855031967, 0.04418240115046501, 0.041940104216337204, 0.03232453018426895, 0.026245446875691414, 0.021309638395905495, 0.017302075400948524, 0.01642398163676262]
+first_step_topk_text=[' I', ' The', ' A', ' This', ' We', ' My', ' It', ' You', ' If', ' In']
+
+[New tokens 10] count=256 first30=[338, 15919, 668, 578, 699, 263, 2415, 2707, 15, 388, 668, 330, 435, 1841, 288, 2221, 263, 2415, 2707, 601, 342, 2222, 299, 1005, 486, 298, 669, 1844, 17, 1509]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: A nurse who has had a heart attack, or who is at risk of having a heart attack will be able to help you and your family. You can also talk with a doctor about getting regular checkups, which can help keep your blood pressure under control.
+If you have a heart attack you may want to take a short-term, long-term, and long-term plan that includes having a heart transplant. These are the steps you should take to prevent heart attacks.
+When you get an emergency call, be sure to tell your doctor before starting any new treatment or if you have a cardiac arrest. If you're pregnant, you may need to see a doctor immediately for a referral. The doctor will ask you about any questions you have regarding your condition. He or she will discuss these with you in writing.
+You may be asked to sign a consent form when your doctor tells you it's okay to use a special medicine called amniocentesis (AJ). It is not possible to give up on your own. However, if you have severe heart disease, such as leukemia, lymphoma, or cancer, you should always consult with a health care professional.
+Your doctor will likely prescribe a medication to treat a heart attack. Your doctor will then
+
+================================================================================
