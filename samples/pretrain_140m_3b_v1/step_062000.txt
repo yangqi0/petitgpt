@@ -1,0 +1,380 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 2446, 2977, 3609, 418, 3, 4, 2, 0, 1]
+first_step_topk_probs=[0.6863507628440857, 0.09484299272298813, 0.08546071499586105, 0.07700642198324203, 0.05633910372853279, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' came', ' saw', ' asked', ' was', '', '!', '', '', '']
+
+[New tokens 1] count=168 first30=[2827, 5273, 2446, 2326, 263, 2023, 15, 16809, 1563, 17, 776, 699, 287, 2877, 339, 610, 3215, 15, 668, 418, 1114, 8763, 299, 1219, 383, 17, 776, 988, 29, 360]
+[Full output 1]
+Once upon a time, a curious child named Jack came across a big, colorful book. He had an idea for his friend, who was very excited to read it. He said: "What is that? It's a book about animals and plants." Jack wanted to learn more about the world around him and he started to explore. He found a list of all the animals in the book. He decided to pick one of them and put it on the shelf. The next day, Jack saw something special in the book - a huge, black bear! He couldn't believe how happy he was with this new book. He looked at the bear and smiled. He felt so proud. Jack knew he could read it himself. So, he went back home and showed his friends the book. They were so glad to see it. Jack learned much more than he had before.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 419, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.794809877872467, 0.20519010722637177, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', ' by', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 2] count=256 first30=[289, 1691, 6677, 419, 269, 2544, 5057, 8110, 4385, 321, 373, 15, 298, 383, 330, 2452, 263, 7489, 288, 269, 2544, 8466, 17, 202, 755, 925, 1980, 15, 263, 1440]
+[Full output 2]
+The Eiffel Tower was built in 1763 by the English architect Sir William Tate, and it is today a museum of the English architecture.
+In 1825, a group of British architects led by Lord Chancellor Thomas Coke, who had been living there for over a decade, met at the London House to discuss the possibility of building a new tower. The idea was not only to build a tower but also to provide an alternative to the existing structure which would be constructed from the original stone, and to use the new brick structure as a way to construct the tower. In the meantime, the first building on the site was completed in 1829 and the first building to be constructed was completed in 1815.
+It is now the largest single-family structure in Britain with over 40,000 members, including many of the most famous architects of the 19th century. It has also been used as a model for other structures, such as the New York City Borough of Saint-Pierre (1860), the Royal Mint (1891) and the Royal Mints (1902).
+The tower was erected in 1688 by the King's son, James I, and was designed by James II. The tower was used in the early years of the 19 th century, when it
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 14274, 2161, 269, 28071, 330, 3097, 388, 4000, 17, 202, 202, 2774, 1427, 415, 1936, 269, 1496, 3581, 29, 202, 202, 91, 333, 353, 21, 65]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that determines whether the eigenvalue is positive or negative.
+
+Now let's consider the given equation:
+
+x = (2^3 - 2^1) + x
+
+To find the eigenvalues of this equation, we need to compute the determinant of the matrix A using the formula:
+
+A = [a - b] × [b - c]
+
+We can do this by solving the system of equations above:
+
+(2^3-2^1) - (2^0+2^1)(2^1-2^2)= 0
+
+This simplifies to:
+
+(-2^1)+((2^0)-2^1= 0
+
+Thus, the determinant of our original equation becomes:
+
+((2^3)-2^0)= (-2^0)+(2^1)-(2^0)
+
+At this point, you may notice something interesting happening here; however, there seems to be some confusion regarding the actual values of x and y. To clarify, recall that the matrix A has two rows and three columns. Now suppose we want to find the determinant of its first row, say:
+
+C(x,y) = C(x,
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 1420, 330, 1991, 491, 395, 817, 3747, 1085, 7337]
+first_step_topk_probs=[0.6331235766410828, 0.08748781681060791, 0.06400745362043381, 0.051969945430755615, 0.04682885482907295, 0.04181580990552902, 0.020351724699139595, 0.01341669075191021, 0.01341669075191021, 0.010340648703277111]
+first_step_topk_text=[' can', ' allow', ' is', ' provide', ' have', ' are', ' use', ' allows', ' model', ' enable']
+
+[New tokens 4] count=207 first30=[483, 342, 885, 299, 1085, 2281, 9668, 298, 9668, 17, 382, 8944, 1085, 330, 263, 2829, 15, 614, 4869, 4379, 339, 2902, 806, 760, 9668, 8646, 374, 613, 3660, 289]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex behaviors and behaviors. The functional model is a simple, but powerful tool for understanding how these behaviors interact with other individuals in the population.
+This paper presents an overview of the functional model and its application to the development of interactive games. We review several examples from this research. First, we show how the functional model can be used by learners to explore their own interests and experiences. Second, we present an example of the functional simulation approach using an interactive game called the Self-Administration Game (SAD). This game is designed to provide users with a real-world experience of their own. Students will learn about their own personal experiences through interactive games and activities. Finally, we discuss the use of the SAD as a learning tool in an educational setting.
+The SAD is a learning tool developed at MIT. It has been used extensively in education and health care for over 50 years. In addition, it provides an important new way to understand and develop innovative strategies for teaching and learning.
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 17, 595, 1637, 551, 711, 202, 6, 5062, 269, 870, 444, 269, 1968, 1436, 202, 856, 835, 66, 917, 11, 2933, 464, 346, 490, 5862, 330, 974]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.getvalue()
+
+
+# Get the data from the input file
+def get_data(filename):
+    if filename is None:
+        return None
+
+    with open(filename) as f:
+        data = json.load(f)
+
+    return data
+
+
+def get():
+    # Get the path of the file and its contents
+    path = os.path.join(os.getcwd(), "../data")
+    if not os.path import file or not os.name == 'nt':
+        return file
+
+    with open("data/file.txt", "r") as f:
+
+        data = json2reader(f)
+
+        # Write the file to the file
+        for line in data:
+            line = line.strip().split("\n")
+
+            # Make sure we have one line per line
+            if line[0] != "." or line[1] != "":
+                continue
+
+            # Add the line to the file
+            for line in line:
+                line = line[line[0]]
+
+                # Create the file
+                file.write(line)
+
+                # Add the file to file
+                file = file.replace(".json", "")
+
+                # Add a new file to the path
+                for line in file:
+                    line
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[311, 1700, 353, 555, 836, 744, 338, 284, 651, 81]
+first_step_topk_probs=[0.3788602948188782, 0.17702633142471313, 0.12294232845306396, 0.07303088903427124, 0.04338216781616211, 0.041180528700351715, 0.03909061476588249, 0.022042347118258476, 0.02092370018362999, 0.019861804321408272]
+first_step_topk_text=[' n', ' `', ' (', '\n\n   ', ' {', ' $', ' A', ' f', ' [', 'n']
+
+[New tokens 6] count=256 first30=[555, 1772, 2125, 311, 29, 8064, 288, 9044, 299, 5111, 17, 346, 1772, 2569, 29, 382, 28045, 288, 263, 1496, 6222, 17, 346, 821, 346, 490, 453, 3834, 11, 81]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+    @param n: Number of integers to generate.
+    @return: The factorial of a given integer.
+    """
+    if not isinstance(n, int):
+        raise TypeError("Expected an int")
+    return _parse_number(n)
+
+
+def _parse_integer(n):
+    """Returns the integer from a float in the given number of values."""
+    if not hasattr(n, 'float'):
+        raise ValueError('Expected a float')
+    return _int(np.round(float(n)))
+
+
+def get_value(value):
+    """Return the value returned by the function `get_value` in the specified value."""
+    return value
+
+
+@register_module()
+class ExponentialType(object):
+    """The exponential type class is used for the exponential type module.
+
+    This class is used to create an instance of the exponential type class and to
+    instantiate a new instance of the :py:class:`ExponentialType`.
+
+    The base class has been created with the following attributes:
+    * :func:`set_exponentialtype`;
+    * :math:`a_{1}`, where `a_{2}$` is the exponential type;
+    * `a_{3}`, where the exponent
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1083, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.7587487697601318, 0.24125118553638458, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' print', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 8049, 11, 81, 12, 1246, 202, 856, 1249, 84, 85, 11, 81, 15, 271, 464, 346, 622, 8049, 11, 86, 12, 202, 202, 6, 538, 1249, 84, 85, 66]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return fib(n)
+    
+def iqr(n, s):
+    return fib(s)
+
+# def iqr_result(i, i, j):
+#     result = i - 1;
+#     if i == 0:
+#         result += 1;
+
+#     return result;
+
+def i_result(s):
+    return " ".join([str(i) for i in s])
+
+
+# def jqr_results(j):
+#    results = [];
+#    result = j.split(" ");
+#        results.append(result);
+#    return results;
+
+## def jqrs_result(j):
+     print "Found {0}".format(len(j));
+
+###
+# TODO: Implement this with an example of the `numpy` function, or from the example below:
+
+import numpy as np
+from scipy import sparse
+from scipy.linalg import inv
+
+def cnn_result(x, y):
+    return x * y;
+
+class CNNQRNN:
+
+    def __init__(self, x1, x2, x3, x4, x5,
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 535, 1289, 698, 2590, 338, 1278, 2050, 783]
+first_step_topk_probs=[0.4396687150001526, 0.1077454537153244, 0.07103022933006287, 0.06742538511753082, 0.0444495789706707, 0.0444495789706707, 0.04219372570514679, 0.040052395313978195, 0.03801973909139633, 0.03609020635485649]
+first_step_topk_text=[' The', ' There', ' In', ' We', ' It', ' No', ' A', ' If', ' One', ' This']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 12052, 17, 202, 37, 1477, 395, 269, 839, 2918, 357, 491, 263, 2886, 12153, 17, 1109, 491, 808, 2645, 6133, 298, 620, 453, 1207, 833, 2886, 28381]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+Bats are the only animals that have a white coat. They have no black hair and do not show any white markings. Bats do not show white markings. They do not have an egg-laying tent in their stomachs. It's the only way they will see white markings.
+The color of the black cat is a very important indicator of how much black is produced. If you think about it, there is a black cat. This is because most of the black cats are brown. The black cat has a black tail with white markings. It has no black hair. It does not look like a black cat or a black cat but it looks like a black one.
+This is why the black cat has black eyes. It doesn't look like a white cat. It looks like a white dog.
+There are two kinds of black cats: black and white. White cats are black; white cats are black. Black cats are black, white cats are white.
+White cats are black except for black ones. They are black. In reality, they are black. But they don't look like white cats.
+When you look at them, you see that they look like white. This is why they look like black
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 2050, 382, 798, 1012, 409, 637, 338, 843, 1218]
+first_step_topk_probs=[0.6153334379196167, 0.06220884993672371, 0.06220884993672371, 0.05605488643050194, 0.04551297053694725, 0.03779996931552887, 0.03153661638498306, 0.023125002160668373, 0.021951405331492424, 0.01605999283492565]
+first_step_topk_text=[' 1', ' One', ' The', ' 4', ' 6', ' 2', ' 3', ' A', ' 5', ' 8']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 202, 20, 13032, 333, 637, 10941, 202, 21, 10941, 333, 409, 10941, 202, 22, 10941, 333, 637, 10941, 3, 711, 6, 5427, 6649, 29, 8163]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+1 apple = 3 apples
+2 apples = 2 apples
+3 apples = 3 apples
+
+# -*- coding: utf-8 -*-
+import unittest
+from django.core import forms
+from django_filters.rest_framework import DjangoFilterBackend, FilterSetup, FilterSetups
+from django import forms
+
+from .models import User, PagingUser, PagingLogin, PagingView
+from .serializers import PagingSerializer
+from .forms import PagingForm
+
+
+class PagingLoginTest(unittest.TestCase):
+    def setUp(self) -> None:
+        self.user = User.objects.create_user('test')
+
+    def test_login_form(self):
+        user = User.get_object()
+
+        form = PagingForm(
+            user=user,
+            user_type='paging',
+            user_url='https://www.paging.com/paging'
+        )
+
+        # Create a new user
+        user = PagingUser.objects.get(username='test')
+        user.save()
+
+        # Add user to the form
+        form = PageForm(request.POST)
+        form.save()
+        form.is_valid()
+        form
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 1289, 338, 2766, 783, 776, 22089, 1966, 360]
+first_step_topk_probs=[0.5479904413223267, 0.04318515956401825, 0.036938223987817764, 0.03506357595324516, 0.03328410163521767, 0.027024580165743828, 0.021942226216197014, 0.02082865871489048, 0.015238572843372822, 0.013731095008552074]
+first_step_topk_text=[' I', ' The', ' We', ' A', ' Dr', ' This', ' He', ' Thank', ' John', ' "']
+
+[New tokens 10] count=70 first30=[356, 873, 6968, 20103, 15, 7495, 298, 12374, 17, 202, 55, 13723, 1938, 29, 356, 491, 263, 2194, 689, 374, 482, 17, 202, 4804, 10837, 587, 29, 356, 2505, 357]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I am feeling depressed, sad and angry.
+Toddler: I have a hard time with this.
+Adolescence: I feel that it's important to tell the difference between teenagers and adults. If you are older than age 18 or younger, talk to your doctor about getting tested for depression if you're a teen or adult.
+
+================================================================================

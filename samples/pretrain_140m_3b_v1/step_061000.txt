@@ -1,0 +1,327 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2446, 2827, 2977, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.45168617367744446, 0.33046063780784607, 0.21785321831703186, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' came', ' named', ' saw', '', '#', '', '"', '!', '', '']
+
+[New tokens 1] count=109 first30=[2827, 5273, 2446, 299, 3565, 610, 3215, 17, 776, 418, 4438, 374, 610, 5373, 298, 2179, 27313, 916, 263, 2916, 7112, 17, 14918, 15, 406, 2977, 2009, 10942, 289, 269]
+[Full output 1]
+Once upon a time, a curious child named Jack came to visit his friend. He was playing with his toys and making noises like a bird fly. Suddenly, he saw something strange in the sky. It was a big, scary dog! Jack was scared but he didn't know what to do. He started to cry and asked his mom for help. Her mom said they could go to the park together. She took him to the park and gave him some snacks. Jack was happy and thanked his mom for helping him. They went home feeling very sad and hugged each other.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[289, 1691, 1590, 298, 269, 775, 2587, 299, 342, 7713, 715, 418, 263, 993, 288, 5392, 351, 269, 2310, 17, 202, 755, 925, 2917, 15, 269, 437, 705, 297, 418]
+[Full output 2]
+The Eiffel Tower was built in 1718 and the first building to be constructed there was a number of buildings on the site.
+In 1821, the Eiffel was incorporated as a town. In 1830, the Eskimos were granted a charter for the construction of the new town hall. The Eiffel is now known as the "Golden City" (from the Latin word for "city").
+During World War II, Eiffel became part of the German Army. After the war, Eiffels moved into the Eiffels' new headquarters building. During the Second World War, Eiffell's headquarters remained at the Eiffell Building until 1945 when it was replaced by the Eifferman Building.
+In 1950, the Efichtenkirche was reopened after the German invasion of Poland. It has been reconstructed and used as a museum.
+The Eiffermans, built in 1937, are situated on the former Eiffel Castle, and are a historic monument. The structure was designed by architect Adolf Böhm-Bawerk.
+Eiffermans was built in 1948 and completed in 1968. In 2008, the Eredivisie Gesellschaft des Mittelalters opened the E
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 289, 269, 2281, 6603, 357, 578, 1127, 1623, 298, 14628, 4543, 17, 202, 202, 2774, 1427, 415, 12443, 707, 6636, 482, 1811, 1191, 3355, 5276, 288, 11379, 9313]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector in the complex plane that has both real and imaginary components.
+
+Now let's dive into solving this problem using basic principles of algebraic geometry. We start by computing the first derivative of a scalar function at a point (x, y) and then apply the formula for finding its derivative:
+
+d/dx = (1 - x2)/(x + 1) + 2*x^2 + ... + (y - y^2)/(x + 1)^2
+
+The first derivative tells us how to find the slope of the tangent line at any given point (x0, y0). The second derivative gives us the slope of our original curve at x = 0. This means that we can compute the slope of any given point by multiplying the derivative with respect to x.
+
+Next up, we tackle the second derivative of a vector field. It represents the directional derivative of a given vector field. To do so, we have to define the vector field as follows:
+
+D = |(x - y)|^2 + |(y - z)|^2
+
+Here, D represents the position vector on the vector field. Now, we need to determine the coordinates of the unknown points (x,y) and
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 1420, 491, 1991, 330, 5546, 395, 817, 3350, 1085]
+first_step_topk_probs=[0.31886351108551025, 0.12486874312162399, 0.08231852948665619, 0.07417522370815277, 0.054267749190330505, 0.04406193643808365, 0.04042891040444374, 0.03577549383044243, 0.03577549383044243, 0.029047435149550438]
+first_step_topk_text=[' can', ' allow', ' have', ' provide', ' is', ' describe', ' are', ' use', ' uses', ' model']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 6811, 2304, 17, 202, 509, 618, 298, 26250, 13121, 202, 509, 3207, 288, 269, 14457, 2673, 330, 1728, 351, 269, 2877, 357, 263, 14457]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex biological systems.
+Theory and Experimental Theory
+The theory of the neural network is based on the idea that a neural network has a set of rules for its actions, such as the following:
+- It can't tell us what action it is taking (the same way as the one we're talking about)
+- It cannot tell us how much of an action it's doing (the same thing we're talking with).
+- It must be able to give us an answer (a single sentence or two).
+- The system must have some sort of control over what action it takes.
+- It needs to know how much of each action it takes (for example, if you think about the number of times that it takes a particular action, then it might take more than 1/2 to get that action).
+- This may seem like a very simple question but it requires lots of practice and knowledge. If you want to understand this, it helps to learn from the experience of the system and how it works.
+In our case, we can make a model of the neural networks in terms of the function of each action, but we don't need to do so because we just don't know what action it does.
+
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 353, 354, 892, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.6456374526023865, 0.3113977909088135, 0.024263864383101463, 0.018700890243053436, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', ' (', ' 1', ' x', '', '', '!', '"', '', '']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 5427, 6649, 29, 8163, 16, 27, 5427, 202, 1568, 202, 18688, 351, 588, 88, 6284, 224, 843, 2234, 29, 6457, 29, 5557, 9697, 202]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Dec  5 14:43:07 2019
+
+@author: <NAME>
+"""
+import numpy as np
+from scipy.stats import norm_score
+import matplotlib.pyplot as plt
+import pandas as pd
+from sklearn.metrics import confusion_matrix
+from sklearn import datasets
+from sklearn_model_selection import train_test_split
+from sklearn._feature_selection import cross_val_score
+from sklearn2d import TransformerMixin
+from sklearnutil import check_array
+from sklearn1st import load_iris
+from sklearn6th.ket_recurrence import KFold
+from sklearn4th.linear_model import LogisticRegression
+from sklearn5th.tree import DecisionTreeClassifier
+from sklearn7th.cluster import KFolds
+from sklearn8th.cluster.datasets import make_dataset
+from sklearn12th.cluster_selection import get_node_population
+from sklearn10th.cluster._random_cross_validation import RandomForestClassifier
+from os import listdir
+import random
+from sklearn3rd import TSNE
+from sklearncis.utils import normalize_
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[311, 1700, 81, 382, 353, 269, 338, 354, 408, 263]
+first_step_topk_probs=[0.46149998903274536, 0.1552848368883133, 0.08756181597709656, 0.07489559054374695, 0.0710945799946785, 0.039998020976781845, 0.029329532757401466, 0.02784103713929653, 0.02036893740296364, 0.019379040226340294]
+first_step_topk_text=[' n', ' `', 'n', ' The', ' (', ' the', ' A', ' 1', ' N', ' a']
+
+[New tokens 6] count=256 first30=[311, 4, 1341, 353, 81, 552, 354, 12, 21, 17, 202, 202, 2774, 15, 1427, 415, 4116, 482, 2097, 299, 829, 1811, 4734, 4007, 269, 993, 288, 2722, 299, 3408]
+[Full output 6]
+Write a Python function that returns the factorial of n: n! / (n - 1)2.
+
+Now, let's apply this concept to our problem involving finding the number of ways to write a program that will accept an integer as input. We want to show that there are no more valid programs available for this particular question. To do so, we need to understand two important concepts: the product of all positive integers up to and including n plus 0, and the product of the greatest common divisor (GCD).
+
+The product of all negative integers up to n is given by:
+
+$$a\_n = \sum\_{i=1}^{n} e^{i\pi i}$$
+
+This expression represents the product of integers up to a certain value called the "product." The product of all numbers less than or equal to zero equals $0$, while the product of any other number greater than or equaling $0$ is denoted as $\sqrt{0}$. Therefore,
+
+$$\frac{\left(\sum\_{i=-1}^{n}\right)^2}{r^2}.$$
+
+Next, consider the product of both the smallest and largest prime numbers; these represent the largest prime numbers between 0 and 1. Since $0 < r < 1$, their product equals $0$.
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1083, 490, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.6069954037666321, 0.3249015212059021, 0.06810306012630463, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' print', ' if', '', '#', '', '"', '!', '', '']
+
+[New tokens 7] count=93 first30=[622, 1701, 2067, 2525, 11, 78, 12, 339, 520, 289, 7631, 11, 2862, 11, 20, 15, 311, 14, 20, 687, 1122, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return sum([sum(k) for k in sorted(range(1, n+1))])
+
+
+if __name__ == '__main__':
+    # print(f"A\_2 = {n} -> {2!r}")
+    # print("A\_3 = {n}".format(a[0], a[1]))
+    # print()
+
+    # print(F.is_primitive())
+    # print("\n")
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 13676, 1289, 1278, 698, 356, 535, 2590, 1238]
+first_step_topk_probs=[0.2775703966617584, 0.14103266596794128, 0.13387514650821686, 0.06802155077457428, 0.05818191543221474, 0.052426256239414215, 0.04724002629518509, 0.042566798627376556, 0.042566798627376556, 0.03835587203502655]
+first_step_topk_text=[' The', ' There', ' Yes', ' We', ' If', ' It', ' I', ' In', ' No', ' As']
+
+[New tokens 8] count=256 first30=[1289, 1755, 847, 1118, 17, 1358, 289, 269, 2338, 15, 722, 411, 2531, 299, 1337, 10676, 15, 411, 4506, 357, 581, 586, 2645, 298, 751, 288, 780, 699, 2886, 6133]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: We don't know. But in the past, when we began to study cats, we discovered that they were black and some of them had white hair. So we decided to look at what they ate and how they got their fur. Then we looked into the body chemistry of cats. And then we asked if they could eat a lot of the stuff like a carrot or a chicken. They didn't have any idea what it was. We found out that cats were also white and we thought they were brown because they didn't get enough of the stuff. So we did find out that cats are black and there is no evidence that they are black. The only thing that they are white is that they have black hair. So they went on a diet which included lots of fruits and vegetables. So we started to look for more vitamins and minerals.
+So we tested the cats' immune system by comparing them with people who were not black. They showed that they were red and black and had white hair and that they were white. That's right. They also showed that they had white hair, but they also showed that there are other things that they aren't black. So they're white and they are black too. It's called white hair.
+We learned that cats
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 2050, 798, 382, 409, 843, 1012, 1541, 637, 1218]
+first_step_topk_probs=[0.5094067454338074, 0.11850010603666306, 0.07039207965135574, 0.06342852860689163, 0.03617321327328682, 0.03576596453785896, 0.03395084664225578, 0.029039699584245682, 0.02299831062555313, 0.015543830581009388]
+first_step_topk_text=[' 1', ' One', ' 4', ' The', ' 2', ' 5', ' 6', ' There', ' 3', ' 8']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 202, 20, 27320, 333, 843, 10941, 202, 21, 26634, 333, 1012, 10941, 202, 22, 26634, 333, 1218, 10941, 202, 23, 26634, 333, 1604, 10941, 202]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+1 banana = 5 apples
+2 bananas = 6 apples
+3 bananas = 8 apples
+4 bananas = 12 apples
+5 bananas = 7 apples
+6 bananas = 8 oranges
+7 bananas = 9 apples
+8 bananas = 10 apples
+9 bananas = 11 apples
+10 bananas = 12 bananas
+11 bananas = 12 oranges
+12 bananas = 13 bananas
+13 bananas = 15 bananas
+14 bananas = 16 bananas
+15 bananas = 18 bananas
+16 bananas = 20 bananas
+17 bananas = 20 apples
+18 bananas = 17 bananas
+19 bananas = 17 oranges
+20 bananas = 17 orange
+21 bananas = 17 green bananas
+22 bananas = 21 green bananas
+23 bananas = 20 green bananas
+24 bananas = 22 brown bananas
+25 bananas = 25 brown bananas
+26 bananas = 24 brown bananas
+27 bananas = 26 green bananas
+28 bananas = 27 brown bananas
+29 bananas = 28 yellow bananas
+30 bananas = 30 green bananas
+31 bananas = 30 brown bananas
+32 bananas = 31 brown bananas
+33 bananas = 32 brown bananas
+34 bananas = 34 brown bananas
+35 bananas = 33 brown bananas
+36 bananas = 36 brown bananas
+37 bananas = 37 brown bananas
+38 bananas = 38 brown bananas
+39 bananas = 40
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 1289, 8151, 3919, 2766, 15255, 22089, 783, 776, 382]
+first_step_topk_probs=[0.43234795331954956, 0.09186478704214096, 0.06720970571041107, 0.049171674996614456, 0.04205876216292381, 0.029209230095148087, 0.026319699361920357, 0.024983977898955345, 0.02251243405044079, 0.019255902618169785]
+first_step_topk_text=[' I', ' We', ' Please', ' My', ' Dr', ' Thanks', ' Thank', ' This', ' He', ' The']
+
+[New tokens 10] count=256 first30=[8151, 5699, 2526, 486, 2505, 649, 18495, 388, 22747, 17, 202, 44, 873, 263, 1929, 4769, 289, 263, 1204, 2868, 289, 10687, 17, 3919, 2780, 330, 299, 5800, 1284, 1397]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: Please explain why you feel so upset or uncomfortable.
+I am a special teacher in a small town in Arizona. My job is to teach my students about how to solve problems and solve problems.
+I was diagnosed with autism in 2004, but it was not until I came back from the hospital that I began teaching my students. I was very surprised by what they saw.
+It was a very exciting time for me because of the many challenges I had as a teacher.
+When I got home from school, I felt like I could do something.
+I realized that I wasn't having any friends or family.
+I had a lot of frustration when I went into the classroom.
+I started thinking about what I would do if I wanted to go to college.
+I didn't know much about other subjects, but I found out that I had a good understanding of math and science.
+I also learned that there are many different types of math problems.
+My students often have trouble learning these types of math.
+I took a math class and asked them to work on problems.
+They were all confused.
+I told them to write down their answers on paper.
+I said, "We want to learn math."
+I said yes.
+I
+
+================================================================================

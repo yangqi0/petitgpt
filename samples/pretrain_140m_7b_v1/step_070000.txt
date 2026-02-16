@@ -1,0 +1,297 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=107 first30=[2827, 5273, 418, 4438, 374, 610, 6086, 1167, 17, 2528, 2553, 3968, 1169, 357, 383, 418, 263, 719, 1167, 339, 269, 1266, 17, 5273, 3766, 299, 1143, 374, 383, 1792]
+[Full output 1]
+Once upon a time, a curious child named Jack was playing with his toy car. His mom told him that it was a new car for the day. Jack wanted to play with it too, so he asked his mom if he could go to the store and get some of the cars. His mom said yes, but they were all very excited to see how much money they had. When they got home, Jack's mom gave him a big hug and said, "I love you, little one." Jack smiled and went back inside to play with his new car.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[289, 1691, 6936, 419, 269, 5057, 4385, 343, 17, 19180, 15, 668, 699, 733, 263, 3365, 288, 269, 7066, 288, 13620, 298, 1683, 323, 5568, 339, 1739, 973, 1234, 4501]
+[Full output 2]
+The Eiffel Tower was built in 1783 by the architect William C. Stewart, who had been a member of the firm of Allen and Spurrier for several years before moving to New York City.
+In 1784, the building was renamed "St. James's" after a family friend, the Rev. George S. Patterson, who was later appointed director of the Brooklyn Museum. The first building, called "St. John's," was completed in 1818. It has been described as one of the most important historic buildings in the United States.
+The original building was completed in the early 19th century, but it was torn down in 1940. The building is now on display at the Brooklyn Museum, which is open daily from 9 a.m. to 5 p.m., Tuesday through Friday, 10 a.m.-4 p.m. and Saturday morning (on Sundays). The museum also displays a variety of artifacts from the city's history, including the Civil War, and an exhibit about the St. James's that depicts the life of the city's leaders during the Civil War.
+The Eiffels Tower was built between 1795 and 1820 and was designed by architect William R. Strickland. It was the tallest structure in the world at that
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 357, 483, 342, 3020, 359, 269, 1701, 288, 795, 7527, 17, 202, 202, 2774, 1427, 415, 1936, 269, 1496, 1811, 29, 4007, 269, 28071, 288, 744, 21, 91]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector that can be written as the sum of two vectors.
+
+Now let's consider the given problem: finding the eigenvalue of $2x^3 - 4y^4 + 6y^5 = 0$ for any vector $u \in \mathbb{R}^n$. To solve this equation, we need to understand the concept of eigenvalues and their properties. An eigenvector is a scalar value that takes on certain values or points in space. It is denoted by $\lambda$, which means it has no zeroes or zeros except when added together. For example, if we have two vectors, say x1 and y1, then their corresponding eigenvectors are also zero because they share the same direction (direction) but different lengths.
+
+To calculate the eigenvalue, first note that the original matrix ($A$) contains only the entries of its components along its main diagonal, while the second matrix ($B$) contains all the other components. This allows us to find the eigenvalues of our original matrix and determine whether it has nonzero values. Finally, note that the eigenvalues of both matrices are zero since there exists no nonzero number of distinct eigenvalues associated with them.
+
+Let's take a look at some examples of eigenvalues and eigenvectors using these matrices:
+
+* Consider
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 330, 1420, 491, 3747, 1991, 395, 817, 5546, 2869]
+first_step_topk_probs=[0.6193792223930359, 0.11698570102453232, 0.04581226035952568, 0.04581226035952568, 0.04128027334809303, 0.027213625609874725, 0.026008613407611847, 0.024521537125110626, 0.013827160000801086, 0.011226776987314224]
+first_step_topk_text=[' can', ' is', ' allow', ' have', ' allows', ' provide', ' are', ' use', ' describe', ' provides']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 9668, 298, 9668, 17, 202, 509, 1549, 2613, 330, 269, 851, 1384, 1085, 339, 2902, 3286, 15, 1091, 383, 2869, 263, 4869, 4379, 339]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex behaviors and behaviors.
+The human brain is the most important model for understanding behavior, because it provides a powerful tool for studying how neurons communicate with each other. It also allows us to understand how the brains of different animals respond to stimuli and how they respond in specific ways. The human brain is an essential part of the brain, which is responsible for processing information about the world around us.
+The brain has many functions that we call "brain-like" (which means it contains parts of the brain that control our feelings and emotions). This includes:
+- Consciousness: The brain's ability to learn or remember new things through its own neural network.
+- Memory: The capacity to process and organize information into words, phrases, and sentences.
+- Brain-like: The capacity for learning and remembering things from a single experience.
+- Behavioral: The capacity of an animal to learn and recognize patterns of movement and movements.
+- Cognitive: The capacity that humans have to reason, think, and act independently.
+- Language: The ability to make sense out of language and to speak effectively.
+- Social: The capacity by which people interact with one another, including social interactions.
+- Perception: The ability of
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=153 first30=[263, 647, 286, 3, 711, 4750, 2062, 263, 689, 715, 418, 263, 1809, 3510, 2827, 3867, 17, 1530, 6446, 299, 1143, 374, 896, 5373, 298, 1428, 1378, 3099, 17, 2050]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+Once upon a time there was a little girl named Lily. She loved to play with her toys and run around outside. One day, she saw a big dog walking towards her. The dog looked scared and wanted to bite it. Lily said, "Don't worry, I will help you." The dog barked and wagged its tail. It ran away from Lily and Lily. Lily felt happy that she could help the dog. She hugged the dog and said, "Thank you for helping me." From that day on, Lily learned that sometimes things can be scary or scary, but it's important to listen to your parents and ask for help when needed. And whenever you feel like being brave, say no to the dog.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 311, 864, 353, 81, 552, 354, 12, 711, 202, 350, 1401, 678, 626, 861, 8922, 3142, 9533, 346, 1083, 801, 7121, 15, 2176, 14364, 3, 711, 4750, 2062, 263]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n * (n - 1)
+
+
+if __name__ == "__main__":
+    print("Hello, World!")
+
+Once upon a time there was a little girl named Lily. She loved to play with her toys and run around outside. One day, she went to the park to play with his friends. They were playing in the park and they saw a big dog running towards them. "Hi, doggy!" said Lily. "Do you want to play with me?" The dog barked and barked happily. It wanted to play too. But it was too late. Lily had to go home and get some food for herself. She felt sad because she did not know what to do. She asked her mom if she could have some cookies. Her mom said yes and gave her a cookie. After the cookies were done, Lily's friend came over and said, "I'm sorry, I didn't mean to be selfish." The dog looked at Lily and said, â€œDonâ€TMt worry, we can find your cookies. We can look at your cookies together and make sure they are safe.â€ Lily smiled and hugged her mom. She was happy again and thanked her mom for helping her. From then on, Lily
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 339, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8892728090286255, 0.11072725802659988, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' for', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=172 first30=[622, 651, 19, 15, 20, 64, 864, 311, 202, 202, 6, 426, 13280, 2257, 29, 783, 330, 453, 6493, 339, 8695, 637, 17, 24, 388, 2413, 202, 1052, 16216, 29]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return [0,1] * n
+
+# FIXME: This is not recommended for Python 3.5 or higher
+class Solution:
+    def generateMatrix(self, matrix):
+        """
+        :type matrix: List[List[int]]
+        :rtype: List[int]
+        """
+        if len(matrix) < 2:
+            return []
+        else:
+            return [0] + [0] * len(matrix[0]) + 1
+
+    # FIXME:- this is a fast way to perform binary search on a given matrix
+    def generate_matrix_smaller(self, matrices):
+        """
+
+        :type matrices: List[list]
+        :rtype:"{}"
+        """
+        return [0]*len(matrix) - 0.5, 0*2+0.5, 1-3
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 1541, 2590, 356, 1289, 698, 338, 1278, 1906]
+first_step_topk_probs=[0.2779759168624878, 0.1832529604434967, 0.1739528924226761, 0.1088569238781929, 0.07176288962364197, 0.047309041023254395, 0.0449080690741539, 0.031188031658530235, 0.031188031658530235, 0.029605241492390633]
+first_step_topk_text=[' The', ' Yes', ' There', ' No', ' I', ' We', ' It', ' A', ' If', ' All']
+
+[New tokens 8] count=256 first30=[1541, 330, 808, 3641, 2833, 299, 1447, 269, 5630, 288, 2645, 10676, 289, 269, 3494, 17, 382, 839, 1414, 1832, 330, 263, 1832, 288, 287, 3864, 374, 2645, 10978, 17]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: There is no scientific evidence to support the existence of black cats in the wild. The only known case is a case of an animal with black fur. In captivity, it is not uncommon for an animal to be black or white, but it does occur in some cases (such as the cat). In this case, the animal's coat is not black, but it is a medium-sized animal. It is also known from the animal's mouth and nose. However, there are many other instances where the animal has been treated as a species of animal, such as a cat.
+The most common explanation for black cats being black is that they have black fur. This would mean that they were not brown; that is, they had dark fur around their eyes. They may also have black fur around their ears, especially when they are very young.
+A black cat is a human being who is black. If a person is black, he or she is considered to be black if he or she has black fur. A black cat is considered to have black skin, although this is not true.
+In addition to these two explanations, it is possible that some cats have black fur, even though they are not black. Some cats have black hair on their cheeks, while
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 798, 843, 1012, 2050, 382, 1218, 409, 0, 1]
+first_step_topk_probs=[0.7303261756896973, 0.08194039762020111, 0.03952072560787201, 0.03208832070231438, 0.030459841713309288, 0.030459841713309288, 0.02891398034989834, 0.02629072591662407, 0.0, 0.0]
+first_step_topk_text=[' 1', ' 4', ' 5', ' 6', ' One', ' The', ' 8', ' 2', '', '']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 202, 20, 13032, 333, 1604, 10941, 202, 21, 10941, 333, 2341, 10941, 202, 22, 10941, 333, 2341, 24847, 202, 23, 10941, 333, 2234, 24847, 202]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+1 apple = 12 apples
+2 apples = 13 apples
+3 apples = 13 oranges
+4 apples = 14 oranges
+5 apples = 15 oranges
+6 apples = 16 oranges
+7 apples = 18 oranges
+8 apples = 19 oranges
+9 apples = 20 oranges
+10 oranges = 21 oranges
+11 oranges = 22 oranges
+12 oranges = 23 oranges
+13 oranges = 26 oranges
+14 oranges = 27 oranges
+15 oranges = 28 oranges
+16 oranges = 32 oranges
+17 oranges = 33 oranges
+18 oranges = 34 oranges
+19 oranges = 35 oranges
+20 oranges = 36 oranges
+21 oranges = 37 oranges
+22 oranges = 38 oranges
+23 oranges = 39 oranges
+24 oranges = 39 orange oranges
+25 oranges = 31 oranges
+26 oranges = 31 orange oranges
+27 oranges = 32 orange oranges
+28 oranges = 32 green oranges
+29 oranges = 32 blue oranges
+30 oranges = 32 red oranges
+31 oranges = 33 orange oranges
+32 oranges = 33 green oranges
+33 oranges = 34 orange oranges
+34 oranges = 33 yellow oranges
+35 oranges = 34 yellow oranges
+36 oranges = 34 red oranges
+36 orange oranges = 34 green oranges
+37 oranges = 34 purple oranges
+38 oranges = 34 black oranges
+
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 22089, 2575, 1289, 3919, 783, 15255, 27614, 382, 1509]
+first_step_topk_probs=[0.5992962718009949, 0.08300112187862396, 0.0444272980093956, 0.03085414320230484, 0.027801893651485443, 0.02639094926416874, 0.02378022111952305, 0.02034030109643936, 0.02034030109643936, 0.016515033319592476]
+first_step_topk_text=[' I', ' Thank', ' What', ' We', ' My', ' This', ' Thanks', ' Hi', ' The', ' You']
+
+[New tokens 10] count=256 first30=[2575, 330, 669, 2942, 34, 202, 16, 437, 13468, 272, 29, 1509, 2068, 263, 1543, 4769, 298, 486, 491, 287, 7774, 2780, 359, 263, 4769, 17, 1509, 483, 342, 287]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience?
+- Eleanor: You're a great teacher and you have an excellent job as a teacher. You can be an effective teacher, but it's not always easy to get in touch with your own feelings. Sometimes it's hard to know where to start, so you may want to find a professional counselor or a special education teacher who will help you out. If you feel like you need to talk to someone about your experiences, you can help by talking to them.
+- Maria: How do you think the experience has changed over time?
+- Mary: The experience of being in a group is different than what you might expect from a classroom situation. You don't have to talk to people on your own to see how they are doing. You can talk to them about things that they would like to see done at school, such as having a friend or family member go through a class period.
+- Elizabeth: What happens when you come home from work?
+- Anna: It's very important for you to stay connected with the past, because you have to tell the story yourself. You can't just tell the story, but you can tell it if you want to make it meaningful. There are many ways to do this, but
+
+================================================================================

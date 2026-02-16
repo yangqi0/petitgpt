@@ -1,0 +1,316 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2977, 2446, 2857, 2827, 418, 12562, 791, 998, 0, 1]
+first_step_topk_probs=[0.4056296646595001, 0.26740723848342896, 0.08502459526062012, 0.07661344856023788, 0.04551038518548012, 0.04551038518548012, 0.041008226573467255, 0.03329611197113991, 0.0, 0.0]
+first_step_topk_text=[' saw', ' came', ' went', ' named', ' was', ' walked', ' would', ' found', '', '']
+
+[New tokens 1] count=118 first30=[2977, 269, 1165, 289, 686, 28467, 17, 698, 418, 263, 11346, 8392, 299, 1137, 17, 202, 509, 3664, 1234, 15, 269, 1809, 3510, 13533, 269, 6437, 2165, 288, 5783, 298]
+[Full output 1]
+Once upon a time, a curious child saw the world in its entirety. It was a wonderful sight to see.
+The night before, the little girl watched the sky full of stars and stars. She thought they were so beautiful that she could barely see them. But then one day, she found herself on the ground with her mom and dad. They looked up at the sky and saw the brightest star. The little girl was so excited! She couldn't wait to see what it was. She waved goodbye as the sun went down and set. She felt like she had been able to see all kinds of things.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[289, 1691, 6677, 419, 269, 9331, 3989, 3860, 5505, 15, 298, 686, 8549, 586, 1000, 885, 339, 269, 2587, 288, 269, 10079, 17, 202, 755, 925, 2202, 15, 263, 1440]
+[Full output 2]
+The Eiffel Tower was built in 1763 by the Dutch East India Company, and its contents were then used for the building of the tower.
+In 1817, a group of British engineers led by William Hancock arrived at the tower to make improvements to the tower. The work was completed on October 22, 1819, and it is known as the "Flying Tower" because of its height and its height. In addition, the tower's height has been increased to accommodate the growth of the tower since the early 1800s. It is now the tallest tower in the world.
+- "Dry Sands". Retrieved 2011-03-22.
+- Bower, William (1801). A History of the English West Indies. London: T. J. Norton & Co. p. 472. ISBN 0-393-08136-9.
+- Cody, John (2005). The New England Encyclopedia. New York: Pearson Education Inc. p. 1. ISBN 978-0-471-79982-5.
+- Smith, Stephen (1998). The Great Seal of the World. New York, NY: HarperCollins Publishers. p. 332. ISBN 052148502X.
+- D
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=242 first30=[263, 1239, 357, 483, 342, 5454, 359, 263, 1701, 288, 795, 7527, 17, 202, 202, 2774, 1427, 415, 1936, 269, 1496, 3581, 29, 202, 202, 2302, 89, 333, 990, 2392]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be represented as a sum of two vectors.
+
+Now let's consider the given equation:
+
+$$v = \frac{1}{2} + 2\sqrt{3-4}.$$
+
+To solve this equation, we need to find its eigenvalues. Since both sides are positive, they must equal zero since there would always be an error in solving for them. However, since we already know these values, it makes sense to substitute them back into our original equation and determine their eigenvalues:
+
+$$\begin{align*}
+v &= \frac{a^2}{2} - 2\sqrt{\frac{3}{2}} \\[5pt]
+&= -\frac{0}{2} \\[5cc]
+&= \boxed{\frac{c}{2}.}
+\end{align*}$$
+
+Since $c$ has no eigenvalues, it follows that $\frac{c}{\sqrt{3}}$ cannot have any nonzero eigenvalues. Therefore, we have successfully solved for the eigenvalue.
+
+Next, let us explore the solution provided by the user who chose to solve the problem using the formula derived from the definition of eigenvalues:
+
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 1420, 491, 330, 395, 1991, 817, 3350, 3747, 5663]
+first_step_topk_probs=[0.4186179041862488, 0.09738045930862427, 0.09738045930862427, 0.07124506682157516, 0.0384816937148571, 0.030962960794568062, 0.02265298366546631, 0.020412052050232887, 0.018392788246273994, 0.017459355294704437]
+first_step_topk_text=[' can', ' allow', ' have', ' is', ' are', ' provide', ' use', ' uses', ' allows', ' involve']
+
+[New tokens 4] count=195 first30=[483, 342, 885, 299, 1005, 1397, 1798, 611, 672, 269, 1165, 1378, 780, 17, 202, 16, 1153, 1373, 288, 287, 957, 2019, 920, 269, 2613, 298, 4189, 330, 263, 2969]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to help students learn more about the world around them.
+- An example of an interplay between the brain and memory is a computer program that helps students with learning disabilities.
+- Learning to think critically and creatively is important for students who have difficulty understanding abstract concepts or making connections between ideas.
+- The ability to recognize patterns in words, letters, sentences, and objects helps students develop skills in using language.
+- A variety of teaching methods exist to help students become better readers and writers.
+- Educational programs like Teaching with Memory and Language Arts (TMSA) provide teachers with hands-on activities that teach students how to use the tools they need to understand what they're reading and writing.
+- Research shows that children who are learning to read independently improve their reading skills by using the same tools from the same book.
+- TMSA provides training and support for teachers to train students on how to use these tools effectively.
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 5427, 6649, 29, 8163, 16, 27, 5427, 202, 1568, 202, 18688, 351, 588, 88, 6284, 224, 843, 2234, 29, 6457, 29, 5557, 9697, 202]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Dec  5 14:43:07 2019
+
+@author: <NAME>
+"""
+import numpy as np
+from scipy.integrate import solve_simplex, sinfer
+
+def log(x, y=None, z=0.1, num_rows=2, n_jobs=-1,
+                 num_nodes=1, n_iter=5, n_split=50, **kwargs):
+    """
+    Calculates log of `x` and `y`.
+
+    :param x: input data
+        Input size (n_jobs)
+        Output size (n)
+        Number of steps to take in each step.
+        Number of columns to use for this step
+    :param y: input data
+    :param z: input data
+
+    :return: output data
+    """
+    if n_jobs == 1:
+        return 1 - (np.log10(x)) * (1 - (y - y)) / (num_rows)
+    else:
+        return 0.5 * (np.exp(-x[i])**2 + 1.) * (1 + (y - x[i]))
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[311, 353, 263, 377, 744, 836, 81, 338, 1700, 284]
+first_step_topk_probs=[0.18251793086528778, 0.0952913910150528, 0.08842992782592773, 0.08586467057466507, 0.06617848575115204, 0.0596318244934082, 0.05660546198487282, 0.048417214304208755, 0.04596005007624626, 0.043627575039863586]
+first_step_topk_text=[' n', ' (', ' a', ' P', ' $', ' {', 'n', ' A', ' `', ' f']
+
+[New tokens 6] count=256 first30=[316, 17, 74, 1155, 353, 81, 14, 20, 12, 72, 11622, 21, 81, 573, 202, 202, 1465, 2859, 330, 3020, 289, 8695, 1191, 269, 8695, 5665, 17, 382, 1271, 1392]
+[Full output 6]
+Write a Python function that returns the factorial of n: e.g., (n+1)e^(2n).
+
+This code is written in Python using the Python library. The main function is `csc_from` and it computes the factorial of the given integer, denoted as f(x). To calculate this value, you must first determine the factorial of x by multiplying both sides of the equation by 1/x:
+
+f(x) = csc_from + f(x)/f(x), where f(x) represents the factorial of 2*x.
+
+Now let's examine how to find the factorial of a non-negative integer n:
+
+* For all integers n > 0, there exists an integer n such that the product of two integers from 1 to n cannot be negative.
+* For any positive integer n, there exists another integer n suchthat the product of these integers from 1 through n does not exceed the sum of their products modulo n.
+* If n=0, then the product of those integers from 1 up to n will always equal zero; otherwise, the product of them will never exceed the sum.
+
+Since our original objective was to find the nth term of f(x), we need to compute the factorial of f
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.7587487697601318, 0.24125118553638458, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 8049, 11, 81, 12, 1246, 537, 2318, 311, 1246, 1083, 801, 44, 3947, 3226, 31393, 17220, 29, 8042, 8049, 11, 81, 687, 3, 711, 1018, 9745, 202, 807, 2994]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return fib(n)
+     #print n
+     print("Ignoring Fibonacci Numbers: ", fib(n))
+
+import unittest
+from random import randint, random
+
+class TestNumbers(unittest.TestCase):
+    def test_basic(self):
+        self.assertEqual(len(random()), 1)
+
+    def test_get_number(self):
+
+        self.assertEqual([1, 2], [3, 4])
+        self.assertTrue(len(generate_numbers()) == 3)
+
+    def check_numbers(self):
+        
+        for i in range(2, len(self.num_numbers)):
+            if self.is_number():
+                self.assertEqual((i, 0), self.num_number)
+    
+    def test_readable(self):
+        
+        for i in list(range(0, len(random()))):
+            for j in range(0, 10):
+                self.assertCountEqual(str(random()*j), random())
+
+    def test__add_numbers(
+            self,
+            input_string=None,
+            output_string=False,
+            num_numbers=5,
+            num1=10,
+            num2=100,
+            num3=100,
+        ):
+        string =
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 13676, 698, 1289, 356, 535, 2590, 1109, 338]
+first_step_topk_probs=[0.25567692518234253, 0.1599985510110855, 0.1170574352145195, 0.07325267046689987, 0.06600619852542877, 0.04829116538167, 0.04584035277366638, 0.0435139536857605, 0.03920932859182358, 0.03353751450777054]
+first_step_topk_text=[' The', ' There', ' Yes', ' It', ' We', ' I', ' In', ' No', ' They', ' A']
+
+[New tokens 8] count=256 first30=[1289, 1755, 847, 1118, 17, 1358, 289, 269, 2338, 1685, 973, 15, 3057, 491, 4506, 263, 9720, 2255, 920, 922, 330, 1255, 269, 360, 10235, 2419, 5, 288, 10676, 353]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: We don't know. But in the past few years, scientists have discovered a surprising link between what is called the "white color" of cats (and how they live) and what other animals may be doing to help them find their way back home.
+A recent study from the University of South Carolina found that black cats are more likely than white cats to be overweight or obese at birth. That's because the body mass index (BMI) is so high compared with the BMI of the average adult cat. The researchers found that black dogs were not as likely to become obese as white cats, but had an increased risk for obesity.
+The researchers also found that black males were less likely to be obese than females. Blacks had lower BMIs by about two-thirds, whereas white females had a smaller percentage.
+How did this happen?
+One theory suggests that black cats will be more likely to get out of bedtime when they're older than black cats. In fact, black cats are one of the most social animals on earth and are generally thought to be much less active than black cats (although there is no evidence that black cats eat rodents).
+In fact, black people are the least likely to have a black cat. And black cats tend to be
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 2050, 382, 798, 3157, 409, 1012, 2590, 843, 637]
+first_step_topk_probs=[0.6759570240974426, 0.09340665489435196, 0.05267002061009407, 0.040594376623630524, 0.03296005725860596, 0.025117315351963043, 0.0241140928119421, 0.020625878125429153, 0.018585460260510445, 0.015969131141901016]
+first_step_topk_text=[' 1', ' One', ' The', ' 4', ' App', ' 2', ' 6', ' No', ' 5', ' 3']
+
+[New tokens 9] count=34 first30=[354, 13032, 333, 798, 10941, 202, 20, 13032, 333, 1604, 10941, 202, 21, 10941, 333, 2341, 10941, 202, 22, 10941, 333, 2341, 26282, 288, 14230, 202, 23, 10941, 333, 2234]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+1 apple = 12 apples
+2 apples = 13 apples
+3 apples = 13 ounces of candy
+4 apples = 14 ounces of candy
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 1289, 22089, 783, 1278, 2575, 3919, 382, 8151, 15255]
+first_step_topk_probs=[0.5763161778450012, 0.0729062557220459, 0.0561911016702652, 0.053339358419179916, 0.045623570680618286, 0.03337891772389412, 0.024420537054538727, 0.024420537054538727, 0.0220047514885664, 0.01982792839407921]
+first_step_topk_text=[' I', ' We', ' Thank', ' This', ' If', ' What', ' My', ' The', ' Please', ' Thanks']
+
+[New tokens 10] count=199 first30=[2575, 330, 669, 2942, 34, 202, 16, 437, 1813, 68, 440, 969, 79, 488, 29, 1289, 3442, 699, 263, 3313, 288, 4083, 444, 269, 2338, 15, 614, 383, 415, 453]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience?
+- Elena Littlich: We've had a lot of stress from the past, but it's not like you're having to deal with it.
+- Jost: Well, we've been talking about what's going on in our lives. It's kind of like how you feel when you are worried about something.
+- Katherine Dillon: That's the way it feels at work. It's really hard for me to remember that when I was in school, my teacher and I were very busy, so I did not have to be there to help myself.
+- Carolyn Guttman: Thank you for your support. You know, it's not just a social problem, it's also a psychological problem. And you can't get away from it.
+Becoming stressed out is really important, because as long as you don't worry about it, you'll keep trying to stay calm and avoid negative emotions.
+
+================================================================================

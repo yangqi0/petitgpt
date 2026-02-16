@@ -1,0 +1,309 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=200 first30=[2827, 5273, 2857, 299, 269, 3843, 374, 610, 2553, 17, 776, 2977, 7336, 288, 24796, 298, 20210, 17, 776, 418, 1114, 8763, 4, 776, 3766, 299, 1143, 374, 780, 545]
+[Full output 1]
+Once upon a time, a curious child named Jack went to the park with his mom. He saw lots of swings and slides. He was very excited! He wanted to play with them all day long. But he did not know how to go up or down. His mom came in and said, "No, Jack. You can't jump on the swing. It's too hard for you to jump on it." Jack felt sad. He knew he had to be careful when he played. He said, "I'm sorry, Mommy. I didn't want to play too much. I just wanted to try something new." So, he jumped off the swing and took a big bite. He couldn't believe his eyes. He ran back to his mom and hugged her tight. "He was so happy, Jack. I like playing. Let's go to the swings and slide together," he said. Jack smiled and nodded. He thanked his mom for being kind and helping him find the best way to jump on the swings.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[289, 1691, 6677, 419, 269, 5057, 5287, 437, 17, 321, 25358, 15, 668, 699, 733, 263, 24232, 17333, 288, 269, 719, 10079, 17, 202, 755, 925, 1913, 15, 437, 17]
+[Full output 2]
+The Eiffel Tower was built in 1763 by the architect Robert E. Tucker, who had been a lifelong advocate of the new tower.
+In 1816, E.T.A. moved to Boston and built his own home at the end of the building. He designed a new tower that he named "L'Espagne" (Old Eiffel), which is still standing today. The tower has two columns, one on each side, and a central tower with a balustrades and an octagonal staircase. The tower itself is a small wooden structure, which is the same as the original tower. It was originally a large tower, but was converted into a house, and the tower became a model for the nearby city of Boston.
+In 1834, a group of men from the Massachusetts Bay Colony arrived in Boston, seeking a more permanent location, and they began building a new tower. They constructed a second tower, which was later called the "Pioneer Tower," and then a larger tower, known as the "Cloak Tower." They also built a second tower on the site of a former brick building. This tower was then used as a private residence for the wealthy and influential family.
+During the American Revolution, the tower was used as a public
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 483, 342, 5454, 359, 263, 1701, 288, 795, 4384, 18956, 17, 783, 2097, 3071, 269, 4054, 339, 914, 2002, 288, 5376, 298, 2969, 2497, 17, 202, 202]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be represented as a sum of two distinct eigenvalues. This concept forms the basis for many areas of mathematics and computer science.
+
+To illustrate this idea further, let's consider a simple example involving real numbers (which are just fancy words for whole numbers). Suppose we have a vector field F(x) with the following characteristic:
+
+F(x) = 2x + 3
+
+Here, x represents the magnitude or direction of the vector, while x stands for its length or position along the diagonal line connecting any point on the vector to itself. We want to find out whether there exists a unique solution (a complex number) for F(x), where the argument of F(x):
+
+1. Multiply both sides by 1: F(x)=2x+3
+2. Simplify further: F'(x)=2(x+3)
+3. Subtract -2 from both sides: F'(2)=2(-2)+3
+4. Simplify: F'(0)=2(0)-6
+5. Simplify again: F'(3)=2(-8)+7
+6. Simplify more: F'(9)=3(12)+7
+
+As you may notice, these
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 1420, 491, 1991, 817, 14071, 1085, 5546, 395, 3747]
+first_step_topk_probs=[0.23563437163829803, 0.19132016599178314, 0.08314743638038635, 0.060831956565380096, 0.060831956565380096, 0.049391645938158035, 0.04010288417339325, 0.03256100043654442, 0.024038875475525856, 0.022613145411014557]
+first_step_topk_text=[' can', ' allow', ' have', ' provide', ' use', ' incorporate', ' model', ' describe', ' are', ' allows']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 2304, 298, 3925, 553, 1231, 8944, 2269, 17, 202, 202, 509, 414, 7490, 2269, 202, 509, 3355, 2877, 3722, 269, 14457, 2673, 330, 357]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex systems and construct their own functional models.
+
+Theoretical models
+The basic idea behind the neural network is that there are a number of possible paths for the network, such as localisation, which allows it to provide information about the environment (for example, by mapping out the connections between different nodes), or to make decisions about how to manage the network's resources. For instance, if you want to predict what will happen next in the future based on the network's current state, then you would need to know the current state (the number of nodes present) before deciding whether to apply the network. This approach involves using mathematical functions called "functions" to describe the network. These functions allow us to define a new set of parameters called "parameters" that can be applied to the network.
+
+In the context of the neural network, the underlying principles of the neural net are:
+
+1. **Systematic Models**: The system of equations representing the network's properties is known as the system of equations. A set of equations describes a subset of the system under consideration, while a set of equations represents the entire system. For instance:
+
+* If we have a set of variables {x\_i}, where x represents the
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 490, 263, 861, 286, 1107, 643, 711, 202, 6, 783, 330, 453, 2126, 1812, 1525, 269, 1180, 288, 4487, 330, 6127, 17, 202, 856, 835, 66, 1637]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b if a == b else 0
+
+
+# This is not always possible since the list of variables is empty.
+def get_value():
+    return [get_value() for _ in range(10)]
+
+
+# A singleton can be created by calling `get_value()` with no arguments.
+def _set_value(val, val):
+    # Return the value from the list of variable names
+    return val
+
+
+# The only difference between the two lists is that they are not required to be initialized.
+def __init__(self, name=None):
+    self._name = name or "."
+
+    def set_name(self, name):
+        self._name += name
+
+    def set(self, value):
+        if isinstance(value, str) and self._name != ".":
+            raise TypeError("The given string must be an integer")
+
+        if isinstance(self._name, str) or isinstance(self.name, str):
+            self._name -= 1
+        elif isinstance(self, str) \
+                or isinstance(v, str) :
+            self._v = v
+            self._set_value(_set_value)
+        else:
+            raise ValueError("Invalid argument.")
+
+    def set_(
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[836, 311, 1700, 353, 744, 7492, 377, 354, 263, 81]
+first_step_topk_probs=[0.2614288330078125, 0.2001269906759262, 0.139932781457901, 0.09718137979507446, 0.06406589597463608, 0.05479846149682999, 0.0278429314494133, 0.0278429314494133, 0.027281207963824272, 0.025088565424084663]
+first_step_topk_text=[' {', ' n', ' `', ' (', ' $', ' $$', ' P', ' 1', ' a', 'n']
+
+[New tokens 6] count=256 first30=[836, 81, 4, 11, 81, 16, 20, 18914, 96, 202, 202, 2774, 15, 1427, 415, 2861, 672, 1467, 1375, 288, 6847, 1255, 360, 51, 25851, 415, 25271, 741, 338, 377]
+[Full output 6]
+Write a Python function that returns the factorial of n: {n!(n-1)!}
+
+Now, let's talk about another type of polynomial called "Pascal's Triangle." A Pascal's Triangle is just a fancy name for a special kind of math expression involving variables and coefficients. Don't worry if you haven't heard of it before; we'll break it down together step by step!
+
+Imagine having a big box full of different toys (we call them "matrices") and some rules. You can arrange these toys in neat rows and columns while keeping their unique properties intact. Now, suppose there exists a rule for combining those toys into one bigger group - say, combining all your toys from the first row with any other toy from the second row. That means each toy belongs to exactly one group inside the new one. This concept relates to something called the "natural logarithm," which helps us understand how many distinct items belong to a given group without needing specific conditions like addition or multiplication.
+
+In our example today, we want to find out whether this natural logarithm has a natural base (the square root) between 0 and 1 when divided by 2. To do so, we need to apply the following steps:
+
+Step 1: Identify the natural logarithm. In our case, since we
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=256 first30=[622, 8049, 11, 81, 12, 1246, 202, 6, 11101, 299, 1098, 269, 1701, 288, 795, 11938, 9044, 15, 374, 808, 3716, 4084, 17, 202, 856, 835, 66, 2525, 11, 91]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return fib(n)
+    
+# Function to find the sum of two consecutive integers, with no extra steps.
+def get_sum(x):
+    """Get the sum of the first n integers, with x being an integer.
+
+    :param x: A tuple containing the first n elements and their corresponding digits.
+    :return: The sum of the second n integers, which is the sum of all the other integers.
+    """
+    # If there are any odd integers, return 0, otherwise return 1.
+    if not isinstance(x, int):
+        raise TypeError("Invalid argument")
+    
+    # We only want to check if there are even integers.
+    if len(x) == 2 or x[0] != 0:
+        raise ValueError("Expected number of odd integers must be greater than 3.")
+
+    # If we have a positive integer, return 1, otherwise return -1.
+    if x < 0:
+        return -1
+
+    # We can't use the length of the last element as a power of -1.  So we're done here!
+    if x > 0:
+        # We don't want to check whether it's a multiple of -1 or not.
+        return -2
+    else:
+        # This is a negative
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 1289, 698, 535, 356, 1278, 13676, 338, 783]
+first_step_topk_probs=[0.48016223311424255, 0.2086775153875351, 0.06989821791648865, 0.04607977345585823, 0.04607977345585823, 0.04152132198214531, 0.030377643182873726, 0.030377643182873726, 0.02341296710073948, 0.02341296710073948]
+first_step_topk_text=[' The', ' There', ' We', ' It', ' In', ' I', ' If', ' Yes', ' A', ' This']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 12052, 17, 202, 37, 1477, 395, 269, 851, 1488, 1875, 288, 26291, 289, 269, 1165, 15, 614, 715, 395, 263, 1685, 613, 1875, 288, 11859, 536, 728]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+Bats are the most common species of mammal in the world, but there are a few other species of mammals which may be considered as being black.
+One of the biggest problems with black cats is that they don't have hair on their body and are often not seen at all.
+The average white cat is about 20 years old. They live in a habitat where they can't find food or water.
+There are also many kinds of cats in captivity, including red-tailed hawks, browns, eagles, eagles, tits, skunks, and raccoons.
+These cats are known for their ability to keep themselves out of the wild, and it's important to note that these cats are not actually Black, as they are not Black.
+Females are more likely than males to have a black cat. This means that they will tend to get caught in the way of other people, such as in an attempt to avoid being attacked by a predator.
+A small number of cats are born with black skin, so this does not mean that they'll always be black.
+Sexually transmitted diseases (STDs) are caused by the bacteria that cause the disease.
+Some people think that if you're
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2050, 382, 354, 1541, 5517, 338, 1278, 798, 2590, 698]
+first_step_topk_probs=[0.28737175464630127, 0.25894346833229065, 0.13860245048999786, 0.07418854534626007, 0.04890812933444977, 0.04183334484696388, 0.020176662132143974, 0.020176662132143974, 0.020176662132143974, 0.01818068139255047]
+first_step_topk_text=[' One', ' The', ' 1', ' There', ' Two', ' A', ' If', ' 4', ' No', ' It']
+
+[New tokens 9] count=256 first30=[2050, 13032, 330, 5405, 744, 1161, 15, 614, 490, 486, 395, 263, 1413, 5964, 388, 263, 1543, 7101, 486, 483, 2126, 2372, 598, 269, 1134, 2140, 288, 3161, 299, 1062]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple is worth $10, but if you are a good buy or a great sell you can always give out the same amount of money to make the same purchase. The only difference between a "good" and an "bad" apple is that it is a "bad" or "too-good" apple. A "bad" apples usually cost about $3,000, but if your apple was purchased in a particular year, you might want to consider buying at least $1500 for each apple you buy. For example, if you bought a new apple from a different year, you would probably get $1,500. If you bought a different apple from a previous year, you could still buy it at least $4,000.
+Some people believe that there is a limit on how much they can earn their apple. But it's not true. You can save $50 by having a "value" of $2,400. This means that if you save $250, you will have earned $100 less than when you store the apple. This limit can be increased by using discounts, which allow you to increase the value of the apple. In addition, if you save the same amount as before, you can reduce the value of a given
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 783, 3919, 1509, 2575, 1289, 360, 1278, 776]
+first_step_topk_probs=[0.5624844431877136, 0.06183585897088051, 0.058697693049907684, 0.04076473414897919, 0.04076473414897919, 0.04076473414897919, 0.03486792370676994, 0.029824119061231613, 0.028310518711805344, 0.02298634499311447]
+first_step_topk_text=[' I', ' The', ' This', ' My', ' You', ' What', ' We', ' "', ' If', ' He']
+
+[New tokens 10] count=256 first30=[2575, 330, 669, 2942, 34, 202, 36, 1470, 337, 29, 338, 1549, 1163, 374, 263, 1114, 1108, 1909, 288, 2910, 702, 269, 619, 668, 578, 383, 15, 298, 330, 658]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience?
+Ambly: A human being with a very different view of nature than the one who has it, and is also a man-man. The difference between a man and a woman is that the woman's identity is not necessarily that of a woman but rather a man in general. It is the man, who is a woman, who is not a woman, but rather a woman who is not only a woman, she is an individual who is not an individual. This difference is evident in the way in which the woman's personality is described by her personality as "a woman" or "a woman."
+Baby: Baby?
+Dog: Dog?
+Carpenter: Cows?
+Cow: A dog?
+Mother: A baby?
+Eggs: Milk?
+Girls: Girls?
+Female: Female?
+Gender: Male?
+I have a bit of a problem with this question because it is really hard to answer. If you are worried about what your child will be experiencing after having a baby, there is no reason why he should be concerned. He may be concerned at all times for his own health and well-being. However, if you do feel that you
+
+================================================================================

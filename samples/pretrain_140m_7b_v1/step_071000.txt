@@ -1,0 +1,338 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=111 first30=[2827, 5273, 2857, 299, 269, 3843, 374, 610, 2553, 17, 776, 2977, 263, 2023, 3197, 374, 914, 4749, 298, 418, 1114, 8763, 17, 776, 3766, 299, 6231, 780, 545, 1266]
+[Full output 1]
+Once upon a time, a curious child named Jack went to the park with his mom. He saw a big tree with many leaves and was very excited. He wanted to touch them all day long. So he ran up to the tree and opened it. Inside were lots of yummy things! He found some sticks and started to eat them. Suddenly, a little bird came out of nowhere and flew down from the tree. It was so happy to see such a beautiful sight. Jack felt so proud of himself for being so brave. He went back home feeling grateful for the bird's help.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 419, 351, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.7834725975990295, 0.10826370865106583, 0.10826370865106583, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', ' by', ' on', '', '#', '', '"', '!', '', '']
+
+[New tokens 2] count=256 first30=[289, 1691, 6677, 419, 269, 5057, 3092, 72, 1068, 742, 17, 202, 202, 755, 925, 4216, 15, 269, 2587, 418, 8932, 707, 263, 7489, 298, 1770, 2037, 269, 437, 705]
+[Full output 2]
+The Eiffel Tower was built in 1763 by the architect Auguste Comte.
+
+In 1805, the building was converted into a museum and later became the Eiffel Hall of History. In 1839, it was renamed the Eiffell Hall of History and the Eiffels' estate was sold to the City of London. The Eiffel Palace was completed in 1828, and it is now known as the Eiffelin Building. It is a two-storey building with a single tower and a brick façade.
+
+It is the oldest building in the United Kingdom, and has been used for many years as a centre for the construction of the Fremont Bridge and the Greenwich Village.
+
+Eiffel Castle was built in 1826 and is the oldest structure in the United States.
+
+History
+
+The Eiffels were built in 1765 and rebuilt in 1827, but their buildings remained intact until the early 20th century. They are still in use today.
+
+Stone Age
+
+Eskimos first settled in the area around 1760. Eskimo people first came to the area from what is now Westport in Connecticut and then Stonington in Ohio. They settled in the region around 1785,
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 483, 342, 6031, 359, 269, 1701, 288, 795, 4384, 18956, 17, 202, 202, 2774, 1427, 415, 11453, 707, 269, 1496, 3748, 1993, 419, 1993, 29, 202, 202]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be expressed as the sum of two distinct eigenvalues.
+
+Now let's delve into the given solution step by step:
+
+1. Compute the eigenvector associated with the eigenvalue λ (which is equal to 1). This is the matrix representation of the eigenvector corresponding to the eigenvalue λ itself. For example, if we have the eigenvector λ = 2x2 - 4y + 6z^2, then its eigenvector is (3x2 - 8)2 - 4(2x2 - 3). Note that this matrix is symmetric about any axis; hence, it has no singularity at all.
+2. Find the eigenvectors for the eigenvector x (in this case, 0):
+ x = (-1)(0)
+ y = (-1)*(-1)
+ z = (-1)
+
+Since there are multiple eigenvectors, we must account for their order. Therefore, our original equation becomes:
+
+e^(4x2 - 7xy) = e^(-4x2) - 4(1)y
+
+This implies that e^(4x3) - 4y equals zero since both the first and second eigenvalues are negative. Consequently, the matrix obtained through the calculation of e^(4*2
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 1420, 817, 491, 1991, 395, 330, 5663, 8709, 1085]
+first_step_topk_probs=[0.3392651081085205, 0.10787227004766464, 0.09720108658075333, 0.07892104238271713, 0.07111383229494095, 0.06614285707473755, 0.038064487278461456, 0.019340435042977333, 0.016542747616767883, 0.01570320501923561]
+first_step_topk_text=[' can', ' allow', ' use', ' have', ' provide', ' are', ' is', ' involve', ' operate', ' model']
+
+[New tokens 4] count=146 first30=[483, 342, 885, 299, 1085, 2281, 870, 4410, 17, 202, 2303, 1373, 15, 1936, 269, 1759, 14457, 2673, 29, 202, 16, 382, 14457, 2673, 330, 263, 14457, 2673, 353, 4625]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data sets.
+For example, consider the following neural network:
+- The neural network is a neural network (which can be described as a neural network)
+- It has many different types of neural networks (see Figure 1).
+The neural network can be defined by two properties:
+- A neural network is in general an output on which it can predict the future behavior of the input and output.
+- An output on which the neural network is not in general an average of the network's predictions.
+The neural net is a neural net, but it has its own external neural network.
+It has a neural network of its own and does not have any internal neural network.
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=169 first30=[263, 647, 286, 3, 711, 4750, 2062, 263, 689, 715, 418, 263, 1809, 3510, 2827, 11183, 17, 1530, 699, 263, 2023, 4180, 10064, 298, 6446, 299, 8479, 383, 1148, 1266]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+Once upon a time there was a little girl named Jane. She had a big blue dress and loved to wear it every day. One day she decided to take her special dress with her. She put it on and went outside to play. When she got to the park, she saw something that made her smile. It was a beautiful flower! Jane looked around and saw the flower was very pretty. She wanted to show it to her friends and they all said yes. The next day, Jane's mom came in and asked her what she had seen. Her mom smiled and said, "It's very pretty!" Jane was so happy and thanked her mom for showing her the beautiful flower. She knew that if she ever wanted to take her new dress, she would always be able to show it off again soon.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 643, 17, 24, 864, 353, 20, 552, 8407, 81, 16, 20, 12, 1341, 409, 687, 711, 202, 856, 1271, 1714, 346, 1083, 801, 21089, 903, 555, 537, 4920, 1968]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return 0.5 * (1 - ((n-1) / 2))
+
+
+def main():
+    print("Starting")
+
+    # Read input file and generate input files
+    input_file = open('input.txt', 'r')
+    output_file = input_file + "\\" + input_file[:-4] + "\n"
+    for line in input_file:
+        output_file += line + "\n\n"
+    
+    print("Running:")
+    print(output_file)
+
+    # Check if the input file is empty
+    if not os.path.exists(output_dir):
+        print("Output directory does not exist")
+        exit()
+
+    # Create a file to store the output files
+    output_files = []
+    for f in input_files:
+        if len(f) == 1:
+            output_file.write("%s\n" % f[0])
+        else:
+            output_.write("\n")
+        output_files.append(f)
+
+    # Load the output files into a list
+    output_list = [None, None, None, [], [], [], [None, [], [], []]]
+    for f, _ in zip(output_files, output_files):
+        output_
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=256 first30=[622, 651, 19, 15, 643, 64, 711, 202, 856, 520, 86, 66, 75, 312, 4932, 1714, 346, 821, 346, 11101, 299, 6519, 269, 31393, 993, 288, 269, 1496, 993, 17]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return [0, 0]
+
+
+def ks_hilbert():
+    """
+    Function to compute the Fibonacci number of the given number.
+
+    :return: The Fibonacci number of 1 + 2 + ... + n, where n is the number of positive integers.
+    """
+    if n == 0:
+        return 1
+    else:
+        return 0
+
+
+def f1() -> int:
+    """
+    Returns the number of consecutive odd prime factors in the array.
+
+    :rtype: int
+    """
+    return 1
+
+
+def gcd(n: int) -> int:  # type: ignore
+    """
+    Return the number of elements in the array with the same value as the first integer (i.e., 0).
+
+    :rtype int: int
+    :raises ValueError: If the array has no elements.
+    """
+
+    def _get_array(self, x: int) \
+            -> np.ndarray:
+        """
+        Returns the number from the first array with the specified values.
+
+        :rtype: np.ndarray
+        """
+        if len(x) > self._max_length:
+            return x[0]
+        elif len(x[0]) < self._max:
+            return 0
+        else:
+            raise ValueError("
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 1541, 2590, 698, 1278, 1289, 356, 535, 338]
+first_step_topk_probs=[0.3285115361213684, 0.17583957314491272, 0.1427704393863678, 0.08934345841407776, 0.05590970441699028, 0.05590970441699028, 0.040904413908720016, 0.0368579737842083, 0.02992630936205387, 0.02429826743900776]
+first_step_topk_text=[' The', ' Yes', ' There', ' No', ' It', ' If', ' We', ' I', ' In', ' A']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 808, 17, 202, 37, 1477, 395, 269, 851, 1488, 1875, 288, 26291, 289, 2311, 2574, 15, 614, 581, 395, 658, 263, 1829, 2243, 288, 1476, 339, 4383]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is no.
+Bats are the most common species of mammal in North America, but they are also a major source of food for humans. In fact, one study found that black cats are more likely to be eaten by humans than white cats (about 5% of the population). In addition, black cats are a great source of protein for humans, so it's not surprising that they may have been able to consume much less protein than white cats.
+The reason why black cats are such an important part of our diet is because they eat mostly insects, which are known as "food bugs." They feed on small invertebrates like worms, spiders, and lizards, but they also eat insects like moths, flies, and beetles.
+Many people think black cats are harmless and should never be fed anything unless you know what kind of food they're eating. But there are many other factors that can affect their health, including whether they are raised or roamed. One thing that makes them so attractive is that they tend to be smaller than other cats. This is true even if they are bigger than other cats, but they don't necessarily like to be left out in the wild.
+One of the best ways to avoid black cats is to avoid them. If you
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 798, 382, 2050, 643, 843, 1012, 1218, 409, 637]
+first_step_topk_probs=[0.5656631588935852, 0.09627076983451843, 0.051530033349990845, 0.046432457864284515, 0.046432457864284515, 0.0418391227722168, 0.03578689321875572, 0.03578689321875572, 0.023645663633942604, 0.018019234761595726]
+first_step_topk_text=[' 1', ' 4', ' The', ' One', ' 0', ' 5', ' 6', ' 8', ' 2', ' 3']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 17, 202, 24771, 29, 637, 10941, 333, 1012, 10941, 17, 202, 22, 10941, 333, 843, 10941, 17, 202, 509, 3533, 330, 263, 1809, 611, 7144]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples.
+Answer: 3 apples = 6 apples.
+3 apples = 5 apples.
+The answer is a little more complicated, but the answer is still not very good. There are some things that you need to know about apples:
+- They are the most common of all fruits in the world; they grow on a tree or other piece of wood.
+- They can be eaten raw.
+- If they are cooked properly, they can be eaten by humans.
+- A small amount of fruit can be consumed.
+- The average size of fruit is around 10 pieces.
+- Most fruits are edible when they are grown, grown, or cooked.
+- Some fruits are tasty, so they may be eaten only once or twice a week.
+- What's the best way to eat them?
+- Choose the right variety for your family.
+- Buy the fruit at home if it looks healthy and delicious.
+- Be sure the fruit is ripe before eating.
+- Keep the fruit away from children who might catch them.
+- Don't overdo it with food, especially fruit juices.
+- Avoid foods that contain high amounts of sugar, such as coffee grounds.
+- Make sure that the fruit
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 382, 3919, 1289, 1278, 783, 22089, 1509, 15255]
+first_step_topk_probs=[0.48294535279273987, 0.06568597257137299, 0.06568597257137299, 0.045618005096912384, 0.04330285266041756, 0.0390191450715065, 0.0370388925075531, 0.0370388925075531, 0.0370388925075531, 0.02572299726307392]
+first_step_topk_text=[' I', ' What', ' The', ' My', ' We', ' If', ' This', ' Thank', ' You', ' Thanks']
+
+[New tokens 10] count=113 first30=[2575, 330, 4083, 34, 202, 8104, 6804, 932, 382, 4083, 288, 269, 2780, 330, 453, 1100, 263, 1811, 339, 486, 614, 658, 263, 4083, 351, 669, 1629, 17, 698, 415]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is stress?
+Assistant : The stress of the job is not just a problem for you but also a stress on your body. It's a stress that you need to cope with.
+Assistance: You are going to be in a better position to deal with this situation than if you were in a stressful job. If you're working at home, it can make things worse.
+Assignment: I feel more comfortable doing something like work and cooking because I have been in a different occupation. My job is to help me deal with stress.
+
+================================================================================

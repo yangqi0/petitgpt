@@ -1,0 +1,250 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=163 first30=[2827, 5273, 2857, 299, 269, 3843, 17, 1530, 2977, 263, 2023, 3197, 374, 914, 8647, 298, 7106, 17, 5273, 418, 1114, 8763, 4, 776, 3766, 299, 1137, 545, 269, 1108]
+[Full output 1]
+Once upon a time, a curious child named Jack went to the park. She saw a big tree with many branches and flowers. Jack was very excited! He wanted to see all the different things around him. So he asked his mom if they could go on an adventure. His mom said yes and they started walking in the trees. Jack felt so happy that she had been able to get out of the forest. But then something magical happened. The little boy got scared and started to cry. He didn't know what to do anymore. Suddenly, he heard a voice coming from outside. It was a big, mean dog who was standing there looking for food. Jack looked up and saw a big, yellow dog lying in front of him. He couldn't believe it! He was very sad but he knew he had to be careful next time.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=102 first30=[289, 1691, 1699, 419, 269, 5057, 5287, 389, 767, 818, 17, 535, 925, 955, 15, 406, 7713, 263, 10079, 288, 1378, 1237, 13787, 353, 20, 17, 24, 10203, 12, 7673]
+[Full output 2]
+The Eiffel Tower was built in 1711 by the architect Robert Browne. In 1819, he constructed a tower of around three metres (1.5 ft) tall and was the first to be built in England.
+In 1824, he also designed the first modern tower of the castle. It is believed that he had built it because of his love for the English people. However, he was not able to build it due to his poor health. He died on 26 October 1826 at the age of 84.
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=198 first30=[263, 1392, 288, 269, 4487, 289, 269, 5438, 17, 382, 28071, 288, 263, 4409, 1462, 483, 342, 5454, 359, 263, 4759, 5284, 288, 269, 4409, 3368, 298, 269, 10294, 8537]
+[Full output 3]
+In linear algebra, an eigenvalue is a function of the variables in the domain. The eigenvalue of a vector field can be represented as a linear combination of the vector fields and the eigenvector associated with it.
+
+Now let's consider a simple example to illustrate this concept better: suppose we have two vectors A and B. We want to find out if there exists a unique vector v that can be expressed as a linear combinations of these vectors. To do so, we need to perform some mathematical operations on each vector in the domain of A and B (the basis). These operations are given by:
+
+* Combining them together gives us a vector v = A + B + C.
+* Adding up all those results gives us a new vector v = B + C where C represents the first matrix of A.
+
+These three steps will give you an idea of how to calculate the eigenvalues of a vector v using matrices and vector addition. However, you should still enjoy learning about matrices and their properties!
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 330, 491, 395, 1420, 817, 8709, 713, 5663, 1991]
+first_step_topk_probs=[0.4125627875328064, 0.11820122599601746, 0.10650814324617386, 0.04545721039175987, 0.037583135068416595, 0.026100941002368927, 0.022325320169329643, 0.019095858559012413, 0.018126744776964188, 0.017206814140081406]
+first_step_topk_text=[' can', ' is', ' have', ' are', ' allow', ' use', ' operate', ' work', ' involve', ' provide']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 9668, 298, 9668, 17, 382, 8944, 1085, 330, 1728, 351, 269, 3207, 357, 1293, 1798, 419, 2449, 374, 263, 1440, 288, 4881, 289, 1663]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex behaviors and behaviors. The functional model is based on the theory that children learn by working with a group of adults in order to create a model that will match their own behavior.
+The model was developed by Willem de Kooning, who also worked with his wife, daughter, and colleagues at the University of Michigan. In this model, the child's personality is represented as a computer-generated graph, which is then combined into a graph, and the computer is able to predict how the child learns from it. This information is then sent back to the computer through a computer program called the Parental Interaction Model (PIP).
+A PIP model has been developed for use by children in the classroom. It includes a program that allows children to communicate with each other using the PIP. For example, if a child is asked to identify her favorite food or drink, she may not have the opportunity to answer questions about food, but she may still do so. If she answers correctly, she might respond by saying "I am sweet."
+The PIP model is based upon the PIP model and is designed to be used by children in an age appropriate way. As children grow up, they become more independent and less dependent
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=145 first30=[263, 647, 286, 864, 353, 69, 552, 263, 12, 711, 202, 856, 853, 66, 468, 11, 68, 15, 263, 464, 346, 622, 287, 552, 286, 864, 353, 68, 552, 263]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b * (b - a)
+
+
+def add_out(a, a):
+    return an - b * (a - a)
+
+def _add_new(a, self):
+    if not isinstance(self, A):
+        raise TypeError("A must be an A instance")
+
+    for i in range(len(self)):
+        if self[i] != 0 and self[i + 1] == 0:
+            raise ValueError("An empty value is not supported")
+
+        if self[0] == 0 or self[1] == 0 and self[-1] == 1:
+            raise KeyError("The value of the new value is not valid")
+
+    return add_out
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[311, 354, 282, 520, 353, 836, 81, 2, 1, 0]
+first_step_topk_probs=[0.7338840365409851, 0.09389649331569672, 0.061900362372398376, 0.03677039593458176, 0.033132873475551605, 0.020734023302793503, 0.019681774079799652, 0.0, 0.0, 0.0]
+first_step_topk_text=[' n', ' 1', ' p', ' k', ' (', ' {', 'n', '', '', '']
+
+[New tokens 6] count=157 first30=[520, 4, 1341, 353, 81, 552, 354, 12, 10608, 353, 81, 647, 354, 573, 535, 482, 1832, 15, 383, 791, 342, 4036, 299, 3296, 269, 993, 288, 2722, 299, 853]
+[Full output 6]
+Write a Python function that returns the factorial of n: k! / (n - 1) \* (n + 1). In this case, it would be useful to determine the number of ways to add these values together using the formula provided in the original text snippet.
+
+The given problem asks us to find the number of combinations of two numbers, like x and y, that satisfy the equation below:
+
+Number of combinations = Number of combinations × Sum of combinations
+= 4 × 3 × 2 × 1
+
+This question involves some complex analysis and algebraic manipulations involving multiple variables while still providing valuable insights into the structure of our original problem. While solving this particular problem requires advanced mathematical knowledge beyond grade school curriculum, understanding the underlying principles behind the solution process remains crucial for many students who struggle with solving problems involving multiple variables.
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=35 first30=[622, 1701, 11, 73, 11, 91, 12, 339, 892, 289, 284, 11, 81, 687, 202, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 801, 27115, 374, 1700]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return sum(f(x) for x in f(n))
+
+if __name__ == '__main__':
+    print("Testing with `.py`")
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 535, 1289, 698, 13676, 338, 356, 1278, 2590]
+first_step_topk_probs=[0.416481077671051, 0.14696215093135834, 0.0786631628870964, 0.07088139653205872, 0.04435644671320915, 0.03996847942471504, 0.03996847942471504, 0.03418685123324394, 0.03418685123324394, 0.027757553383708]
+first_step_topk_text=[' The', ' There', ' In', ' We', ' It', ' Yes', ' A', ' I', ' If', ' No']
+
+[New tokens 8] count=256 first30=[382, 1811, 330, 357, 715, 330, 808, 1194, 299, 1118, 490, 833, 288, 269, 10676, 395, 2645, 17, 698, 415, 453, 1812, 339, 263, 3191, 299, 342, 2645, 15, 614]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The problem is that there is no way to know if any of the cats are black. It's not possible for a cat to be black, but it does seem to be a good idea.
+The only thing that needs to be done is to show how much of an animal's body is black. If you want to see what is going on with your cat, you should have a pet. But this is just one part of the question. I have a pet in my house and it's been a long time since I was out in the park.
+I have two cats, both white and black. They're yellow and black. The color is gray. I'm sure they'll get brown too.
+But the answer is the same. What if you want to show how many cats are black, and then show how many of them are white? You need to tell me what color is.
+You don't want to make sure that a cat is black or black. That means that there isn't enough room for a cat who is black. This is because there are lots of cats in the world who aren't black anymore. There aren't enough places to show that a cat can be black. That doesn't mean that a cat has to be black at
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 382, 798, 2050, 409, 843, 1541, 1012, 338, 637]
+first_step_topk_probs=[0.4229505658149719, 0.14924485981464386, 0.07988502085208893, 0.06486157327890396, 0.046601761132478714, 0.04275937005877495, 0.040589336305856705, 0.0312834233045578, 0.028188731521368027, 0.02062329649925232]
+first_step_topk_text=[' 1', ' The', ' 4', ' One', ' 2', ' 5', ' There', ' 6', ' A', ' 3']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 202, 3146, 1763, 15, 360, 44, 483, 847, 1062, 833, 288, 269, 10941, 356, 3442, 3500, 741, 2575, 620, 486, 1645, 482, 330, 34, 202]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+He says, "I can't make any of the apples I've got." What do you think this is?
+Answer : a apple = 5 apples
+So, the first number is 7, the second number is 8, the third number is 9, and so on...
+Answer : 6 apples = 7 apples
+That's right, there are 10 apples in each row. There are 10 apples that we have left over for our last number. So, we have four apples with an equal amount of apples.
+Answer : 5 apples = 11 apples
+Now, if we add the two numbers together, what would happen to the remaining number?
+Answer - 1 apple = 12 apples
+This means that the total number of apples is 24. But since we have three apples, the number is still 13. We call it the "number of apples" because the number is raised to the power of 100. The number is not equal to the number itself but to the whole number.
+Answer - 2 apples = 20 apples
+The number is still 16. Now, let's say we add up all the apples from the previous number and then multiply by 100. So, the number becomes 10 x 100 = 101 + 102 = 101 +
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 1289, 360, 783, 338, 1278, 3919, 1509, 698]
+first_step_topk_probs=[0.4399356245994568, 0.10563591867685318, 0.0857696682214737, 0.07336268573999405, 0.04590919241309166, 0.03358788415789604, 0.030265195295214653, 0.030265195295214653, 0.02727123163640499, 0.02588719315826893]
+first_step_topk_text=[' I', ' The', ' We', ' "', ' This', ' A', ' If', ' My', ' You', ' It']
+
+[New tokens 10] count=256 first30=[360, 44, 4575, 6968, 20103, 741, 202, 755, 2224, 15, 486, 483, 835, 263, 3313, 288, 4083, 444, 263, 1685, 2829, 1943, 916, 4083, 298, 4083, 3420, 17, 1220, 1373]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: "I'm feeling depressed."
+In general, you can get a lot of stress from a few simple things like stress and stress management. For example, you may feel more comfortable in the office or at home. Or you might be more likely to be unemployed. You also have a better sense of how your job is going. If you're working with people who are not getting enough rest, you may find that it's easier to get out of work.
+There are several ways to deal with stress. You'll need to take some time to get through this process. Someone else will probably start to feel better about yourself as they get older. Others will simply try to stay on top of their stressors. It's important to remember that you are aware of what's happening when you're in a job. This includes how you feel and what you don't want to do.
+For example, if you've been taking medication for depression, you'll probably notice that you're still having trouble sleeping. This can make it harder to cope with the stressor. You might also notice that you go to bed earlier than usual. This is because you're getting less sleep, which can make it hard to fall asleep.
+You'll also notice that people who are depressed
+
+================================================================================

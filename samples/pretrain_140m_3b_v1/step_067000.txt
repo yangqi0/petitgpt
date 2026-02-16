@@ -1,0 +1,299 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 3609, 2446, 12562, 2977, 418, 2857, 1255, 5349, 791]
+first_step_topk_probs=[0.37074175477027893, 0.13082227110862732, 0.11788053065538406, 0.0957116112112999, 0.07002411037683487, 0.06309696286916733, 0.05123073607683182, 0.03748120740056038, 0.030432336032390594, 0.016289254650473595]
+first_step_topk_text=[' named', ' asked', ' came', ' walked', ' saw', ' was', ' went', ' called', ' appeared', ' would']
+
+[New tokens 1] count=157 first30=[3609, 896, 2553, 299, 1432, 896, 1842, 17, 1530, 988, 12052, 15, 614, 1024, 418, 1114, 8763, 17, 3230, 2553, 988, 357, 383, 418, 269, 1839, 1584, 299, 631, 298]
+[Full output 1]
+Once upon a time, a curious child asked her mom to take her home. She said yes, but she was very excited. Her mom said that it was the best place to go and find something fun. When she got there, she went back to her house and saw a big box full of toys. She picked them up and put them in her pocket. The little girl started playing with the toy cars. She had so much fun! After a while, she decided to play with the toy car again. She found some more toys and took another one too. The little boy ran after her and saw her mom doing what she could to make the toy car special. He smiled at her and said he loved her too. From then on, she always remembered to be careful when you are playing with the toys.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[289, 1691, 6677, 298, 269, 10079, 418, 3385, 419, 5057, 6016, 421, 451, 2116, 15, 668, 699, 5083, 3385, 269, 10079, 289, 925, 4559, 17, 202, 202, 509, 10079, 330]
+[Full output 2]
+The Eiffel Tower was built in 1763 and the tower was designed by architect Henry Dudley, who had previously designed the tower in 1831.
+
+The tower is part of a new building which opened in 1865 as the "Eiffel Tower" in London. It was designed by architects Robert Hooke and John Patterson. The tower is open to the public.
+
+In October 2011, the tower was renovated and redecorated and replaced with a new one at the end of the tower.
+
+History
+
+On May 15, 1687, a group of English merchants, including Sir Thomas Lancelot, purchased the tower from the Great Exhibition in London. They were called "the Lord's Tower". The building was built in a plan for the tower's roof, but was later demolished and was eventually rebuilt. The tower was used until it was demolished in 1912. In 1918, the original tower was destroyed and the tower became known as the "Mother Tower". The tower was demolished in 1931.
+
+A large stone structure was constructed in 1833-1844, but it still stands today. This is the only remaining example of an ancient tower in England.
+
+Pompey was the first to build a large tower, but
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 483, 342, 5454, 359, 263, 1701, 288, 795, 7527, 17, 783, 2097, 7311, 263, 6489, 2501, 289, 2175, 2002, 288, 5376, 298, 6745, 2021, 299, 686, 4589]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be represented as a sum of two vectors. This concept plays a crucial role in various areas of mathematics and physics due to its connection with the concept of eigenvalues.
+
+For example, consider the following vector space:
+```css
+[ 0 1 ]
+[ 0 2 ]
+```
+Here, the eigenvector associated with this vector is called the eigenvalue. Here, the eigenvalue represents the size of the original vector, while the diagonal elements represent the eigenvalues of the new vector. When we have two linearly independent eigenvectors (i.e., the same set of vectors), their respective eigenvalues will always satisfy the equation u = v1 + v2 + ... + vn for all n, where u0 = 0, and v1 = 1. We denote the eigenvalue by 'v'.
+
+The formula for eigenvalue is given by:
+
+(v1 - v2) * v1^T = (v2 - v3)(v3 - v4).
+
+Applying this definition to our previous case, let's compute the eigenvalues:
+
+* For each eigenvalue, we get:
+ - x\_ij = 1
+* For every eigenvalue, we obtain:
+ - y\_ij = (1/2)x
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 330, 491, 1420, 1991, 395, 817, 1085, 3350, 3747]
+first_step_topk_probs=[0.3659329116344452, 0.10484153777360916, 0.0944700688123703, 0.0691157802939415, 0.050566185265779495, 0.04724506288766861, 0.04556391388177872, 0.027066128328442574, 0.025692520663142204, 0.02438860572874546]
+first_step_topk_text=[' can', ' is', ' have', ' allow', ' provide', ' are', ' use', ' model', ' uses', ' allows']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 9668, 298, 9668, 17, 202, 509, 1549, 2613, 330, 269, 851, 1384, 1085, 339, 806, 411, 1645, 672, 829, 3286, 15, 614, 383, 658]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex behaviors and behaviors.
+The human brain is the most important model for how we think about our behavior, but it also has its own unique way of thinking. When you look at your brain, you see patterns of activity in the left hemisphere, and when you look at the right side of your brain, it's like a computer. If you were to look at your whole body, you would see patterns of movement on different parts of your body.
+You might also notice patterns of activity between your right and left sides of your brain. This pattern of activity can help us understand what we're talking about ourselves. For example, if we have two or more friends who are going to play soccer, we could say that they're playing soccer. Or maybe we want to know why the soccer team will come back first. We could say that there are many ways to describe this pattern of activity, but not all of them are the same.
+The next step in the process of understanding the nature of our brains is to use the human brain as a model for how our lives are organized. How do we get to that? One way is by making sure that we understand what we mean by "being" and "being"? A good way to start
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=96 first30=[263, 647, 286, 864, 263, 647, 286, 711, 202, 6, 5062, 269, 870, 339, 482, 1392, 202, 856, 835, 66, 917, 1714, 346, 622, 836, 331, 360, 320, 987, 494]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b * a + b
+
+
+# Get the data for this function
+def get_data():
+    return {
+        "id": int(input("Enter the id of the function you want to use: "),
+            "type": input("Type "),
+            #"value": input("Value "),
+            'type': input("Type '"),
+            #"name": input("Name"),
+            "size": input("Size", size)
+        }
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[311, 81, 1700, 353, 520, 316, 744, 354, 555, 0]
+first_step_topk_probs=[0.406589537858963, 0.3084424138069153, 0.11465781182050705, 0.07175102829933167, 0.028098104521632195, 0.02403358370065689, 0.018523406237363815, 0.015039832331240177, 0.0128642488270998, 0.0]
+first_step_topk_text=[' n', 'n', ' `', ' (', ' k', ' e', ' $', ' 1', '\n\n   ', '']
+
+[New tokens 6] count=256 first30=[520, 14, 20, 17, 202, 202, 2774, 15, 1427, 415, 1774, 351, 299, 269, 1271, 5826, 435, 1325, 552, 4007, 269, 28045, 288, 263, 1496, 854, 288, 1890, 1191, 269]
+[Full output 6]
+Write a Python function that returns the factorial of n: k+1.
+
+Now, let's move on to the main topic at hand - finding the factorial of a given set of numbers using the given formula. We will first define our variables and then apply them to our problem statement. Here is the code snippet provided:
+```python
+def factorial(n):
+ return int(input());
+for i in range(1,n):
+ if(input() == 1) or input() == 0:
+ return factorial(input())
+```
+Next, we need to determine how many unique ways to divide the number of positive integers (i.e., when dividing by 10) to obtain the factorial of the total number of positive integer integers (i). To do this, we need three steps:
+
+Step 1: Calculate the product of all positive integers up to some value, which is 5 because there are no negative integers between 1 and 10. For example, 3 + 5 = 6 since both 2 and 3 are positive integers, so 5 equals 4. Similarly, 3 + 7 = 8 since both 2 & 3 are positive integer multiples of 10. Since these two factors are equal, we have:
+
+* Addition of positive integers: (-2)^(-3) = (-4)^
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 339, 1083, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.6933680176734924, 0.16129399836063385, 0.14533796906471252, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' for', ' print', '', '#', '', '"', '!', '', '']
+
+[New tokens 7] count=57 first30=[622, 8049, 11, 81, 12, 1246, 202, 2318, 11, 73, 5, 54, 379, 288, 836, 1813, 11, 36, 66, 1253, 5771, 4282, 289, 269, 1180, 903, 202, 2318, 11, 86]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return fib(n)
+    
+print(f"Sort of {len(A_list)} items in the list")
+print(s.sort())
+print(sum([1 for i in range(len(A)) if i < len(A))] )
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 13676, 1278, 1289, 2590, 356, 698, 338, 535]
+first_step_topk_probs=[0.3022856116294861, 0.1795652061700821, 0.16180184483528137, 0.06014680489897728, 0.05144628882408142, 0.0488353967666626, 0.044004347175359726, 0.04177112877368927, 0.03965124487876892, 0.029009472578763962]
+first_step_topk_text=[' The', ' There', ' Yes', ' If', ' We', ' No', ' I', ' It', ' A', ' In']
+
+[New tokens 8] count=256 first30=[1541, 330, 808, 3641, 2833, 299, 1447, 269, 5630, 288, 2645, 10676, 17, 1783, 15, 263, 3193, 1337, 419, 269, 1442, 288, 4897, 435, 16591, 3056, 357, 10676, 395, 453]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: There is no scientific evidence to support the existence of black cats. However, a recent study by the University of Texas at Austin shows that cats are not as likely to be black than white. The reason for this is that cats are more likely to be domesticated than domesticated cats. If you want to see why cats are black, you have to look in your eyes. You can't see if cats are black or black. If you look at the number of cats you see in your house, you will find out that cats are black.
+So what do you think is going on? What do you think would happen if cats were black? Is it possible that cats are born with black hair? Does this mean that cats should be bred for their hair color? Does it really matter which way you look at them?
+Answer : We don't know exactly how cats behave. But I believe that there is an interesting question that has been asked about cats. How does the litter box look like? Are there any cats that are black? Can they be a group of cats? Would cats be black? Could cats be black because they are different from each other?
+Answer – Yes, cats are black but they are not black.
+There are a lot of things that
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 382, 2050, 798, 2590, 3744, 409, 338, 1012, 13676]
+first_step_topk_probs=[0.586967945098877, 0.11086389422416687, 0.08110976219177246, 0.03346119448542595, 0.03176303580403328, 0.027168365195393562, 0.02241143397986889, 0.022058991715312004, 0.017910486087203026, 0.016138702630996704]
+first_step_topk_text=[' 1', ' The', ' One', ' 4', ' No', ' First', ' 2', ' A', ' 6', ' Yes']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 202, 20, 13032, 333, 637, 10941, 202, 21, 10941, 333, 409, 10941, 202, 22, 10941, 333, 637, 10941, 3, 711, 6, 5427, 6649, 29, 8163]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+1 apple = 3 apples
+2 apples = 2 apples
+3 apples = 3 apples
+
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Jul  6 16:59:10 2017
+
+@author: <NAME>
+"""
+import numpy as np
+from scipy import interpolate, interpolate
+from scipy.interpolate import interp1d
+from scipy_clustering import clustering
+from scipy2 import ndimage
+from scipy4py import msft
+from scipy._ndimage import gaussian_filter
+
+def plot_line(ax):
+    plt.plot(ax)
+    plt.xlabel('x')
+    plt.ylabel('y')
+    plt=plt.gca()
+    plt.legend(['x', 'y'])
+    plt.title('No plot')
+    plt_text='{0} {1}'.format(ax[0], ax[1]))
+    plt.show()
+    
+def get_data():
+    data = []
+    for i in range(len(ax)):
+        if ax[i] == 'A':
+            data.append(ax[i])
+        else:
+            data.extend([ax[i], ax[i]])
+   
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 382, 1509, 783, 1278, 1348, 3919, 1289, 698]
+first_step_topk_probs=[0.3867310881614685, 0.15042078495025635, 0.058905623853206635, 0.050384651869535446, 0.050384651869535446, 0.04782763496041298, 0.040909141302108765, 0.03152990713715553, 0.029929766431450844, 0.025600288063287735]
+first_step_topk_text=[' I', ' What', ' The', ' You', ' This', ' If', ' How', ' My', ' We', ' It']
+
+[New tokens 10] count=256 first30=[2575, 330, 263, 314, 506, 296, 1008, 34, 202, 43, 1640, 57, 5411, 50, 29, 5531, 15, 486, 1118, 15, 411, 2068, 8093, 672, 269, 314, 506, 296, 3888, 15]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is a lone mug?
+HARVESTO: Well, you know, we're talking about the lone muge, and that's where we have to worry about what happens in the field of science. And if you look at it from a very basic level, you can see that the earth has a lot of different types of plants and animals, so they have different kinds of organisms. So if you look around at the earth, you'll see that there are different kinds of things that do not go through the same kind of plant growth cycle, but also those are different kinds.
+So you see, these kinds of plants grow in different ways because they grow in different places, like in the desert, in the mountains, in the desert. You see, these plants grow in many different ways. So you see, you see, we see that these plants grow all over the place, and when you look at them, you see that there is some sort of difference between plants and animals. So it's really interesting to think about the different kinds of plants growing in different places.
+And what does this mean for us? How do we measure how much plants grow in each area? We need to look at how well we measure how far
+
+================================================================================

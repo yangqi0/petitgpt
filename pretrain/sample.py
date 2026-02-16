@@ -406,7 +406,7 @@ def generate_default_samples(
 
     prompts = [
         "Once upon a time, a curious child",
-        "The Eiffel Tower was built",
+        "Paris is the capital of",
         "In linear algebra, an eigenvalue is",
         "Neural networks are a class of machine learning models that",
         "Complete the following Python function:\n\ndef add(a, b):\n    return",

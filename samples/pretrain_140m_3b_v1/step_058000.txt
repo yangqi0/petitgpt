@@ -1,0 +1,329 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=79 first30=[2827, 5273, 2857, 299, 269, 3843, 17, 1530, 2977, 263, 2023, 3197, 374, 914, 4749, 298, 7106, 17, 5273, 418, 1114, 4191, 298, 5842, 299, 269, 3197, 17, 14918, 15]
+[Full output 1]
+Once upon a time, a curious child named Jack went to the park. She saw a big tree with many leaves and flowers. Jack was very happy and ran to the tree. Suddenly, he heard a loud noise. It was a bird! The bird flew away and started to fly around the park. Jack felt so happy that he had been so excited for his adventure. He said goodbye to the bird and then went home.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[289, 1691, 1590, 419, 269, 5057, 3092, 72, 11600, 319, 358, 15, 298, 383, 330, 2827, 994, 269, 3388, 16, 6355, 7850, 17, 382, 10079, 418, 7334, 419, 3025, 351]
+[Full output 2]
+The Eiffel Tower was built in 1718 by the architect Auguste Nicolay, and it is named after the French-American artist. The tower was destroyed by fire on September 11, 1859.
+In 1878, the Eiffel tower was rebuilt and has a tower of 35,000 feet with a total height of 25,050 ft (5,630 m). It is believed that the tower had been constructed for the Royal Navy during World War I.
+The Eiffels Tower was one of the first in the world to be completed in 15 years. It was completed in 1907 and is the oldest building in the world.
+The tower has two towers, one at each side and the other at the same side. The tower has three flaps, which are located behind the tower. The tower is believed to have been built by the British Army in 1716.
+The Tower was designed by the architect Henry Dudley, who also designed the tower. It was originally used as an office building. In 1825, the tower was rebuilt again and has a new tower, the tower of which is still standing. The tower remains today in the National Museum of Ireland.
+The English company, AEI, bought the tower in 1835. They bought it from William
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=250 first30=[263, 1239, 357, 483, 342, 5454, 359, 269, 1701, 288, 795, 18956, 17, 202, 202, 2774, 1427, 415, 1936, 269, 1811, 435, 1325, 29, 4007, 269, 993, 288, 22542, 4672]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be represented as the sum of two eigenvalues.
+
+Now let's consider the problem at hand: finding the number of linearly independent eigenvectors (n) of a matrix A satisfying the equation n = 2^2 + 1 = 4. To solve this problem, we will utilize the method of independence of matrices. First, recall that every nonzero vector in A can be expressed as a product of its corresponding eigenvectors; thus, it must satisfy the following equality:
+
+A = {1, 0, 0}
+
+Since any vector in A is linearly dependent on zero, its determinant equals zero because there are no other vectors in A that cannot be written as a product. Therefore, the solution to the above equation is given by:
+
+x = sqrt(a\_0 + a\_1 * a\_0 + ... + a\_k * a\_k)
+
+Solving for x yields:
+
+y = sqrt((4)^2 + (-5)^2)
+
+Using this formula, we get:
+
+z = sqrt[(4)^2 - (-3)^2]
+
+Thus, the solution becomes:
+
+xy = sqrt[(-4)^2+(-5)^2]
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 491, 330, 1085, 1420, 395, 817, 1991, 5546, 5663]
+first_step_topk_probs=[0.30768147110939026, 0.10857032239437103, 0.09782997518777847, 0.07157394289970398, 0.05811350420117378, 0.057589489966630936, 0.03452090173959732, 0.03452090173959732, 0.029527295380830765, 0.015804821625351906]
+first_step_topk_text=[' can', ' have', ' is', ' model', ' allow', ' are', ' use', ' provide', ' describe', ' involve']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 9668, 298, 9668, 17, 382, 8944, 1085, 330, 1728, 351, 269, 3207, 357, 269, 14457, 2673, 330, 263, 1440, 288, 14457, 8119, 15, 536]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex behaviors and behaviors. The functional model is based on the theory that the neural network is a group of neural networks, which can be described as a network consisting of neural networks.
+The neural network consists of many neurons (neurons) and several neurons (neuron). Each neuron has its own neural network. All neurons in the brain have one or more neural networks. This means that there are many different neural networks for each neuron. The neural network consists mainly of neurons that make up the brain. There are also many other neural networks that are connected by neural networks. These include neurons that communicate with each other, neurons that communicate using the brain, neurons that use the brain, etc.
+A neural network consists primarily of neurons. It contains all the neurons that make the brain. These neurons are called neurons. They are called neurons because they are found in the brain. Some neurons are made from neurons, while others are made from cells. There are many types of neurons that do not make the brain: neurons that make neurons, neurons that make them move around, neurons that help us to think about our world, neurons that keep us healthy, neurons that give us new information, neurons that are good at math and science, neurons that enable us
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 5427, 6649, 29, 8163, 16, 27, 5427, 202, 1568, 202, 18688, 351, 588, 88, 6284, 1171, 1691, 29, 6457, 29, 5613, 9281, 202, 202]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Dec 10 17:43:56 2018
+
+@author: <NAME>
+"""
+
+import numpy as np
+from scipy.io import loadmat
+
+def f_m(x, y, z, s=0.5):
+    """
+    Generate a single line of the given shape
+
+    Parameters
+    ----------
+    x : array
+        The input data in the matrix.
+    y : array
+        A list of points from which to generate lines.
+    z : array
+        An array of points from where to generate lines (e.g., 0, 1).
+    s : array
+        Array of points that will be generated.
+    s : float
+        The number of points produced by each line.
+    """
+    # find the largest possible line
+    x = np.array([x[0], x[1]])
+    y = np.append(np.zeros((len(x), len(y)))
+    for i in range(len(x)):
+        if x[i] == y[i]:
+            break
+    return x
+    
+def f2(x, x, z, w=1):
+    """ 
+    Calculate the line of the
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[311, 836, 354, 353, 651, 1700, 409, 990, 7492, 555]
+first_step_topk_probs=[0.4158939719200134, 0.1599426567554474, 0.14412029087543488, 0.11107785999774933, 0.03919563069939613, 0.03182433918118477, 0.020979909226298332, 0.019915161654353142, 0.013830805197358131, 0.01312889251857996]
+first_step_topk_text=[' n', ' {', ' 1', ' (', ' [', ' `', ' 2', ' \\', ' $$', '\n\n   ']
+
+[New tokens 6] count=128 first30=[836, 81, 4, 11, 81, 16, 20, 18914, 96, 202, 202, 5288, 415, 806, 486, 1628, 5951, 482, 1811, 1191, 8695, 29, 202, 202, 8001, 6429, 202, 1018, 3541, 202]
+[Full output 6]
+Write a Python function that returns the factorial of n: {n!(n-1)!}
+
+Here's how you might solve this problem using Python:
+
+```python
+import math
+
+def factorial_of_numbers(n):
+    return 1 + (math.sqrt(n)) / 2
+
+
+if __name__ == '__main__':
+    n = int(input())
+
+    # calculate factorial of n
+    factorial_of = 0
+    for i in range(0, n):
+        factorial_of += i * factorial_of
+
+        factorial_of *= 2 ** i - 1
+
+    print('Number of factorial: %d' % factorial_of)
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 1083, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.518977165222168, 0.2777884900569916, 0.20323437452316284, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', ' print', '', '#', '', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 311, 864, 353, 20, 647, 354, 12, 711, 202, 6, 426, 13280, 2257, 29, 783, 330, 453, 2843, 263, 8695, 7011, 17, 202, 6, 224, 356, 4575, 453, 2849]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return n * (1 + 1)
+
+
+# FIXME: This is not really a Python implementation.
+#  I'm not sure how to do it, but it's pretty easy to make the code more readable.
+#
+# You might want to write your own functions for this class, and see if they work in the same way as Python.
+# For example, you can use the `funcs` function to find the Fibonacci number of any given number, using the `functest` function from Python 2.
+# 
+
+import math
+from scipy import stats
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('Agg') # pyplot.figure()
+
+# from scipy.stats import multivariate_normalization
+
+# Get the data
+data = pd.read_csv("data/data.csv")
+
+# Calculate the average of each row in the dataframe
+average = []
+for row in data:
+    average.append(float(row))
+
+# Compute the average of all rows in the dataframe with the first row
+average.sort(key=lambda x: x[0])
+
+# Create a
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 698, 13676, 1289, 356, 5531, 535, 1278, 338]
+first_step_topk_probs=[0.3427805006504059, 0.16532666981220245, 0.08400197327136993, 0.07973888516426086, 0.07185069471597672, 0.061457160860300064, 0.042681142687797546, 0.03650711849331856, 0.03465435281395912, 0.03122619539499283]
+first_step_topk_text=[' The', ' There', ' It', ' Yes', ' We', ' I', ' Well', ' In', ' If', ' A']
+
+[New tokens 8] count=256 first30=[382, 1811, 330, 357, 715, 330, 808, 2079, 4784, 288, 269, 2000, 2645, 17, 1541, 330, 263, 1457, 288, 8529, 289, 1584, 299, 5546, 482, 2097, 17, 1220, 1373, 15]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The problem is that there is no single definition of the term black. There is a range of definitions in place to describe this concept. For example, I have found that it has been used by many different people for centuries to refer to a number of different things. Some of them are the same or similar, but they are not the same. So what does it mean? It means that one cat may be black, one can't see, one cannot see, one may not be black, and so on. We also need to think about how to classify an animal's color, its body size, its hair colour, its skin color, etc. This is called "blackness". It is basically a way of saying that something is black, and then describing it as white.
+For instance, if you were to say that a cat is black, you would say that a red dog is black. If you said that a dog is black, then it would be black. But if you said that dogs are black, then a dog is blue. If you say that a dog has a brown coat, then a red dog has a yellow coat. If you mean that a dog looks black, then you would say he is black. And if you say that your dog
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 2050, 382, 798, 1012, 409, 637, 843, 1541, 698]
+first_step_topk_probs=[0.48109304904937744, 0.15296784043312073, 0.08187778294086456, 0.06647951155900955, 0.03377803415060043, 0.032355520874261856, 0.0246566291898489, 0.022267846390604973, 0.021137753501534462, 0.01904669962823391]
+first_step_topk_text=[' 1', ' One', ' The', ' 4', ' 6', ' 2', ' 3', ' 5', ' There', ' It']
+
+[New tokens 9] count=34 first30=[354, 13032, 333, 798, 24187, 430, 202, 20, 18, 21, 9105, 288, 5781, 202, 22, 17362, 288, 1069, 202, 20, 9105, 288, 10604, 202, 23, 17362, 288, 10755, 202, 24]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 pennies
+1/2 cup of sugar
+3 cups of water
+1 cup of coffee
+4 cups of tea
+5 cups of water
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 1289, 1278, 3919, 1509, 783, 698, 2575, 338]
+first_step_topk_probs=[0.4536795914173126, 0.08510886132717133, 0.07668952643871307, 0.0479910783469677, 0.04104894399642944, 0.03698816895484924, 0.03698816895484924, 0.033329110592603683, 0.031637657433748245, 0.021971916779875755]
+first_step_topk_text=[' I', ' The', ' We', ' If', ' My', ' You', ' This', ' It', ' What', ' A']
+
+[New tokens 10] count=256 first30=[2575, 330, 669, 2942, 374, 269, 360, 44, 4575, 6968, 18029, 5, 12028, 34, 202, 26783, 29, 2575, 415, 669, 2942, 374, 482, 12028, 34, 202, 14466, 29, 356, 418]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience with the "I'm feeling stressed" attitude?
+Student: What's your experience with this attitude?
+Students: I was feeling stressed and stressed, but not depressed.
+Amy: My feelings were over-stressed, I felt anxious about my situation, and I had to go back to work and get a better handle on my situation.
+Anthony: I was very upset because I feel tired of being stressed.
+In general, there are some things that you can do that don't mean to hurt you.
+I am going to have a lot of fun in the class and it is important for me to be in control of my situation. You should know what to expect from the teacher. If you have problems or need help understanding them, you may want to take action and ask questions about them.
+Assistance: How did you manage your anxiety?
+Student (or at least try to understand) "You got more sleep when you started to sleep."
+Teacher: How did I learn to relax during the day?
+Student(s): Are you happy about your experience?
+Student/student: Do you think you could talk to someone else?
+Student-student: Have you ever been so frustrated or sad
+
+================================================================================

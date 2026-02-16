@@ -1,0 +1,346 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 2977, 418, 2446, 1255, 5349, 2, 3, 1, 0]
+first_step_topk_probs=[0.45379552245140076, 0.2188705950975418, 0.1300145983695984, 0.1055637076497078, 0.04587776958942413, 0.04587776958942413, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' saw', ' was', ' came', ' called', ' appeared', '', '', '', '']
+
+[New tokens 1] count=205 first30=[2827, 5273, 4725, 299, 4196, 269, 1165, 288, 2910, 17, 776, 3766, 299, 1118, 611, 672, 269, 1165, 1378, 1169, 17, 1238, 406, 418, 7948, 888, 269, 3320, 15, 406]
+[Full output 1]
+Once upon a time, a curious child named Jack decided to explore the world of nature. He wanted to know more about the world around him. As he was walking through the forest, he saw a little girl playing with her toy. She asked her mother, "Can I play with you?" Her mother replied, "Yes, let's go!" Jack thought for a moment and then said, "Let's go see if we can find some special things." So, Jack went to the park to look for a new place to hide. When they got there, they found something shiny and pretty. It looked like a magical box! Jack was so excited that he couldn't wait to come inside. He quickly ran out of the box and tried to open it up. Suddenly, he heard a voice calling from behind him. "Hello, little boy! Can I have some fun?" Jack asked. The voice said, "Of course, I will be here soon". Jack nodded and smiled back. After he finished, he waved goodbye as he went outside.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[289, 1691, 1699, 419, 269, 9331, 18316, 15, 495, 17, 37, 17, 336, 1242, 82, 17, 382, 10079, 330, 2827, 994, 269, 3103, 16, 2202, 401, 16, 9257, 3483, 26829]
+[Full output 2]
+The Eiffel Tower was built in 1711 by the Dutch builder, J.B. Sarno. The tower is named after the late-17th-century German explorer and botanist (1758–1832), who discovered the first beekeeping colony in North America.
+In 1802, a French expedition led by General Pierre-Louis David de Saint-Saëns made the first successful attempt to locate the colony in North American waters. In 1803, a group of Frenchmen from the British colony, led by General Charles de Bacchancy, set out on an expedition to find the colony. They found the colony's treasure and took it to Canada where they were able to preserve the colony for future generations.
+The French explorer, Louis-Napoleon de Montréal, had discovered the colony in 1704 near present-day Quebec. He was not impressed with its ability to survive the long journey. After leaving his native France, he traveled to Canada and settled there in 1714. In 1824, he was elected as the first governor of the colony, becoming its governor.
+After his success at Quebec, he became one of the most influential people in the world. He also served as a member of the Continental Congress. He was elected to the
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 357, 483, 342, 3020, 359, 269, 1701, 288, 795, 7527, 17, 202, 202, 2774, 1427, 415, 1936, 269, 1496, 1811, 4734, 269, 10294, 8537, 353, 91, 20, 15]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector that can be written as the sum of two vectors.
+
+Now let's consider the given problem involving the eigenvector (x1, x2) and eigenvector (y1, y2). We want to find out whether there exists a unique solution for the equation:
+
+$$\begin{align*}
+&\int \frac{d}{dx} = 0 \\
+&=\frac{dy}{dx}\quad\text{(since } d=0\times dx = 1\\
+&= d-1\times dy = -\frac{dy}{\sqrt{3}}+\frac{dy^2}{dx}=\boxed{\frac{dy}{(dx)^2},\\
+&\leq n<0.5\\
+&\geq 0.5\\[6pt]
+&\leq 2\end{align*}$$
+
+Since $n>0$, we know that the solution would look like this:
+
+$$(\frac{dy/dx}{dx})=\frac{1}{4}+\frac{1}{\sqrt{2}}+(-1)\cdot\frac{dy/(dx)}=\boxed{\frac{-1}{4}-\frac{1}{(1-\frac{dy}}{2}}\end{align*}$$
+
+We
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 817, 1420, 491, 395, 1085, 713, 1005, 330, 1991]
+first_step_topk_probs=[0.42468494176864624, 0.12167427688837051, 0.0890187993645668, 0.08021260052919388, 0.05099780485033989, 0.038687385618686676, 0.031411707401275635, 0.031411707401275635, 0.02550431340932846, 0.02550431340932846]
+first_step_topk_text=[' can', ' use', ' allow', ' have', ' are', ' model', ' work', ' help', ' is', ' provide']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 6811, 2304, 17, 202, 509, 8944, 1440, 330, 263, 2829, 854, 288, 14457, 2673, 4543, 15, 1010, 288, 536, 483, 342, 5177, 289, 914]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex biological systems.
+The functional group is a simple set of neural network components, each of which can be connected in many ways. The model is called the functional group and it has been shown that the functional group can be applied to a wide range of biological processes, from the production of proteins for drugs to the control of gene expression.
+The model is called an adaptive network, which is also known as a neural network. This network is very useful because it can be used in a number of different applications.
+A network is defined by the following four basic concepts:
+- A network is a mathematical object with two properties: (i) the size of the network and (ii) the distance between the nodes.
+- A net is a continuous, non-linear, continuous, discrete, finite, continuous, or multivariable network.
+- The net is a vector space, where the vectors are vectors of length n, and the net is a scalar field.
+- An input is a function that takes inputs and outputs.
+- Linear networks are linear networks.
+- All these are useful for understanding how the behavior of the system changes over time.
+The main idea behind the model is that the network is made up of
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 5427, 6649, 29, 8163, 16, 27, 5427, 202, 1568, 202, 18688, 351, 3644, 19253, 224, 409, 2508, 29, 6457, 29, 5559, 10343, 202, 202]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Apr  2 11:43:09 2021
+
+@author: <NAME>
+"""
+from collections import defaultdict
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.feature_selection import train_test_split
+
+# Create your model from data
+model = pd.read_csv('../data/training_data.csv')
+df = model.fit(train_test_features=True)
+print(df[['x','y'], 'label'])
+print(list(df))
+print(len(df))
+
+
+class Model(object):
+
+    def __init__(self, X, y, xlim=0., xmax=None, ymin=0., ymax=None):
+        self.X = X
+        self.y = y
+        self.xlim = xlim
+        self.yscale = 0.5
+        self.scale = 1.
+        self.grads = []
+
+        # Set up the gradient for each training set
+        self.gradient = []
+        self.alpha = 0.01
+        self.beta = 0.001
+        self.gamma = 0.
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[311, 316, 836, 1700, 353, 354, 744, 7492, 81, 282]
+first_step_topk_probs=[0.5451067090034485, 0.07215305417776108, 0.06849128752946854, 0.05858370661735535, 0.047566208988428116, 0.0330340750515461, 0.029766174033284187, 0.028255542740225792, 0.02067219652235508, 0.018627194687724113]
+first_step_topk_text=[' n', ' e', ' {', ' `', ' (', ' 1', ' $', ' $$', 'n', ' p']
+
+[New tokens 6] count=256 first30=[1249, 17, 72, 1155, 353, 81, 14, 20, 12, 864, 353, 81, 16, 20, 573, 1278, 269, 1677, 288, 545, 3097, 9044, 330, 22807, 419, 311, 15, 1000, 383, 330]
+[Full output 6]
+Write a Python function that returns the factorial of n: i.e., (n+1) * (n-1). If the product of all positive integers is divisible by n, then it is called the factorial of 1.
+
+Now let's examine how to find the factorial of a non-negative integer n using some examples. We will first explore the properties of rational numbers and their properties through rigorous mathematical reasoning while maintaining engagement throughout our discussion.
+
+First, recall that the factorial of an integer n is defined as n! = {n!(n-1)!}, where n represents the number of elements in the set. For example, consider the natural numbers x and y, which are integers less than or equal to x. Their product with itself results in another number whose product equals x. Now, we can express this property mathematically as follows:
+
+((x^2 + 3)(x^3 - 4x^4)) / ((x^4 - 5x^6)^5 = ((x^2)^2 + 3)^2 = (x^3 + 3)(3x^2 - 4x + 7) = (x + 2)^2 + ... + (x^2*x + 3)^3 = (x+2)^2
+
+Here, x represents
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1083, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.6273422837257385, 0.3726576864719391, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' print', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 8049, 11, 81, 12, 1246, 202, 2318, 801, 20, 17, 22, 17, 19, 903, 202, 2318, 801, 21, 17, 23, 17, 19, 903, 3, 711, 807, 1401, 8644, 626]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return fib(n)
+    
+print("1.3.0")
+print("2.4.0")
+
+from __future__ import print_function, division, absolute_import
+from __future__.description import division
+
+import os
+import sys
+
+import pytest
+
+from dna.dna import DnaError
+from dneu.util import minspect, utils
+
+from .common import *
+
+class TestDnaError(unittest.TestCase):
+    def test_validate_type(self):
+        with open('test.json') as f:
+            data = json.load(f)
+
+        self.assertEqual(data['name'], 'foo')
+
+    def test_mime_type(cls):
+        with mock.patch('dna.dno.utils.is_dict', side_effect=MUST_RENDERED) as m:
+            data['name'] = 'foo'
+            data['expires'] = 1
+            data['count'] = 0
+
+            m.assert_equal(
+                {
+                    'name': 'foo',
+                    'expires': 2,
+                    'count': 3,
+                    'sum': 5,
+                    'size': 4,
+                    '
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 535, 356, 13676, 698, 1289, 338, 783, 2590]
+first_step_topk_probs=[0.5427113175392151, 0.14010770618915558, 0.0548669695854187, 0.04693020507693291, 0.04228762537240982, 0.03810431435704231, 0.03617052361369133, 0.02787771262228489, 0.026462920010089874, 0.025119928643107414]
+first_step_topk_text=[' The', ' There', ' In', ' I', ' Yes', ' It', ' We', ' A', ' This', ' No']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 12052, 17, 202, 43, 2509, 12734, 395, 269, 851, 1488, 1875, 288, 12030, 14577, 289, 2311, 2574, 17, 1109, 395, 658, 1414, 359, 360, 10733, 12030, 12734]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+Honey bees are the most common species of honey bee in North America. They are also known as "black honey bees" because they have a dark white or yellowish fur on their head. This is why it's important to be aware of what the bees look like. Honey bees are not the only ones that have been described as being black. Their feathers are very similar to those of other mammals.
+Hayes' study found that honey bees are more closely related to humans than any other group of birds. However, this difference is due to differences in appearance between different groups of bees. This means that the differences between the two groups are less clear.
+The study also showed that bees are the least likely to be black, and that there is no scientific evidence for this.
+There are many reasons why some people may be more prone to having black-eyed cats than others. These include:
+• There is no scientific reason why black-eyed cat owners should not take precautions against black-eyed Cats.
+• There are no studies showing that black-eyed dogs do not show any signs of black-eyedness.
+• Most importantly, there is no research that shows black-eyed dog owners are more likely to report
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 382, 2050, 798, 409, 1012, 1541, 637, 2590, 843]
+first_step_topk_probs=[0.5734265446662903, 0.13339251279830933, 0.05797215923666954, 0.05797215923666954, 0.04749796912074089, 0.021550089120864868, 0.021550089120864868, 0.02101990580558777, 0.01941824145615101, 0.018432768061757088]
+first_step_topk_text=[' 1', ' The', ' One', ' 4', ' 2', ' 6', ' There', ' 3', ' No', ' 5']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 202, 3146, 658, 578, 637, 10941, 333, 1012, 10941, 202, 509, 2818, 1419, 330, 2126, 269, 1134, 15, 614, 3053, 383, 415, 269, 1134, 3467]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+He also has 3 apples = 6 apples
+The average person is always the same, but sometimes it's the same thing. The average person is usually the same as the average person, but they are not the same. If you get a lot of money, you might end up with a big change in your income. That means that if you lose $1,000, you will be able to pay off the rest of your expenses.
+Now we're going to talk about the difference between "total" and "average". So let's look at what happens when we say "total," or "average." We'll call this the "standard deviation." This is just like the standard deviation, which tells us how far apart our data points from the mean. In other words, we want to know the actual value of the standard deviation. To do this, we'll use something called the "standard error function."
+So now we know that there's a difference between the standard deviation and the average. It turns out that the standard deviation is actually the difference between the mean and the standard deviation! This is because the standard deviation measures how much our data points are closer together than the standard deviation makes it closer together. And since the standard deviation
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 1289, 783, 1278, 776, 1509, 3919, 2575, 698]
+first_step_topk_probs=[0.5328382253646851, 0.07827222347259521, 0.04649565368890762, 0.04189610481262207, 0.03775152564048767, 0.0358356349170208, 0.030651845037937164, 0.026217913255095482, 0.026217913255095482, 0.0248873308300972]
+first_step_topk_text=[' I', ' The', ' We', ' This', ' If', ' He', ' You', ' My', ' What', ' It']
+
+[New tokens 10] count=256 first30=[2575, 330, 669, 2942, 288, 4083, 34, 202, 55, 503, 500, 672, 383, 289, 269, 7369, 2677, 17, 3, 711, 6, 6729, 353, 70, 12, 9211, 15, 12590, 15, 5572]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience of stress?
+Tell us about it in the comments below.
+
+# Copyright (c) 2016, Facebook, Inc. and its affiliates. All Rights Reserved.
+# SPDX-License-Identifier: Apache-2.0
+"""Tests for the API."""
+
+from __future__ import absolute_import
+from __main__ import get_module_name
+
+import unittest
+
+from test_api_v1.client import Client
+from test.test_api_response import TestResponse
+from test import utils
+
+class TestClient(unittest.TestCase):
+    """Test client class."""
+
+    def setUp(self):
+        self.app = Client()
+
+        self.app.add_url_for('http://localhost:8000/')
+        self.client = Client(self.app)
+
+    def tearDown(self):  # pylint: disable=protected-access
+        pass
+
+    def test_get_id(self):    # pylint:disable=protected-Access
+        """Test the API endpoint."""
+        response = self.client.get('/', 'api')
+        self._assertEqual(response.status_code, 200)
+        self.assertTrue(response.json['status']
+
+================================================================================
