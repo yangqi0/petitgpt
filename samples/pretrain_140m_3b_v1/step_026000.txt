@@ -1,0 +1,292 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[418, 2446, 2827, 5349, 791, 3609, 2857, 2, 1, 0]
+first_step_topk_probs=[0.4535035192966461, 0.1970916986465454, 0.17759452760219574, 0.05646771565079689, 0.05088168382644653, 0.037225835025310516, 0.02723500318825245, 0.0, 0.0, 0.0]
+first_step_topk_text=[' was', ' came', ' named', ' appeared', ' would', ' asked', ' went', '', '', '']
+
+[New tokens 1] count=106 first30=[2827, 5273, 418, 1255, 299, 269, 20678, 17, 776, 13533, 269, 4769, 289, 3628, 288, 1169, 298, 988, 29, 360, 44, 873, 1621, 4, 356, 1418, 299, 1143, 374, 486]
+[Full output 1]
+Once upon a time, a curious child named Jack was called to the playground. He watched the teacher in front of him and said: "I am here! I want to play with you!" Jack said: "You have to go back home now." His mom smiled and said: The little boy had a lot of fun playing together. She ran around and played with the other kids' toys all day long. But then, he saw that his big friend had gone into the playground with the other children. They were so happy and thanked Jack for helping them.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[289, 1691, 6936, 298, 269, 10079, 418, 2793, 419, 269, 16506, 288, 5564, 277, 9785, 17, 202, 202, 6880, 202, 509, 10079, 418, 2793, 289, 925, 5559, 15, 722, 269]
+[Full output 2]
+The Eiffel Tower was built in 1783 and the tower was built by the Earl of Salisbury.
+
+History
+The tower was built in 1809, when the first building was constructed. The original structure was built on a large hill called "Eiffel Tower", which was surrounded by a small forest. It is now known as the "Eiffels" (from Oldham) and was built to house the architect, William Guthrie, who later became the Eiffel House.
+
+In 1815, the new building was completed and the tower's height was increased from 15,000 feet to 19,000 feet. The tower had a capacity of 6,500 tons, and the tower had a length of . The tower was designed for the British Empire with a maximum of 20,000 feet (2,200 m). The tower had an area of .
+
+The tower's design was based on the original plan of the tower. It was placed in the centre of the tower, and the roof and roof were covered with air. The tower was laid down in 1819.
+
+It was a tall tower that had been replaced in 1851 by the new tower. This tower was rebuilt in 1840 and was re-built in 1886. The tower remained in use until
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 483, 342, 5454, 359, 269, 1701, 288, 795, 7527, 17, 202, 202, 2774, 1427, 415, 1936, 269, 1496, 1811, 29, 4007, 269, 28071, 353, 68, 12, 298]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be represented as the sum of two vectors.
+
+Now let's consider the given problem: finding the eigenvalue (a) and its corresponding eigenvector (b):
+
+(a) * b^2 + c = a^3 - 2ab + c^4 + ... + k
+
+To solve this equation, we need to find the eigenvalues (a) of both the original vector and its determinant. This will allow us to determine the eigenvector of the resulting matrix A, which has two components: a and b. However, since our goal is to find the eigenvector for A, we can rewrite it using the formula above as follows:
+
+A = ((1)^n)/n
+
+This means that when n equals 1, the eigenvector becomes zero because no matter how many times you add or subtract these new vectors, they always result in exactly the same outcome. Therefore, even though there are some instances where there isn't enough information about the eigenvector, this does not necessarily mean that the eigenvector remains constant! That's why solving the eigenvector involves several steps:
+
+1. **Complex Step:** Since the eigenvector is simply a constant, applying the eigenvector step by step gives us the eigen
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 817, 491, 1420, 395, 1991, 5663, 713, 1085, 9847]
+first_step_topk_probs=[0.3089293837547302, 0.16535799205303192, 0.12097848206758499, 0.10901056230068207, 0.04957083612680435, 0.04268919304013252, 0.03846615552902222, 0.03466091305017471, 0.022849878296256065, 0.01855265162885189]
+first_step_topk_text=[' can', ' use', ' have', ' allow', ' are', ' provide', ' involve', ' work', ' model', ' combine']
+
+[New tokens 4] count=105 first30=[483, 342, 885, 299, 1085, 298, 5699, 269, 9668, 288, 1108, 2584, 288, 874, 17, 202, 509, 2097, 330, 2014, 299, 922, 411, 940, 360, 69, 6416, 5, 388, 360]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model and explain the behaviors of different types of people.
+The concept is similar to what we call "budget" or "charts." It involves looking at how individuals process their own data, then creating them into a computer program. The program is typically designed for use in an online environment where it is easy to see how people interact with each other's data.
+This article is based on the paper by Bill Nielsen of the University of California, Berkeley.
+Published: June 2012
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 864, 286, 3, 711, 6, 5427, 6649, 29, 8163, 16, 27, 5427, 202, 807, 1401, 8644, 626, 655, 6409, 66, 1018, 202, 807, 1401, 3142, 626, 655, 1271, 202]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a * b
+
+# -*- coding: utf-8 -*-
+from __future__ import absolute_import
+from __main__ import main
+from __file__ import get_file
+from collections import defaultdict
+from typing import List
+from datetime import timedelta
+from django.utils.translation import ugettext as _
+from django_cors.core.exceptions import ValidationError
+from django import forms
+from django2.contrib.auth.models import User
+from django1.db.models import Q
+from django3.db.forms import TextForm
+from django4.db.serializers.db.fields import UUIDField
+from django5.db.views.decorators import login_required
+from django6.db.admin.models import Tag
+from django7.db.apps.user import User
+
+from .models import Post
+from .forms import PostForm
+from .views import PostForm
+
+
+class PostForm(forms.ModelForm):
+
+    def __init__(self, **kwargs) -> None:
+        super().__init__(*args, **kwargs )
+
+        self.post = None
+        self.form = SubForm()
+        self.title = 'View'
+        self.is_active = True
+       
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[311, 353, 263, 836, 990, 408, 643, 354, 413, 520]
+first_step_topk_probs=[0.2760404050350189, 0.20104287564754486, 0.049379389733076096, 0.04676734283566475, 0.040002234280109406, 0.03797211870551109, 0.03797211870551109, 0.03797211870551109, 0.030830921605229378, 0.030830921605229378]
+first_step_topk_text=[' n', ' (', ' a', ' {', ' \\', ' N', ' 0', ' 1', ' r', ' k']
+
+[New tokens 6] count=256 first30=[413, 13, 81, 333, 353, 81, 552, 354, 12, 864, 353, 81, 552, 409, 573, 783, 330, 287, 1373, 288, 263, 6847, 17, 202, 202, 755, 482, 1811, 15, 411]
+[Full output 6]
+Write a Python function that returns the factorial of n: r*n = (n - 1) * (n - 2). This is an example of a polynomial.
+
+In this problem, we are given two functions, one being x and another having positive integer values. We want to find the number of ways to multiply these functions using the formula:
+
+f(x) = f'(1/2)(x-3)^2 + ... + (n-3)^(n+4)\*(n-3)!
+
+Here, since there are no numbers on the number line, we can simplify the expression into a simpler form called "f(x)" by adding up all those numbers in the first term:
+
+F(x) ≈ f'(1/(2n)) / ((n-3)(n+4)+n\*(n-5)).
+
+Now let's focus on finding the product of two functions with a power of zero. We start by setting the numerator equal to zero and then multiplying it by the denominator to get the value of f(x):
+
+f'(1/6) = f(1/6)(x-9)^2 +... + (n+8)^(n-7)
+
+Next, we need to solve for the coefficients
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1083, 339, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.5336416959762573, 0.25738126039505005, 0.20897707343101501, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' print', ' for', '', '#', '', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 311, 864, 311, 202, 202, 6, 783, 330, 269, 851, 1488, 1375, 288, 6847, 289, 536, 299, 4116, 263, 21329, 1392, 17, 202, 6, 382, 993, 288, 4487, 330]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return n * n
+
+# This is the most common type of polynomial in which to apply a recursive function.
+# The number of variables is the same as the number of values, but with different coefficients.
+# For example, if you have two polynomials and you want to find an equation for a polynomial that can be used to solve the problem, you would need to multiply them together (i.e., multiply them together).
+# If you are using any other type of polynomial like x^2 + y^3, it will take more time than you do.
+# You can use this method to solve the first one or more of the quadratic equations.
+# If we add another polynomial, we get the second polynomial.
+# Then we can substitute these expressions into the second polynomial, and then multiply the terms of the first polynomial by the term of the second polynomial:
+# For instance, if we want to divide n by n, we will multiply n by 1.
+# So here's how you can solve the first polynomial:
+import math import sqrt
+from collections import defaultdict
+
+# We don't really need to understand the concept of factoring; instead, we're going to talk about finding the roots of a polynomial.
+
+
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 338, 1541, 535, 1278, 1906, 783, 360, 698, 3987]
+first_step_topk_probs=[0.5010624527931213, 0.15931712090969086, 0.06923896819353104, 0.0411297082901001, 0.03904234245419502, 0.03518010303378105, 0.031699903309345245, 0.025738315656781197, 0.016106626018881798, 0.015289201401174068]
+first_step_topk_text=[' The', ' A', ' There', ' In', ' If', ' All', ' This', ' "', ' It', ' Most']
+
+[New tokens 8] count=256 first30=[382, 2000, 360, 10235, 5, 330, 1431, 885, 299, 3239, 299, 833, 3864, 388, 2916, 357, 578, 733, 9279, 289, 269, 3494, 17, 1783, 15, 490, 486, 2068, 453, 263]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The term "white" is often used to refer to any animal or bird that has been caught in the wild. However, if you're not a veterinarian, there's no way that you can tell what your cat is about.
+I've seen many cats on my family's farms in California. I was able to see them in a field with their long legs. They were very aggressive. But they have the ability to get to the ground without being so big.
+How do I know if I'm a vet?
+Yes, dogs are fairly common. There are two types of cats: dogs and rabbits. These cats live in a group called the "bullies," which means they stay together for several days, and then move around until they reach their full length.
+Bullies are small, brown-colored cats that have a rounded head. They have a short tail and a long tail. They have an average size of 3 feet (1/2) inches (5/4") of weight. They are large, dark gray-brown, with a tail length of 2 to 4 inches (3/4). They have a broad head and a large tail. Their fur is black, and their body is white. They have large ears and small
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1278, 354, 1541, 783, 2590, 1509, 776, 338, 2050]
+first_step_topk_probs=[0.422993540763855, 0.0719897598028183, 0.06486815959215164, 0.06486815959215164, 0.05845111981034279, 0.05266882851719856, 0.05266882851719856, 0.04745855554938316, 0.03472142294049263, 0.032959312200546265]
+first_step_topk_text=[' The', ' If', ' 1', ' There', ' This', ' No', ' You', ' He', ' A', ' One']
+
+[New tokens 9] count=256 first30=[2050, 288, 269, 1839, 2722, 299, 835, 263, 1413, 4560, 330, 419, 2179, 2849, 357, 486, 395, 4006, 2478, 3161, 299, 5964, 751, 10941, 17, 698, 415, 1384, 299, 1062]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One of the best ways to get a good deal is by making sure that you are getting enough money to buy some apples. It's important to make sure that the apple is not being used in your food, since it's an easy way to get out of the jar. When you are buying a new apple, you should also try to get a little extra money for the apple.
+Question: What are the reasons why we're having trouble with apples?
+Answer : You may be thinking about how often you need to cut down on apples or how much they will cost in the future. If you want to cut down to half the amount you'll need, then take care of it. If you've had a bad problem with apples, you can't count on the amount you'd like to eat.
+Answer : The apple is the perfect fruit. I mean the fruit is very small. But if you don't know what you can do, you could find it at home. You can use a little bit of information from the book to help you get the fruit. I can say this is all about keeping your apple healthy.
+Answer: To get the apple back into the bowl, put the apple in the bottom of the bowl. Then press the hole in the
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 356, 2766, 1966, 338, 5395, 776, 11585, 447, 440]
+first_step_topk_probs=[0.12539111077785492, 0.12539099156856537, 0.060477469116449356, 0.054494719952344894, 0.04424625635147095, 0.02916892245411873, 0.02494949847459793, 0.020257413387298584, 0.020257413387298584, 0.019229350611567497]
+first_step_topk_text=[' The', ' I', ' Dr', ' John', ' A', ' Mr', ' He', ' Joe', ' G', ' L']
+
+[New tokens 10] count=47 first30=[4593, 426, 18297, 15, 7078, 202, 6372, 11241, 351, 3092, 515, 401, 15, 2807, 435, 1171, 29, 3459, 9384, 12958, 202, 11923, 353, 38, 12, 12958, 4920, 86, 637, 700]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: Mary Frost, MD
+Date posted on August 19th, 2012 at 10:35 AM •
+comment (C) • Reads 301
+Don't forget to check the FAQs page for more information and questions.
+
+================================================================================

@@ -1,0 +1,335 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[418, 2446, 2827, 699, 10227, 791, 2, 3, 1, 0]
+first_step_topk_probs=[0.7700311541557312, 0.08639509975910187, 0.05132094398140907, 0.04166931286454201, 0.03048592247068882, 0.02009757235646248, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' was', ' came', ' named', ' had', ' noticed', ' would', '', '', '', '']
+
+[New tokens 1] count=138 first30=[418, 7948, 888, 269, 16443, 17, 698, 418, 287, 17682, 2942, 4, 382, 929, 418, 649, 8763, 299, 1137, 545, 288, 610, 5373, 298, 11981, 17, 776, 2977, 7336, 288]
+[Full output 1]
+Once upon a time, a curious child was walking through the woods. It was an incredible experience! The child was so excited to see all of his toys and clothes. He saw lots of different animals, but he didn't know what they were looking for. Suddenly, a big dog came out of the yard and started to run away. The dog ran after the dog and it started to cry. "What's wrong?" the dog asked. "I'm sorry," the dog said. "It's okay, I'll help you find your toys." The dog followed the dog and the dog and they continued walking together until finally, they found their toy car. They both had fun exploring the woods and enjoying the day.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=136 first30=[289, 1691, 1699, 419, 269, 2751, 5009, 15, 298, 383, 330, 1244, 263, 7489, 17, 382, 10079, 578, 733, 2827, 994, 269, 3388, 16, 4205, 3388, 26829, 15, 11793, 16]
+[Full output 2]
+The Eiffel Tower was built in 1711 by the British Government, and it is now a museum. The tower has been named after the French-born French explorer, Jean-Baptiste de Saint-Gaudens (1702–1814), who died in 1732.
+The tower is part of the National Park Service's "Museum of Natural History" program. It is located on the eastern side of the city of Paris, at 2200 Rm 3276, and was constructed as a public park in 1819.
+The original tower was demolished in 1828 and replaced with a new building. Today, the tower has a capacity of 5,000 people.
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 2000, 289, 269, 2281, 6603, 357, 3936, 269, 4409, 288, 545, 2348, 351, 269, 1926, 17, 202, 202, 2774, 15, 1427, 415, 1721, 411, 491, 795, 7527, 2714, 7469]
+[Full output 3]
+In linear algebra, an eigenvalue is a term in the complex plane that represents the vector of all points on the space.
+
+Now, let's say we have two vectors $\vec{u}$ and $\vec{v}$, which are vectors with real numbers, and $\vec {v} = \vec{v}$. We want to find out how these vectors can be represented using matrices:
+
+$$
+\begin{align*}
+&\text{Matrix}\quad\quad\quad\,\,\cdot\,v &= \vec{u},\end{align*}&=\vec{v}\\
+&= \vec{a}-\vec{b}=\vec{c}+\vec{d}\\
+&= \frac{\vec{v}}{i}=1+i\left(\vec{v}\right)\left(\vec{(i)}_{i\in I})^{i\left(i\right)}\right)\\
+&= \sqrt{{2}^{2}-i\left({x-1}\right)^2-i\left[1-\left(i+\frac{1}{i\right)}}^2-i\,y\right]\right).
+\end{align*}$$
+
+We know that there exists some positive integer $k$ such that $\vec{a
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 817, 491, 1420, 5663, 1991, 330, 395, 3350, 586]
+first_step_topk_probs=[0.204410582780838, 0.14954997599124908, 0.10941310226917267, 0.09858947992324829, 0.07212960720062256, 0.05277114734053612, 0.05277114734053612, 0.05205899477005005, 0.04284678399562836, 0.02293423004448414]
+first_step_topk_text=[' can', ' use', ' have', ' allow', ' involve', ' provide', ' is', ' are', ' uses', ' were']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 9668, 15, 857, 359, 1103, 12328, 289, 269, 1623, 1165, 17, 535, 482, 2930, 15, 411, 601, 11453, 707, 751, 288, 269, 851, 1488]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex behaviors, such as those encountered in the real world. In this article, we will delve into some of the most common and interesting models available for learning how these models work.
+The following table shows examples of each model developed by a computer scientist at the University of Florida. The tables show the different models being developed. For example, there is an experiment using the human brain, which uses various brain regions. The results were obtained from a small sample of mice. The images were then combined with a computer program to create a model that would produce a model of one particular animal. This model was used to simulate the behavior of animals, including humans.
+A typical model has three parts:
+- A mouse, a human, and a mouse.
+- A human.
+- An animal, a rat.
+- The mouse.
+This model was developed by a team led by Dr. Tom Wattin, an assistant professor in the Department of Psychology at the University College London. It is similar to the model used in the human brain but is much more flexible than the model used to describe human behavior. The model has been used to simulate behavioral problems involving humans, rats, rabbits, and dogs. The model is based on the human
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 5427, 6649, 29, 8163, 16, 27, 5427, 202, 1568, 202, 18688, 351, 588, 88, 2463, 2508, 1691, 29, 3451, 29, 5613, 9281, 202, 202]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Mar 11 17:34:56 2018
+
+@author: <NAME>
+@license: MIT License
+
+"""
+import os
+from datetime import timedelta
+import sys
+import time
+import random
+import shutil
+import subprocess
+import tempfile
+import time
+
+
+class Loader:
+
+    def __init__(self, config_path=None, download_dir=None,
+                 run_dir='./', verbose=1, **kwargs):
+        self.config = config_path or []
+
+        if not os.path.exists():
+            raise Exception("The file '{}' does not exist".format(os.getcwd()))
+
+        self._run_dir = None
+        self._init_run()
+        self._write_file(self.config)
+        self._check_file(os.path.join(self.get_directory(), "..", ".."))
+        self._save_dir(self.load_dir())
+        self._start_time = time.time()
+        self.stop_time = datetime.now().strftime("%Y%m%d-%H%M%S")
+        self.set_logger
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[311, 382, 338, 555, 408, 1700, 354, 263, 643, 651]
+first_step_topk_probs=[0.2667354643344879, 0.14148592948913574, 0.08404617756605148, 0.07978083938360214, 0.07573195546865463, 0.061489496380090714, 0.05836891382932663, 0.039808616042137146, 0.03652632236480713, 0.02536703087389469]
+first_step_topk_text=[' n', ' The', ' A', '\n\n   ', ' N', ' `', ' 1', ' a', ' 0', ' [']
+
+[New tokens 6] count=256 first30=[555, 1772, 2125, 311, 29, 382, 993, 288, 7234, 289, 269, 1392, 17, 346, 1772, 2569, 29, 338, 8695, 1392, 374, 269, 28045, 288, 269, 993, 288, 6141, 289, 269]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+    @param n: The number of rows in the function.
+    @return: A Python function with the factorial of the number of columns in the function,
+    :rtype: float
+    """
+    return self._n
+
+
+class Solution(object):
+    def __init__(self, n: int) -> None:
+        if n is None or n == 0:
+            raise ValueError("No such array.")
+
+        if n is not None and n != 1:
+            raise TypeError("Invalid array.")
+
+        self._n = n
+        self._n_list = []  # list of integer values
+        self._type = [1] * n
+
+    def _get_n(self, n):
+        if n > 0:
+            return self._get_n()
+        else:
+            return len(self._n) - 1
+
+    def _find_n(
+        self, n: float, n: Tuple[int, ...], n: int
+    ) -> List[List[List[str]]:]:
+        """
+        Returns a list of integers where each element has the same length as the input array.
+        If this is a list, then we have to search for an empty array.
+        """
+        while True:
+            if n < n:
+               
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8892726898193359, 0.11072734743356705, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=251 first30=[622, 311, 864, 353, 20, 647, 311, 12, 202, 202, 6, 426, 13280, 2257, 29, 783, 330, 287, 1373, 288, 269, 1700, 41, 2911, 67, 5360, 17, 202, 6, 224]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return n * (1 + n)
+
+# FIXME: This is an example of the `Flex` module.
+# 
+#   :class:`pymath.Functional` : This class implements the `Fam` method.
+#   @param n: The number of iterations in the function.
+#     :type n: int
+#       :rtype: int
+
+#
+#
+@functools.lru_cache()
+def get_function():
+    """Returns a list of functions to be returned."""
+    return [f for f in f.readlines() if not f]
+
+
+def main():
+    """Main function"""
+
+    # Define the function and its arguments
+    parser = argparse.ArgumentParser(
+        description="Generate a function from a Python library")
+    parser.add_argument("--output",
+                        help="Output file path.",
+                        type=str,
+                        default='./tmp/python/lib/python-python.py')
+    parser.set_defaults(func=main())
+    args = parser.parse_args()
+    print("usage:", args.output)
+    print("sys_path:", sys_path)
+    print(args.output)
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 338, 535, 1541, 1278, 1289, 1238, 1906, 783, 698]
+first_step_topk_probs=[0.46438848972320557, 0.1198875829577446, 0.07903481274843216, 0.06091451272368431, 0.052102942019701004, 0.052102942019701004, 0.03618477284908295, 0.032605189830064774, 0.023854468017816544, 0.021494658663868904]
+first_step_topk_text=[' The', ' A', ' In', ' There', ' If', ' We', ' As', ' All', ' This', ' It']
+
+[New tokens 8] count=256 first30=[382, 1811, 330, 357, 715, 330, 808, 2079, 4784, 288, 269, 2000, 360, 10733, 5, 289, 269, 3641, 5879, 17, 698, 415, 263, 6604, 6609, 2097, 299, 627, 15, 614]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The problem is that there is no single definition of the term "black" in the scientific literature. It's a pretty obvious concept to me, but I'm not sure it has been proven correct. It seems like an absolute definition for what it means, as if it were true, but it doesn't mean that it's a clear definition. So what I would say is that the term "white" does not necessarily mean any animal or human being. But it does mean that it actually refers to something else. We don't know how many people there are, so this is a very interesting question.
+What about the definition of "white"? Is it really true that the term is used to describe a group of animals, and that the word "white" comes from the Greek words "white," which is a noun meaning "other." Why do you think that the term refers to a group of humans who have "white" teeth, or "non-white" teeth? What does it mean?
+The definition of "black" is actually quite similar to the definition of a "black" tooth. This is the definition of the word "black." A white tooth is a "non-black" tooth because the term "non-red" does not refer to
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 382, 2050, 338, 1541, 13676, 409, 360, 798, 1278]
+first_step_topk_probs=[0.44820475578308105, 0.23990671336650848, 0.07628040760755539, 0.05297568812966347, 0.045312508940696716, 0.02425403892993927, 0.020512022078037262, 0.018693318590521812, 0.018693318590521812, 0.016844095662236214]
+first_step_topk_text=[' 1', ' The', ' One', ' A', ' There', ' Yes', ' 2', ' "', ' 4', ' If']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 17, 202, 3016, 914, 10941, 620, 406, 491, 34, 2050, 288, 269, 1943, 357, 356, 4575, 2397, 299, 1721, 330, 15, 360, 44, 1118, 806]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples.
+How many apples do he have? One of the things that I'm going to say is, "I know how many apples do I need to add up?"
+To answer this question, let's first understand what it means for a number to be smaller than itself. For example, if you take 5 apples and then divide by 3, your result would be:
+- 2 apples = 6 apples.
+- 3 apples = 10 apples.
+This is a big number because it makes sense to multiply each fruit individually. So if we look at the numbers in the table above, it will be the same as the ones in the table below. But if we look closely at the numbers on the table, we see that they are the same as those in the table.
+The numbers in the tables should be larger than the numbers in our table. So if the numbers in Table 1 were equal to 1, then we could find out that there are only 2 apples left over.
+Let's try to find out how many apples we can make with these numbers. The first number is the number of apples. We want to find out which apples you have. To do this, we use the formula:
+$5 + (1 -
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[338, 2766, 356, 382, 421, 1966, 447, 776, 368, 343]
+first_step_topk_probs=[0.1360555738210678, 0.1225963681936264, 0.07348795235157013, 0.05912953242659569, 0.0455729104578495, 0.04326009005308151, 0.03164975717663765, 0.0285187978297472, 0.01880076341331005, 0.0178466085344553]
+first_step_topk_text=[' A', ' Dr', ' I', ' The', ' D', ' John', ' G', ' He', ' M', ' C']
+
+[New tokens 10] count=87 first30=[4593, 431, 749, 3663, 15, 7765, 288, 269, 3011, 339, 17245, 25390, 435, 269, 1442, 288, 6221, 202, 16, 14972, 29, 495, 12774, 343, 1765, 15, 7765, 288, 3285, 298]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: Mary Wickford, Director of the Center for Biological Diversity at the University of Florida
+- Contact: Janna Cohn, Director of Science and Technology, Tulane University, USA
+- Contact information:
+- Centers for Disease Control and Prevention
+1600 Clifton Rd
+Atlanta, GA 30333
+TTY: (888) 232-6348
+- Contact CDC-INFO
+
+================================================================================

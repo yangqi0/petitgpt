@@ -410,7 +410,7 @@ def generate_default_samples(
         "In linear algebra, an eigenvalue is",
         "Neural networks are a class of machine learning models that",
         "Complete the following Python function:\n\ndef add(a, b):\n    return",
-        "Write a Python function that returns the factorial of n:",
+        "Write a Python function that returns the factorial of n:\n\ndef factorial(n):\n    ",
         "Write a Python function that computes Fibonacci numbers recursively:\n\ndef fib(n):\n    ",
         "If all cats are animals and some animals are black, can we conclude that some cats are black?\nAnswer:",
         "John has 3 apples and buys 2 more. How many apples does he have?\nAnswer:",

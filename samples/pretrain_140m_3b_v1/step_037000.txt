@@ -1,0 +1,301 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[418, 5349, 2446, 2827, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.5481917262077332, 0.19343802332878113, 0.17430227994918823, 0.0840679258108139, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' was', ' appeared', ' came', ' named', '', '', '!', '"', '', '']
+
+[New tokens 1] count=119 first30=[5349, 299, 342, 289, 269, 1134, 3984, 359, 287, 3233, 17, 202, 509, 929, 418, 1114, 1608, 298, 699, 808, 1762, 289, 1258, 17, 776, 418, 2126, 5952, 339, 5400]
+[Full output 1]
+Once upon a time, a curious child appeared to be in the same room as an adult.
+The child was very old and had no interest in school. He was always ready for college, but he did not want to go on any job until after his grade level was over. The child's teacher said that she would be doing well if she wanted to go with her classmates. She was very excited because she could see something new. When she got home, she decided to go to the doctor's office and take a rest. Her mom told him it was a good idea and they were going to have some fun together.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[289, 1691, 6843, 298, 269, 775, 2544, 12944, 586, 269, 30565, 378, 5338, 426, 340, 1938, 17, 202, 202, 755, 925, 4216, 15, 269, 30565, 378, 4385, 447, 6913, 358]
+[Full output 2]
+The Eiffel Tower was built in 1781 and the first English settlers were the Reverend Thomas Fowler.
+
+In 1805, the Reverend William Galloway (b. 1785) died at a church on his farm near Binghamton, where he had been educated by his brother Robert, who later became the Reverend John Galloway. The Reverend William M. Creech (b. 1818) married Mary Ann Sutherland (b. 1837), daughter of George W. Hewitt (b. 1846).
+
+During the 19th century, the Revereths were often called "Old Stranders" because they were not allowed to attend school. In 1920, the Revereons opened their new home at Stranding Church in Binghamton. A second Presbyterian congregation was established in 1921, with the congregation becoming the Reverend James Fowler (b. 1900). The Revereons also began a small group of congregations in the area, but these were not until after the First World War.
+
+After the Second World War, the Reveresters moved to Stranding in London, where they worked as clerks for the local newspaper. They also worked as a school teacher in Stranding. The Revereons started work there
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 357, 483, 342, 5454, 359, 269, 1134, 4409, 17, 202, 202, 1974, 1557, 2526, 482, 5671, 15, 1427, 415, 775, 5998, 751, 1551, 2559, 29, 202, 202, 13]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector that can be represented as the same vector.
+
+To understand why this happens, let's first define some key terms:
+
+* **Acceleration**: A vector $v$ is said to be constant if its magnitude is zero or the amount of time it takes for something to take in a given value. For example, the magnitude of $v$ would be 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 15, ... .
+* **Vectors:** An vectors are just numbers with inputs (x, y) and outputs (y, z). For instance, we could have two vectors $a\_1$ and $b\_2$, where $a\_i$ represents the position of a vector $i$.
+
+Now, suppose we want to find the derivative of $v$: given any scalar $x \in V$, we know that $v = x + iy.$ To do so, we need to find the absolute values of $x$ and $y$ such that their corresponding coefficients are equal. This means that when we apply the above equation to our original vector $v$, we get a new variable
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 330, 491, 817, 1420, 1991, 5546, 395, 3350, 5663]
+first_step_topk_probs=[0.38508689403533936, 0.16735796630382538, 0.06553838402032852, 0.05321301147341728, 0.04794890433549881, 0.03508016839623451, 0.03508016839623451, 0.03508016839623451, 0.028482872992753983, 0.018777061253786087]
+first_step_topk_text=[' can', ' is', ' have', ' use', ' allow', ' provide', ' describe', ' are', ' uses', ' involve']
+
+[New tokens 4] count=131 first30=[483, 342, 885, 299, 1085, 2281, 9668, 298, 9668, 17, 202, 509, 1740, 3011, 339, 4424, 12989, 353, 16059, 1458, 12, 330, 263, 2364, 1481, 4716, 7977, 299, 269, 1831]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex behaviors and behaviors.
+The National Center for Education Statistics (NCES) is a national research organization dedicated to the development, implementation, and evaluation of the National Science Foundation's educational programs. The NSDU conducts a multidisciplinary program in which the scientific and engineering disciplines of science, technology, and education are integrated into the NSDU curriculum, with an emphasis on the development of new technologies, techniques, and methods of teaching and learning.
+NSDU is an independent federal agency charged with actively safeguarding the quality of education by providing grants to schools and universities to support their efforts to improve student achievement.
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=238 first30=[263, 647, 286, 3, 711, 6, 5427, 6649, 29, 8163, 16, 27, 5427, 202, 1568, 202, 18688, 351, 11654, 19253, 1720, 1171, 29, 2725, 29, 4611, 9281, 202, 202, 35]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Apr 15 10:24:44 2018
+
+@author: <NAME>
+
+Author: <NAME>, M.D., Gideon, and K.P.
+
+Description:
+    The main function of this program is to run the code in parallel with the input parameters (for example, an output file). This function will be used by the input parameter in the input configuration.
+
+Example 1:
+    A simple method for calculating the number of input parameters.
+
+    :param n_inputs: Number of inputs per n x n x n y n x n = n_x x n y x n y y x n x p x r x x qy
+    :return: The number of output parameters.
+
+    """
+    # Check if all input parameters are valid.
+    if len(n_inputs) == 0:
+        raise ValueError("Input parameters must be a non-negative integer")
+    else:
+        raise TypeError("Input parameters cannot be negative.")
+
+
+if __name__ == "__main__":
+    import sys
+    sys.exit(1)
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[311, 408, 382, 744, 338, 836, 353, 263, 1700, 377]
+first_step_topk_probs=[0.4264949858188629, 0.07209426909685135, 0.05274529755115509, 0.047527458518743515, 0.047527458518743515, 0.03858928382396698, 0.03477182984352112, 0.03083929419517517, 0.026799699291586876, 0.02414855733513832]
+first_step_topk_text=[' n', ' N', ' The', ' $', ' A', ' {', ' (', ' a', ' `', ' P']
+
+[New tokens 6] count=256 first30=[316, 65, 81, 17, 202, 202, 2774, 15, 1427, 415, 1774, 351, 299, 269, 2097, 288, 269, 20128, 12312, 17, 338, 20128, 12312, 330, 263, 993, 357, 6584, 806, 914]
+[Full output 6]
+Write a Python function that returns the factorial of n: e^n.
+
+Now, let's move on to the concept of the binomial coefficient. A binomial coefficient is a number that describes how many times each number has been divided by the total number of possible outcomes. For example, if you have 2, 3, 4, and 5, you would write it as "2 x 10", which means "3 x 9". The formula for the binomial coefficient is:
+
+$$(1 + (5)^n) = \frac{6}{4} * (x^n - 1)$$
+
+Here, 'x' represents the number of ways to choose an option from a set of three numbers. When we multiply this value by itself, we get our binomial coefficients. This way, we can calculate the binomial coefficients using the formula above.
+
+Let's consider two cases based on whether there are any unique values of n such that n < n or n > 0. Suppose we want to find the sum of these two cases. To do so, we will utilize the formula below:
+
+$$\sum\_{k=0}^{n-1} e^{k-1} = \sum\_{k=-1}^n \left(\sum\_{k+1}\right)^n.$$
+
+First
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=256 first30=[622, 311, 864, 311, 202, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 717, 36, 8695, 5360, 330, 2273, 802, 3, 711, 1018, 3266, 202, 807, 7298]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return n * n
+
+if __name__ == '__main__':
+    print('A Python module is required')
+
+import json
+from typing import List, Optional
+
+from pydantic.core import BaseModel, BaseModel, Dict
+from pyddl.core.models import Model
+from pyctest.core.model_utils import get_model_to_model_dict
+from pyqtpy.core.backend.models import ConfigType
+from pypuc.core.base import BaseModel
+
+
+class ModelConfigType(BaseModel):
+    """
+    Class for training model with `Model` and `Model`.
+
+    Attributes
+    ----------
+    name : str
+        Name of the model to train in (inherited from
+    default)
+    image_path : str
+        Image path to the model file
+    model_type : str
+        Type of model type used by the model
+    config_file : str
+        Path to the configuration file
+
+    Example
+    -------
+    class Model(BaseModel)
+    def __init__(self, config_file: str = None, model_type: str = 'cpu'):
+        self._config_file = config_file
+        self._model_type = model_type
+        self._device
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 338, 535, 783, 1238, 1278, 1541, 356, 1289, 1906]
+first_step_topk_probs=[0.49065518379211426, 0.09267284721136093, 0.07524441182613373, 0.049604203552007675, 0.047086749225854874, 0.044697102159261703, 0.04027542844414711, 0.03444939851760864, 0.029466133564710617, 0.027970731258392334]
+first_step_topk_text=[' The', ' A', ' In', ' This', ' As', ' If', ' There', ' I', ' We', ' All']
+
+[New tokens 8] count=256 first30=[382, 1811, 330, 357, 715, 395, 795, 2584, 288, 7568, 17, 2050, 1375, 330, 2886, 15, 269, 613, 330, 11458, 17, 783, 1375, 288, 3597, 330, 658, 2645, 15, 536]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The problem is that there are two types of dogs. One type is white, the other is gray. This type of dog is also black, which means it has a brown color. Another type is grey. It's also known as gray-brown. Both types of dogs have yellow fur on their back. They're not black anymore. So you could say, "It's black, but you don't see this kind of dog."
+What I want to discuss here is the fact that most cats are black or light gray. Their eyes are not black, so they are black, even though they look like white. In order for a cat to be black, it must have dark gray hair. If you look at the hair on your face, you will notice that the hair on the back of the head is brownish, while the front of the tail is brownish.
+So what does this mean? Well, if you look at a cat's eyes, you'll notice that it's black, so it's black. That's because it's black and has no blotch or stripes. And it's black because it's brownish. But in general, you would expect that the eye will be red. So if you look closely at the eyes,
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 382, 798, 2050, 2590, 409, 744, 338, 843, 356]
+first_step_topk_probs=[0.21230877935886383, 0.19130609929561615, 0.07111453264951706, 0.06082748621702194, 0.046881578862667084, 0.037636324763298035, 0.03429929539561272, 0.03429929539561272, 0.03429929539561272, 0.030906260013580322]
+first_step_topk_text=[' 1', ' The', ' 4', ' One', ' No', ' 2', ' $', ' A', ' 5', ' I']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 202, 509, 3533, 330, 1186, 10941, 15, 536, 1818, 581, 395, 263, 1809, 1108, 444, 269, 2189, 3802, 17, 382, 3593, 920, 269, 795, 330]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+The answer is 7 apples, which means they are a little different from the original ones. The difference between the two is that there's only one apple for each of the apples.
+To make it easier to understand the concept of "food", you can think of the term as being "the same thing." In this case, the word "food" comes from the Greek word 'sou' meaning food.
+As I said before, what we're talking about here is the difference between "food" and "food". So if we look at the word "diet," we see that it is not like the word "cold". So the word "water" is actually just another word for water.
+And so on... the word "frozen" is actually a combination of both.
+A third way to understand the difference between the words "frozen"? This is because the word "wet" means "to cook". It's the same word in our world today. But when we talk about "food", we mean "to cook" or "to cook."
+The problem with this is that the word "munchies" is actually the same thing as "food". And what we're trying to do
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 338, 776, 360, 1289, 2766, 3919, 783, 535]
+first_step_topk_probs=[0.36404937505722046, 0.13780276477336884, 0.09084516018629074, 0.08185829222202301, 0.04862590879201889, 0.03377002105116844, 0.030429314821958542, 0.017158428207039833, 0.017158428207039833, 0.013224529102444649]
+first_step_topk_text=[' I', ' The', ' A', ' He', ' "', ' We', ' Dr', ' My', ' This', ' In']
+
+[New tokens 10] count=199 first30=[338, 7543, 288, 4437, 3554, 15, 269, 437, 58, 42, 2460, 263, 2999, 299, 269, 507, 17, 54, 17, 3257, 288, 11121, 9187, 357, 581, 791, 342, 360, 267, 269]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: A couple of weeks ago, the EWG sent a message to the U.S. Department of Agriculture asking that they would be "on the ground" if they were to stop this practice.
+The USDA said it was not working on a new rule that would have been implemented in the past several years.
+In the meantime, there are some other changes to the rule, including the removal of certain types of pesticide from farm fields and the use of pesticides as fertilizer.
+And there's also an increase in the number of new pesticide applications for food crops.
+A recent report by the USDA suggests that it could be possible to reduce the amount of pesticide application used by farmers for agriculture.
+It may be possible to lower the amount of pesticides applied to fields by reducing the amount of fertilizer used.
+Ensuring that farmers get a better sense of what is being done to produce their crops will help them to make better decisions about how much they should spend on their crops.
+
+================================================================================

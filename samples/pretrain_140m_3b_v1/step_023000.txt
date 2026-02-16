@@ -1,0 +1,310 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 418, 4928, 288, 2446, 3, 4, 2, 0, 1]
+first_step_topk_probs=[0.6546010375022888, 0.23098620772361755, 0.05373292416334152, 0.03191869333386421, 0.028761161491274834, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' was', ' lived', ' of', ' came', '', '!', '', '', '']
+
+[New tokens 1] count=54 first30=[2827, 5273, 418, 649, 8763, 299, 1432, 610, 1231, 7129, 17, 202, 5, 44, 1418, 299, 342, 916, 482, 961, 988, 5273, 17, 360, 1693, 415, 649, 8926, 298, 6052]
+[Full output 1]
+Once upon a time, a curious child named Jack was so excited to take his own pictures.
+"I want to be like this," said Jack. "It's so nice and beautiful." He had never seen anything like it before. And he knew it would make a big difference in the world.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[289, 1691, 6936, 298, 269, 775, 2587, 418, 2793, 289, 1769, 7916, 17, 382, 10079, 418, 7713, 289, 925, 1161, 15, 614, 686, 1444, 418, 453, 2657, 1761, 269, 7557]
+[Full output 2]
+The Eiffel Tower was built in 1783 and the first building was built in 1691. The tower was constructed in 1810, but its design was not developed until the 1950s.
+
+The Eiffels Tower is a four-story structure with a series of two-storey towers and a number of five-storey houses. It has an open space for construction and a three-storey tower. A three-storeys tower is designed by a designer who has built several smaller towers. The tower also features a large array of six-storey designs.
+
+History
+
+The tower was originally named after the French explorer Louis de Lausanne, who was working on the new site. He discovered that the tower had been constructed at the time as a result of the Spanish conquest. However, the tower remained unaffected by the French invasion of France and a French occupation during the Second World War. In addition to the work on the tower, it was demolished in 1931 and replaced by a single-storey house with a 13-storey structure. The tower became part of the French National Historic Park in 1938.
+
+In 1940, the tower was replaced by a new one with a more modern tower. The tower remained in use until 2006 when the tower was renov
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 357, 483, 342, 5454, 359, 269, 1701, 288, 795, 7527, 289, 269, 2189, 1926, 17, 783, 1818, 357, 339, 833, 1496, 4409, 1690, 298, 757, 15, 715, 4280]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector that can be represented as the sum of two vectors in the original space. This means that for any given vector X and Y, there exists a unique vector Z such that:
+
+Z = (1 + 1)z + z^2
+
+This implies that:
+(x - x)^2 = 0
+
+where x represents the size of the vector and y stands for its magnitude. We now have a new matrix A[X], which provides us with an example of the identity matrix Z:
+
+A[Y] = (1+1)/2 + 2/3 + ... + (1+5)z + ... + ... +... + ... + [x-5]*0.
+
+Now let's consider the case when we want to show that the eigenvectors are real numbers—that is, they are real numbers. The first step would involve finding the eigenvalues of both matrices A and B:
+
+x = sqrt[(1+1)*x^2 + (-1)/(1+1)*(1+1))*(1+1) + (-1)+(1+1)]
+= sqrt[1+1*x^2].
+
+As you might notice, even though these values may seem complex at
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 491, 1420, 395, 817, 1991, 601, 5663, 586, 7337]
+first_step_topk_probs=[0.4776967465877533, 0.13686241209506989, 0.09022514522075653, 0.07358963042497635, 0.05359608680009842, 0.04829408600926399, 0.039211735129356384, 0.028687918558716774, 0.011234350502490997, 0.011234350502490997]
+first_step_topk_text=[' can', ' have', ' allow', ' are', ' use', ' provide', ' will', ' involve', ' were', ' enable']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 298, 5699, 269, 1165, 1378, 500, 17, 202, 509, 851, 1488, 1375, 288, 4855, 2465, 1085, 330, 263, 2829, 1085, 357, 483, 342, 3844, 374]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model and explain the world around us.
+The most common type of machine learning model is a simple model that can be compared with the real world, but it's not very useful for the real world. It uses a system called "theory" which is based on the idea that there is an infinite number of different types of machines. In this case, we call the systems "common computer" or "special computer." The two main features of the model are:
+- In the human brain, the machine is able to see a way out of the brain, while in the human brain the computer is able to show the way out of it. This is known as the "sense of being" theory.
+- In computer science, the "sensing" concept is the "sack of being". This means that the computer is unable to see what the system is doing, because it has no memory.
+- There are two main types of machines: one is able to make use of the other, and the other is able to create a process called "initiation", which is the process by which the machines are working. These machines have to be programmed so that they can move from one place to another, and then work on
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=123 first30=[263, 62, 69, 64, 711, 202, 856, 835, 66, 81, 401, 11, 68, 15, 276, 464, 346, 311, 333, 643, 346, 1150, 1794, 29, 331, 490, 276, 861, 276, 29]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a[b]
+
+
+def get_nth(a, c):
+    n = 0
+    while True:
+        if c == c:
+            return 1
+        else:
+            return 0
+
+    for i in range(0, len(a)):
+        if c < c and a[i] == c[i]:
+            return -1
+
+        elif c < c or a[i][c]:
+            return 0
+
+        elif c == c and a[-1][c]:  # check if any of the variables are not present
+                return -1
+
+            else:
+                return 0
+
+    return nth
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[311, 282, 836, 353, 408, 263, 354, 284, 651, 413]
+first_step_topk_probs=[0.5748127698898315, 0.09738598763942719, 0.08775214850902557, 0.0712491050362587, 0.03813690319657326, 0.03167391195893288, 0.030964745208621025, 0.023865463212132454, 0.02265429124236107, 0.021504588425159454]
+first_step_topk_text=[' n', ' p', ' {', ' (', ' N', ' a', ' 1', ' f', ' [', ' r']
+
+[New tokens 6] count=256 first30=[413, 65, 81, 333, 353, 81, 552, 354, 12, 1341, 311, 17, 202, 202, 2774, 15, 1427, 415, 8793, 269, 2428, 2859, 14248, 29, 202, 202, 8001, 2476, 996, 16740]
+[Full output 6]
+Write a Python function that returns the factorial of n: r^n = (n - 1) / n.
+
+Now, let's analyze the provided code snippet:
+
+```mathematica
+```csharp
+# f(x) = 0;
+```
+Here, we want to find the value of x when dividing by zero or less than n. To do so, first compute the equation y = (-1)^2 + (0)^3 + ... + (0 + 1)/4. We then multiply both sides of the equation by 2 and obtain:
+
+f(x) ≈ 0.5 * (1 - 0.5)/(1 - 0)
+f'(x) ≈ -1.5*(-1/4)
+= 0.5*(1 - 0.)
+= 0
+
+This simplifies to:
+
+y = (-1)*(1 - 0.),
+= 0,
+
+where y is a constant of integration (i.e., multiplying both sides by zero), and x is an integer. Note that this option does not affect the answer since it represents the factorial of x, which cannot be expressed as a sum of two integers.
+
+Let us now calculate the values of x using the formula for finding the derivative of x with respect to
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 1083, 339, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.6288973093032837, 0.2462797313928604, 0.07830677181482315, 0.04651622101664543, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', ' print', ' for', '', '', '!', '"', '', '']
+
+[New tokens 7] count=239 first30=[622, 311, 13, 81, 647, 354, 537, 1396, 20, 15, 21, 33, 341, 490, 311, 1542, 643, 29, 416, 622, 651, 19, 64, 864, 311, 331, 1107, 29, 416, 622]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return n*n + 1 # <1,2>
+         if n > 0:
+            return [0] * n
+        else:
+            return np.array([n, 2])
+
+
+# This function is used to generate the `fun` function of a `fun` with `fun`, and then executes it in the `fun`.
+def simple_fun(n):
+    return n*1/n
+
+def get_fun(fun):
+    """
+    Returns a list of all the magic functions that are available for this function.
+
+    :param int args: The arguments for each module.
+    :return: The code here to add to the list of the first argument.
+    """
+    result = []
+    for i in range(len(fun)):
+        result += i
+        if not os.path.exists(i):
+            continue
+        else:  # just use this module for the current test
+            result += " ".join(result)
+        result += "</code> <!--> <!-> <!–> <!+>" % (fun[i], func)
+        result = result[:-1]
+    return result
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 338, 1278, 783, 535, 1289, 1906, 0, 1]
+first_step_topk_probs=[0.5863770246505737, 0.09979608654975891, 0.08992383629083633, 0.08992383629083633, 0.04337121918797493, 0.03908071294426918, 0.025763610377907753, 0.025763610377907753, 0.0, 0.0]
+first_step_topk_text=[' The', ' There', ' A', ' If', ' This', ' In', ' We', ' All', '', '']
+
+[New tokens 8] count=256 first30=[382, 1811, 330, 357, 715, 395, 795, 2584, 288, 10676, 17, 2050, 1375, 578, 263, 2886, 3456, 298, 269, 613, 578, 263, 7633, 3456, 17, 1541, 395, 795, 2584, 17]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The problem is that there are two types of cats. One type has a white face and the other has a brown face. There are two types. One type is red or green, one is red or blue. A kind is called a "black" color. A kind of red or yellow color is called a red or blue color. The other type is called a pink or green color.
+The first type of cat is called a green or purple color. The second type is called an orange or purple color because it is not as white as the second type. The third type is called the red or green color because it has the same color as the third type. The second kind is called the green or yellow color. The third kind is called an apple or orange color. The most common type is called white or yellow color because they have the same color.
+In cats, the main difference between a black and yellow color is that the person with the white color looks very similar to a black and orange color. This difference is called a blue or green color if you want to see a dark color. The color is called the blue or blue color because it shows different colors.
+You can also see a yellow color in your pet's home environment. You can find
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1278, 1541, 354, 2050, 783, 2590, 776, 1509, 338]
+first_step_topk_probs=[0.45341169834136963, 0.08563846349716187, 0.06953299790620804, 0.06265443563461304, 0.056456390768289566, 0.050871431827545166, 0.045838966965675354, 0.037218332290649414, 0.033536504954099655, 0.027229515835642815]
+first_step_topk_text=[' The', ' If', ' There', ' 1', ' One', ' This', ' No', ' He', ' You', ' A']
+
+[New tokens 9] count=256 first30=[2050, 1194, 299, 3533, 482, 2395, 330, 299, 2033, 263, 3215, 339, 744, 20, 15, 1086, 15, 614, 356, 1755, 847, 1118, 806, 1264, 3161, 486, 791, 2372, 780, 17]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One way to answer this question is to ask a friend for $1,000, but I don't know how much money you would give them. So, if they were $1,500, the first one would be $2,000, or $3,000, the second one would be 1,000, which is $5,000, then the third one would be 2,000, and so on.
+Answer: This is a fraction of what it means to put in $1,200, or $4,000. The fourth one is $5.
+Answer : I think the third one is $6,000, since there are no extra items that we can buy at our disposal. And I do not know whether this number is worth considering. It's a little bit like saying "I don't know" when I say "I'm sorry." I mean, I don't understand why the third one isn't worth paying attention to. But the fourth one is just because we don't pay attention to things like the ones we're talking about.
+Answer(s): In my opinion, the fifth one is $10,000, because it's a lot easier to get a good price than it actually is. That means that
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 3919, 783, 338, 1289, 1278, 1541, 698, 1509]
+first_step_topk_probs=[0.18338611721992493, 0.18338611721992493, 0.12089554965496063, 0.08844907581806183, 0.07969930768013, 0.07181503623723984, 0.06471072137355804, 0.03648900240659714, 0.02405502460896969, 0.02405502460896969]
+first_step_topk_text=[' I', ' The', ' My', ' This', ' A', ' We', ' If', ' There', ' It', ' You']
+
+[New tokens 10] count=256 first30=[338, 15919, 668, 578, 699, 263, 2415, 2707, 15, 287, 16147, 289, 269, 9681, 15, 388, 263, 2415, 20267, 17, 202, 8104, 8413, 29, 338, 4484, 374, 435, 9320, 1937]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: A nurse who has had a heart attack, an artery in the chest, or a heart defect.
+Assisted: A patient with atopic disease that is not treated by a doctor.
+Assistive: A patient who has received treatment for a condition that may be caused by an overactive immune system.
+Assessments: An individual who has had symptoms of a condition called pericardial disease.
+Assistance: The patient has experienced symptoms such as headache, fatigue, weakness, and/or muscle weakness.
+Assessment: A patient's evaluation of the conditions he or she would like to see on his or her own.
+Assignment: A physician who specializes in diagnosing pericarditis (APA), or who is diagnosed with pericardia (a condition that causes a condition known as pericardium vasodilator syndrome).
+Assisted endoscopic diagnosis: A patient whose heart defect was affected by a condition known to cause a condition known today as pericardiogram (PID) or pulmonary embolism (PID).
+Assessment and evaluation: A person who has been hospitalized for a condition known now to have pericardiac disease.
+A procedure performed to examine the
+
+================================================================================

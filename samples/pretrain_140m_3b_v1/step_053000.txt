@@ -1,0 +1,273 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[418, 791, 2827, 2977, 2446, 12562, 1255, 288, 4928, 0]
+first_step_topk_probs=[0.3390129506587982, 0.24802717566490173, 0.18146057426929474, 0.06403131783008575, 0.05769706144928932, 0.03427349403500557, 0.027827903628349304, 0.025075025856494904, 0.022594494745135307, 0.0]
+first_step_topk_text=[' was', ' would', ' named', ' saw', ' came', ' walked', ' called', ' of', ' lived', '']
+
+[New tokens 1] count=90 first30=[1255, 5273, 418, 289, 269, 3843, 722, 406, 2977, 2009, 357, 699, 7729, 5242, 17, 776, 418, 649, 7495, 299, 1137, 383, 17, 776, 3766, 299, 1143, 374, 383, 298]
+[Full output 1]
+Once upon a time, a curious child called Jack was in the park when he saw something that had gone wrong. He was so sad to see it. He wanted to play with it and feel better. But then, a kind lady came running to him. She said, "I'm sorry for you, Jack! I should have been very upset." Jack smiled and thanked her. He took out his toy car and drove away. He was happy again and soon he felt better.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=173 first30=[289, 1691, 6677, 419, 269, 11633, 288, 2262, 15, 298, 383, 330, 619, 288, 269, 851, 1384, 17227, 289, 269, 1165, 17, 535, 269, 1745, 1365, 401, 2162, 15, 269]
+[Full output 2]
+The Eiffel Tower was built in 1763 by the Duke of York, and it is one of the most important towers in the world. In the early 20th century, the tower was rebuilt as a four-story building with a central square, with a large tower at the center. The tower was built in 1805, with a new tower in 1909. It was completed in 1938.
+The tower was built to commemorate the 400th anniversary of the Battle of Yorktown. It has been used for many years since the first historic battle in North Africa. Its original purpose was to honor the dead and wounded who died on the battlefield.
+In recent decades, the tower has become an iconic symbol of the fight against the British and the English. As a symbol of the fighting, the tower is also celebrated with the British military parade in London and the Royal Military College in London.
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 357, 578, 269, 1134, 8878, 359, 686, 27922, 17, 202, 202, 2774, 1427, 415, 1936, 269, 1496, 1170, 672, 263, 3592, 3823, 744, 36, 2729, 536, 411, 601]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector that has the same magnitude as its transpose.
+
+Now let's consider the given information about a square matrix $A$, which we will use to determine its eigenvalues and eigenvectors:
+
+$$A = \begin{bmatrix} 1 & 0 \\ 0 & 0 \end{bmatrix}$$
+
+For any nonzero real number $x$, we can express this expression using the formula:
+
+$$\begin{align*}
+\mathbf{A}{1}\cdot\mathbf{B}=\mathbf{0}.\end{align*}$$
+
+Next, notice that both $A$ and $B$ are matrices of the form $\mathbf{A}^{2}(A)$. Since both $A$-th entries in $A$ are positive numbers ($-$), they have the same direction (denoted by $\mathbf{B}$. Therefore, we can rewrite them using the definition of eigenvalues:
+
+$\mathbf{A}=\mathbf{A}+(\mathbf{B})$.
+
+We now introduce another characteristic of our original matrix:
+
+\[
+\mathbf{\mathbf{A}}=\mathbf{A}+\mathbf{B}=(\mathbf{A}-\mathbf{B}),
+\]
+
+As mentioned earlier, when dealing with matrix multiplication, remember that multiplying
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 491, 395, 1420, 817, 1991, 1005, 330, 1085, 713]
+first_step_topk_probs=[0.5670797824859619, 0.07836153358221054, 0.06537716835737228, 0.05165908485651016, 0.041943904012441635, 0.041943904012441635, 0.030686814337968826, 0.030686814337968826, 0.022450953722000122, 0.015591876581311226]
+first_step_topk_text=[' can', ' have', ' are', ' allow', ' use', ' provide', ' help', ' is', ' model', ' work']
+
+[New tokens 4] count=202 first30=[483, 342, 885, 299, 1085, 2281, 6811, 4621, 17, 202, 509, 1481, 418, 10601, 419, 269, 1740, 3285, 5931, 353, 8857, 41, 12, 298, 269, 1740, 17033, 288, 2640, 353]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex biological processes.
+The research was funded by the National Science Foundation (NSF) and the National Institutes of Health (NIH). The work was supported by grants from the National Institute on Aging, the NIH Office of Research, the U.S. Department of Energy, the Office of Communications and Public Liaison, the Howard Hughes Medical Institute, the Howard University Foundation for Scientific Information, the Bill & Melinda Gates Foundation, the University of California-Berkeley, the Howard Hawks Foundation, the Howard State University, the Max Planck Society, the Max-Planck-Institut für Physikalische Physik, the German Federal Institute for Social Research and the National Institute for Social Science in Leipzig.
+Other social bookmarking and sharing tools:
+Note: Materials may be edited for content and length. For further information, please contact the source cited above.
+Note: If no author is given, the source is cited instead.
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 6729, 353, 70, 12, 10343, 377, 14004, 51, 14004, 24501, 17, 1906, 6554, 19154, 17, 202, 6, 336, 11284, 59, 16, 11956, 16, 25673]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# Copyright (c) 2021 PaddlePaddle Authors. All Rights Reserved.
+# SPDX-License-Identifier: Apache-2.0
+"""Test the algorithm."""
+import unittest
+from typing import List
+
+import torch
+import torch.nn as nn
+import torch_geometric.utils.config as config
+import torch
+
+
+class TestSetup(unittest.TestCase):
+  def test_setup(self):
+    """Test setup."""
+    self.assertEqual(torch.randn(1, 1), 2)
+
+  def test_add(self):
+
+    # Test add method with a setup
+    self.assertTrue(torch.is_equal(torch.rand(1, 2)), "SG")
+    self.assertFalse(torch.has_tensor(torch.FloatTensor([3, 3])))
+    self.assertIs(torch.random.uniform(1e-4, 2), 0.5)
+    self.assertIsNotNone(torch.cuda.get_device_id())
+    self.assertGreaterEqual(torch.randint(1e6, 2), 1)
+
+  def _test_init(self):  # pylint: disable=too-many-arguments
+    assert
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[311, 1700, 836, 408, 354, 643, 520, 353, 579, 744]
+first_step_topk_probs=[0.44128480553627014, 0.1412668377161026, 0.09810786694288254, 0.03841958940029144, 0.03119427151978016, 0.03119427151978016, 0.028108371421694756, 0.02532774768769741, 0.024042364209890366, 0.022822216153144836]
+first_step_topk_text=[' n', ' `', ' {', ' N', ' 1', ' 0', ' k', ' (', '\n               ', ' $']
+
+[New tokens 6] count=138 first30=[520, 4, 17, 3, 711, 4750, 2062, 263, 689, 15, 715, 418, 263, 1809, 3510, 2827, 3867, 17, 1530, 6446, 299, 1143, 374, 896, 5373, 298, 1698, 8278, 17, 2050]
+[Full output 6]
+Write a Python function that returns the factorial of n: k!.
+
+Once upon a time, there was a little girl named Lily. She loved to play with her toys and sing songs. One day, she saw a big truck in the street. It was so big and shiny, but it made her feel sad. Her mom said, "Don't worry, we can fix this truck." Lily felt happy again and started to play with the truck. After playing with the truck, Lily found a beautiful doll that she wanted to share with her friends. She asked her mom, "Can I have some for you?" Her mom smiled and said, "Yes, please!" They both played together and had fun. The end.
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=109 first30=[622, 8049, 11, 81, 12, 1246, 202, 856, 835, 66, 4203, 11, 4203, 464, 346, 490, 993, 861, 643, 29, 331, 622, 643, 3461, 622, 354, 711, 202, 350, 1401]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return fib(n)
+    
+def get_number(number):
+    if number == 0:
+        return 0
+    
+    return 1
+
+
+if __name__ == '__main__':
+    print "Computing Fibonacci Numbers"
+    print "Number of Fibonacci Numbers is: ", n
+
+    #print "Number of Growth of the Balsa Tree"
+    #print "The number of growth of the Balow tree in the Balsas tree is: ", (n - 1) + 1
+    #print str(len(numbers))
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 13676, 338, 1289, 535, 698, 2590, 356, 1906]
+first_step_topk_probs=[0.38125520944595337, 0.226475328207016, 0.061593230813741684, 0.058467380702495575, 0.05268348753452301, 0.04277564585208893, 0.03473111614584923, 0.03473111614584923, 0.028199438005685806, 0.028199438005685806]
+first_step_topk_text=[' The', ' There', ' Yes', ' A', ' We', ' In', ' It', ' No', ' I', ' All']
+
+[New tokens 8] count=256 first30=[1541, 330, 808, 2079, 3533, 17, 1278, 715, 330, 263, 2079, 3533, 15, 383, 330, 1431, 269, 1832, 357, 751, 10676, 601, 342, 2645, 388, 2886, 289, 2419, 15, 614]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: There is no single answer. If there is a single answer, it is often the case that some cats will be black or white in color, but this is not always true. Cats may have many different colors depending on their color pattern and coloration. Some cats are blue-gray with darker stripes. Others may have dark stripes (or gray). The most common color is green or yellow.
+The most commonly used color is black. Blacks are red, orange, yellow, and purple. White is also called gray, brown, or black. White is usually green, but sometimes it is pale blue. White is found primarily in areas of the body, including the neck, back, shoulders, feet, and ears. Red is the color of the cat's body.
+Some cats do not have any color differences between the two colors. Other cats only have color differences between them. For example, some cats have gray pigmented skin that looks like white. Also, some cats show more dark blotches than others.
+A few cats are black, especially if they are born outside of the home environment. They are considered to be black because they have white fur. Most cats live in the home environment and have a low birth weight.
+There are several ways
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 798, 382, 2050, 409, 843, 744, 637, 1541, 2590]
+first_step_topk_probs=[0.48752111196517944, 0.10218997299671173, 0.10218997299671173, 0.060703396797180176, 0.03876933455467224, 0.03605936840176582, 0.03249218687415123, 0.03234536573290825, 0.030843205749988556, 0.029277918860316277]
+first_step_topk_text=[' 1', ' 4', ' The', ' One', ' 2', ' 5', ' $', ' 3', ' There', ' No']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 202, 509, 3533, 330, 1604, 10941, 15, 536, 330, 269, 993, 288, 10941, 289, 263, 2819, 17, 382, 1811, 374, 10487, 1890, 330, 357, 581]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+The answer is 12 apples, which is the number of apples in a row. The problem with counting numbers is that they are not exactly equal to each other. For example, if we know that 5 is the number 3, then 6 is an even number because it is divisible by 5. So for instance, 7 is a odd number because 7 is divisible by 3. In this case, since we're only looking at whole numbers, there's no way to count them all together. However, you can still count them all out and say that 7 is the number 4. This means that 9 is also divisible by 8.
+Let's take another example: 5 is divisible by 9. What do you think about this? It turns out that the answer is 0.325. If we multiply both sides of our original equation (which looks like a repeating pattern), the result will be 0.775. But what happens when we divide both sides of the equation by 9? We get 0.575. Now let's go back to our original equation: 3 + 2x - 1 = 0.925. Since the product of two consecutive terms is always divisible by either x or y, the answer is 1.925!
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 1289, 382, 783, 776, 338, 1278, 698, 3919, 1220]
+first_step_topk_probs=[0.2682667076587677, 0.15971863269805908, 0.09994935989379883, 0.06589066237211227, 0.05635926127433777, 0.025803152471780777, 0.02207060530781746, 0.020950524136424065, 0.018877990543842316, 0.017919933423399925]
+first_step_topk_text=[' I', ' We', ' The', ' This', ' He', ' A', ' If', ' It', ' My', ' For']
+
+[New tokens 10] count=48 first30=[783, 330, 263, 4401, 5369, 299, 1798, 806, 299, 817, 269, 6606, 2705, 289, 269, 6453, 17, 202, 26783, 29, 1289, 395, 1191, 482, 2705, 339, 269, 775, 689, 15]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: This is a rare opportunity to learn how to use the latest technology in the classroom.
+Student: We are using this technology for the first time, and we have a new curriculum that will teach students about the technology they are learning.
+
+================================================================================

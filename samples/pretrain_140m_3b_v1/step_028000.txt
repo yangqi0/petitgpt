@@ -1,0 +1,316 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[418, 2827, 791, 699, 2446, 3, 4, 2, 0, 1]
+first_step_topk_probs=[0.6511040925979614, 0.13647884130477905, 0.11081226915121078, 0.053445927798748016, 0.048158783465623856, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' was', ' named', ' would', ' had', ' came', '', '!', '', '', '']
+
+[New tokens 1] count=101 first30=[2827, 5273, 418, 2126, 1114, 4191, 17, 1530, 6446, 299, 1143, 374, 896, 5373, 298, 1062, 3326, 17, 2050, 1266, 15, 5273, 2857, 299, 269, 3843, 298, 2977, 7336, 288]
+[Full output 1]
+Once upon a time, a curious child named Jack was always very happy. She loved to play with her toys and make friends. One day, Jack went to the park and saw lots of beautiful things. He wanted to show his mom what he had done for him. His mom said, "Don't worry, Jack. I will give you some books." Jack smiled and hugged Lily. They were so happy that they played together all day long. From that day on, Jack made sure to always be careful when playing with new things.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[289, 1691, 6936, 419, 269, 5057, 4385, 343, 17, 321, 9990, 15, 668, 699, 733, 263, 9004, 4201, 289, 269, 1831, 288, 269, 2587, 298, 1770, 269, 2587, 288, 269]
+[Full output 2]
+The Eiffel Tower was built in 1783 by the architect William C. Tanner, who had been a prominent figure in the development of the building and later the building of the National Museum of Natural History. The structure was designed by Joseph B. Tanner and others to support the work of his father.
+In 1817, Henry L. Tanner became the first American governor to serve as president of the United States House of Representatives from 1831 to 1832. He served for four years before being elected to the United States Senate in 1830. In 1821 he became the first president of the U.S. House of Representatives. His primary role was to provide a position for the administration of the United State Constitution (1832) which would be the basis for the appointment of President John Adams. The office of President was one of the most important events in American history.
+The first American governor was James Madison, who was born in 1819. The man who was born on this day is said to have died in Washington, D.C., when he was six years old. He received his medical degree in 1820, but it did not succeed him until 1825. His health was restored after his death.
+The family's early years were spent in the Army of the Potomac,
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 357, 483, 342, 5454, 359, 269, 1701, 288, 545, 1812, 9201, 288, 686, 18956, 17, 535, 482, 1832, 15, 411, 601, 5998, 269, 28071, 353, 68, 12, 359]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector that can be represented as the sum of all possible combinations of its eigenvalues. In this case, we will define the eigenvalue (a) as follows:
+
+$$A = \frac{1}{2} + \frac{3}{4}$$
+
+where $A$ and $B$ are constants. This gives us the eigenvalue $\mu=0$. The eigenvalue $\mu$ can be written as:
+
+$$\mu = \frac{\sum_{i=1}^{n+1}}{2} - \frac{e^{i-1}}{2}\cdot\mu+\int\_{\infty}^{\infty}{\infty}\cdot\hat{\sqrt{2}} - \frac{\pi}{2}}\cdot\mu.$$
+
+Now let's consider some examples to illustrate these ideas better. Consider two vectors $v_1, v_2,$ and $v_3,$ respectively. Our goal is to determine their eigenvalues using the formula below:
+
+* Given any scalar $k > 0$, we get $(v_1^k+v_2)^k=\left(\frac{1}{(2k+1)}-u_1^2+v_3^2-u_2^2+u_3^
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 491, 395, 1420, 817, 330, 5663, 586, 3350, 713]
+first_step_topk_probs=[0.41051697731018066, 0.16076074540615082, 0.08762209862470627, 0.08604911714792252, 0.0629548728466034, 0.03369731456041336, 0.03036380372941494, 0.027360085397958755, 0.027360085397958755, 0.022214634343981743]
+first_step_topk_text=[' can', ' have', ' are', ' allow', ' use', ' is', ' involve', ' were', ' uses', ' work']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1005, 1397, 1798, 611, 672, 269, 1165, 1378, 780, 17, 202, 16, 1153, 414, 24984, 10412, 7564, 330, 287, 9792, 6113, 9638, 419, 3769, 442, 16]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to help students learn more about the world around them.
+- Anorexia nervosa is an anxiety disorder characterized by poor self-esteem and a lack of self-worth, which leads to frustration with others who don't have enough money.
+- The system of social interaction helps students learn more in their own lives.
+- A variety of social interactions can help students understand how they feel when they need it.
+- There is no way to make connections between emotional and physical behaviors.
+- In addition to social interaction, the emotional and behavioral systems also allow students to develop relationships through group work, such as family or friends.
+- If you have difficulty remembering letters, words, or phrases, you will want to try out these strategies before you begin to read or write.
+- It's important for students to learn to recognize emotions in order to get their attention.
+- Students may find it helpful to explore their surroundings in ways that can help them cope with the effects of stress and other stressors.
+- Some people use the term "bully" to describe a person suffering from depression.
+- Others use the term to describe someone who has suffered from depression or other mental health conditions.
+- Many people do not understand the term
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=113 first30=[263, 864, 286, 3, 711, 6, 19688, 419, 18122, 637, 17, 20, 17, 25, 351, 9281, 16, 1402, 16, 1699, 1720, 29, 2202, 202, 202, 807, 5210, 17, 2541, 655]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a * b
+
+# Generated by Django 3.1.6 on 2018-12-11 15:17
+
+from django.db import migrations, models
+
+
+class Migration(migrations.Migration):
+
+    dependencies = [
+        ('main', '0005_auto_20210304_2158'),
+    ]
+
+    operations = [
+        migrations.AlterField(
+            model_name='frozen',
+            name='unique_name',
+            field=models.CharField(blank=True, max_length=50),
+        ),
+    ]
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[353, 990, 311, 643, 354, 836, 744, 382, 338, 1700]
+first_step_topk_probs=[0.24814951419830322, 0.22360128164291382, 0.1542365550994873, 0.07489704340696335, 0.06406284123659134, 0.057725414633750916, 0.026428617537021637, 0.026428617537021637, 0.025087367743253708, 0.01835431158542633]
+first_step_topk_text=[' (', ' \\', ' n', ' 0', ' 1', ' {', ' $', ' The', ' A', ' `']
+
+[New tokens 6] count=256 first30=[990, 81, 63, 81, 10, 333, 990, 2392, 94, 20, 2031, 81, 2987, 81, 2320, 783, 330, 6295, 299, 269, 1134, 3467, 359, 5913, 360, 506, 483, 10381, 419, 619]
+[Full output 6]
+Write a Python function that returns the factorial of n: \n\n' = \frac{1}{n}\n'. This is equivalent to the same thing as saying "one can multiply by one, or two."
+
+So there you have it! By understanding how these functions work together, we can learn more about creating complex expressions using something called "convexity." Don't worry if this sounds complicated; I promise it will make sense soon.
+
+First, let's talk about infinite sets and their properties. A set X is said to be infinite if every element in X has at least one element in X. The value of X itself is given by the symbol {x : x} + {y : y} for some integer x. So when we say that each element in X is finite, then its sum becomes zero because no matter which element in X, the result is always equal to 1. Thus, our original set X should be infinitely many times, so we write it as follows:
+
+$$f(x) = \sum_{i=0}^{n-1} x^2 - f(x)\, dt.$$
+
+Here, $f$ represents the set of all possible integers from 0 to infinity. Now, here comes the cool part: since any integer
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=256 first30=[622, 311, 864, 353, 81, 552, 354, 12, 1341, 409, 202, 202, 6, 224, 202, 6, 224, 201, 856, 853, 66, 6447, 11, 492, 15, 3197, 464, 1246, 537, 224]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return n * (n - 1) / 2
+
+# 
+# 	def add_tree(self, tree):
+     # 	# 	#  	# 			#  			#    	#      	#     	#      			#      				#       #       	#       @return
+		# 						# 
+				#         	#      
+# 		
+# 
+		
+# 				# 
+		
+		# 
+
+
+# 
+
+	# 
+
+#
+# 
+	
+	# 
+
+
+	# 
+	
+
+# ##############
+# ###########
+# ####################################
+#  
+
+# ------
+# #######
+#
+
+# 
+
+#
+"""
+
+class Solution:
+    def isScheduler(self, root: TreeNode) -> bool:
+        """
+        :type root: Treenode
+        :rtype: bool
+        """
+        if not root:
+            return False
+
+        if not root.isScheduler():
+            return True
+
+        if not self._root:
+            return True
+        
+        if not root or not root.hasScheduler() and not root.exists():
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 338, 1541, 1803, 1278, 2050, 535, 783, 1289, 0]
+first_step_topk_probs=[0.5386484861373901, 0.15432551503181458, 0.08260449022054672, 0.060434740036726, 0.05445622280240059, 0.039841026067733765, 0.029148316010832787, 0.02132536470890045, 0.019215766340494156, 0.0]
+first_step_topk_text=[' The', ' A', ' There', ' When', ' If', ' One', ' In', ' This', ' We', '']
+
+[New tokens 8] count=256 first30=[382, 1811, 330, 357, 715, 728, 342, 263, 993, 288, 1108, 2722, 299, 3792, 269, 795, 2584, 288, 10676, 17, 2660, 288, 760, 3036, 5663, 1191, 263, 3812, 288, 4125]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The problem is that there may be a number of different ways to identify the two types of cats. Some of these methods involve using a variety of techniques like color or texture to help identify which cats are not. Others include using a combination of an in-depth approach and an evolutionary perspective. Some of the methods include looking at the distribution of the cat's eye structure with a variety of other techniques such as flimsy lines and colour. Other methods include searching for a specific type of animal or something similar, trying to find a specific species or a particular breed or breed, or looking for a specific breed or breed. These methods also include studying how the cat is studied by researchers, or looking at whether it is possible to distinguish between different breeds and different types of cats, and then analyzing what is known about the population of cats around you.
+Breeding can be done anywhere from one to four years. Breeding will take place during the first year after birth. For example, if you live in a large area where you have a lot of people, your family will probably visit several places around the same time. You may find that most people do not get enough food because they are not born until the last year. It's important to note that when a person is born
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 2050, 1541, 354, 338, 2590, 1278, 1803, 783, 776]
+first_step_topk_probs=[0.5338512659072876, 0.169742614030838, 0.07376986742019653, 0.05989644676446915, 0.03557998687028885, 0.03206025809049606, 0.02888869307935238, 0.026030872017145157, 0.021135419607162476, 0.01904459483921528]
+first_step_topk_text=[' The', ' One', ' There', ' 1', ' A', ' No', ' If', ' When', ' This', ' He']
+
+[New tokens 9] count=172 first30=[2050, 288, 269, 1839, 2722, 299, 835, 263, 1413, 4560, 330, 419, 2179, 2849, 357, 1010, 13032, 330, 4604, 269, 1134, 1986, 359, 1010, 613, 17, 783, 1818, 619, 13032]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One of the best ways to get a good deal is by making sure that each apple is exactly the same size as each other. This means one apple is 1/4 inch long, 1/8 inch wide, 1/2 inch wide, and 1/3 inch wide.
+Answer: Two apples are 1/2 inches tall and 1/5 inch wide. The first apple should be 4 inches high and 1/6 inch wide. This makes it easy for you to pick up all the different fruits in your garden.
+Answer - When you add three apples, try adding them together. If you add two apples, then the remaining two are the same size.
+Answer : There are 6 apples in a row. Each number represents one apple. The total number of apples is 0.15.
+Answer Suggestions for Your Friends:
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 356, 338, 2766, 1289, 783, 776, 698, 3919, 360]
+first_step_topk_probs=[0.29946160316467285, 0.20377598702907562, 0.12354052811861038, 0.045923925936222076, 0.04138089343905449, 0.039280813187360764, 0.02727995626628399, 0.023333784192800522, 0.021025503054261208, 0.01894555054605007]
+first_step_topk_text=[' The', ' I', ' A', ' Dr', ' We', ' This', ' He', ' It', ' My', ' "']
+
+[New tokens 10] count=196 first30=[338, 15919, 289, 269, 5988, 668, 330, 2222, 299, 4888, 374, 263, 12630, 16012, 659, 17, 202, 44, 491, 287, 10729, 2707, 298, 383, 483, 2197, 486, 299, 342, 611]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: A nurse in the hospital who is able to speak with a licensed pediatrician.
+I have an asthma attack and it can cause you to be more sensitive to the medications.
+What are your concerns?
+The doctor will ask you questions about your symptoms, how they affect you, and what you can do to help. He or she may also ask you questions such as:
+- What is my treatment for this disease?
+- How much of each drug was prescribed?
+- What treatments were used for this disease, and why did they work?
+- Are there any side effects that you might have if you had a severe asthma attack?
+- Do you have any questions about your health history?
+- Is there any other way to talk to someone else?
+You should know that you can always ask a licensed pediatric cardiologist at your child's hospital. You can ask him or her to help you answer questions about your medical condition, such as:
+
+================================================================================

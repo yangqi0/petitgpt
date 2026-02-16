@@ -1,0 +1,288 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[418, 2827, 791, 3609, 2446, 5349, 1255, 288, 699, 2977]
+first_step_topk_probs=[0.5133713483810425, 0.10760858654975891, 0.06392224133014679, 0.06392224133014679, 0.04676651209592819, 0.04676651209592819, 0.03797140717506409, 0.022555984556674957, 0.021411269903182983, 0.021411269903182983]
+first_step_topk_text=[' was', ' named', ' would', ' asked', ' came', ' appeared', ' called', ' of', ' had', ' saw']
+
+[New tokens 1] count=207 first30=[1255, 5273, 418, 2126, 5952, 299, 4196, 269, 1165, 17, 776, 699, 287, 17682, 1328, 9482, 288, 672, 2436, 973, 17, 5273, 415, 3222, 586, 1507, 715, 298, 406, 418]
+[Full output 1]
+Once upon a time, a curious child called Jack was always ready to explore the world. He had an incredible life span of about five years. Jack's parents were still there and he was very excited when he got home. After a few days, Jack realized that his father was not going to be able to take care of him. He knew he could do something with him so he could keep up his efforts. But then, Jack's mother took him out to see what it was like for Jack. It was a big surprise and he couldn't wait to get back home.
+
+After spending all day, Jack learned that everyone in the family was important. They loved to learn new things, such as how to make friends and make money. One day, Jack found a toy that made them feel happy. He wanted to show everyone how good they are to have fun. Jack felt proud and happy because he liked his idea. He thanked his mom and went home feeling sad. From that day on, Jack was always grateful for his family and their new friend.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=81 first30=[289, 269, 1745, 9222, 86, 15, 298, 383, 330, 1244, 885, 359, 263, 3843, 17, 698, 330, 269, 9619, 288, 269, 10079, 415, 2587, 4880, 17, 202, 202, 6880, 202]
+[Full output 2]
+The Eiffel Tower was built in the early 1940s, and it is now used as a park. It is the oldest of the tower's building blocks.
+
+History
+
+In 1954, the Old Town Hall was opened for use by the National Park Service in 1965. The original building block was built in 1948 to house the first public library. In 1957, the original building block became part of the new White House.
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 357, 483, 342, 5454, 359, 263, 13742, 3289, 288, 269, 1968, 4409, 17, 783, 1818, 357, 269, 2642, 4409, 578, 808, 13622, 9194, 289, 686, 5438, 298, 3952]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector that can be represented as a scalar multiple of the input vector. This means that the entire vector has no diagonal entries in its domain and therefore is a linearly independent vector. The determinant of this matrix is called the "diagonal basis."
+
+Now let's consider a more complex example where we want to determine the number of distinct vectors in the matrix. To do so, we need to calculate the determinant of each vector by multiplying it with its corresponding diagonal elements. Since the determinant of any two matrices is given by their respective diagonal entries, they must also have the same diagonal entries. However, since there are only three matrices (i = 1, 2, 3, 4, 5), these vectors must also have at least one of them. We will now show that the determinant of these matrices equals the product of their diagonal entries.
+
+The determinant of a matrix $A$ is given by:
+$$A \times A \times B = \frac{1}{2} \cdot A.$$
+
+Since every row in our matrix corresponds to the same column in the matrix, we can express it using the formula for the determinant of the matrix:
+$$(A - A) = A \times A.$$
+This equation allows us to express the
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 491, 330, 817, 1420, 395, 3747, 3350, 1991, 586]
+first_step_topk_probs=[0.37668168544769287, 0.16370509564876556, 0.09724508970975876, 0.05776601284742355, 0.05776601284742355, 0.05181628838181496, 0.030919916927814484, 0.027861185371875763, 0.025105010718107224, 0.01655023917555809]
+first_step_topk_text=[' can', ' have', ' is', ' use', ' allow', ' are', ' allows', ' uses', ' provide', ' were']
+
+[New tokens 4] count=133 first30=[483, 342, 885, 299, 1085, 2281, 870, 4954, 17, 202, 509, 1271, 3563, 288, 269, 1554, 330, 299, 966, 287, 10747, 2969, 953, 339, 870, 5504, 298, 30237, 15, 536]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data structures.
+The main goal of the project is to develop an interactive computer system for data storage and retrieval, which will enable a user to create a virtual machine for a wide range of applications. The software can then be used to build a system that can perform various tasks such as handling different data types or processing time in different environments.
+Using the programmer's knowledge of computer science, this would allow users to access the application directly from their computer through a network interface.
+In addition, the software could also be used to create and maintain a database for use by other users (e.g., Google or Google).
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 17, 595, 717, 68, 561, 643, 12, 3, 711, 43, 13436, 415, 8899, 395, 885, 339, 4227, 298, 613, 3013, 857, 359, 7948, 388, 7994, 656, 17]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get('a', 0)
+
+Horse's legs are used for running and other activities such as walking or standing up. Horses have been known to use their feet in moving and walking when they need to be able to walk. Horses can also use their feet to walk on water or for swimming.
+The length of your toes varies from 20-30 inches at a time depending upon the size of your toe. The length of your foot is measured by your heel. If you're not careful, you'll probably feel like you're walking.
+If you're too heavy, your toes will turn red if you're going to do so. If you've got a difficult job, you may want to try some new things that could help.
+Tips for avoiding your feet
+- Keep your feet flat, with your toes straight and your toes flat.
+- Avoid touching your toes and knees.
+- Don't touch your toes while you're riding.
+- Try to avoid putting your toes on the ground.
+- Always wear gloves when playing sports.
+- Wear shoes that are comfortable and well suited to your body.
+- Never apply any of these items to your feet.
+- If you're having trouble walking
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[990, 836, 338, 353, 408, 744, 382, 409, 354, 643]
+first_step_topk_probs=[0.16895726323127747, 0.1603827029466629, 0.05659359693527222, 0.05099506303668022, 0.04595041275024414, 0.04361838847398758, 0.03930347040295601, 0.03361804038286209, 0.03191189467906952, 0.03191189467906952]
+first_step_topk_text=[' \\', ' {', ' A', ' (', ' N', ' $', ' The', ' 2', ' 1', ' 0']
+
+[New tokens 6] count=256 first30=[520, 4, 1341, 651, 78, 4, 11, 81, 16, 78, 18914, 935, 913, 446, 81, 10, 330, 833, 6222, 17, 202, 202, 4551, 415, 1936, 287, 1373, 1191, 829, 1392]
+[Full output 6]
+Write a Python function that returns the factorial of n: k! / [k!(n-k)!], where 'n' is any integer.
+
+Let's consider an example using our function `f[x] = x^2 + 2x + 3`. To do this, we need to find out how many times each number gets multiplied by its own factor (in this case, 1). Since we want to express it as follows:
+
+* The first few numbers are positive integers; they should be positive and negative multiples of 3.
+* The second few numbers are negative integers because they share no common factors other than 1.
+* Finally, since 5 is negative, we can substitute f(x) = 1 for x in our expression.
+
+Now let's apply these steps to solve your problem step-by-step:
+
+1. Identify the values of $x$ and $y$:
+ * Calculate the largest prime factorization of all terms within the sequence {0, 1}, {1, 2}.
+ * Add up all those products and subtract them from both sides of the equation:
+ * Multiply the smallest prime factorization of the product of two consecutive terms together: {1, 0} and {1, 1}.
+ * Divide both sides of both sides by -
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1083, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8670356273651123, 0.1329643428325653, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' print', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 311, 864, 353, 20, 647, 354, 12, 8472, 409, 1246, 622, 311, 711, 202, 856, 1098, 66, 4787, 11, 2330, 15, 1663, 32, 1711, 464, 346, 821, 346, 4692]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return n * (1 + 1) // 2
+     return n
+
+
+def find_matrix(shape, order=None):
+    """
+    Returns the matrix of all possible permutations of a given shape.
+
+    :param shape: The shape of the grid.
+    :type shape: tuple[int]
+    :return: A list of matrices with the same shape as the list of eigenvectors.
+    """
+    if order is None:
+        order = np.zeros((shape[0], dtype=np.float32))
+    elif order == 'one':
+        # print('A matrix has no order in which to compute the number of elements')
+        # print(order)
+        return np.array([shape[0]]).reshape(-1, -1)
+    else:
+        raise ValueError("Invalid matrix")
+    
+    # make sure that the matrix has exactly one dimension
+    for i in range(shape[0]):
+        #print(i)
+        #print('Num of permutations of length %d' % i)
+        #for j in range(3):
+            #print(j)
+            #print('Number of permutations of size %d'%(j))
+            #print('\t', j)
+            #for j, v in enumerate(v)):
+               
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 338, 1541, 1278, 1289, 535, 1803, 1906, 783, 1238]
+first_step_topk_probs=[0.6258951425552368, 0.11821639537811279, 0.05137660354375839, 0.041714541614055634, 0.030519012361764908, 0.027499914169311523, 0.027499914169311523, 0.02232818491756916, 0.02011936716735363, 0.013263511471450329]
+first_step_topk_text=[' The', ' A', ' There', ' If', ' We', ' In', ' When', ' All', ' This', ' As']
+
+[New tokens 8] count=256 first30=[382, 1811, 288, 360, 10733, 5, 330, 453, 359, 4012, 359, 383, 6780, 17, 1278, 486, 1418, 299, 1557, 269, 2097, 288, 360, 10733, 634, 1000, 486, 491, 299, 1313]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The problem of "black" is not as bad as it sounds. If you want to understand the concept of "black", then you have to look at how this applies to a group of animals. It's possible for a group of humans to be black, but they cannot see the same thing. For example, if a cat has a white coat, it would probably be green or red. But in this case, there is no way to determine whether the dog has black. In fact, if your cat has a black coat, its hair color will vary from person to person. However, in other words, if you want to know what kind of animal is black, then the question is, "What is the color of my cat?" This is an important question. How many different types of animal are black? Why do dogs have white coats? Why does he have white coats, which is why he has a white face? What is the color? What is his color? What does his color mean? Where does he have a white coat? How much of the color is brown? What are the colors of the color of the eye? What is one color?
+Answer : "White" and "white" are two kinds of animals. One type of animal is
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 354, 1541, 356, 1278, 338, 783, 2590, 2050, 776]
+first_step_topk_probs=[0.4816303551197052, 0.15313853323459625, 0.08196914941072464, 0.03953462839126587, 0.03381575644016266, 0.026062823832035065, 0.023484554141759872, 0.023484554141759872, 0.023484554141759872, 0.018100272864103317]
+first_step_topk_text=[' The', ' 1', ' There', ' I', ' If', ' A', ' This', ' No', ' One', ' He']
+
+[New tokens 9] count=256 first30=[354, 13032, 15, 798, 26634, 17, 202, 3016, 914, 10941, 620, 486, 910, 299, 5964, 263, 1167, 5330, 34, 202, 20, 17, 7509, 2849, 269, 1167, 5330, 330, 619, 288]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple, 4 bananas.
+How many apples do you need to buy a carrot?
+1. Make sure the carrot is one of the four main types of fruits. The fruit is the most expensive thing for a carrot.
+2. Place the fruit in a bucket.
+3. Place the apple in the bucket.
+4. Place the potato in the bucket by the table.
+5. Place the apples in the bucket in the bucket or in the bucket of water.
+6. Place the cereal in the bucket when the apple is full.
+7. Place the other two apples in the box.
+8. Place the remaining three apples in the jar.
+9. Place the milk in the bucket so that it is both the first and second fruits.
+10. Place the food in the bucket and add the other two fruits.
+11. Fill the bowl with the remaining two apples.
+12. Place the red apple in the jar and the green apple in the lid.
+13. Place the blue apple in the refrigerator.
+14. Place the yellow apple in the box and the green orange in the bucket on the bottom.
+15. Place the brown apple in the bag.
+16. Place the green apple
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 356, 338, 3919, 360, 2766, 1278, 7193, 783, 1289]
+first_step_topk_probs=[0.4187064468860626, 0.13313132524490356, 0.0833115428686142, 0.06095202639698982, 0.04018203914165497, 0.029397806152701378, 0.0251452773809433, 0.02386915683746338, 0.02386915683746338, 0.01839667744934559]
+first_step_topk_text=[' The', ' I', ' A', ' My', ' "', ' Dr', ' If', ' Professor', ' This', ' We']
+
+[New tokens 10] count=127 first30=[382, 3563, 288, 269, 2070, 330, 299, 1005, 874, 835, 707, 9327, 419, 14443, 780, 299, 2861, 672, 553, 17287, 298, 613, 3013, 357, 395, 2812, 299, 269, 1811, 17]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: The goal of the program is to help people get into trouble by encouraging them to talk about their homework and other activities that are related to the problem. It's not a simple task, but it can be done. If you want to find out more information about your homework or other problems, see the link below for help.
+- Student: Ask students what they need in order to take care of their homework.
+- Students: Tell me if there is any reason why they need to do this. I think this is a good way to give them an idea of how they feel when they are trying to solve a problem.
+
+================================================================================

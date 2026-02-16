@@ -1,0 +1,299 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[418, 699, 288, 2446, 791, 2857, 4928, 2827, 15, 982]
+first_step_topk_probs=[0.5787664651870728, 0.08875679224729538, 0.05272379890084267, 0.04750808700919151, 0.03475766256451607, 0.025429246947169304, 0.022913655266165733, 0.02064693719148636, 0.017540685832500458, 0.015105622820556164]
+first_step_topk_text=[' was', ' had', ' of', ' came', ' would', ' went', ' lived', ' named', ',', ' could']
+
+[New tokens 1] count=209 first30=[418, 3673, 298, 406, 1879, 610, 1842, 17, 776, 699, 795, 1293, 29, 619, 929, 418, 3673, 299, 263, 5585, 668, 418, 263, 5585, 17, 1803, 269, 775, 929, 418]
+[Full output 1]
+Once upon a time, a curious child was born and he left his home. He had two children: one child was born to a boy who was a boy. When the first child was born, the father went into the garden with him. The mother's parents were very careful about the child's behavior and the young child was always in the garden.
+The second child was born again; the second child was called the "father" of the family.
+But when the son came out of the garden, the father said, "We can't tell you what is happening here."
+At first, the father looked at the child as it was a little bit closer to the child. As soon as the father got there, the father found himself in the garden, and the father realized that this was a child's problem. And when the father did not have the child, the father decided to put the child back in the garden for the next year. So the father smiled and said, "You know, we are going to do something else," the father said.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=61 first30=[289, 1691, 6936, 298, 269, 775, 2587, 418, 2793, 289, 1769, 7916, 17, 382, 10079, 418, 7713, 289, 925, 1161, 15, 614, 383, 418, 1770, 3258, 299, 269, 2587, 17]
+[Full output 2]
+The Eiffel Tower was built in 1783 and the first building was built in 1691. The tower was constructed in 1810, but it was later added to the building.
+In 1830, the building was used as a fire station for the construction of the building. It is now known as the House of Representatives Hall.
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 357, 578, 269, 1134, 4169, 288, 13821, 359, 269, 3823, 17, 202, 202, 2774, 1427, 415, 1936, 269, 1496, 3823, 338, 15, 536, 3399, 269, 3098, 288, 269]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector that has the same degree of symmetry as the matrix.
+
+Now let's consider the given matrix A, which contains the elements of the matrix B. For example, if we have a scalar (a vector) and b=b, then its matrix A, denoted by:
+
+$$\lim_{n \to 0} \frac{d}{2}\left(\frac{1}{n}\right)\cdot\frac{d}{\sqrt{3}}{2}}$$
+
+where $a$ represents the dimension of the matrix. The value of the matrix can be expressed as follows:
+
+$$A = \sum\_{i=0}^{n} f(x)=f(x)\quad f(x)=\sum\_{i=-1}^{n} x^2 + n^{2}(x-2)(x-2)$$
+
+The original matrix B is defined as:
+
+* $A = \frac{1}{(1+2)}=\frac{1+\sqrt{2}}{2}$
+
+Since $\frac{1}{\sqrt{2}}\cdot\frac{\sqrt{2}+{1-2})$, we know that for any $x\in\mathbb{R}$, we have:
+
+\
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 491, 601, 1991, 817, 1420, 395, 411, 586, 713]
+first_step_topk_probs=[0.3428325057029724, 0.14899444580078125, 0.07186159491539001, 0.07186159491539001, 0.0647527351975441, 0.05257507041096687, 0.046734798699617386, 0.04268762096762657, 0.020588692277669907, 0.015063009224832058]
+first_step_topk_text=[' can', ' have', ' will', ' provide', ' use', ' allow', ' are', ' we', ' were', ' work']
+
+[New tokens 4] count=109 first30=[483, 342, 885, 299, 1005, 1397, 1557, 269, 1165, 1378, 780, 17, 202, 509, 851, 1488, 1498, 339, 1191, 8792, 330, 299, 1889, 263, 2969, 298, 263, 2969, 1191, 263]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to help students understand the world around them.
+The most common method for using machines is to create a computer and a computer using a computer. A computer with an algorithm that takes the input data from a computer, then gets it in the computer. The computer uses the computer to make predictions about the object and its location on the computer. A software program called SLR can also be used to create a new computer.
+This system is designed to be easy to use and can be built using a computer or a computer.
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=76 first30=[263, 62, 19, 64, 552, 286, 62, 20, 64, 864, 286, 62, 21, 64, 647, 286, 62, 22, 3971, 711, 202, 856, 835, 66, 68, 1714, 346, 622, 263, 17]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a[0] - b[1] * b[2] + b[3]]
+
+
+def get_a():
+    return a.get('a')
+
+
+def find_a(a, a):
+    return an(b)
+
+
+def calculate_a(b):
+    return (b * b) / (b * c).sum()
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[311, 409, 354, 353, 836, 408, 990, 20, 643, 637]
+first_step_topk_probs=[0.3617602586746216, 0.15025858581066132, 0.1353943645954132, 0.12200044840574265, 0.07247138023376465, 0.043049804866313934, 0.03495371341705322, 0.03149590641260147, 0.025572683662176132, 0.02304290048778057]
+first_step_topk_text=[' n', ' 2', ' 1', ' (', ' {', ' N', ' \\', '1', ' 0', ' 3']
+
+[New tokens 6] count=256 first30=[409, 81, 4, 3, 711, 1018, 4160, 359, 1216, 202, 807, 689, 655, 4119, 202, 1018, 1656, 202, 1018, 3266, 202, 1018, 3266, 711, 202, 856, 1219, 66, 1053, 11]
+[Full output 6]
+Write a Python function that returns the factorial of n: 2n!
+
+import numpy as np
+from time import sleep
+import os
+import json
+import json
+
+
+def read_file(path):
+    '''
+    :param path: path to file
+    :return: list of all files, as a string and a list of all subfiles.
+    '''
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+    with open(path + ".json") as f:
+        for line in f:
+            if not line:
+                continue
+            if line[0] == ' '.join(line[1:]) != ' '.join([str(i) for i in range(len(line))]
+            else:
+                print('' * len(line))
+                break
+    return json.dumps(line, indent=4)
+
+
+def main():
+    #  '''
+    # get the number of files and calculate the length of the file
+    #     count = 0
+    #     print("exiting", count)
+    #     # print(count)
+    #
+    #     if count > 0:
+    #         count += 1
+    #     break
+    #     start = count - count
+    #     end = count
+    #
+    print("start", end)
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 537, 1083, 490, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.6749222278594971, 0.1570027768611908, 0.08403752744197845, 0.08403752744197845, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' #', ' print', ' if', '', '', '!', '"', '', '']
+
+[New tokens 7] count=133 first30=[622, 311, 864, 353, 81, 552, 354, 12, 202, 202, 6, 22154, 29, 783, 330, 269, 1759, 1392, 536, 5922, 269, 775, 1239, 288, 263, 993, 202, 856, 8049, 66]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return n * (n - 1)
+
+# NOTE: This is the following function which returns the first value of a number
+def fib_result(n, k):
+    result = [k + 1 for k in range(1, k)]
+    result[k] = result[k - 1]
+    return result
+
+
+# We can find the second value of a function with this function
+def fib():
+    result = []
+    for i in range(len(result)):
+        result[i] = result[-1]
+    result[i][0] = result[:-1]
+    return np.sum(result[i])
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1278, 338, 1541, 1289, 535, 783, 1803, 356, 1658]
+first_step_topk_probs=[0.4394296705722809, 0.13972073793411255, 0.10222186893224716, 0.05471542477607727, 0.04930268973112106, 0.04442541301250458, 0.04442541301250458, 0.03607061877846718, 0.03607061877846718, 0.021426865831017494]
+first_step_topk_text=[' The', ' If', ' A', ' There', ' We', ' In', ' This', ' When', ' I', ' These']
+
+[New tokens 8] count=230 first30=[382, 4784, 288, 360, 73, 5896, 430, 5, 330, 269, 1134, 359, 360, 75, 1552, 263, 2916, 388, 795, 741, 382, 2000, 6128, 299, 833, 3864, 289, 536, 383, 330]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The definition of "families" is the same as "having a bird or two." The term refers to any animal in which it is a dog or a cat.
+One of the first problems with this concept is that it does not have an appropriate pattern for dogs. For example, if you're a cat who has a long-lasting long-lasting tail, then you probably have a long-lived pair. If you look at the number 4 on the map, then you might see that the number is less than 5. However, when you look at it, the number is larger than 6. In fact, the number of cats is smaller than 7. This means that the number can be calculated from the number 2, but that's how many cats are blue. So even though your cat is brown, it's still yellow.
+When you look at this, the number does not change over time. It doesn't change over time because it does change over time since it isn't colorless. Therefore, it may just change over time, so the number will change over time until you get to the next date.
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1509, 783, 1278, 356, 1289, 1541, 2050, 354, 338]
+first_step_topk_probs=[0.532878041267395, 0.06635111570358276, 0.04854351282119751, 0.04854351282119751, 0.04854351282119751, 0.0355151928961277, 0.0355151928961277, 0.03037775494158268, 0.03037775494158268, 0.019009912386536598]
+first_step_topk_text=[' The', ' You', ' This', ' If', ' I', ' We', ' There', ' One', ' 1', ' A']
+
+[New tokens 9] count=47 first30=[2050, 288, 269, 1839, 2722, 299, 835, 263, 2829, 3541, 1811, 330, 299, 1062, 383, 3831, 339, 4355, 299, 1557, 806, 581, 395, 2179, 553, 3541, 2061, 5468, 17, 698]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One of the best ways to get a simple math problem is to make it easy for kids to understand how they are making their math problems easier. It's a great way to start with something that helps them learn some math concepts!
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 1278, 338, 783, 1509, 1289, 2766, 3919, 1906]
+first_step_topk_probs=[0.22907133400440216, 0.16759216785430908, 0.1360742300748825, 0.06563004106283188, 0.05913757532835007, 0.041070230305194855, 0.03165406361222267, 0.03165406361222267, 0.030047619715332985, 0.024396762251853943]
+first_step_topk_text=[' I', ' The', ' If', ' A', ' This', ' You', ' We', ' Dr', ' My', ' All']
+
+[New tokens 10] count=256 first30=[1278, 486, 1755, 847, 2505, 263, 3851, 2106, 289, 669, 1512, 15, 486, 728, 342, 21393, 490, 715, 330, 263, 1811, 17, 382, 4035, 483, 1005, 486, 7634, 2161, 299]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: If you don't feel a bit pain in your head, you may be wondering if there is a problem. The doctor can help you decide whether to stop or not.
+- To find out what you need and how it works, see the following information:
+- There are no tests that can diagnose symptoms of depression.
+- Some people with depression have had symptoms that make them worse.
+- The doctor may also recommend treatment for depression.
+In some cases, it's important to get help right away. If you notice any signs of depression, your doctor will ask about your symptoms and medical history.
+What to expect from your doctor
+Your doctor may prescribe medicines to treat depression. Your doctor may recommend treatment for some types of depression. In rare cases, your doctor may order other treatments.
+The most common way to get help is to talk with your doctor about your condition. These medications can cause side effects such as:
+- The overuse of drugs called prophylaxis (brucking)
+- A medication called pelopodine (brucks)
+- Nerve therapy
+- A prescription drug that helps you control your depression
+- An antihistamine that stimulates your body's cells
+- A substance called "
+
+================================================================================

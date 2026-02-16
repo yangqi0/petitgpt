@@ -1,0 +1,353 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 418, 791, 2977, 2446, 699, 2857, 2, 1, 0]
+first_step_topk_probs=[0.45075052976608276, 0.3659805357456207, 0.05057280510663986, 0.05057280510663986, 0.03333967179059982, 0.02439182437956333, 0.02439182437956333, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' was', ' would', ' saw', ' came', ' had', ' went', '', '', '']
+
+[New tokens 1] count=139 first30=[2827, 5273, 418, 2126, 5952, 299, 4196, 269, 1165, 1378, 1169, 17, 776, 791, 1834, 351, 610, 5687, 298, 4440, 339, 610, 2553, 299, 2142, 1842, 17, 2050, 1266, 15]
+[Full output 1]
+Once upon a time, a curious child named Jack was always ready to explore the world around him. He would sit on his bed and wait for his mom to come home. One day, Jack decided he had an idea. He went outside and found a big tree in the woods. Suddenly, he heard a voice from behind a branch. It was a little girl who had been waiting for her baby. She looked up at Jack and said, "Hello! I'm so happy to see you!" The little girl smiled and said, â€œYou're welcome! You can play with your toys.â€ Jack agreed and they played together all day long. They were very happy and excited to have such a fun adventure.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 351, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.9165090918540955, 0.08349093049764633, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', ' on', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 2] count=156 first30=[289, 1691, 1590, 419, 269, 2751, 5009, 299, 3032, 269, 2868, 444, 7022, 419, 2751, 3869, 17, 382, 2982, 330, 4253, 885, 339, 269, 4300, 288, 263, 719, 2587, 15]
+[Full output 2]
+The Eiffel Tower was built in 1718 by the British Government to protect the town from attacks by British forces. The structure is currently used for the construction of a new building, but it's only been restored as a museum and museum site.
+- A large stone structure, designed by George Calvert (1756-1833), which houses the famous Eiffel tower, and an old Romanesque church, with its massive, elaborate clock, and three-story windows, has been built over the tower.
+- The magnificent Church of St. Mary (19th century)
+- The St. Mary's Church (19th and early 20th centuries)
+- Famous Catholic Churches (19th Century)
+- L'Oise (19th/20th century)
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=219 first30=[263, 4409, 357, 578, 269, 1134, 8878, 359, 686, 5606, 10294, 8537, 17, 202, 202, 2774, 1427, 415, 1936, 269, 1496, 1811, 29, 4007, 269, 28071, 288, 263, 1496, 4759]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector that has the same magnitude as its corresponding eigenvector.
+
+Now let's consider the given problem: finding the eigenvalue of a given linear combination of a linear combination of two vectors. We want to find the eigenvalues of the particular linear combination A = B + C and A = 0. To do this, we need to understand what it means for a linear combination to be a scalar multiple of the original linear combination A. However, since we already know the eigenvalues, we can rewrite them using the formula:
+
+A = B - C
+
+Since the sum of all possible combinations of A and B is equal to 1, we have:
+
+B = (1 - A) * (0 - B)
+= (1 - B) * (1 - 2)
+= 1 - 3 * (2 - 4)
+= 5 * (3 - 2) * (4 - 6)
+= 7 / 3
+
+Therefore, the eigenvector of the single-variable matrix A = B - (3 - 3) is the eigenvector.
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 1420, 330, 491, 817, 395, 1991, 1085, 3350, 3747]
+first_step_topk_probs=[0.3645245432853699, 0.10443803668022156, 0.09410648047924042, 0.0764084979891777, 0.06884977221488953, 0.04792354628443718, 0.04538855329155922, 0.036852627992630005, 0.024294741451740265, 0.017774410545825958]
+first_step_topk_text=[' can', ' allow', ' is', ' have', ' use', ' are', ' provide', ' model', ' uses', ' allows']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 9668, 298, 9668, 17, 382, 8944, 819, 288, 269, 2673, 1085, 395, 3400, 289, 10149, 637, 17, 202, 8563, 637, 17, 338, 14457, 2673]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex behaviors and behaviors. The functionalities of the network model are shown in Figure 3.
+Figure 3. A neural network model that is used to model the functionality of a group of neurons.
+The functionality of the network is measured by an accuracy scale, which measures the number of connections between the neurons. The accuracy of the model is dependent on the number of neurons present (the number of connections), and on the number or size of connections between neurons. For example, if we have a neuron with 10 neurons, it will have 20 neurons. This means that if we take a neuron with 50 neurons, it would have 60 cells. If we take a cell with 40 neurons, we get 70 cells.
+Figure 4. An average of the number of synapses per neuron.
+Figure 5. An average over the number of different synapses per cell.
+Figure 6. An average across the number of distinct synapses per neurons.
+To find out how many synapses per node you need, let's assume that the number of clusters is 100. You could use this to estimate the number of nodes in the network.
+If we were to calculate the number of "in-between" synapses per row, we would find
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 5427, 6649, 29, 8163, 16, 27, 5427, 202, 1568, 202, 18688, 351, 11654, 14651, 1720, 2234, 29, 3505, 29, 6457, 9697, 202, 202, 35]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Sep 15 14:29:43 2019
+
+@author:  <NAME>
+"""
+import numpy as np
+from scipy.stats import multivariate_normal
+from sklearn.model_selection import train_test_split
+from sklearn import preprocessing
+from sklearn_model_selection.text import TfidfVectorizer
+from sklearn._base import BaseEstimator
+from sklearnv3d import V3DClassifier
+from sklearning import r2
+from sklearnpeech.metrics import confusion_matrix
+from sklearno3d import *
+from sklearnolive_analysis import *
+import pickle
+import sys
+sys.path.append("../")
+import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('Agg') # do not use matplotlib
+import matplotlib import cm
+import seaborn as sns
+import matplotlib as mpl
+import matplotlib_gcc
+import matplotlib2
+import matplotlib1
+import matplotlib; ax = fig.add_subplot(111)
+import pandas as pd
+import matplotlib 
+import matplotlib['line_format']
+import matplotlib
+
+
+class PlotData():
+
+    def __init
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[311, 354, 836, 353, 409, 637, 643, 798, 651, 377]
+first_step_topk_probs=[0.21284115314483643, 0.120561383664608, 0.10312162339687347, 0.09788811951875687, 0.07947894930839539, 0.05519703030586243, 0.047212518751621246, 0.04038300737738609, 0.04038300737738609, 0.03638811409473419]
+first_step_topk_text=[' n', ' 1', ' {', ' (', ' 2', ' 3', ' 0', ' 4', ' [', ' P']
+
+[New tokens 6] count=256 first30=[409, 13, 81, 4, 17, 202, 202, 4551, 415, 10954, 482, 1191, 829, 1373, 29, 202, 8001, 6429, 202, 856, 835, 66, 4203, 11, 81, 464, 202, 490, 311, 1542]
+[Full output 6]
+Write a Python function that returns the factorial of n: 2*n!.
+
+Let's illustrate this using our example:
+```python
+def get_number(n):
+ if n > 1:
+ return 0
+ else:
+ return 1
+```
+Now, let's see how to solve this problem using some code. First, we need to find the number of ways to do it:
+```csharp
+Number = [1,2]
+```
+Next, we want to find the product of all possible combinations of these permutations. To do so, we first multiply both sides by the product of their individual probabilities:
+```makefile
+Fit[x_i * x_j * y_i * (x_i - x_j)] = Fit[x_, y_, z_(i + 1)]
+```
+Finally, we multiply together the products of each pair of permutations:
+```less
+Fit[(x_i + y_i) / (y_i + z_(i+1)) + ... ] = Fit[(x_, y_) / (y_, z_(-1))]]
+```
+Thus, the product of the first two permutations is equal to the product of its individual probabilities: $(x_i, y
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1083, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8112776875495911, 0.18872226774692535, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' print', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=60 first30=[622, 1701, 11, 2525, 11, 81, 12, 339, 311, 289, 1457, 11, 20, 15, 311, 687, 711, 202, 856, 284, 11, 81, 464, 346, 622, 1701, 11, 73, 11, 81]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return sum(sum(n) for n in range(1, n))
+
+
+def f(n):
+    return sum(f(n) - sum(n))
+
+
+if __name__ == '__main__':
+    print("Running the main script")
+
+    run_script()
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 338, 535, 1906, 1278, 1238, 783, 698, 1289]
+first_step_topk_probs=[0.4967893362045288, 0.1423325389623642, 0.08025829493999481, 0.05573821812868118, 0.03310992196202278, 0.028320420533418655, 0.026883160695433617, 0.026883160695433617, 0.022994384169578552, 0.021827401593327522]
+first_step_topk_text=[' The', ' There', ' A', ' In', ' All', ' If', ' As', ' This', ' It', ' We']
+
+[New tokens 8] count=236 first30=[382, 1811, 374, 482, 330, 357, 269, 3191, 415, 1629, 3379, 728, 342, 2498, 702, 686, 1629, 3379, 17, 783, 330, 1091, 383, 330, 658, 19437, 289, 269, 2903, 299]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The problem with this is that the cat's body temperature may be lower than its body temperature. This is because it is also cooler in the sun to stay warm and cool. However, the temperature of a cat is higher than its body temperatures. If your cat is black, you have a higher risk of being overweight.
+The answer to the question is yes, but not too far off.
+A cat is considered black if it has a body temperature between -30°C and +40°C (which is less than -20°C). Therefore, it would be wise to consider the following statement:
+(1) If a cat is black or white, what color will they be?
+Answer 1: A cat is black and white.
+Answer 2: A cat's body heat is equal to its body temperature at the same time as its body temperature (i.e., the body temperature is 5°C).
+Answer 3: A cat does not have a body temperature above 30°C.
+Answer 4: A cat cannot have a body heat.
+Answer 5: A cat can only have a body hotter than its body heat.
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 798, 382, 2050, 843, 409, 1012, 338, 744, 637]
+first_step_topk_probs=[0.3382074236869812, 0.11934200674295425, 0.11934200674295425, 0.0873124748468399, 0.054638754576444626, 0.051631420850753784, 0.03997456282377243, 0.03794581815600395, 0.03794581815600395, 0.035938579589128494]
+first_step_topk_text=[' 1', ' 4', ' The', ' One', ' 5', ' 2', ' 6', ' A', ' $', ' 3']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 202, 20, 13032, 333, 637, 10941, 202, 21, 10941, 333, 843, 10941, 202, 22, 10941, 333, 1171, 10941, 202, 23, 10941, 333, 1604, 10941, 202]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+1 apple = 3 apples
+2 apples = 5 apples
+3 apples = 10 apples
+4 apples = 12 apples
+5 apples = 7 apples
+6 apples = 8 apples
+7 apples = 9 apples
+8 apples = 12 oranges
+9 apples = 6 apples
+10 apples = 20 apples
+11 apples = 10 bananas
+12 apples = 15 apples
+13 apples = 16 apples
+14 apples = 11 apples
+15 apples = 18 apples
+16 apples = 21 apples
+17 apples = 24 apples
+18 apples = 29 apples
+19 apples = 17 apples
+20 apples = 28 apples
+21 apples = 33 apples
+22 apples = 32 apples
+23 apples = 35 apples
+24 apples = 34 apples
+25 apples = 36 apples
+26 apples = 44 apples
+27 apples = 42 apples
+28 apples = 48 apples
+29 apples = 49 apples
+30 apples = 48 apple
+31 apples = 53 apples
+33 apples = 55 apples
+35 apples = 52 apples
+36 apples = 51 apples
+37 apples = 54 apples
+38 apples = 64 apples
+39 apples = 57 apples
+40 apples = 58 apples
+40 bananas = 56 apples
+41 apples = 65 apples
+42 apples = 81 apples
+43 apples = 76
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 338, 1278, 1289, 783, 1509, 698, 2575, 3919]
+first_step_topk_probs=[0.37366846203804016, 0.13096222281455994, 0.06654150784015656, 0.05128554254770279, 0.04621215909719467, 0.04164061322808266, 0.03752130642533302, 0.03380953520536423, 0.03046492114663124, 0.027451174333691597]
+first_step_topk_text=[' I', ' The', ' A', ' If', ' We', ' This', ' You', ' It', ' What', ' My']
+
+[New tokens 10] count=256 first30=[338, 7543, 288, 1943, 299, 1918, 289, 3090, 722, 486, 1189, 5035, 672, 669, 9659, 17, 202, 44, 491, 263, 3215, 668, 330, 1100, 649, 13657, 15, 298, 356, 483]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: A couple of things to keep in mind when you start thinking about your thoughts.
+I have a friend who is just so confused, and I can't figure out how much it's worth.
+A couple of things that are not really true, but I'm not sure if they're true or false.
+1) The problem with my response is that it doesn't make sense for me to think about what the situation is all about.
+2) If I get to see if there's something wrong, I don't know why.
+3) If I want to see if it's okay, I don`t need to do anything at all.
+4) If I have some idea about what I mean, I'm going to say something.
+5) If I feel sad, I don ́t understand what it means.
+6) If I am worried about myself, I'll tell you what the situation looks like.
+7) If I haven't gotten into the details, I won't go through it again.
+8) If I'm nervous about getting out of bed, I will ask what the situation was.
+9) If I remember what I said, I wonít be able to work out how to do it.
+
+
+================================================================================

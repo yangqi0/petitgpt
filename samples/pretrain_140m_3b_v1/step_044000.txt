@@ -1,0 +1,284 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[418, 2827, 791, 3609, 10227, 2977, 2446, 699, 12562, 1255]
+first_step_topk_probs=[0.3314746618270874, 0.17742560803890228, 0.09496916830539703, 0.06948093324899673, 0.06260751187801361, 0.050833333283662796, 0.04127344489097595, 0.04127344489097595, 0.027209121733903885, 0.02451745606958866]
+first_step_topk_text=[' was', ' named', ' would', ' asked', ' noticed', ' saw', ' came', ' had', ' walked', ' called']
+
+[New tokens 1] count=100 first30=[3609, 627, 2526, 406, 418, 649, 7495, 17, 356, 988, 357, 269, 1809, 5585, 699, 733, 2397, 299, 1258, 339, 2233, 298, 357, 1266, 418, 610, 15618, 17, 776, 3766]
+[Full output 1]
+Once upon a time, a curious child asked me why he was so sad. I said that the little boy had been going to school for days and that day was his birthday. He wanted to know what he was feeling like and he decided to take him home. When he arrived, he found the old man who had never seen him. He told him that he loved him very much because he loved him too. The old man felt happy and proud of himself. He knew that he loved all of his friends and loved them forever.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 419, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.9081844091415405, 0.0918155312538147, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', ' by', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 2] count=143 first30=[289, 1691, 1699, 419, 269, 5057, 4385, 431, 17, 321, 9990, 15, 668, 699, 733, 263, 9004, 4201, 289, 269, 1831, 288, 269, 2587, 298, 1770, 2657, 383, 707, 269]
+[Full output 2]
+The Eiffel Tower was built in 1711 by the architect William W. Tanner, who had been a prominent figure in the development of the building and later developed it into the National Bank Building.
+
+In 1816, Tanner was appointed Director of the Borough of Ghent (now known as Ghent) for the office of the Minister of Finance. He also served as an advisor to the Minister of Justice for the Kingdom of Prussia. In 1821 he became Chief Minister of the Crown of Prussia and was replaced by Lord Mayor of Ghent. He then returned to Ghent from 1827 until his death on 19 August 1831.
+
+He died in Ghent on 20 November 1815 at the age of 89.
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 2000, 289, 269, 2281, 6603, 357, 3936, 269, 4409, 288, 545, 1623, 1890, 17, 202, 202, 2774, 1427, 415, 4196, 806, 299, 5951, 482, 1811, 1191, 11379, 15540, 17]
+[Full output 3]
+In linear algebra, an eigenvalue is a term in the complex plane that represents the vector of all real numbers.
+
+Now let's explore how to solve this problem using algebraic manipulation. We start by finding the roots of the equation:
+
+$$x^2 + y^2 = 0.$$
+
+We want to find the values of $y$ and $z$. To do so, we need to determine its eigenvalues, which are often represented as $\sqrt{a^2-b^2}$. The first term ($u^2$) has two factors; one being less than or equal to zero (the second factor is greater than or equal). For example, if $f(0) = 1$, then $(1/3)^2=0$.
+
+Next, we calculate the characteristic polynomial for $f(x):= \frac{1}{x+1}$, where $x$ denotes the characteristic polynomial. This gives us the eigenvalues of the polynomial. Since there are no zeros at the point of intersection, the coefficients become positive, meaning they have different signs. Thus, our final answer becomes:
+
+$$\left(\frac{1}{\sqrt{a}^{2}}+\frac{1}{(a^2+b^2})\right)\cdot \frac{a
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 330, 491, 1420, 1991, 817, 395, 5546, 1085, 3350]
+first_step_topk_probs=[0.4070073068141937, 0.10507402569055557, 0.0946795642375946, 0.07687380164861679, 0.05624207481741905, 0.0456649512052536, 0.03386622294783592, 0.03010421432554722, 0.027126146480441093, 0.027126146480441093]
+first_step_topk_text=[' can', ' is', ' have', ' allow', ' provide', ' use', ' are', ' describe', ' model', ' uses']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 9668, 298, 9668, 17, 202, 509, 1549, 2613, 330, 269, 851, 1384, 645, 288, 829, 10985, 3822, 15, 614, 383, 415, 658, 263, 1114]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex behaviors and behaviors.
+The human brain is the most important part of our everyday lives, but it's also a very powerful tool for understanding how we perceive and react to situations in the world around us. It's an essential component of our daily life and can help us make sense of our environment, and even better understand our surroundings.
+It's important to remember that we all have different ways of knowing about things – not just ourselves. We may be able to learn from each other, but we may never know what it is like to be on the street or in front of a TV, and we may always think about how we feel when we are out at night. This helps us make sense, so we'll have more opportunities to use this knowledge to improve our own habits and behavior.
+A common misconception about humans is that they are "babies" – they are kids who are afraid to tell someone else that they're okay. They may have to ask their parents if they don't want to talk to them about something that makes them feel good. Some children might be afraid to say 'no' to anyone because they don't like to be around people who do not like to be there. Others may be worried that they
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 5427, 6649, 29, 8163, 16, 27, 5427, 202, 807, 1401, 8644, 626, 655, 15551, 66, 22513, 202, 202, 1018, 3266, 202, 1018, 1656, 17]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
+import json
+import os.path as osp
+import sys
+
+from django.db import models
+from django import forms
+from django_filters import reverse
+from django1.contrib.auth.models import User
+from django2.core.urlresolvers import reverse
+
+from .forms import (
+    FormForm,
+    FormForm
+)
+from .utils import check_type
+from .views import UserView
+from .app import app
+from .admin import admin
+from .user import user
+from .permissions import get_user_permissions
+from . import auth
+from .token import token_factory
+from .users import users
+from .domain import domain
+from .models import *
+from .data import *
+
+# Create your views here.
+class Views(models.Model):
+
+    class Meta:
+        model = view
+        fields = ['id', 'name']
+        verbose_name = "Views"
+
+    def __str__(self):
+        return self.form.cleaned_data['id'].strip()
+
+    def save(self, *args, **kwargs):
+        if
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[353, 311, 354, 316, 338, 643, 382, 651, 836, 377]
+first_step_topk_probs=[0.35587888956069946, 0.2182103544473648, 0.10196101665496826, 0.03992850333452225, 0.03992850333452225, 0.03790213540196419, 0.03597860410809517, 0.02772979438304901, 0.02371855080127716, 0.02137218974530697]
+first_step_topk_text=[' (', ' n', ' 1', ' e', ' A', ' 0', ' The', ' [', ' {', ' P']
+
+[New tokens 6] count=256 first30=[316, 65, 81, 17, 202, 202, 2774, 15, 1427, 415, 12443, 707, 6636, 482, 1811, 1993, 16, 1353, 16, 3370, 1191, 751, 3355, 5276, 444, 993, 3207, 298, 5267, 3207]
+[Full output 6]
+Write a Python function that returns the factorial of n: e^n.
+
+Now, let's dive into solving this problem step-by-step using some basic principles from number theory and probability theory. First, we need to understand what it means for an integer to be prime or smaller than 1. This concept is crucial when working with numbers, like 1, 2, 3, etc., but not all of them are prime.
+
+Let's begin by defining our terms more closely. Imagine you have two friends who love playing together - one friend wants to play with their favorite toy, while another friend wants to share it with a friend who likes to play with her. The question then becomes "How many times do I want my toy to go back to its original size?"
+
+To answer this question, first notice that since there are only three possible outcomes (the first number being 'e', the second number being 'k'), each time both friends choose their own toy, they should make up the same total. Thus, the formula for finding the sum of these individual outcomes is given by:
+
+Total Number of Variables = Σ(x) * i * k * k
+= n! / [k!(n+1)!]
+
+In essence, we can write down the sum as
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1083, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.794809877872467, 0.20519010722637177, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' print', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=80 first30=[622, 311, 864, 353, 81, 647, 354, 12, 202, 202, 6, 291, 538, 835, 66, 2525, 1714, 202, 6, 317, 1701, 333, 643, 202, 6, 317, 339, 1249, 289, 1457]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return n * (n + 1)
+
+#    def get_sum():
+#        sum = 0
+#        for i in range(1, n+1):
+#            sum += sum / sum
+#            print sum
+#        print sum
+
+#        return sum
+
+print("This is the first time you can run this program...\n")
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 535, 338, 1289, 783, 1278, 698, 1906, 2590]
+first_step_topk_probs=[0.4538521468639374, 0.14430634677410126, 0.07724162191152573, 0.07724162191152573, 0.06960048526525497, 0.04588349163532257, 0.033569082617759705, 0.02587270364165306, 0.024559663608670235, 0.024559663608670235]
+first_step_topk_text=[' The', ' There', ' In', ' A', ' We', ' This', ' If', ' It', ' All', ' No']
+
+[New tokens 8] count=256 first30=[382, 1811, 330, 357, 715, 395, 795, 2584, 288, 10676, 17, 2050, 1375, 578, 263, 2645, 3191, 17, 6957, 1375, 578, 263, 2886, 3191, 17, 783, 1375, 288, 3191, 330]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The problem is that there are two types of cats. One type has a black cat. Another type has a white cat. This type of cat is not black or has no black cats. So if you have two cats with different colors and their color is gray, then your dog will be black. If the color of the cat is brown, then it's gray. If the other cat is black, then the color of his coat is blue. If the coat is white, then the colour of his coat would be gray. In fact, if one cat is black or has a black coat, then the other cat will be black or has any color of his. If the second cat is black and has any color in its coat, then it won't be white.
+The same applies to the other types of cats: dogs are black and have no black. When dogs are black, they are black and show a gray. Dogs are black and display a gray. Animals are black and exhibit a gray. When dogs do not display a gray, they are white. Dogs are white. Animals are white. They are black and are black. Dogs are yellow. Animals are red and show a dark gray. Animals and dogs are black. Animals are colored. Animals are orange
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 382, 798, 2050, 2590, 409, 1012, 338, 843, 1541]
+first_step_topk_probs=[0.3789079487323761, 0.18275132775306702, 0.07942342013120651, 0.07156644016504288, 0.04251229017972946, 0.04118562862277031, 0.03830675780773163, 0.034517254680395126, 0.034517254680395126, 0.025253362953662872]
+first_step_topk_text=[' 1', ' The', ' 4', ' One', ' No', ' 2', ' 6', ' A', ' 5', ' There']
+
+[New tokens 9] count=256 first30=[354, 12, 637, 10941, 333, 843, 4749, 353, 20, 12863, 21, 9105, 12, 798, 4749, 353, 22, 12863, 23, 9105, 12, 1218, 4749, 353, 23, 12863, 23, 9105, 573, 2575]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1) 3 apples = 5 leaves (1⁄2 cup) 4 leaves (3⁄4 cup) 8 leaves (4⁄4 cup). What is the number of apples in each bag?
+Answer 1) 6 apples = 5: 7 apples = 12 leaves (5/8 cup) 11 leaves (6/16 cup) 9 leaves (9/16 cup). Which apple was his favorite?
+Answer 2) 6 apples + 1 leaf = 15: 10 leaves (7/15 cup) 13 leaves (10/16 cup), or 5 leaves (12/17 cup) 4 leaf (11/16 cup); what is the total number of apples that are on a list of 5?
+Answer 3) 7 apples = 14: 15: 16: 17: 17: 20: 17: 18: 18: 19: 18: 17: 19: 17: 21: 17: 22: 17: 23: 17: 24: 17: 30: 17: 31: 17: 34: 17: 29: 17: 33: 17: 35: 17: 37: 17: 26: 17: 28: 17: 36: 17: 27: 17: 38: 17: 39: 17: 41: 17: 44: 17: 45: 17:
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 776, 338, 783, 360, 1289, 2766, 3919, 5395]
+first_step_topk_probs=[0.37966373562812805, 0.11801467090845108, 0.0958203449845314, 0.07780003547668457, 0.046215206384658813, 0.03209578990936279, 0.0274529866874218, 0.023481784388422966, 0.017179640009999275, 0.016307774931192398]
+first_step_topk_text=[' I', ' The', ' He', ' A', ' This', ' "', ' We', ' Dr', ' My', ' Mr']
+
+[New tokens 10] count=256 first30=[338, 15919, 289, 269, 5988, 668, 330, 2222, 299, 4888, 298, 483, 4888, 299, 874, 374, 11181, 17, 202, 5333, 25333, 29, 382, 775, 6413, 9101, 330, 1882, 444, 269]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: A nurse in the hospital who is able to speak and can speak to people with disabilities.
+First Aid: The first aid kit is available from the American Red Cross. It includes a list of things you need to know about each child's health, including what they should do if they are sick or not. It also includes some basic medical information such as blood pressure, heart rate, and blood pressure. The kit includes details for parents, nurses, and other caregivers. They include instructions on how to make it easier for children to talk to their doctors.
+I am aware that there are many different types of care kits, but most are written by a doctor. These are usually referred to as "specialized" care kits. The specialist will tell you when to start your child's care, what type of care is best for your child, and what kind of care is appropriate for your child.
+The Specialized Care Kit is available from my office at 1-800-977-6273. This kit contains more than 2,000 copies of medical books, articles, booklets, and videos. You may be asked to sign up for one of these services at 1-866-585-4277.
+A special service kit consists of
+
+================================================================================

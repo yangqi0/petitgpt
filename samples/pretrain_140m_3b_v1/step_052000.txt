@@ -1,0 +1,299 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2977, 2827, 791, 418, 288, 998, 2446, 3609, 2857, 4506]
+first_step_topk_probs=[0.32592955231666565, 0.2646344006061554, 0.11500956118106842, 0.09338047355413437, 0.06156018003821373, 0.02969115599989891, 0.026753950864076614, 0.0241073127835989, 0.021722514182329178, 0.01957361027598381]
+first_step_topk_text=[' saw', ' named', ' would', ' was', ' of', ' found', ' came', ' asked', ' went', ' discovered']
+
+[New tokens 1] count=39 first30=[2827, 5273, 718, 998, 287, 4430, 1462, 288, 4001, 11809, 17, 202, 202, 55, 12405, 418, 263, 4648, 1266, 339, 269, 2361, 298, 581, 3608, 1987, 545, 716, 1106, 17]
+[Full output 1]
+Once upon a time, a curious child named Jackie found an interesting field of ice cream.
+
+Tuesday was a perfect day for the team and they played together all year long. It was a fun and exciting event!
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 419, 299, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.7918660044670105, 0.1495639830827713, 0.058570098131895065, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', ' by', ' to', '', '#', '', '"', '!', '', '']
+
+[New tokens 2] count=256 first30=[289, 1691, 1699, 419, 269, 9331, 3989, 3860, 5505, 15, 298, 686, 1444, 339, 263, 10079, 330, 269, 1134, 359, 357, 288, 269, 2751, 7762, 17, 382, 10079, 330, 1164]
+[Full output 2]
+The Eiffel Tower was built in 1711 by the Dutch East India Company, and its design for a tower is the same as that of the British Empire. The tower is made from granite with a single stone head and a circular cross-section, with a very small central tower at the top. The tower has an original height of 1,550 m (1,075 ft). It is an open space which is usually used to accommodate a large mass of rock.
+The tower was built between 1801 and 1835, when it was designed as a tower for the West India Company. It was built on the site of the present-day Indian-built tower. The tower was originally intended to be the tallest tower in the world, but was rebuilt after the British Empire took over the tower. The building was later taken over by the English company, who built the tower in 1818.
+The Eiffels Tower is one of the most impressive structures in the world. The tower stands at a height of 2,830 m (3,400 ft) above sea level. It is the tallest structure in the world; the tower is also the tallest in the world and has a diameter of 3,460 m (1.737 feet). It is the largest
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 357, 483, 342, 5454, 359, 263, 1701, 288, 795, 7527, 17, 202, 202, 2774, 1427, 415, 1936, 269, 1496, 3847, 29, 202, 202, 91, 65, 21, 647, 371]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector that can be represented as a sum of two vectors.
+
+Now let's consider the given expression:
+
+x^2 + y^2 = 0
+
+This means that there are no nonzero real numbers (also known as zero) in the equation. Now, we need to find a vector x such that the original equation has been written into the form:
+
+(x - y)^2 = (0, 1, 0)
+
+The general solution for this equation involves adding and subtracting one of these special vectors to our original equation. However, since we want to express x as a product of two vectors, it would require applying the power rule or the power rule. This requires finding a number n satisfying the equation. But what if we wanted to prove that x^2 + 2x + 1 is a scalar? Well, imagine having a bunch of different types of vectors, each with their own unique properties. We could represent them using an eigenvector:
+
+1. Vector x: x = (0,) * x^2
+2. Vector y: y = (0,), where x represents any scalar value.
+3. Vector z: z = (0,))
+4. Vector z_1: z = (-1
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 1420, 817, 330, 1991, 395, 491, 1085, 9847, 5546]
+first_step_topk_probs=[0.6643114686012268, 0.09179750084877014, 0.054530058056116104, 0.032392244786024094, 0.02918783761560917, 0.02776932902634144, 0.021354278549551964, 0.019241802394390106, 0.012684986926615238, 0.010850043036043644]
+first_step_topk_text=[' can', ' allow', ' use', ' is', ' provide', ' are', ' have', ' model', ' combine', ' describe']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 9668, 298, 9668, 17, 382, 3563, 330, 299, 1420, 10462, 299, 1557, 806, 581, 1798, 15, 922, 553, 12518, 339, 1892, 728, 342, 15]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex behaviors and behaviors. The goal is to allow learners to understand how they learn, what their expectations for success may be, and what they should do if they need it.
+A key concept in the study was that students could share a set of instructions with each other, using a computer program to create and test a variety of tasks. In order to develop this type of knowledge, learners would have to create a new set of instructions that had previously been written down. They could then use these instructions to generate a new set or a new set by themselves. This process would be called "learning about the world."
+The researchers also wanted to know whether students who were able to use the computer programs to solve problems would be able to use their new learning strategies to improve their skills. In addition, they wanted to find out if there was an actual connection between teaching and learning. It was found that students who did not have an initial experience in math and mathematics were likely to take longer to complete the task than those who didn't.
+"It's very exciting," said co-author Dr. James C. Robinson, director of the Department of Psychology at Washington University in St. Louis. "We're trying to figure out why we're doing this
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=112 first30=[263, 647, 286, 3, 711, 6, 19688, 419, 18122, 409, 17, 21, 17, 25, 351, 9697, 16, 700, 16, 4216, 1720, 29, 6974, 202, 807, 5210, 17, 2541, 655, 8167]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# Generated by Django 2.2.6 on 2019-01-05 15:52
+from django.db import migrations, models
+
+
+class Migration(migrations.Migration):
+
+    dependencies = [
+        ('bots', '0004_auto_20210516_2054'),
+    ]
+
+    operations = [
+        migrations.AlterField(
+            model_name='bots',
+            name='image',
+            field=models.ImageField(upload_to="images/img/", null=True),
+        ),
+    ]
+
+================================================================================
+[Prompt 6] (prompt_tokens=11)
+Write a Python function that returns the factorial of n:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[311, 338, 1700, 836, 353, 263, 354, 377, 382, 643]
+first_step_topk_probs=[0.2780405580997467, 0.13080282509326935, 0.1062036007642746, 0.09569739550352097, 0.09569739550352097, 0.049737151712179184, 0.035573750734329224, 0.02470545470714569, 0.02470545470714569, 0.02226148545742035]
+first_step_topk_text=[' n', ' A', ' `', ' {', ' (', ' a', ' 1', ' P', ' The', ' 0']
+
+[New tokens 6] count=247 first30=[316, 11622, 81, 14, 20, 12, 333, 354, 18, 21, 17, 202, 202, 1974, 1098, 269, 993, 288, 2722, 299, 10381, 311, 419, 2601, 15, 775, 1432, 269, 1677, 288]
+[Full output 6]
+Write a Python function that returns the factorial of n: e^(n+1) = 1/2.
+
+To find the number of ways to multiply n by itself, first take the product of the first n terms and then divide the result by 2:
+
+n = (n + 1)/2 = 1 / 2
+
+Now, we need to calculate the factorial of a positive integer n using the definition of factorial:
+
+N(n - 1) = N*(n - 1)/(2*n^2)
+
+Using the formula for factorial, we get:
+
+Number of ways to divide n: N*(n-1)*(n-2)*(n-3)
+
+Since both n and n are positive integers, their product is divisible by 2: N*(1-2)*(2-3)*(4-5) = 4! Now, let's focus on finding the sum of the factorial of 3. Since we want to find the value of n when n is odd, we can use the following formula:
+
+Sum = (n * k * (n - 1)^k) / (2 * k * ((n - 1)*k))
+
+Using this formula, we can now calculate the factorial:
+
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1083, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.7185943722724915, 0.28140559792518616, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' print', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=180 first30=[622, 311, 864, 353, 20, 647, 354, 12, 1319, 409, 711, 202, 6, 5167, 656, 269, 1759, 1392, 299, 342, 1255, 351, 269, 5372, 993, 17, 202, 856, 835, 66]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return n * (1 + 1) % 2
+
+
+# Set up the following function to be called on the specified number.
+def get_number(i, k):
+    if i == 0:
+        return -1
+    else:
+        return int(k)
+
+
+# A list of integers starting at one and ending at another.
+def check_one(list_, _=None):
+    if len(_) != 0:
+        raise ValueError('Invalid input')
+
+    for i in range(len(list_)):
+        if list_[i] != list_:
+            raise ValueError('Only valid integer values are allowed.')
+
+    # Check if the given list is empty or not.
+    if list_.count() < 0:
+        print('Incorrect number of elements')
+        return False
+    else:
+
+        # If the array contains an element, return it.
+        return True
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 13676, 1289, 535, 2590, 338, 698, 1278, 783]
+first_step_topk_probs=[0.3318999111652374, 0.2188018262386322, 0.19715681672096252, 0.04831535741686821, 0.04353579133749008, 0.04353579133749008, 0.03534826636314392, 0.03355434536933899, 0.024548886343836784, 0.02330302819609642]
+first_step_topk_text=[' The', ' There', ' Yes', ' We', ' In', ' No', ' A', ' It', ' If', ' This']
+
+[New tokens 8] count=256 first30=[1541, 330, 808, 2079, 3533, 17, 1278, 715, 330, 263, 2079, 3533, 15, 1000, 715, 330, 839, 619, 1194, 299, 3533, 383, 17, 1783, 15, 490, 715, 330, 263, 2226]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: There is no single answer. If there is a single answer, then there is only one way to answer it. However, if there is a specific question, then the answer must be either black or white.
+The most common form of an animal's response to an alarm is its response to a sound. This is called a sound-response response. The sound will be heard at a certain time in the future, usually within seconds. A sound-response reaction may be triggered by a change in the animal's behavior or by a change of a part of the animal's body. For example, if you have a cat who has been known to attack your dog for fear of being picked up by a cat, you might respond with a sound that sounds like a white noise. If you get a positive response, you'll respond with a white noise that sounds like something from a black noise. You should also respond with a false sense of security. In this case, a negative response would be followed by a positive response.
+A negative response is simply an indication of the presence of another animal's response. When a negative response occurs, it is considered a sign of a different animal's response than the actual result. For example: "I am getting a yellow noise."
+
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 382, 798, 409, 1541, 338, 2050, 843, 2590, 1012]
+first_step_topk_probs=[0.5089071989059448, 0.16181159019470215, 0.07032298296689987, 0.041023653000593185, 0.039653632789850235, 0.030562249943614006, 0.030562249943614006, 0.02901121973991394, 0.027538875117897987, 0.024814609438180923]
+first_step_topk_text=[' 1', ' The', ' 4', ' 2', ' There', ' A', ' One', ' 5', ' No', ' 6']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 647, 354, 27320, 333, 1604, 10941, 333, 1012, 10941, 333, 1291, 10941, 333, 1171, 10941, 333, 2341, 25, 10941, 333, 1365, 202, 509, 1811, 330]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples + 1 banana = 12 apples = 6 apples = 9 apples = 10 apples = 136 apples = 20
+The problem is that there are only four apples in the basket, so if you put all the apples in one basket, then you will get a total of three apples. So, how do we calculate the number of apples?
+Answer : No, not only can we calculate the total number of apples, but we also need to know the number of ones and oranges (which we'll call "total") when we calculate the size of each fruit. For example, if I take the apple from the top of my basket and add the two apples together, I get a total length of 1 apple = 142 apples = 283 apples = 244 apples = 151 apples = 188 apples = 375 apples = 179 apples = 185 apples = 211 apples = 321 apples = 157 apples = 231 apples = 389 apples = 0.25 apples = 229 apples = 331 apples = 771 apples = 271 apples = 176 apples = 184 apples = 193 apples = 291 apples = 304 apples = 579 apples = 161 apples = 311 apples = 555 apples =
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 1289, 382, 3919, 776, 2766, 783, 8151, 1509, 22089]
+first_step_topk_probs=[0.411911278963089, 0.07904308289289474, 0.064177967607975, 0.057829149067401886, 0.057829149067401886, 0.03435198962688446, 0.029382815584540367, 0.02789161168038845, 0.025132453069090843, 0.02264622040092945]
+first_step_topk_text=[' I', ' We', ' The', ' My', ' He', ' Dr', ' This', ' Please', ' You', ' Thank']
+
+[New tokens 10] count=256 first30=[8151, 5699, 2526, 486, 2505, 486, 395, 6968, 22747, 298, 922, 486, 986, 620, 299, 1005, 6082, 17, 202, 5333, 25333, 552, 14906, 374, 669, 4035, 672, 269, 1839, 2322]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: Please explain why you feel you are feeling uncomfortable and what you should do to help yourself.
+First Aid - Talk with your doctor about the best treatment plan for you.
+- Check out our website on the following topics:
+- How to cope with stress
+- What to expect from a therapist
+- What is it?
+- What are the side effects of therapy?
+- How can I help myself?
+- Therapists' Guide to Understanding Stress
+- How and how to deal with stress
+How to cope with anxiety
+What to think about when you have anxiety
+How to resolve it
+What to make an appointment
+You may find that you have a problem in your life, such as depression or anxiety disorders. You may need to take steps to cope with these problems before they become serious. Some people experience anxiety during their lifetime, while others experience it more frequently. These situations can be stressful and affect someone's ability to function well. If you suspect that someone has anxiety, talk to your doctor.
+If you have panic disorder, it is important to remember that you are not alone. Your loved ones are the most likely to suffer from this type of anxiety. They will usually seek medical attention if they are experiencing any of the symptoms above.
+
+================================================================================
