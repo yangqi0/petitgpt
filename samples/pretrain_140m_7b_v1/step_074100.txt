@@ -1,71 +1,98 @@
 Samples generated with tokenizer=tokenizer/tokenizer.json
 precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
 avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
-stop_strings=['\n\nOnce upon a time', '\nOnce upon a time'] strip_stop=True
 seed_base=1234 (step_tag=None)
 ================================================================================
 [Prompt 1] (prompt_tokens=8)
 Once upon a time, a curious child
 
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=133 first30=[2827, 5273, 2857, 299, 269, 3843, 374, 610, 2553, 17, 776, 2977, 263, 2023, 3197, 298, 3766, 299, 15935, 383, 17, 1358, 722, 406, 3500, 715, 15, 406, 2977, 357]
 [Full output 1]
-Once upon a time, a curious child named Tim went to the park with his mom. Tim saw a big slide and wanted to climb it. He climbed up the slide and reached the top. But the slide was too high. Tim saw a big rock and got scared. He wanted to go back down. Tim ran to the rock and tried to climb it. But the rock was too high. The slide was too high. Tim was sad. He lost his balance and his mom. Tim felt bad. He wished he had listened to his mom. He wished he had listened to his mom.
+Once upon a time, a curious child named Jack went to the park with his mom. He saw a big tree and wanted to climb it. But when he got there, he saw that the tree was not high up in the sky. "Mommy, can we go down the tree?" asked Jack. His mom smiled and said, "Sure, let's take a look." So they walked over to the tree and found a small hole. Inside, there were lots of colorful flowers and trees! Jack was so happy to see them and he started to play with them. When he came back home, he saw all the colorful flowers and plants. He had so much fun playing with them!
 
 ================================================================================
 [Prompt 2] (prompt_tokens=6)
 Paris is the capital of
 
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 263, 11438, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.916081428527832, 0.05756388232111931, 0.02635466493666172, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' a', ' Greece', '', '#', '', '"', '!', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 9556, 17, 382, 2317, 330, 12092, 289, 269, 4079, 288, 657, 454, 335, 319, 320, 15, 298, 686, 4223, 330, 269, 2317, 288, 657, 454, 809]
 [Full output 2]
-Paris is the capital of the Republic of Egypt. The capital is situated in the southern part of the country, on the banks of the Nile. The capital is situated in the southern part of the country, on the banks of the Nile. The capital is situated in the southern part of the country, on the banks of the Nile. The capital is situated in the southern part of the country, on the banks of the Nile. The capital is situated in the southern part of the country, on the banks of the Nile. The capital is situated in the southern part of the country, on the banks of the Nile. The capital is situated in the southern part of the country, on the banks of the Nile. The capital is situated in the southern part of the country, on the banks of the Nile. The capital is situated in the southern part of the country, on the banks of the Nile. The capital is situated in the southern part of the country, on the banks of the Nile. The capital is situated in the southern part of the country, on the banks of the Nile. The capital is situated in the southern part of the country, on the banks of the Nile. The capital is situated in the southern part of the country, on the banks of the Nile. The capital is situated
+Paris is the capital of the province of the province. The city is situated in the district of Valladolid, and its capital is the city of Valladevi.
+The province of Vallabhbhaira has a population of approximately 1,000,000 inhabitants. It is located on the banks of the river Ganges, and lies at an altitude of 3,000 metres above sea level.
+The principal cities are Varanasi, Dashar, and Tirupati. There are many historical monuments including temples, temples, temples and temples. The most famous temple of Varanasi is the Varanasi temple. The oldest temple is the Vijayanagara temple which was built by the Portuguese in 1553. The most important temple is the Ganapatha temple which was constructed in 1758 by the Portuguese, who had been visiting the region for years. The present temple is situated in Varanasi district.
+Varanasi is one of the five major provinces of India with a total area of 13,775 square kilometres. Its capital is Varanasi.
+The state of Varanas is divided into three sections:
+- Kundalini - the capital of Varanasa
+- Lahore - the
 
 ================================================================================
 [Prompt 3] (prompt_tokens=7)
 In linear algebra, an eigenvalue is
 
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 357, 578, 1127, 8878, 298, 3892, 17, 382, 28071, 288, 263, 4409, 483, 342, 7734, 1191, 269, 4641, 29, 202, 202, 72, 65, 91, 333, 353, 68, 13]
 [Full output 3]
-In linear algebra, an eigenvalue is a number that is equal to zero.
+In linear algebra, an eigenvalue is a vector that has both magnitude and direction. The eigenvalue of a vector can be calculated using the formula:
 
-Now, let's consider the problem of finding the value of the eigenvalue of the product of the first n squared numbers, denoted by n(n+1). We want to find the value of the eigenvalue of the product of the first n squared numbers, denoted by n(n+1).
+e^x = (a*cos(θ)) * e^(-iθ)
 
-To do this, we need to find the value of the eigenvalue of the product of the first n squared numbers, denoted by n(n+1).
+where i, j are coefficients in the matrix, and i represents the conjugate transpose of the matrix.
 
-First, we need to find the value of the eigenvalue of the product of the first n squared numbers, denoted by n(n+1). This is the eigenvalue of the product of the first n squared numbers, denoted by n(n+1).
+Now let's consider the given problem involving finding the characteristic function for a square matrix A. We have the eigenvalues of A; thus, we need to find the characteristic function of A. First, recall that A is a square matrix with two rows and three columns. Therefore, its characteristic function is given by:
 
-To do this, we can use the formula n(n+1) = n(n+1).
+f(A) = f(B), where B denotes the identity matrix.
+This means that A has the property that the characteristic function is equal to zero. Therefore, A has the characteristic function D. Now, let's focus on solving this problem step-by-step.
 
-The formula for finding the eigenvalue of the product of the first n squared numbers, denoted by n(n+1), is:
+First, notice that the characteristic functions of A are:
 
-n(n+1) = n(n+1)
+D = |A| + |B| = 0
 
-For the eigenvalue of the product of the first n squared numbers, we can use the formula n(n+1) = n(n+1) =
+We know that C = |A||B| - |C|. Thus, there exists some nonzero vector x such that C = ||x||. However, since ||x|| belongs to the general form of
 
 ================================================================================
 [Prompt 4] (prompt_tokens=11)
 Neural networks are a class of machine learning models that
 
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 817, 1420, 491, 1991, 330, 395, 9845, 5663, 1005]
+first_step_topk_probs=[0.21620284020900726, 0.12842988967895508, 0.11572504788637161, 0.10427692532539368, 0.06194315478205681, 0.05029386654496193, 0.03662950545549393, 0.03315578028559685, 0.026920365169644356, 0.02425728552043438]
+first_step_topk_text=[' can', ' use', ' allow', ' have', ' provide', ' is', ' are', ' rely', ' involve', ' help']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 9668, 298, 9668, 17, 202, 509, 1549, 2613, 330, 269, 851, 1384, 645, 288, 829, 14424, 15, 614, 383, 415, 658, 619, 288, 269]
 [Full output 4]
-Neural networks are a class of machine learning models that can be used to help learners learn to use their own learning styles.
-
-To illustrate the importance of learning to learn, let's take a look at the following examples:
-
-* A child's brain is a network that uses information from a person's environment to learn.
-* A child's brain is a network that uses information from a person's environment to learn.
-* A child's brain is a network that uses information from a person's environment to learn.
-
-In our example, the child's brain is a network that uses information from a person's environment to learn.
-
-In our example, the child's brain is a network that uses information from a person's environment to learn.
-
-* A child's brain is a network that uses information from a person's environment to learn.
-
-Now, let's take a look at the following examples:
-
-* A child's brain is a network that uses information from a person's environment to learn.
-* A child's brain is a network that uses information from a person's environment to learn.
-* A child's brain is a network that uses information from a person's environment to learn.
-
-Let's take a look at the following examples:
-
-* A
+Neural networks are a class of machine learning models that can be used to model complex behaviors and behaviors.
+The human brain is the most important part of our brains, but it's also one of the few structures in which we have the ability to understand how the brain works. In fact, if you think about it, your brain is a very different organ than the rest of us, so why not make it into a world where we can learn from others? The Brain of the Human Body is a brain-based system that is capable of learning from one another. It has evolved over many years to be a way for people to communicate with each other in ways that are similar to what we humans do. This is where the human brain comes in:
+The human body is made up of millions of neurons, each of which contains thousands of nerve cells. Each neuron is made up by a network of cells called axons, which run through them like a sponge. These axon neurons work together to send messages between two neurons. When the axon sends out messages from the axon, they send signals back to the axon. When the neurons send messages from the neuron, they send back messages to the axons. When the neuron receives messages from the brain, it sends them back to the brain.
+This system
 
 ================================================================================
 [Prompt 5] (prompt_tokens=17)
@@ -74,59 +101,23 @@ Complete the following Python function:
 def add(a, b):
     return
 
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=190 first30=[263, 647, 286, 3, 711, 4750, 2062, 263, 689, 715, 418, 263, 1809, 3510, 2827, 11183, 17, 1530, 699, 1106, 6133, 298, 1114, 2850, 10978, 17, 2050, 1266, 15, 11183]
 [Full output 5]
 Complete the following Python function:
 
 def add(a, b):
-    return a + b + a
-
-def count(a, b):
     return a + b
 
-def check(a, b):
-    return a + b
-
-def count_s(a, b):
-    return a + b
-
-def find_s(a, b):
-    return a + b
-
-def count_s(a, b):
-    return a + b
-
-def count_s(a, b):
-    return a + b
-
-def count_s(a, b):
-    return a + b
-
-def count_s(a, b):
-    return a + b
-
-def count_s(a, b):
-    return a + b
-
-def count_s(a, b):
-    return a + b
-
-def count_s(a, b):
-    return a + b
-
-def count_s(a, b):
-    return a + b
-
-def count_s(a, b):
-    return a + b
-
-def count_s(a, b):
-    return a + b
-
-def count_s(a, b):
-    return a + b
-
-def count_s(a, b):
-    return a +
+Once upon a time there was a little girl named Jane. She had long hair and very soft fur. One day, Jane wanted to go for a walk in the park. So she asked her mom if she could go. Her mom said yes and they went together. Jane ran as fast as she could until she got to the top of the hill. When she reached the top, she saw something else. It was a big, red ball! Jane was so excited that she jumped up and down and laughed with joy. But then, she noticed something strange - it was a small mouse! Jane was scared but she knew she should take care of it. So, Jane took a deep breath and walked away. After a while, Jane's eyes lit up. She looked around and saw a big, yellow dog. The dog was so cute and Jane was so happy. Jane and the dog were best friends forever.
 
 ================================================================================
 [Prompt 6] (prompt_tokens=19)
@@ -135,50 +126,40 @@ Write a Python function that returns the factorial of n:
 def factorial(n):
     
 
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=219 first30=[622, 353, 81, 552, 354, 12, 864, 353, 81, 647, 354, 12, 711, 202, 6, 538, 1401, 1285, 1737, 492, 15, 892, 32, 19, 15, 371, 32, 20, 464, 202]
 [Full output 6]
 Write a Python function that returns the factorial of n:
 
 def factorial(n):
-     return n * (n - 1)
-    
-def factorial_x(n):
-     return n * (n - 1)
-    
-def factorial_y(n):
-     return n * (n - 1)
-    
-def factorial_z(n):
-     return n * (n - 1)
-    
-def factorial_z(n):
-     return n * (n - 1)
-    
-def factorial_z_0(n):
-     return n * (n - 1)
-    
-def factorial_z_1(n):
-     return n * (n - 1)
-    
-def factorial_z_2(n):
-     return n * (n - 1)
-    
-def factorial_z_3(n):
-     return n * (n - 1)
-    
-def factorial_z_4(n):
-     return n * (n - 1)
-    
-def factorial_z_5(n):
-     return n * (n - 1)
-    
-def factorial_z_6(n):
-     return n * (n - 1)
-    
-def factorial_z_7(n):
-     return n * (n - 1)
-    
-def factorial_z_8(n):
-     return n * (
+     return (n - 1) * (n + 1)
+
+
+# def __init__(self, x=0, y=1):
+#     self.x = x
+#     print("!{}+{}".format(len(self), len(self)))
+#     for i in range(len(x)):
+#         self.x[i] = x[i-1]
+#         print("!{:02d}".format(len([self])) )
+#         if self.x > 0:
+#             self.x -= 1
+#             print("!{{:02d}>".format(len([[self.x]])) )
+#             else:
+#                 pass
+#             return
+#             #print("!{}*".format(self.x))
+#             if self.y < 0:
+##                self.y += 1
+#         elif self.y >= 0:
+###            print("!({:03d})".format(str(self)))
 
 ================================================================================
 [Prompt 7] (prompt_tokens=19)
@@ -187,163 +168,100 @@ Write a Python function that computes Fibonacci numbers recursively:
 def fib(n):
     
 
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.6273422837257385, 0.3726576864719391, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=211 first30=[622, 8049, 11, 81, 12, 1246, 202, 2318, 11, 73, 5, 54, 379, 288, 836, 1813, 11, 815, 2444, 8551, 3, 711, 4750, 2062, 263, 689, 15, 715, 418, 263]
 [Full output 7]
 Write a Python function that computes Fibonacci numbers recursively:
 
 def fib(n):
      return fib(n)
     
-def fib(n):
-     return fib(n)
-    
-def fib(n):
-     return fib(n)
-    
-def fib(n):
-     return fib(n)
-    
-def fib(n):
-     return fib(n)
-    
-def fib(n):
-     return fib(n)
-    
-def fib(n):
-     return fib(n)
-    
-def fib(n):
-     return fib(n)
-    
-def fib(n):
-     return fib(n)
-    
-def fib(n):
-     return fib(n)
-    
-def fib(n):
-     return fib(n)
-    
-def fib(n):
-     return fib(n)
-    
-def fib(n):
-     return fib(n)
-    
-def fib(n):
-     return fib(n)
-    
-def fib(n):
-     return fib(n)
-    
-def fib(n):
-     return fib(n)
-    
-def fib(n):
-     return fib(n)
-    
-def fib(n):
-     return fib(n)
-    
-def fib(n):
-     return fib(n)
-    
-def fib(n):
-     return fib(n)
-    
-def fib
+print(f"Sort of {len(str())}")
+
+Once upon a time, there was a little girl named Lily. She loved to play outside in the park with her friends. One day, she saw a big dog running towards it. The dog looked angry and scared. Lily wanted to help the dog, so she ran away from the dog. But then, she remembered that her mom had told her not to be afraid because they were different animals. So, she went to the store and bought some candy for her. When she got home, she felt very sad and lost her balance. She didn't know what to do about it anymore. Her mom came over and asked if she could help her. Lily said yes and gave her a big hug. From that day on, Lily knew that sometimes things can be dangerous, but she still had a good idea. And she learned that even when you are scared, it's important to always listen to your parents and take care of them.
 
 ================================================================================
 [Prompt 8] (prompt_tokens=23)
 If all cats are animals and some animals are black, can we conclude that some cats are black?
 Answer:
 
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 13676, 2590, 698, 1289, 1278, 535, 1906, 1238]
+first_step_topk_probs=[0.36092162132263184, 0.20351584255695343, 0.09317634254693985, 0.05254011228680611, 0.04493993520736694, 0.04265923425555229, 0.04049428179860115, 0.036488376557826996, 0.03463659808039665, 0.03287876024842262]
+first_step_topk_text=[' The', ' There', ' Yes', ' No', ' It', ' We', ' If', ' In', ' All', ' As']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 12052, 17, 202, 509, 3533, 330, 12052, 15, 614, 356, 1645, 383, 415, 263, 1809, 1108, 17, 2660, 288, 269, 10676, 491, 7633, 10978, 351, 553, 8899]
 [Full output 8]
 If all cats are animals and some animals are black, can we conclude that some cats are black?
-Answer: If there is a black cat, the answer is yes. It is possible that some cats are black, but not all.
-How do cats get black?
-Answer: The black cat is the most common cat in the United States. It is also the most common cat in the United States.
-How do cats get black?
-Answer: The black cat is the most common cat in the United States. It is also the most common cat in the United States.
-How do cats get black?
-Answer: The black cat is the most common cat in the United States. It is also the most common cat in the United States.
-How do cats get black?
-Answer: The black cat is the most common cat in the United States. It is also the most common cat in the United States.
-How do cats get black?
-Answer: The black cat is the most common cat in the United States. It is also the most common cat in the United States.
-How do cats get black?
-Answer: The black cat is the most common cat in the United States. It is also the most common cat in the United States.
-How do cats get black?
-Answer: The black cat is the most common cat in the United
+Answer: The answer is yes.
+The answer is yes, but I think it's a little different. Some of the cats have brown fur on their legs, while others have brown fur underneath their legs. It seems like these cats are not as brown as other cats. But they're still brown! They're very small, so I'm not sure how many cats are brown. So I'd say there are no brown cats in the world.
+I don't know about you, but if you were to say that you didn't get brown in your life, then you would be correct. I don't think it was true. If you had a black cat, then you wouldn't have brown fur. And if you had a white cat, then it would have brown fur and brown fur.
+But if you had brown fur, then you might not have brown fur or brown fur. You could have brown fur, but then you couldn't have brown skin because you wouldn't be browned by the color of your skin. So I guess if you had red fur, then it wasn't a brownish-red color.
+Yes, that sounds like something to do with our past. But now you're talking about the future.
+Well, I've been hearing about
 
 ================================================================================
 [Prompt 9] (prompt_tokens=20)
 John has 3 apples and buys 2 more. How many apples does he have?
 Answer:
 
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 2050, 382, 798, 409, 843, 338, 2, 1, 0]
+first_step_topk_probs=[0.7075438499450684, 0.10850546509027481, 0.06445501744747162, 0.04715629667043686, 0.0278854351490736, 0.023959947749972343, 0.02049402892589569, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' One', ' The', ' 4', ' 2', ' 5', ' A', '', '', '']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 17, 2069, 15, 490, 486, 395, 263, 1413, 13042, 15, 486, 483, 5964, 619, 435, 263, 689, 17, 1358, 490, 486, 1418, 299, 7101, 2009]
 [Full output 9]
 John has 3 apples and buys 2 more. How many apples does he have?
-Answer: One apple is worth 2 apples.
-Answer: One apple is worth 2 apples.
-Answer: One apple is worth 2 apples.
-Answer: One apple is worth 2 apples.
-Answer: One apple is worth 2 apples.
-Answer: One apple is worth 2 apples.
-Answer: One apple is worth 2 apples.
-Answer: One apple is worth 2 apples.
-Answer: One apple is worth 2 apples.
-Answer: One apple is worth 2 apples.
-Answer: One apple is worth 2 apples.
-Answer: One apple is worth 2 apples.
-Answer: One apple is worth 2 apples.
-Answer: One apple is worth 2 apples.
-Answer: One apple is worth 2 apples.
-Answer: One apple is worth 2 apples.
-Answer: One apple is worth 2 apples.
-Answer: One apple is worth 2 apples.
-Answer: One apple is worth 2 apples.
-Answer: One apple is worth 2 apples.
-Answer: One apple is worth 2 apples.
-Answer: One apple is worth 2 apples.
-Answer: One apple is worth 2 apples.
-Answer: One apple is worth 2 apples.
-Answer: One apple is worth 2 apples.
-Answer: One apple is worth 2 apples
+Answer: 1 apple = 4 apples. So, if you are a good customer, you can buy one at a time. But if you want to sell something, you must first pay for the price of the apple. In other words, you will be paying for the price.
+If you are a bad customer, you cannot buy any more apples than you are. Therefore, if you do not get a discount on your purchase, you will never be able to buy any more fruits or vegetables.
+Answer: You cannot buy anything else that is less expensive. That means that it is cheaper for you to buy things. It is easier to buy things when there is no price.
+Question: Why is the price of apples so high?
+Answer 7: The price of apples is higher than the price of oranges. Because of this, the price of bananas is lower than the price in oranges. Therefore, the price for oranges is higher than that for oranges.
+Answer 8: When the price of grapes is low, the price is higher than those for oranges. Hence, the price will go up as well.
+Answer 9: The price for oranges increases because of the price of orange. Therefore, oranges increase because of the cost of the price. Thus, the price rises
 
 ================================================================================
 [Prompt 10] (prompt_tokens=13)
 User: I'm feeling stressed lately.
 Assistant:
 
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 783, 382, 698, 1289, 1509, 3919, 2575, 338, 535]
+first_step_topk_probs=[0.45582932233810425, 0.09110971540212631, 0.09110971540212631, 0.04876751825213432, 0.04171307012438774, 0.04171307012438774, 0.04171307012438774, 0.03386836498975754, 0.022327395156025887, 0.021194282919168472]
+first_step_topk_text=[' I', ' This', ' The', ' It', ' We', ' You', ' My', ' What', ' A', ' In']
+
+[New tokens 10] count=256 first30=[2575, 330, 4083, 34, 202, 8104, 6804, 330, 263, 1844, 288, 6753, 357, 3080, 269, 2613, 15, 13669, 11560, 298, 11007, 953, 17, 382, 6113, 483, 1823, 289, 6254, 15]
 [Full output 10]
 User: I'm feeling stressed lately.
-Assistant: I'm feeling so stressed.
-Cheryl: What's going on?
-Joe: I'm feeling stressed.
-Dave: I'm feeling stressed.
-Mike: I'm feeling stressed.
-Dave: I'm feeling stressed.
-Mike: I'm feeling stressed.
-Dave: I'm feeling stressed.
-Mike: I'm feeling stressed.
-Dave: I'm feeling stressed.
-Mike: I'm feeling stressed.
-Dave: I'm feeling stressed.
-Mike: I'm feeling stressed.
-Dave: I'm feeling stressed.
-Mike: I'm feeling stressed.
-Dave: I'm feeling stressed.
-Mike: I'm feeling stressed.
-Dave: I'm feeling stressed.
-Mike: I'm feeling stressed.
-Dave: I'm feeling stressed.
-Mike: I'm feeling stressed.
-Dave: I'm feeling stressed.
-Mike: I'm feeling stressed.
-Dave: I'm feeling stressed.
-Mike: I'm feeling stressed.
-Dave: I'm feeling stressed.
-Mike: I'm feeling stressed.
-Dave: I'm feeling stressed.
-Mike: I'm
+Assistant: What is stress?
+Assistant is a family of disorders that affect the brain, spinal cord and nervous system. The disorder can occur in anyone, but most people with it have no symptoms at all. It's not contagious or only one person has it.
+The symptoms of stress are often similar to those of other conditions such as heart disease or cancer. They include fatigue, anxiety, depression, anxiety and even seizures.
+It's common for someone who suffers from stress to suffer from an eating disorder. Eating disorders usually develop slowly over time. Some people experience some symptoms of stress after having a stressful event, while others may experience feelings of guilt, sadness, anger or loneliness.
+People with stress also have problems with their sense of self-worth.
+In general, people with stress tend to have a higher level of well-being than people without stress. People with stress tend more to be happy and happier than people without.
+What causes stress?
+Research shows that stress can trigger many different types of health problems. It can make you feel depressed, anxious, angry or depressed. Stress triggers your body to produce hormones and make you feel less lonely.
+Your body produces chemicals called neurotransmitters. These chemicals cause your body to make too much
 
 ================================================================================

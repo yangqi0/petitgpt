@@ -1,0 +1,273 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=125 first30=[2827, 5273, 2857, 299, 269, 3843, 374, 610, 2553, 17, 776, 2977, 263, 2023, 3197, 298, 3766, 299, 15935, 383, 17, 1358, 722, 406, 3500, 2940, 15, 406, 2977, 357]
+[Full output 1]
+Once upon a time, a curious child named Jack went to the park with his mom. He saw a big tree and wanted to climb it. But when he got close, he saw that the tree was not safe for him. He ran away from the tree and found a big rock on the ground. It was very old and had many pieces of wood inside. Jack asked his mom if he could help her. His mom said yes, but only if he took good care of the rock. So, Jack carefully climbed up the rock and put the rock back in the tree. When he was done, he hugged his mom and thanked her for helping him.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 7093, 263, 11438, 2357, 7362, 336, 8333, 5190, 13029]
+first_step_topk_probs=[0.7581238150596619, 0.08681050688028336, 0.04895060509443283, 0.035813022404909134, 0.02127382904291153, 0.011995860375463963, 0.009739870205521584, 0.009739870205521584, 0.008776359260082245, 0.008776359260082245]
+first_step_topk_text=[' the', ' Italy', ' a', ' Greece', ' South', ' Spain', ' S', ' Georgia', ' Egypt', ' Turkey']
+
+[New tokens 2] count=256 first30=[269, 4772, 288, 7014, 17, 202, 509, 2317, 330, 12092, 351, 269, 5235, 4069, 288, 9370, 15, 289, 269, 3690, 2986, 288, 2357, 16, 22007, 2100, 17, 698, 330, 12091]
+[Full output 2]
+Paris is the capital of the Republic of Ireland.
+The city is situated on the southern coast of Scotland, in the Highlands of South-East Europe. It is surrounded by the Scottish Borders and the River Humber. The old city centre is also called "Hunter's Place".
+The city has a population of about 3,000 people (2011). There are an estimated 100,000 residents living in the city, with most of them being under the age of 30.
+In the early days of the Republic, the city was known as the 'Wales' or 'Fairfax'. In the late 18th century, it became part of the Kingdom of Ireland, and today it is a major trading center for the Irish and Irish trade.
+At the time of the Treaty of Paris in 1795, the City of London had been governed by a coalition government with the local British Crown, which was established to take over the city from England. This meant that the city could not be held by any other political party until the Commonwealth of Nations took over in 1917.
+The City of London was a popularly elected city when it came into power in 1945.
+It was originally named the City of Westminster because of its location on the east bank of the River Th
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 289, 269, 2281, 6603, 357, 578, 1127, 8878, 298, 3892, 17, 783, 4409, 483, 342, 5454, 359, 2714, 8490, 94, 89, 9895, 913, 744, 89, 7, 3936, 269]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector in the complex plane that has both magnitude and direction. This vector can be represented as $\mathbf{v}$, where $v$ represents the angle formed by the positive x-axis and $v$ denotes the vertical component of the magnitude (the negative y-axis). The eigenvalue of a matrix is defined as follows:
+
+$$
+\begin{aligned}
+&=\mathbf{v} \cdot \mathbf{v}\quad(\text{with } v=0) \\
+&= -\mathbf{v}, &=\mathbf{u},\qquad u=\mathbf{x}.
+\end{aligned}$$
+
+This equation indicates that the eigenvalues of the eigenvector associated with the eigenvalue are zero; hence, they cannot be expressed as an eigenvector due to the nature of the eigenvalue itself. Therefore, the eigenvalue must be nonzero within the range of the real numbers because it cannot equal zero. However, if we consider the case when $n=1$, then this becomes crucial since any eigenvector of a square matrix with real entries would satisfy the condition for being an eigenvalue. For instance, take the number 1, which appears to be a square matrix, but isn't. Thus, the eigenvalue cannot be written as a scalar multiple of 2.
+
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 1420, 817, 491, 1085, 1991, 5663, 330, 395, 9845]
+first_step_topk_probs=[0.4590013027191162, 0.131506085395813, 0.08669412136077881, 0.04640401899814606, 0.03767712414264679, 0.03394990786910057, 0.022381149232387543, 0.021245308220386505, 0.01936158910393715, 0.01817207597196102]
+first_step_topk_text=[' can', ' allow', ' use', ' have', ' model', ' provide', ' involve', ' is', ' are', ' rely']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 2304, 17, 202, 509, 775, 1085, 15, 269, 6878, 414, 10030, 6605, 353, 1640, 48, 504, 418, 2657, 289, 5471, 419, 7193, 6241, 621]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex systems.
+The first model, the Autoregressive Model (ARM), was developed in 1997 by Professor Peter Kuhlman and Professor Michael Ritchie. The model is based on the idea that neural networks might be used to predict future behavior or to predict future behaviour, but it has been criticized for being too slow. In 1998, Dr. David Huffington suggested that ARMs could be used to simulate how individuals learn. It's also not clear whether the model would work well with people who have never seen an ARM. In this case, there may be no way to make the model work without using any of the other ARM models.
+In 1998, Dr John Cage from the University of Cambridge and his colleagues published a paper on the model which they call "A New Model for Decision-Making." This model predicts that if a person wants to use an ARM, he will be able to choose between a model of choice and a model of decision making. A new model, called the Multi-Model Model (MRF) is a theory developed by Dr. Michael Ritchies at the University of Bristol. It proposes that if a user chooses a model of the same type as their own, then he
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=211 first30=[263, 647, 286, 3, 711, 4750, 2062, 263, 689, 715, 418, 263, 1809, 3510, 1255, 15781, 17, 1530, 699, 263, 2023, 2716, 288, 5373, 298, 1024, 6446, 299, 1143, 374]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+Once upon a time there was a little girl called Lucy. She had a big box of toys and she loved to play with them. One day, her mom said, "Let's take turns playing with your toys." So Lucy went outside and started to play with her toys. But when she got tired, she saw that her toy box was missing! It was gone and it looked like she was lost. Lucy was very sad because she wanted to go back home. Her mom hugged her and said, "Don't worry, we can find another one for you. We'll see who is in charge." They searched the house until they found the perfect toy. Then they took it out and showed it to their friends. They all laughed and played together. After a while, Lucy felt better and thanked her mom for helping her. She said goodbye and ran off into the garden. The moral of the story is that even if something seems impossible, it's important to always be careful around things that might be too dangerous.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=44 first30=[622, 353, 81, 552, 354, 12, 864, 353, 81, 647, 354, 12, 711, 202, 6, 538, 330, 66, 5756, 1714, 202, 6, 265, 622, 1794, 202, 202, 6, 538, 835]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return (n - 1) * (n + 1)
+
+
+# def is_real():
+#     return True
+
+# def get_real():
+    #     return True
+
+    #     return False
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=180 first30=[622, 8049, 11, 81, 12, 1246, 202, 2318, 801, 20, 903, 202, 2318, 801, 21, 903, 202, 2318, 551, 202, 2318, 801, 22, 903, 3, 711, 4750, 2062, 263, 689]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return fib(n)
+    
+print("1")
+print("2")
+print()
+print("3")
+
+Once upon a time, there was a little girl named Lily. She loved to play outside and pick flowers with her friends. One day, she found a pretty flower in the garden. It was so pretty! Her mom said it was very pretty and they went inside to look for it. But when they got there, they saw that the flower had fallen off the ground. Lily was sad because she wanted to help. Suddenly, a kind lady came by and asked if she could help. The lady gave her a hug and told her that it's okay to be kind to others who are different from you. They all worked together and soon Lily was feeling much better. From that day on, Lily always remembered to be kind and share with others who were different.
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 1541, 2590, 338, 1289, 1906, 535, 698, 356]
+first_step_topk_probs=[0.38149896264076233, 0.15738439559936523, 0.14181524515151978, 0.10930128395557404, 0.03298955783247948, 0.03298955783247948, 0.03131534159183502, 0.026785429567098618, 0.025426071137189865, 0.02413567528128624]
+first_step_topk_text=[' The', ' Yes', ' There', ' No', ' A', ' We', ' All', ' In', ' It', ' I']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 12052, 17, 202, 7267, 486, 5699, 269, 3593, 920, 2645, 298, 2886, 34, 202, 24771, 354, 17, 382, 2645, 3191, 330, 2645, 1091, 383, 578, 808, 10978]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+Can you explain the difference between black and white?
+Answer 1. The black cat is black because it has no fur. So, in fact, white cats have a fur coat (black cats do not).
+Answer 2. A black cat's fur is just like black, but it is made of a material with two layers of hairs. When the animal is outside, its fur is covered by hair. Black cats have fur on their forehead and their ears. White cats have fur too, but they don't have any feathers. They are very hard to see.
+Answer 3. Black cats are really white, so there is only one color difference between them. There is only one gray color difference between black cats and white cats. Black cats also have fur on both sides of their head.
+Answer 4. Black cats' fur is more than twice as long as black cats' fur. Black cats get about five times longer when they're black than black cats. Blacks have more fur than black cats, so if you look at the tail of a black cat, you'll notice that the tail is shorter than the body.
+Answer 5. Black cats live much longer than black cats and can be found in all habitats except for
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 798, 843, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.8874920010566711, 0.08084765076637268, 0.03166038915514946, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' 4', ' 5', '', '#', '', '"', '!', '', '']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 17, 202, 9325, 3215, 330, 658, 263, 1413, 3215, 15, 649, 1024, 728, 491, 10227, 357, 722, 486, 853, 269, 795, 10941, 1987, 15, 581]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples.
+Your friend is also a good friend, so she may have noticed that when you add the two apples together, they always get the same number of apples. This means that if she adds 3 apples to her original amount, then her original amount would be 6. So, her first number would be 9 because 8 + 3 = 5. The second number would be 10 since 10^2 = 10.
+
+Now let's see how we can calculate the total number of apples using some clever thinking! We know that there are three apples in total, which we call "x". In this case, x represents the number of apples needed for each apple (let's say it's a bag with six red apples). Similarly, x corresponds to the number of candies needed for each red apple. Our goal now is to find out how many apples should we need to make from these four apples before adding them all up.
+
+To do this, we need to think about how many apples we need to mix together in order to get the exact count of apples needed. To do this, follow these steps:
+
+1. Find the total number available for each apple. In our example, it would look like this: {4, 3}.
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 783, 1289, 698, 3919, 2575, 1509, 338, 22089]
+first_step_topk_probs=[0.491861492395401, 0.09524381905794144, 0.05370591580867767, 0.05370591580867767, 0.037298016250133514, 0.03190268203616142, 0.03190268203616142, 0.028746703639626503, 0.022155974060297012, 0.021031538024544716]
+first_step_topk_text=[' I', ' The', ' This', ' We', ' It', ' My', ' What', ' You', ' A', ' Thank']
+
+[New tokens 10] count=256 first30=[2575, 330, 4083, 34, 2575, 1223, 383, 1734, 299, 342, 18029, 34, 202, 16, 25799, 7498, 202, 16, 25799, 3420, 202, 16, 25799, 6495, 202, 16, 25799, 9522, 202, 16]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is stress? What does it mean to be stressed?
+- Stress Management
+- Stress management
+- Stress reduction
+- Stress relief
+- Stress prevention and coping strategies
+- Stress Reduction
+- Stress recovery
+- Stress control
+- Stress resolution
+- Stress avoidance techniques
+- Stress correction in the workplace
+- Stress-reducing tips for dealing with stress
+- Stress mitigation techniques
+- Therapies to help relieve stress
+- Physical therapy
+- Stress rehabilitation
+- Stress stabilization techniques
+- Physical therapists
+- Stress treatment consultants
+- Stress patients
+- Stress managers
+- Stress professionals
+- Stress therapists
+What is stress management?
+It's important to know that stress management is not only about preventing or treating your stress, but also about reducing stress. This includes taking time to recognize when you're at risk of being stressed. When stress is too much or too little, you may have a hard time managing your stress. For example, if you feel stressed, you might want to take a break from work or spend time outside. You can do this by avoiding stressful situations and by doing something else.
+In addition, you need to take responsibility for yourself and others around you. Involving others in your life will help
+
+================================================================================

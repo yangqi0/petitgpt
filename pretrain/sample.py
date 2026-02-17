@@ -1,339 +1,408 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""sample.py (cover version)
+"""
+Sampling / text generation for petitgpt.
 
-Fixes vs the buggy stop-string/whitespace-ban behavior:
+Used by:
+- training (train_pretrain.py) to dump periodic samples via generate_default_samples()
+- CLI: python pretrain/sample.py --ckpt ... --out ... [options]
 
-1) **avoid_first_whitespace** now bans ONLY tokens that decode to *pure whitespace* (" ", "\n", "\t", etc.)
-   instead of banning tokens that merely *start* with whitespace (e.g. " in", " a"), which would
-   accidentally ban most of the vocabulary and force junk first tokens.
-
-2) **stop_strings** are implemented as proper stopping criteria (token-suffix match + optional
-   decoded-text fallback) and are **NOT** added into the banned-id list.
-
-3) No NameError: stop_token_seqs is always defined.
-
-Drop this file into `pretrain/sample.py` (overwrite).
+Key features:
+- Compatible with ckpt formats produced by this repo (ckpt["config"] + ckpt["model"])
+- avoid_first_whitespace: ban whitespace-ish tokens for first N steps
+- resample tries if first token still becomes whitespace (defensive)
+- repetition_penalty + no_repeat_ngram_size + max_repeat_token (sampling-only quality guards)
+- deterministic but varied seeds across prompts / steps
 """
 
 from __future__ import annotations
 
 import argparse
-import os
-from dataclasses import dataclass
+import json
+import random
 from pathlib import Path
-from typing import Iterable, List, Optional, Sequence, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
+import numpy as np
 import torch
+from tokenizers import Tokenizer
 
-try:
-    from tokenizers import Tokenizer
-except Exception as e:  # pragma: no cover
-    raise RuntimeError(
-        "tokenizers is required. Install with: pip install tokenizers"
-    ) from e
-
-
-# ---------------------------
-# Cached helpers
-# ---------------------------
-
-_WHITESPACE_BAN_CACHE = {}
-
-
-def _compute_whitespace_only_ids(tok: "Tokenizer", bos_id: int, eos_id: int) -> List[int]:
-    """Token ids that decode to only whitespace.
-
-    IMPORTANT: do **not** ban tokens like " in" or " a"; those are normal BPE tokens.
-    We only ban tokens whose decoded string is non-empty and becomes empty after .strip().
-    """
-    vocab = tok.get_vocab()  # {token_str: id}
-    key = (len(vocab), bos_id, eos_id)
-    cached = _WHITESPACE_BAN_CACHE.get(key)
-    if cached is not None:
-        return cached
-
-    ids: List[int] = []
-    for _t, i in vocab.items():
-        if i in (bos_id, eos_id):
-            continue
-        s = tok.decode([i])
-        # Pure whitespace tokens only
-        if s and (s.strip() == ""):
-            ids.append(int(i))
-
-    ids = sorted(set(ids))
-    _WHITESPACE_BAN_CACHE[key] = ids
-    return ids
-
-
-def _compile_stop_token_seqs(tok: "Tokenizer", stop_strings: Optional[Sequence[str]]) -> List[Tuple[str, List[int]]]:
-    """Encode stop strings into token-id sequences (suffix match)."""
-    if not stop_strings:
-        return []
-    out: List[Tuple[str, List[int]]] = []
-    for s in stop_strings:
-        if s is None:
-            continue
-        s = str(s)
-        if s == "":
-            continue
-        ids = tok.encode(s).ids
-        if ids:
-            out.append((s, [int(x) for x in ids]))
-    return out
-
-
-def _endswith_seq(full_ids: Sequence[int], seq: Sequence[int]) -> bool:
-    if not seq or len(full_ids) < len(seq):
-        return False
-    return list(full_ids[-len(seq) :]) == list(seq)
-
-
-@dataclass
-class SampleConfig:
-    tokenizer_path: str
-    max_seq_len: int
-    precision: str
-    temperature: float
-    top_p: float
-    top_k: int
-    max_new_tokens: int
-    min_new_tokens: int
-    greedy: bool
-    avoid_first_whitespace: bool
-    first_whitespace_resample_tries: int
-    ban_first_steps: int
-    extra_ban_token_ids: Optional[List[int]]
-    stop_strings: Optional[List[str]]
-    strip_stop: bool
-    add_bos: bool
-    bos_id: int
-    eos_id: int
-    seed_base: int
-
+import sys
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+# -------------------------
+# Utilities
+# -------------------------
 
 def _set_seed(seed: int) -> None:
-    import random
-
     random.seed(seed)
+    np.random.seed(seed)
     torch.manual_seed(seed)
-    torch.cuda.manual_seed_all(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(seed)
 
+
+def _top_k_top_p_filtering(logits: torch.Tensor, top_k: int = 0, top_p: float = 1.0) -> torch.Tensor:
+    """Filter logits using top-k and/or nucleus (top-p). logits: [vocab]."""
+    if top_k and top_k > 0:
+        k = min(int(top_k), logits.numel())
+        values, _ = torch.topk(logits, k)
+        min_keep = values[-1]
+        logits = torch.where(logits < min_keep, torch.full_like(logits, -float("inf")), logits)
+
+    if top_p is not None and top_p < 1.0:
+        sorted_logits, sorted_indices = torch.sort(logits, descending=True)
+        probs = torch.softmax(sorted_logits, dim=-1)
+        cumprobs = torch.cumsum(probs, dim=-1)
+
+        sorted_mask = cumprobs > float(top_p)
+        sorted_mask[0] = False  # keep at least one
+
+        mask = torch.zeros_like(logits, dtype=torch.bool)
+        mask.scatter_(0, sorted_indices, sorted_mask)
+        logits = torch.where(mask, torch.full_like(logits, -float("inf")), logits)
+
+    return logits
+
+
+def _apply_repetition_penalty(logits: torch.Tensor, history: List[int], penalty: float) -> torch.Tensor:
+    """CTRL-style repetition penalty on logits (1D)."""
+    if penalty is None or penalty <= 1.0 or not history:
+        return logits
+    for tok in set(history):
+        v = logits[tok]
+        logits[tok] = v * penalty if v < 0 else v / penalty
+    return logits
+
+
+def _apply_no_repeat_ngram(logits: torch.Tensor, history: List[int], n: int) -> torch.Tensor:
+    """Ban next tokens that would create an already-seen n-gram (single sequence)."""
+    if n is None or n <= 0:
+        return logits
+    if len(history) < n - 1:
+        return logits
+
+    prefix_len = n - 1
+    cur_prefix = tuple(history[-prefix_len:])
+    banned: set[int] = set()
+
+    for i in range(len(history) - n + 1):
+        pref = tuple(history[i : i + prefix_len])
+        nxt = history[i + prefix_len]
+        if pref == cur_prefix:
+            banned.add(nxt)
+
+    if banned:
+        idx = torch.tensor(list(banned), device=logits.device, dtype=torch.long)
+        logits.index_fill_(0, idx, -float("inf"))
+    return logits
+
+
+def _ban_consecutive_repeats(logits: torch.Tensor, history: List[int], max_repeat_token: int) -> torch.Tensor:
+    """If last token repeats too many times consecutively, ban it."""
+    if max_repeat_token is None or max_repeat_token <= 0 or not history:
+        return logits
+    last = history[-1]
+    k = 1
+    for i in range(len(history) - 2, -1, -1):
+        if history[i] == last:
+            k += 1
+            if k >= max_repeat_token:
+                logits[last] = -float("inf")
+                break
+        else:
+            break
+    return logits
+
+
+def _safe_softmax_probs(logits: torch.Tensor) -> torch.Tensor:
+    probs = torch.softmax(logits, dim=-1)
+    if torch.isnan(probs).any() or float(probs.sum().item()) == 0.0:
+        # If everything is -inf or numerical issues, fallback to one-hot argmax
+        probs = torch.zeros_like(probs)
+        probs[int(torch.argmax(logits).item())] = 1.0
+    return probs
+
+
+def _sample_next_id(
+    logits_1d: torch.Tensor,
+    temperature: float,
+    top_p: float,
+    top_k: int,
+    greedy: bool,
+) -> int:
+    if greedy or temperature <= 0:
+        return int(torch.argmax(logits_1d).item())
+
+    logits = logits_1d / max(float(temperature), 1e-8)
+    logits = _top_k_top_p_filtering(logits, top_k=top_k, top_p=top_p)
+    probs = _safe_softmax_probs(logits)
+    nxt = torch.multinomial(probs, num_samples=1)
+    return int(nxt.item())
+
+
+def _load_ckpt_and_build_model(
+    ckpt_path: str,
+    device: str,
+) -> Tuple[torch.nn.Module, Dict[str, Any]]:
+    """
+    Compatible with the checkpoint produced by your train_pretrain.py:
+    - ckpt["config"]  (dict)
+    - ckpt["model"]   (state_dict)
+    Also tries a few common fallbacks.
+    """
+    from src.model import GPT, GPTConfig  # local import
+
+    ckpt = torch.load(ckpt_path, map_location="cpu")
+    if not isinstance(ckpt, dict):
+        raise ValueError(f"Unexpected ckpt type: {type(ckpt)}")
+
+    cfg_dict = None
+    # your repo format
+    if "config" in ckpt and isinstance(ckpt["config"], dict):
+        cfg_dict = ckpt["config"]
+    # fallback formats
+    elif "model_config" in ckpt and isinstance(ckpt["model_config"], dict):
+        cfg_dict = ckpt["model_config"]
+    elif "args" in ckpt and isinstance(ckpt["args"], dict) and "config" in ckpt["args"]:
+        cfg_dict = ckpt["args"]["config"]
+
+    if cfg_dict is None:
+        keys = sorted(list(ckpt.keys()))
+        raise KeyError(f"Cannot find config in ckpt. Available keys: {keys}")
+
+    cfg = GPTConfig(**cfg_dict)
+    model = GPT(cfg)
+
+    sd = None
+    if "model" in ckpt and isinstance(ckpt["model"], dict):
+        sd = ckpt["model"]
+    elif "state_dict" in ckpt and isinstance(ckpt["state_dict"], dict):
+        sd = ckpt["state_dict"]
+    else:
+        # heuristic: first dict that looks like a state_dict
+        for k, v in ckpt.items():
+            if isinstance(v, dict) and any(isinstance(x, torch.Tensor) for x in v.values()):
+                sd = v
+                break
+
+    if sd is None:
+        keys = sorted(list(ckpt.keys()))
+        raise KeyError(f"Cannot find model state_dict in ckpt. Available keys: {keys}")
+
+    model.load_state_dict(sd, strict=True)
+    model.to(device)
+    model.eval()
+    return model, ckpt
+
+
+def _build_whitespace_ban_ids(tokenizer: Tokenizer) -> List[int]:
+    """
+    Build a small set of whitespace-ish token ids to ban early.
+    We *do not* scan full vocab (too slow). We collect from encodings and a few known ids.
+    """
+    candidates: set[int] = set()
+
+    # Common whitespace strings -> ids
+    for s in [" ", "\n", "\t", "\r", "\n\n", " \n", "\n "]:
+        try:
+            candidates.update(tokenizer.encode(s).ids)
+        except Exception:
+            pass
+
+    # Also ban tokens that decode to pure whitespace for a small id window (cheap)
+    # This catches things like single-token '\n' if it exists, etc.
+    for tid in range(0, 512):
+        try:
+            txt = tokenizer.decode([tid])
+        except Exception:
+            continue
+        if txt and txt.strip() == "":
+            candidates.add(tid)
+
+    return sorted(candidates)
+
+
+# -------------------------
+# Generation core
+# -------------------------
 
 @torch.no_grad()
-def _sample_one(
-    *,
+def generate(
     model: torch.nn.Module,
-    tok: "Tokenizer",
-    device: torch.device,
+    tokenizer: Tokenizer,
     prompt: str,
-    cfg: SampleConfig,
-    prompt_index: int,
-    debug: bool,
-) -> str:
-    enc = tok.encode(prompt)
-    prompt_ids = [int(x) for x in enc.ids]
+    device: str,
+    max_seq_len: int,
+    temperature: float = 0.7,
+    top_p: float = 0.9,
+    top_k: int = 0,
+    max_new_tokens: int = 256,
+    min_new_tokens: int = 0,
+    eos_id: Optional[int] = None,
+    add_bos: bool = True,
+    bos_id: Optional[int] = None,
+    greedy: bool = False,
+    debug: bool = False,
+    debug_topk: int = 10,
+    repetition_penalty: float = 1.10,
+    no_repeat_ngram_size: int = 3,
+    max_repeat_token: int = 3,
+    seed: Optional[int] = None,
+    # new:
+    avoid_first_whitespace: bool = False,
+    ban_first_steps: int = 0,
+    first_whitespace_resample_tries: int = 32,
+    extra_ban_token_ids: Optional[List[int]] = None,
+) -> Dict[str, Any]:
+    if seed is not None:
+        _set_seed(int(seed))
 
-    # Optionally prepend BOS
-    if cfg.add_bos:
-        prompt_ids = [int(cfg.bos_id)] + prompt_ids
+    enc = tokenizer.encode(prompt)
+    prompt_ids = enc.ids
 
-    # Truncate from left if prompt too long
-    if len(prompt_ids) >= cfg.max_seq_len:
-        prompt_ids = prompt_ids[-(cfg.max_seq_len - 1) :]
+    if add_bos:
+        if bos_id is None:
+            raise ValueError("add_bos=True but bos_id is None")
+        if not prompt_ids or prompt_ids[0] != bos_id:
+            prompt_ids = [bos_id] + prompt_ids
 
-    stop_token_seqs = _compile_stop_token_seqs(tok, cfg.stop_strings)
+    if len(prompt_ids) >= max_seq_len:
+        prompt_ids = prompt_ids[-(max_seq_len - 1):]
 
-    whitespace_only_ids = _compute_whitespace_only_ids(tok, cfg.bos_id, cfg.eos_id)
+    ids = torch.tensor(prompt_ids, device=device, dtype=torch.long)[None, :]
+    generated: List[int] = []
 
-    # Fixed banned ids (do NOT include stop_token_seqs here)
-    fixed_banned: List[int] = []
-    if cfg.extra_ban_token_ids:
-        fixed_banned.extend(int(x) for x in cfg.extra_ban_token_ids)
-
-    # Keep BOS out of sampling unless user explicitly wants it
-    fixed_banned.append(int(cfg.bos_id))
-
-    # NOTE: we do NOT ban EOS globally; EOS is allowed but we enforce min_new_tokens
-
-    # Generation
-    full_ids: List[int] = list(prompt_ids)
-    new_ids: List[int] = []
-
-    # for decoded-text fallback stop check (handles rare tokenizer mismatch)
-    stop_texts = [s for s, _ in stop_token_seqs]
-    max_stop_len = max([len(s) for s in stop_texts], default=0)
-
+    dbg: Dict[str, Any] = {}
     if debug:
-        print("\n[Debug]")
-        print(f"bos_id={cfg.bos_id} eos_id={cfg.eos_id}")
-        print(
-            f"avoid_first_whitespace={cfg.avoid_first_whitespace} ban_first_steps={cfg.ban_first_steps} "
-            f"banned_ids_count={(len(set(fixed_banned)) + (len(whitespace_only_ids) if cfg.avoid_first_whitespace else 0))}"
-        )
-        head = sorted(set(fixed_banned + (whitespace_only_ids if cfg.avoid_first_whitespace else [])))[:32]
-        print(f"banned_ids_head={head}")
+        dbg["bos_id"] = bos_id
+        dbg["eos_id"] = eos_id
+        dbg["avoid_first_whitespace"] = bool(avoid_first_whitespace)
+        dbg["ban_first_steps"] = int(ban_first_steps)
 
-    for step in range(int(cfg.max_new_tokens)):
-        x = torch.tensor([full_ids[-cfg.max_seq_len :]], device=device, dtype=torch.long)
-        logits = model(x)  # [1, T, V]
-        logits = logits[:, -1, :]  # [1, V]
+    whitespace_ban_ids: List[int] = []
+    if avoid_first_whitespace and ban_first_steps > 0:
+        whitespace_ban_ids = _build_whitespace_ban_ids(tokenizer)
+    if extra_ban_token_ids:
+        whitespace_ban_ids = sorted(set(whitespace_ban_ids).union(set(extra_ban_token_ids)))
 
-        # Temperature / greedy
-        if cfg.greedy or cfg.temperature <= 0:
-            next_id = int(torch.argmax(logits, dim=-1).item())
-            # enforce bans by falling back to sampling if greedy picks banned
-            if next_id in fixed_banned:
-                cfg_greedy = False
-            else:
-                cfg_greedy = True
-        else:
-            cfg_greedy = False
+    if debug and avoid_first_whitespace and ban_first_steps > 0:
+        dbg["banned_ids_count"] = len(whitespace_ban_ids)
+        dbg["banned_ids_head"] = whitespace_ban_ids[:32]
 
-        # Build banned ids for THIS step
-        banned_now = set(fixed_banned)
-        if cfg.avoid_first_whitespace and step < int(cfg.ban_first_steps):
-            banned_now.update(whitespace_only_ids)
-        if len(new_ids) < int(cfg.min_new_tokens):
-            banned_now.add(int(cfg.eos_id))
+    for step in range(max_new_tokens):
+        if ids.size(1) > max_seq_len:
+            ids = ids[:, -max_seq_len:]
 
-        # Apply bans by setting logits to -inf
-        if banned_now:
-            logits = logits.clone()
-            logits[:, list(banned_now)] = -float("inf")
+        out = model(ids)
+        logits = out["logits"] if isinstance(out, dict) else out
+        next_logits = logits[0, -1, :].float()
 
-        if cfg_greedy:
-            # already computed next_id above
-            pass
-        else:
-            # sample
-            if cfg.temperature > 0:
-                logits = logits / float(cfg.temperature)
+        history = ids[0].tolist()
+        next_logits = _apply_repetition_penalty(next_logits, history, repetition_penalty)
+        next_logits = _apply_no_repeat_ngram(next_logits, history, no_repeat_ngram_size)
+        next_logits = _ban_consecutive_repeats(next_logits, history, max_repeat_token)
 
-            probs = torch.softmax(logits, dim=-1)  # [1, V]
+        # Early-step whitespace ban
+        if avoid_first_whitespace and step < ban_first_steps and whitespace_ban_ids:
+            idx = torch.tensor(whitespace_ban_ids, device=next_logits.device, dtype=torch.long)
+            next_logits.index_fill_(0, idx, -float("inf"))
 
-            if cfg.top_k and int(cfg.top_k) > 0:
-                topk = int(cfg.top_k)
-                vals, idx = torch.topk(probs, k=topk, dim=-1)
-                probs2 = torch.zeros_like(probs)
-                probs2.scatter_(1, idx, vals)
-                probs = probs2
-                probs = probs / probs.sum(dim=-1, keepdim=True)
+        # Debug preview for first step (after bans/penalties)
+        if debug and step == 0:
+            tmp = next_logits / max(float(temperature), 1e-8) if temperature > 0 else next_logits.clone()
+            tmp = _top_k_top_p_filtering(tmp.clone(), top_k=top_k, top_p=top_p)
+            probs = _safe_softmax_probs(tmp)
+            if eos_id is not None:
+                dbg["first_step_eos_prob"] = float(probs[eos_id].item())
+            k = min(int(debug_topk), probs.numel())
+            topv, topi = torch.topk(probs, k)
+            dbg["first_step_topk_ids"] = topi.detach().cpu().tolist()
+            dbg["first_step_topk_probs"] = topv.detach().cpu().tolist()
+            try:
+                dbg["first_step_topk_text"] = [tokenizer.decode([i]) for i in dbg["first_step_topk_ids"]]
+            except Exception:
+                dbg["first_step_topk_text"] = None
 
-            if cfg.top_p and float(cfg.top_p) < 1.0:
-                sorted_probs, sorted_idx = torch.sort(probs, descending=True, dim=-1)
-                cum = torch.cumsum(sorted_probs, dim=-1)
-                mask = cum > float(cfg.top_p)
-                # keep at least 1 token
-                mask[..., 0] = False
-                sorted_probs = sorted_probs.masked_fill(mask, 0.0)
-                probs2 = torch.zeros_like(probs)
-                probs2.scatter_(1, sorted_idx, sorted_probs)
-                probs = probs2
-                probs = probs / probs.sum(dim=-1, keepdim=True)
-
-            next_id = int(torch.multinomial(probs, num_samples=1).item())
-
-        full_ids.append(next_id)
-        new_ids.append(next_id)
-
-        # Stop conditions (only after min_new_tokens)
-        if len(new_ids) >= int(cfg.min_new_tokens):
-            # EOS
-            if next_id == int(cfg.eos_id):
-                break
-
-            # Token-suffix stop strings
-            hit_stop: Optional[Tuple[str, List[int]]] = None
-            for s, seq in stop_token_seqs:
-                if _endswith_seq(full_ids, seq):
-                    hit_stop = (s, seq)
+        # Sample (with extra resample tries if still hits whitespace early)
+        if avoid_first_whitespace and step < ban_first_steps and whitespace_ban_ids:
+            # We already masked them, but add defensive resampling if tokenizer oddities happen.
+            tries = int(first_whitespace_resample_tries)
+            local_logits = next_logits
+            chosen = None
+            for _ in range(max(1, tries)):
+                nxt = _sample_next_id(local_logits, temperature, top_p, top_k, greedy)
+                if nxt not in set(whitespace_ban_ids):
+                    chosen = nxt
                     break
+                # ban this one and try again
+                local_logits = local_logits.clone()
+                local_logits[nxt] = -float("inf")
+            if chosen is None:
+                chosen = _sample_next_id(next_logits, temperature, top_p, top_k, greedy)
+            nxt = int(chosen)
+        else:
+            nxt = _sample_next_id(next_logits, temperature, top_p, top_k, greedy)
 
-            # Decoded-text fallback: check only the tail
-            if hit_stop is None and stop_texts and max_stop_len > 0:
-                tail_text = tok.decode(full_ids[-(cfg.max_seq_len) :])
-                # only look near the end to avoid O(n^2)
-                tail_slice = tail_text[-(max_stop_len + 32) :]
-                for s in stop_texts:
-                    if s in tail_slice:
-                        # best-effort: treat as hit, but we cannot safely map to tokens here
-                        hit_stop = (s, [])
-                        break
+        generated.append(nxt)
+        ids = torch.cat([ids, torch.tensor([[nxt]], device=device, dtype=torch.long)], dim=1)
 
-            if hit_stop is not None:
-                s, seq = hit_stop
-                if cfg.strip_stop and seq:
-                    # remove stop tokens from ids
-                    del full_ids[-len(seq) :]
-                    del new_ids[-len(seq) :]
-                break
+        if eos_id is not None and nxt == eos_id and (step + 1) >= min_new_tokens:
+            break
 
-    out_text = tok.decode(full_ids)
+    full_ids = prompt_ids + generated
+    out_text = tokenizer.decode(full_ids)
 
-    # If the user asked to strip stop strings but we hit via text-fallback, do a final text strip
-    if cfg.strip_stop and cfg.stop_strings:
-        for s in cfg.stop_strings:
-            if not s:
-                continue
-            pos = out_text.find(s)
-            if pos != -1:
-                out_text = out_text[:pos]
-                break
+    return {
+        "prompt_tokens": len(prompt_ids),
+        "new_tokens": generated,
+        "output_text": out_text,
+        "debug": dbg if debug else None,
+    }
 
-    return out_text
 
+# -------------------------
+# Default sampling for training
+# -------------------------
 
 def generate_default_samples(
-    *,
     model: torch.nn.Module,
     tokenizer_path: str,
-    device: torch.device,
+    device: str,
     max_seq_len: int,
     precision: str,
-    out_path: str | os.PathLike,
+    out_path: Path,
     temperature: float,
     top_p: float,
     top_k: int,
     max_new_tokens: int,
-    min_new_tokens: int,
-    eos_id: int,
+    eos_id: Optional[int],
     add_bos: bool,
-    bos_id: int,
-    greedy: bool,
-    debug: bool,
+    bos_id: Optional[int],
+    min_new_tokens: int,
+    greedy: bool = False,
+    debug: bool = True,
+    repetition_penalty: float = 1.15,
+    no_repeat_ngram_size: int = 4,
+    max_repeat_token: int = 3,
+    # new:
     avoid_first_whitespace: bool = True,
-    first_whitespace_resample_tries: int = 32,
     ban_first_steps: int = 4,
+    first_whitespace_resample_tries: int = 32,
     extra_ban_token_ids: Optional[List[int]] = None,
-    stop_strings: Optional[List[str]] = None,
-    strip_stop: bool = False,
-    seed_base: int = 1234,
+    seed_base: Optional[int] = None,
+    step_tag: Optional[int] = None,
 ) -> None:
     tok = Tokenizer.from_file(tokenizer_path)
 
-    cfg = SampleConfig(
-        tokenizer_path=tokenizer_path,
-        max_seq_len=max_seq_len,
-        precision=precision,
-        temperature=temperature,
-        top_p=top_p,
-        top_k=top_k,
-        max_new_tokens=max_new_tokens,
-        min_new_tokens=min_new_tokens,
-        greedy=greedy,
-        avoid_first_whitespace=avoid_first_whitespace,
-        first_whitespace_resample_tries=first_whitespace_resample_tries,
-        ban_first_steps=ban_first_steps,
-        extra_ban_token_ids=extra_ban_token_ids,
-        stop_strings=stop_strings,
-        strip_stop=strip_stop,
-        add_bos=add_bos,
-        bos_id=bos_id,
-        eos_id=eos_id,
-        seed_base=seed_base,
-    )
+    model.eval()
+    if precision in ("fp16", "float16"):
+        autocast_dtype = torch.float16
+    elif precision in ("bf16", "bfloat16"):
+        autocast_dtype = torch.bfloat16
+    else:
+        autocast_dtype = None
 
     prompts = [
         "Once upon a time, a curious child",
@@ -351,108 +420,230 @@ def generate_default_samples(
     out_path = Path(out_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
-    # Header
-    with open(out_path, "w", encoding="utf-8") as f:
+    # Stable-but-varied seed:
+    # - If step_tag is given (training), tie seed to step.
+    # - Otherwise use seed_base or default.
+    if seed_base is None:
+        base = 1234
+        if step_tag is not None:
+            base = int(step_tag) * 1000003 + 868234  # big-ish mix
+        seed_base = base
+
+    with out_path.open("w", encoding="utf-8") as f:
         f.write(f"Samples generated with tokenizer={tokenizer_path}\n")
         f.write(
             f"precision={precision}, temperature={temperature}, top_p={top_p}, top_k={top_k}, "
             f"max_new_tokens={max_new_tokens}, min_new_tokens={min_new_tokens}, greedy={greedy}\n"
         )
         f.write(
-            f"avoid_first_whitespace={avoid_first_whitespace}, "
-            f"first_whitespace_resample_tries={first_whitespace_resample_tries}, extra_ban_token_ids={extra_ban_token_ids}\n"
+            f"avoid_first_whitespace={avoid_first_whitespace}, first_whitespace_resample_tries={first_whitespace_resample_tries}, "
+            f"extra_ban_token_ids={extra_ban_token_ids}\n"
         )
-        f.write(f"stop_strings={stop_strings} strip_stop={strip_stop}\n")
-        f.write(f"seed_base={seed_base} (step_tag=None)\n")
+        f.write(f"seed_base={seed_base} (step_tag={step_tag})\n")
         f.write("=" * 80 + "\n")
 
-    # Generation
-    for i, p in enumerate(prompts, start=1):
-        try:
-            _set_seed(int(seed_base) + i)
-            out = _sample_one(
-                model=model,
-                tok=tok,
-                device=device,
-                prompt=p,
-                cfg=cfg,
-                prompt_index=i,
-                debug=debug,
-            )
-            with open(out_path, "a", encoding="utf-8") as f:
-                f.write(f"[Prompt {i}] (prompt_tokens={len(tok.encode(p).ids)})\n")
-                f.write(p + "\n\n")
-                f.write(f"[Full output {i}]\n")
-                f.write(out + "\n\n")
+        for i, prompt in enumerate(prompts, 1):
+            try:
+                f.write(f"[Prompt {i}] (prompt_tokens={len(tok.encode(prompt).ids) + (1 if add_bos else 0)})\n")
+                f.write(prompt + "\n\n")
+                f.flush()
+
+                with torch.autocast(
+                    "cuda",
+                    dtype=autocast_dtype,
+                    enabled=(autocast_dtype is not None and torch.cuda.is_available()),
+                ):
+                    res = generate(
+                        model=model,
+                        tokenizer=tok,
+                        prompt=prompt,
+                        device=device,
+                        max_seq_len=max_seq_len,
+                        temperature=temperature,
+                        top_p=top_p,
+                        top_k=top_k,
+                        max_new_tokens=max_new_tokens,
+                        min_new_tokens=min_new_tokens,
+                        eos_id=eos_id,
+                        add_bos=add_bos,
+                        bos_id=bos_id,
+                        greedy=greedy,
+                        debug=debug,
+                        repetition_penalty=repetition_penalty,
+                        no_repeat_ngram_size=no_repeat_ngram_size,
+                        max_repeat_token=max_repeat_token,
+                        seed=int(seed_base) + i * 9973,  # different per prompt
+                        avoid_first_whitespace=avoid_first_whitespace,
+                        ban_first_steps=ban_first_steps,
+                        first_whitespace_resample_tries=first_whitespace_resample_tries,
+                        extra_ban_token_ids=extra_ban_token_ids,
+                    )
+
+                if debug and res.get("debug"):
+                    d = res["debug"]
+                    f.write("[Debug]\n")
+                    f.write(f"bos_id={d.get('bos_id')} eos_id={d.get('eos_id')}\n")
+                    f.write(
+                        f"avoid_first_whitespace={d.get('avoid_first_whitespace')} "
+                        f"ban_first_steps={d.get('ban_first_steps')} "
+                        f"banned_ids_count={d.get('banned_ids_count', 0)}\n"
+                    )
+                    if "banned_ids_head" in d:
+                        f.write(f"banned_ids_head={d['banned_ids_head']}\n")
+                    if "first_step_eos_prob" in d:
+                        f.write(f"first_step_eos_prob={d['first_step_eos_prob']:.3e}\n")
+                    if "first_step_topk_ids" in d:
+                        f.write(f"first_step_topk_ids={d['first_step_topk_ids']}\n")
+                    if "first_step_topk_probs" in d:
+                        f.write(f"first_step_topk_probs={d['first_step_topk_probs']}\n")
+                    if d.get("first_step_topk_text") is not None:
+                        f.write(f"first_step_topk_text={d['first_step_topk_text']}\n")
+                    f.write("\n")
+
+                new_tokens = res["new_tokens"]
+                f.write(f"[New tokens {i}] count={len(new_tokens)}")
+                if new_tokens:
+                    f.write(f" first30={new_tokens[:30]}")
+                f.write("\n")
+                f.write(f"[Full output {i}]\n{res['output_text']}\n\n")
                 f.write("=" * 80 + "\n")
-        except Exception as e:
-            with open(out_path, "a", encoding="utf-8") as f:
-                f.write(f"[Prompt {i}] (prompt_tokens={len(tok.encode(p).ids)})\n")
-                f.write(p + "\n\n")
+                f.flush()
+
+            except Exception as e:
+                # Never silently truncate the file: record error and continue.
                 f.write("[ERROR]\n")
                 f.write(f"prompt_index={i}\n")
                 f.write(f"exception={repr(e)}\n\n")
                 f.write("=" * 80 + "\n")
+                f.flush()
 
+
+# -------------------------
+# CLI
+# -------------------------
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--ckpt", type=str, required=True)
+    ap.add_argument("--ckpt", type=str, required=True, help="checkpoint .pt file")
     ap.add_argument("--tokenizer_path", type=str, required=True)
-    ap.add_argument("--precision", choices=["bf16", "fp16", "fp32"], default="bf16")
+    ap.add_argument("--device", type=str, default="cuda")
     ap.add_argument("--max_seq_len", type=int, default=1024)
-    ap.add_argument("--out", type=str, required=True)
+    ap.add_argument("--precision", type=str, default="bf16", choices=["fp32", "fp16", "bf16"])
+
+    # generation controls
     ap.add_argument("--temperature", type=float, default=0.7)
     ap.add_argument("--top_p", type=float, default=0.9)
     ap.add_argument("--top_k", type=int, default=0)
     ap.add_argument("--max_new_tokens", type=int, default=256)
-    ap.add_argument("--min_new_tokens", type=int, default=32)
-    ap.add_argument("--bos_id", type=int, default=2)
+    ap.add_argument("--min_new_tokens", type=int, default=0)
+
+    # tokenizer special ids
     ap.add_argument("--eos_id", type=int, default=3)
     ap.add_argument("--add_bos", action="store_true")
+    ap.add_argument("--bos_id", type=int, default=2)
+
+    # sampling quality guards
     ap.add_argument("--greedy", action="store_true")
-    ap.add_argument("--stop_string", action="append", default=[])
-    ap.add_argument("--strip_stop", action="store_true")
+    ap.add_argument("--seed", type=int, default=1234)
+    ap.add_argument("--repetition_penalty", type=float, default=1.15)
+    ap.add_argument("--no_repeat_ngram_size", type=int, default=4)
+    ap.add_argument("--max_repeat_token", type=int, default=3)
+
+    # first-token handling
+    ap.add_argument("--avoid_first_whitespace", action="store_true")
+    ap.add_argument("--ban_first_steps", type=int, default=0)
+    ap.add_argument("--first_whitespace_resample_tries", type=int, default=32)
+    ap.add_argument("--extra_ban_token_ids", type=str, default=None, help="comma-separated ints, e.g. '202,224'")
+
+    # mode
+    ap.add_argument("--prompt", type=str, default=None, help="If set, generate single completion to stdout.")
+    ap.add_argument("--out", type=str, default=None, help="If set, write default prompts to this file (like training).")
+    ap.add_argument("--debug", action="store_true")
+
     args = ap.parse_args()
 
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    ckpt = torch.load(args.ckpt, map_location="cpu")
+    model, ckpt = _load_ckpt_and_build_model(args.ckpt, device=args.device)
 
-    # Lazy import your model builder
-    from src.model import GPT, GPTConfig  # type: ignore
+    # dtype / autocast
+    if args.precision == "fp16":
+        autocast_dtype = torch.float16
+    elif args.precision == "bf16":
+        autocast_dtype = torch.bfloat16
+    else:
+        autocast_dtype = None
 
-    cfg_dict = ckpt.get("config", None)
-    if cfg_dict is None:
-        raise RuntimeError("checkpoint missing config")
+    extra_ban = None
+    if args.extra_ban_token_ids:
+        extra_ban = [int(x) for x in args.extra_ban_token_ids.split(",") if x.strip()]
 
-    cfg = GPTConfig(**cfg_dict)
-    model = GPT(cfg).to(device)
+    if args.prompt is not None:
+        tok = Tokenizer.from_file(args.tokenizer_path)
+        with torch.autocast(
+            "cuda",
+            dtype=autocast_dtype,
+            enabled=(autocast_dtype is not None and torch.cuda.is_available()),
+        ):
+            res = generate(
+                model=model,
+                tokenizer=tok,
+                prompt=args.prompt,
+                device=args.device,
+                max_seq_len=args.max_seq_len,
+                temperature=args.temperature,
+                top_p=args.top_p,
+                top_k=args.top_k,
+                max_new_tokens=args.max_new_tokens,
+                min_new_tokens=args.min_new_tokens,
+                eos_id=(None if args.eos_id < 0 else args.eos_id),
+                add_bos=args.add_bos,
+                bos_id=args.bos_id,
+                greedy=args.greedy,
+                debug=True,
+                repetition_penalty=args.repetition_penalty,
+                no_repeat_ngram_size=args.no_repeat_ngram_size,
+                max_repeat_token=args.max_repeat_token,
+                seed=args.seed,
+                avoid_first_whitespace=args.avoid_first_whitespace,
+                ban_first_steps=args.ban_first_steps,
+                first_whitespace_resample_tries=args.first_whitespace_resample_tries,
+                extra_ban_token_ids=extra_ban,
+            )
+        print(res["output_text"])
+        if args.debug and res.get("debug") is not None:
+            print("\n[debug]\n" + json.dumps(res["debug"], ensure_ascii=False, indent=2))
+        return
 
-    state = ckpt["model"]
-    if any(k.startswith("_orig_mod.") for k in state.keys()):
-        state = {k[len("_orig_mod.") :]: v for k, v in state.items()}
-    model.load_state_dict(state, strict=True)
-    model.eval()
+    # default sampling to file
+    if args.out is None:
+        raise SystemExit("Either provide --prompt or --out")
 
+    out_path = Path(args.out)
     generate_default_samples(
         model=model,
         tokenizer_path=args.tokenizer_path,
-        device=device,
+        device=args.device,
         max_seq_len=args.max_seq_len,
         precision=args.precision,
-        out_path=args.out,
+        out_path=out_path,
         temperature=args.temperature,
         top_p=args.top_p,
         top_k=args.top_k,
         max_new_tokens=args.max_new_tokens,
-        min_new_tokens=args.min_new_tokens,
-        eos_id=args.eos_id,
+        eos_id=(None if args.eos_id < 0 else args.eos_id),
         add_bos=args.add_bos,
         bos_id=args.bos_id,
+        min_new_tokens=args.min_new_tokens,
         greedy=args.greedy,
-        debug=True,
-        stop_strings=(args.stop_string if args.stop_string else None),
-        strip_stop=args.strip_stop,
+        debug=args.debug,
+        repetition_penalty=args.repetition_penalty,
+        no_repeat_ngram_size=args.no_repeat_ngram_size,
+        max_repeat_token=args.max_repeat_token,
+        avoid_first_whitespace=args.avoid_first_whitespace,
+        ban_first_steps=args.ban_first_steps,
+        first_whitespace_resample_tries=args.first_whitespace_resample_tries,
+        extra_ban_token_ids=extra_ban,
+        seed_base=args.seed,
+        step_tag=ckpt.get("global_step", None),
     )
 
 
