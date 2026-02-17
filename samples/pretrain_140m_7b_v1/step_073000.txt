@@ -1,0 +1,333 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 2446, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8991213440895081, 0.10087861120700836, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' came', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 1] count=88 first30=[2827, 5273, 2857, 299, 269, 3843, 374, 610, 2553, 17, 776, 2977, 263, 2023, 3197, 298, 3766, 299, 15935, 383, 17, 14918, 15, 406, 5052, 263, 10603, 6387, 4834, 444]
+[Full output 1]
+Once upon a time, a curious child named Jack went to the park with his mom. He saw a big tree and wanted to climb it. Suddenly, he heard a loud noise coming from behind the tree. It was a little bird! "Hi, bird!" said Jack. The bird flew away and soon it was back home. Jack felt so happy that he had been able to climb the tree. From that day on, Jack loved to explore the world around him.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=153 first30=[289, 1691, 6677, 298, 269, 775, 2544, 16, 10427, 5057, 299, 342, 3673, 289, 3985, 17, 202, 202, 755, 1691, 7278, 15, 5338, 26751, 2037, 269, 775, 1419, 299, 1444]
+[Full output 2]
+The Eiffel Tower was built in 1763 and the first English-language architect to be born in London.
+
+In 1797, Thomas Edison became the first person to design a machine that could produce electricity. He used the machine as his laboratory for experiments with electricity. In 1809, he designed the first commercial electric light bulb.
+
+Thomas Edison died on February 20, 1812 at age 71. His wife, Anne Elizabeth, married William Henry Harrison, who had been a noted electrical engineer for many years. The couple's daughter, Mary Ann, married Thomas Edison in 1819.
+
+Frederick Thomas Edison died in New York City on May 7, 1822. His son, William Henry Harrison Edison, died in New Jersey on June 8, 1827.
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 289, 269, 2281, 6603, 357, 15353, 1939, 2242, 17, 202, 202, 509, 18956, 288, 263, 3823, 338, 395, 1255, 28069, 15, 298, 581, 11648, 269, 1759, 2242, 29]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector in the complex plane that satisfies certain conditions.
+
+The eigenvalues of a matrix A are called eigenvectors, and they satisfy the following conditions:
+
+1. An eigenvector in the complex-plane is a scalar multiple of zero; i.e., if A = 0, then A = 0.
+2. The identity matrix (also known as the inverse matrix) is a square matrix with determinant equal to 1.
+3. The inverse matrix (also called the eigenvalue) is a scalar multiples of one; i. e.
+4. If A = 0 and B = 0, there exists a nonzero vector (i.e., a vector x such that x^0 = 0).
+5. For any real number x, the eigenvector of A is a scalar times the sum of its eigenvalues squared.
+6. There exists a unique eigenvalue of A such that for all n, |A| < 1, the eigenvalue is always greater than or equal to 1, but not equal to 1 itself.
+7. The eigenvalues of A are linearly independent, meaning that their corresponding eigenvectors must be positive.
+8. All eigenvalues of A have positive definiteness, except possibly at a single point, which corresponds to the characteristic polynomial P(x
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[1420, 483, 491, 1991, 1085, 395, 330, 817, 5546, 7337]
+first_step_topk_probs=[0.14628420770168304, 0.14628420770168304, 0.11877350509166718, 0.07055442780256271, 0.06357487291097641, 0.06159091740846634, 0.04651237279176712, 0.044151827692985535, 0.03230217099189758, 0.027629507705569267]
+first_step_topk_text=[' allow', ' can', ' have', ' provide', ' model', ' are', ' is', ' use', ' describe', ' enable']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 4410, 17, 202, 509, 8944, 1440, 288, 269, 2673, 330, 1255, 269, 621, 16, 6693, 15, 298, 383, 5733, 288, 1237, 1271, 4543]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data sets.
+The functional group of the network is called the K-network, and it consists of three main components:
+1. A network consisting of nodes (nodes) connected by a network of nodes (edges).
+2. The network consisting of edges connecting nodes connected by edges connected by edges (edges). These edges connect nodes with edges connected by edge connections.
+3. The network containing nodes connected by edge connection connections (edges). This network includes the network itself.
+4. The network comprising nodes connected by connections (edges), which contains the nodes connected by connection connections (edge connections). This network comprises the network consisting of vertices connected by edges connecting nodes (edges), and the network comprised of edges connected by connections linking nodes (edges) connected by edges connections (edges) (edges). Each node in this network has its own unique node in the network.
+5. The network comprises all nodes connected by connectors (edges) linked by connections (edge links) connected by connections between nodes (edges); these connections are called nodes connected by link links (edges). All nodes in this network have their own unique node on each node.
+6. The network consists of nodes connected by links (edges) linking nodes connected by
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=140 first30=[263, 647, 286, 3, 711, 4750, 2062, 263, 689, 715, 418, 263, 1809, 3510, 1255, 15781, 17, 1530, 6446, 299, 1143, 3099, 298, 1313, 435, 269, 6437, 17, 2050, 1266]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+Once upon a time there was a little girl called Lucy. She loved to play outside and look at the sky. One day she saw something very interesting in the sky - it was a big, round ball! It was so shiny and sparkly. Lucy wanted to try it out, but her mom said they had to wait until they got home. When they arrived at the park, Lucy's friend Emma came over to play. She showed her friends how to put the ball in the air and they all laughed with excitement. Lucy was so happy that she could help her friend. From then on, Lucy always made sure to keep her special ball safe around her house.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=105 first30=[622, 353, 81, 552, 354, 12, 864, 353, 81, 647, 354, 12, 711, 202, 6, 538, 892, 66, 5756, 1714, 202, 6, 265, 1083, 801, 91, 903, 202, 6, 265]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return (n - 1) * (n + 1)
+
+
+# def x_real():
+#     print("x")
+#     for i in range(2, 10):
+#         print("x = ", i)
+#         if i == 0:
+#             print("x is:", x)
+#             break
+#         else:
+#                 print("x does not exist!")
+#         return 0
+#     # print(x)
+#     return x
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=256 first30=[622, 8049, 11, 81, 12, 1246, 202, 2318, 360, 20, 5, 202, 2318, 360, 21, 5, 202, 2318, 1083, 360, 22, 5, 202, 2318, 14590, 23, 64, 798, 5, 202]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return fib(n)
+    
+print "1"
+print "2"
+print print "3"
+print "[4] 4"
+print "# 5"
+print ""
+print "5"
+print "\n6"
+print "-"
+print ","
+print "7"
+print "<NAME>"
+print "8"
+print "{0} {1}".format("abc", "a")
+print "<EMAIL>!"
+print "9"
+print "+\\\\\\{1}\\\\\\\\\\{\\\\\\\ \\\\\\\\{}.\\\\\\".join(
+    [
+        "abc",
+        "abcd",
+        "ccc",
+        "adbddd",
+        "ffaae",
+        "faccae",
+        "bbebaeff",
+        "beccaeff",
+    ]
+    )
+    print "11"
+    print "12"
+    print "\n13"
+    print ""
+
+#print "12"
+print ": " + str(len(f))
+print "13"
+print "(1)"
+print "14"
+print ") : " + str((f[i]) + " (1)")
+print "\t2"
+
+
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 13676, 698, 2590, 535, 1289, 1278, 356, 338]
+first_step_topk_probs=[0.34034445881843567, 0.24900130927562714, 0.09751032292842865, 0.06428274512290955, 0.054983943700790405, 0.038185589015483856, 0.03624763712286949, 0.031004248186945915, 0.02793717384338379, 0.022683193907141685]
+first_step_topk_text=[' The', ' There', ' Yes', ' It', ' No', ' In', ' We', ' If', ' I', ' A']
+
+[New tokens 8] count=256 first30=[1541, 330, 808, 3641, 2833, 299, 1447, 269, 2877, 357, 2645, 10676, 395, 2645, 17, 1783, 15, 715, 330, 2466, 2833, 339, 482, 5342, 289, 2645, 10676, 359, 263, 1875]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: There is no scientific evidence to support the idea that black cats are black. However, there is strong evidence for this belief in black cats as a species. In fact, it has been suggested that black cats have black hair on their heads and that they have evolved from an early-breed black cat. The only evidence to support this hypothesis is that black cats originated in Africa. However, one of the most controversial findings was that black cats were not black. This argument was based on the fact that black cats do not share any genes with humans. It also suggested that black people have a genetic predisposition towards black cats.
+In the same paper, Dr. Federico Garcia-Sinclair and colleagues used a mouse model to demonstrate that black cats exhibit a gene called LB151 (also known as LB142) which plays a role in human evolution. They found that white cats live in an evolutionary order that includes both black and white cats. White cats live in groups of three to six individuals. However, because these groups of cats are much smaller than other cats, the number of white cats increases dramatically when they grow up.
+The study's authors concluded that the black cats had more offspring in the group that lived in the African sav
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 2050, 382, 798, 1012, 843, 409, 1541, 338, 698]
+first_step_topk_probs=[0.49979445338249207, 0.14319351315498352, 0.09439894556999207, 0.04552961513400078, 0.038943544030189514, 0.0333101786673069, 0.0328606516122818, 0.031619682908058167, 0.024370243772864342, 0.023133456707000732]
+first_step_topk_text=[' 1', ' One', ' The', ' 4', ' 6', ' 5', ' 2', ' There', ' A', ' It']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 202, 20, 13032, 333, 1604, 10941, 202, 21, 10941, 333, 2341, 10941, 202, 22, 10941, 333, 2341, 26634, 202, 23, 10941, 333, 2234, 26634, 202]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+1 apple = 12 apples
+2 apples = 13 apples
+3 apples = 13 bananas
+4 apples = 14 bananas
+5 apples = 15 bananas
+6 apples = 16 bananas
+7 apples = 16 banana
+8 apples = 17 bananas
+9 apples = 18 bananas
+10 apples = 20 bananas
+12 apples = 20 apples
+13 apples = 19 bananas
+14 apples = 20 oranges
+15 apples = 20 banana
+16 apples = 21 bananas
+17 apples = 22 bananas
+18 apples = 24 bananas
+19 apples = 25 bananas
+20 apples = 25 banana
+21 apples = 26 bananas
+22 apples = 23 bananas
+23 apples = 32 bananas
+24 apples = 32 banana
+25 apples = 34 bananas
+26 apples = 36 bananas
+27 apples = 37 bananas
+28 apples = 39 bananas
+29 apples = 33 bananas
+30 apples = 38 bananas
+31 apples = 34 banana
+32 apples = 35 bananas
+33 apples = 38 banana
+34 apples = 34 apples
+35 apples = 38 oranges
+36 apples = 38 fruits
+37 apples = 38 fruit
+38 apples = 40 bananas
+39 apples = 42 bananas
+40 apples = 43 bananas
+41 apples = 44 bananas
+42 apples = 44 apples
+43 apples = 44
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 783, 22089, 1289, 2575, 698, 1509, 3919, 1278]
+first_step_topk_probs=[0.53815758228302, 0.07011301070451736, 0.05692731589078903, 0.039535198360681534, 0.039535198360681534, 0.03752879053354263, 0.033816248178482056, 0.03047099895775318, 0.02606322430074215, 0.022293057292699814]
+first_step_topk_text=[' I', ' The', ' This', ' Thank', ' We', ' What', ' It', ' You', ' My', ' If']
+
+[New tokens 10] count=256 first30=[2575, 1223, 482, 1734, 339, 486, 34, 202, 1465, 330, 263, 2070, 357, 578, 733, 2657, 419, 263, 2361, 288, 874, 444, 269, 1442, 288, 3409, 15, 14292, 298, 269]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What does this mean for you?
+This is a program that has been developed by a team of people from the University of California, Berkeley and the University of Wisconsin. They have worked with other researchers to develop a new way of measuring the amount of stress in a patient's body. This research will help them better understand how stress affects our bodies. It could also be used as an example to help patients cope with their stress.
+The project was started at UC Berkeley and is currently being funded by the National Institutes of Health. The purpose of the project is to make sure that patients are able to use their natural stress-related behaviors (i.e., they feel stress) to reduce stress.
+It involves two main phases – one on stress and one on stress.
+First, the researchers want to know what kinds of stress hormones work best in the body and how they affect stress levels. These hormones can help regulate the body's stress response. The goal is to find out whether these hormones work in different ways and if so, how they work.
+In the second phase, the scientists hope to learn more about the hormone's role in stress.
+For more information, contact:
+Susan Berman, Ph.D., CU-Boulder,
+
+================================================================================
