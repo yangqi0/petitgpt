@@ -13,8 +13,6 @@ import argparse
 import json
 import sys
 import time
-import random
-import signal
 from dataclasses import asdict
 from pathlib import Path
 from typing import Dict, Optional, Tuple
@@ -31,11 +29,7 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from dataset_pretrain import PackedBinDataset  # noqa: E402
-# Prefer a fixed sampler implementation if present.
-try:
-    from sample_fixed import generate_default_samples  # type: ignore  # noqa: E402
-except Exception:
-    from sample import generate_default_samples  # noqa: E402
+from sample import generate_default_samples  # noqa: E402
 from src.model import GPT, GPTConfig  # noqa: E402
 
 # -----------------------------------------------------------------------------
@@ -134,23 +128,6 @@ def _resolve_resume_path(resume_path: str, out_dir: Path, resume_step: int = -1)
     return None
 def set_seed(seed: int) -> None:
     import random
-
-# -----------------------------------------------------------------------------
-# Graceful Ctrl+C (SIGINT): request stop and save a checkpoint at a safe boundary.
-# -----------------------------------------------------------------------------
-_STOP_REQUESTED = False
-
-
-def _handle_sigint(signum, frame):  # pragma: no cover
-    global _STOP_REQUESTED
-    _STOP_REQUESTED = True
-    print("\n[interrupt] SIGINT received (Ctrl+C). Will save and stop at next safe point...", flush=True)
-
-
-try:
-    signal.signal(signal.SIGINT, _handle_sigint)
-except Exception:
-    pass
 
     try:
         import numpy as np
@@ -562,19 +539,6 @@ def parse_args() -> argparse.Namespace:
     ap.add_argument("--sample_max_new_tokens", type=int, default=256)
     ap.add_argument("--sample_min_new_tokens", type=int, default=32)
 
-    # stop strings for sampling (can be passed multiple times)
-    ap.add_argument(
-        "--stop_string",
-        action="append",
-        default=[],
-        help="Stop generation when ANY of these strings appears (can be repeated).",
-    )
-    ap.add_argument(
-        "--strip_stop",
-        action="store_true",
-        help="If set, remove the stop string from the printed sample output.",
-    )
-
     # Resume
     ap.add_argument("--resume_path", type=str, default="")
     ap.add_argument("--resume_full", action="store_true")
@@ -725,35 +689,12 @@ def main() -> None:
         for pg in optim.param_groups:
             pg["lr"] = lr
 
-        # Stop requested via Ctrl+C? Save and exit cleanly.
-        if _STOP_REQUESTED:
-            print("[interrupt] Saving checkpoint and exiting...")
-            save_ckpt(
-                out_dir=out_dir,
-                global_step=global_step,
-                local_step=local_step,
-                model=model,
-                optim=optim,
-                scaler=scaler if use_fp16 else None,
-                model_config=asdict(cfg),
-                train_args=vars(args),
-            )
-            print(f"[interrupt] saved latest + step_{global_step:06d}.pt to {out_dir}")
-            return
-
         optim.zero_grad(set_to_none=True)
 
-        # EOS weight schedule:
-        # If eos_weight_warmup_steps > 0, linearly anneal eos_weight -> 1.0 over that many steps.
-        # (Use eos_weight < 1.0 to down-weight EOS early and avoid EOS-collapse.)
+        # EOS weight schedule
         cur_eos_weight = float(args.eos_weight)
-        warm = int(args.eos_weight_warmup_steps)
-        if warm > 0 and cur_eos_weight != 1.0:
-            if global_step >= warm:
-                cur_eos_weight = 1.0
-            else:
-                t = float(global_step) / float(warm)
-                cur_eos_weight = cur_eos_weight + t * (1.0 - cur_eos_weight)
+        if int(args.eos_weight_warmup_steps) > 0 and global_step >= int(args.eos_weight_warmup_steps):
+            cur_eos_weight = 1.0
 
         accum_loss_raw = 0.0
 
@@ -855,21 +796,6 @@ def main() -> None:
         global_step += 1
         local_step += 1
 
-        if _STOP_REQUESTED:
-            print("[interrupt] Saving checkpoint and exiting...")
-            save_ckpt(
-                out_dir=out_dir,
-                global_step=global_step,
-                local_step=local_step,
-                model=model,
-                optim=optim,
-                scaler=scaler if use_fp16 else None,
-                model_config=asdict(cfg),
-                train_args=vars(args),
-            )
-            print(f"[interrupt] saved latest + step_{global_step:06d}.pt to {out_dir}")
-            return
-
         # Logging
         if global_step % int(args.log_every) == 0:
             dt = time.time() - t_window
@@ -915,8 +841,6 @@ def main() -> None:
                     bos_id=int(args.bos_id),
                     greedy=False,
                     debug=True,
-                    stop_strings=(args.stop_string if len(args.stop_string) > 0 else None),
-                    strip_stop=args.strip_stop,
                 )
                 print(f"[sample] wrote {out_path}")
             except Exception as e:
