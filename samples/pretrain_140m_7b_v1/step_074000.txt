@@ -1,0 +1,262 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=115 first30=[2827, 5273, 2857, 299, 269, 3843, 374, 610, 2553, 17, 1109, 2977, 7336, 288, 24796, 298, 20210, 17, 5273, 418, 1114, 8763, 4, 776, 3766, 299, 631, 1282, 269, 11913]
+[Full output 1]
+Once upon a time, a curious child named Jack went to the park with his mom. They saw lots of swings and slides. Jack was very excited! He wanted to go down the slide so badly. But then, he heard a loud noise. It sounded like a big thunder! Jack got scared and ran back home. When he got home, he asked his mom if they could go back home. His mom said yes and gave him a hug. She told Jack that it's okay because it's always fun. Jack learned an important lesson: sometimes things can be scary when you feel scared or scared.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 419, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8991213440895081, 0.10087861120700836, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', ' by', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 2] count=256 first30=[289, 1691, 1699, 298, 269, 10079, 418, 5153, 289, 925, 1590, 17, 382, 10079, 330, 2827, 994, 269, 3388, 5057, 11793, 16, 4066, 278, 10245, 11131, 1945, 2609, 793, 370]
+[Full output 2]
+The Eiffel Tower was built in 1711 and the tower was completed in 1818. The tower is named after the French architect Jean-François Le Guise de la Bastille, who died in 1822.
+
+The tower has a total of . It was constructed from 1680 to 1870 by the architect Pierre L'Osservatore (1714–1872), who built it with the addition of a new tower in 1816. The tower has a floor plan that is identical to the earlier plans for the tower which were used until the 1970s.
+
+History
+
+The building was originally constructed as a private residence on the site of the old Catholic church of Saint Mary, Saint-Jean-de-Chapelle, where the first church was built in 1823. The church was purchased by the French government in 1710.
+
+In 1828, the foundation stone was laid on the west side of the churchyard. The stone was subsequently removed to its present location near the former church of Saint-Jérôme, the cathedral of St-Jean. In 1838, the new tower was completed.
+
+It was rebuilt under the direction of Charles Lévi-Dieu in 1886. The original church was demolished in
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 483, 342, 3020, 359, 269, 1677, 288, 795, 7527, 17, 783, 1818, 357, 490, 411, 491, 263, 4409, 374, 775, 298, 1408, 7527, 353, 8615, 1414, 359]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be written as the product of two vectors. This means that if we have a vector with first and second vectors (also known as eigenvalues) and then its transpose, we can write it as the sum of their individual eigenvalues.
+
+Now let's talk about matrices. A matrix is just a fancy name for a rectangular array of numbers arranged in rows and columns. Matrices are like tables filled with numbers arranged in different ways, each with a specific number associated with them. For example, consider our matrix:
+```css
+[ 2 1 3]
+[ 4 6]
+[ 8 9]
+[ 9 10]
+[ 11 12]
+[ 13 16]
+[ 18 17]
+```
+We want to find out how many times these numbers are multiplied together to create a new matrix that is equal to one of the original ones. To do this, we need to know some properties of matrices. Specifically, when we take the square root of a negative number, the result will always be positive because multiplying any positive number by itself gives us zero. So, we say that the square root is zero! That means that no matter which positive number we choose, there will always be a corresponding negative number.
+
+So now you see
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 1420, 491, 817, 395, 1991, 1085, 7337, 9845, 1005]
+first_step_topk_probs=[0.30431169271469116, 0.1807689219713211, 0.1191701665520668, 0.08718676120042801, 0.05568341910839081, 0.035968244075775146, 0.035968244075775146, 0.03241007775068283, 0.029203908517956734, 0.020281707867980003]
+first_step_topk_text=[' can', ' allow', ' have', ' use', ' are', ' provide', ' model', ' enable', ' rely', ' help']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 9668, 298, 9668, 17, 382, 8944, 1085, 330, 263, 2829, 619, 16, 9359, 6946, 288, 269, 14457, 2673, 17, 202, 509, 8944, 1085, 330]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex behaviors and behaviors. The functional model is a simple one-dimensional representation of the neural network.
+The functional model is the basis for many other cognitive tasks, such as memory, attention, and decision making. In addition, it provides an insight into how people learn and work with the information they collect. It is also useful in cognitive science research because it allows researchers to explore the connections between various brain regions.
+In this paper, we describe a method to construct a functional model of cognitive behavior using the functional model. We present the results of this study, which will provide insights into how our model works. This work will help us understand how cognitive behavior might be related to the development of mental disorders, including schizophrenia.
+We have designed a functional model to evaluate the effects of the social context on cognitive behavior. This model is a generalization of the behavioral model that was developed by Peter Barratt and colleagues at the University of Texas Health Science Center. These models are based on the theory that social context influences how people interact with others. We use these models to test hypotheses about the effects of social context on cognition. We show that social context affects cognitive behavior in two ways: (1) social context influences cognitive behavior in different ways; and
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=255 first30=[263, 647, 286, 3, 711, 4750, 2062, 263, 689, 715, 418, 263, 1809, 3510, 2827, 11183, 17, 1530, 6446, 299, 4196, 298, 1098, 719, 1943, 17, 2050, 1266, 1024, 4725]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+Once upon a time there was a little girl named Jane. She loved to explore and find new things. One day she decided to go on an adventure with her mom. They walked through the forest together. When they arrived at their destination, Jane saw something strange. It was a big, scary bear! Jane said to herself, "What is that?". Her mom smiled and said, "That's a bear, Jane. You must be brave to try it." So Jane took out her hands and started walking around the woods. As she walked, she noticed a big tree in the distance. She stopped by the tree and looked up. Suddenly, she heard a voice behind her. It was her mom! She said, "Jane, I'm so scared of you. Can we stay here forever?" Jane nodded and ran back home. The next morning, Jane had an idea. She asked her mom if she could go and she said yes! She went downstairs and sat down for some sleep. After a few minutes, Jane woke up feeling very tired but happy. She knew that even though she didn't have any friends, she still wanted to explore more. And so, Jane and her mom became good friends.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=69 first30=[622, 311, 864, 353, 20, 647, 354, 12, 711, 202, 856, 28045, 66, 4203, 1714, 346, 1083, 801, 7863, 288, 1890, 903, 346, 1083, 801, 509, 993, 288, 3097, 9044]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n * (1 + 1)
+
+
+def factorial_number():
+    print("Number of numbers")
+    print("The number of positive integers is equal to the number of negative integers.")
+    print("All the positive integers are equal to the sum of the two numbers in the product of the first and second numbers.")
+    print()
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 1083, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.6307199597358704, 0.2225596159696579, 0.14672043919563293, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', ' print', '', '#', '', '"', '!', '', '']
+
+[New tokens 7] count=93 first30=[622, 651, 73, 62, 78, 64, 339, 520, 289, 311, 490, 284, 17, 9938, 801, 41, 903, 298, 284, 62, 1813, 801, 41, 28290, 1542, 643, 64, 202, 202, 350]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return [f[k] for k in n if f.startswith("F") and f[len("F")] > 0]
+
+if __name__ == "__main__":
+    import sys
+
+    # Load the string input file
+    print('Loading the Python function')
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--test', type=str, help='The test file')
+    parser.set_defaults(func=test)
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 1289, 13676, 535, 698, 1238, 2590, 1278, 338]
+first_step_topk_probs=[0.4324909746646881, 0.20859499275684357, 0.0511183962225914, 0.0511183962225914, 0.046061497181653976, 0.04372388496994972, 0.03550102189183235, 0.030365630984306335, 0.02882455289363861, 0.01900232769548893]
+first_step_topk_text=[' The', ' There', ' We', ' Yes', ' In', ' It', ' As', ' No', ' If', ' A']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 12052, 17, 202, 509, 2597, 2526, 269, 2645, 3191, 330, 649, 1264, 611, 2433, 299, 342, 2645, 330, 1091, 383, 578, 263, 22994, 12153, 702, 613, 10676]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+The reason why the black cat is so much more likely to be black is because it has a darker coat than other cats. So even though it's white, it also has an unusual coat pattern of black and white stripes. This is because it's less likely to be brown than white. And this is why the black cats have a darker coat.
+So, if you think about how many black cats there are in your home, you're probably not alone. A lot of people who own homes have black cats. It's not uncommon for people to get sick from being in these homes without knowing what they look like. You'll find out by looking at the color of their hair.
+This is why the fact that the black cat lives in such large cities makes it easy to spot any kind of problem. If you live in a city with a population of 1 million, then you'll find that most of the cats live in one of the largest urban areas. That means that the black cats will live in a smaller area. But if you live in the same city as the black cats, you'll find many more black cats.
+Remember, black cats live in the black community and the black cats don't live in a big city anymore
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 382, 2050, 1541, 698, 338, 843, 1289, 643, 798]
+first_step_topk_probs=[0.4935910701751709, 0.193293035030365, 0.10346230864524841, 0.03846021369099617, 0.03650832921266556, 0.02284632809460163, 0.02168687805533409, 0.019541501998901367, 0.017608368769288063, 0.017608368769288063]
+first_step_topk_text=[' 1', ' The', ' One', ' There', ' It', ' A', ' 5', ' We', ' 0', ' 4']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 17, 202, 3016, 914, 10941, 620, 406, 491, 34, 2050, 13032, 330, 744, 21, 15, 1086, 17, 202, 509, 3533, 330, 263, 1809, 3851, 288]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples.
+How many apples do he have? One apple is $2,000.
+The answer is a little bit of the hard work. The problem with this is that the price for apples is very high. For example, if you were to buy a lot of apples in a week, you would pay around $1,000 per pound (or $1,500 per pound) for each dollar you bought. This is because the price of apples is so low that you are not paying any more than you could earn by buying more apples at a lower price. So, if you bought one of these apples at a rate of 5 cents per pound, you would get approximately $3,000 per year. That's a big amount!
+But it turns out that the cost of apples is very small compared to the cost of other goods like food or clothing. If you bought two different items, you would be paid less than one dollar. And when you sold the same item twice, you would end up getting only $4,000 per dollar. In fact, you might even get $4,500 per dollar every day. This is why people tend to think of the "cost" of things as being the number of dollars they spend on
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 783, 382, 1289, 2575, 698, 22089, 1509, 3919, 1278]
+first_step_topk_probs=[0.41430601477622986, 0.10744379460811615, 0.07461816072463989, 0.06723660230636597, 0.04669484868645668, 0.03994021937251091, 0.03598915785551071, 0.03416268154978752, 0.024993952363729477, 0.02137845940887928]
+first_step_topk_text=[' I', ' This', ' The', ' We', ' What', ' It', ' Thank', ' You', ' My', ' If']
+
+[New tokens 10] count=193 first30=[2575, 330, 4083, 34, 202, 11190, 18427, 29, 25799, 330, 269, 1629, 415, 2018, 299, 4083, 633, 15, 298, 383, 3974, 500, 2505, 1951, 722, 411, 2068, 6968, 18029, 598]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is stress?
+Emotional: Stress is the body's response to stressors, and it helps us feel better when we're feeling stressed out. When you feel stressed out, your body can't make sense of it because it's not getting enough energy. It also feels like you need more energy than you need.
+- Stress Management for Depression: A Guide for People with depression (PDF)
+- The Fight With Depression: How to Prevent and Treat Depression
+- The American Psychiatric Association: Depression in Children and Adolescents
+- National Institute on Mental Health: Depression and Other Disorders
+- The Mental Health Foundation: Depression and other disorders
+- The Autism Society: Depression and Related Disorders
+- Mental Health America: Answers to Questions About Depression
+- Depression in Adults: Resources for Supporting Families
+- The National Alliance on Mental Illness (NAMI): Depression in Adults
+- The University of Michigan: Depression in Adults
+
+================================================================================

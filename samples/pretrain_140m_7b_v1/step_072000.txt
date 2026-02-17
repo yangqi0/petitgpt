@@ -1,0 +1,340 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=85 first30=[2827, 5273, 2857, 299, 269, 3843, 17, 776, 2977, 263, 2023, 3197, 374, 7336, 288, 4749, 298, 7106, 17, 5273, 3766, 299, 15935, 269, 3197, 15, 614, 406, 418, 11251]
+[Full output 1]
+Once upon a time, a curious child named Jack went to the park. He saw a big tree with lots of leaves and flowers. Jack wanted to climb the tree, but he was scared. He said, "I can help you. Let's go down the path." So they climbed up the tree and climbed higher and higher. They felt happy that their mom had helped them. From that day on, Jack always remembered to be careful when climbing trees.
+
+================================================================================
+[Prompt 2] (prompt_tokens=7)
+The Eiffel Tower was built
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[289, 351, 299, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.7797950506210327, 0.13271434605121613, 0.08749058097600937, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' in', ' on', ' to', '', '#', '', '"', '!', '', '']
+
+[New tokens 2] count=156 first30=[289, 1691, 6936, 298, 269, 10079, 418, 269, 775, 299, 342, 5153, 17, 202, 40, 705, 297, 17506, 15, 263, 719, 10079, 536, 418, 2793, 419, 9068, 15406, 2756, 15]
+[Full output 2]
+The Eiffel Tower was built in 1783 and the tower was the first to be completed.
+Eiffel Tower, a new tower which was built by Edward Gibbon, had been constructed at the same time as the original tower, but it was destroyed in the French Revolution of 1848. The tower was designed by architect Georges Cuvier, who later became the designer of the tower.
+In addition to the tower, the tower also contained an orchestra, a piano, and a theatre. The opera house was built on the site of the tower itself, and the opera house was used for the opera house.
+When the opera house collapsed in 1832, the tower was again rebuilt and restored, and the two towers were restored.
+The tower was repaired and re-opened in 1835.
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 483, 342, 5454, 359, 263, 5284, 288, 795, 7527, 17, 202, 202, 2774, 1427, 415, 1936, 269, 1496, 3581, 29, 202, 202, 91, 647, 371, 333, 643]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be represented as a combination of two vectors.
+
+Now let's consider the given equation:
+
+x + y = 0
+
+The objective here is to find x and y values of x so that they satisfy the condition (x - y) < 0. To do this, we will first define the unknown variables X and Y. Then, using the formula for finding x and y:
+
+X = 1 / (1 - 0.5)^2
+Y = 1 / 2
+
+Next, we need to determine the eigenvalues of the system. Since there are no other solutions, we cannot directly solve them directly. However, since our goal is to compute these eigenvectors, we should also know the eigenvalues of each vector separately. Thus, we obtain:
+
+(x - y)/((1 - 0) * y) = x^2/2 \* (y - y)
+
+Since we already found y, we now have:
+
+0 = 1 / ((1 - 0)(1 - 0))
+
+We now know that there exists some nonzero number z such that z > 0 whenever z > 0. Therefore, we must set z equal to zero because any nonzero number z can be expressed as a single negative
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 330, 3747, 491, 1420, 3350, 9845, 817, 578, 1991]
+first_step_topk_probs=[0.1810581088066101, 0.14700770378112793, 0.07090336829423904, 0.06388930976390839, 0.05756904557347298, 0.04674241319298744, 0.044370196759700775, 0.03246193006634712, 0.029250657185912132, 0.029250657185912132]
+first_step_topk_text=[' can', ' is', ' allows', ' have', ' allow', ' uses', ' rely', ' use', ' has', ' provide']
+
+[New tokens 4] count=109 first30=[483, 342, 885, 299, 1085, 2281, 870, 17, 202, 509, 3355, 2877, 3722, 269, 6605, 16, 6013, 268, 330, 299, 1062, 383, 3831, 339, 486, 299, 1137, 806, 669, 870]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data.
+The basic idea behind the Model-Viewer is to make it easy for you to see how your data can be manipulated, and then how to use it in the real world. In this article I will explain how to create a model that can be applied on any computer. It is important to note that all of these methods are not 100% intuitive. This means that there may be some problems with the model. To learn more about the Model-viewer, please read our next post.
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=140 first30=[263, 647, 286, 864, 263, 647, 286, 711, 202, 6, 5167, 656, 269, 1392, 339, 4416, 202, 856, 865, 66, 1104, 1714, 346, 1083, 801, 1192, 903, 555, 537, 3186]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b * a + b
+
+
+# Set up the function for testing
+def test_add():
+    print("test")
+
+    # Test that the function is called when the function is set to true.
+    print("Test")
+
+    # Tests that the function has been set to false.
+    print()
+
+    # Test with the function as defined in the first example
+    print("Incorrectly initialized.")
+
+    # Test the function has not been set to true (i.e., it's not set to false).
+    print("Testing failed!")
+
+    # Test if the function is not set to true or false.
+    assert "The function has not given its value." == expected
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 643, 17, 24, 864, 353, 81, 552, 354, 12, 711, 202, 6, 5520, 274, 202, 1052, 16216, 29, 346, 538, 1401, 1285, 1737, 492, 15, 311, 29, 494, 333]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return 0.5 * (n - 1)
+
+
+# Classes
+class Solution:
+    def __init__(self, n: int = 0) -> str:
+        self._total_numbers = []
+        self._number_of_trials = {}
+
+        # Define the number of triples and their combinations
+        for i in range(0, n):
+            if i % 2 == 0:
+                continue
+
+            # Initialize the number of triplets and their combinations
+            triv = [1] + list(range(i))
+            self._total = sum([len(d) for d in triv])
+            self._num_trials[i] = len(d)
+
+    def _sum_triplet(self, num_trials: int) -> int:
+        """
+        Return the total number of trives that have been counted
+        """
+        for i, triv in enumerate(self._total):
+            if not triv:
+                raise ValueError("Number of Trips is not an integer")
+            count = max(self._num_Trials, i)
+            if count > 0:
+                return triv[count]
+        return count
+
+    def _add_single_tripleta(self, triv
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=256 first30=[622, 651, 20, 490, 311, 861, 643, 1107, 354, 339, 1249, 289, 1457, 11, 19, 15, 311, 3830, 711, 202, 6, 783, 330, 269, 775, 1309, 288, 269, 8695, 5758]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return [1 if n == 0 else 1 for i in range(0, n)]
+
+
+# This is the first line of the Python script.
+
+import numpy as np
+from scipy import stats
+
+class SparseSolver():
+    def __init__(self, x=None, y=None, z=None, *args, **kwargs):
+        self._x = x
+        self._y = y
+        self._z = z
+
+        # define the parameters
+        self.__k_size = 1
+        self.__type = "f"
+        self.__params = {"x": x, "y": y}
+
+    def __call__(self, input):
+        return self.__get_param("input", input)
+
+    def __len__(self):
+        return len(self.__x)
+
+    def get_func(self, x, y):
+        return (
+            self.__x[i] - self.__y[i] + self.__z[i]
+            for i in xrange(0, len(self))
+        )
+
+    def get(self, num):
+        return sum([self.__x[j] for j in xrange(num)])
+
+    def __repr__(self):
+
+        if self.__type == "f":
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 13676, 2590, 356, 1289, 698, 535, 5531, 1278]
+first_step_topk_probs=[0.23358389735221863, 0.1896551549434662, 0.1708936244249344, 0.09636320173740387, 0.06030254811048508, 0.05157950520515442, 0.05157950520515442, 0.03400329500436783, 0.027608515694737434, 0.02361481636762619]
+first_step_topk_text=[' The', ' There', ' Yes', ' No', ' I', ' We', ' It', ' In', ' Well', ' If']
+
+[New tokens 8] count=256 first30=[1541, 330, 808, 3641, 2833, 299, 1447, 269, 2877, 357, 2645, 10676, 395, 2645, 17, 202, 3811, 2597, 339, 482, 330, 357, 383, 330, 5308, 357, 2645, 10676, 491, 263]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: There is no scientific evidence to support the idea that black cats are black.
+One reason for this is that it is believed that black cats have a dark coloration in their eyes which causes them to look white. Black cats can be classified as either black or brown. The black cat has black eyes, although they do not have a black eye. This means that when you look at a black cat, you see a black eye, but you don't see a black one. In fact, if you look at the black cat's eye, you will notice that it looks white. It doesn't matter how dark it is, black cats are usually black. If you look at it from a distance, you will see white, while black cats are darker than black cats.
+The other reason why black cats are so black is because of their light-colored eyes. When you look at an object, you see black cats, it is black. You can see black cats and black cats are lighter colored. Black cats are more likely to be black than black ones. So black cats may look blue, whereas black cats are grayer.
+This is a very important point to remember, since black cats are generally black. They are black and yellow.
+There are also other
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 382, 2050, 2590, 1541, 13676, 798, 338, 409, 698]
+first_step_topk_probs=[0.3067916929721832, 0.24909520149230957, 0.12014135718345642, 0.03442107513546944, 0.03442107513546944, 0.02944190800189972, 0.02944190800189972, 0.02794770523905754, 0.027321942150592804, 0.026529360562562943]
+first_step_topk_text=[' 1', ' The', ' One', ' No', ' There', ' Yes', ' 4', ' A', ' 2', ' It']
+
+[New tokens 9] count=256 first30=[2050, 13032, 330, 5405, 354, 13032, 15, 614, 806, 914, 10941, 620, 406, 491, 34, 382, 3533, 330, 354, 13032, 17, 2069, 15, 490, 486, 1990, 619, 13032, 289, 269]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple is worth 1 apple, but how many apples do he have? The answer is 1 apple. So, if you put one apple in the first box, there will be an apple in the second box, so that's 1 apple. And the apple in the third box is 1 apple, so that means 1 apple. But what about a apple that was left out of the first box? In fact, the apple was left out because it had been taken from the first box. Now, we say that the apple was not left out, but instead went to the last box, which is 0 apples. This is why I said that apple was left in the first place.
+Answer: A apple is worth 100 apples.
+Answer : If you were to ask yourself, "What is the difference between apples and apples?" You would think that apples are really the same thing as apples. But, I don't know. It just looks like apples are not the same thing. Let me show you another way. Suppose you wanted to find out how much apple was left over after you took out the first box of apples. What could you do?
+Answer : First, let's take out the first apple and put it back into the first box where you started.
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 3919, 1289, 382, 2575, 783, 22089, 776, 15255, 1348]
+first_step_topk_probs=[0.3395628333091736, 0.09861723333597183, 0.06848829984664917, 0.06501252949237823, 0.0617130883038044, 0.05560816451907158, 0.04756418243050575, 0.02976490557193756, 0.025459272786974907, 0.0217764712870121]
+first_step_topk_text=[' I', ' My', ' We', ' The', ' What', ' This', ' Thank', ' He', ' Thanks', ' How']
+
+[New tokens 10] count=256 first30=[2575, 330, 669, 2942, 374, 269, 1759, 9668, 34, 202, 16, 1509, 2068, 2221, 9327, 15239, 388, 280, 1147, 656, 435, 3664, 17, 202, 16, 4516, 9657, 985, 936, 298]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience with the following behaviors?
+- You're having trouble sleeping or waking up at night.
+- Your stomach aches and pains are getting worse.
+- You've had a lot of weight loss, but you don't feel as full as you did in the past.
+- It's important to get regular exercise for at least 30 minutes each day.
+- If you have diabetes, talk to your doctor about what you can do to help control it.
+- Have a plan that works for you.
+- Talk to your doctor if you have any questions about your medications.
+What causes stress?
+Stress can be caused by many things, including:
+- The weather.
+- Exposure to certain environmental factors.
+- Stress from stressful situations.
+- Being exposed to others who may be experiencing stress.
+- Eating disorders.
+- Anxiety.
+- Some medicines.
+- Medications.
+- Problems with sleep.
+- Changes in mood.
+- Other medical conditions.
+How is stress treated?
+Depending on the type of stress you have, your doctor will treat you with medications, such as:
+- Medicines. Medicines are used to treat some types of stress. They include
+
+================================================================================

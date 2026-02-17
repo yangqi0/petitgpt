@@ -28,7 +28,7 @@
   "num_workers": 2,
   "seed": 1234,
   "log_every": 20,
-  "eval_every": 1000,
+  "eval_every": 100,
   "save_every": 2000,
   "debug_every": 2000,
   "add_bos_to_prompts": false,
@@ -37,7 +37,12 @@
   "sample_top_k": 0,
   "sample_max_new_tokens": 256,
   "sample_min_new_tokens": 32,
-  "resume_path": "outputs/pretrain_140m_3b_v1/latest.pt",
+  "stop_string": [
+    "\n\nOnce upon a time",
+    "\nOnce upon a time"
+  ],
+  "strip_stop": true,
+  "resume_path": "outputs/pretrain_140m_7b_v1/latest.pt",
   "resume_full": true,
   "resume_step": -1,
   "compile": true,
