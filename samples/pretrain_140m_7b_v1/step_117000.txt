@@ -1,0 +1,270 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 2857, 2446, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.5474507212638855, 0.3251993954181671, 0.12734991312026978, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' went', ' came', '', '#', '', '"', '!', '', '']
+
+[New tokens 1] count=125 first30=[2827, 5273, 418, 7948, 888, 269, 3843, 17, 776, 2977, 2009, 17935, 351, 269, 2389, 298, 406, 3766, 299, 3466, 383, 656, 17, 776, 5004, 598, 610, 1325, 298, 10225]
+[Full output 1]
+Once upon a time, a curious child named Jack was walking through the park. He saw something shiny on the ground and he wanted to pick it up. He reached out his hand and picked it up. Suddenly, Jack heard a voice coming from behind him. It said, "I found this thing! I think it is a magic wand!" Jack was so surprised that he couldn't believe his eyes. He ran back home with the wand in his hands. When he got home, Jack showed his mom all about the magical wand. She told him all about it and they were very happy. Jack knew that the magic wand could help him find new things.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 356, 19135, 6578, 15, 298, 269, 1408, 3796, 2317, 289, 11438, 17, 698, 418, 6214, 419, 2960, 2924, 398, 2676, 353, 70, 17, 1291, 4573, 16]
+[Full output 2]
+Paris is the capital of the province of the Ionian Sea, and the second largest city in Greece. It was founded by King Minos II (c. 995-1032) as a result of his conquests during the reign of Tiberius (c. 1015-1035). The city's name is derived from Greek Αέλιστος (tēnos), "the city of the gods".
+The city was the seat of the royal house of Ptolemy III Philadelphus (c. 1096–1154), son of king Philocles, who had ruled for a long time under his father's rule. He was the first king to be crowned on August 25, 1092 at the Church of St. Peter at Rome. In the late 11th century, the city became an important trading centre with the rest of Europe. The city was also known as the "Boggy Hill" because of its location near the river Tyrrhenia.
+In the 13th century, Ptolemy XI established the city of Phrygia, which was the first Roman Empire in history. A new city was built here that was dedicated to the goddess Phrygia. In the 14th century, it was
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 14274, 2161, 269, 2819, 353, 767, 12, 288, 263, 3823, 483, 342, 11188, 707, 1467, 2819, 1191, 263, 9220, 17, 382, 28071, 330, 4810, 9798, 419]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that determines whether the row (row) of a matrix can be transformed into another row using a transformation. The eigenvalue is typically denoted by λ or λ_1, where λ is a scalar and λ is a vector in the first row of the matrix.
+
+Now let's consider the given problem:
+
+> f(x) = (2x - 2) * x^3 + (4x - 4) * x + (6x - 6) * x
+
+The goal is to find the eigenvalues of this system of equations. To do so, we need to apply some algebraic manipulation to the coefficients of the equation. First, notice that both sides of the equation are equal to zero because they represent the same vector in the second row of the system. Next, we substitute these expressions back into our original equation to get rid of any terms involving x. Finally, we take the square root of both sides to obtain the general solution.
+
+Let's start with the right side of the equation:
+
+[0] [−1] [2x - 1] [3x - 3] [7x - 6] [8x - 6
+
+Next, let's focus on the left side of the expression:
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 1085, 5546, 491, 9845, 1420, 395, 1991, 3350]
+first_step_topk_probs=[0.2997475266456604, 0.10577081143856049, 0.08587910979986191, 0.07738357037305832, 0.05964185297489166, 0.05661503225564957, 0.043634913861751556, 0.03783348575234413, 0.037322916090488434, 0.02592024952173233]
+first_step_topk_text=[' use', ' can', ' model', ' describe', ' have', ' rely', ' allow', ' are', ' provide', ' uses']
+
+[New tokens 4] count=218 first30=[22968, 269, 14457, 2673, 885, 289, 269, 1549, 2613, 17, 382, 1085, 330, 1728, 351, 269, 2877, 357, 14457, 8119, 483, 342, 3658, 419, 263, 854, 288, 3677, 15, 536]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the neural network used in the human brain. The model is based on the idea that neural networks can be described by a set of rules, which can then be analyzed to predict how well they will behave in real-world situations.
+The model was developed by an international team of researchers led by Dr. Peter Wrenner and his colleagues at the University of California, San Diego. The paper describes the model as "a very sophisticated tool for studying neural networks." It is one of the first models to use a set of mathematical formulas to predict the behavior of a system.
+"It's not just about predicting what we'll see," said Wrenner. "But it's also about understanding the behavior of our brains, and making predictions about how these systems work."
+Wrenner's research has been supported by the National Science Foundation.
+Other social bookmarking and sharing tools:
+Note: Materials may be edited for content and length. For further information, please contact the source cited above.
+Note: If no author is given, the source is cited instead.
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=172 first30=[263, 647, 286, 3, 711, 4750, 2062, 263, 689, 715, 418, 263, 1809, 3510, 2827, 15781, 17, 1530, 6446, 299, 4196, 298, 619, 1266, 1024, 4725, 299, 631, 351, 287]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+Once upon a time there was a little girl named Lucy. She loved to explore and one day she decided to go on an adventure. As she walked through the woods, Lucy noticed something strange. There were some strange things around her. She wondered what they were! Suddenly, Lucy heard a loud noise coming from outside. It sounded like someone had left their house in the middle of the forest. Lucy quickly ran back inside and asked, "What's that noise?" Her mom came out and said, "That's a big noise. I think it's going to be very dangerous." Lucy was scared but she knew she had to help. She slowly crept closer and closer until finally the noise stopped. Lucy felt relieved and happy. She thanked her mom for helping her and then went off home with a smile on her face.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=54 first30=[622, 643, 1246, 622, 354, 1246, 622, 552, 20, 711, 202, 6, 538, 835, 66, 4390, 66, 4203, 1714, 202, 6, 265, 622, 2994, 17, 13263, 11, 19, 15, 1804]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return 0
+     return 1
+     return -1
+
+
+# def get_random_number():
+#     return random.randint(0, len(sys.argv))
+
+def get_random() -> int:
+    return sys.argv[1]
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=74 first30=[622, 354, 17, 19, 647, 353, 20, 552, 311, 12, 864, 353, 21, 864, 311, 12, 711, 202, 350, 1401, 678, 626, 861, 8922, 3142, 9533, 346, 537, 1083, 11]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1 - n) * (2 * n)
+
+
+if __name__ == "__main__":
+    # print(f"function {math.log(n)}")
+
+    # print(fun(f"{math.exp(-1/3)}"))
+    # print("function f", math.exp(-2/3))
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 2590, 13676, 535, 4619, 338, 698, 356, 783]
+first_step_topk_probs=[0.5171182751655579, 0.14063790440559387, 0.06438872218132019, 0.06438872218132019, 0.044717080891132355, 0.03630739822983742, 0.03105536475777626, 0.02798323519527912, 0.02156752347946167, 0.01943395286798477]
+first_step_topk_text=[' The', ' There', ' No', ' Yes', ' In', ' Black', ' A', ' It', ' I', ' This']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 360, 13134, 1385, 1278, 269, 3533, 330, 12052, 15, 1000, 383, 330, 263, 1832, 288, 360, 2966, 1385, 202, 509, 2597, 339, 482, 330, 357, 490, 263]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is "yes". If the answer is yes, then it is a case of "no".
+The reason for this is that if a cat is not black, there are no other animals in the world. Cats are not related to humans, so they cannot be considered as a separate species. So what does it mean when a cat is black?
+Question: Is there any difference between black and white cats?
+Answer 1: A cat is a type of cat which has two different colours (black and white) but is not a part of the same family. They have both white and black hair. In fact, the colour of the hair is called white. White cats are also known as pawns or paws.
+Question: What do you think about the term "white" in the world?
+Answer 2: Can you explain why the term "brown" is used in the world in the way that the word "white" is used?
+Answer 3: It seems that the term "blue" comes from the Latin word "green", which means red. That is because blue is the color of the leaf. The word "blue" is derived from the Greek words "green" and "red." The word "green" is the
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 843, 798, 1012, 2050, 409, 1218, 2, 1, 0]
+first_step_topk_probs=[0.499083936214447, 0.1586880385875702, 0.14298994839191437, 0.06214313581585884, 0.05045628547668457, 0.045671265572309494, 0.04096730425953865, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' 5', ' 4', ' 6', ' One', ' 2', ' 8', '', '', '']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 202, 509, 993, 288, 10941, 486, 483, 5964, 330, 1012, 15, 649, 490, 486, 10848, 1186, 10941, 15, 486, 791, 835, 263, 2056, 288, 843]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+The number of apples you can buy is 6, so if you bought 7 apples, you would get a total of 5 apples. But if you bought 4 apples, you could sell 5 apples for the same amount of money as you did before. So if you bought 6 apples, you'd have a total of 8 apples.
+How many apples do you need to buy each day from the store?
+Answer- "5 apples" = 12 apples
+This is how we get the answer: 10 apples = 12 apples. The total is 12 apples plus one extra apple.
+If you want to know what the answer is, try this:
+Answer: 11 apples = 12 + 12 = 24 apples
+The answer is: 16 apples = 24 apples.
+So the answer is: 24 apples = 36 apples.
+But what if you don't know which apple to buy?
+Answers: 15 apples = 20 apples
+You will probably find that the answer is 14 apples.
+Why is it important to be aware of the answers to these questions?
+Answered: 20 apples = 14 apples
+I am not sure if there are any other answers to these problems. I have been reading some books on the subject but I haven't
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 22089, 360, 3919, 382, 1509, 15255, 2069, 698]
+first_step_topk_probs=[0.47318241000175476, 0.07422684878110886, 0.057208869606256485, 0.05154947564005852, 0.03973076865077019, 0.03580039367079735, 0.03398352861404419, 0.024862879887223244, 0.01916257105767727, 0.01819007098674774]
+first_step_topk_text=[' I', ' What', ' Thank', ' "', ' My', ' The', ' You', ' Thanks', ' So', ' It']
+
+[New tokens 10] count=256 first30=[2575, 330, 4083, 34, 202, 11190, 926, 29, 382, 4083, 288, 269, 1266, 578, 733, 1047, 11986, 289, 269, 3035, 5879, 15, 614, 383, 415, 453, 2009, 357, 486, 483]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is stress?
+Emily: The stress of the day has been well documented in the medical literature, but it's not something that you can change for a moment. Stress may be a result of a number of factors including:
+- Being involved with a person or group of people who are experiencing stress
+- Being exposed to stressful situations such as job interviews and social interactions
+- Being in contact with people who have experienced stress
+- Having difficulty interacting with others or living in a community
+- Being aware of your own stress levels
+- Being emotionally supportive
+- Being able to cope with difficult situations
+- Being prepared to deal with the stress of daily life
+For more information on stress and its causes visit www.asthma.org/hiv.
+"I feel like I'm going through an overwhelming process of losing my temper," says Amy G. Becker, MD, professor of psychiatry at Emory University School of Medicine in Atlanta. "I've seen it happen all over the world."
+Glenn Becker, PhD, assistant professor of psychopharmacology at Emory and author of "The Tragedy of Stress," offers a simple way to help alleviate stress and help prevent it from occurring again.
+Becker
+
+================================================================================

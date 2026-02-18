@@ -1,0 +1,245 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 2857, 12562, 1255, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.5934746861457825, 0.17003335058689117, 0.12439905107021332, 0.11209295690059662, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' went', ' walked', ' called', '', '', '!', '"', '', '']
+
+[New tokens 1] count=208 first30=[1255, 5273, 418, 4438, 289, 269, 5786, 17, 776, 6446, 299, 4196, 298, 5524, 719, 1943, 17, 2050, 1266, 15, 406, 998, 263, 2023, 3147, 357, 418, 1114, 2466, 17]
+[Full output 1]
+Once upon a time, a curious child called Jack was playing in the garden. He loved to explore and discover new things. One day, he found a big rock that was very strong. He tried to balance it with his hands and feet, but it was too heavy for him. Suddenly, Jack had an idea! He asked his mom if he could use his foot to help him balance the rock. His mom said yes, so Jack took off his shoes and went outside. He saw some other kids playing with the rock and they were having lots of fun. When Jack's mom came inside, she saw that there was a lot of rocks on the ground. She told Jack that he should try and balance them with his feet. So Jack started to practice using his feet and legs. After a few minutes, he felt much better and started to climb up the rock. It was hard work, but Jack kept trying and eventually managed to balance the rock just like before. Jack was so proud of himself for practicing and he couldn't wait to show everyone what he did.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 356, 89, 618, 7928, 17, 698, 418, 6214, 289, 2234, 2543, 419, 8110, 1966, 1215, 281, 2116, 15, 263, 5178, 288, 269, 27432, 288, 2524, 17]
+[Full output 2]
+Paris is the capital of the province of the Ivory Coast. It was founded in 1499 by Sir John Whalley, a native of the Isle of Man. The first post office opened in 1719 and the first newspaper was published in 1732.
+The city's first major industry was coal mining. In 1769, the town received its first charter from the Crown. The town became an important centre for mining, producing gold, copper, lead, zinc, iron ore, tin, copper, and silver. The mines were designed to produce all the raw materials needed for the town's economy. They were also used to manufacture all the goods necessary to support the town's population. In 1805, the British government established a post office at the town, which served as a central point of communication between the island's northern and southern parts. During the 19th century, the area around the post office became more densely populated than it had been before. By 1930, the town had become one of the largest in the world, with more than half of the population living there.
+During World War II, the British Army built the village of Cunard Hill (later known as Cunard), the largest military installation in the world. It was the scene of the famous Battle of
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 14274, 269, 3892, 288, 269, 9220, 17, 382, 8639, 288, 287, 28071, 6128, 299, 269, 5043, 993, 288, 22542, 4672, 7527, 2273, 339, 8323, 269, 18956]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that determines the direction of the transformation. The dimension of an eigenvalue refers to the maximum number of linearly independent vectors required for computing the eigenvalues.
+
+Now let's consider the given problem:
+
+> If A is a linear transformation and B is a linear operator with an eigenvalue λ1 = λ2, what can we say about the existence of an eigenvector such that the following eigenvector satisfies the equation (A - λ1) = 0?
+
+To understand this better, imagine you have two types of matrices: one with a nonzero determinant and another with a zero determinant. These matrices are called "linearly dependent." The determinant of a matrix is defined as the product of its row and column entries; it doesn't change when changing the matrix's rows or columns. For example, if A has 2x2y2z2 and B has 4x4y2z3, then the resulting matrix would look like this:
+
+| | A | B |
+|---|---|---|
+| 1 | 0 | 0 |
+| 2 | 0 | 1 |
+| 3 | 0 | 2 |
+
+This means that the determinant of any linear transformation is equal to 1. This property ensures that all the eigenvalues in our original
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 5546, 817, 1420, 3235, 491, 9845, 1991, 395, 1085]
+first_step_topk_probs=[0.18264444172382355, 0.164576455950737, 0.14829571545124054, 0.07937697321176529, 0.05232851207256317, 0.05232851207256317, 0.047151945531368256, 0.04475894942879677, 0.04306865110993385, 0.032746344804763794]
+first_step_topk_text=[' can', ' describe', ' use', ' allow', ' predict', ' have', ' rely', ' provide', ' are', ' model']
+
+[New tokens 4] count=256 first30=[22968, 269, 14457, 2673, 1085, 17, 1109, 483, 342, 885, 299, 20993, 1549, 8755, 15, 388, 1121, 4383, 374, 2821, 2613, 1392, 17, 202, 509, 14457, 2673, 1085, 330, 453]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the neural network model. They can be used to simulate human intelligence, or even humans with normal brain function.
+The neural network model is not only useful for understanding how people learn and behave in real life, but also to understand how they interact with each other and with their environment. The neural network model can help us understand the way people process information and make decisions about what they want to eat, how much energy they need to work, and where they will go when they leave home.
+As part of the Human Intelligence Project (HIPP), the HIPP has been working on developing a new version of the neural network called the "World Wide Web." It is based on the concept of "the Internet" which is based on a set of principles known as the World Wide Web. In the future, it may be possible to use the Web to analyze the world's data and find out more about the nature of information and how it relates to our lives.
+To develop the World Wide web, we have developed a prototype system called the "Internet," which uses computers to process information. This system allows us to collect, store, and share information using the Internet. We can then use this information to design, test, and implement technologies that improve the quality
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 17, 595, 551, 202, 202, 350, 1401, 678, 626, 861, 8922, 3142, 9533, 346, 655, 3715, 555, 1083, 801, 18318, 903, 3, 711, 509, 795, 16, 1306]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+if __name__ == "__main__":
+    import sys
+
+    print("Python")
+
+The two-way car race was a popular sport in Japan for many years and has been a popular pastime of the city. The first race occurred on April 2nd, 1982 at the Sagami-Kazuoka Stadium in Kyoto, Japan. It was held from 6 to 7 p.m. in the afternoon and was attended by thousands of spectators. The event was called "The Kissing Night" (Shinjuku) or "Dancing Night". In addition to the sport itself, the event also featured the Dancing Night for those who had never played before. This event is the second of three events that were held during the event.
+
+Background
+After the event, the city's official record was set as being the highest average speed of any city in Japan. The official record of the event was set by the government of Japan on May 4th, 1982 when it was held by the International Olympic Committee (IOC). It was held on March 1st, 1983 at the Tokyo International Exposition in Osaka, Japan. The event started with an open race between the cities of Osaka
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=53 first30=[622, 1701, 2619, 81, 864, 353, 20, 552, 311, 12, 2216, 409, 12, 1341, 8407, 21, 864, 311, 12, 2216, 637, 687, 711, 202, 6, 490, 1401, 678, 626, 861]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return sum((n * (1 - n) ** 2) / ((2 * n) ** 3))
+
+
+# if __name__ == '__main__':
+#     print(f'First, {len(input_data)} input data')
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.6970592141151428, 0.3029407858848572, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=66 first30=[622, 1701, 2619, 20, 647, 353, 73, 554, 11, 81, 12, 552, 354, 687, 1341, 409, 12, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 11]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return sum((1 + (fib(n) - 1)) / 2)
+
+
+if __name__ == '__main__':
+    print(Fib(n), n, fib(n), fib(n-1), fib(0.5), fib(2*i+1, n/2))
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 1541, 535, 2590, 356, 698, 1289, 1278, 338]
+first_step_topk_probs=[0.39217227697372437, 0.2099146991968155, 0.18914885818958282, 0.04400050640106201, 0.041767485439777374, 0.02355177514255047, 0.02235652506351471, 0.01635638438165188, 0.01635638438165188, 0.01635638438165188]
+first_step_topk_text=[' The', ' Yes', ' There', ' In', ' No', ' I', ' It', ' We', ' If', ' A']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 12052, 17, 202, 509, 3533, 330, 808, 17, 382, 2645, 3191, 330, 263, 2076, 3864, 357, 3822, 289, 263, 1440, 288, 613, 10676, 17, 382, 2645, 10676]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+The answer is no. The black cat is a social animal that lives in a group of other cats. The black cats live in groups called cages. In this group the cages are usually made up of an adult female cat or male cat. They often have two litters per year.
+Pets have been known to be docile for at least 50 years. Pets can be frightened away from people by their size, which may be their fear of being stung or injured. They may also be afraid of being handled with care. Pets are usually given care during times when they are sick, but can also be treated with anesthesia.
+Eating a cat is not the same as sleeping alone. Cats will be fed through a tube attached to their nose, and then they drink water from the tube. Some cats are given a substance called diaper rash, which helps them avoid getting sunburned. Some cats will also get scratches on their skin.
+Cats are also used as pets, especially if they are prone to getting bitten by cats. The cat will bite once it has eaten something else. This means that the cat is likely to eat anything that has been touched by its owner.
+
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 2050, 843, 798, 409, 1012, 382, 1218, 0, 1]
+first_step_topk_probs=[0.3683891296386719, 0.17767813801765442, 0.17767813801765442, 0.16010145843029022, 0.03591814637184143, 0.03355908766388893, 0.024552354589104652, 0.022123508155345917, 0.0, 0.0]
+first_step_topk_text=[' 1', ' One', ' 5', ' 4', ' 2', ' 6', ' The', ' 8', '', '']
+
+[New tokens 9] count=40 first30=[2050, 13032, 15, 795, 10941, 15, 1237, 10941, 17, 202, 3030, 486, 5964, 263, 719, 6086, 15, 383, 4530, 744, 19, 17, 1517, 1010, 17, 6571, 330, 357, 2012, 649]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple, two apples, three apples.
+When you buy a new toy, it costs $0.50 each. Why is that cost so much?
+Answer by: Mr. Lee
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 1966, 1289, 2766, 338, 360, 354, 353, 321]
+first_step_topk_probs=[0.40551137924194336, 0.06678516417741776, 0.042895738035440445, 0.03393332287669182, 0.02068907953798771, 0.02015724778175354, 0.017241407185792923, 0.017241407185792923, 0.01636640913784504, 0.013998929411172867]
+first_step_topk_text=[' I', ' The', ' John', ' We', ' Dr', ' A', ' "', ' 1', ' (', ' T']
+
+[New tokens 10] count=227 first30=[4593, 18557, 368, 2026, 15, 7765, 288, 269, 3011, 339, 8485, 27605, 202, 48, 2536, 17, 5593, 29, 356, 873, 6968, 18029, 672, 1284, 2780, 298, 922, 383, 330, 916]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: Mary Beth Mott, Director of the Center for Learning Disabilities
+Mrs. Smith: I am feeling stressed about my job and what it is like to be a teacher. My daughter has been having problems with her math skills in school. She's still doing well at math because she has a high level of confidence. Her math skills are very good at these things. She's learning how to do math in school so that she can get better at it. She's being able to do math that was not done before. She's also having trouble with math because she doesn't have time to practice. She doesn't have a lot of work to do when she is working on math. And she has a lot of writing skills. She's reading and writing. She's using computers and using computer games. She's trying to figure out what she needs to do and what she wants to do.
+I've always loved teaching children to read and write, but they don't understand the importance of reading. They're just too smart. So I want them to learn how to read. That's why I'm here today.
+
+================================================================================

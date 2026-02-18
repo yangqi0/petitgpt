@@ -1,0 +1,256 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=197 first30=[2827, 6087, 2857, 299, 269, 3843, 374, 610, 2553, 17, 1109, 2977, 263, 2023, 3197, 298, 3766, 299, 15935, 383, 17, 6087, 988, 15, 360, 4551, 415, 631, 656, 269]
+[Full output 1]
+Once upon a time, a curious child named Max went to the park with his mom. They saw a big tree and wanted to climb it. Max said, "Let's go up the tree!" His mom said, "Okay, but be careful." Max climbed down the tree and was very happy. He climbed higher and higher until he reached the top of the tree. It was so high that Max could see all the way down. When they got to the top, Max felt like he was going to climb the tree. But then, Max started to feel scared because he was scared. He tried to run away, but he couldn't. The tree fell down and made a loud noise. Max was scared too, but he knew he had to help him. He grabbed his toy box and took off his hat. Max ran back to his mom and showed her his hat. She gave Max a hug and told him that it was okay. Max learned that sometimes we need to help others when we're scared.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 7362, 7093, 263, 336, 3, 4, 2, 0, 1]
+first_step_topk_probs=[0.8897629976272583, 0.03217562288045883, 0.03217562288045883, 0.023540189489722252, 0.0223455261439085, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' Spain', ' Italy', ' a', ' S', '', '!', '', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 7535, 281, 8191, 17, 202, 509, 851, 1384, 288, 760, 586, 269, 9249, 288, 269, 657, 398, 2184, 15, 536, 586, 263, 645, 288, 269, 7425, 288]
+[Full output 2]
+Paris is the capital of the province of Catalonia.
+The most important of these were the towns of the Vosges, which were a part of the Kingdom of Naples. The largest town was the city of the Vodunum (Bolivia), founded by Mateus in 1550 and named after his son, Pacius, who had died when he was still alive. It was also known as the Patera, or Patera of the Vowelids, and was a centre for trade between the Iberian Peninsula and the Iberian peninsula.
+The area that now forms the Vohon River has been called the "River of Gold". This river is one of the few rivers that flows through the region, even though it is only the second-most important river in Europe. It is not a tributary of the River of the Río de la Plata but rather a tributary to the Valle del Carmen.
+The river has a long history of its own, with its main source being the Vohona river, which was a vital source of food during the first millennium BC. The Vohona was a key link in the evolution of the Roman Empire from the old Roman empire to the modern period. The
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 14274, 269, 1986, 388, 3892, 288, 269, 4409, 288, 18956, 17, 382, 854, 288, 545, 28069, 3071, 263, 4054, 339, 482, 1462, 17, 202, 202, 2774]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that determines the size or direction of the vector of eigenvalues. The set of all eigenvectors forms a basis for this field.
+
+Now let's consider the given problem involving the eigenvalue $\lambda$. We want to find the eigenvalues of the following matrix:
+
+$$A = \begin{bmatrix} 0 & 1 \\ 0 & -1\end{bmatrix}$$
+
+First, we need to find the entries of $A$:
+
+$$B = \begin{(matrix): 2 & -1 & 0 \\ 0 & 1 & -1 \\ 0 & 0 & 0 \end{bmatrix}\text{ and }\lambda=\begin{bmatrix}-2 & -0\\-1 & 0\\-1& 0\\-0 & 1\\-1&\quad\end{align*}$$
+
+The first entry in the matrix is called the "nth row" column, which is a column vector containing only one eigenvalue. When you multiply each entry by the number of rows (or columns), you get the original matrix as follows:
+
+$$\begin{bmatrix}(A) &= \begin{pmatrix} 0 & 0 \\ 1 & -0 \end{pmatrix}\text{and }\lambda=(-\lambda)\,\mathbf
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 817, 1085, 1420, 491, 14071, 1991, 9845, 5546, 20993]
+first_step_topk_probs=[0.242015540599823, 0.11672666668891907, 0.09477464109659195, 0.08539904654026031, 0.07695100456476212, 0.062479279935359955, 0.045710816979408264, 0.04118890315294266, 0.027153389528393745, 0.017900614067912102]
+first_step_topk_text=[' can', ' use', ' model', ' allow', ' have', ' incorporate', ' provide', ' rely', ' describe', ' simulate']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 2304, 17, 202, 509, 775, 1085, 15, 1255, 269, 8485, 17906, 1113, 353, 47, 3237, 504, 330, 1728, 351, 269, 2877, 357, 263, 14457]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex systems.
+The first model, called the Learning Mechanism (LMA), is based on the idea that a neural network has a finite number of components and that each component has a unique value. The LMA is a generalization of the concept of neural networks by John Maynard Keynes, who proposed a new theory for the theory of neural networks.
+The second model, called SAM, was developed in response to the need to define neural networks in terms of a set of discrete-time systems. These systems have a finite number and are called the "generalized" or "specialized" model. This model is often referred to as the "SAM" because it allows us to define a new system with a single input and an output of several inputs. In the SAM model, we say that a neural net consists of a set and a set of inputs, where each input is a given element of the system. The SAM model is essentially a generalization from the SAM theory to the generalization of neural networks using the theory of a neural network.
+In the SAM models, the basis of the neural network is the set of all possible states of the system, which are known as the "state
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=187 first30=[263, 647, 286, 3, 711, 4750, 2062, 263, 689, 715, 418, 263, 1809, 3510, 2827, 3867, 17, 1530, 6446, 299, 1143, 374, 896, 5373, 298, 1428, 1378, 3099, 17, 2050]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+Once upon a time there was a little girl named Lily. She loved to play with her toys and run around outside. One day, she saw a big dog in the park. The dog was very friendly and wanted to pet it. Lily said, "Hello, dog! Can I pet you?" The dog barked and growled at her. Lily giggled and said, "Yes, you can pet me!" They played together for a while until they were tired. Then, Lily's mom came out of the house. She said, "Lily, let's go home now." Lily said, and they went back to playing. As they walked home, Lily noticed that the sun was shining on the ground. She remembered how much fun it had been before. She said goodbye to the dog and promised to come back soon. From then on, Lily and the dog would always be friends.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=177 first30=[622, 311, 864, 353, 20, 552, 311, 12, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 717, 7121, 15, 2176, 18379, 3, 711, 4750, 2062, 263]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n * (1 - n)
+
+
+if __name__ == '__main__':
+    print('Hello, World!')
+
+Once upon a time there was a little girl named Lily. She loved to play with her toys and run around outside. One day, she saw a big dog running towards her. The dog looked sad because it had no food. Lily wanted to help the dog, so she went to find some food. After looking at the food, Lily noticed that the dog was eating too much food. She remembered how her mom told her not to eat too much because it could make her feel sick. So, Lily decided to take a nap and sleep just like the dog. As she woke up, she felt happy again. From then on, Lily knew that sometimes we have to be patient and listen to our parents when they say something is wrong.
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1083, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.9165090918540955, 0.08349093049764633, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' print', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=68 first30=[622, 354, 17, 19, 647, 353, 20, 552, 311, 12, 864, 353, 20, 552, 353, 20, 1341, 409, 687, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1 - n) * (1 - (1 / 2))
+
+
+if __name__ == '__main__':
+    print('Starting with Python function.')
+
+    # Function to run the program for generating Fibonacci numbers,
+    # using a Python function to calculate Fibonacci number.
+    print('Running Python function.')
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 1541, 2590, 1289, 1278, 356, 2, 1, 0]
+first_step_topk_probs=[0.37506818771362305, 0.27440574765205383, 0.16300402581691742, 0.08282177150249481, 0.0379185676574707, 0.03599420562386513, 0.030787471681833267, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' There', ' No', ' We', ' If', ' I', '', '', '']
+
+[New tokens 8] count=256 first30=[13676, 17, 1541, 330, 808, 2395, 357, 269, 993, 288, 2645, 10676, 289, 269, 1165, 330, 3271, 359, 263, 897, 288, 2628, 1406, 17, 1783, 15, 914, 288, 760, 10676]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Yes. There is no question that the number of black cats in the world is increasing as a result of globalization. However, many of these cats are being bred for their fur or skin. Some are being bred to be wild cats; others are being bred on farms or zoos. The numbers of cats in the United States have increased by more than 10% since the late 1960s.
+The population growth rate of the black cat is increasing rapidly in the United Kingdom. In 2008 there were about 1,500 black cats in England, Wales, Northern Ireland, Scotland, and Northern Ireland (1,040). This increase has been driven largely by the introduction of hybridisation. It has also caused a decline in the number of cats in rural areas.
+Honey bees have become very important in Europe because they provide food for millions of people each year. Honey bees are one of the most abundant insects in the world. They are an excellent source of food for birds, squirrels, and other wildlife. Their value for human health is estimated at around $3 billion annually.
+There are also other reasons why there are not any more black cats in Britain today. For example, black cats are much less common in northern parts of England than in northern regions of England
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 382, 2050, 798, 1541, 409, 843, 637, 698, 0]
+first_step_topk_probs=[0.5940717458724976, 0.10110566020011902, 0.07792524993419647, 0.07021648436784744, 0.04876437783241272, 0.03905922919511795, 0.028967255726456642, 0.022682668641209602, 0.01720728911459446, 0.0]
+first_step_topk_text=[' 1', ' The', ' One', ' 4', ' There', ' 2', ' 5', ' 3', ' It', '']
+
+[New tokens 9] count=103 first30=[354, 13032, 333, 798, 202, 24771, 29, 843, 10941, 333, 1218, 202, 24771, 29, 1186, 10941, 333, 1291, 202, 24771, 29, 1218, 10941, 333, 1171, 202, 24771, 29, 1291, 10941]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4
+Answer: 5 apples = 8
+Answer: 7 apples = 9
+Answer: 8 apples = 10
+Answer: 9 apples = 12
+Answer: 12 apples = 13
+Answer: 14 apples = 16
+Answer: 15 apples = 17
+Answer: 18 apples = 18
+Answer: 20 apples = 21
+Answer: 22 apples = 27
+Answer: 23 apples = 28
+Answer: 24 apples = 31
+Answer: 33 apples = 32
+Answer: 34 apples = 32
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 1509, 382, 1289, 22089, 698, 3919, 1803, 783]
+first_step_topk_probs=[0.3205450475215912, 0.16323727369308472, 0.08737461268901825, 0.07473547011613846, 0.07094258069992065, 0.06734224408864975, 0.03247987851500511, 0.025033246725797653, 0.023762786760926247, 0.021412068977952003]
+first_step_topk_text=[' I', ' What', ' You', ' The', ' We', ' Thank', ' It', ' My', ' When', ' This']
+
+[New tokens 10] count=256 first30=[2575, 415, 2397, 351, 289, 269, 2613, 34, 202, 43, 1640, 57, 17649, 29, 382, 2613, 330, 263, 1114, 2281, 953, 15, 298, 383, 578, 299, 713, 374, 7336, 288]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What's going on in the brain?
+HARVARD: The brain is a very complex system, and it has to work with lots of different kinds of people at different times. In fact, we have been working with a lot of people who are actually working with this kind of research, but they're not quite as well-organized as we would like them to be.
+I'm going to talk about some of the ways that you can help your child get better on his or her own.
+WITHOUT THE RECORD:
+I'll give you a few examples of what you can do to help your child stay healthy and take care of himself or herself. You might want to ask your doctor if you need any other advice before starting a new diet program.
+When you talk to your doctor about how you can make sure your child gets the right amount of exercise, there's no reason why you should try to eat more than five servings of fruits and vegetables each day. So if you've had your child getting up from school for the last time, you may want to consider giving him or her some extra nutrients.
+In addition, you could include a little bit of vitamin D2, which helps your body absorb calcium. And you could
+
+================================================================================

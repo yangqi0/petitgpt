@@ -1,0 +1,317 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 2857, 418, 2977, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.5028834342956543, 0.24254624545574188, 0.17745064198970795, 0.07711967825889587, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' went', ' was', ' saw', '', '', '!', '"', '', '']
+
+[New tokens 1] count=103 first30=[2827, 4229, 2857, 299, 269, 3843, 374, 610, 2553, 17, 1109, 2977, 914, 4129, 298, 7106, 298, 4646, 17, 4229, 418, 1114, 4191, 1091, 406, 982, 1143, 374, 610, 3326]
+[Full output 1]
+Once upon a time, a curious child named Tim went to the park with his mom. They saw many trees and flowers and birds. Tim was very happy because he could play with his friends. He wanted to join them too. As they played, Tim's mom told him that it was important to be kind to others. She said that being kind is important, but not everyone can be nice. Tim learned that being kind and respectful made him feel good inside. And so, Tim and his mom had a fun day at the park together.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 321, 263, 336, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.9516164064407349, 0.02253243699669838, 0.014100438915193081, 0.011750713922083378, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' T', ' a', ' S', '', '', '!', '"', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 7581, 12199, 15, 298, 330, 12092, 351, 269, 5235, 4069, 288, 269, 5566, 17, 698, 578, 263, 2073, 288, 1378, 1186, 1517, 10894, 353, 9494, 573]
+[Full output 2]
+Paris is the capital of the province of the Eastern Cape, and is situated on the southern coast of the island. It has a population of around 750 inhabitants (2006).
+The municipality is divided into two subdivisions: the town of Bantu-Bantu, which is located in the eastern part of the island, and the town of Mandalay, which is situated in the western part of the islands. The village of Mandalaya lies on the east side of the island; it is situated on a peninsula that separates the eastern and central parts of the island from the mainland.
+
+History
+
+The first written mention of the island dates back to the 15th century when the Dutch explorer Pedro de Alvarado explored the area. In 1653, a ship named the Dutch East India Company was found floating on the sea bed near Mandalay.
+
+In 1823, the British government granted the island to the Dominion of the Commonwealth of Australia for an island. The Dominions of the Commonwealth were established in 1871, and the name Mandalay is the original spelling of the island's name. The territory of Mandalays Island includes the following island groups:
+
+Gallery
+
+Demographics
+According to the 2011 Census of Population conducted by Statistics New
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=54 first30=[263, 13742, 1239, 357, 11547, 374, 2685, 299, 263, 1496, 3823, 17, 1220, 1373, 15, 1936, 269, 1759, 409, 91, 21, 3823, 29, 202, 8001, 18690, 202, 62, 354, 643]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that varies with respect to a given matrix. For example, consider the following 2x2 matrix:
+```css
+[ 1 0 0 | 0 1 ]
+ [ 0 1 0 | 0 0 ]
+ [ 1 0 0| 0 0 ]
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 5546, 1420, 491, 9845, 1085, 3235, 395, 1991]
+first_step_topk_probs=[0.22637297213077545, 0.1344713270664215, 0.10918208956718445, 0.08415000140666962, 0.055475082248449326, 0.055475082248449326, 0.0450422503054142, 0.03657141700387001, 0.033480122685432434, 0.024109378457069397]
+first_step_topk_text=[' use', ' can', ' describe', ' allow', ' have', ' rely', ' model', ' predict', ' are', ' provide']
+
+[New tokens 4] count=256 first30=[22968, 269, 14457, 2673, 17, 1658, 2269, 483, 342, 885, 299, 3235, 806, 874, 601, 4773, 299, 719, 1170, 15, 857, 359, 2161, 581, 601, 342, 2222, 299, 817, 263]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the neural network. These models can be used to predict how people will respond to new information, such as whether they will be able to use a new drug or whether they will need to take longer to get the same level of treatment.
+The basic idea behind the model is that people learn by doing things, and this is where it gets interesting. The first part of the model, called the "model of the brain," says the person who starts with the initial version of the model. This is the first part of what the model describes.
+In the second part of the project, the model of the brain is shown in blue. This is how people learn from their training and testing sessions. The model is made up of different parts of the brain, including the cortex, which contains the prefrontal cortex, and the cortex that controls the motor control centers in the left hemisphere. In the first part, the model has been shown to be very similar to the model of a patient who was given the drug at the beginning of the study.
+Once the model has built up its structure, the next part of the program begins. It includes all the features of the model that have been tested on the patients' training. Then, it asks them to try out various
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=59 first30=[263, 647, 286, 17, 595, 551, 202, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 655, 3715, 555, 1499, 29, 331, 444, 7298, 655, 3907, 726, 538, 1208]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+if __name__ == '__main__':
+    import sys
+
+    try:
+        from typing import List
+
+        def _list_lists():
+            for item in listdir(sys.argv[1]):
+                yield (item[0], item[1])
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.6746222376823425, 0.32537776231765747, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 6] count=256 first30=[622, 354, 490, 311, 861, 643, 1107, 354, 711, 202, 856, 28045, 66, 89, 21, 1714, 346, 622, 28045, 11, 499, 12, 647, 28045, 11, 3316, 12, 647, 28045, 4097]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return 1 if n == 0 else 1
+
+
+def factorial_v2():
+    return factorial(int) + factorial(float) + factorial(-1)(float)
+
+
+def fprintf(*args, **kwargs):
+    print(*args, *args, **kwds)
+
+
+@functools.lru_cache()
+def log(*args,**kwargs):
+    # Log = log(*args)
+    # Logs = log(*kwargs)
+    # LOG.info("Log %d", args[0])
+    # LOG._log('LOG', log, args[1], kwargs)
+    # if args[0] != '-':
+    #     raise Exception("Log %r not in argument '%r'" % (args[0], args[1]))
+
+    # Log = logging.getLogger(__name__)
+    # Log.debug("Log %s", args)
+    # with open(log, 'w') as f:
+    #     for i in range(len(args)):
+    #         log.info("LOG %d", i)
+    #         LOG.info("%s %s", i, args[i])
+    #         print(*args[i], log=log)
+    #     LOG.info
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 339, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.6026853919029236, 0.39731457829475403, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' for', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[490, 311, 1319, 409, 861, 643, 29, 341, 622, 354, 8789, 490, 311, 1319, 637, 861, 643, 298, 311, 1319, 798, 861, 643, 29, 4045, 622, 8049, 11, 81, 12]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     if n % 2 == 0:
+         return 1
+       if n % 3 == 0 and n % 4 == 0:
+          return fib(n) + fib(n - 1) + fib(-1) + fib(*[f"Fibonacci Numbers of {n}"]) # FIXME: This is not a problem with this function, it's just an implementation error
+else:
+    def fib(n, n2=0):
+        if n != n2 or n > n3 or n > 1:
+            return 1
+        if n < n2 or (n >= n2 or i <= n3):
+            return fib(i * n2 + n**2 + i ** 2 + n**3 + i**4 + i**5 + i**6 + i**7 + i**8 + i**9 + i**10 + i**11 + i**12 + i**13 + i**14 + i**15 + i**16 + i**17 + i**18 + i**19 + i**20 + i**21 + i**22 + i**23 + i**24 + i**25 + i**26 + i**27 + i**28 + i**29 + i**30
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 2590, 1541, 535, 1289, 338, 356, 698, 0]
+first_step_topk_probs=[0.3799186646938324, 0.23774704337120056, 0.14122779667377472, 0.13406050205230713, 0.0253207478672266, 0.0228158887475729, 0.02165798470377922, 0.02055884338915348, 0.01669246144592762, 0.0]
+first_step_topk_text=[' Yes', ' The', ' No', ' There', ' In', ' We', ' A', ' I', ' It', '']
+
+[New tokens 8] count=256 first30=[13676, 17, 1541, 330, 808, 2395, 357, 269, 993, 288, 2645, 10676, 289, 269, 1560, 1705, 578, 3029, 758, 269, 2338, 1685, 5676, 17, 4619, 10676, 491, 733, 3271, 339]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Yes. There is no question that the number of black cats in the United States has increased over the past few decades. Black cats have been increasing for at least a decade or more. In fact, the number of cats in the U.S. has increased since 1979. Cat numbers have also declined. So why does it matter to you whether you believe your cat is black or not?
+Question: Does the number of cat owners increase as well as the number of people who do their house-cleaning?
+Answer. The number of people in the U-M Health System has risen by about 1 percent per year since 1980. From 1980 to 2007, there were approximately 2.5 million cats in the system. The number increases with age. More than half of those cats in the household are black, but they still make up less than one-third of the total cats in the country.
+Question: What about the number of children in the UM?
+Answer – Yes. It's true that the number and size of kids in the UMC is growing. But the number of kids in a UM has decreased from 5.6 million in 1983 to 3.1 million in 2008.
+Question. Is there any reason to think that this decline will
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 798, 2050, 843, 382, 409, 643, 637, 1012, 0]
+first_step_topk_probs=[0.4184132516384125, 0.22396047413349152, 0.10801860690116882, 0.09733285009860992, 0.042300693690776825, 0.037431761622428894, 0.029377218335866928, 0.02379847690463066, 0.01936667039990425, 0.0]
+first_step_topk_text=[' 1', ' 4', ' One', ' 5', ' The', ' 2', ' 0', ' 3', ' 6', '']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 202, 20, 13032, 333, 637, 10941, 202, 21, 13032, 333, 409, 10941, 202, 22, 13032, 333, 637, 24847, 202, 23, 13032, 333, 798, 24847, 202]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+1 apple = 3 apples
+2 apple = 2 apples
+3 apple = 3 oranges
+4 apple = 4 oranges
+5 apple = 5 oranges
+6 apple = 6 oranges
+7 apple = 7 oranges
+8 apple = 8 oranges
+9 apple = 9 oranges
+10 apple = 10 oranges
+11 apple = 11 oranges
+12 apple = 12 oranges
+13 apple = 13 oranges
+14 apple = 14 oranges
+15 apple = 15 oranges
+16 apple = 16 oranges
+17 apple = 17 oranges
+18 apple = 18 oranges
+19 apple = 19 oranges
+20 apple = 20 oranges
+21 orange = 21 oranges
+22 orange = 22 oranges
+23 orange = 23 oranges
+24 orange = 24 oranges
+25 orange = 25 oranges
+26 orange = 26 oranges
+27 orange = 27 oranges
+28 orange = 28 oranges
+29 orange = 29 oranges
+30 orange = 30 oranges
+31 orange = 31 oranges
+32 orange = 32 oranges
+33 orange = 33 oranges
+34 orange = 34 oranges
+35 orange = 35 oranges
+36 orange = 36 oranges
+37 orange = 37 oranges
+38 orange = 38 oranges
+39 orange = 39 oranges
+40 orange = 40 oranges
+41 orange = 41 oranges
+42 orange = 42
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 1348, 382, 1509, 15255, 22089, 1289, 776, 360]
+first_step_topk_probs=[0.5375085473060608, 0.08802454173564911, 0.04590500146150589, 0.04245518893003464, 0.03447090834379196, 0.028726618736982346, 0.027268730103969574, 0.025884846225380898, 0.01893775723874569, 0.015781931579113007]
+first_step_topk_text=[' I', ' What', ' How', ' The', ' You', ' Thanks', ' Thank', ' We', ' He', ' "']
+
+[New tokens 10] count=256 first30=[2575, 330, 669, 2942, 374, 263, 4484, 668, 578, 733, 9529, 374, 5494, 34, 202, 7681, 17, 621, 681, 273, 29, 5531, 15, 715, 395, 751, 1943, 357, 486, 483]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience with a patient who has been diagnosed with diabetes?
+Dr. Kirsten: Well, there are some things that you can do to help. You know, it's important for the doctor to be able to diagnose and treat this condition. It's very important to see the doctor as soon as possible because if you have diabetes, you may not be able to go to the doctor right away. And if you're having diabetes, you need to get to the doctor.
+Assistance: Is there anything I can do to make sure I'm getting enough sleep?
+Drinker: One of the best ways to keep from getting tired is to stay in bed at night. That means going to bed every night when you feel well rested. If you're going to bed late, you should take a break from work and stay up all night.
+Assutor: Are there any other ways to keep your blood sugar under control?
+Drinking specialist: Yes, you could try to control your blood sugar by eating foods high in fiber. Eating foods low in fat and calories will help you feel better. In addition, you might also try to eat more fruits and vegetables. This will give you more energy.
+Assedu: How do you
+
+================================================================================

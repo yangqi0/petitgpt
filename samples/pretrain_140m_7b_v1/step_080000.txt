@@ -1,0 +1,284 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=160 first30=[2827, 5273, 2857, 299, 269, 3843, 374, 610, 2553, 17, 1109, 2977, 7336, 288, 24796, 298, 20210, 17, 5273, 418, 1114, 8763, 4, 776, 3766, 299, 631, 351, 287, 13555]
+[Full output 1]
+Once upon a time, a curious child named Jack went to the park with his mom. They saw lots of swings and slides. Jack was very excited! He wanted to go on an adventure in the park. So, he asked his mom if they could go. His mom said yes, but they had to be careful not to get too close. When they got home, Jack started playing. Suddenly, he saw something strange - it was a big, brown bear! Jack was scared and didn't know what to do. But then, Jack's mom told him that it was okay. She gave him a hug and said she would take care of him. Jack felt so relieved because he knew that his mom loved him. From that day on, Jack always made sure to keep an eye out for any animals that might come along.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 11438, 7093, 263, 5190, 336, 13029, 24251, 4616, 7362]
+first_step_topk_probs=[0.6372402906417847, 0.11194601655006409, 0.07005402445793152, 0.035594239830970764, 0.02346515841782093, 0.01808532327413559, 0.017167478799819946, 0.014684122987091541, 0.010743132792413235, 0.010743132792413235]
+first_step_topk_text=[' the', ' Greece', ' Italy', ' a', ' Egypt', ' S', ' Turkey', ' Romania', ' Germany', ' Spain']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 14206, 3976, 17, 382, 2317, 330, 3323, 289, 269, 2415, 288, 269, 6126, 9556, 288, 16711, 15, 435, 269, 5235, 10514, 288, 269, 9556, 415, 5992, 6794]
+[Full output 2]
+Paris is the capital of the province of Upper Canada. The city is located in the heart of the Canadian province of Quebec, at the southern tip of the province's western border with Ontario and the province's easternmost point.
+The City of Toronto is also home to the University of Toronto College of Business and Economics. It was founded by John C. Baird in 1675 as a result of an attempt by John Baird to establish a university in Toronto. The University of Toronto was founded in 1755 by William H. Bairds and named for John Bairds, a Scottish-American explorer who arrived in the United States in 1803. The University was established in 1853, and the name is now used only for the University of Montreal.
+In its early years, the city had many buildings and businesses, including a library, a museum, a school, a hospital, a post office, a café, a hotel, a general store, a bank, a medical clinic, a hospital for patients, a library, and a restaurant. In the mid-1800s, the City of Toronto became known as "the first Canadian city". By the late 1800s, the city's population grew rapidly; in 1881, it was one of the largest metropolitan areas in
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 993, 357, 483, 342, 6031, 359, 269, 1677, 288, 795, 3148, 17, 202, 202, 2774, 1427, 415, 1936, 269, 1496, 3581, 29, 202, 202, 91, 21, 647, 371, 21]
+[Full output 3]
+In linear algebra, an eigenvalue is a number that can be expressed as the product of two factors.
+
+Now let's consider the given equation:
+
+x2 + y2 = (1/2)x2 + 2y2
+
+To find the eigenvalues and eigenvectors, we need to solve for x2 using substitution or elimination methods. Let's first express the unknowns in terms of the variables:
+
+* x2 = (3/4)x2 - 4(1/2)(2)
+* y2 = ((1/2)*(-1))2 + (-1)2
+
+We know that there are three possible solutions for x2. However, since our goal was to determine these values, we only need to focus on one particular solution. Since both x2 and y2 satisfy the condition y2=((-1)^2), they must be equal. Therefore, we have three distinct solutions.
+
+For the second solution, notice that its characteristic polynomial has no solutions; hence, we cannot directly apply the linearity theorem. Instead, we should utilize the fact that the discriminant (C) equals zero because it equals the sum of squares of the original quadratic form. Thus, substituting C back into either original equation gives us:
+
+a
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 1420, 491, 817, 1085, 1991, 395, 9845, 1005, 7337]
+first_step_topk_probs=[0.23897206783294678, 0.1748356968164444, 0.14195552468299866, 0.09358280897140503, 0.05559057742357254, 0.05009126663208008, 0.04919193685054779, 0.0297554899007082, 0.02681192196905613, 0.024159548804163933]
+first_step_topk_text=[' can', ' allow', ' have', ' use', ' model', ' provide', ' are', ' rely', ' help', ' enable']
+
+[New tokens 4] count=101 first30=[483, 342, 885, 299, 1085, 2281, 9668, 298, 9668, 17, 202, 509, 1549, 2613, 330, 269, 851, 1384, 645, 288, 829, 14424, 15, 614, 383, 415, 658, 619, 288, 269]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex behaviors and behaviors.
+The human brain is the most important part of our brains, but it's also one of the few structures in the brain that allows us to process information from many different sources simultaneously. It's a wonderful tool for understanding how our brains work and how we learn, and it's very powerful as an example of how our brains are able to understand and interpret complex behaviors.
+So what do you think? What questions would you ask about your brain?
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=218 first30=[263, 647, 286, 3, 711, 4750, 2062, 263, 689, 715, 418, 263, 1809, 3510, 2827, 11183, 17, 1530, 6446, 299, 4196, 298, 1098, 719, 1943, 17, 2050, 1266, 1024, 4725]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+Once upon a time there was a little girl named Jane. She loved to explore and find new things. One day she decided to go on an adventure with her mom. They went to the park together. When they arrived, Jane saw lots of people playing games. She asked them questions about what they were doing and how they played. Her mom said, "Let's take turns playing tag!" So Jane ran around the park with her friends. After a while, they got tired but happy. The next day, Jane wanted to play tag again. But her mom said it was too difficult for her to do so. So Jane put on her shoes and started running around the park. Soon enough, she found a big tree! Jane felt so excited. Then, Jane's mom said, â€œNow you can have fun and play more games!â€ Jane smiled. She knew that even though she had to be careful, she could still make sure everyone was safe. And from then on, Jane always made sure to take good care of herself.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=50 first30=[622, 311, 13, 81, 8257, 81, 16, 20, 6801, 81, 9383, 81, 14, 20, 12, 202, 202, 350, 1401, 678, 626, 861, 8922, 3142, 9533, 346, 1083, 801, 27115, 537]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n*n*(n-1)*n/(n+1)
+
+if __name__ == "__main__":
+    print("Testing #1")
+    print("\n" + str(len(sys.argv)) + 1)
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8267115950584412, 0.17328834533691406, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 651, 73, 62, 78, 64, 339, 520, 289, 311, 490, 284, 4524, 20, 64, 861, 446, 36, 10, 298, 284, 4524, 21, 64, 3158, 446, 37, 10, 3352, 711]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return [f[k] for k in n if f[-1] == 'A' and f[-2] != 'B' ]
+
+
+#
+# import sys
+# from argparse import ArgumentParser
+# from sys.path import join as _join
+# from itertools import chain, chain
+# from collections import deque
+from typing import Optional, Tuple, Union
+import numpy as np
+import torch
+import torch.nn as nn
+import torch_geometric
+import torchutils
+import matplotlib.pyplot as plt
+import os
+import random
+import math
+import time
+import glob
+import sys
+from torch import Tensor
+from torch.autograd import Variable
+import torchaudio
+import torchlib
+import warnings
+warnings.filterwarnings('ignore')
+
+from network import Network
+from network.layers import Conv2D
+from network._base import base
+from network_util import *
+from network2d import *
+
+class MLP(nn.Module):
+    def __init__(self, input_size=None, hidden_dim=None, num_classes=8, num_channels=4, hidden_size=32, max_length=64,
+                 n_features=3,
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 13676, 535, 1289, 2590, 698, 1238, 1278, 1906]
+first_step_topk_probs=[0.40707525610923767, 0.18637263774871826, 0.062427014112472534, 0.04811442643404007, 0.04567257687449455, 0.04115444794297218, 0.039065830409526825, 0.033414773643016815, 0.033414773643016815, 0.02320609800517559]
+first_step_topk_text=[' The', ' There', ' Yes', ' In', ' We', ' No', ' It', ' As', ' If', ' All']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 12052, 17, 202, 509, 2597, 2526, 269, 2645, 3191, 330, 649, 1264, 611, 2433, 299, 342, 263, 2645, 3597, 330, 1091, 288, 686, 2419, 325, 298, 269]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+The reason why the black cat is so much more likely to be a black dog is because of its coloration and the fact that it has no fur or skin. It's also because of its coat pattern and because of its hair. As long as the cat is black, it's still in a white-skinned state. This means that even though it's a black animal, it will have black hair on the top of its head. The black cat is not just a black one; it's also an African, Asian, and Asian species.
+Aside from being black, it is also possible that there may be other reasons for this. Some people think that it is because of the way cats have been seen by humans, but they believe that they do have a tendency to be black, which is something that many people don't realize.
+Another possibility is that some people think that if a cat was black, it could possibly be black. But what if a person thought that they were black? Wouldn't that make them black? Would it make them black again?
+Answer : No. You must admit that there are different breeds of cats, however, you will find that they have different colors and sizes.
+Many people
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 382, 2050, 843, 798, 643, 2, 3, 1, 0]
+first_step_topk_probs=[0.808627724647522, 0.059809934347867966, 0.05389322340488434, 0.03201394900679588, 0.02342190407216549, 0.02223324403166771, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' The', ' One', ' 5', ' 4', ' 0', '', '', '', '']
+
+[New tokens 9] count=122 first30=[354, 13032, 333, 798, 10941, 17, 202, 3016, 914, 10941, 620, 406, 491, 34, 2050, 13032, 333, 798, 26634, 17, 202, 3544, 15, 269, 993, 288, 10941, 330, 409, 10941]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples.
+How many apples do he have? One apple = 4 bananas.
+So, the number of apples is 2 apples. The total number of apples equals 2 apples. So, if we multiply 5 apples by 4, we get 6 apples. So there are 8 apples in a row.
+See another brain teaser just like this one...
+Or, just get a random brain teaser
+If you become a registered user you can vote on this brain teaser, keep track of
+which ones you have seen, and even make your own.
+Back to Top
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 783, 1289, 338, 22089, 2575, 1509, 360, 698]
+first_step_topk_probs=[0.4157865345478058, 0.10446289926767349, 0.0893518477678299, 0.04539936035871506, 0.033214882016181946, 0.02992912195622921, 0.025599732995033264, 0.024300524964928627, 0.023067275062203407, 0.021896613761782646]
+first_step_topk_text=[' I', ' The', ' This', ' We', ' A', ' Thank', ' What', ' You', ' "', ' It']
+
+[New tokens 10] count=256 first30=[783, 330, 263, 1114, 1384, 3467, 299, 4283, 672, 1284, 3694, 415, 2322, 288, 269, 10818, 9204, 17, 776, 578, 733, 9529, 374, 31641, 1446, 7544, 15, 536, 330, 658]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: This is a very important thing to remember about my son's treatment of the autism spectrum. He has been diagnosed with Asperger syndrome, which is also known as Asperger's Syndrome.
+Assistedness: If you are not able to get help for your child or if he's having trouble in school, it can be difficult to get help from an adult.
+Treatments: There are medications that may help alleviate symptoms and help prevent or delay the development of these disorders.
+When your child starts treatment, it will probably take several weeks to see improvement. You should have no more than two treatments at once, so it's important to talk to your doctor before starting any therapy.
+Your child will need to have some special training to learn how to deal with problems. These include:
+- Support groups such as social workers, teachers, and other mental health professionals who can help with daily life.
+- Family members, friends, and others who care for children with autism.
+- Specialists who work with children with developmental disabilities.
+- School counselors. The counselor will provide information on services available to parents and children with disabilities.
+For more information, contact:
+Last reviewed September 2012 by Michael Woods, MD
+Please be aware that this information
+
+================================================================================

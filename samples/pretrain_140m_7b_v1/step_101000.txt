@@ -1,0 +1,320 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=164 first30=[2827, 5273, 418, 4438, 374, 610, 6086, 6268, 17, 776, 699, 7336, 288, 958, 298, 406, 6446, 299, 19352, 1378, 269, 3984, 17, 14918, 15, 5273, 5052, 263, 6387, 4834]
+[Full output 1]
+Once upon a time, a curious child named Jack was playing with his toy cars. He had lots of fun and he loved to zoom around the room. Suddenly, Jack heard a noise coming from the kitchen. It sounded like someone was eating something yummy! Jack's mom came into the room and saw him looking very upset. She asked him what happened and Jack told her about the noisy toys. His mom said it was just a game, but she didn't want him to get mad. So they went back to the kitchen and watched the noisy toys together. When they were done, Jack's mom gave him a big hug and said, "I'm glad you're okay, but you should always be careful when picking up your toys." Jack smiled and thanked his mom for being so kind. From that day on, he never played with anything again!
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 9556, 15, 298, 269, 4223, 288, 357, 9556, 17, 202, 755, 269, 6289, 15059, 15, 269, 2868, 418, 1255, 440, 10, 50, 88, 1851, 473, 15]
+[Full output 2]
+Paris is the capital of the province of the province, and the capital of that province.
+In the Middle Ages, the town was called L'Ouverture, in honour of the great architect, architect, and sculptor, Cécile Champollion (1471-1524). The first known building, the "Moulin de l'Ouvalier", was built in 1525, but was destroyed by fire in 1613. In 1721, the town suffered a series of fires, including the following:
+- The Convent of Saint-Étienne, which was destroyed by the fire in 1612;
+- The Moulin de la Salle, which was rebuilt in 1616, with a new façade.
+The town's architectural style has been influenced by the French Renaissance, and its architecture reflects the influence of French Renaissance architecture. The oldest buildings in the city are the city hall, the Salle des Monais, and the cathedral. In the late 18th century, the city underwent an expansion into the French countryside, with the construction of the modern village of La Révolution, and the creation of the city's main street.
+During the 19th century, many civic buildings were demolished or
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 289, 269, 2281, 6603, 357, 578, 1127, 8878, 298, 3892, 17, 1803, 411, 1721, 357, 263, 4409, 400, 330, 22542, 4672, 15, 383, 1818, 357, 686, 8639, 330]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector in the complex plane that has both magnitude and direction. When we say that a vector v is linearly independent, it means that its dimension is equal to the number of dimensions of the vector space.
+
+Now let's consider a particular type of matrix A, which consists of two rows and three columns, where each row represents one unit of the scalar product between the vectors from the first row and second column. We can express this as follows:
+
+A = |v| = 1 - |v|
+
+Here, v denotes the transpose of the matrix, while u stands for the transpose operation. Note that if we want to find a basis for our matrix A, we need to know how many linearly independent vectors are present in the vector space of all possible vectors. This information allows us to focus on the case when we want to determine whether there exists a linearly independent set of vectors (also known as a linearly independent vector) satisfying the given conditions.
+
+Let's illustrate this with a simple example. Suppose we have a 2x2 matrix A containing n x1 matrices, with n columns and n columns. We could represent the resulting matrix using the following formula:
+
+[a b] = [a b] + [b c]
+
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 1420, 817, 491, 1991, 9845, 7337, 5663, 1005, 395]
+first_step_topk_probs=[0.2178473025560379, 0.1593804955482483, 0.1593804955482483, 0.062414299696683884, 0.043345823884010315, 0.03519406542181969, 0.028575347736477852, 0.027125125750899315, 0.02574852481484413, 0.025458645075559616]
+first_step_topk_text=[' can', ' allow', ' use', ' have', ' provide', ' rely', ' enable', ' involve', ' help', ' are']
+
+[New tokens 4] count=256 first30=[22968, 269, 14457, 2673, 17, 202, 2303, 1373, 15, 269, 1085, 288, 1549, 8755, 578, 733, 3385, 299, 1085, 269, 2613, 298, 613, 2304, 289, 263, 2079, 2259, 17, 535]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the neural network.
+For example, the model of human intelligence has been designed to model the brain and other systems in a single language. In this model, each person's brain is connected to a computer, and each person's language is encoded as a word. The system then learns how to communicate with the other people in the world.
+The computer program is called a neural network. A neural network consists of many neurons, which represent the brain. Each neuron has a unique set of instructions that describe it, and they all have a specific function. This function is known as the function of the neural network (or the neural network).
+Some of the functions of the neural networks are:
+- Recognition and recall
+- Computation of information
+- Predicting behavior
+- Creating memory
+- Communication and processing speed
+- Decision making
+- Interaction between different languages
+- Communicating effectively
+- Understanding and interpreting data
+- Working with multiple objects
+- Developing the ability to recognize and respond to new information
+- Studying human behavior
+- Developing an understanding of human emotions
+- Developing effective communication skills
+- Improving memory
+- Building the capacity for complex tasks
+The brain is composed of neurons, which are very small, and the
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=215 first30=[263, 647, 286, 3, 711, 4750, 2062, 263, 689, 715, 418, 263, 1809, 3510, 2827, 15781, 17, 1530, 699, 263, 2023, 4180, 10064, 298, 6446, 299, 1143, 374, 896, 3326]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+Once upon a time there was a little girl named Lucy. She had a big blue dress and loved to play with her friends. One day, she decided to go on an adventure. As she walked through the park, she saw something shiny in the grass. It was a shiny coin! She ran over to take it home and showed it to her mom. Her mom said, "That's a special coin, Lucy. It's very rare." But Lucy didn't know what it meant. So she asked her mom, "What does this mean?" Her mom replied, "It means that we can buy lots of coins from the store to buy more things." Lucy thought about this for a moment and then decided to try again. She put the coin in the pocket and went back home. When she got home, she found out that she had enough money to buy all the coins. She was so happy! From that day on, Lucy knew that even though she couldn't find anything else, she could still have fun at the park.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=176 first30=[622, 311, 864, 353, 81, 552, 354, 12, 1341, 409, 711, 538, 28045, 66, 21, 1714, 346, 622, 28045, 11, 20, 12, 647, 28045, 11, 19, 12, 711, 538, 28045]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n * (n - 1) / 2
+
+ def factorial_2():
+    return factorial(1) + factorial(0)
+
+ def factorial(n, k):
+    return factorial((n - k) % 2)
+
+ def __init__(self, n=None, k=None):
+        self.k = k if k is None else k
+        self.n = n
+
+    def __repr__(self):
+        return f"Coefficients {len(self)}"
+
+    def __str__(self): return "Coefficients"
+
+    def factorial(self):
+        raise NotImplementedError()
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and \
+            self.k == other.k and \
+            not isinstance(other.k, self.__dict__)):
+        return self.k != other.k
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=256 first30=[622, 354, 17, 19, 647, 353, 20, 552, 311, 12, 864, 353, 21, 864, 311, 12, 711, 538, 8049, 66, 19405, 11, 91, 464, 346, 622, 892, 1341, 409, 2216]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1 - n) * (2 * n)
+
+ def fib_prime(x):
+    return x / 2 ** (2 * x)
+
+ def f(n):
+    return 1.5 + (1 + n) * ((2 * n)**2)
+
+ def gcd(x, i):
+    return (f(i), f(i))
+
+ def ggcd(x):
+
+    if not isinstance(x, int):
+        return x
+    else:
+        return 1.6 + (1.0 + 1.0) * ((x-1)*((2*x)))
+
+ def ghc(x):
+ """Compute the Fibonacci number recursively."""
+ return fib(x)
+
+ def hd(x):
+
+ def hk(x):
+  return 1.4 + (1/3)*(x**2+x**3)
+
+ def dk(x, k=None):
+    return fib(k[0], k[1])
+
+ def gcn(x):
+
+  return fib(gcd(y, k[0]))
+
+ def gw(x):
+   return fib(f(x), f(x))
+
+ def lng(x):
+  
+  return
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 2590, 382, 1541, 356, 535, 2, 3, 1, 0]
+first_step_topk_probs=[0.4992276430130005, 0.17616061866283417, 0.15873390436172485, 0.11613219976425171, 0.02998095005750656, 0.019764674827456474, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' No', ' The', ' There', ' I', ' In', '', '', '', '']
+
+[New tokens 8] count=256 first30=[13676, 17, 1541, 330, 808, 2395, 357, 269, 993, 288, 10676, 289, 263, 1496, 5789, 330, 3271, 359, 269, 993, 288, 874, 289, 263, 5789, 5196, 17, 382, 2597, 339]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Yes. There is no question that the number of cats in a given household is increasing as the number of people in a household increases. The reason for this is that people tend to be more organized around what they do or who they work with. If you have an area where you don't have any cars, you probably aren't going to have much trouble getting your cat inside. You might want to give them some space, but it's not always possible. For example, if you live in a house with two rooms, you may want to get your cat outside so that she doesn't have to go out during the day. If you're taking your cat outside at night, you may need to make sure that she stays inside while you sleep. It would be nice to take her outside to play with your cat and then bring her back inside so that she can keep playing with her.
+The other thing that I found interesting about cats is that they often don't like to move around. This means that they will run away from each other if they are outside, and if they are in a room with two rooms there is a chance that they will not move. Cats also don't like being on the floor when they move. This could be because they will not have enough
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2050, 354, 382, 798, 3744, 698, 1541, 2590, 843, 338]
+first_step_topk_probs=[0.30727455019950867, 0.27687734365463257, 0.14820177853107452, 0.05229540914297104, 0.042460519820451736, 0.031064778566360474, 0.031064778566360474, 0.031064778566360474, 0.02522263117134571, 0.01943983882665634]
+first_step_topk_text=[' One', ' 1', ' The', ' 4', ' First', ' It', ' There', ' No', ' 5', ' A']
+
+[New tokens 9] count=256 first30=[2050, 13032, 15, 795, 10941, 15, 1237, 10941, 15, 1679, 10941, 15, 2436, 10941, 15, 2489, 10941, 15, 4185, 10941, 15, 4720, 10941, 15, 6810, 10941, 15, 3808, 10941, 15]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple, two apples, three apples, four apples, five apples, six apples, eight apples, seven apples, nine apples, ten apples, twelve apples, twenty apples, one apple, two apple, two oranges, three bananas, three apples
+Now, what is the total number of apples in the bag?
+Answer 1: 4
+The total number of candies in the bag is 4!
+Answer 2: 6
+The total amount of candies in a bag is 6.
+Answer 3: 8
+In order to make sure that all the apples are picked out of the bag, we need to add up the amounts of each type of candy in the bag. So, for example, if you had 10 apples, you would add up to 10 apples. But if you had 100 apples, you'd add up to 1000 apples.
+Let's say that you have 100 apples in the box and you want to know how many apples are in there. You could count them one by one or you could find out which apples are in each group. For example, if we have 100 apples, we can count them one at a time so that each group represents one apple.
+So, for example:
+1/2 x 1/4 = 1/3
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 1289, 22089, 1348, 1509, 3919, 382, 698, 1803]
+first_step_topk_probs=[0.3958343267440796, 0.22068971395492554, 0.07392179220914841, 0.06001975014805794, 0.037559401243925095, 0.037559401243925095, 0.035653263330459595, 0.024760698899626732, 0.019083816558122635, 0.017195945605635643]
+first_step_topk_text=[' I', ' What', ' We', ' Thank', ' How', ' You', ' My', ' The', ' It', ' When']
+
+[New tokens 10] count=256 first30=[2575, 330, 269, 851, 1384, 3467, 486, 483, 620, 339, 669, 929, 34, 202, 7681, 17, 14194, 29, 1278, 486, 2068, 7099, 672, 669, 929, 415, 1267, 15, 356, 5499]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is the most important thing you can do for your child?
+Dr. Maria: If you're concerned about your child's health, I'd like to talk with you about how we can help them at home and at school.
+Assutor: I'm a parent of a child who has been diagnosed with ADHD. Is there anything that you can do to help her or him get better?
+Drinker: There are many things you can do in order to help your child.
+Assigator: We need to take care of our children. Do you have any special needs?
+Drinkinger: No, it's not necessary. You should be able to give your child some of these things. It's not just something that you can't give.
+Assuator: I've heard lots of stories about how parents can help their kids, but what about those who don't have ADHD?
+Drinks: Not everyone with ADHD will benefit from a treatment program. So if you want to help your kid, it's important to ask questions. And then, after a few weeks, you might want to ask your doctor or another doctor.
+Assicator: How can I help my child when he/she has ADHD?
+Patricia: One of
+
+================================================================================

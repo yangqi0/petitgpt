@@ -1,0 +1,289 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=117 first30=[2827, 6087, 4928, 289, 263, 1204, 5440, 17, 2050, 1266, 15, 6087, 2977, 263, 2023, 3197, 298, 3766, 299, 15935, 383, 17, 776, 23140, 656, 269, 3197, 298, 3109, 299]
+[Full output 1]
+Once upon a time, a curious child named Max lived in a small village. One day, Max saw a big tree and wanted to climb it. He climbed up the tree and started to climb. As he was climbing, he heard a loud noise. It was his mom! She had come home from work and she was very angry. Max ran back to his mom and told her what Max had done. His mom said that Max had been very naughty and could not play with his toys. Max felt sad and went back to his house. He learned that sometimes bad things happen when you try your best.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 17, 698, 418, 269, 8492, 288, 269, 9556, 1761, 1691, 7916, 15, 722, 383, 2037, 263, 645, 288, 269, 8053, 4047, 13877, 288, 16711, 17, 202, 509, 16991]
+[Full output 2]
+Paris is the capital of the province. It was the seat of the province until 1791, when it became a part of the newly formed Province of Quebec.
+The provincial capital is the city of Saint-Michel-de-Léon, and has a population of 2,464 (2010). The town is served by the Canadian National Railway, which runs through the province from Montreal to Grand Junction.
+Saint-Michel is located in the southern part of the province, between the lakes of Lake Champlain and the St. Lawrence River. It lies at an elevation of 6,720 feet above sea level.
+The province's population is approximately 5,000 (2005), making it the third largest in Canada after Ontario and New Brunswick. In addition, the population density is 4,813 people per square mile (2,755/km2).
+The province is also home to the world's most famous mountaineer: Jean-Baptiste Lamarck.
+The French were the first Europeans to settle in the region, and the French are known for their strong economic ties with the British Empire. The French established themselves as the major trading partners in the area during the French and Indian War of 1792–1793.
+In
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 6584, 269, 3286, 288, 263, 4409, 17, 382, 28071, 18062, 330, 1255, 269, 28071, 2686, 374, 269, 4409, 17, 202, 509, 28071, 18062, 330, 9798, 419]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that describes the behavior of a vector. The eigenvalue λ is called the eigenvalue associated with the vector.
+The eigenvalue λ is denoted by λ2 = λ1 + λ2. It can be written as λ = λ3 - λ4.
+An eigenvalue λ0 is a scalar multiple of λ0.
+Asymptotically, an eigenvalue λn is a scalar multiples of λ0 if and only if n is odd.
+The eigenvalues are the eigenvalues of the matrix A in the following way:
+For example, suppose we have the following matrix A:
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+| 0 0 | 1 1 | 2 2 | 3 3 | 4| 4 | 5| 6 | 7| 8 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31 | 32 | 33 | 34 | 35 | 36 | 37 | 38 | 39 | 40 | 41 | 42 | 43 | 44 | 45 | 55 | 56 | 57 | 58 | 59 | 60 | 61 | 62 | 63 | 64 |
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 817, 5546, 1420, 491, 395, 9845, 1991, 1085, 22968]
+first_step_topk_probs=[0.2042822390794754, 0.1840735822916031, 0.14945606887340546, 0.0684259757399559, 0.06495336443185806, 0.05695881322026253, 0.03662578761577606, 0.0347670279443264, 0.03132769465446472, 0.022919829934835434]
+first_step_topk_text=[' can', ' use', ' describe', ' allow', ' have', ' are', ' rely', ' provide', ' model', ' mimic']
+
+[New tokens 4] count=256 first30=[22968, 269, 14457, 2673, 1085, 17, 1109, 483, 342, 885, 299, 1798, 15, 8793, 298, 3235, 1623, 16, 7128, 4465, 17, 202, 509, 851, 1488, 1375, 288, 14457, 2673, 330]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the neural network model. They can be used to learn, analyze and predict real-world applications.
+The most common type of neural network is the neural network, which consists of two or more neurons, each with its own unique set of inputs and outputs. The neural network model can be applied to any number of different problems, including:
+- Data mining (the processing of data by means of algorithms)
+- Scattering and regression analysis
+- Logistic regression
+- Linear regression
+- Nonlinear regression
+- Computational science
+- Statistical inference
+- Experimental design
+The neural network is an important tool for designing computer programs and testing them in real-time. It can also be used to simulate real-life scenarios using real-world data. For example, it can detect traffic patterns, help predict disease risk, and track trends.
+The neural networks have been used extensively for studying human behavior since the first computers were invented in the late 1800s. They were the first artificial intelligence to use the human brain as a model for human behavior. They were also used to study the effects of various environmental factors on human behavior.
+The earliest known neural network was developed in the early 1900s by Richard Feynman. In this model, the neurons
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 17, 595, 551, 202, 202, 350, 1401, 678, 626, 861, 8922, 3142, 9533, 346, 655, 3715, 555, 1083, 801, 18318, 2944, 903, 3, 711, 509, 851, 1488]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+if __name__ == "__main__":
+    import sys
+
+    print("Python functions")
+
+The most common cause of diabetes is high blood sugar (hypoglycemia). This can occur when your body doesn't respond to insulin or if you have an increased need for insulin or if your body doesnít respond to it properly. In other words, you are having too much insulin in your system and not enough insulin in your body. If this happens, you may be at risk for type 2 diabetes.
+There are several factors that increase your chance of developing diabetes. These include:
+- Family history of diabetes
+- High blood pressure
+- High cholesterol
+- Being overweight
+- Having family members with diabetes
+Your doctor will ask about your symptoms and medical history. He or she will do a physical exam. You may also undergo tests such as blood tests, ultrasound, and blood tests.
+Blood tests may show how well your kidneys are working. They help diagnose diabetes and monitor your blood glucose levels.
+In addition to checking for any underlying health problems, your doctor may order tests to see if you have diabetes. Tests include:
+Treatment depends on what is causing your diabetes. Your doctor may prescribe medicine or diet changes
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=194 first30=[622, 494, 11, 81, 18, 21, 12, 711, 202, 350, 1401, 678, 626, 861, 8922, 3142, 9533, 346, 1083, 801, 26884, 8042, 1968, 2444, 3, 711, 4750, 2062, 263, 689]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return int(n/2)
+
+
+if __name__ == "__main__":
+    print(">>> ", input())
+
+Once upon a time, there was a little girl named Lily. She loved to play with her toys and run around outside. One day, she saw a big dog running towards her house. The dog looked sad because it had no owner. Lily wanted to help the dog, so she went to get some water from the tap. As they were walking back home, Lily saw a boy who was crying. He asked his mom what was wrong. His mom said he lost his toy car. Lily felt bad for the boy and decided to help him find his toy car instead. They searched all over the house until they found the boy's toy car. The boy was happy again and thanked Lily for helping him. From that day on, Lily learned that even when things seem scary or hard, we can still be kind and help others.
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 339, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.7587489485740662, 0.24125102162361145, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' for', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=104 first30=[622, 354, 17, 19, 647, 353, 20, 552, 311, 12, 864, 353, 21, 13, 81, 12, 711, 202, 350, 1401, 678, 626, 861, 8922, 3142, 9533, 346, 537, 22018, 269]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1 - n) * (2*n)
+
+
+if __name__ == "__main__":
+    # Initialize the program with the following arguments:
+    print("The input is: ")
+    print()
+
+    # Calculate Fibonacci Numbers recursively using the function above:
+    for i in range(len(Fib(5)):
+        print("I am a Fibonacci number!")
+
+        # Initialize the function to print:
+        print("The output is: ")
+        print()
+        print()
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 2590, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.7587489485740662, 0.24125102162361145, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' No', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 8] count=256 first30=[13676, 17, 1541, 330, 808, 2395, 357, 2645, 10676, 395, 269, 851, 1488, 12445, 288, 3191, 289, 269, 1560, 1705, 17, 1109, 395, 658, 1414, 359, 360, 10733, 10676, 741]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Yes. There is no question that black cats are the most common breed of cat in the United States. They are also known as "black cats." Black cats are a group of cats who live in different parts of the country, but they are not considered to be any distinct species. The black cat has been recorded from California through Texas and the Southwest, but it was not documented until after World War II. This is because the black cat is so rare in the United Kingdom, and so much of the population lives there. It is estimated that between 5% and 10% of all cats in the UK are black. In addition, the black cat has become a dominant feature in the British Isles since the late 1800s.
+The reason for this is that black cats have more natural white coat coloration than other breeds of cats. These white coats tend to be darker or lighter in colour, which is why they are called black cats. Because of this, black cats are often considered to be the 'white' cat, and are sometimes referred to as 'white cats'. They may look like dark-colored, but they do not have the same white as their white counterparts.
+Black cats can be found in many countries including Australia, New Zealand, New Caledonia
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 798, 843, 2050, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.564358651638031, 0.1991431564092636, 0.17944268882274628, 0.05705546587705612, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' 4', ' 5', ' One', '', '', '!', '"', '', '']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 202, 24771, 29, 798, 10941, 333, 843, 10941, 202, 4528, 482, 263, 4697, 2758, 34, 3, 711, 509, 1811, 435, 1325, 4963, 4007, 269, 1701]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+Answer: 4 apples = 5 apples
+Is this a fair game?
+
+The problem at hand involves finding the sum of all the odd numbers in the set {1, 2, ..., n}. This can be solved using the formula for an even number:
+
+a + b = a2 + b2 - 2ab + b3
+
+where a is any integer, b is any positive integer, and a and b are both odd integers. To solve this equation, let's first understand what it means to add up an even number. An even number is any integer that leaves a remainder when divided by another integer. For example, 7/7 is an even number because it is divisible by 7 without leaving a remainder. Now, our goal is to find the sum of these two even numbers.
+
+To begin solving this problem, recall that the sum of an even number equals the product of its digits after the decimal point. Therefore, we need to express the sum as follows:
+
+S_n = a2+b2-2ab+b3
+
+Here, S\_n represents the sum of the even numbers; specifically, S\_2 = a2-2aba-b2, which results
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 22089, 3189, 27614, 1509, 360, 1348, 15255, 8151]
+first_step_topk_probs=[0.5326191186904907, 0.17639636993408203, 0.05608680471777916, 0.03509822487831116, 0.028497518971562386, 0.024375220760703087, 0.02196390926837921, 0.019791124388575554, 0.017833290621638298, 0.016069138422608376]
+first_step_topk_text=[' I', ' What', ' Thank', ' Do', ' Hi', ' You', ' "', ' How', ' Thanks', ' Please']
+
+[New tokens 10] count=256 first30=[2575, 330, 669, 2942, 374, 482, 34, 202, 55, 3422, 29, 5531, 15, 356, 3442, 733, 289, 263, 2690, 339, 672, 2236, 973, 298, 383, 415, 733, 263, 1809, 3851]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience with this?
+Tony: Well, I've been in a relationship for about 30 years and it's been a little bit like I've always had that kind of experience. It was a lot of fun, but you know, I never really got to see the real thing. It's not a real problem, it's just a way of looking at things, which I think, well, I feel very stressed out now.
+Assicator: How do you get through it?
+Tonight we will be going to talk about some of the most common problems in relationships. We'll be talking about the two main types of relationships.
+Assigator: You're a very good person.
+Tonany: You're not a great person.
+Assuator: Yeah, I would love to hear from you.
+Tony's father is a very good teacher. He has been teaching me for 20 years and he teaches me every day. And he doesn't have any problems.
+Assutor: Thank you.
+Teacher: I can't wait to go back and talk to you again.
+Toni: I can remember what I did last week.
+Assiator: I still have some stress in my life.
+
+================================================================================

@@ -1,0 +1,281 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 2446, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8670357465744019, 0.13296423852443695, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' came', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 1] count=122 first30=[2827, 5273, 2857, 299, 269, 3843, 17, 776, 2977, 7336, 288, 613, 4355, 4438, 298, 2221, 958, 17, 14918, 15, 406, 5052, 263, 10603, 6387, 4834, 444, 3722, 263, 3197]
+[Full output 1]
+Once upon a time, a curious child named Jack went to the park. He saw lots of other kids playing and having fun. Suddenly, he heard a loud noise coming from behind a tree. He looked up and saw a big dog! The dog was barking and running towards them. Jack's mom came over and said, "It's ok Jack, it's just a dog!" But the dog didn't listen. It ran away with its teeth in its mouth. Jack felt sad and scared. He knew he had to be careful around the dog, so he decided to stay away from the dog until it got too close to him.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 263, 336, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.8808853030204773, 0.1053021028637886, 0.01381263043731451, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' a', ' S', '', '#', '', '"', '!', '', '']
+
+[New tokens 2] count=186 first30=[269, 9556, 17, 698, 418, 269, 8492, 288, 269, 1534, 11031, 288, 269, 9556, 15, 298, 330, 269, 9619, 2317, 289, 269, 9556, 17, 202, 509, 1861, 288, 269, 9556]
+[Full output 2]
+Paris is the capital of the province. It was the seat of the last governor of the province, and is the oldest city in the province.
+The history of the province begins with the arrival of the first inhabitants of the area by the first European settlers. The first settlement was founded in 1558. It was here that the first Catholic church was built. The first church was built in 1680, and the first school was established in 1731. In 1814, the first public school was opened in the town.
+In 1869, the population of the province increased to 200. By 1880, there were 5,500 people in the municipality. There are a number of churches in the municipality, and the population has decreased since then. The first mayor was Clyde Moody. He was elected to the Legislative Assembly in 1881 and served until his death in 1902.
+The present mayor is Clyde W. Wong.
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 6058, 500, 806, 1264, 269, 9220, 411, 1418, 299, 3714, 578, 733, 4491, 17, 382, 775, 1993, 289, 6636, 482, 1811, 330, 4007, 269, 18956, 288]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that tells us how much the transformation we want to transform has been applied. The first step in solving this problem is finding the eigenvalues of the given matrix.
+
+The second step involves finding the determinant of the matrix and then applying the chain rule to each row and column separately. This will give you the determinant of your original matrix (i.e., the product of its elements). You can think of it as taking the dot product between two vectors, which gives you the magnitude of the result. Once you have done this, you can apply the chain rule again to find the corresponding eigenvectors.
+
+To calculate the eigenvectors for our matrix, follow these steps:
+
+1. Determine the values of the rows and columns of the resulting matrix. These represent the entries along the main diagonal from the top left corner to bottom right corner of the matrix.
+2. Multiply the corresponding entries together. For example, if you had a vector of length 1, say, "a", "b" would be multiplied by "c".
+3. Subtract the corresponding entries from each other, giving you the total number of entries.
+4. Finally, multiply the final answer by the determinant of this new matrix.
+5. Lastly, add all those
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 5546, 817, 395, 1085, 491, 9845, 1420, 1991, 14071]
+first_step_topk_probs=[0.2324068397283554, 0.17003247141838074, 0.13805560767650604, 0.052614010870456696, 0.05131963640451431, 0.05131963640451431, 0.05131963640451431, 0.03955359011888504, 0.037546250969171524, 0.037546250969171524]
+first_step_topk_text=[' can', ' describe', ' use', ' are', ' model', ' have', ' rely', ' allow', ' provide', ' incorporate']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 298, 3235, 806, 1047, 383, 601, 1776, 289, 1623, 16, 7128, 6863, 17, 202, 509, 2877, 3722, 269, 1085, 330, 357, 383, 3350]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data and predict how well it will perform in real-world situations.
+The idea behind the model is that it uses the same neural network as the human brain, which allows us to understand how the brain processes information and what happens when we do something different. The model also shows how the brain changes over time based on its own experience with the environment (e.g., if you were to watch an experiment, the brain would change over time).
+This new approach is being used by researchers at the University of California, Berkeley to study the brain's development and behavior in humans. They have shown that the brain has evolved in response to changes in environmental conditions.
+"We have been able to demonstrate this type of research in mice," said Dr. Michael J. Herrera, associate professor of psychiatry and behavioral sciences at UC Berkeley. "These results show that the brain can adapt to changing environments and may be able to adapt to changes in our environment."
+A version of the model was presented at the American Psychological Association annual meeting of the Society for Neuroscience in Boston, MA.
+Source: Eurekalert & othersLast reviewed: By John M. Grohol, Psy.D. on 21 Feb 2009
+Published on
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=209 first30=[263, 647, 286, 3, 711, 4750, 2062, 263, 689, 715, 418, 263, 1809, 3510, 2827, 15781, 17, 1530, 699, 263, 2023, 2716, 298, 1024, 3766, 299, 1369, 383, 17, 2069]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+Once upon a time there was a little girl named Lucy. She had a big box and she wanted to open it. So she opened the box and found lots of colorful things inside! She was so excited when she saw them. She picked up some of her favorite toys and put them in the box. Then she grabbed some of the other toys and started to play with them. Suddenly, she heard a loud noise outside. It was her mom calling her from the house. She ran over to the kitchen and saw Lucy playing with all kinds of toys. Her mom was very angry and told Lucy that she needed to clean up before she could go back home. Lucy didn't want to leave her box behind because she knew she would have to do something. But her mom said that they couldn't just take away the toys, but also the box. They promised Lucy that she would always be careful around the box and not touch anything. From then on, Lucy made sure to keep her box safe and tidy.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 311, 864, 353, 81, 552, 354, 12, 647, 311, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 655, 3715, 555, 1499, 29, 331, 1083, 801, 7351]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n * (n - 1) + n
+
+
+if __name__ == '__main__':
+    import sys
+
+    try:
+        print("Checking factorial")
+        print("\033[1;32m" + str(len(sys.argv)) + " are called.")
+        print("Number of functions is:", len(sys.stdin.readline()))
+
+        print("\033[-1;33m" + "\033[0;31m" + " are named:")
+        print("Function name is:", sys.argv[2])
+        print("Functions are:", sys.getdefaultencoding())
+        print("Prime numbers are:", sys._maxsize() / 2)
+        print("Max number of primes is:", sys._minsize() / 3)
+        print("-", sys._maxlength() / 2, "-")
+        print("First argument is:", sys.__getattribute__(self).__first__()["second"])
+        print("Second argument is:", self.__getargument('function_name', 'first'))
+        print("Possible arguments are:", sys.__setattribute__(self.__getargument('_type', 'first'), self.__getargs__(self.__class__.__name__))
+        print("Makes sure it's an integer, and prints it
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=256 first30=[622, 354, 17, 19, 13, 20, 17, 19, 8257, 81, 16, 20, 12, 647, 643, 17, 24, 13, 20, 17, 24, 13, 21, 17, 19, 13, 22, 17, 19, 13]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0*1.0*(n-1) + 0.5*1.5*2.0*3.0*4.0*5.0*6.0*7.0*8.0*9.0*10.0*11.0*12.0*13.0*14.0*15.0*16.0*17.0*18.0*19.0*20.0*21.0*22.0*23.0*24.0*25.0*26.0*27.0*28.0*29.0*31.0*32.0*33.0*34.0*36.0*37.0*38.0*39.0*40.0*41.0*42.0*43.0*44.0*45.0*46.0*47.0*48.0*49.0*50.0*51.0*52.0*53.0*54.0*55.0*56.0*57.0*58.0*59.0*64.0*65.0*66.
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 1541, 2590, 535, 338, 356, 698, 1906, 4619]
+first_step_topk_probs=[0.29443326592445374, 0.215411975979805, 0.19410249590873718, 0.127960205078125, 0.045152805745601654, 0.036661211401224136, 0.02976658195257187, 0.02294199913740158, 0.016784727573394775, 0.016784727573394775]
+first_step_topk_text=[' The', ' Yes', ' There', ' No', ' In', ' A', ' I', ' It', ' All', ' Black']
+
+[New tokens 8] count=256 first30=[1541, 330, 808, 3641, 2833, 299, 1447, 482, 6965, 17, 382, 1152, 357, 751, 10676, 491, 263, 2645, 12153, 6950, 357, 581, 395, 453, 2645, 388, 833, 613, 2419, 17]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: There is no scientific evidence to support this conclusion. The fact that some cats have a black coat indicates that they are not black or any other color. In other words, it's unlikely that any cat will be black if the coat is white. If there were any cat, why don't you try to find out what color of coat is the same as your own?
+Answer No. Some cats may have black coats because their coat is too short. But most cats with white coats are black-and-white colored. They may also have a black tail, which may be a sign of a disease called "mild yellow fever." It could be that the coat has a black tip, but if it is white, then the tail must be black. White dogs, however, do not display any symptoms of yellow fever.
+Some cats with white coat have an increase in the number of black spots on their skin. This means that some cats may have white patches on their skin that look like black dots. When white spots appear on the skin, these spots may be black.
+See another brain teaser just like this one...
+Or, just get a random brain teaser
+If you become a registered user you can vote on this brain teaser, keep track
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 2050, 843, 798, 382, 637, 2, 3, 1, 0]
+first_step_topk_probs=[0.5608537793159485, 0.16068744659423828, 0.13046802580356598, 0.07750125974416733, 0.04148343577980995, 0.029006043449044228, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' One', ' 5', ' 4', ' The', ' 3', '', '', '', '']
+
+[New tokens 9] count=168 first30=[354, 13032, 333, 798, 10941, 17, 202, 24771, 29, 637, 10941, 333, 1012, 10941, 17, 202, 22, 10941, 333, 843, 10941, 17, 202, 509, 993, 288, 10941, 330, 409, 15]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples.
+Answer: 3 apples = 6 apples.
+3 apples = 5 apples.
+The number of apples is 2, so there are 7 apples in total.
+Answer by: 5 apples = 5 + 6 = 10 apples.
+4 apples = 10 apples = 12 apples.
+There are 6 apples in total, so there is 9 apples in total each time.
+Answer 2 apples = 6 + 3 = 8 apples.
+5 apples = 6+2 = 11 apples.
+6 apples = 6 -1 = 3 apples.
+7 apples = 6-1 = 3-2 apples.
+8 apples = 6/2 = 3 apples each.
+9 apples = 6 (each) + 1/2 = 2 apples.
+10 apples = 6 * 2 = 6 apples each.
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 382, 338, 1509, 1348, 360, 2766, 421, 1289]
+first_step_topk_probs=[0.6625706553459167, 0.06937740743160248, 0.04229924455285072, 0.026470191776752472, 0.022641154006123543, 0.020939644426107407, 0.014925971627235413, 0.011503901332616806, 0.01036587543785572, 0.009839808568358421]
+first_step_topk_text=[' I', ' What', ' The', ' A', ' You', ' How', ' "', ' Dr', ' D', ' We']
+
+[New tokens 10] count=256 first30=[2575, 330, 4083, 34, 202, 11190, 926, 29, 25799, 483, 342, 3436, 419, 263, 993, 288, 1943, 15, 1433, 29, 202, 16, 382, 4083, 272, 2601, 353, 262, 669, 1629]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is stress?
+Emily: Stress can be caused by a number of things, including:
+- The stressor itself (in your body)
+- the environment around you
+- what you eat or drink
+- how much you smoke
+- when you are feeling down
+- when your heart beats faster than it should
+- when there's no need to take action
+- the stressors that you experience in life
+- your thoughts and feelings about your health
+- how you feel about yourself
+- your experiences with the stressor
+I'm not sure if this list will cover all of these, but it might help to know something about how stress affects your health. It may also help to know some things about how stress interacts with other factors such as:
+- How long you have been living with the stress of life
+- How much stress you've had over time
+- How you use your energy
+- How well you cope with stress
+- How stress affects your moods
+- How your body responds to stress
+- Your personal beliefs about the causes of your stress
+- Whether you're coping with stress
+In addition, here are some important points to remember from the list above:
+- You don't always feel better because
+
+================================================================================

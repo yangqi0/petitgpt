@@ -1,0 +1,287 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 2857, 2446, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.4631267786026001, 0.4173114597797394, 0.11956174671649933, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' went', ' came', '', '#', '', '"', '!', '', '']
+
+[New tokens 1] count=172 first30=[2827, 5273, 2857, 299, 269, 3843, 17, 776, 2977, 263, 2023, 3197, 374, 7336, 288, 4749, 298, 7106, 17, 5273, 3766, 299, 15935, 269, 3197, 298, 1137, 922, 418, 351]
+[Full output 1]
+Once upon a time, a curious child named Jack went to the park. He saw a big tree with lots of leaves and flowers. Jack wanted to climb the tree and see what was on top. Suddenly, he heard a voice behind him. It was his mom! She said, "Jack, come down from the tree!" Jack was scared but he knew he had to be brave. So he ran up to the tree and started climbing it. He felt like he could reach all the way there. But then, he noticed something strange. The branches were getting bigger and bigger. Jack tried to climb them, but they were too high. He was sad that he couldn't get out of the tree. His mom told him to stay close to me. Jack listened carefully and climbed higher than ever before. He was so happy that he started to climb the tallest tree in the world!
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 4772, 288, 31772, 17, 382, 2317, 578, 263, 2073, 288, 672, 354, 15, 2992, 10894, 353, 9581, 573, 202, 509, 2317, 415, 1271, 9255, 13003, 330]
+[Full output 2]
+Paris is the capital of the province of the Republic of Malta. The city has a population of about 1,100 inhabitants (2007).
+The city's main thoroughfare is the National Museum of Malta, which houses a collection of local artifacts and information on the history of Malta from the first half of the 19th century to the present day. It also contains an important collection of ancient coins, including a number of coins dating back to the early medieval period.
+There are several major museums in Malta:
+- The National Museum of Istanbul - the largest museum in the world, with over 500,000 objects, including a large number of jewellery, including the oldest surviving coin in Malta.
+- The British Museum - the most extensive library in Malta, with more than 2 million items, including some of the earliest examples of art, pottery, textiles, and glassware.
+- Malta Museum - the oldest private museum in the country, with more recent collections of antiquities, and museum exhibits.
+- Museo dei Bardi - the best-preserved collection of the ancient Greek Orthodox Church.
+- the United States Naval Academy - the most prestigious of all the military schools in the United States.
+- International Military College - the most widely used military school in
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 288, 269, 3823, 357, 3777, 269, 28071, 17, 382, 9256, 6847, 288, 263, 3592, 3823, 330, 269, 1701, 288, 545, 18956, 288, 269, 1496, 3823, 17, 1220, 1373]
+[Full output 3]
+In linear algebra, an eigenvalue is a value of the matrix that gives the eigenvalue. The characteristic polynomial of a square matrix is the sum of all eigenvalues of the given matrix. For example, if we have two matrices A and B with entries in the first row and second column respectively, then the characteristic polynomial of A can be written as follows:
+
+A = [1 1 0 0 0] + [0 0 0 0 1 0] + ... + [0 1 0 0 1] + [1 0 0 0 2 0] + (2 0 0 0 3) ... + ... + (3 0 0 0 4) 0 0 ] + ...
+
+where each entry is a scalar function of the form f(x) = x^T. Here, we are interested in finding the eigenvalues of this matrix. One way to approach this problem is by using a particular technique called the Frobenius method. This method involves performing certain operations on the matrix until it reaches a point where it becomes zero. However, there are some situations where this method fails, such as when you take the matrix A and return to the original matrix, or when you perform a transformation for the matrix A. These problems may seem challenging at first glance due to their complexity and lack of clear-cut information about the eigenvalues
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 1420, 9845, 817, 491, 1991, 5663, 1085, 5546, 395]
+first_step_topk_probs=[0.2010994702577591, 0.18120567500591278, 0.13257290422916412, 0.09699241071939468, 0.07875168323516846, 0.06394131481647491, 0.04678046703338623, 0.03422531858086586, 0.030839605256915092, 0.02350141480565071]
+first_step_topk_text=[' can', ' allow', ' rely', ' use', ' have', ' provide', ' involve', ' model', ' describe', ' are']
+
+[New tokens 4] count=229 first30=[22968, 14457, 8119, 17, 202, 509, 421, 15687, 1440, 330, 1728, 351, 269, 3176, 2657, 419, 621, 4068, 404, 352, 894, 298, 610, 7563, 435, 269, 1442, 288, 10966, 81]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic neural networks.
+The DLR group is based on the approach developed by Kurt Hirsh and his colleagues at the University of Bonn in Germany, who have made significant progress towards developing a new kind of model for the study of neural networks. The DLR group has already demonstrated that neural networks can be transformed into other types of neural networks using functional imaging techniques. This work shows that these two new classes of neural networks are not only different from each other but also much more complex than previously thought.
+The group's work is supported by the German Federal Ministry of Education and Research (BMBF), which is the world's largest private research institution, with its own staff and funds. It supports a number of important projects in the area of neuroscience and neural networks. These include:
+- the development of a new type of neural network called the Cognition Machine (CMM)
+- development of a mathematical model to describe the neural network in terms of a neural network
+- development and validation of the neural network
+This work was funded by the German Research Council (GCR) and the Max Planck Society.
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=44 first30=[263, 647, 286, 17, 595, 66, 1637, 551, 861, 263, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 655, 3715, 555, 1271, 333, 9745, 17, 2953, 13740]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get_value() == a
+
+
+if __name__ == '__main__':
+    import sys
+
+    main = unittest.TestLoader().loadTestsFromTestCase(add)
+    main.run()
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=170 first30=[622, 353, 20, 12829, 311, 12, 647, 354, 711, 537, 5062, 545, 1812, 9044, 444, 643, 299, 311, 552, 354, 1191, 269, 7534, 3077, 7924, 202, 202, 6, 1278, 311]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return (1 << n) + 1
+
+ # Get all possible integers from 0 to n - 1 using the binary search algorithm
+
+# If n is odd, then it will be divisible by 2.
+if len(sys.argv) > 1:
+    print("You have no arguments for this function.")
+    sys.exit(-1)
+
+print("Number of input arguments: " + str(len(sys.stdin)) + "\n")
+
+# Check if number of inputs is odd or even.
+for i in range(2, len(sys._argv)):
+    print("Input argument: ", i)
+    print()
+    sys.stdout.write("\r\n")
+    sys.stderr.write("0x{}\r\n".format(i))
+    sys.stdin.close()
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1083, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.6970592141151428, 0.3029407858848572, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' print', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 1701, 2619, 20, 647, 353, 76, 552, 354, 12, 864, 311, 12, 1341, 409, 339, 1249, 289, 1457, 11, 19, 15, 311, 687, 711, 538, 8049, 66, 2957, 11]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return sum((1 + (i - 1) * n) / 2 for i in range(0, n))
+
+ def fib_fun(x):
+ if (len(x) > 0 and x[0] == 0):
+ return fib(x)
+ else:
+ return fib_fun
+
+print "Fibre-Hammer Function"
+
+# Fibre-Cone Function
+if __name__ == "__main__":
+    # Print the number of consecutive Fibonacci numbers
+    print "Number of Fibonacci Numbers: ", len(fib(n))
+    print "Pairs of Fibonacci Numbers : ", len(pairs(n))
+
+    # Return the number of unique Fibonacci numbers in the given array.
+    p = np.array([[1,2], [3,4]])
+    n = int(input("Enter number of Fibonacci numbers: "))
+    while True:
+        index = input("Enter index: ")
+        index += 1
+        if index < n:
+            break
+        else:
+            print "Invalid number of Fibonacci Numbers."
+            raise ValueError("Invalid number of indices.")
+
+        # Find the next Fibonacci number with the largest index.
+        index = index % n
+        while index < n or index >= n:
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 2590, 1541, 356, 1289, 698, 2, 1, 0]
+first_step_topk_probs=[0.419400155544281, 0.18227045238018036, 0.14799204468727112, 0.1333518922328949, 0.07519430667161942, 0.025186937302350998, 0.01660424843430519, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' No', ' There', ' I', ' We', ' It', '', '', '']
+
+[New tokens 8] count=256 first30=[13676, 17, 1541, 330, 263, 3313, 288, 2833, 299, 2173, 357, 2645, 10676, 395, 453, 839, 2076, 2918, 614, 658, 1163, 6783, 487, 17, 1109, 395, 658, 1114, 18824, 17]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Yes. There is a lot of evidence to suggest that black cats are not only social animals but also being domesticated. They are also very territorial. I have found in my research that the black cat has been in captivity for over two decades nowadays, as far back as 1997 when the first published paper was published on the subject by a team from the University of Cambridge. It is true that there are many different types of cats and that they live in the same area, but it is much more difficult to find out what exactly is being considered a 'black cat'. So there is a great deal of research going into the issue of how black cats behave in the wild. There are several factors that need to be taken into account before we can say if these cats are indeed black or whether they are actually a domesticated species. We have come up with some interesting points about how they behave in the natural world.
+First, it would be important to note that black cats don't necessarily exhibit aggression towards other cats. This is a very subtle trait which helps us to understand why they do so. However, it does show that they are not aggressive toward other cats. In fact, black cats tend to have a preference for people who are usually male and usually have a preference towards
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 382, 2050, 1541, 798, 2590, 698, 409, 338, 843]
+first_step_topk_probs=[0.5009198784828186, 0.143515944480896, 0.11652585119009018, 0.03338521346449852, 0.03338521346449852, 0.03169088438153267, 0.028555888682603836, 0.02037794329226017, 0.01983165182173252, 0.01983165182173252]
+first_step_topk_text=[' 1', ' The', ' One', ' There', ' 4', ' No', ' It', ' 2', ' A', ' 5']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 202, 20, 13032, 333, 637, 10941, 202, 21, 10941, 333, 409, 10941, 202, 22, 10941, 333, 637, 10941, 3, 711, 509, 1560, 1705, 3257, 288]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+1 apple = 3 apples
+2 apples = 2 apples
+3 apples = 3 apples
+
+The United States Department of Agriculture (USDA) recently released a report on the state's food security, with a focus on the state as a source for food assistance. The report also includes a list of key questions that should be addressed to ensure that people are prepared for what they need to do in order to get the most out of their food supply.
+"We want everyone who is interested in food and how it can help," said Robert Garnett, Director of Food Security at the USDA. "It will be important to remember that we know all the information we need to make informed decisions about our food supply."
+According to the report, the U.S. Department of Agriculture is currently working with the Department of Health and Human Services (HHS), the Department of Defense (DOD), the Department for Environmental Protection (DEP), and the Department of Agriculture to develop and implement programs to support the nation's food security efforts.
+The report outlines six major goals for the Department of Food and Agriculture, including:
+- Increase access to affordable and nutritious foods;
+- Improve the quality and quantity of food products;
+- Reduce the
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 22089, 2575, 3919, 1509, 382, 360, 15255, 1289, 27614]
+first_step_topk_probs=[0.4921526610851288, 0.15228943526744843, 0.06618466973304749, 0.03362823277711868, 0.031921595335006714, 0.028763748705387115, 0.027303988113999367, 0.019976027309894562, 0.01708640158176422, 0.013873067684471607]
+first_step_topk_text=[' I', ' Thank', ' What', ' My', ' You', ' The', ' "', ' Thanks', ' We', ' Hi']
+
+[New tokens 10] count=256 first30=[2575, 330, 4083, 34, 202, 11190, 926, 29, 25799, 330, 263, 1144, 288, 3090, 15, 298, 269, 1629, 23253, 299, 383, 289, 263, 1194, 357, 411, 483, 1557, 17, 1289]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is stress?
+Emily: Stress is a state of mind, and the body responds to it in a way that we can understand. We have a sense of being happy, even when we're not. But if you are stressed out, then you feel less stressed than if you were stressed out. It's a natural part of your life. And it's important for us to think about what we want to do with our lives so that we can live as healthy and happy as possible.
+Assisting people in dealing with stress has been very helpful because they know how to deal with it. They know how to manage stress. You've got to be able to cope with stress better than anyone else. That's one of the reasons why I am here today.
+Assisted stress can be described as a normal reaction to an event or situation. An expected response to something is the way someone feels. The person is naturally more likely to react to the event if he or she does not respond to the event. A stressful event may occur at any time during the day, but the person is always trying to get things done. In fact, a stressful event can happen at any time, but only after the event has happened.
+When we talk about stress, we
+
+================================================================================

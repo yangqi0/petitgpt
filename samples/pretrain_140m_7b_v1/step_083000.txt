@@ -1,0 +1,277 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=58 first30=[2827, 21186, 998, 2009, 1929, 17, 1530, 699, 2245, 2595, 4453, 916, 383, 1234, 17, 21186, 418, 649, 8763, 299, 1098, 598, 922, 383, 418, 4, 1530, 3609, 896, 2553]
+[Full output 1]
+Once upon a time, a curious child named Sally found something special. She had never seen anything like it before. Sally was so excited to find out what it was! She asked her mom for help and she went home with the special thing. Sally's mom said that this special thing could be the most amazing thing ever!
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 17, 698, 418, 269, 8492, 288, 269, 9556, 415, 775, 11031, 15, 298, 418, 306, 3696, 419, 610, 3694, 15, 5693, 2676, 17, 202, 509, 2868, 330, 3323]
+[Full output 2]
+Paris is the capital of the province. It was the seat of the province's first governor, and was reigned by his son, Charles II.
+The town is located on a peninsula in the north-east corner of the province, which lies just south of the city center. The town is surrounded by the River Tiber.
+A road connects the town with the island of Trinidad, and its eastern side passes through the village of Santo Domingo.
+Beneath the harbour is the town of Humbertina, a small settlement (about 15 km2) situated on the southern coast of Trinidadian territory.
+The harbour is the largest port in Trinidad.
+The Port of San Antonio is also known as "the Town of Ponce de Leon" or "the Town Hall".
+There are several historic sites of interest in the town:
+- The famous Cocos Island
+- The Lone Star State Park
+- The Castle of Santo António
+- The Fountain of Youth
+- The Convent of the Sisters of St. Francis
+- The Mansion of the Sacred Hearts
+- The Roman Church
+- The St. Dominic's Chapel
+- The Church of St. James
+- The Cathedral
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 483, 342, 6031, 359, 269, 1701, 288, 795, 4384, 18956, 17, 202, 202, 2152, 10294, 8537, 400, 330, 3821, 359, 269, 4409, 1677, 288, 795, 7527, 400]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be expressed as the sum of two distinct eigenvalues.
+
+An eigenvector v is defined as the vector product of two vectors v and w, denoted by vv + wv. The determinant of this vector is given by the formula:
+
+det(v) = (1/2) * (1 - v^2) + (1/4) * (0) + ... + (0)^n
+
+where n represents the number of dimensions in the complex plane. When solving systems of equations involving these eigenvectors, it's essential to consider their components separately. For instance, if we have two vectors u and v, their corresponding eigenvector vi are given by:
+
+u = uv + vw
+v = vw + vwk
+
+Now let us analyze the provided system of equations:
+
+1. vv + vh = 0
+2. vw + w = 0
+3. vw = 1
+4. vwz = 2
+5. vwx = 1
+6. vy = 4
+7. vyz = 3
+8. vwyz = 4
+9. vyx = 5
+10. vxy = 6
+
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 1420, 1991, 491, 817, 5546, 395, 5663, 1085, 1005]
+first_step_topk_probs=[0.24974405765533447, 0.20277634263038635, 0.09780117124319077, 0.07155287265777588, 0.06447448581457138, 0.05234919860959053, 0.039533112198114395, 0.03829949349164963, 0.03829949349164963, 0.02524857223033905]
+first_step_topk_text=[' can', ' allow', ' provide', ' have', ' use', ' describe', ' are', ' involve', ' model', ' help']
+
+[New tokens 4] count=104 first30=[22968, 269, 3286, 288, 12473, 289, 269, 2613, 17, 202, 509, 8944, 1085, 330, 1728, 351, 269, 3207, 357, 269, 14457, 15258, 395, 3385, 299, 8646, 374, 619, 1467, 15]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the behavior of neurons in the brain.
+The functional model is based on the theory that the neural circuits are designed to interact with one another, and that they can be changed by external factors such as the environment or the environment. The neural circuitry is then used to control the neural activity. This means that it is possible to learn how the neural circuit works at any given time.
+This article is licensed under the GNU Free Documentation License. It uses material from the Wikipedia article "Brain_model".
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=163 first30=[263, 647, 286, 3, 711, 4750, 2062, 263, 689, 715, 418, 263, 1809, 3510, 2827, 15781, 17, 1530, 6446, 299, 1143, 3099, 298, 4196, 17, 2050, 1266, 1024, 2857, 351]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+Once upon a time there was a little girl named Lucy. She loved to play outside and explore. One day she went on an adventure with her mom. They walked through the woods and saw lots of exciting things. As they were walking, Lucy noticed something strange. There was a big, scary bear! He had never seen anything like it before. Lucy wanted to touch it but he didn't know how. So Lucy asked her mom for help. Her mom said no, but Lucy decided to ask her dad if he could have some fun. Lucy's dad showed her how to use the bear and Lucy knew that it was just a toy. Lucy felt so happy and excited about what she had found. From then on, Lucy always remembered to be careful around things in the woods.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=135 first30=[490, 311, 861, 643, 29, 341, 622, 354, 341, 1107, 29, 416, 622, 409, 864, 353, 81, 552, 354, 12, 647, 354, 4461, 202, 350, 1401, 678, 626, 861, 7200]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     if n == 0:
+         return 1
+         else:
+            return 2 * (n - 1) + 1
+            
+if __name__ == '__main__':
+    input_file = '../input.txt'
+    output_file = input_file + '/test/output.txt'
+
+    print('input file:')
+    print(input_file)
+    print('output file:')
+    for i in range(len(input_files)):
+        input_file += input_files[i]
+    
+    print('output files:')
+    print()
+    print('input output file:')
+    #print(input_dir)
+    print("output directory:")
+    print()
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.5260184407234192, 0.4739815294742584, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=38 first30=[622, 651, 73, 62, 78, 64, 339, 520, 289, 311, 490, 284, 62, 78, 64, 861, 284, 62, 78, 3971, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return [f[k] for k in n if f[k] == f[k]]
+
+
+if __name__ == '__main__':
+    print('Hello, World!')
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 1541, 356, 2590, 698, 535, 1289, 338, 1278]
+first_step_topk_probs=[0.2157895416021347, 0.2157895416021347, 0.1422571986913681, 0.13503766059875488, 0.0845043957233429, 0.05570871755480766, 0.038688935339450836, 0.03672543540596962, 0.028305428102612495, 0.024210914969444275]
+first_step_topk_text=[' The', ' Yes', ' There', ' I', ' No', ' It', ' In', ' We', ' A', ' If']
+
+[New tokens 8] count=256 first30=[1541, 330, 808, 3641, 2833, 299, 1447, 269, 5630, 288, 2645, 10676, 17, 1783, 15, 263, 993, 288, 2629, 491, 3400, 357, 2645, 10676, 620, 453, 2720, 299, 342, 263]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: There is no scientific evidence to support the existence of black cats. However, a number of studies have shown that black cats do not appear to be a separate species from the group called the African black cat (Loxodonta africana). This means that black cats are more likely than other cats to exhibit a similar appearance on the same territory.
+The American Veterinary Medical Association's (AVMA) definition of black cats has been used by animal welfare groups to describe black cats as "non-human" pets and thus, as far as we know, is unproven. The American Veterinary Medical Journal (AVMA), which was established in the late 1970s, recognized black cats as both human and non-human. In its 1993 report, the AAP recommended that the term "black cats" should be used instead of "humans."
+According to the American Veterinary Medical Society, black cats are an endangered species. As with many other mammals, black cats live in low numbers in the wild, although they are known to breed in captivity. Black cats are also found in the wild but only rarely in captivity. The American Animal Hospital Association (AHA) defines black cats as any of the black cats living in the wild.
+In contrast, black cats generally
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2050, 354, 382, 698, 776, 1541, 3744, 5517, 4449, 798]
+first_step_topk_probs=[0.32076385617256165, 0.2604396939277649, 0.12561292946338654, 0.04919073358178139, 0.03993971645832062, 0.03993971645832062, 0.029220521450042725, 0.022521156817674637, 0.02137818932533264, 0.02029324509203434]
+first_step_topk_text=[' One', ' 1', ' The', ' It', ' He', ' There', ' First', ' Two', ' Each', ' 4']
+
+[New tokens 9] count=165 first30=[2050, 13032, 483, 5964, 798, 611, 10941, 15, 649, 715, 395, 839, 1012, 10941, 1879, 289, 269, 9849, 17, 382, 2056, 993, 288, 10941, 3373, 330, 354, 13032, 17, 2069]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple can buy 4 more apples, so there are only 6 apples left in the basket. The total number of apples sold is 1 apple. So if you sell 7 apples, you will receive 8 apples.
+To find out how many apples you need to buy each day, multiply the number of apples by the number of days you buy each fruit. For example, if you bought 10 apples, then the total number of fruits would be 9 apples.
+Here's a simple calculation for you to figure out how many fruits you should buy each day. You could say that the total number you purchase per day is 5 apples. But what about the total number we use when calculating the number of fruits? We call this the "total number."
+The answer is no! You just need to calculate the total number.
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 22089, 382, 2575, 783, 1803, 1289, 1509, 360, 776]
+first_step_topk_probs=[0.565033495426178, 0.06573404371738434, 0.06573404371738434, 0.0456513874232769, 0.030095238238573074, 0.030095238238573074, 0.023195307701826096, 0.020900726318359375, 0.018833119422197342, 0.01787734031677246]
+first_step_topk_text=[' I', ' Thank', ' The', ' What', ' This', ' When', ' We', ' You', ' "', ' He']
+
+[New tokens 10] count=256 first30=[2575, 330, 669, 2942, 374, 263, 4083, 16, 4877, 5648, 34, 202, 46, 1727, 718, 15, 269, 619, 668, 578, 733, 289, 263, 4083, 16, 6473, 1815, 339, 611, 702]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience with a stress-related illness?
+Kristie, the one who has been in a stress-free environment for more than 20 years now. She's not alone. "I've had an episode of PTSD and I don't think that's something I have to deal with," she says. "It's going to be a part of my life."
+And it's just about everyone who's affected by the event. And it's not only about the patients themselves. The patients are also in a stressor. They're getting anxious as they get older, and they are trying to take care of themselves.
+"You can't see anything happening because you're not there," says Kris, who runs a crisis center at the University of California San Diego. "People are always looking out for them."
+The result of her past work with a team of researchers from the University of Wisconsin Medical School is a novel approach to coping with stress. The team is developing a new tool called the Stress Management Toolkit (PMBG). It will help physicians diagnose and treat people suffering from stress disorders and how to manage their stress.
+Kristy and her colleagues will use PMBG to learn how to better control stress in people suffering from
+
+================================================================================

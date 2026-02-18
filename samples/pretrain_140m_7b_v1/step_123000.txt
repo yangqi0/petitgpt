@@ -1,0 +1,312 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 2857, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.7772998809814453, 0.22270014882087708, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' went', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 1] count=173 first30=[2827, 5273, 418, 4438, 289, 269, 3843, 17, 776, 6446, 299, 4196, 298, 1098, 719, 1943, 17, 2050, 1266, 15, 406, 998, 263, 2023, 2716, 288, 8180, 4, 5273, 418]
+[Full output 1]
+Once upon a time, a curious child named Jack was playing in the park. He loved to explore and find new things. One day, he found a big box of matches! Jack was so excited that he ran over to it and started to play with them. Suddenly, Jack heard a loud noise coming from the box. It was his friend Jack's dog, Max. Jack was scared at first, but then he saw something very interesting. He noticed that the match had a lot of matches inside. Jack asked Max if they could play with the matches too. Max said yes and they both played together. They took turns throwing the matches and having lots of fun. After a while, Jack's mom called him back home. She gave him a big hug and told him she was ready for a new adventure. Jack was so happy and couldn't wait to tell his friends about his new game.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 263, 321, 336, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.8987187743186951, 0.07444258034229279, 0.014812111854553223, 0.012026489712297916, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' a', ' T', ' S', '', '', '!', '"', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 7535, 281, 8191, 15, 298, 330, 269, 1408, 3796, 2317, 289, 269, 2027, 17, 698, 330, 3323, 351, 269, 5566, 288, 389, 2530, 358, 15, 263, 1204]
+[Full output 2]
+Paris is the capital of the province of Catalonia, and is the second largest city in the country. It is located on the island of Biscay, a small island about six miles (10 km) southeast of Barcelona.
+The town was founded by the Romans during the first century AD. The town had an area of 226 square miles (490 km2), and was known as Taranto. In 1492 it was taken over by the Turks. In 1521, it was captured by the Spanish in the Battle of Maracas. After the fall of Catalans, it became part of the Province of Catalunya. In 1665, it was taken from the Austrian Empire by the French.
+In 1784, the city was captured by Napoleon's troops. In 1802, the city received its independence from France. In 1904, the city experienced a major earthquake, which caused considerable damage to the buildings and infrastructure.
+The old town has been used for several different purposes:
+- as a roadway, as a railway station, as a hospital, as a water supply system, as a highway, as a bridge, as a city hall, as a port, as a school, as a church, as a museum, as a public
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 2686, 374, 263, 3592, 3823, 17, 382, 18956, 288, 263, 3823, 395, 269, 18956, 288, 269, 3823, 298, 553, 5606, 28069, 17, 202, 202, 509, 8639, 288]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value associated with a square matrix. The eigenvalues of a matrix are the eigenvalues of the matrix and their corresponding eigenvectors.
+
+The dimension of an eigenvalue refers to the number of linearly independent eigenvectors that can be generated by the matrix in some way. For example, if we have a 2x2 matrix A = [a1, a2], then its dimension would be the number of eigenvectors for the given matrix A.
+
+Now let's consider the case where the eigenvalues are all zero. Let's say we have a 1 x 1 matrix B = [0, 0, 0] and we want to find all possible solutions (or eigenvectors) of B such that the sum of the eigenvalues equals zero. We start by finding the eigenvalues of B:
+
+* If the eigenvalues are (0, 0), then they are equal to 0;
+* If they are (1, 0), we get 0;
+
+Since there are no nonzero entries in B, the solution set will contain only zeros since it has no real number values. Thus, the eigenvalues of any eigenvector of B are always zero.
+
+Next, let's explore how the determinant of a matrix relates to the eigenvalue of another matrix. Specifically, we need to find the determinant of
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 5546, 3235, 491, 1085, 1420, 395, 9845, 14071]
+first_step_topk_probs=[0.2316955029964447, 0.20877498388290405, 0.12401767075061798, 0.06993085891008377, 0.05677942559123039, 0.046101246029138565, 0.03743129223585129, 0.03380487486720085, 0.032016683369874954, 0.023423904553055763]
+first_step_topk_text=[' use', ' can', ' describe', ' predict', ' have', ' model', ' allow', ' are', ' rely', ' incorporate']
+
+[New tokens 4] count=256 first30=[22968, 269, 14457, 2673, 1085, 17, 1109, 483, 342, 885, 299, 3235, 806, 874, 601, 14667, 289, 1108, 6863, 15, 857, 359, 263, 719, 2780, 388, 263, 719, 2780, 17]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the neural network model. They can be used to predict how people will behave in different situations, such as a new job or a new job.
+The first model was developed by Emmy Noether and is based on the idea that there is no one "model" for every situation. It does not take into account the differences between people who have similar experiences (such as their jobs) and those who do not. The other model is based on how people learn from each other and the patterns they make.
+The second model was developed at the University of California, Berkeley. This model uses a model called the "neural network model". It is based on two-dimensional data.
+In the first model, the neural network takes in information about the person's environment and then analyzes it using the information from the person's brain. In the second model, the information comes out of the person's memory, so the person has a better understanding of what he/she is doing.
+A third model is based around the idea that people are more likely to behave in certain ways than others. This is because the more you know about the person, the more you can judge whether your behavior is good or bad.
+All the models use the same principles but the
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=123 first30=[263, 647, 286, 17, 595, 551, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 655, 3715, 555, 1499, 29, 331, 444, 9879, 86, 22235, 655, 853, 15]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+
+if __name__ == '__main__':
+    import sys
+
+    try:
+        from libsdk import add, add_function
+        import libsdk.core as core
+
+        print("Adding to library")
+        print("The functions are now loaded.")
+        print("Loaded libraries:")
+        print("Found the functions in " + str(sys.argv[1]) + " library files!")
+        print("Done loading the libraries.")
+        print(f"Running this function:\n{add(print(sys.executable), print(sys.path))}")
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=44 first30=[622, 354, 490, 311, 861, 643, 1107, 354, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 655, 3715, 555, 537, 22018, 269, 1960, 7445, 346, 679, 333]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return 1 if n == 0 else 1
+
+
+if __name__ == '__main__':
+    import sys
+
+    # Initialize the user interface
+    app = create_app()
+    app.run(debug=True)
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 339, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.7948100566864014, 0.20518995821475983, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' for', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 354, 17, 19, 647, 353, 20, 552, 311, 12, 864, 353, 21, 864, 311, 12, 711, 202, 6, 11101, 299, 6519, 269, 31393, 993, 288, 269, 1496, 993, 15]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1 - n) * (2 * n)
+
+
+# Function to compute the Fibonacci number of the given number,
+# using the provided algorithm
+def fib_iter(n):
+    return fib(n)
+
+# Function for generating Fibonacci numbers recursion
+def fibs(n):
+
+    # Return the number of Fibonacci numbers in the list.
+    return 0 if n == 0 else 0
+
+# Method to generate Fibonacci numbers recursive
+def fib_(n):
+    # Return the Fibonacci number recursively
+    return fib_(n)
+# Function with the provided algorithm.
+    # This function is called from the library when we are creating an object.
+    # It returns the number of ways to add up all the Fibonacci numbers.
+    # Note: this method is only available for python3.6 and python3.7.
+    # The base case is the number of integers in the range [0..10].
+    # We will use the code below to calculate the Fibonacci number recursive
+    # algorithm.
+    while True:
+        try:
+            result = fib_(n).next()
+            break
+        except Exception as e:
+            print("Exception occured while looping through Fibonacci numbers")
+            time.sleep(
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 2590, 1541, 356, 4619, 2, 3, 1, 0]
+first_step_topk_probs=[0.47484758496284485, 0.2290240377187729, 0.12914177775382996, 0.10485484451055527, 0.038977861404418945, 0.023153845220804214, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' No', ' There', ' I', ' Black', '', '', '', '']
+
+[New tokens 8] count=256 first30=[13676, 17, 1541, 330, 808, 2395, 288, 2526, 269, 2419, 2645, 418, 885, 289, 269, 4376, 1165, 17, 698, 418, 453, 263, 4155, 5342, 15, 614, 2592, 263, 15806, 5408]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Yes. There is no question of why the color black was used in the ancient world. It was not a religious belief, but rather a symbolic symbol of humanity's struggle to survive. In fact, it was believed by many to be a sign of the superiority of the human race over other animals. The Egyptians were known for their white skin and red hair, which they called "mummies." But this is just an interpretation of what the Egyptians thought about their ancestors. They thought that if they lived in the desert, they would have brown skin, but then they would have black eyes.
+The Egyptians also believed that they had the ability to see the sun. When they saw the sun, they knew that it was the sun that caused them to be darkened. This happened to many of the ancient Egyptians, who believed that the sun was the cause of darkness. This is the reason why the Egyptians did not believe that the sun could affect them as well. The Egyptians believed that the moon made the sun shine brightly and so they became dark. The Egyptians thought that the moon was the cause for the darkness because the sun did not shine like the moon does today. So when the sun appeared on the sky, the Egyptians thought that it was due to the moon making
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 843, 798, 2050, 409, 643, 2, 3, 1, 0]
+first_step_topk_probs=[0.5828061103820801, 0.12216279655694962, 0.12216279655694962, 0.09918844699859619, 0.04214194416999817, 0.03153785318136215, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' 5', ' 4', ' One', ' 2', ' 0', '', '', '', '']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 202, 20, 13032, 333, 1604, 10941, 202, 21, 10941, 333, 409, 24847, 202, 22, 24847, 333, 1218, 24847, 202, 23, 26634, 333, 354, 27320, 202]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+1 apple = 12 apples
+2 apples = 2 oranges
+3 oranges = 8 oranges
+4 bananas = 1 banana
+5 oranges = 7 oranges
+6 oranges = 9 oranges
+7 oranges = 5 oranges
+8 oranges = 10 oranges
+9 oranges = 6 oranges
+10 oranges = 10 bananas
+11 oranges = 10 tomatoes
+12 oranges = 13 oranges
+13 oranges = 15 oranges
+14 oranges = 16 oranges
+15 oranges = 17 oranges
+16 oranges = 18 oranges
+17 oranges = 20 oranges
+18 oranges = 22 oranges
+19 oranges = 25 oranges
+20 oranges = 27 oranges
+21 oranges = 28 oranges
+22 oranges = 26 oranges
+23 oranges = 30 oranges
+24 oranges = 31 oranges
+25 oranges = 32 oranges
+26 oranges = 33 oranges
+27 oranges = 32 orange
+
+Now, let's find out how many apples we can buy from the store using these numbers! We know that each apple costs $0.60 or $0.70. So, if you bought all of this apples at a cost of $0.30, then you would need to figure out how much money you'll get when it comes to buying them. But wait, there are some rules for our calculations – which means we
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 382, 1289, 22089, 3919, 783, 1509, 8151, 27614]
+first_step_topk_probs=[0.5857075452804565, 0.0622384287416935, 0.050533659756183624, 0.03794664517045021, 0.034192781895399094, 0.021397296339273453, 0.020847262814641, 0.020311374217271805, 0.016926655545830727, 0.016926655545830727]
+first_step_topk_text=[' I', ' What', ' The', ' We', ' Thank', ' My', ' This', ' You', ' Please', ' Hi']
+
+[New tokens 10] count=256 first30=[2575, 330, 269, 851, 1384, 3467, 486, 483, 620, 339, 669, 929, 34, 202, 7681, 17, 423, 6992, 29, 1541, 395, 914, 1943, 357, 3222, 483, 620, 299, 1005, 553]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is the most important thing you can do for your child?
+Dr. Rita: There are many things that parents can do to help their children develop and grow, but we also have to address the following:
+- How much sleep a child needs at any given time in the day.
+- How often a child should be awake during the night before going to bed.
+- What kind of behavior the child will use at school or when he/she wakes up from bed.
+There are other things you can do as well. For example, if your child has a fever, let him/her know what the temperature is and how it feels. Then he/she can get a better idea of the temperature so they can take care of themselves.
+In addition, there are some things you can try to help your child. Here are some suggestions on how to make the best of your child's sleeping situation:
+- Make sure your child gets enough rest each night.
+- Talk with your child about his/her feelings. If your child is upset, talk to him/her about what you're doing wrong. It might help to explain why your child is not getting enough rest.
+- Try to stay calm while your child is sleeping.
+
+================================================================================

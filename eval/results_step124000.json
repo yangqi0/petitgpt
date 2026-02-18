@@ -1,0 +1,106 @@
+{
+  "ckpt": "outputs/pretrain_140m_7b_v1/latest.pt",
+  "bench": "pretrain/bench_v1.jsonl",
+  "time_s": 217.63,
+  "acc_arithmetic": 0.0,
+  "acc_syllogism": 0.6666666666666666,
+  "acc_code": 0.3333333333333333,
+  "counts": {
+    "total": 9,
+    "arithmetic": {
+      "n": 3,
+      "correct": 0
+    },
+    "syllogism": {
+      "n": 3,
+      "correct": 2
+    },
+    "code": {
+      "n": 3,
+      "correct": 1
+    }
+  },
+  "results": [
+    {
+      "id": "arith_0001",
+      "task": "arithmetic",
+      "ok": false,
+      "prompt": "John has 3 apples and buys 2 more. How many apples does he have?\nAnswer:",
+      "gold": "5",
+      "gen": " 1 apple = 2 apples\nAnswer: 2 apples = 4 apples\nAnswer 1 apple = 5 apples\nAnswer 2 apples = 6 apples\nAnswer 3 apples = 7 apples\nAnswer 4 apples = 8 apples\nAnswer 5 apples = 9 apples\nAnswer5 apples = 10 apples\nAnswer6 apples = 11 apples\nAnswer7 apples = 12 apples\nAnswer8 apples = 13 apples\nAnswer9 apples = 14 apples\nAnswer10 apples = 15 apples\nAnswer11 apples = 16 apples\nAnswer12 apples = 17 apples\nAnswer13 apples = 18 apples\nAnswer14 apples = 19 apples\nAnswer15 apples = 20 apples\nAnswer16",
+      "detail": "pred=16.0 gold=5"
+    },
+    {
+      "id": "arith_0002",
+      "task": "arithmetic",
+      "ok": false,
+      "prompt": "Compute 17 + 25.\nAnswer:",
+      "gold": "42",
+      "gen": " The answer is 14.\nThe answer is 14, which is the correct answer.\nThe question is asking for the answer of 15.\nAnswer 1: The answer 2.\nAnswer 3: The answer 4.\nAnswer 5: The answer 5.\nAnswer 6: The answer 7.\nAnswer7: The answer 8.\nAnswer8: The answer 9.\nAnswer9: The answer 10.\nAnswer10: The answer 11.\nAnswer11: The answer 12.\nAnswer12: The answer 13.\nAnswer13: The answer 14.\nAnswer14: The answer 15.\nQuestion: The",
+      "detail": "pred=15.0 gold=42"
+    },
+    {
+      "id": "arith_0003",
+      "task": "arithmetic",
+      "ok": false,
+      "prompt": "What is 9 * 8?\nAnswer:",
+      "gold": "72",
+      "gen": " 9.8 = 6.2\nAnswer: 6.3 = 3.4\nAnswer: 3.4 = 4.5\nAnswer: 4.6 = 5.1\nAnswer: 5.1 = 1.7\nAnswer: 2.9 = 1.8\nAnswer: 1.8 = 1.9\nAnswer: 0.0 = 1.1\nQuestion: What is the difference between 7 and 10?\nAnswer : 7.10 = 11.11\nAnswer: 11.11 = 12.12\nAnswer: 12.12 = 13.14\nAnswer: 14.12 = 15.",
+      "detail": "pred=15.0 gold=72"
+    },
+    {
+      "id": "syll_0001",
+      "task": "syllogism",
+      "ok": false,
+      "prompt": "If all cats are animals and some animals are black, can we conclude that some cats are black?\nAnswer:",
+      "gold": "unknown",
+      "gen": " Yes. The black cat is a member of the genus Cervidae, which includes dogs, cats, and other domesticated animals. It has a long tail, short legs, and a long neck. It is also known as the black cat or black dog.\nThe black cat is not a member of either the genus Cetacea or the family Cetacea. In fact, it is a member in the family Cephalopoda.\nCats are carnivores, meaning they eat plants and insects. They have a wide range of diets including grass, leaves, fruits, nuts, seeds, and even small mammals.",
+      "detail": "pred=yes gold=unknown"
+    },
+    {
+      "id": "syll_0002",
+      "task": "syllogism",
+      "ok": true,
+      "prompt": "All A are B. All B are C. Can we conclude all A are C?\nAnswer:",
+      "gold": "yes",
+      "gen": " Yes, the answer is NO! The answer is NO.\nThe answer is NO, and it's not true that all A are B!\nAnswer: No, it's true that all B are C!\nAnswer 1: No, the answer to this question is NO!\nAnswer 2: Yes, all A are A!\nAnswer 3: Yes, ALL A are A!!\nAnswer 4: Yes, All A are A!!!\nAnswer 5: Yes, ANY A ARE THEY TO DO IT!\nAnswer 6: Yes, THAT IS NOT TWO WAYS TO DO IT...\nAnswer 7:",
+      "detail": "pred=yes gold=yes"
+    },
+    {
+      "id": "syll_0003",
+      "task": "syllogism",
+      "ok": true,
+      "prompt": "Some A are B. All B are C. Can we conclude some A are C?\nAnswer:",
+      "gold": "yes",
+      "gen": " Yes, all B are C and all A is B.\nThe answer is NO! The only difference between B and A is that B is B-A.\nB is B-C.\nIf you have a question about this topic, please contact us at:",
+      "detail": "pred=yes gold=yes"
+    },
+    {
+      "id": "code_add_0001",
+      "task": "code",
+      "ok": true,
+      "prompt": "Complete the following Python function:\n\ndef add(a, b):\n    ",
+      "gold": null,
+      "gen": " return a + b\n\n\nif __name__ == \"__main__\":\n    print(\"The main function is called\")",
+      "detail": ""
+    },
+    {
+      "id": "code_fact_0001",
+      "task": "code",
+      "ok": false,
+      "prompt": "Complete the following Python function:\n\ndef factorial(n):\n    ",
+      "gold": null,
+      "gen": " return 1 if n < 0 else -1\n\n\n# Function to find the number of integers that are divisible by n.\ndef factorial_number(n):\n    return factorial(n) + factorial(n-1) * factorial(n+1)\n\n\n# The function returns the number of all integers that are not divisible by n, and the remainder is the result of dividing n by n. \ndef remainder(n):\n\n    # The function returns a positive integer.\n    return factorial_number((n-1)) % n\n\n\n# This function returns the remainder of the given integer.\ndef remainder_",
+      "detail": "Traceback (most recent call last):\n  File \"/tmp/tmpdi3ucn4e/tmp_eval.py\", line 4, in <module>\n    assert factorial(0)==1\nAssertionError"
+    },
+    {
+      "id": "code_fib_0001",
+      "task": "code",
+      "ok": false,
+      "prompt": "Complete the following Python function:\n\ndef fib(n):\n    ",
+      "gold": null,
+      "gen": " return n.fib()\n\n\nif __name__ == \"__main__\":\n    print(\"Fib\")",
+      "detail": "Traceback (most recent call last):\n  File \"/tmp/tmpi83rjeiq/tmp_eval.py\", line 4, in <module>\n    assert fib(0)==0\n  File \"/tmp/tmpi83rjeiq/tmp_eval.py\", line 2, in fib\n    return n.fib()\nAttributeError: 'int' object has no attribute 'fib'"
+    }
+  ]
+}

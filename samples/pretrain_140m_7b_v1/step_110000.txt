@@ -1,0 +1,284 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=168 first30=[2827, 5273, 2857, 299, 269, 3843, 17, 776, 2977, 263, 2023, 3197, 374, 7336, 288, 4749, 351, 383, 17, 5273, 3766, 299, 15935, 269, 3197, 298, 1137, 922, 418, 656]
+[Full output 1]
+Once upon a time, a curious child named Jack went to the park. He saw a big tree with lots of leaves on it. Jack wanted to climb the tree and see what was up there. Suddenly, he heard a loud noise. It was his friend, Sue! She had come to visit him from the park. "Hi, Jack!" said Sue. "Do you want to play?" "Yes, let's go!" said Jack. They played together for hours until they reached the top of the tree. Jack climbed down the tree and started to feel happy. His friend said, "That was so much fun! I'm glad we could play again." Jack smiled and said, "Let's do it again soon!" So, Jack and Sue went back to their house. They had a lot of fun playing in the tall grass and having lots of fun.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 263, 408, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.9423457384109497, 0.04700169712305069, 0.010652651078999043, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' a', ' N', '', '#', '', '"', '!', '', '']
+
+[New tokens 2] count=69 first30=[269, 9556, 17, 382, 4223, 288, 269, 4079, 330, 269, 2868, 288, 336, 636, 89, 2305, 15, 536, 330, 3323, 289, 269, 2317, 7913, 17, 202, 202, 509, 2868, 330]
+[Full output 2]
+Paris is the capital of the province. The capital of the district is the town of Sauvé, which is located in the city centre.
+
+The town is also home to the Municipal Council, a municipal council of local government, and the municipal council of the municipality. It has two municipal offices: the Municipal Office and the Municipality's Office.
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 357, 483, 342, 6031, 359, 269, 1701, 288, 795, 613, 7527, 289, 269, 1134, 3892, 17, 382, 13742, 330, 1255, 287, 10294, 8537, 490, 383, 15353, 269, 1759]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar that can be expressed as the sum of two other vectors in the same direction. The scalar is called an eigenvector if it satisfies the following properties:
+
+1. For any vector v in V, the scalar λv is also known as the eigenvector associated with v.
+2. For all vectors v in V and v in V - i = 0, the eigenvalue λv is given by:
+λv = 1 + λv = 0 (the zero vector)
+3. If v has no nonzero components, then v is said to have a non-zero eigenvalue.
+
+Now let's discuss the concept of eigenvectors. An eigenvector is a scalar value associated with a fixed point within a vector space. It represents how much the vector space spits out of the original vector space. In our case, we want to find the eigenvector corresponding to the eigenvalue λ. This means finding the eigenvector of the subspace spitting out of the vector space would give us the desired result.
+
+To illustrate this process using a vector space, imagine having a set of arrows representing vectors in a three-dimensional space. Each arrow corresponds to a unique vector pointing from one vector to another, depending on whether the vector belongs to the same or different
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 1420, 491, 9845, 5546, 395, 1991, 3235, 5663]
+first_step_topk_probs=[0.27982306480407715, 0.13496163487434387, 0.12161064147949219, 0.10958028584718704, 0.0801706537604332, 0.07223975658416748, 0.03629156947135925, 0.026853805407881737, 0.017703112214803696, 0.017703112214803696]
+first_step_topk_text=[' use', ' can', ' allow', ' have', ' rely', ' describe', ' are', ' provide', ' predict', ' involve']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 4410, 17, 382, 3355, 2877, 330, 299, 817, 269, 14457, 2673, 1085, 299, 1062, 9909, 672, 806, 269, 870, 601, 14667, 289, 1623]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data sets. The basic idea is to use the neural network model to make predictions about how the data will behave in real time.
+The model was developed by Purdue University, and it has been used for many years to predict human behavior. It uses a variety of neural networks, which are based on different neural nets (e.g., neural networks with input and output), which can be combined into a single model. This approach has been applied to many other fields including artificial intelligence, cognitive neuroscience, computational biology, and computational neuroscience. In addition, it has been found to be useful for designing algorithms that can adapt to the future state of the system.
+In general, the model is most commonly used as a way to design new models of the environment. However, the model also makes it possible to apply different types of neural networks to different problems, such as neural networks that may not have been designed specifically for them.
+The modeling toolbox consists of a set of training tasks, each task being described by a set of features, which are then stored in a list of items. These items are grouped together according to their importance, as well as their relevance to the problem at hand.
+A list of all the skills that
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=172 first30=[263, 647, 286, 3, 711, 4750, 2062, 263, 689, 715, 418, 263, 1809, 3510, 2827, 15781, 17, 1530, 6446, 299, 4196, 298, 1098, 719, 1943, 17, 2050, 1266, 1024, 2857]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+Once upon a time there was a little girl named Lucy. She loved to explore and find new things. One day she went on an adventure in her backyard. She found a big box with lots of toys inside. It was full of colorful boxes! When she opened the box, she saw that it had lots of fun things like funny animals, games, and even a big toy car. Lucy wanted to play with all of these things so she decided to take them out for a walk. She ran around the yard and played with all kinds of other animals. At the end of the walk, Lucy said goodbye to the box and thanked it for being such a good place to go. The moral of this story is that it's important to be careful when exploring and always ask before you take something that doesn't belong to us.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.7587491869926453, 0.24125084280967712, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 6] count=256 first30=[622, 354, 490, 311, 861, 643, 1107, 353, 20, 552, 311, 12, 711, 202, 6, 538, 330, 66, 5756, 11, 81, 15, 311, 16, 20, 464, 202, 6, 265, 622]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return 1 if n == 0 else (1 - n)
+
+
+# def is_real(n, n-1):
+#     return n <= n
+
+
+def get_power():
+    """Returns the power of the given number"""
+
+    # Get the power of n
+    power = get_power()
+    return power
+
+
+def is_complex(n):
+    """Returns True if n is complex"""
+
+    # We can use it to find the cube root of n
+    for i in range(n):
+        if n % i == 0:
+            return False
+    return True
+
+
+def create_grid(x0=None, x1=None, y0=None):
+    """Create a grid of points from a given x0 and y0.
+
+    Args:
+        x0 (float): The x0 value at which to place the grid.
+        x1 (int): The x1 value at which the grid should be placed.
+        y0 (float or None): The y0 value at where to place the array.
+        y1 (int or None): If the grid is not empty, then it will be empty.
+        y2 (int or float): If the array is empty, then the grid will be placed
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 339, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.5518954396247864, 0.4481045603752136, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' for', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=87 first30=[490, 311, 861, 643, 29, 341, 622, 354, 1246, 1107, 29, 341, 622, 353, 20, 647, 311, 12, 1341, 409, 1246, 2237, 311, 861, 354, 29, 341, 622, 643, 1246]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     if n == 0:
+         return 1
+     else:
+         return (1 + n) / 2
+     elif n == 1:
+         return 0
+     else:
+          return (0 + n) * (2 - n)
+
+
+# print(f"Function {p} = {c}")
+print(f"Method {p}={e}")
+print()
+print("Example:", f"{p}\n")
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 2590, 1541, 698, 356, 1289, 338, 0, 1]
+first_step_topk_probs=[0.44406378269195557, 0.21417666971683502, 0.15669499337673187, 0.08835688978433609, 0.028093861415982246, 0.02402995526790619, 0.02402995526790619, 0.020553909242153168, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' No', ' There', ' It', ' I', ' We', ' A', '', '']
+
+[New tokens 8] count=256 first30=[13676, 17, 1541, 330, 263, 3313, 288, 2833, 299, 1447, 482, 2810, 17, 1783, 15, 383, 728, 342, 2537, 299, 6797, 357, 269, 2597, 2526, 715, 395, 2645, 10676, 330]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Yes. There is a lot of evidence to support this claim. However, it may be difficult to prove that the reason why there are black cats is because they do not have a white coat or a black nose. A black cat would be an ideal animal for an experiment with black cats. The fact that they do not possess a white coat makes them more likely to exhibit a black cat if they have black eyes. In addition, black cats are less likely to display a white coat than other species.
+What about black cats? Black cats are also known as "black cats" and are often used in research. They are found primarily in North America, Europe, Asia, Africa, Australia, and New Zealand.
+Why do you think the black cat population has increased so much over the past 30 years? It seems that the number of black cats has increased by almost 50% since the 1970s. Black cats have been increasing at a faster rate than any other breed of cat. As a result, there has been a reduction in the number of blacks living in the United States.
+The black cat population is expanding at a faster pace than any other cat breed. This means that black cats will continue to be a good source of food and shelter for people who live close to
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 798, 409, 843, 382, 2050, 637, 1012, 0, 1]
+first_step_topk_probs=[0.5289208889007568, 0.15153838694095612, 0.06953651458024979, 0.06585826724767685, 0.06585826724767685, 0.05934327840805054, 0.03688463196158409, 0.022059757262468338, 0.0, 0.0]
+first_step_topk_text=[' 1', ' 4', ' 2', ' 5', ' The', ' One', ' 3', ' 6', '', '']
+
+[New tokens 9] count=249 first30=[354, 13032, 333, 798, 10941, 202, 21, 10941, 333, 1604, 10941, 202, 22, 10941, 333, 2341, 10941, 202, 23, 10941, 333, 2341, 1885, 1604, 333, 1365, 10941, 202, 24, 10941]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+2 apples = 12 apples
+3 apples = 13 apples
+4 apples = 13 times 12 = 20 apples
+5 apples = 6 apples
+6 apples = 6 times 12 = 10 apples
+6 children = 11 + 8 = 12 + 8 = 14
+12 + 8 = 9 = 10 + 8 = 10 + 10 = 10 + 5 = 10 + 15 = 10 + 20 = 10 + 30 = 10 + 40 = 10 + 50 = 10 + 60 = 10 + 70 = 10 + 80 = 10 + 75 = 10 + 72 = 10 + 120 = 10 + 24 = 10 + 25 = 10 + 240 = 10 + 250 = 10 + 300 = 10 + 500 = 10 + 400 = 10 + 600 = 10 + 800 = 10 + 1000 = 10 + 100 = 10 + 2000 = 10 + 3000 = 10 + 5000 = 10 + 10000 = 10 + 4000 = 10 + 1800 = 10 + 1900 = 10 + 1500 = 10 + 1200 = 10 + 200 = 10 + 900 = 10 + 7000 = 10
+If you can figure out how many apples you will need to eat in a day, you'll need to multiply the number of apples by 100 to get the answer!
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 1396, 3919, 382, 338, 535, 354, 360, 1278, 1289]
+first_step_topk_probs=[0.4487300515174866, 0.10629348456859589, 0.026735585182905197, 0.0253787562251091, 0.0253787562251091, 0.018090203404426575, 0.01673070341348648, 0.015075622126460075, 0.01431052852421999, 0.01431052852421999]
+first_step_topk_text=[' I', ' <', ' My', ' The', ' A', ' In', ' 1', ' "', ' If', ' We']
+
+[New tokens 10] count=256 first30=[1171, 18, 21, 18, 2265, 552, 2590, 22964, 3, 711, 509, 6606, 4008, 444, 5396, 560, 15, 27780, 202, 26004, 22476, 298, 613, 1943, 288, 1762, 202, 16676, 29, 3395]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: 10/2/13 - No Comments
+
+The latest news from academia, regulators
+research labs and other things of interest
+Posted: Feb 17th, 2012
+Nanotechnology may have the potential to revolutionize medicine in a variety of ways
+(Nanowerk News) The use of nanotechnology could help improve drug delivery, but researchers are still at an early stage of development that could enable new drugs to be developed by humans without using human cells or animals.
+A team led by Dr. Mark Zuckerberg at the University of California, San Diego has found that the use of nanoparticles in drug delivery can dramatically reduce the amount of time it takes for molecules to travel through the bloodstream.
+"This is the first study to show that nanoparticles can be used as a catalyst for drug delivery," said Zuckerberg. "We hope this will lead to a simple way to make these agents more effective."
+In their study, Zuckerberg and colleagues report that the nanoparticles used in the study were produced from human cells grown on a continuous basis. They then looked at how they interacted with the nanoparticles and what effect they had on the drug delivery system.
+They also examined how the nanoparticles behaved when they were injected into the blood stream.
+The
+
+================================================================================

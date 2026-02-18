@@ -1,0 +1,278 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=147 first30=[2827, 5273, 2857, 299, 269, 3843, 17, 776, 2977, 263, 2023, 3197, 374, 7336, 288, 4749, 298, 406, 3766, 299, 15935, 383, 17, 1358, 722, 406, 3500, 2940, 299, 269]
+[Full output 1]
+Once upon a time, a curious child named Jack went to the park. He saw a big tree with lots of leaves and he wanted to climb it. But when he got close to the tree, something strange happened. The leaves started to shrink! It was so small that it could fit in the trunk of the tree. Jack felt scared and ran away as fast as he could. He looked around for help but couldn't find it. Suddenly, Jack heard a voice behind him. "Don't worry," said the voice. "I can help you." Jack quickly climbed down the tree and found the little hole under the leaves. He was happy again because he had helped someone who needed help. From then on, Jack always remembered to be careful when climbing trees.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 263, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.9598755836486816, 0.040124423801898956, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' a', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 2] count=214 first30=[269, 9556, 288, 7535, 281, 8191, 15, 298, 330, 12092, 351, 269, 1879, 5358, 288, 269, 4549, 3626, 1766, 17, 698, 578, 263, 2073, 288, 354, 15, 25, 2725, 10894]
+[Full output 2]
+Paris is the capital of the province of Catalonia, and is situated on the left bank of the river Elbe. It has a population of 1,624 inhabitants (2011).
+The town was founded in the 10th century by the Counts of Osteria, who were the first to be granted lands in the territory of the Province of Catalunya. The town was an important trading centre for the Kingdom of Sicily from 1466 until its destruction by the German general Werner von Stauffenberg in 1581. In 1638 the town was awarded the title of King of Sicily, but it suffered badly during the Italian Civil War. After the end of World War II, the town became part of the Republic of Sicily, and was occupied by Italy until 1941. The town remained part of the Kingdom of Italy until the Allied invasion in 1945.
+After World War II the town was again occupied by Germany in 1948. During the war the town was used as a military base and a military training ground. The town is now a museum and a museum.
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 14274, 269, 3286, 288, 269, 953, 359, 263, 1392, 288, 686, 4487, 17, 535, 482, 2815, 15, 411, 601, 2336, 351, 6636, 269, 1496, 1811, 1191]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that determines the behavior of the system as a function of its variables. In this context, we will focus on solving the given problem using the given matrix equation:
+
+$$A = \begin{bmatrix} 2 & 1 \\ 3 & 0 \end{bmatrix}, \quad A = \begin{(5)}1 & -3 & -2 \\ 6 & 0 & 0 \\\end{bmatrix}$$
+
+The goal here is to find the eigenvalues and eigenvectors of the resulting matrix $A$. To accomplish this task, let's first define some terms. Given two matrices $A$ and $B$, their characteristic polynomial can be written as follows:
+
+$$\alpha_AB + \beta_B = \begin{{matrix}} {\lambda\_A} + {{\lambda\_B} \end{matrix}} $$
+
+where $\lambda\_A$ represents the eigenvalue associated with the eigenvalue $A$; $\beta\_B$ denotes the conjugate transpose of $A$; and $\lambda\_B$ stands for the eigenvalue corresponding to the eigenvalue $B$. Now, our objective is to determine the eigenvalues and vectors of $A$. Since both matrices are symmetric, they must satisfy the condition $(A-I)^{-1}=\sum\_{i=
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 5546, 483, 491, 9845, 1420, 1085, 1991, 395, 4478]
+first_step_topk_probs=[0.22464986145496368, 0.16435733437538147, 0.13344761729240417, 0.12024641036987305, 0.07927128672599792, 0.05225883796811104, 0.047089166939258575, 0.036293040961027145, 0.028742676600813866, 0.021558992564678192]
+first_step_topk_text=[' use', ' describe', ' can', ' have', ' rely', ' allow', ' model', ' provide', ' are', ' aim']
+
+[New tokens 4] count=170 first30=[483, 342, 885, 299, 1085, 2281, 870, 4410, 17, 382, 3355, 2877, 3722, 269, 1085, 330, 2829, 29, 5174, 486, 491, 263, 15659, 288, 1890, 15, 298, 1010, 993, 289]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data sets. The basic idea behind the model is simple: imagine you have a bunch of numbers, and each number in your dataset has its own unique pattern or feature. Now suppose you want to predict how many points your next friend will score based on their current height. To do this, you would first calculate the average (average) value of all the possible heights by dividing the total height by the total height. Then, using the model's training set, you would calculate the average of these averages for every single individual height.
+
+In summary, the model helps us understand how different variables interact with one another. By doing so, we can better understand how various features influence our predictions! Just remember, even though the model may seem complicated at first, it's actually quite useful when dealing with large datasets.
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=134 first30=[263, 647, 286, 17, 595, 551, 711, 202, 350, 1401, 678, 626, 861, 8922, 3142, 9533, 346, 655, 3715, 555, 490, 1804, 11, 6022, 17, 8256, 12, 1396, 409, 29]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+
+if __name__ == "__main__":
+    import sys
+
+    if len(sys.argv) < 2:
+        print("Usage: python python3 main.py [--help] python2 main.py")
+        exit(1)
+
+    input_file = sys.argv[1]
+    output_file = open(input_file, "w")
+    output_dir = os.path.join(output_file, input_file)
+    if not os.path."+"/" in output_dir:
+        output_dir += "/"
+
+    for line in output_file:
+        print(line)
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=115 first30=[622, 354, 17, 19, 864, 353, 20, 647, 311, 12, 711, 202, 350, 1401, 678, 626, 861, 8922, 3142, 9533, 346, 655, 3715, 555, 655, 9130, 346, 3546, 333, 9130]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return 1.0 * (1 + n)
+
+
+if __name__ == "__main__":
+    import sys
+
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--input", type=str, default="example.txt")
+    args = parser.parse_args()
+    print("Input:")
+    print(args.input)
+    print("Output:")
+    print("Number of inputs:")
+    print("\tNumber of outputs:")
+    print("")
+    print("Num of outputs:")
+
+    print(int(sys.argv[2]))
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=131 first30=[622, 354, 17, 19, 647, 353, 20, 552, 311, 12, 864, 353, 20, 1341, 311, 12, 711, 202, 350, 1401, 678, 626, 861, 8922, 3142, 9533, 346, 537, 22018, 269]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1 - n) * (1 / n)
+
+
+if __name__ == "__main__":
+    # Initialize the array with the Fibonacci numbers as input
+    # and store it in memory for later use
+    print("Reading Fibonacci Numbers...")
+
+    # Initialize the function to be called when we are done
+    print("Running the Function")
+
+    # Check if we have a Fibonacci number, so we can run the function again
+    print("Checking Fibonacci Numbers...")
+    print("Finished running the Function.")
+
+    # Run the function once, then run the function once for each iteration
+    print("Run the Function once.")
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 1541, 2590, 535, 356, 698, 1289, 4619, 0]
+first_step_topk_probs=[0.4319813549518585, 0.18773838877677917, 0.17821066081523895, 0.10048911720514297, 0.03545919060707092, 0.018979936838150024, 0.017102358862757683, 0.015410504303872585, 0.014628423377871513, 0.0]
+first_step_topk_text=[' The', ' Yes', ' There', ' No', ' In', ' I', ' It', ' We', ' Black', '']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 12052, 17, 202, 509, 3533, 330, 808, 17, 382, 3533, 330, 808, 15, 269, 3533, 330, 808, 339, 263, 1939, 1440, 288, 2918, 17, 382, 3533, 299]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+The answer is no. The answer is no, the answer is no for a certain group of animals. The answer to this question is yes. There are no animals in the world except humans who live in cities or in crowded places. Some of these people are black. But there are other types of animals. Some of them are not black. Many of them are very active, but they do not have enough energy to run their lives. They are not even really active. In fact, they are not active at all. And it is not true that they cannot be active if they do not exist. This is called the "black cat hypothesis."
+I'm not sure what you mean by the black cat hypothesis. It's just an assumption. If you want to know whether there are any black cats in the world, then you need to look at the data from the book "Black Cat Inventories" by Terence Taddeo. He does not tell us where he came from. I don't think anyone knows his exact location. But I am convinced that Taddeos would be the first black cat in the world. That's a pretty interesting question.
+In the next chapter, I will show how Tadde
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 382, 843, 2050, 798, 409, 698, 637, 1541, 0]
+first_step_topk_probs=[0.3371511995792389, 0.22226370871067047, 0.11896918714046478, 0.1072002425789833, 0.1072002425789833, 0.03534286469221115, 0.02915465272963047, 0.022470369935035706, 0.020247504115104675, 0.0]
+first_step_topk_text=[' 1', ' The', ' 5', ' One', ' 4', ' 2', ' It', ' 3', ' There', '']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 17, 2069, 15, 490, 486, 395, 2179, 263, 7594, 339, 263, 1554, 15, 486, 791, 491, 299, 1062, 843, 10941, 1010, 1266, 17, 1358, 15]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples. So, if you are making a budget for a project, you would have to make 5 apples each day. But, if you were making a budget, you could have made 6 apples per week (or at least 3 apples per week).
+If you are making your budget, you need to make 10 apples every week. To make 10 apples, you must first make 10 apples each week. The question is how many apples do you get when you make 9 apples each week?
+Answer 1 apple = 12 apples. You can't make 9 apples after you make the 10 apples. This means that 8 times 3 apples equals 16 apples.
+So, if you want to make 20 apples, you will need 15 apples. That's equal to 32 apples. If you want to keep all of these apples in one basket, you only need 25 apples.
+Answer 2 apple = 24 apples. You need 14 apples. That means there are 14 apples in total. That's equivalent to 18 apples.
+You also need to add up the number of apples you already have. For example, if you wanted to have 11 apples, you would add up 11 apples plus the amount of apples you have.
+Answer 3 apple = 36 apples. You would
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 360, 354, 382, 2156, 5395, 2730, 408, 535, 27614]
+first_step_topk_probs=[0.6432530879974365, 0.035485342144966125, 0.03281857818365097, 0.028811834752559662, 0.028071215376257896, 0.025961631909012794, 0.024644069373607635, 0.01850569061934948, 0.01542186364531517, 0.011282877065241337]
+first_step_topk_text=[' I', ' "', ' 1', ' The', ' May', ' Mr', ' Jan', ' N', ' In', ' Hi']
+
+[New tokens 10] count=256 first30=[356, 873, 6968, 20103, 1244, 17, 202, 45, 1976, 10961, 29, 2575, 330, 669, 8332, 689, 288, 269, 716, 34, 202, 45, 1976, 29, 1289, 2068, 4006, 263, 1809, 3851]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I am feeling depressed now.
+Jennifer: What is your favorite time of the year?
+Jenn: We're getting a little bit more stress and it's not too late to get some sleep. But if you can't get enough sleep, then you have to be patient. It's really important that you stay in bed for at least 24 hours after going through the day. And that means staying up to date with the latest information on how to improve your health.
+Assisted: I'm getting better every day.
+Jen: Do you feel better after having this program?
+Jen.: I think the most important thing is that we're going to talk about what to do to help yourself become healthier. If you are sick or need to take medicine, you can go into the hospital and get the right medicine. You'll also have to pay attention to your eating habits and physical activity.
+Assigned: How much exercise does your body need?
+Jentz: My weight is 100 pounds. That's my average size. Your body needs a lot of calories from food. So you need to eat an adequate amount of food. You need to drink lots of water and try to get at the same level as you do when you're
+
+================================================================================

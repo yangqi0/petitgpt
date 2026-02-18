@@ -1,0 +1,265 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=84 first30=[2827, 5273, 2857, 299, 269, 3843, 17, 776, 2977, 263, 2023, 3197, 298, 3766, 299, 15935, 383, 17, 1358, 406, 418, 1792, 1204, 339, 1169, 4, 14918, 15, 263, 1809]
+[Full output 1]
+Once upon a time, a curious child named Jack went to the park. He saw a big tree and wanted to climb it. But he was too small for him! Suddenly, a little girl came up to him and said, "I can help you!" She took out her hand and helped Jack climb the tree. They climbed down together and Jack felt so proud of himself. From that day on, Jack learned to be more careful when climbing trees.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 356, 89, 618, 7928, 17, 698, 418, 6214, 289, 2234, 2543, 419, 2960, 1966, 2676, 288, 16523, 15, 668, 699, 733, 7183, 283, 298, 2621, 20559]
+[Full output 2]
+Paris is the capital of the province of the Ivory Coast. It was founded in 1499 by King John II of Portugal, who had been deposed and taken prisoner in 1494. The town was later renamed the Porte de Porte, after its governor, who was also the first governor of the island.
+The port of Porte de Saint-Vincent was founded in 1534, when the Portuguese Crown took control of the island, and the city's name was changed to Porte de San Martín (Porte de San Martin). The port of Porterea was built on the site of a fortress that had been destroyed in the 18th century. A new port was built at Porte de Montes, near the present Porte de la Paz, which was established in 1772 as a port for the French colony of New Granada.
+The city's name is derived from the Spanish word "San Martín" meaning "city". The city has an area of 640 square kilometers, making it one of the most densely populated cities in the world.
+There are three main towns: Porte de La Paz, Porte de St. Vincent and Porte de Luna.
+Porte de La Raza is located in the center
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 357, 578, 269, 1134, 8878, 359, 686, 5606, 10294, 8537, 17, 1803, 269, 18956, 395, 3097, 15, 581, 395, 3636, 15, 298, 722, 581, 395, 4000, 15, 581]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector that has the same magnitude as its corresponding eigenvector. When the eigenvalues are positive, they are zero, and when they are negative, they are negative.
+The second term in the above equation is called the first term, which indicates the direction of the eigenvalue. In this case, the eigenvectors will be positive because the eigenvalues are negative. The second term is called the second term, which means the eigenvectors will not be negative.
+When we talk about the eigenvalues of a matrix, we mean the number of rows or columns of a matrix. If the eigenvalues are all zeros, then the matrix is said to have a zero matrix. This means that the matrix contains only one nonzero column.
+If there is no eigenvalue for the matrix, it means that the row or column of the matrix is zero. For example, if the matrix has only two nonzero columns, the matrix may contain one nonzero column, but not the other.
+If the matrix has just one nonzero column (i.e., all zeros), then the matrix must have at least one nonzero column with zero entries. For example:
+- 0 = 0
+- 1 = 0
+For example, the matrix with only one nonzero columns with zero entries would have a row or column with zero.
+
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 1420, 817, 491, 395, 5546, 9845, 1991, 1005, 3235]
+first_step_topk_probs=[0.40593311190605164, 0.12251976877450943, 0.09947819262742996, 0.09442967921495438, 0.06085800752043724, 0.053246837109327316, 0.04554443061351776, 0.01878901571035385, 0.017835456877946854, 0.017835456877946854]
+first_step_topk_text=[' can', ' allow', ' use', ' have', ' are', ' describe', ' rely', ' provide', ' help', ' predict']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 4410, 17, 202, 2573, 330, 263, 910, 339, 263, 1951, 2902, 288, 269, 14457, 2673, 8466, 298, 806, 383, 957, 6202, 374, 613]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data sets.
+There is a need for a better understanding of the neural network architecture and how it interacts with other systems in order to predict or improve its performance. This article will focus on the neural network's architecture, including its different types of connections (and their properties), the application of neural networks to the real world, and the applications of neural networks in the future.
+The neural network consists of a set of nodes (or nodes) connected by a network of connections. Each node has an associated network of connections, which are arranged in a way to form a single connection (which may be referred to as a "layer"). The layer is known as the core and is responsible for determining which nodes are connected by the network.
+A neural network is a computer program that acts as a network of nodes, each containing a single connection between them. A neural network is composed of nodes that are connected by a series of connections, each with a unique type of connection.
+In the past, the neural network was based on a set of rules that allowed a given network to be used to decide whether to use the same network as another network. Today, the network is generally called a neural network because the rules are very similar to the rules
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=174 first30=[263, 647, 286, 3, 711, 4750, 2062, 263, 689, 715, 418, 263, 1809, 3510, 1255, 15781, 17, 1530, 699, 1106, 6133, 298, 1114, 2850, 10978, 17, 2050, 1266, 1024, 2857]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+Once upon a time there was a little girl called Lucy. She had long hair and very soft fur. One day she went for a walk in the park with her mum. As they walked, Lucy saw something strange. It was a big tree! She asked her mum what it was. Her mum said it was a big pile of leaves. Lucy thought it looked like fun to play with them. But then she noticed that one of the leaves was stuck in the tree. She tried to pull it out but it wouldn't move. So she asked her mum if she could help. Her mum smiled and said yes. She carefully pulled the leaf away from the tree and the leaves were free again. Then Lucy ran back home with the leaves in her hands. She felt so happy when she saw how much fun she had playing with them.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=170 first30=[622, 354, 490, 311, 861, 643, 1107, 354, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 717, 7121, 15, 1165, 18379, 3, 711, 4750, 2062, 263]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return 1 if n == 0 else 1
+
+
+if __name__ == '__main__':
+    print('Hello, world!')
+
+Once upon a time there was a little girl named Mia. She lived in a big house with her mommy and daddy. One day, Mia wanted to go outside and play. But she didn't know where to go. So, she asked her mommy and Daddy for help. They said they would get a new toy car from the store. Mia was so excited! When they got home, Mia's mommy and dda were very happy. Mia felt so good inside. She played with her new toy car all day long. The sun was shining on it, and Mia loved playing with her new car. And every day after school, Mia went back to the park to play with her new friend.
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=256 first30=[622, 354, 647, 353, 20, 18, 21, 12, 864, 311, 1190, 21, 552, 354, 711, 202, 6, 18897, 263, 1392, 299, 6519, 31393, 1890, 13649, 292, 202, 856, 8049, 66]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1 + (1/2) * n**2 - 1
+
+
+# Define a function to compute Fibonacci numbers recursion
+def fib_recursive(n, n0=0):
+    # initialize the function
+    def fib(n0):
+        # print("Fib: %s" % n)
+        # print(fib(n0))
+        # print()
+        # print("\n")
+        # print('Fib: \t')
+        # print('\n')
+        # return fib(n)
+        # return fib(n)
+
+    # return fib_recursively(n)
+    # return fib((n-1)/2) * (n+1)*len(fib_recursive())
+
+# Create a function to calculate Fibonacci numbers recursions.
+def fib_(n):
+    # create a function to determine Fibonacci numbers recursioperfectly
+    # and return the Fibonacci number recursion recursed into a single iteration
+    # for each of the following values:
+    #   0 -> 1
+    #    1 -> 2
+    #    2 -> 3
+    #    3 -> 4
+    #    4 -> 5
+    #    5 -> 6
+    #    7 -> 8
+    #    8 -> 9
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 2590, 1541, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.4447314441204071, 0.32537245750427246, 0.1414063423871994, 0.088489830493927, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' No', ' There', '', '', '!', '"', '', '']
+
+[New tokens 8] count=256 first30=[13676, 17, 1541, 330, 263, 3313, 288, 2833, 299, 2173, 357, 2645, 10676, 395, 453, 839, 2076, 2918, 614, 658, 1163, 2812, 299, 613, 2918, 359, 1047, 17, 31412, 728]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Yes. There is a lot of evidence to suggest that black cats are not only social animals but also being related to other animals as well. Cats may be social creatures and it's unlikely that they will ever be seen in the wild or even if they do come from an animal shelter. However, there is evidence that black cats may have been brought into the home by humans. It is likely that they were introduced into the home during the early part of the 20th century. The first documented instances of black cats being brought into the house came in 1935 when a black cat was introduced into the house by a person who had been contacted by a black cat. This cat became known as the "Black Cat" because of its white coat. As the owner of the cat, the cat would often wear a black mask on his face and look like a cat. Although black cats are generally considered to be solitary animals, many people believe that the cat is simply a member of the cat family. Black cats live in small groups called cages. Each cage has a different group of cats. The cats are divided into two groups based on their size and color. The cats that live in these cages are called the "Cats".
+The first recorded use of black cats was in
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 798, 2050, 843, 382, 409, 1012, 5517, 637, 0]
+first_step_topk_probs=[0.44093549251556396, 0.15559127926826477, 0.12633025646209717, 0.09242518991231918, 0.06093041971325874, 0.03736003488302231, 0.036194220185279846, 0.026480259373784065, 0.02375287376344204, 0.0]
+first_step_topk_text=[' 1', ' 4', ' One', ' 5', ' The', ' 2', ' 6', ' Two', ' 3', '']
+
+[New tokens 9] count=54 first30=[354, 13032, 333, 798, 10941, 202, 22, 10941, 333, 1604, 10941, 202, 23, 24847, 333, 1218, 24847, 202, 24, 26634, 333, 1171, 24847, 202, 3544, 15, 269, 2056, 993, 288]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+3 apples = 12 apples
+4 oranges = 8 oranges
+5 bananas = 10 oranges
+So, the total number of apples in the basket is 12 apples.
+The correct answer is 6 apples (or one less than 12 apples).
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 360, 2575, 783, 1289, 1509, 1278, 698, 1348]
+first_step_topk_probs=[0.5689835548400879, 0.0829220563173294, 0.06391055881977081, 0.05758819729089737, 0.037964485585689545, 0.02255186066031456, 0.020857060328125954, 0.020857060328125954, 0.020320923998951912, 0.017839988693594933]
+first_step_topk_text=[' I', ' The', ' "', ' What', ' This', ' We', ' You', ' If', ' It', ' How']
+
+[New tokens 10] count=256 first30=[2575, 330, 269, 3593, 920, 360, 44, 5, 298, 360, 44, 13123, 202, 45, 1370, 1128, 431, 27941, 29, 5531, 15, 356, 1755, 847, 1118, 922, 299, 1721, 672, 383]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is the difference between "I" and "I"?
+Johann Werner: Well, I don't know what to say about it, but I think it's a little bit more complicated than that.
+Assignment: How do you describe it?
+Johanna Wieland: It's a little hard to talk about it because it's not really part of the project, but it's something that you can talk about in a very short time. So if you're talking about something like this, it's probably just a bunch of stuff that you've written on paper or in your head, so it's going to be something that's actually going to be pretty much anything you write down.
+Assigning a piece of information to the project, it's usually fairly easy to get an idea of what you want to say, and then you have to ask the person who wrote it to figure out what the purpose of the piece is. That's the way it gets people to come up with ideas for how to make sense of what they are saying. You might also want to ask them to use some sort of vocabulary.
+Asserting what you want is going to be important. But when you get into the project, you need to
+
+================================================================================

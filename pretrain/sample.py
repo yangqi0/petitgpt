@@ -448,10 +448,11 @@ def generate_default_samples(
                 f.write(prompt + "\n\n")
                 f.flush()
 
+                device_type = "cuda" if ("cuda" in str(device) and torch.cuda.is_available()) else "cpu"
                 with torch.autocast(
-                    "cuda",
+                    device_type,
                     dtype=autocast_dtype,
-                    enabled=(autocast_dtype is not None and torch.cuda.is_available()),
+                    enabled=(autocast_dtype is not None and device_type=="cuda"),
                 ):
                     res = generate(
                         model=model,
@@ -559,6 +560,7 @@ def main() -> None:
     ap.add_argument("--prompt", type=str, default=None, help="If set, generate single completion to stdout.")
     ap.add_argument("--out", type=str, default=None, help="If set, write default prompts to this file (like training).")
     ap.add_argument("--debug", action="store_true")
+    ap.add_argument("--quiet", action="store_true", help="print only generated text")
 
     args = ap.parse_args()
 
@@ -578,10 +580,12 @@ def main() -> None:
 
     if args.prompt is not None:
         tok = Tokenizer.from_file(args.tokenizer_path)
+
+        device_type = "cuda" if ("cuda" in str(args.device) and torch.cuda.is_available()) else "cpu"
         with torch.autocast(
-            "cuda",
+            device_type,
             dtype=autocast_dtype,
-            enabled=(autocast_dtype is not None and torch.cuda.is_available()),
+            enabled=(autocast_dtype is not None and device_type == "cuda"),
         ):
             res = generate(
                 model=model,
@@ -598,7 +602,7 @@ def main() -> None:
                 add_bos=args.add_bos,
                 bos_id=args.bos_id,
                 greedy=args.greedy,
-                debug=True,
+                debug=args.debug and (not args.quiet),
                 repetition_penalty=args.repetition_penalty,
                 no_repeat_ngram_size=args.no_repeat_ngram_size,
                 max_repeat_token=args.max_repeat_token,
@@ -608,9 +612,15 @@ def main() -> None:
                 first_whitespace_resample_tries=args.first_whitespace_resample_tries,
                 extra_ban_token_ids=extra_ban,
             )
-        print(res["output_text"])
+
+        completion = tok.decode(res["new_tokens"])
+        if args.quiet:
+            print(completion, end="")
+        else:
+            print(res["output_text"])
+
         if args.debug and res.get("debug") is not None:
-            print("\n[debug]\n" + json.dumps(res["debug"], ensure_ascii=False, indent=2))
+                print("\n[debug]\n" + json.dumps(res["debug"], ensure_ascii=False, indent=2))
         return
 
     # default sampling to file

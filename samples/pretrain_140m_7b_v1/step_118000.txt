@@ -1,0 +1,311 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 2857, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.7772998809814453, 0.22270014882087708, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' went', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 1] count=115 first30=[2827, 5273, 2857, 299, 269, 3843, 17, 776, 2977, 263, 2023, 3197, 374, 7336, 288, 4749, 17, 5273, 3766, 299, 15935, 269, 3197, 298, 1137, 922, 418, 351, 1644, 17]
+[Full output 1]
+Once upon a time, a curious child named Jack went to the park. He saw a big tree with lots of leaves. Jack wanted to climb the tree and see what was on top. Suddenly, he heard a loud noise! It was his mom coming up from behind him. She said, "Jack, what are you doing?" Jack replied, "I'm climbing the tree." His mom said, "That's okay, Jack. We can help you. Let's go back home together." So they went back to the tree and climbed down. They were happy that their little one had helped them.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 14206, 3976, 15, 298, 269, 1512, 288, 1144, 17, 698, 330, 12092, 289, 269, 2415, 288, 269, 24602, 3345, 17, 202, 509, 2317, 415, 1112, 23547, 444]
+[Full output 2]
+Paris is the capital of the province of Upper Canada, and the head of state. It is situated in the heart of the Ottawa River.
+The city's name derives from the original inhabitants of the area, who were called "Cree" (meaning "white") by the Indians. The town was founded in 1785 by a group of settlers who came to work on the railroad. It is located at the junction of the Narrows and Nawaght rivers. In 1788, the legislature passed an act that established a new city hall and named it after the former city.
+In 1814, the City Council granted the city a charter for a new town building. A new school was built there, and in 1830, the new town hall was built. The new town hall, which had been completed in 1830, was renamed the City Hall, and the new town house was built in 1836. The new city hall was designed by Sir William Hewitt, and the old city hall was completed in 1852.
+In 1865, the federal government granted the city its first municipal election. In 1873, the city council elected the mayor. This elected him as mayor of the city. He also served two terms in the House of Commons. In 1878, he was appointed to the post
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 20745, 14274, 269, 3892, 288, 287, 10294, 8537, 17, 1803, 6636, 2304, 288, 4759, 5662, 15, 383, 415, 3254, 299, 1557, 806, 760, 7527, 8646, 374]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that uniquely determines the direction of an eigenvector. When solving systems of linear equations, it's essential to understand how these vectors interact with each other and their corresponding solutions.
+
+Now let us consider the problem at hand: finding the eigenvalues of the given system of equations. We start by setting up the system of equations as follows:
+
+1) A = 0, B = 0, C = 1, D = 3, E = 4, F = 6, G = 7, and T = 0
+2) B = 0 (which means that the system has no solution).
+3) C = 0, D = 5, D = 8, E = 9, F = 10, G = 11, and T=0
+4) D = 2, E = 2, F = 1, G = -7, and T=-8
+5) E = 0, F = -6, F = 0, G = 1, and T equals zero
+
+The final step involves applying the eigenvalue equation derived earlier to obtain the eigenvalues. Since there are three possible values for the eigenvalues, we can set them equal to one another in terms of the first two vectors. Specifically, if we have the following system of equations:
+
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[5546, 817, 483, 1420, 1085, 491, 20993, 1991, 9845, 395]
+first_step_topk_probs=[0.3202342391014099, 0.15445251762866974, 0.10182134807109833, 0.07449409365653992, 0.06712474673986435, 0.06048447638750076, 0.03073194995522499, 0.024952391162514687, 0.023686060681939125, 0.023686040192842484]
+first_step_topk_text=[' describe', ' use', ' can', ' allow', ' model', ' have', ' simulate', ' provide', ' rely', ' are']
+
+[New tokens 4] count=156 first30=[22968, 269, 1194, 4383, 1798, 298, 1798, 17, 202, 509, 3355, 2877, 330, 299, 1085, 806, 3660, 1798, 444, 553, 1231, 4882, 15, 1191, 263, 14457, 2673, 1255, 269, 360]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the way humans learn and learn.
+The basic idea is to model how individuals learn from their own actions, using a neural network called the "model-based learning system".
+"The model-based learning process is based on the idea that individuals learn best when they have the right environment," says Professor Peter Wrenn at the University of Leicester.
+Wrenn's team has already demonstrated that the model-based system can be used in many different ways, including in the teaching of human beings' behavioural behaviors.
+Other social bookmarking and sharing tools:
+Note: Materials may be edited for content and length. For further information, please contact the source cited above.
+Note: If no author is given, the source is cited instead.
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=55 first30=[263, 647, 286, 17, 595, 66, 1637, 551, 861, 263, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 655, 3715, 555, 1271, 333, 9745, 17, 2953, 13740]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get_value() == a
+
+
+if __name__ == '__main__':
+    import sys
+
+    main = unittest.TestLoader().loadTestsFromTestCase(add)
+    unittest.TextTestRunner(verbosity=2).run(main)
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=222 first30=[622, 353, 20, 13, 81, 12, 864, 353, 20, 16, 81, 6801, 81, 202, 202, 6, 11101, 299, 5224, 269, 1677, 288, 545, 9044, 444, 354, 656, 299, 311, 17]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return (1*n) * (1-n)*n
+
+# Function to calculate the product of all integers from 1 up to n.
+def factorial_all():
+    for i in range(0, len(factorial)):
+        if factorial[i] == 0:
+            return True
+    return False
+
+# Functions to find the largest integer between 1 and n.
+class Solution:
+    def primeSum(self, n):
+        """
+        :type n: int
+        :rtype: List[int]
+        """
+        # Get the nth prime number
+        # n = max(2, n)
+        # n_prime = n/2 - 1
+        # n %= 2
+        # n is the smallest positive integer.
+        # n > 1 so we have the largest number.
+        # print(n)
+        # print("n:", n)
+        n = 0
+
+        # for i in xrange(1, n+1):
+        #     if n%i == 0:
+        #         return n
+        #     else:
+        #     return n
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=60 first30=[622, 354, 17, 19, 647, 353, 20, 552, 311, 12, 864, 353, 21, 13, 81, 12, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 537, 1083, 717]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1 - n) * (2*n)
+
+
+if __name__ == '__main__':
+    # print('Fib', fib(100))
+    # print(fib(1000))
+    # # print('Ruby', fib(500))
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 1541, 2590, 356, 698, 535, 1278, 1289, 0]
+first_step_topk_probs=[0.3068774342536926, 0.2765195369720459, 0.1642596572637558, 0.0752035528421402, 0.05502009391784668, 0.04957721754908562, 0.029450133442878723, 0.021546175703406334, 0.021546175703406334, 0.0]
+first_step_topk_text=[' Yes', ' The', ' There', ' No', ' I', ' It', ' In', ' If', ' We', '']
+
+[New tokens 8] count=256 first30=[1541, 330, 808, 2833, 299, 1447, 482, 21642, 17, 1783, 15, 383, 330, 1384, 299, 4310, 357, 751, 288, 269, 851, 5181, 3229, 14580, 339, 482, 1811, 491, 733, 6041]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: There is no evidence to support this assertion. However, it is important to note that some of the most commonly reported explanations for this problem have been derived from research conducted in the past decade or so. One of the most common explanations for why black cats have such a low body mass index (BMI) is that they may be the result of an over-exposure to UV light. In fact, this is one reason why black cats may appear more docile than other cats. However, if there is any explanation for this phenomenon, it would not necessarily mean that black cats were subject to the same diseases as humans.
+Another possible explanation for the lack of black cats in the literature is that many people think that the average life expectancy of a cat is six years, but it is actually only about eight years. This is probably true even though black cats generally live longer than human cats. It has also been suggested that black cats have a lower lifespan than humans because they are less active. This means that, although black cats tend to live longer than humans, they are also much less active than humans.
+In conclusion, it seems clear that black cats do not behave like humans, but rather behave like their relatives. It's worth noting that black cats are highly social creatures
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 798, 843, 2050, 382, 409, 1012, 776, 698, 0]
+first_step_topk_probs=[0.4307820200920105, 0.2077709287405014, 0.12342123687267303, 0.07331535965204239, 0.05952736735343933, 0.033338941633701324, 0.028710708022117615, 0.022128209471702576, 0.02100520208477974, 0.0]
+first_step_topk_text=[' 1', ' 4', ' 5', ' One', ' The', ' 2', ' 6', ' He', ' It', '']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 202, 22, 10941, 333, 1604, 10941, 202, 23, 10941, 333, 2341, 10941, 202, 24, 10941, 333, 1769, 10941, 202, 25, 10941, 333, 3041, 10941, 202]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+3 apples = 12 apples
+4 apples = 13 apples
+5 apples = 16 apples
+6 apples = 24 apples
+7 apples = 27 apples
+8 apples = 25 apples
+9 apples = 23 apples
+10 apples = 22 apples
+11 apples = 21 apples
+12 apples = 20 apples
+13 apples = 17 apples
+14 apples = 15 apples
+15 apples = 18 apples
+16 apples = 19 apples
+17 apples = 26 apples
+18 apples = 21 fruit
+19 apples = 20 fruit
+20 apples = 20 fruits
+21 apples = 20 bananas
+22 apples = 20 banana
+23 apples = 20 grapes
+24 apples = 20 cherry
+25 cherries = 20 cherries
+26 cherries = 21 cherries
+27 cherries = 28 cherries
+28 cherries = 29 cherries
+29 cherries = 30 cherries
+30 cherries = 31 cherries
+31 cherries = 32 cherries
+32 cherries = 33 cherries
+33 cherries = 34 cherries
+34 cherries = 35 cherries
+35 cherries = 36 cherries
+36 cherries = 37 cherries
+37 cherries = 38 cherries
+38 cherries = 39 cherries
+39 cherries = 40 cher
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 1509, 382, 3919, 1289, 3189, 1348, 783, 22089]
+first_step_topk_probs=[0.5516433715820312, 0.07186999171972275, 0.04737962409853935, 0.03651692345738411, 0.02814469300210476, 0.025360485538840294, 0.025360485538840294, 0.025360485538840294, 0.02285170368850231, 0.02285170368850231]
+first_step_topk_text=[' I', ' What', ' You', ' The', ' My', ' We', ' Do', ' How', ' This', ' Thank']
+
+[New tokens 10] count=256 first30=[2575, 330, 269, 3593, 920, 263, 360, 44, 5, 298, 263, 360, 37, 13123, 202, 26783, 29, 535, 263, 2821, 1419, 15, 486, 1755, 847, 491, 299, 342, 263, 4035]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is the difference between a "I" and a "B"?
+Student: In a normal person, you don't have to be a doctor or psychologist to feel stressed out in this situation. You can also experience stress from an illness such as cancer, diabetes, or asthma. A student with a chronic health condition may be depressed, anxious, or depressed.
+Assisted Student: If you're having trouble concentrating on your homework, do something that helps you relax and stay focused.
+Student: I need to do a lot of things like get up and go to bed at night.
+Student-Friendly Student: If your friend has a heart attack, it's important to talk to him about what he needs to do to cope with his feelings.
+Assigned Student: Do everything right. Take your time, keep your grades down, and try not to overdo things.
+Able To Help
+Assistant (or student): Don't worry if you're feeling down or worried. This will help you focus on your assignments.
+Assignee: This means you're responsible for all of the things you're doing.
+Student(s): Your parents are there to help you when you need to.
+Assignment: You're responsible for
+
+================================================================================

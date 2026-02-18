@@ -1,0 +1,270 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=170 first30=[2827, 6087, 2857, 299, 269, 3843, 17, 776, 2977, 263, 5585, 4438, 374, 263, 3043, 298, 3766, 299, 1143, 1792, 17, 6087, 3609, 610, 2553, 490, 406, 982, 491, 263]
+[Full output 1]
+Once upon a time, a curious child named Max went to the park. He saw a boy playing with a ball and wanted to play too. Max asked his mom if he could have a game of tag. His mom said yes, but she had to be careful not to scare him. Max played tag all day long and was very happy when he got to play. He ran around in circles and jumped on the swings. Suddenly, Max heard a loud noise. It was a big dog barking at him! Max didn't like this noise, so he started to cry. Max's mom came over and hugged him tight. She told Max that he loved playing tag and that it made him feel safe. Max felt better knowing that he had been able to help the dog. From that day on, Max always remembered to be careful with his toys and to never scare them again.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 263, 336, 4455, 16769, 20246, 1136, 7362, 7093, 24057]
+first_step_topk_probs=[0.7151477336883545, 0.07599299401044846, 0.02177235670387745, 0.019618524238467216, 0.018622884526848793, 0.016780612990260124, 0.01435321755707264, 0.013624792918562889, 0.012933336198329926, 0.010501044802367687]
+first_step_topk_text=[' the', ' a', ' S', ' France', ' Peru', ' Colombia', ' New', ' Spain', ' Italy', ' Venezuela']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 21538, 3244, 17, 382, 2317, 330, 12092, 289, 269, 5235, 645, 288, 269, 9556, 15, 1661, 269, 6794, 374, 16769, 298, 26386, 17, 698, 418, 3199, 359]
+[Full output 2]
+Paris is the capital of the province of Guyana. The city is situated in the southern part of the province, near the border with Peru and Bolivia. It was established as a centre for trade between the two countries.
+The capital of Guyana is located on the banks of the Mombasa River, about 10 km from the town of Ponte de Santa Cruz. There are three main rivers: the Jalapo (river), the Río and the Cachimú (river). The river flows through the towns of Bacanque and Huayna. The main rivers flow into the country, which has a long history of development. The river was named after the French explorer Pierre-Charles-Jean-Baptiste Lévi-Strauss, who discovered it in 1784. It was named after an old man, a Portuguese merchant named Lévi, who had been stationed at the port of Buenos Aires since 1660. The river has a population of over 500 people.
+Cities and villages in Guyana include:
+- Baca, founded by the Portuguese in 1515;
+- Coyoti, founded by English settlers in 1608;
+- Dibello, founded by Spanish colonists in 16
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 6584, 269, 3286, 288, 263, 4409, 17, 202, 202, 509, 18956, 288, 263, 3823, 395, 545, 1623, 1890, 15, 298, 581, 483, 342, 5454, 359, 8824]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that describes the behavior of a vector.
+
+The eigenvalues of a matrix are all real numbers, and they can be represented as matrices with rows and columns. The entries in each row and column represent the number of times a given matrix has been multiplied by itself. For example, if we have a 2x2 matrix with two rows and three columns, its eigenvalues would be:
+
+* If we multiply every entry of matrix by one, it will also result in a 1:1 matrix, which means that multiplying any element of matrix by zero gives us the original matrix.
+* When you add a row and column to a matrix, the resulting matrix will also result into the same result.
+
+Now let's consider a matrix A that has a characteristic equal to its own transpose (i.e., the sum of its diagonal elements equals the identity matrix). This means that when we multiply a matrix by a nonzero scalar multiple of its transpose, there won't be any negative signs inside the matrix. Mathematically speaking, this property can be expressed mathematically using the following formula:
+
+A = |a b| , where a and b are scalars, and |||||||| denotes the dot product between vectors.
+
+Here, a and b represent
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 1420, 817, 491, 1991, 5546, 1085, 14071, 9845, 20993]
+first_step_topk_probs=[0.2614562511444092, 0.13994744420051575, 0.11362845450639725, 0.10238773375749588, 0.054804205894470215, 0.036129180341959, 0.032555095851421356, 0.029334574937820435, 0.027845848351716995, 0.022609064355492592]
+first_step_topk_text=[' can', ' allow', ' use', ' have', ' provide', ' describe', ' model', ' incorporate', ' rely', ' simulate']
+
+[New tokens 4] count=134 first30=[483, 342, 885, 299, 1085, 2281, 870, 4410, 17, 202, 509, 1271, 3563, 288, 269, 2851, 330, 299, 8422, 806, 269, 14457, 2673, 483, 342, 4491, 299, 1085, 2281, 13384]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data sets.
+The main goal of the paper is to demonstrate how the neural network can be applied to model complex datasets and how it can be used in practice. The paper has been published in the Journal of Experimental Psychology: An Introduction, Volume 2 (Vol. 3, No. 1). It will be available online from http://www.jstor.org/cgi-bin/journal_viewer.pl?name=R&v=2&page=1&qid=3#ixzz0xQYZAJQYZQYzKIZZWXJO
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=149 first30=[263, 647, 286, 3, 711, 4750, 2062, 263, 689, 715, 418, 263, 1809, 3510, 2827, 15781, 17, 1530, 699, 263, 2023, 4180, 10064, 298, 6446, 299, 1143, 374, 896, 5373]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+Once upon a time there was a little girl named Lucy. She had a big blue dress and loved to play with her toys. One day, she found a shiny ring on the ground. It was very pretty and she wanted to show it to her mom. So, she went to her room and put her toy box in the lock. When she opened the box, she saw that it was full of shiny things! Lucy's eyes lit up as she picked them up. She was so happy that she hugged her mom tight. From then on, Lucy always made sure to keep her toys safe from anything else. And every time she played with her toys, she would look at them and smile. The end.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=88 first30=[622, 311, 864, 353, 81, 552, 354, 12, 1341, 409, 711, 202, 350, 1401, 678, 626, 861, 8922, 3142, 9533, 346, 655, 9130, 555, 3546, 333, 9130, 17, 15289, 551]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n * (n - 1) / 2
+
+
+if __name__ == "__main__":
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--verbose", help="Print the output.")
+    args = parser.parse_args()
+
+    print("Running on python")
+    print("Starting the python program...")
+    print("starting the python program with arguments:")
+    print("start")
+    print("")
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.5518959164619446, 0.4481040835380554, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=192 first30=[622, 651, 73, 62, 78, 64, 339, 520, 289, 7631, 11, 2862, 11, 20, 15, 311, 647, 354, 504, 1551, 32, 4820, 892, 29, 494, 11, 91, 687, 3352, 711]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return [f[k] for k in sorted(range(1, n + 1), key=lambda x: int(x)) ]
+
+
+#
+#
+class Solution:
+    def find_n(self, n: int) -> List[int]:
+        # print("N-Square:", n)
+        # print(len(str(i)))
+        # print()
+
+        # for i in range(0, len(str(j)):
+        #     if str(i) == str(j):
+        #         break
+        # else:
+        #     for j in range(i - 1, len(list(str(num)))) :
+        #         if str(num) > num[j]:
+        #             continue
+        
+        # print("Number of Lists:", len(str((i+1)/2)) )
+        # print('Number of Listes:', len(str([i])) )
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 1541, 2590, 338, 698, 1906, 4619, 1289, 535]
+first_step_topk_probs=[0.508886992931366, 0.1618051826953888, 0.1618051826953888, 0.037639688700437546, 0.03219492733478546, 0.02014707401394844, 0.02014707401394844, 0.01912461221218109, 0.01912461221218109, 0.01912461221218109]
+first_step_topk_text=[' The', ' Yes', ' There', ' No', ' A', ' It', ' All', ' Black', ' We', ' In']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 12052, 17, 202, 509, 3533, 330, 808, 17, 382, 2645, 3191, 330, 263, 2076, 3864, 357, 578, 914, 3326, 289, 269, 1134, 1844, 359, 686, 2886, 4942]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+The answer is no. The black cat is a social animal that has many friends in the same family as its white relative. There is no reason to believe that any of these cats have been bred for this purpose. If you consider the number of cats in your household, it would be obvious that there is no reason why such cats should not be kept as pets. But if you take into account that black cats may not be so well adapted to their surroundings, then they will be likely to become less and less domesticated than other cats.
+One way to understand the importance of keeping cats in good health is to examine the behavior of cats in relation to humans. Cats tend to eat and drink more often than non-cats do. They also seem to enjoy being socialized with others and play games which are enjoyable and pleasant to them.
+In addition to providing an ideal environment for a cat, it is important to keep a close eye on the pet's behaviour. It is very important to observe how well they interact with each other and to monitor their interactions. This allows us to look at the interaction between two people. We can see how different cats are interacting with each other through their grooming habits.
+There are a number of ways that
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 2050, 382, 798, 409, 5517, 843, 1218, 0, 1]
+first_step_topk_probs=[0.5031228065490723, 0.17753510177135468, 0.14414724707603455, 0.08562713861465454, 0.024981044232845306, 0.024532584473490715, 0.02210569567978382, 0.017948422580957413, 0.0, 0.0]
+first_step_topk_text=[' 1', ' One', ' The', ' 4', ' 2', ' Two', ' 5', ' 8', '', '']
+
+[New tokens 9] count=166 first30=[354, 13032, 333, 798, 10941, 17, 202, 20, 18, 23, 9105, 288, 1069, 330, 2478, 339, 263, 929, 299, 3997, 1218, 17362, 288, 1069, 17, 202, 21, 18, 22, 9105]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples.
+1/4 cup of water is enough for a child to drink 8 cups of water.
+2/3 cup of juice is enough for an infant to eat 8 cups of juice.
+3/4 cup can be used in place of fruit or milk.
+Answer: 5 cups of juice is sufficient for an infant who eats 10 cups of juice each day.
+Note: 1 cup of juice contains 9 cups of juice, so the amount of juice you give your child is 0.5 cups.
+See another brain teaser just like this one...
+Or, just get a random brain teaser
+If you become a registered user you can vote on this brain teaser, keep track of
+which ones you have seen, and even make your own.
+Back to Top
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 1509, 22089, 382, 1348, 1289, 4516, 1278, 783]
+first_step_topk_probs=[0.2938897907733917, 0.15518498420715332, 0.13983342051506042, 0.13273675739765167, 0.04006294533610344, 0.04006294533610344, 0.03609970957040787, 0.030877714976668358, 0.027823133394122124, 0.022590620443224907]
+first_step_topk_text=[' I', ' What', ' You', ' Thank', ' The', ' How', ' We', ' Your', ' If', ' This']
+
+[New tokens 10] count=256 first30=[2575, 330, 669, 2942, 374, 482, 34, 202, 55, 12405, 15, 3092, 4235, 15, 2874, 552, 202, 44, 491, 733, 2449, 351, 263, 1554, 339, 751, 689, 1244, 298, 383]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience with this?
+Tuesday, August 23, 2011 -
+I have been working on a project for some time now and it's definitely worthwhile to get started. The first thing that comes up is the timeframe you need to set up your own system so that you can use it as much as possible in your work. For example, if you want to create a user interface, you might be able to do it by using the FTP command line (http://www.fsm.org/) and then by running the program as described above.
+The second thing that comes down to getting started is the setting of the server. This means that you will need to setup the server yourself before you start creating a new user account. You could also simply set up the server yourself and have it run over the network at any point during the process. If you're not sure what you'll need to do, try searching through the FTP URL and the FTP version.
+For example, if your FTP server is running on the same machine but you are trying to set up a FTP account, you may want to make sure that you've done everything right. This will give you a chance to test out your new password or use
+
+================================================================================

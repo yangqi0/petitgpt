@@ -1,0 +1,285 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 2857, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.7391716837882996, 0.26082828640937805, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' went', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 1] count=101 first30=[2827, 5273, 2857, 299, 269, 3843, 374, 610, 2553, 17, 1109, 2977, 914, 2918, 4438, 298, 2221, 958, 17, 14918, 15, 5273, 10227, 2009, 10942, 17, 776, 2977, 263, 2023]
+[Full output 1]
+Once upon a time, a curious child named Jack went to the park with his mom. They saw many animals playing and having fun. Suddenly, Jack noticed something strange. He saw a big, dark cloud in the sky! It was coming from the sky! Jack thought it was so exciting and wanted to go home. But then he remembered that he had seen something amazing happen when he saw the clouds flying around him. The sun was shining brightly, and Jack felt very happy. He knew that this happened because of the incredible sight.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=49 first30=[269, 9556, 17, 382, 4223, 288, 269, 2317, 330, 269, 2868, 288, 336, 293, 78, 352, 15, 536, 330, 3323, 289, 269, 2317, 7913, 288, 269, 9556, 288, 437, 724]
+[Full output 2]
+Paris is the capital of the province. The capital of the city is the town of Soukir, which is located in the city centre of the province of Eritrea.
+
+The town has a population of around 2,200 people (2021).
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 16292, 299, 269, 1309, 357, 19373, 269, 1926, 707, 795, 2721, 17, 783, 1818, 357, 490, 486, 1432, 833, 4409, 289, 269, 6603, 298, 10381, 383, 419, 2601]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector perpendicular to the line that divides the space into two parts. This means that if you take any vector in the plane and multiply it by itself, then there exists some number N such that for all n in the plane, we have N(n) = (N - 1)/2.
+
+Now let's consider the given problem involving the function f(x)=4x^3+5x-12x^2. To find this, first note that the expression inside the parentheses can be written as:
+
+f(x)=3x^3+(4x)^2-(1/2)^3+(6/2)^2=(9/2)^1+(11/2)^0+(11/4)^2-(7/2)^4+(13/4)^3+(14/4)^4+(15/4)^5+(16/4)^6+(16/2)^7+(17/2)^8+(18/2)^9+(19/2)^10+(21/2)^11+(22/2)^12+(23/2)^13+(23/4)^14+(24/4)^15+(26/4)^16+(27/4)^8+(28/4)^9+(29/
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 491, 1420, 817, 395, 1991, 9845, 1085, 14071, 20993]
+first_step_topk_probs=[0.3698050081729889, 0.1304917335510254, 0.0860254243016243, 0.07751534134149551, 0.045219384133815765, 0.03738650679588318, 0.03035544417798519, 0.02464669570326805, 0.020011555403470993, 0.020011555403470993]
+first_step_topk_text=[' can', ' have', ' allow', ' use', ' are', ' provide', ' rely', ' model', ' incorporate', ' simulate']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 6811, 2304, 17, 202, 2303, 1373, 15, 269, 1085, 330, 3385, 339, 12438, 269, 3286, 288, 4851, 30144, 289, 263, 2079, 1443, 353, 4625]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex biological systems.
+For example, the model is designed for modeling the behavior of protein folding in a single cell (which can be described as a simple linear regression model). It has been shown that the model can be modified to simulate a different kind of model (see Figure 1). The model is then fed into the neural network and is then used to model the entire system. This model can be developed by simulating the function of many different proteins with different inputs.
+Figure 1: Modeling protein structures using a model
+The model is then used for modeling the structure of the whole system, which can then be used to predict how the system will behave when it encounters other proteins or tissues.
+A process called "decision-making" (or "decision management") is also used to describe the processes involved in the design of a system. In this case, the model consists of two steps: one involving the input and output signals, and another involving the output signals. The input signal is the input signal and the output signal. If the input signal is given a value, then the output signal is a vector (the input signal) with values between 0 and 1. The output signal is the output signal, and the output is the
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=73 first30=[263, 647, 286, 17, 595, 551, 202, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 655, 3715, 555, 1499, 29, 331, 444, 9879, 86, 1072, 17, 3506, 86]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+if __name__ == '__main__':
+    import sys
+
+    try:
+        from libspy.libspy_api import build_python_setup
+
+        print('Adding a python script to your module')
+        print('The python script will be installed in your Python installation.')
+        install_python_module()
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=248 first30=[622, 353, 20, 18, 21, 12, 864, 353, 81, 552, 354, 12, 711, 202, 6, 538, 330, 66, 5756, 11, 81, 15, 296, 464, 202, 6, 265, 490, 311, 1542]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return (1/2) * (n - 1)
+
+
+# def is_real(n, m):
+#     if n > m:
+#         return True
+#     else:
+#             return False
+#     elif n < m:
+
+#         # print("n is ", n)
+#         if m[0] == 0 or m[1] == 1:
+#                 return True
+
+#     return True
+def get_number(m):
+    if len(m) != 2:
+        return int(m.group(2))
+    else:
+        return m.group(3)
+
+# def get_is_valid(n, k):
+#    if n >= k and k <= k:
+#        return False
+
+# print('Is a function defined?')
+print('The function has a value of ' + str(i) for i in range(10))
+print('If the function is not defined, return None.')
+print('For example, the function is %s' % (get_number(k)))
+print('Using this function does not yield any results.' % (get_)
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=256 first30=[622, 651, 73, 11, 78, 12, 339, 520, 289, 311, 64, 711, 202, 6, 537, 22018, 269, 1392, 299, 342, 29990, 298, 1428, 202, 856, 1271, 1714, 346, 537, 22018]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return [f(k) for k in n]
+
+
+# # Initialize the function to be initialized and run
+def main():
+    # Initialize the functions
+
+    # Initialize the values of the parameters
+    # Parameters are:
+    # 1. Calculate the number of Fibonacci numbers in the range 0-1
+    # 2. Determine the number of positive integers in the range -1-1
+    m = int(input("Enter your number: "))
+
+    # Run the function on each integer (e.g., 0, 1, 2, 3).
+    # Return the number of the negative integers in the specified range
+    # If the number is less than or equal to 1, then return the number of negative integers
+    # Return 0 if the number is greater than 1, otherwise return the number
+    # The number will be incremented by 1.
+    # The result will be an array with size n-1.
+    # Returns the number of all positive integers in that range
+    # The function returns the number of integers in the desired range
+    # For example, to get the number of real numbers in the interval [-1, 1], we need to compute
+    # the number of consecutive real numbers.
+    # We do this using the function `fib()
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 1541, 2590, 3126, 698, 1289, 1278, 338, 0]
+first_step_topk_probs=[0.4910370707511902, 0.19229286909103394, 0.09770332276821136, 0.09274488687515259, 0.02948906645178795, 0.027992473915219307, 0.026571856811642647, 0.02272811345756054, 0.019440386444330215, 0.0]
+first_step_topk_text=[' Yes', ' The', ' There', ' No', ' Not', ' It', ' We', ' If', ' A', '']
+
+[New tokens 8] count=256 first30=[13676, 17, 1541, 330, 263, 3313, 288, 1170, 351, 269, 2442, 289, 269, 1563, 15, 614, 383, 415, 453, 2401, 2161, 715, 330, 833, 4589, 920, 760, 795, 1943, 17]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Yes. There is a lot of information on the subject in the book, but it's not clear whether there is any connection between these two things. I'm not sure if there is anything to say about this. However, I have read an article by Dr. Paul Wegner in The Animal Kingdom, which discusses the fact that cats have evolved from a common ancestor. He points out that cats may have evolved from dogs and cats as well. I have also read about cats being able to run long distances with their tails, but I don't think that is what they are doing here.
+The following is an excerpt from the book, "Animal Origin," by C.A.E. Wilson, published in the March issue of The New York Times (November 17, 2002).
+Cats are born black, which means they have a white coat. But cats can be found in almost every part of the world except Antarctica. They're a nuisance and a nuisery pest that attacks crops. It's a problem for people who live in the deserts of Africa, where they tend to be domesticated. So it's hard to get a good idea of how many cats are there today. Cats have been around since the earliest days of human civilization,
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 2050, 382, 4449, 698, 409, 798, 1541, 3744, 338]
+first_step_topk_probs=[0.48158884048461914, 0.18859289586544037, 0.12432806193828583, 0.046216677874326706, 0.030467897653579712, 0.02445949986577034, 0.02229079231619835, 0.01809871196746826, 0.01809871196746826, 0.016308292746543884]
+first_step_topk_text=[' 1', ' One', ' The', ' Each', ' It', ' 2', ' 4', ' There', ' First', ' A']
+
+[New tokens 9] count=70 first30=[2050, 13032, 330, 5405, 744, 1161, 15, 1086, 17, 202, 21654, 288, 269, 1759, 8871, 330, 2699, 672, 10941, 34, 202, 24771, 354, 29, 1541, 395, 1237, 10941, 289, 263]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple is worth $10,000.
+Which of the following statements is true about apples?
+Answer 1: There are three apples in a basket.
+Answer 2: There are four apples in a box.
+Answer 3: All the apples in a bag are empty.
+Answer 4: The apples in a bottle are empty.
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 22089, 15255, 2575, 382, 1509, 1289, 783, 1348, 338]
+first_step_topk_probs=[0.32749226689338684, 0.1817616969347, 0.07117889821529388, 0.052075594663619995, 0.04228207841515541, 0.038099318742752075, 0.03258807212114334, 0.030934231355786324, 0.021483397111296654, 0.01837572269141674]
+first_step_topk_text=[' I', ' Thank', ' Thanks', ' What', ' The', ' You', ' We', ' This', ' How', ' A']
+
+[New tokens 10] count=256 first30=[2575, 330, 263, 360, 309, 604, 5, 34, 202, 43, 1640, 25205, 447, 17649, 1768, 29, 698, 415, 263, 4083, 2018, 15, 298, 383, 415, 263, 4083, 272, 357, 483]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is a "stress"?
+HARRY GARDEN: It's a stress response, and it's a stressor that can be triggered by many things.
+BETWEEN A CALCULATE THE MIND AND THINKING CASES OF WATER HISTORICAL EFFECTS.
+CHICAGO CITIZENS (a) The person who is suffering from depression or anxiety is not in control of his/her life. He/she is in control of the situation. This person has been suffering from depression for years. This person also has a strong sense of what he/she is doing. This person may have a bad mood. It's not just a stressor.
+CHILDREN: It is the person who is experiencing a "stressed" mood. This person is having a difficult time with all of the symptoms.
+AIR FACTS: If you are experiencing these symptoms, it is important to understand what causes them. You must know what triggers these symptoms.
+CHIMESTEPIDENCE: Any physical or mental disturbance that may contribute to depression.
+ANSWERS TO CHILDHOOD OR ADULTURE FOR ANTIVELY MAKE
+
+================================================================================

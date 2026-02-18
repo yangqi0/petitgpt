@@ -1,0 +1,321 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 2857, 2446, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.5849443674087524, 0.22906750440597534, 0.18598811328411102, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' went', ' came', '', '#', '', '"', '!', '', '']
+
+[New tokens 1] count=158 first30=[2827, 6087, 2857, 299, 269, 3843, 374, 610, 2553, 17, 6087, 6446, 4438, 351, 269, 24796, 298, 11913, 17, 776, 791, 14197, 1059, 656, 289, 269, 6437, 298, 2505, 269]
+[Full output 1]
+Once upon a time, a curious child named Max went to the park with his mom. Max loved playing on the swings and slide. He would swing high up in the sky and feel the wind on his face. Max's mom was very proud of him for being so brave. One day, Max saw a little girl crying. She had lost her toy car! Max asked her what happened and she told her about the toy car. Max wanted to help, but he didn't know how. His mom said, "Don't worry, we can fix it together." They worked hard and finally found the toy car under a big tree. Max was so happy that he could play with his new toy car again soon. From then on, Max and his mom were good friends and always helped each other when they needed it.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=63 first30=[269, 9556, 288, 269, 356, 309, 5472, 11295, 17, 202, 755, 1291, 4915, 15, 269, 2868, 418, 3199, 359, 263, 645, 288, 269, 2317, 288, 377, 1128, 8191, 17, 535]
+[Full output 2]
+Paris is the capital of the province of the Istrian kingdom.
+In 985, the town was established as a part of the city of Pannonia. In 1086, it became part of the municipality of Vitebsk.
+The town has a population (2018) of 312 and an area of .
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 357, 578, 1127, 8878, 298, 3892, 17, 382, 28071, 288, 263, 3823, 338, 330, 269, 1701, 288, 686, 18956, 30, 383, 330, 3821, 359, 269, 1677, 288, 545]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector that has both magnitude and direction. The eigenvalue of a matrix A is the sum of its eigenvalues; it is defined as the product of all the eigenvectors (eigenvectors) in the original matrix.
+The first two terms are related to the matrix A by the fact that they are linearly independent matrices with nonzero entries. Thus, the eigenvalue of the matrix A is given by:
+where k = (a1 + b2 - c3)/n. If a1 and a2 are scalar multiples of a1 and b1 are scalar multiples, then the corresponding eigenvector of A is given as:
+A = (a2 + b2)(a1 + a2)
+and therefore the characteristic polynomial of the matrix is
+This leads us to the concept of a basis for the eigenvectors of the matrix.
+For example, consider the following vectors x1, x2, ..., xN:
+x1 = (0, 0), (0, 1), (0,-1), (0+1, 0), ...
+x2 = (0,-0), (0-0, 0).
+If we denote the basis of the matrix as (0, 2*1):
+(0, 0)^T = (0)^
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[9845, 1420, 483, 817, 491, 1991, 5546, 3747, 5663, 330]
+first_step_topk_probs=[0.22324401140213013, 0.16332879662513733, 0.09209755808115005, 0.07877521216869354, 0.06738001108169556, 0.04929627105593681, 0.04216533154249191, 0.04002544656395912, 0.030848819762468338, 0.026386389508843422]
+first_step_topk_text=[' rely', ' allow', ' can', ' use', ' have', ' provide', ' describe', ' allows', ' involve', ' is']
+
+[New tokens 4] count=256 first30=[9845, 351, 14457, 8119, 299, 1798, 444, 298, 3235, 269, 7259, 288, 7105, 17, 202, 509, 5281, 2097, 330, 357, 383, 415, 453, 1100, 672, 806, 874, 1798, 15, 614]
+[Full output 4]
+Neural networks are a class of machine learning models that rely on neural networks to learn from and predict the outcomes of experiments.
+The core concept is that it's not just about how people learn, but also how they learn. The brain has been shown in studies to be highly efficient at learning because it can adapt itself to new situations and make new connections with existing ones. It is well known that the brain processes information through neural networks, which are like the brain of a computer. However, there is another aspect of this process called "memory." Memory is an important part of learning. In order for the brain to learn, it needs to remember what it knows, rather than forgetting what it has learned. This means that memory is used by the brain as a whole, not just the individual neurons or neurons.
+The ability to remember things is one of the most important characteristics of learning. A person who learns in a way that makes him or her more efficient will have fewer problems with memory. Memory is also important because it helps us get to know our own brain better. For example, if we're studying the human brain, we may want to learn about the brain and learn about the mind. If we're trying to learn something new, we might try to learn something else. Learning about the brain is really important because
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 5427, 6649, 29, 8163, 16, 27, 5427, 202, 807, 1401, 8644, 626, 655, 15551, 66, 22513, 202, 1018, 306, 202, 202, 807, 5210, 17]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+import re
+
+from django.db import models
+from django import forms
+from django_extras.fields import GenericField
+from django._test import TestCase
+
+from .models import Dashboard, DashboardForm, DashboardsForm, DashesForm
+from .utils import get_admin_model_name, get_form_class_name
+from .forms import DashboardsViewForm, DashedTextForm, DashingTextForm
+from ..utils import (
+    get_user_model_settings,
+    get_username_or_email,
+    gettext_data,
+    getdate_time,
+    geturl_for_login,
+    gettitle_field,
+    getbutton_list,
+    getqty_choices,
+    getusers_list,
+)
+from .mixins import DashBoardMixin
+
+
+class UserMixin(DashboardsViewMixin):
+
+    model = models.User
+    fields = ['id', 'name']
+    verbose_name_plural = "User"
+    # class Meta:
+    #     model = DashboardsModel
+    #     date_
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 354, 490, 311, 861, 643, 1107, 354, 202, 202, 6, 11101, 299, 1098, 269, 993, 288, 3097, 9044, 1415, 702, 388, 3007, 299, 311, 202, 856, 3911, 66, 4203]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return 1 if n == 0 else 1
+
+# Function to find the number of positive integers less than or equal to n
+def factor_number(n, p):
+    """Find the number of integers less than n with exactly p >= 1"""
+    if not isinstance(p, int) and len(p) > 1:
+        raise TypeError("Expected integer value for p must be an integer")
+    if p < 1:
+        return 0 if p <= 1 else 1
+    elif p < 2:
+        return 1 - p + 1 if p >= 2 else 1
+    else:
+        return p + 1
+
+
+def prime_factor(n):
+    """Get the prime factors of n:
+    The first prime is the largest positive integer greater than or equal
+    to n.
+
+    :param n: Number of primes to check
+    :return: Prime factors of n
+    """
+    if n % 2 != 0:
+        raise ValueError("Number of primes must be divisible by 2")
+    if n == 1:
+        prime = 2 ** (1 - 1) // 2
+        if n % 3 == 0:
+            raise ValueError("The prime factors are odd")
+        if n == 2:
+            prime = 2 * (2 * n) // 2
+            if
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.5, 0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=128 first30=[622, 354, 490, 311, 1396, 409, 1107, 643, 202, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 801, 18745, 1166, 903, 555, 284, 333, 1369, 717, 2178]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1 if n < 2 else 0
+
+if __name__ == '__main__':
+    print("Finished")
+
+    f = open('input.txt', 'r')
+    for i in range(1,len(f)):
+        f[i] = f[i-1] + f[i+2:]
+        f[0] += 1
+        f[1] += 1
+
+
+# %%
+print("\n\t\t{4}\t\t*1e3\t\ntheta\t1e6\t\ndc_k\t\n")
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 1541, 356, 2590, 535, 698, 338, 0, 1]
+first_step_topk_probs=[0.35132259130477905, 0.2570330798625946, 0.20869459211826324, 0.05979199707508087, 0.03941730037331581, 0.0303801316767931, 0.027374768629670143, 0.02598550356924534, 0.0, 0.0]
+first_step_topk_text=[' The', ' Yes', ' There', ' I', ' No', ' In', ' It', ' A', '', '']
+
+[New tokens 8] count=256 first30=[1541, 330, 808, 2079, 3533, 299, 482, 2395, 17, 1278, 486, 2033, 263, 3191, 490, 383, 415, 2645, 15, 922, 1223, 269, 3533, 1721, 672, 269, 2419, 288, 686, 3630]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: There is no single answer to this question. If you ask a cat if it's black, what does the answer say about the color of its skin? In other words, if it's white, what do you know about its color?
+Answers from the following list of answers may not be all that helpful for your pet:
+- Cats have long, curly hair and a thin coat (the "belly" in cats)
+- They have long, soft fur and short legs
+- Their ears are small and round, which makes them look like they're walking on grass or under rocks
+- Their eyes are small and oval, which make them look like it's looking at something
+- Their paws are large and pointed, which make it feel like they're running around
+- Their feet are big and round, meaning they're on top of each other
+- Their noses are large and round, making them look like a dog
+- Their legs are long and thick and their tails are long and round
+- Their fur is light brown with a deep red tinge
+- Their toes are long and wide, which make the animal look like it has a long tail
+- Their hair is long and thick, which make their ears look like
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 382, 2050, 798, 1541, 698, 843, 409, 13676, 1109]
+first_step_topk_probs=[0.5336717367172241, 0.100797638297081, 0.09082629531621933, 0.07374512404203415, 0.05395308881998062, 0.039472922682762146, 0.039472922682762146, 0.03147410228848457, 0.0211283341050148, 0.015457818284630775]
+first_step_topk_text=[' 1', ' The', ' One', ' 4', ' There', ' It', ' 5', ' 2', ' Yes', ' They']
+
+[New tokens 9] count=82 first30=[354, 13032, 333, 798, 10941, 202, 22, 10941, 333, 1604, 10941, 202, 23, 10941, 333, 1604, 24847, 202, 24, 10941, 333, 2341, 24847, 202, 25, 10941, 333, 2234, 24847, 202]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+3 apples = 12 apples
+4 apples = 12 oranges
+5 apples = 13 oranges
+6 apples = 14 oranges
+7 apples = 9 oranges
+8 apples = 8 oranges
+9 apples = 10 oranges
+10 apples = 12 bananas
+11 apples = 12 cherries
+12 cherries = 6 oranges
+13 cherries = 5 oranges
+14 cherries = 10 oranges
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 1509, 22089, 3189, 1490, 1348, 698, 783, 1803]
+first_step_topk_probs=[0.5059158205986023, 0.315877765417099, 0.045983023941516876, 0.03364190086722374, 0.021052561700344086, 0.015402383171021938, 0.013878699392080307, 0.013174356892704964, 0.012505759485065937, 0.01187108177691698]
+first_step_topk_text=[' I', ' What', ' You', ' Thank', ' Do', ' Is', ' How', ' It', ' This', ' When']
+
+[New tokens 10] count=256 first30=[2575, 330, 669, 2942, 374, 263, 1167, 34, 202, 43, 784, 2181, 29, 356, 491, 733, 289, 263, 1167, 339, 672, 2236, 4350, 298, 383, 415, 4006, 4304, 3099, 15]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience with a car?
+Holdover: I have been in a car for about 30 minutes and it's getting dark outside, so I've noticed that it's getting darker. It's also getting lighter. It's not as good as it used to be. But I don't think the car is going to get pretty much anything out of it. So, I've got some very interesting stuff to talk about.
+We're all in this together. We are all in this same car. And we're all on the same track.
+I've been in this car for 10 years now, and I've never seen a car like this before. It's really amazing how much we can relate to each other.
+It's hard to imagine what this car would look like if you were driving a car of any size. The cars look different because they're bigger than they actually are. That's true, but there are lots of things that could be made into something that looks like a car. You might see cars that look like cars that look similar to cars that look more like cars that looked like cars that fit inside their own heads.
+There are lots of reasons why I thought that this car was a car. But I didn't realize
+
+================================================================================

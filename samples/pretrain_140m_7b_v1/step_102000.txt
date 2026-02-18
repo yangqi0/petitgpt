@@ -1,0 +1,274 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1255, 2857, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.7919543981552124, 0.10943575948476791, 0.09860990941524506, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' called', ' went', '', '#', '', '"', '!', '', '']
+
+[New tokens 1] count=167 first30=[1255, 5273, 418, 4438, 289, 269, 3843, 17, 776, 2977, 2009, 17935, 351, 269, 2389, 298, 406, 4725, 299, 3466, 383, 656, 17, 776, 5004, 598, 610, 1325, 298, 10225]
+[Full output 1]
+Once upon a time, a curious child called Jack was playing in the park. He saw something shiny on the ground and he decided to pick it up. He reached out his hand and picked it up, but then he noticed that it was very small. It had been a bit of a hard thing for him to carry around with him. So Jack went over to take a closer look at the tiny thing. He found that it was an old man who lived near the pond. The old man smiled and said: "That's a little piece of paper, Jack. Let me show you how I can hold it." Jack looked at the paper and he thought about what he could do. Then he began to pull the paper together. When he pulled it, the paper started to glow! Jack was so excited that he couldn't wait to show his friends the surprise.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 263, 7093, 11438, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.8906449675559998, 0.06411035358905792, 0.0226223636418581, 0.0226223636418581, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' a', ' Italy', ' Greece', '', '', '!', '"', '', '']
+
+[New tokens 2] count=256 first30=[269, 4844, 4328, 7762, 17, 202, 509, 2317, 418, 2793, 351, 263, 9902, 3600, 15, 351, 269, 2310, 288, 263, 4328, 6088, 17, 382, 4328, 11031, 288, 269, 1505, 418]
+[Full output 2]
+Paris is the capital of the Western Roman Empire.
+The city was built on a hilltop, on the site of a Roman fort. The Roman governor of the area was Sulla (or Sulla) and his son, Clovis, were called the "Sons of the Romans". In 1053, Cloxitos II became king of the city. It was an important place for trade with the Romans. In 1272, it was renamed to Rome after the Roman emperor Claudius I. After the death of Claudius in 137, Cloaxitos II died and the city was given to the Roman Emperor Maximianus I. He is considered one of the greatest military commanders of the Roman Empire. He commanded the fleet at sea during the Battle of Trajan against the Roman army in 141 BC. During the battle, he captured the city from the Persians, but did not capture it. The city fell into disrepair by the Battle of Vesuvius in 143 BC. Cloxits III's death caused a great deal of damage to the city.
+In the 11th century, Clovales was conquered by the Huns. The city was destroyed in 965 AD by the Persians. The Huns
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 357, 578, 269, 1134, 8878, 359, 686, 1231, 28071, 17, 535, 613, 2351, 15, 383, 415, 269, 1701, 288, 545, 269, 7527, 289, 263, 4409, 1462, 298, 357]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector that has the same magnitude as its own eigenvalue. In other words, it's the sum of all the vectors in a vector field and that means that there are two or more vectors that have the same length.
+
+Now let's consider the case where the eigenvalues are zero. The first one is called the "zero eigenvector," which is just a fancy name for a vector with the same magnitude (length) as its own eigenvector. This means that if we take any two linearly independent eigenvectors, we can always find a nonzero vector that has only one eigenvalue. That means that the second eigenvector will be zero because no other eigenvector will ever be zero.
+
+Next up, we have the "unitary" eigenvalue, which is just another name for a matrix that is not diagonalizable. Think about this like a big box full of toys - each toy has a unique number associated with it. Now imagine you want to rearrange these toys so that they fit together perfectly while still keeping their original positions intact. To do this, you would need to follow certain rules:
+
+1. Every time you move your toys around, the resulting arrangement must also change its size.
+2. If you keep moving your toys at regular intervals, then eventually you
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 1420, 9845, 5546, 483, 491, 1991, 1085, 395, 5663]
+first_step_topk_probs=[0.1491231918334961, 0.12107857316732407, 0.12107857316732407, 0.12107857316732407, 0.10910084843635559, 0.047415051609277725, 0.045008692890405655, 0.03468959406018257, 0.03300373628735542, 0.03125791624188423]
+first_step_topk_text=[' use', ' allow', ' rely', ' describe', ' can', ' have', ' provide', ' model', ' are', ' involve']
+
+[New tokens 4] count=256 first30=[9845, 351, 14457, 2673, 8119, 299, 3235, 298, 1840, 269, 3286, 288, 1549, 10259, 17, 202, 509, 414, 7490, 2269, 288, 1549, 27363, 395, 2281, 15, 298, 751, 288, 780]
+[Full output 4]
+Neural networks are a class of machine learning models that rely on neural network networks to predict and control the behavior of human beings.
+Theoretical models of human cognition are complex, and some of them can be difficult to understand or even difficult to understand. For example, they may not be able to provide a complete picture of how humans perceive and respond to objects, but might provide a good approximation of what people would feel if they were seeing an object in a certain way. Theoretical models have been used extensively for many years, and their applications have been very limited. In fact, the first two-dimensional models of human perception, which have been used as models for several other types of cognitive systems, are the most widely used and commonly used. Some of these models have also been used in research studies, but their use is not restricted to psychology, neuroscience, and cognitive science. This article will focus on three models that have been used by psychologists to model human cognition: the "real world" model, the "unreal world" and the "normal world." These models have been widely used to study human cognition since the 1960s.
+Some of the models that have come into use have been developed using computer modeling techniques, and some have been used in clinical trials. They include the "interactive theory,"
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=193 first30=[263, 647, 286, 3, 711, 4750, 2062, 263, 689, 715, 418, 263, 1809, 3510, 17, 1530, 6446, 299, 1143, 289, 896, 5786, 298, 1313, 339, 17150, 17, 2050, 1266, 1024]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+Once upon a time there was a little girl. She loved to play in her garden and look for bugs. One day she found an old bug. It was very small and had a long tail. The little girl wanted to touch it but she couldn't because it was too small. So she asked her mom if she could go closer. Her mom said yes and they went outside together. They walked around the garden until they came across a big red apple tree. The little boy was so excited that he ran up to it and started eating the apple. Suddenly, the apple fell out of his hand and landed on the ground. He was scared and started to cry. But then something amazing happened! A beautiful butterfly flew down from the sky and landed right next to him. The little bird was so happy and thanked the little girl for being so kind. From then on, the little girl always looked for bugs when she went inside.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 353, 81, 552, 354, 12, 864, 353, 81, 647, 354, 12, 711, 202, 6, 538, 28045, 66, 5756, 11, 81, 15, 296, 464, 202, 6, 265, 490, 311, 5730]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return (n - 1) * (n + 1)
+
+
+# def factorial_real(n, m):
+#     if n <= m:
+#         return n % m
+#         else:
+#             return factorial(n - m) / n
+
+
+# FUNCT = factorial(n)
+# FACTOR = factorial(2)
+#
+# FULL = factorial(1)
+# f(0) = FULL
+#
+def factorial_multiplication(n, factor):
+    if n >= factor:
+        return factorial(factor)
+    else:
+        return FULL
+
+# FLOWER = factorial(4)
+# HUGE = factorial(5)
+# MULTI = factorial(6)
+# LISTENGER = factorial(7)
+# OVERRIDE = factorial(8)
+# NONFIND = factorial(9)
+# POSITIVE = factorial(10)
+# DIGEST = factorial(11)
+# GREATER = factorial()
+#
+class Solution:
+    # @param n: Number of items
+    # @return an integer
+    def factorial(self, n):
+        res = 0
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=77 first30=[622, 651, 73, 11, 76, 12, 339, 1249, 289, 311, 64, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 284, 333, 1369, 717, 2178, 17, 5155, 561]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return [f(i) for i in n]
+
+
+if __name__ == '__main__':
+    f = open('input.txt', 'r')
+
+    while True:
+        try:
+            # print(f, file=sys.stderr)
+            p = input()
+
+            if p == 1:
+                break
+
+        except Exception as e:
+            print(e)
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 1541, 2590, 4619, 356, 535, 338, 698, 2660]
+first_step_topk_probs=[0.2908054292201996, 0.1917106956243515, 0.1819813996553421, 0.07126493752002716, 0.07126493752002716, 0.06095613166689873, 0.03262746334075928, 0.02649143524467945, 0.01938154734671116, 0.01938154734671116]
+first_step_topk_text=[' The', ' Yes', ' There', ' No', ' Black', ' I', ' In', ' A', ' It', ' Some']
+
+[New tokens 8] count=256 first30=[1541, 330, 808, 2079, 3533, 299, 482, 2395, 17, 1358, 269, 1152, 3594, 357, 715, 330, 263, 1457, 288, 7571, 289, 1010, 6309, 17, 1220, 1373, 15, 10676, 395, 453]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: There is no single answer to this question. But the fact remains that there is a range of answers in each category. For example, cats are not black or white, but they are all black. It seems that most cats are black and some are white. The cat group is the same as the black group.
+But what about cats who are black? Some cats are black because they have a black coat on their head and legs. Other cats are black when they are young and will be brown if they are old enough to walk. The cat groups are black because it has a black coat and a white tail. They are also black because they live in different habitats. Cats are not black, but they do have white fur. So cats are black in general, though they may also be black in some areas.
+There are many different types of cats. You might think that cats are black at first, but there are some differences between them. There are black cats and black cats. A black cat is black if it is a dog, and a black cat is a cat if it is an owl. The cats are black for the rest of their lives.
+The cat group is black, and you would expect the cat group to be black if you were a cat
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 2050, 798, 409, 382, 843, 643, 2, 1, 0]
+first_step_topk_probs=[0.6792781949043274, 0.11560724675655365, 0.06867358833551407, 0.050470735877752304, 0.03312202915549278, 0.029845427721738815, 0.02300277166068554, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' One', ' 4', ' 2', ' The', ' 5', ' 0', '', '', '']
+
+[New tokens 9] count=256 first30=[354, 13032, 15, 798, 10941, 15, 1291, 10941, 17, 202, 2774, 1427, 415, 1721, 411, 1418, 299, 1118, 806, 914, 288, 1010, 2419, 715, 330, 289, 269, 2716, 17, 1289]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple, 4 apples, 9 apples.
+Now let's say we want to know how many of each color there is in the box. We can do this by dividing the number of apples into two equal parts: one part for red and another for blue. So if you divide the number of red apples (1/2) by 3, then the number of blue apples (1) would be 3/3 or 6/5.
+But wait! What happens when we multiply a certain number of apples (let's call it "n") together? Well, that gives us our answer. When n equals 1, we get 5/5, which is just 1/4. And since we already calculated that, we could write that as:
+(5/5)^n = 5^(n-1)/5^n
+So, when n=1, we get 10/1 or 15/1. That means that, on average, each individual apple will have a value between 0 and 1. This means that every time we take out an apple from the bag, we're getting closer to the actual number of apples we'll get with our bags.
+This is called the "standard deviation," which tells us how spread out the numbers are around
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 1289, 22089, 1348, 1509, 3919, 3189, 382, 1278]
+first_step_topk_probs=[0.36459293961524963, 0.18233513832092285, 0.061074625700712204, 0.05797509104013443, 0.03627988323569298, 0.034438684582710266, 0.034438684582710266, 0.022703371942043304, 0.02155117690563202, 0.0204574353992939]
+first_step_topk_text=[' I', ' What', ' We', ' Thank', ' How', ' You', ' My', ' Do', ' The', ' If']
+
+[New tokens 10] count=256 first30=[2575, 330, 669, 2942, 374, 263, 1440, 288, 874, 34, 202, 7681, 17, 440, 465, 29, 698, 415, 263, 1114, 1384, 645, 288, 669, 1328, 298, 383, 415, 1114, 1384]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience with a group of people?
+Dr. Liz: It's a very important part of your life and it's very important to have that relationship with them, this is what you need to be involved in. You don't want to go into a discussion about the issues you're facing because you've been told by someone who has these problems. This is a very important aspect of having a relationship with someone you love and with you. If you are being involved in an issue, it's really important to ask for help so that you can get a support network or even share that information with others.
+Assistance: Do you feel like getting a support network for yourself?
+Drinker: Yes, we do think that when you start talking about things, you can become a member of the group, you can get support from other people, you can help someone else get support from another person, you can use the same network as they used to. The person who is using the network will also know how to use it. So if you have a friend, a friend of mine who lives in a different city or country, you can be sure that you can use that network and that there's a person who can connect to people you know.
+
+================================================================================

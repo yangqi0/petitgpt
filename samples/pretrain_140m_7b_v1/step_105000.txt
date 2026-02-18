@@ -1,0 +1,306 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=131 first30=[2827, 5273, 2857, 299, 269, 3843, 17, 776, 2977, 263, 2023, 3197, 298, 3766, 299, 15935, 383, 17, 1358, 722, 406, 3500, 715, 15, 406, 2977, 357, 269, 3197, 418]
+[Full output 1]
+Once upon a time, a curious child named Jack went to the park. He saw a big tree and wanted to climb it. But when he got there, he saw that the tree was very tall and heavy. Jack started to cry because he didn't want to go down. Suddenly, he heard a voice coming from behind him. "Hey! That's my tree!" Jack said. The voice said, "Don't worry, I'll help you." Jack climbed up the tree and reached for the tree. He pulled on the trunk and lifted it up. Inside, he found a small toy car that made funny noises. Jack laughed and played with the toy car all day long.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 336, 4895, 484, 295, 4352, 2343, 289, 10191, 17, 202, 755, 269, 6289, 15059, 15, 269, 5110, 586, 1255, 360, 54, 300, 278, 1562, 5, 1091]
+[Full output 2]
+Paris is the capital of the province of the Sephardic Jewish community in Jerusalem.
+In the Middle Ages, the Jews were called "Sasanians" because they were the first to leave the city and settle there. In the early 17th century, the Jews settled in the town of Hattin, near the present-day town of Haifa. The town was renamed Haifa after the Jewish community that was founded there in 1677.
+The Jewish community was divided into two different political parties: the B'nai Yehuda (the Yiddish-speaking minority) and the Sephardi (Jews who had been expelled from the country). The B'nayat and the Yomach were both part of the Jewish community.
+When the Jews fled from the Ottoman Empire, the B'nei Yisrael came under the control of the Ottoman sultanate, which later became the Kingdom of Israel. During the Ottoman period, the Bâhars, who lived in the city for many years, moved to the city. They established a new Jewish settlement in the city on the banks of the river Tiber, called the Gevurah, which was named after the city's name. The Jewish community remained at this
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 483, 342, 885, 299, 1749, 269, 3286, 288, 263, 1392, 17, 1153, 28071, 330, 263, 993, 357, 330, 2163, 3097, 388, 4000, 15, 298, 383, 330, 1431]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be used to represent the behavior of a function. An eigenvalue is a number that is either positive or negative, and it is often written as a negative number. The most common examples are the square root of -1, which is the number 1, and the exponential function, which is also called the natural logarithm.
+When you have a set of functions (such as the function $f(x)$), you can define some special rules for how these functions behave. For example, if you want to describe the behavior of the function as a function approaches infinity, you might say: "The function is increasing at infinity." This rule tells us that we should keep adding more and more terms to our expression until we get back to the original function.
+For example, let's say you wanted to find the slope of the line connecting points $(0,1)$ and $(2,3)$. To do this, you would write: "The slope of the tangent line is 1/2." You could even use this rule to express the slope of a line in terms of its slope. But what about the slope of an angle? That's where the "sine" comes into play! It describes the relationship between the y-intercept and x-intercept
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 1420, 491, 9845, 817, 3235, 5546, 395, 1991, 1085]
+first_step_topk_probs=[0.16840802133083344, 0.15174823999404907, 0.12320993840694427, 0.11695703864097595, 0.07318985462188721, 0.05354683846235275, 0.04127016291022301, 0.04080553352832794, 0.03350875526666641, 0.025826208293437958]
+first_step_topk_text=[' can', ' allow', ' have', ' rely', ' use', ' predict', ' describe', ' are', ' provide', ' model']
+
+[New tokens 4] count=256 first30=[9845, 351, 14457, 2673, 12438, 299, 3235, 269, 2519, 3876, 288, 287, 5145, 17, 202, 509, 14457, 2673, 1085, 330, 619, 288, 269, 851, 5746, 885, 3841, 289, 6117, 13627]
+[Full output 4]
+Neural networks are a class of machine learning models that rely on neural network modeling to predict the future performance of an experiment.
+The neural network model is one of the most widely used tools in neuroscience and has been used for many years by researchers, including the scientists at the National Institute of Standards and Technology (NIST), and the scientists at NIST. The neural network model can be thought of as a set of neural nodes that can be connected to a central nervous system and then interact with other neurons in the brain. It's called the neural network model because it uses neural networks to predict the outcome of experiments.
+For example, you might have a group of people who have different kinds of brain injuries, or you could have a group that has some kind of injury, or you might have several groups of people who are all susceptible to a particular type of injury. These types of injuries can change over time, but they don't necessarily mean that every person will get injured.
+When you're working with neural networks, you need to understand how these connections work and what makes them important. If you're going to use neural networks to make predictions about how your data will behave in real life, you'll want to do this in the context of the data being analyzed. You can think of neural networks as a collection of
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=88 first30=[263, 647, 286, 17, 595, 551, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 655, 3715, 555, 1499, 29, 331, 444, 9879, 86, 1072, 17, 3506, 86]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+
+if __name__ == '__main__':
+    import sys
+
+    try:
+        from libspy.libspy_util import build_python_setup
+
+        print('Starting python-build')
+        builder = build_python("tests")
+        print('Start building with Python code')
+        builder.start()
+    except Exception as e:
+        print('Exiting Python Python')
+        raise e
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 354, 490, 311, 861, 643, 1107, 354, 711, 202, 6, 11101, 299, 835, 269, 28045, 288, 287, 6222, 202, 856, 28045, 66, 967, 66, 18457, 11, 4203, 464, 346]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return 1 if n == 0 else 1
+
+
+# Function to get the factorial of an integer
+def factorial_to_integer(number):
+    # Get the number from the input list
+    number = int(number)
+    return factorial(number, factorial_to=int(number))
+
+
+# FIXME: This function is not useful for all functions, but it can be used in other ways.
+# For example, here's the code for the function:
+def factorial():
+    print("Fruit: %d" % (number,))
+    print("Solution: %s" % (factorial()))
+
+
+# Functions to find the factorial of a given integer
+def factor(number):
+
+    # Get the factorial of the number
+    number = factorial(number)
+
+    # FIXME - FIXME! Use the factorial function to calculate the factorial of number and multiply it by itself.
+    factorial(number + 1)
+    # FIXED! Use the factor function to calculate factorial of number.
+    factorial()
+
+    # Flexible function to use the factorial function as the result of the exponent.
+    factorial(-1)
+    # The factorial of the factorial of 3:
+    factorial(3)
+    # PASSWORD!
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=256 first30=[622, 354, 17, 19, 647, 353, 20, 17, 19, 13, 2809, 17, 1302, 21, 11, 81, 687, 864, 353, 20, 17, 24, 13, 2809, 17, 3791, 4097, 20, 17, 19]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1.0*math.log2(n)) * (1.5*math.exp(-1.0/(2*math.pi*math.sqrt(2))))
+
+
+if __name__ == '__main__':
+    print('Start with Fibonacci number')
+    print('Fib(3,4)')
+    print()
+
+    # A = [1, 2, 3]
+    # F = [0, 0, 1, 0]
+    # P = [0,-1, -1, 0, 0, -1]
+    # H = [0.9, 0.8, 0.7, 0.6, 0.4, 0.3, 0.2, 0.5, 0.12, 0.13, 0.14, 0.15, 0.16, 0.17, 0.18, 0.19, 0.23, 0.24, 0.25, 0.26, 0.27, 0.29, 0.31, 0.32, 0.35, 0.38, 0.39, 0.40, 0.61, 0.60, 0.70, 0.71, 0.73, 0
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 1541, 2590, 356, 338, 1289, 535, 698, 1906]
+first_step_topk_probs=[0.3516465127468109, 0.25727009773254395, 0.1528249979019165, 0.06641742587089539, 0.056809838861227036, 0.03203386068344116, 0.02740001119673252, 0.02111801505088806, 0.019028911367058754, 0.015450269915163517]
+first_step_topk_text=[' The', ' Yes', ' There', ' No', ' I', ' A', ' We', ' In', ' It', ' All']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 12052, 17, 202, 509, 2597, 339, 482, 330, 357, 2645, 10676, 4299, 299, 342, 611, 3758, 702, 2886, 10676, 289, 269, 3494, 15, 649, 581, 395, 453]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+The reason for this is that black cats tend to be more active than white cats in the wild, so they are not as active when they are young. In fact, they have a greater chance of being aggressive if they are born with an extremely large head.
+In addition, black cats may seem to be more social than white cats because they do not have any of the same social traits as black cats. They also appear to be less likely to be given the opportunity to be alone or playful. Their behavior might even be more helpful to them, since they are usually active during times of stress.
+However, the question is not whether black cats are really social. There is no evidence that black cats have a higher social status than white cats.
+We know from studies that black cats show a preference for the darkest areas around their eyes. However, it does not prove that black cats are social; it merely suggests that black cats don't have a preference for brightly-colored areas around their ears. It seems that black cats will prefer these areas over other kinds of areas such as trees, bushes, flowers, etc.
+As you can see, black cats are much more social than black cats.
+There is still a
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 382, 2050, 1541, 698, 2590, 798, 643, 843, 338]
+first_step_topk_probs=[0.45184069871902466, 0.15943937003612518, 0.1436668038368225, 0.06243734806776047, 0.03342030569911003, 0.02713514305651188, 0.024450818076729774, 0.024450818076729774, 0.022032015025615692, 0.018844982609152794]
+first_step_topk_text=[' 1', ' The', ' One', ' There', ' It', ' No', ' 4', ' 0', ' 5', ' A']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 202, 22, 10941, 333, 1604, 10941, 202, 23, 10941, 333, 1604, 24847, 202, 24, 10941, 333, 2341, 24847, 202, 25, 10941, 333, 2234, 24847, 202]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+3 apples = 12 apples
+4 apples = 12 oranges
+5 apples = 13 oranges
+6 apples = 14 oranges
+7 apples = 9 oranges
+8 apples = 8 oranges
+9 apples = 10 oranges
+10 apples = 12 bananas
+11 apples = 12 cherries
+12 cherries = 6 cherries
+13 cherries = 5 cherries
+14 cherries = 15 cherries
+15 cherries = 16 cherries
+16 cherries = 20 cherries
+17 cherries = 24 cherries
+18 cherries = 25 cherries
+19 cherries = 30 cherries
+20 cherries = 40 cherries
+21 cherries = 60 cherries
+22 cherries = 45 cherries
+23 cherries = 50 cherries
+24 cherries = 33 cherries
+25 cherries = 34 cherries
+26 cherries = 36 cherries
+27 cherries = 37 cherries
+28 cherries = 35 cherries
+29 cherries = 38 cherries
+30 cherries = 39 cherries
+31 cherries = 27 cherries
+32 cherries = 26 cherries
+33 cherries = 28 cherries
+34 cherries = 22 cherries
+35 cherries = 21 cherries
+36 cherries
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 1509, 22089, 1289, 3189, 382, 783, 2069, 1803]
+first_step_topk_probs=[0.45013660192489624, 0.23768924176692963, 0.07961592078208923, 0.04261533170938492, 0.0364508256316185, 0.026667993515729904, 0.021652720868587494, 0.019510719925165176, 0.01758061908185482, 0.015841469168663025]
+first_step_topk_text=[' I', ' What', ' You', ' Thank', ' We', ' Do', ' The', ' This', ' So', ' When']
+
+[New tokens 10] count=256 first30=[2575, 395, 486, 3573, 289, 269, 5988, 34, 202, 43, 1640, 57, 5411, 1381, 29, 5531, 15, 356, 418, 4532, 299, 835, 263, 5930, 351, 383, 15, 298, 356, 988]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What are you doing in the hospital?
+HARVESTON: Well, I was trying to get a handle on it, and I said, "Well, I'm not sure what this is." And then, we had an open door, and I saw that there were some things that were really important. So I went over to the kitchen and put my hand under the chair, and I looked at the floor. And I got out of the chair, I started to feel very relaxed. And then, just as I did with the chair, we talked about what I wanted to do. And I thought about how much fun it would be if I could actually sit down and have some quiet time. And I think that's when I realized that I had something else to do, and I decided that I should try to go back and talk to someone who knew me better than me. And so, I started talking to someone who was sitting down, and they told me about that. And then they began talking about the fact that I could really relax for the rest of the day. And then after that, they talked about how much more fun it would take. And then I found out that I had a lot of friends that I liked to meet around me.
+
+================================================================================

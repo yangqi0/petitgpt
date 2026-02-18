@@ -1,0 +1,295 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=166 first30=[2827, 5273, 2857, 299, 269, 3843, 374, 610, 2553, 17, 776, 2977, 263, 2023, 3197, 374, 7336, 288, 4129, 298, 7106, 17, 698, 418, 1114, 6604, 4, 5273, 3766, 299]
+[Full output 1]
+Once upon a time, a curious child named Jack went to the park with his mom. He saw a big tree with lots of trees and flowers. It was very pretty! Jack wanted to touch it, but he didn't know how to get it. His mom said, "No, Jack. That is not safe." Jack felt sad and wished he could go back home. But then he remembered something. He had seen a big tree that was too tall for him. He ran over to it and picked up the branches. Then he climbed on one branch and started to walk towards it. Suddenly, he heard a loud noise. It was a big truck coming down from the other side of the road. The truck stopped and looked at Jack. He was so scared that he dropped the trunk and ran away. Jack was relieved and went back to his mom.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 336, 263, 7093, 426, 321, 2, 3, 1, 0]
+first_step_topk_probs=[0.8819279670715332, 0.036368586122989655, 0.031107701361179352, 0.022758878767490387, 0.015003574080765247, 0.012833235785365105, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' S', ' a', ' Italy', ' F', ' T', '', '', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 7535, 281, 8191, 17, 202, 509, 9556, 418, 6214, 289, 2234, 2543, 419, 437, 559, 484, 7150, 15, 668, 418, 269, 775, 4332, 288, 269, 7425, 288]
+[Full output 2]
+Paris is the capital of the province of Catalonia.
+The province was founded in 1499 by Eduard III, who was the first king of the Kingdom of Catalonian origin. He died in 1526 and his son, Emmanuel II, succeeded him as King of Catalon until 1683 when he became the first pope. In 1524, Emmanuel IV was crowned king of Catalunya, which was ruled from 1525 to 1529. The kingdom was divided into two parts: one in the north (the eastern part) and the other in the south (the western part). In 1530, Emmanuel's son Emmanuel I was elected emperor. In 1538, Emmanuel VII became the first Pope of the Order of St. Pius V, but this did not last for long. He was re-elected at the same time as Pope Leo XIII in 1541, but only on a small scale. He was replaced by the new pope, Giovanni de' Medici, who was made Archbishop of Catalona. He also established the first cathedral in Catalonia, the Cathedral of Santa Maria Maggiore. In 1543, the new pope died and Emmanuel IV returned to the throne.
+From 1546 to 15
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 483, 342, 6031, 359, 269, 1701, 288, 795, 4384, 18956, 17, 1278, 269, 18956, 395, 1623, 1890, 298, 553, 5606, 28069, 395, 658, 2281, 1890, 15, 1000]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be expressed as the sum of two distinct eigenvalues. If the eigenvalues are real numbers and their corresponding eigenvectors are also complex numbers, then we say that the eigenvector associated with the eigenvalue is a scalar.
+
+Now let's consider the problem posed by user 'FitR', which asks for the identity matrix of a square matrix A with entries equal to its transpose (a, b). This means that the determinant of A must always be positive. However, the given solution doesn't provide enough information about this particular matrix yet it does provide some insight into how it relates to the original matrix A. We will explore why this is the case here.
+
+Firstly, note that if A has a characteristic of 1, then there exists some nonzero vector v such that the determinant(A) = 0. That is, the determinant of the characteristic of A is zero. Therefore, any vector in the domain of A would satisfy the property that the determinant equals zero. Now, since A has a unique characteristic of 2, we know that the determinant must be nonnegative. Thus, the determinant cannot be negative; instead, it must be nonnegative because the determinant must always be nonnegative.
+
+To see why this holds true, recall that the determinant is defined as the
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 817, 1420, 491, 1991, 395, 330, 9845, 5663, 14071]
+first_step_topk_probs=[0.26634681224823, 0.12846189737319946, 0.10430291295051575, 0.08468727022409439, 0.07630964368581772, 0.0540870800614357, 0.03493709862232208, 0.03316401317715645, 0.026927076280117035, 0.018700480461120605]
+first_step_topk_text=[' can', ' use', ' allow', ' have', ' provide', ' are', ' is', ' rely', ' involve', ' incorporate']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 269, 14457, 2673, 17, 202, 509, 14457, 2673, 330, 263, 2829, 298, 3421, 1085, 339, 2970, 298, 2465, 17, 698, 483, 342, 885, 289, 914]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model the neural network.
+The neural network is a simple and effective model for training and learning. It can be used in many different ways, including:
+- Learning from input data, such as image processing or video games
+- Training on the neural network (for example, using memory)
+- Using the neural network to train the neural network
+- Training with neural networks
+- Evaluating neural networks
+There are several different types of neural networks, including neural networks that can be applied to training. The most common type of neural network is the neural network, which consists of two main parts:
+- Neural network
+- Embedding networks
+A neural network can be described by its name, which is derived from the word "neural". In general, it is a network consisting of two parts: the neural network and the neural network(s). The neural network is composed of the following components:
+- A neural network is an abstract model of the neural network that describes the neural network of the neural system.
+- The neural network has three main parts: the training part, the neural network part, and the neural net part.
+- An artificial neural network is constructed out of the neural net. This is called a neural network
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=172 first30=[263, 647, 286, 3, 711, 4750, 2062, 263, 689, 715, 418, 263, 1809, 3510, 1255, 15781, 17, 1530, 699, 263, 2023, 4180, 10064, 298, 6446, 299, 8479, 383, 1148, 1266]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+Once upon a time there was a little girl called Lucy. She had a big blue dress and loved to wear it every day. One day she decided to go on an adventure with her friends. As they were walking, Lucy saw something shiny in the distance. It was a shiny coin! She ran over to take a closer look. Suddenly, she heard a loud noise coming from the sky. She looked up and saw a small bird flying by. "What is that?" asked Lucy. The bird said, "I found a special coin!" Lucy was so excited and couldn't wait to show it to her friends. She put the coin inside and started playing with it. When she was done, she waved goodbye to the new friend. From then on, she always remembered to keep his coins safe when she went on adventures.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 1216, 17, 1302, 11, 20, 647, 353, 81, 552, 354, 12, 864, 409, 12, 711, 202, 6, 338, 17638, 1392, 299, 1098, 269, 28045, 288, 263, 1496, 3097, 6222]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return np.log(1 + (n - 1) * 2)
+
+
+# A helper function to find the factorial of a given positive integer, or a list of integers whose product is less than or equal to n.
+def factorial_sum(n):
+    """Computes the factorial of an integer n and returns the sum of its factors with all positive integers up to n.
+
+    Parameters
+    ----------
+    n : int
+        Number of elements in the sequence.
+    Returns
+    -------
+    N = 3
+        The number of elements in this list.
+    """
+    if n == 0:
+        raise ValueError("Number of elements must be greater than or equal")
+    elif n > 1:
+        raise TypeError("Number of element must be greater")
+    else:
+        raise NotImplementedError()
+
+
+def factorial2(n):
+
+    """Computes factor n from n to N+1.
+
+    Parameters
+
+    ----------
+    n: int
+        Number (number of elements) of elements in a list.
+    Returns
+
+    -------
+    N
+    """
+    return np.exp(-1 / (n ** 2))
+
+
+def factor_count(n):
+    
+    """Computes factors of n by dividing n by n+1.
+    
+    Parameters
+    ---------- 
+    n: int
+      Number of
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=32 first30=[622, 8049, 11, 81, 12, 1246, 202, 2318, 801, 20, 903, 202, 6, 1083, 11, 73, 5, 21, 903, 202, 2318, 801, 22, 903, 202, 202, 2318, 8493, 81, 23]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return fib(n)
+    
+print("1")
+# print(f"2")
+print("3")
+
+print("\n4")
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 2590, 1541, 698, 1278, 1289, 356, 3126, 0]
+first_step_topk_probs=[0.3246020972728729, 0.21399103105068207, 0.1737469881772995, 0.14107152819633484, 0.03836647421121597, 0.03457106649875641, 0.0280695129185915, 0.022790642455220222, 0.022790642455220222, 0.0]
+first_step_topk_text=[' Yes', ' The', ' No', ' There', ' It', ' If', ' We', ' I', ' Not', '']
+
+[New tokens 8] count=132 first30=[2590, 17, 1541, 330, 808, 2395, 672, 269, 993, 288, 2645, 10676, 289, 269, 1165, 17, 382, 2597, 339, 482, 330, 357, 383, 330, 453, 2699, 357, 10676, 395, 2645]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: No. There is no question about the number of black cats in the world. The reason for this is that it is not true that cats are black; they are not black. Cats have been around since ancient times but most people think of them as a form of evil or evil. They are also called "black cats" because they are the most beautiful of all cats.
+In fact, you may wonder why cats do not live in the same area as humans. Why would they live in different regions? Why should they be treated differently than humans? And what is the reason why cats are not black? How does one get rid of a cat?
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 2050, 798, 643, 382, 843, 1012, 1218, 5517, 1541]
+first_step_topk_probs=[0.5578746199607849, 0.07708951830863953, 0.07708951830863953, 0.06946347653865814, 0.056399889290332794, 0.041263043880462646, 0.030188685283064842, 0.024511300027370453, 0.017932850867509842, 0.017022758722305298]
+first_step_topk_text=[' 1', ' One', ' 4', ' 0', ' The', ' 5', ' 6', ' 8', ' Two', ' There']
+
+[New tokens 9] count=256 first30=[354, 13032, 15, 798, 10941, 15, 1186, 10941, 15, 1218, 10941, 15, 1291, 10941, 15, 1604, 10941, 15, 1604, 24847, 15, 2341, 10941, 15, 1171, 10941, 15, 2508, 10941, 15]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple, 4 apples, 7 apples, 8 apples, 9 apples, 12 apples, 12 oranges, 13 apples, 10 apples, 11 apples, 13 apples.
+1 apple = 6.5 apples
+2 apples = 5.8 apples
+3 apples = 8.6 apples
+4 apples = 4.7 apples
+5 apples = 4 apples
+The number of apples in the box is equal to the total number of apples that were picked from the pile.
+Now we need to find out how many apples are in each pile. We can do this by taking the product of the number of apples (or the number of times it was picked) and dividing it by the number of candies in the pile. Then we add up all the results. The result is the sum of the products of the two groups.
+To get the answer, we just multiply the numbers on the left side of the equation by the number on the right side of the expression. So for example, if we take the product of 4 apples and divide it by 2, we get 3. And we see that our answer is 3.
+Next, let's find the value of x which gives us the total number. This is called the formula for finding the area between a curve and a
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 382, 1509, 1278, 15255, 22089, 1289, 783, 1348]
+first_step_topk_probs=[0.46523433923721313, 0.07397840917110443, 0.05137697979807854, 0.043945059180259705, 0.04171481356024742, 0.03568056970834732, 0.03568056970834732, 0.03568056970834732, 0.03386978432536125, 0.024779662489891052]
+first_step_topk_text=[' I', ' What', ' The', ' You', ' If', ' Thanks', ' Thank', ' We', ' This', ' How']
+
+[New tokens 10] count=256 first30=[2575, 330, 4083, 34, 202, 8104, 6804, 353, 272, 360, 44, 5, 339, 2089, 12, 330, 269, 2000, 885, 299, 5546, 287, 1780, 415, 3083, 298, 330, 1431, 885, 289]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is stress?
+Assistant (or "I" for short) is the term used to describe an individual's condition and is often used in a variety of ways, including as a response to stressful situations or by acknowledging that they are experiencing stress. Stress can be caused by many different factors, such as physical illness, work environment, family, social support, and stressors. If you're having stress, it's important to talk with your health care provider about how to manage this type of stress.
+How do I know if my child has stress?
+Your child's doctor will usually answer your questions about what kind of stress you're dealing with. He may also ask you about any medications you take, like blood pressure medication, and whether or not your child has been diagnosed with chronic stress disorder. Your doctor also may give you information on what medications to use, when to try them, and how to use them appropriately.
+What are some things you should do before starting treatment?
+- Don't smoke, drink alcohol, or eat fatty foods.
+- Do not smoke while you're pregnant.
+- Eat healthy food and drinks that contain sugar and salt.
+- Avoid caffeine, nicotine, and other stimulants.
+- Use alcohol only
+
+================================================================================
