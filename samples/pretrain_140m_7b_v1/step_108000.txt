@@ -1,0 +1,297 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 3609, 2446, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.8965327143669128, 0.05975189059972763, 0.04371541365981102, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' asked', ' came', '', '#', '', '"', '!', '', '']
+
+[New tokens 1] count=153 first30=[2827, 5273, 2857, 299, 269, 3843, 17, 776, 2977, 263, 2023, 3197, 374, 7336, 288, 4749, 298, 7106, 17, 5273, 3766, 299, 15935, 383, 649, 406, 23140, 656, 269, 3197]
+[Full output 1]
+Once upon a time, a curious child named Jack went to the park. He saw a big tree with lots of leaves and flowers. Jack wanted to climb it so he climbed up the tree. As he got closer, he could see that the leaves were all wet! Suddenly, Jack heard a loud noise coming from behind him. It was a bird who had been flying high in the sky. Jack looked around and saw a little girl standing by the tree. She said hello and asked Jack if she wanted to play with her. Jack smiled and said yes. They played together for a while until it was time to go home. Jack thanked the little girl for being such a good friend. From then on, Jack made sure to always be careful when climbing trees and never let anyone fall off again.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=131 first30=[269, 9556, 288, 269, 4772, 288, 4945, 31218, 17, 698, 418, 6214, 289, 925, 2917, 419, 269, 3163, 3671, 288, 269, 4772, 15, 3895, 11793, 16, 37, 2296, 363, 72]
+[Full output 2]
+Paris is the capital of the province of the Republic of Senegal. It was founded in 1821 by the former President of the Republic, General Jean-Baptiste Sobibor.
+The city has a population of about 400 inhabitants and a historical town hall is located on the left bank of the River Pékla. The town hall houses the oldest surviving church in Senegambia, built in 1762, which was dedicated to Saint Francis of Assisi. The church was destroyed during World War II but rebuilt after the war, which took place in the former city center. The museum is open daily except for an hourly special event every Saturday.
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 14274, 269, 3892, 288, 269, 4409, 17, 382, 8639, 288, 287, 28071, 330, 3821, 359, 269, 993, 288, 22542, 4672, 7527, 289, 269, 4409, 1926, 17]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that determines the direction of the vector. The dimension of an eigenvalue is defined as the number of linearly independent vectors in the vector space.
+For example, consider two vectors x and y. They are said to be orthogonal if their dot product equals zero:
+The characteristic polynomial of a square matrix A is given by the characteristic polynomial p(x) = ax^2 + bx + c. It can also be written as p(x), which is a square matrix with one column vector containing only one row and one column vector with one nonzero entry.
+An important property of matrices is that they have no zeroes or zeros. For instance, all real numbers are zero. In other words, if we take any two real numbers (a,b) and multiply them together, then there will always be some nonzero element called the identity element of the matrix.
+A linear transformation between two matrices is a function that preserves the structure of the original system. That is, for any two matrices A and B, their linear transformations are also invertible. This means that the corresponding eigenvalues of A and B are exactly the same for both matrices.
+Consider the following table of eigenvalues and eigenvectors:
+|Vectors||IoU||Sin[i
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[5546, 817, 483, 1420, 9845, 491, 1085, 14071, 5663, 395]
+first_step_topk_probs=[0.20468193292617798, 0.20468193292617798, 0.08895434439182281, 0.08895434439182281, 0.08015459030866623, 0.08015459030866623, 0.06508038192987442, 0.04072626307606697, 0.025485845282673836, 0.022964654490351677]
+first_step_topk_text=[' describe', ' use', ' can', ' allow', ' rely', ' have', ' model', ' incorporate', ' involve', ' are']
+
+[New tokens 4] count=256 first30=[14071, 14457, 2673, 1444, 5276, 17, 382, 14457, 2673, 1085, 330, 9638, 419, 269, 1759, 3445, 29, 202, 16, 698, 578, 263, 3790, 76, 16, 29592, 8466, 15, 536, 3747]
+[Full output 4]
+Neural networks are a class of machine learning models that incorporate neural network design principles. The neural network model is characterized by the following properties:
+- It has a priori-independent architecture, which allows for real-time learning and computation in both input and output channels.
+- It is implemented as a non-linear model with the goal of optimizing the model's performance.
+- Its time complexity is bounded above and below the predefined number of training epochs.
+The neural network model can be thought of as a generalized linear regression model where the mean of all data points is used to predict the response variable. This model has the potential to provide valuable insights into the nature of the underlying problem at hand. However, it is not possible to generalize this model without additional computational resources, such as information about the response variable or the response of the model itself. Instead, one should consider using different algorithms for different tasks (e.g., neural network modeling). In particular, the neural network model has been developed specifically for dealing with complex problems involving nonlinear systems, such as those that involve nonlinear systems. This article discusses the specific features of the neural network models described here.
+A neural network model may be considered an "ideal" model if it does not contain any other elements (or components) that are required to
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=225 first30=[263, 647, 286, 3, 711, 4750, 2062, 263, 689, 715, 418, 263, 1809, 3510, 2827, 11183, 17, 1530, 6446, 299, 1143, 3099, 298, 4196, 719, 4241, 17, 2050, 1266, 1024]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+Once upon a time there was a little girl named Jane. She loved to play outside and explore new places. One day she went for a walk in the park with her mom. As they walked, Jane saw something very special - it was a big box of snacks! She opened the box and found lots of yummy snacks inside. But when she opened the box, she noticed that some of them were all gone! Jane asked her mom if she could find one. Her mom said yes, so Jane started searching for more snacks. Eventually, she came across a small box full of treats. She opened it carefully and found a whole bunch of different kinds of treats. Jane smiled and said "I found these treats!" Then she put them into the box and began to eat them. The treat was delicious! After eating the treats, Jane's mom said "Let's go home now." Jane smiled and waved goodbye as she left. She had learned an important lesson about sharing and being kind. From then on, whenever she went for walks in the park, she would always remember this special moment.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 494, 11, 81, 12, 202, 202, 6, 11101, 299, 6519, 269, 1677, 288, 795, 9044, 15, 1249, 17, 72, 1155, 202, 6, 353, 20, 647, 354, 18, 21, 12]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return int(n)
+
+# Function to compute the product of two integers, i.e.,
+# (1 + 1/2) = (1 * 2 + 3 * 4), and
+# (3 + 4) = (4 * 5 + 6).
+
+def factorize(n):
+    if n == 0 or n > 1:
+        return 0
+    else:
+        for i in range(0, n - 1):
+            if n % i != 0:
+                return i
+        return None
+
+def main():
+    # Init functions
+    print("Starting functions")
+
+    x = np.array([[-5, 5], [7, 7]])
+    y = np.random.rand(len(x))
+    x_prime = np.zeros((len(x), len(y)))
+    x_largest = np.ones((len(y), len(x)))
+    for i in xrange(len(xx)):
+        x_prime[i] += 1
+        if x_prime == xx[i]:
+            break
+        elif x_prime < xx[i+1]:
+            break
+    print("Number of prime numbers:", x_prime)
+    print("Perfect number:", x_largest)
+    print()
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.6026851534843445, 0.39731481671333313, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=47 first30=[622, 354, 17, 19, 647, 353, 20, 552, 311, 12, 864, 8049, 11, 81, 12, 711, 202, 6, 1083, 11, 73, 5, 41, 554, 4564, 81, 2817, 333, 836, 6137]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1 - n) * fib(n)
+
+
+# print(f"Fib({n}) = {function.fun()}")
+print(f"Function {function.func()}")
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 2590, 382, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.518977165222168, 0.2777884900569916, 0.20323437452316284, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' No', ' The', '', '#', '', '"', '!', '', '']
+
+[New tokens 8] count=256 first30=[2590, 17, 1541, 330, 808, 3641, 2833, 299, 1447, 482, 2810, 17, 1783, 15, 490, 263, 3191, 330, 263, 2645, 3191, 15, 383, 1298, 342, 2645, 289, 1663, 339, 269]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: No. There is no scientific evidence to support this claim. However, if a cat is a black cat, it must be black in order for the cat to be black. If there is any reason why an animal cannot be black, then it is not black. The only way to prove this is to prove that a cat is black. For example, a cat that has been bred with black cats may have been bred with white cats. A cat that is black should be treated as a black cat. In the case of a black cat or a black cat being born with black hair, then the cat will not be black because the hair on the body is black. Therefore, it is not possible to prove that an animal can be black or black.
+This argument was first proposed by Carl Jung in his book, "The Theory of the Origin of Species." Jung's theory is based on the idea that there is an evolutionary process that takes place when two species are related genetically. This means that one of the two species will get a particular color from another person, and the other will get a different color from the other person. This is how Jung developed his theory of evolution.
+For instance, if you take a bird, say a black bird, and
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 2050, 798, 2590, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.815574049949646, 0.07429608702659607, 0.07429608702659607, 0.035833824425935745, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' One', ' 4', ' No', '', '', '!', '"', '', '']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 202, 20, 13032, 333, 843, 10941, 202, 21, 10941, 333, 409, 10941, 202, 22, 10941, 333, 409, 24847, 202, 23, 10941, 333, 354, 11554, 202]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+1 apple = 5 apples
+2 apples = 2 apples
+3 apples = 2 oranges
+4 apples = 1 orange
+5 apples = 2 carrots
+6 apples = 2 grapes
+7 apples = 2 potatoes
+8 apples = 2 bananas
+9 apples = 2 eggs
+10 apples = 2 corn
+11 apples = 2 peas
+12 apples = 2 tomatoes
+13 apples = 2 beans
+14 apples = 2 cherries
+15 apples = 2 cucumbers
+16 apples = 2 cups of fruit
+17 apples = 2 milk
+18 apples = 2 yogurt
+19 apples = 2 nuts
+20 apples = 2 fish
+21 apples = 2 marbles
+22 apples = 2 coins
+23 apples = 2 boxes
+24 apples = 2 blocks
+25 apples = 2 small toys
+26 apples = 2 toys
+27 apples = 2 friends
+28 apples = 2 pets
+29 apples = 2 birds
+30 apples = 2 balls
+31 apples = 2 pies
+32 apples = 2 grains
+33 apples = 2 slices
+34 apples = 2 pieces
+35 apples = 2 sticks
+36 apples = 2 pins
+37 apples = 2 bags
+38 apples = 2 dishes
+39 apples = 2 bottles
+40 apples = 2 drinks
+41 apples
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 15255, 22089, 3919, 1803, 382, 1509, 1278, 783]
+first_step_topk_probs=[0.6365648508071899, 0.09350933879613876, 0.042811695486307144, 0.03299626335501671, 0.025431228801608086, 0.016765302047133446, 0.01591445691883564, 0.014340123161673546, 0.0136123551055789, 0.011643263511359692]
+first_step_topk_text=[' I', ' What', ' Thanks', ' Thank', ' My', ' When', ' The', ' You', ' If', ' This']
+
+[New tokens 10] count=256 first30=[2575, 330, 263, 360, 309, 604, 5, 388, 4083, 34, 202, 7681, 17, 440, 1370, 9307, 29, 25799, 483, 342, 3821, 359, 263, 5284, 288, 2963, 15, 8510, 298, 5425]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is a "stress" or stress?
+Dr. Lohmann: Stress can be defined as a combination of physical, emotional and mental stresses that may occur at any time during your life. If you have a job, work, home, school, workplace, family, social group, family environment, or a general public, you are likely to feel stressed. You may feel anxious, depressed, angry, frustrated, anxious, sad, upset, sad, overwhelmed, scared, etc. Stressful situations include things like:
+- Work or school activities (i.e., work, living)
+- Work (or school) activities (i . . . )
+- Physical activity (i. e. ;)
+- Repeated work (i. i. e. ).
+If you have a situation that makes you stressed, it's important to recognize the stressors in your life. Some people find stress a normal part of their lives because they experience the stress of being stressed. However, if you are feeling stressed, you may not be able to cope with the stress of having a stressful day. But if you have a stressful day, you might feel less stressed than when you were born. For example, if you have been through college,
+
+================================================================================

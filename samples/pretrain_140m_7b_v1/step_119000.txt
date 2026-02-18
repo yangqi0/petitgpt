@@ -1,0 +1,303 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 2857, 1255, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.7723761796951294, 0.13145172595977783, 0.09617213904857635, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' went', ' called', '', '#', '', '"', '!', '', '']
+
+[New tokens 1] count=142 first30=[2827, 5273, 2857, 299, 269, 3843, 17, 776, 2977, 263, 2023, 3197, 374, 7336, 288, 4749, 17, 5273, 3766, 299, 15935, 383, 298, 1137, 922, 418, 351, 1644, 17, 14918]
+[Full output 1]
+Once upon a time, a curious child named Jack went to the park. He saw a big tree with lots of leaves. Jack wanted to climb it and see what was on top. Suddenly, he heard a voice from behind him. "What are you doing?" It was a little girl who had come to visit. She said, "I'm climbing this tree." Jack thought for a moment and then said, "That's okay, I'll help you. Let's go together!" So they climbed down the tree and started to climb. They were both very happy and excited. After some time, they reached the top of the tree. The sun was shining and the birds were singing. Jack felt so proud that he could do anything!
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 7581, 12199, 15, 298, 330, 12092, 351, 269, 3232, 4069, 288, 2357, 3996, 17, 698, 6151, 435, 287, 13718, 288, 1186, 5452, 13787, 353, 1356, 19868]
+[Full output 2]
+Paris is the capital of the province of the Eastern Cape, and is situated on the west coast of South Africa. It lies at an elevation of 7500 metres (20 000 ft).
+The region has a rich and fertile soil, with some of the most productive soils in the world. The highlands are covered by forests, and the land is used for agriculture. The area is also one of the most important centres of the Kingdom of the Netherlands, and is home to a large number of the inhabitants of the country.
+This area has been inhabited since ancient times, but the earliest settlements date back to around 1500 BC.
+The region's history has been shaped by colonial settlement. A colony was established in 1775, and the first settlers arrived in 1817. The first school was founded in 1850, and the population grew rapidly until the early 20th century. In 1950, the area became part of the South African National Union (SANU) and the Southern African Development Community (SADC), which became the South African Labour Party (SACP).
+During the 1960s, the region experienced a sharp decline due to the introduction of new technologies such as electricity and steam power. However, the SAS government continued to operate and the region remained relatively unpopulated.
+
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 20745, 14274, 269, 3892, 288, 263, 4409, 17, 1220, 1373, 15, 490, 411, 491, 795, 7527, 744, 88, 7, 298, 744, 89, 2729, 553, 28069, 395]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that uniquely determines the direction of a vector. For example, if we have two vectors $u$ and $v$, their eigenvectors are given by:
+
+$$A = \begin{bmatrix} u\_1 & v\_2 \\ v\_3 & v\_4 \end{bmatrix}$$
+
+where $A$ is a matrix containing the entries of the system. The term "eigenvalue" refers to the maximum number of linearly independent solutions for the system. A positive eigenvalue indicates that the system has no solutions; thus, it may not be possible to find all possible solutions through this method.
+
+Now let's consider the given system of equations:
+
+$$\begin{cases}
+\frac{\partial u}{\partial x} &= -\frac{\partial v}{\partial x}\,\left(\frac{\partial x}{x}+\frac{\partial y}{y}\right) - \frac{\partial z}{\partial x}+ \frac{\cos(x)}{x}\,\left[\frac{\sin(x)}{(x+y)}+\frac{\cos^2(x)+\cos^2 (x-y)\cdot\cos(x)-\cos^3(x+x)}\right]\\
+&= -\
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 817, 491, 1085, 1420, 5546, 3235, 1991, 395, 14071]
+first_step_topk_probs=[0.4642080068588257, 0.11984098702669144, 0.07900409400463104, 0.0641462579369545, 0.0641462579369545, 0.046930402517318726, 0.030938448384404182, 0.029368292540311813, 0.02581200748682022, 0.022635051980614662]
+first_step_topk_text=[' can', ' use', ' have', ' model', ' allow', ' describe', ' predict', ' provide', ' are', ' incorporate']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 4410, 17, 338, 14457, 2673, 330, 263, 3655, 288, 12473, 357, 8646, 374, 1010, 613, 15, 298, 1000, 4591, 553, 3286, 1728, 351]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data sets. A neural network is a collection of neurons that interact with each other, and then adapt their behavior based on the input signal received from the input neuron. The brain has many different types of neural networks, but most of them have simple, parallel neural networks.
+A neural network is an artificial neural network that uses information from the environment to make decisions about how to best use the information it receives. For example, if you want to learn how to drive your car, you might have a neural network that can tell you which way to go for a certain amount of time, such as when you're driving or driving in a city. If you think about what you're doing now, you'll probably notice that there's a lot of information available, so you may not need to worry much about where to start. But if you're planning to take a trip around the world, you may be able to use some of these new neural networks to figure out how to do things like driving home, or even building a house.
+In this article we will discuss some of the basic concepts of neural networks and how they work together to understand the neural network. We will also look at some of the more common problems faced by people who are working
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=126 first30=[263, 647, 286, 17, 595, 551, 202, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 655, 3715, 555, 1499, 29, 331, 444, 9879, 86, 1072, 17, 3506, 86]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+if __name__ == '__main__':
+    import sys
+
+    try:
+        from libspy.libspy_file import read_python
+
+        print("Starting Python module")
+        import sys
+        import subprocess
+        print("Running python command line")
+        import platform
+
+        if platform.system() == "Darwin":
+            print("Error: Python module is not installed.")
+
+            sys.exit(1)
+
+        elif platform.system():
+            print("Python module is not available.")
+            sys.exit(-1)
+
+        else:
+            print("The system library has been installed.")
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=47 first30=[622, 1701, 2619, 91, 62, 76, 64, 864, 353, 69, 396, 647, 276, 12, 339, 1249, 15, 286, 396, 289, 6338, 11, 14510, 11, 2862, 11, 20, 15, 311, 14]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return sum((x[i] * (bac + c) for i, bac in enumerate(sorted(range(1, n+1))))))
+
+
+if __name__ == '__main__':
+    main()
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 339, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.6746222376823425, 0.32537776231765747, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' for', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=248 first30=[622, 1701, 2067, 73, 11, 91, 12, 339, 892, 289, 311, 1122, 711, 202, 6, 22018, 269, 1392, 374, 263, 8695, 1392, 202, 856, 8049, 66, 5496, 11, 81, 15]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return sum([f(x) for x in n])
+
+
+# Initialize the function with a Python function
+def fib_func(n, f, t):
+    if f == '0':
+        return fib(n - 1)
+    elif f == '1':
+        return Fib(n - 2) + fib(n) * fib(n + 3)  # TODO: this should be the same as fib()
+
+    # Check whether the function is valid and check if it's not.
+    try:
+        # Check if the function is an invalid number.
+        if f == '_' or f == 'a':
+            return fib(0)
+        else:
+            raise ValueError('Invalid function')
+
+    except (TypeError, TypeError):
+        print("Fail to parse function string")
+        pass
+
+
+# Check if the functions are not valid and check whether they're valid.
+def fib():
+    # Check if function is valid.
+    try :
+        # Check whether function is valid, check if it is.
+        if fib() != 0:
+            return fib()
+        else:
+                raise ValueError('Function not valid.')
+
+    except (ValueError, TypeError):
+
+        print("Failing function")
+        pass
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 1541, 2590, 1278, 698, 535, 338, 1289, 0]
+first_step_topk_probs=[0.3282133638858795, 0.20539069175720215, 0.17567996680736542, 0.1667640507221222, 0.03682451695203781, 0.026941394433379173, 0.020764542743563652, 0.01971074566245079, 0.01971074566245079, 0.0]
+first_step_topk_text=[' The', ' Yes', ' There', ' No', ' If', ' It', ' In', ' A', ' We', '']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 808, 17, 202, 509, 3533, 330, 808, 15, 614, 269, 2395, 3594, 1369, 339, 751, 689, 17, 2660, 288, 269, 10676, 491, 733, 8511, 299, 7566, 263]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is no.
+The answer is no, but the question remains open for some time. Some of the cats have been trained to recognize a black spot on their hind legs, which they believe may be a sign of an animal that has eaten a food source or something else. For example, a cat with a black spot in its tail will often eat a piece of meat or other food while standing, but not if it eats anything other than a red or green one. This is because the cat's tail is not a good indicator of whether the cat is eating a food source, or not.
+What about the person who eats a red or brown dog? Does he have a black spot? If so, what would you do?
+Answer by Dr. Fred
+A cat is a little like a dog, except that the cat is black and can't see anything. But when it gets a white spot, it has a black face, a white nose, and a black body. It also has a black eye. When it gets a black eye, it has no color, and when it gets another white spot, the eye is white. That means the cat is not a black dog; it just has a white eye.
+How do you know that your
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 2050, 798, 843, 1012, 409, 776, 637, 0, 1]
+first_step_topk_probs=[0.3451017737388611, 0.22750502824783325, 0.1664462387561798, 0.13514378666877747, 0.03871934115886688, 0.031580325216054916, 0.031437624245882034, 0.024065887555480003, 0.0, 0.0]
+first_step_topk_text=[' 1', ' One', ' 4', ' 5', ' 6', ' 2', ' He', ' 3', '', '']
+
+[New tokens 9] count=256 first30=[2050, 13032, 7670, 619, 934, 667, 795, 17, 202, 2474, 486, 586, 299, 1016, 545, 269, 10941, 15, 486, 791, 1137, 357, 715, 395, 843, 10941, 1879, 17, 2069, 798]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple plus one buys two.
+If you were to count all the apples, you would see that there are 5 apples left. So 4 apples equals 5 apples.
+But what if we counted all the apples again? What if we counted them first? What if they were added together? What if each apple was a different number of apples? We can add the numbers 1 through 6 to get the total number of apples.
+So there is only one way to count all those apples.
+Let's say that we had 5 apples and we could count them by adding the number of apples from 1 to 6. How many times did we count the apples? Well it turns out that we're counting the apples because we're counting apples.
+And so on...
+This is a very interesting question! If we count the whole number of apples, then how many apples do we actually have? And if we count the number of oranges, then how much?
+We know that the number of orange juice is equal to the number of red juice. But what about the number of green juice? The number of green milk is equal to 1/2 times the number of blue juice. So the number of yellow juice is equal 4 times the number for red juice.
+
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2766, 1289, 382, 27614, 783, 15255, 2575, 3919, 408]
+first_step_topk_probs=[0.4198475182056427, 0.07876207679510117, 0.07097052782773972, 0.07097052782773972, 0.0673687681555748, 0.03249267116189003, 0.02198564074933529, 0.018321918323636055, 0.0169450044631958, 0.015671567991375923]
+first_step_topk_text=[' I', ' Dr', ' We', ' The', ' Hi', ' This', ' Thanks', ' What', ' My', ' N']
+
+[New tokens 10] count=256 first30=[2575, 395, 486, 6968, 1244, 34, 202, 45, 1976, 10961, 29, 5531, 15, 356, 1755, 847, 1118, 17, 1358, 383, 415, 1114, 1384, 299, 835, 751, 3035, 3759, 298, 835]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What are you feeling now?
+Jennifer: Well, I don't know. But it's very important to get some medical attention and get a good night's sleep so that we can go back into the evening. We'll be able to talk about what happened in the past, what did happen when the sun came up and how do you think it will affect us again tomorrow. And I guess we'll have to find out the reason why. It may not be right or wrong but it might be something that we're going to do more than just look at the sky.
+Assisted: Is there anything you would like to learn from this experience?
+Jen: Yes, yes. That's what we're looking for.
+Assistance: Do you feel better after you've finished your work?
+Jenna: Thank you.
+Assignment: How much time do you spend on the phone?
+Joe: You spend all day doing things like getting dressed, reading, playing video games, watching TV. If you don't, you won't be able to do anything else.
+Assigned: What is your job?
+Jeannine: I was thinking of you.
+Hearing: What is it that you're hearing?
+
+================================================================================

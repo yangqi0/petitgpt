@@ -1,0 +1,306 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=138 first30=[2827, 5273, 2857, 299, 269, 3843, 17, 776, 2977, 263, 2023, 3197, 298, 3766, 299, 15935, 383, 17, 1358, 722, 406, 3500, 6310, 15, 406, 5052, 263, 10603, 6387, 4834]
+[Full output 1]
+Once upon a time, a curious child named Jack went to the park. He saw a big tree and wanted to climb it. But when he got closer, he heard a loud noise coming from the tree. It was a dog! The dog was barking and running towards him. Jack stopped and looked at his mom. She said, "Oh no, what a scary dog!" Jack's mom hugged her and said, "Don't worry, Jack. We can get you back down on your feet." They took Jack to the vet and gave him some medicine. Jack was happy again and thanked the dog for being so nice. From that day on, Jack always remembered to be careful with his things in the park.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 263, 4455, 336, 7362, 7093, 7014, 2, 1, 0]
+first_step_topk_probs=[0.8894381523132324, 0.05198296159505844, 0.014893367886543274, 0.013420051895081997, 0.012738971970975399, 0.010343238711357117, 0.0071832360699772835, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' a', ' France', ' S', ' Spain', ' Italy', ' Ireland', '', '', '']
+
+[New tokens 2] count=217 first30=[269, 9556, 288, 269, 4772, 288, 4945, 31218, 17, 202, 509, 2868, 330, 3323, 289, 269, 2415, 288, 269, 2027, 15, 298, 686, 2073, 330, 5213, 299, 342, 1378, 409]
+[Full output 2]
+Paris is the capital of the province of the Republic of Senegal.
+The town is located in the heart of the country, and its population is estimated to be around 2 million people. It has a long history of colonial rule, as well as a very rich cultural heritage that includes art, music, and dance. The town was founded by the Portuguese in 1524, when they conquered the area from the French in 1759.
+After independence, the town became part of the Kingdom of the Congo (now Zaire). After independence, it was known as the "Congo District". In the 19th century, the town's name was changed to Côte d'Ivoire, and today it is called the "Cape Town", or simply Côte Défensee.
+The village is surrounded by a series of small villages which are scattered along the riverbank. They are:
+- Gomba - The Village of the Gomba
+- Fondo - The Village
+- Ville de Gomba – The Village of Gomba
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 357, 483, 342, 6031, 359, 263, 1701, 288, 795, 7527, 17, 783, 1818, 357, 490, 486, 491, 263, 4409, 289, 269, 2281, 6603, 353, 5165, 415, 1100, 263]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar that can be expressed as a sum of two vectors. This means that if you have a vector in the complex plane (that's just a fancy name for a square), then it has both a magnitude and direction equal to zero.
+
+Now let's consider the example provided earlier:
+
+$$\begin{align*}
+\frac{\partial^2}{\partial x} &= \frac{\partial^{x}}{x}\\[6pt]
+&= \frac{1}{3}\left[2\sin(x)\right]\\[6pt\]
+&=\frac{1}{(3-4)^2}=\boxed{0}$$
+
+Our goal now is to find the value of $r$ so that we can express this equation as a linear combination of the original equation with respect to $\theta$. To do this, we need to take the derivative of the sine function at the point $(3-4) = 0$, which is given by $$d/dx$$ = 3\cos(x)$$ where $d/dx$ represents the rate of change of the cosine function at that particular location. Since the cosine function has no negative values, its derivative will be undefined. Therefore, we cannot directly apply the derivative formula here; instead, we
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 491, 1420, 817, 1991, 1085, 14071, 395, 1005, 9845]
+first_step_topk_probs=[0.17948803305625916, 0.16173230111598969, 0.10662047564983368, 0.09607302397489548, 0.07800520211458206, 0.05706982687115669, 0.04398543760180473, 0.03254684805870056, 0.02612847089767456, 0.024802451953291893]
+first_step_topk_text=[' can', ' have', ' allow', ' use', ' provide', ' model', ' incorporate', ' are', ' help', ' rely']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 4410, 17, 202, 2303, 1373, 15, 1936, 269, 2673, 288, 12473, 289, 669, 2613, 17, 4449, 25284, 578, 263, 2226, 2780, 383, 2768]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data sets.
+For example, consider the network of neurons in your brain. Each neuron has a specific job it needs to perform a certain task. It's important to remember that the neural network is not just a collection of neurons but also a collection of neural networks. This means that the network must be able to process all the information at once and then use it for its own purpose.
+The other part of the network is called the "brain" (or "network"). In this case, the brain is a network. The brain is a large network which contains many nerve cells and which helps to make decisions about how to act on them. These nerve cells have their own functions and may be involved in some things like movement or communication. For example, they might be involved in certain kinds of games such as chess or baseball.
+Another important aspect of the brain is that it consists of many layers. A layer is an area of information that makes up the whole thing. For example:
+- The layer on the left side of the brain (the cortex) is the part of the brain that controls emotion, thought, memory, and judgment.
+- The right hemisphere of the brain has an area called the medial prefrontal cortex
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=55 first30=[263, 647, 286, 17, 595, 551, 202, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 655, 3715, 555, 1499, 29, 331, 444, 7298, 655, 3770, 346, 1722, 21017]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+if __name__ == '__main__':
+    import sys
+
+    try:
+        from typing import Union
+    except ImportError:
+        print('Error in python: %s' % sys.version_info)
+        print('import unittest')
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=92 first30=[622, 354, 490, 311, 861, 643, 1107, 354, 711, 202, 856, 1271, 1714, 346, 284, 333, 1369, 717, 2178, 17, 5155, 561, 446, 85, 802, 555, 1968, 66, 1253, 333]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return 1 if n == 0 else 1
+
+
+def main():
+    f = open('input.txt', 'r')
+
+    input_list = []
+    for line in f:
+        f.write(" '.join([line]) + '\n')
+
+        input_list.append(line)
+
+    print(f)
+
+    print("\n")
+
+    print(input_list)
+
+    print('\n')
+
+    print(len(input_string))
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1083, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8670356273651123, 0.1329643428325653, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' print', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=72 first30=[622, 354, 17, 19, 647, 353, 20, 552, 311, 12, 864, 353, 81, 552, 354, 12, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 537, 1083, 11]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1 - n) * (n - 1)
+
+
+if __name__ == '__main__':
+    # print(f"function {math.fam} is called")
+
+    # print(fun(x))
+    # print("Function: " + str(f"lambda x = {fun(x)}"))
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 1541, 2590, 3126, 1906, 1289, 338, 698, 1238]
+first_step_topk_probs=[0.27825117111206055, 0.27825117111206055, 0.1342034935951233, 0.07183394581079483, 0.06144283339381218, 0.04050559923052788, 0.031218912452459335, 0.028130577877163887, 0.019536295905709267, 0.019536295905709267]
+first_step_topk_text=[' Yes', ' The', ' There', ' No', ' Not', ' All', ' We', ' A', ' It', ' As']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 12052, 17, 202, 43, 1477, 4, 2590, 15, 486, 2625, 1721, 357, 10676, 395, 2645, 17, 1109, 395, 453, 2645, 17, 1109, 2915, 289, 269, 1134, 6777]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+Hats! No, you cannot say that cats are black. They are not black. They live in the same habitat as cats and dogs.
+You know, cats do have a coat for protection from humans. If you see a cat or dog with a coat, it is because they are warm-blooded. So, if you see a dog that has a coat, you can assume that it is a cat. But if you see an animal that is cold-blooded, you can infer that it is not a cat.
+So, even though cats are warm-hearted creatures, they are not black either. That's why cats are black, which means they are not gray.
+Now, what about cats? Is there any difference between them and humans? How does this affect the way cats behave?
+Answer : We can't tell by looking at cats. Cats don't interact with people, so cats are not black, and cats are not brown.
+But, how does cats interact with humans? How do cats interact with dogs?
+Answer - The answer to this question is no. It depends on your age, your height, and whether you're a cat or a dog. In general, cats have a
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 798, 382, 2050, 409, 1012, 843, 2, 1, 0]
+first_step_topk_probs=[0.6531438231468201, 0.10016293823719025, 0.0902542993426323, 0.06603145599365234, 0.05054789409041405, 0.019929783418774605, 0.019929783418774605, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' 4', ' The', ' One', ' 2', ' 6', ' 5', '', '', '']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 202, 20, 13032, 333, 637, 10941, 202, 21, 10941, 333, 409, 10941, 202, 22, 10941, 333, 409, 24847, 202, 23, 10941, 333, 354, 11554, 202]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+1 apple = 3 apples
+2 apples = 2 apples
+3 apples = 2 oranges
+4 apples = 1 orange
+5 apples = 1 lemon
+6 apples = 1 apple
+7 apples = 1 grape
+8 apples = 1 cherry
+9 apples = 1 pear
+10 apples = 1 banana
+12 apples = 1 tomato
+13 apples = 1 egg
+14 apples = 1 potato
+15 apples = 1 squash
+16 apples = 1 strawberry
+17 apples = 1 green bean
+18 apples = 1 peanut
+19 apples = 1 crabapple
+20 apples = 1 papa
+21 apples = 1 red pepper
+22 apples = 1 chocolate chip
+23 apples = 1 walnut
+24 apples = 1 white pepper
+25 apples = 1 small peach
+26 apples = 1 sweet potato
+27 apples = 1 big peach
+28 apples = 1 brown sugar
+29 apples = 1 yellow peach
+30 apples = 1 black pepper
+31 apples = 1 cup
+33 apples = 1 purple peach
+34 apples = 1 gingerbread
+35 apples = 1 clover
+36 apples = 1 muffin
+37 apples = 1 raisins
+38 apples = 1 jelly
+39 apples = 1 mint
+40
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 1509, 2575, 382, 1803, 22089, 1348, 2, 1, 0]
+first_step_topk_probs=[0.7665455341339111, 0.06628595292568207, 0.06292194128036499, 0.03937555104494095, 0.024640589952468872, 0.02220301330089569, 0.01802743971347809, 0.0, 0.0, 0.0]
+first_step_topk_text=[' I', ' You', ' What', ' The', ' When', ' Thank', ' How', '', '', '']
+
+[New tokens 10] count=256 first30=[2575, 330, 4083, 34, 202, 8104, 6804, 353, 55, 464, 698, 415, 2821, 299, 2505, 18029, 490, 486, 491, 263, 3313, 288, 4083, 289, 669, 1328, 15, 2665, 490, 383]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is stress?
+Assistant (T): It's normal to feel stressed if you have a lot of stress in your life, especially if it's caused by something else or if it's just too much. If stress is not controlled with medication, you may be able to cope with the stress. For example, if you're having a hard time sleeping, you might find that your body has trouble getting enough sleep. You could also develop depression.
+Assertive (T): That's not true for stress management. Stress can cause symptoms such as feelings of being stressed, anxiety, and restlessness. But you can help yourself by making changes in your daily routine. For example: You can do things like brushing teeth, changing clothes, or eating more than usual. These changes can make you feel better about yourself.
+Asset (T): So what are some things you can do to keep yourself healthy?
+Asserted (T): There are many things you can try to take care of yourself. If you do things that don't work well, you can start taking care of yourself again. This will help you stay strong and make you less stressed out.
+Asserts (T): Do you need to change activities at school or work?
+
+
+================================================================================

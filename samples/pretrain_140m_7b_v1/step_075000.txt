@@ -1,0 +1,236 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=141 first30=[2827, 5273, 418, 4438, 289, 269, 3843, 17, 776, 2977, 2009, 357, 1164, 1169, 1418, 299, 631, 351, 287, 13555, 17, 698, 418, 263, 2023, 9337, 4, 5273, 10225, 656]
+[Full output 1]
+Once upon a time, a curious child named Jack was playing in the park. He saw something that made him want to go on an adventure. It was a big truck! Jack picked up the truck and drove away. He wanted to go back home but he didn't know how to get back. Suddenly, he heard a voice say, "I will take you back!" It said, "Don't worry, Jack. I will help you find your way." Jack ran down the street and found his dad. He was very excited and gave him a big hug. Jack was so happy to have such a great friend like himself. They played together every day for hours and hours. Jack never forgot about the terrible things he had done.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 263, 7093, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.81580650806427, 0.12426099926233292, 0.059932395815849304, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' a', ' Italy', '', '#', '', '"', '!', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 7535, 281, 8191, 17, 698, 6151, 289, 269, 3446, 16, 10011, 645, 288, 269, 2027, 15, 298, 6151, 351, 269, 3246, 2071, 288, 269, 3345, 437, 862]
+[Full output 2]
+Paris is the capital of the province of Catalonia. It lies in the south-western part of the country, and lies on the north side of the River Eupatoria.
+The town has a population (2005) of 655,895 people. The town's name means "Lady of the Sun".
+Apart from its commercial centre, the town also has a number of railway stations: the first railway station was opened in 1826; the present station was built in 1870; the second station was opened by the General Electric Company in 1902; the third station was opened on 16 June 1929; the fourth station was opened 26 August 1936; the fifth station was opened 17 April 1935; the sixth station was opened 25 July 1938; the fourth was opened 22 October 1957; the seventh station was opened 29 December 1959; the tenth station was opened 20 January 1961; the eighth station was opened 30 March 1963; the ninth station was opened 31 May 1964; the twelfth station was opened 27 February 1965; the eleventh station was opened 28 September 1966; the elighth was opened 19 November 1967; the elth was opened 21 January 1972; the elteenth station was opened 1 January 1974; the elthan was opened 2 January 1975; the elor was opened 5 March
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 6058, 500, 806, 1264, 269, 4409, 288, 287, 28071, 483, 342, 15043, 419, 17, 1289, 13895, 482, 4409, 359, 744, 36, 2838, 202, 202, 2774, 1427]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that tells us how much the vector of an eigenvalue can be multiplied by. We denote this vector as $A$.
+
+Now let's consider the problem at hand: finding the eigenvalues of $\mathbf{x} = \lambda x + 1$, where $\lambda$ represents the eigenvalue of the normal vector. To do so, we need to find the eigenvalues of the system. Since the normal vector is the zero vector, it has both magnitude and direction; hence, $\mathbf{u}=0$; thus, $\mathbf{\mathbf{u}}=0$. Using these definitions, we can rewrite our equation in terms of the normal vectors:
+
+$$-\frac{\mathbf{v}}{|\mathbf{w}|}=\begin{cases}\quad\text{if } w\neq 0 \\ -\frac{\mathbf{(v)}{|\mathbf{h}|}}{\mathbf{w}}\end{cases}$$
+
+Here, $\mathbf {w}$ denotes the standard basis vector for $\mathbf{w}$. Note that since $\mathbf{a}=\mathbf{1}$, then $\mathbf{b}=\mathbf{2}$. Therefore, $\mathbf{{\mathbf{e}}}(A)=\mathbf{e}^{-1}$, meaning there exists some nonzero vector $\mathbf{v}$
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 817, 491, 1420, 395, 9845, 330, 5663, 1085, 1991]
+first_step_topk_probs=[0.447946697473526, 0.09389472752809525, 0.09389472752809525, 0.05577581003308296, 0.03710424154996872, 0.03313225507736206, 0.03313225507736206, 0.028339514508843422, 0.024240074679255486, 0.018682556226849556]
+first_step_topk_text=[' can', ' use', ' have', ' allow', ' are', ' rely', ' is', ' involve', ' model', ' provide']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 14457, 8119, 17, 202, 509, 3355, 2877, 330, 357, 1010, 25284, 578, 686, 1231, 360, 11300, 5, 298, 3290, 269, 2673, 483, 342, 5454, 359]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model neural networks.
+The basic idea is that each neuron has its own "memory" and thus the network can be represented as a matrix. This means that if you want to make the network more efficient, you need to do it in a different way (for example, by using a memory board). The other important thing is that you have to know how the network works. If you want to learn more about the network, then you have to learn some basic concepts like the ability to use a memory board for a new task or a memory board.
+For instance, imagine you're trying to predict the weather on your local weather station. You could estimate the temperature at any given time based on the current day's weather. By doing this, you can predict what will happen tomorrow, but also the type of weather that will occur later. For example, suppose you wanted to find out how much rain fell over the weekend. You would need to learn how to use a computer program called SMS to solve this problem. One approach is to use an algorithm that can predict the amount of rain falling during the week. That's where SMS comes in.
+SMS can be used with many other applications, including games, education, business, and science
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=207 first30=[263, 647, 286, 3, 711, 4750, 2062, 263, 689, 715, 418, 263, 1809, 3510, 2827, 11183, 17, 1530, 6446, 299, 4196, 298, 1098, 719, 1943, 17, 2050, 1266, 1024, 998]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+Once upon a time there was a little girl named Jane. She loved to explore and find new things. One day she found a big box in her room. It was so heavy that it was very hard to carry around. Jane looked around for something to do. Suddenly, she heard a voice. "Hello!" said the voice. Jane looked up and saw a man standing next to her. He smiled at her and said, "Hi! I'm here to help you." The man opened the box and Jane opened it. Inside were lots of toys. She had so much fun playing with them all by herself. She even put some of the toys back into the box. When the boy came home, he showed his mom the toy he had brought. His mom hugged him and said, â€œYouâ€TMre welcome. We love you too.â€ Jane nodded and said goodbye. From then on, Jane and her mom would always remember the special moment when they played together.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=34 first30=[622, 354, 1246, 1107, 29, 341, 622, 354, 1246, 2237, 311, 5730, 643, 29, 341, 622, 643, 1246, 1107, 29, 331, 2120, 5410, 801, 22345, 1239, 1319, 71, 5, 1319]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return 1
+     else:
+         return 1
+     elif n <= 0:
+         return 0
+     else:
+        raise Exception("Expected value %d" % (n,))
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1083, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.811277449131012, 0.18872256577014923, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' print', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=177 first30=[622, 8049, 11, 81, 12, 1246, 202, 2318, 801, 20, 903, 202, 2318, 801, 21, 903, 202, 2318, 11, 73, 5, 22, 903, 202, 2318, 8493, 81, 23, 903, 3]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return fib(n)
+    
+print("1")
+print("2")
+print(f"3")
+print("\n4")
+
+Once upon a time, there was a little girl named Lily. She loved to play outside in the rain and pretend to be a bird. One day, she saw a big tree with many leaves on it. She wanted to climb it, but her mom said no because they couldn't get down. Lily felt sad for the tree and decided to ask her mom if she could help. Her mom gave her some juice and told her to take off her shoes. Lily climbed up the tree and sat on the branches. She felt happy and free from the tree. After playing on the swings, Lily went back inside and got out of bed. She closed her eyes and dreamed about all the fun things she would do today.
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 1541, 2590, 1289, 338, 1906, 698, 356, 0]
+first_step_topk_probs=[0.30214494466781616, 0.19918636977672577, 0.19918636977672577, 0.16172654926776886, 0.043983910232782364, 0.028995972126722336, 0.022348089143633842, 0.02121390402317047, 0.02121390402317047, 0.0]
+first_step_topk_text=[' The', ' Yes', ' There', ' No', ' We', ' A', ' All', ' It', ' I', '']
+
+[New tokens 8] count=256 first30=[1541, 330, 808, 2079, 3533, 299, 482, 2395, 17, 1358, 269, 3533, 330, 12052, 298, 383, 415, 453, 263, 2829, 619, 17, 382, 2597, 2526, 411, 620, 453, 1118, 339]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: There is no single answer to this question. But the answer is yes and it's not a simple one. The reason why we do not know for sure is because there is no clear answer. We do not know how many of these cats live in our country. Some of them have been domesticated. Others live on farms or in wooded areas. Some of those cats live in parks and parks. The reason they do not live in parks is because they live on farms. In fact, most of them live in houses where they don't have access to water. They are not allowed to drink from their homes. They just get into a car. This is not true of any other cat species. It is true of many other cats as well. Many of them live alone in the same house. All cats are brown and all are black. All cats can be seen together.
+So what does the "black" term mean? Well, it means that there is a lot of grey matter in the head of each cat. That makes them dark. So, if you look at the head of an adult, you see that there is more grey matter than there is white. And even though the black part of the head of a dog is gray, its white part is
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 9] count=94 first30=[354, 13032, 333, 798, 10941, 17, 202, 3146, 578, 637, 10941, 15, 649, 269, 2056, 993, 288, 10941, 330, 843, 17, 2069, 15, 843, 647, 1012, 333, 1604, 10941, 17]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples.
+He has 3 apples, so the total number of apples is 5. So, 5 + 6 = 12 apples.
+What is the average amount of apples you get when you eat a sandwich?
+Answer 1 apple = 1 apple.
+The average amount of fruit you get when eating a sandwich is 0.5 apples.
+You can find out how much each apple contains by taking the average of the apples in your bag.
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 22089, 1289, 783, 382, 2575, 1509, 3919, 1490, 698]
+first_step_topk_probs=[0.39152073860168457, 0.10269089043140411, 0.06426232308149338, 0.05217692628502846, 0.049528904259204865, 0.038173455744981766, 0.036236122250556946, 0.029421433806419373, 0.021525179967284203, 0.019395798444747925]
+first_step_topk_text=[' I', ' Thank', ' We', ' This', ' The', ' What', ' You', ' My', ' Is', ' It']
+
+[New tokens 10] count=256 first30=[2575, 330, 4083, 34, 202, 8104, 6804, 932, 382, 4083, 272, 330, 263, 2963, 6349, 299, 269, 4083, 357, 3879, 383, 17, 382, 4083, 330, 17964, 419, 269, 4083, 2601]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is stress?
+Assistant : The stressor is a physical reaction to the stress that causes it. The stress is triggered by the stress itself, and that is what causes it. When we're stressed, our body feels more stressed than usual, and when we feel stressed, our bodies become less stressed. We have been told how much stress there is in our environment, but as a result of this stress, we feel tired, and are not able to perform normal activities. It's not something you can do at home or work. You can't go anywhere without doing anything else.
+Assertion: What is the difference between "You can't get hurt" and "I don't know how to get hurt."
+Assertions: How does stress affect us?
+Assertors: They have a lot of different types of stresses, and they may be hard to control. If you're stressed, your body makes more of these kinds of stresses. You might feel more stressed if you're stressed because you've been exposed to stress. If you've been stressed, your stress level might increase. Your body has an increased amount of stress hormones, so stress hormones cause you to feel less stressed. This kind of stress is called stress syndrome.
+The
+
+================================================================================

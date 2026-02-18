@@ -1,0 +1,301 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=147 first30=[2827, 5273, 418, 4438, 374, 610, 5373, 17, 776, 6446, 299, 21717, 357, 406, 418, 263, 2035, 19653, 298, 699, 7336, 288, 958, 17, 2050, 1266, 15, 5273, 415, 2553]
+[Full output 1]
+Once upon a time, a curious child named Jack was playing with his toys. He loved to pretend that he was a superhero and had lots of fun. One day, Jack's mom told him they were going on an adventure. Jack was so excited! He couldn't wait to go explore the forest. When they arrived at the forest, Jack saw many pretty flowers and trees. He wanted to join in, but he didn't know how to be brave. Suddenly, Jack heard a loud noise coming from the sky. It sounded like a big bird flying overhead! Jack was scared and ran away as fast as he could. But when he got there, he realized that he had been too far away from home. He knew he should have stayed with him forever.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 17, 698, 418, 775, 2793, 289, 1691, 1161, 419, 269, 9331, 339, 269, 2868, 288, 423, 5192, 1884, 5192, 78, 15, 536, 418, 1770, 14086, 299, 431, 3088]
+[Full output 2]
+Paris is the capital of the province. It was first built in 1710 by the Dutch for the town of Rijswijk, which was later renamed to Willem-Johannesburg and became a part of the city's administrative district in 1811.
+The town was named after Johann Bernhard Willem (1745–1824), who lived on the site from 1640 until his death in 1786. The village grew up around the main square and was then known as Willemburg. It was originally called Willemburck, but after the Reformation it was renamed Willembogen. In 1737 it was again called Willemeber. During the 19th century Willem was one of the largest towns in the province, with over 1,000 inhabitants.
+Willemburg is the seat of the municipality of Willembe-Willem-Wiegand, which was created in the late 18th century by the merger of the two districts of the municipality, Willem and Wiese.
+There are three towns in Willem: Willem, Wietfelde, and Wissenfeld. Wiese is the home of the Wiese Family,
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 20745, 14274, 269, 3892, 288, 269, 10294, 8537, 17, 1803, 269, 28071, 330, 3097, 15, 383, 330, 3636, 15, 298, 722, 383, 330, 4000, 15, 383]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that uniquely determines the direction of the eigenvector. When the eigenvalue is positive, it is zero, and when it is negative, it is negative. For example, the eigenvalue of the square matrix A has two distinct eigenvalues: one for the row vector and another for the column vector.
+
+Now let's consider the given problem involving the existence of an eigenvalue λ such that the sum of the products of the eigenvectors of A equals zero:
+
+λ = (1/2) \* (1 + 1/4) \* (0 + 0/8) \* (((1/2)-(1/4))^2+(-1/4)+(0+0/16)).
+
+To solve this equation, we need to find the values of λ that satisfy both conditions simultaneously. This requires finding the eigenvalues of the original system of equations and solving them individually. However, since we are dealing with only the first two equations, we cannot directly compute them separately; therefore, we will rely on factoring techniques. We start by factoring out common terms from each equation:
+
+* If n > 1, then λ = 1/2
+* If p < 1, then m = 1/3
+* If q > 1, we get
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 491, 1420, 9845, 817, 395, 1991, 330, 1085, 5546]
+first_step_topk_probs=[0.30143529176712036, 0.17906025052070618, 0.08197975158691406, 0.05997766926884651, 0.054044369608163834, 0.053435925394296646, 0.03562822937965393, 0.03047444112598896, 0.026066171005368233, 0.026066171005368233]
+first_step_topk_text=[' can', ' have', ' allow', ' rely', ' use', ' are', ' provide', ' is', ' model', ' describe']
+
+[New tokens 4] count=256 first30=[22968, 269, 14457, 2673, 1085, 17, 382, 1085, 330, 7713, 444, 263, 1204, 854, 288, 12473, 15, 1010, 374, 686, 1231, 14457, 8466, 298, 2686, 3445, 17, 1658, 14457, 8119]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the neural network model. The model is constructed from a small set of neurons, each with its own neural architecture and associated properties. These neural networks can be described as a linear patterned model or a nonlinear one-to-one correspondence between the two.
+
+The model has many applications in fields such as cognitive psychology, artificial intelligence, artificial intelligence and cognitive neuroscience. It can also be used to study biological systems like cell populations, which are thought to have an underlying structure that makes them difficult to observe directly. This model was developed by John Liddell and Stephen C. Smith in 2006.
+
+In the field of artificial intelligence, there are three main types of neural networks:
+
+1. Automatic neural networks (ARNs): A network that consists of a number of neurons connected via a single connection. For example, if you want to determine whether a person is a human, you could use ARNs to identify people who are both human and are not humans. If you wanted to find out if someone is a human then you would use ARN's functionality. In this case, you would use the ARNs for some unknown reason.
+2. Prediction networks (DNSs): A graph where each node represents a prediction
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 17, 595, 551, 202, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 655, 9130, 555, 3546, 333, 9130, 17, 15289, 551, 346, 3546, 17, 1104]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+if __name__ == '__main__':
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-o', '--output', type=str)
+    args = parser.parse_args()
+
+    if len(sys.argv) > 1:
+        print('Usage: python run.py <output>')
+        sys.exit(-1)
+
+    if not os.path.exists(args.output):
+        os.makedirs(args.outdir)
+
+    if args.output is None:
+        print("Output file path is empty")
+        sys.stdout.write("\n".join([
+            "python", "-r",
+            "--output",
+            "--outdir",
+            "--no-check",
+            "--verbose",
+            "--help",
+            "--version",
+            "--format",
+            "--date",
+            "--time",
+            "--input",
+            "--log",
+            "--debug",
+            "--error",
+            "--err",
+            "--build-id",
+            "--run-id",
+        ])
+
+        for i in range(len(args.outputs)):
+            if args.execute and args.execute != 'call':
+                run_json = json.loads(args.run_id)
+                if run_
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=83 first30=[622, 353, 81, 13, 20, 12, 647, 354, 711, 537, 5062, 269, 993, 288, 25969, 288, 269, 775, 11695, 289, 269, 1496, 1968, 3292, 17, 202, 537, 382, 1392, 601]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return (n*1) + 1
+
+ # Get the number of occurrences of the first digit in the given input string.
+ # The function will return the factorial of the first integer.
+ def factorial_number():
+    for i in range(len(input_string)):
+        if input_string[i] == '1':
+            return 0
+        else:
+            break
+
+    return factorial_number()
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 339, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.7185943722724915, 0.28140559792518616, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' for', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=204 first30=[622, 651, 73, 62, 78, 64, 339, 520, 289, 311, 64, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 537, 21612, 263, 1392, 357, 5922, 269, 31393]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return [f[k] for k in n]
+
+
+if __name__ == '__main__':
+    # Generate a function that returns the Fibonacci number with given input.
+    # Note that this function is not built-in, so we don't need to do it here.
+    # We use a simple function called `fun`.
+
+    # Define an array of integers from 1 to n, where each integer is a value of 0 and 1 are corresponding to 0.
+    # The first argument is the index (0) of the array, which is the sum of the two arrays.
+    # Then, we compute the next element using the formula below:
+    # x = np.array([1,2,3])
+    # y = np.append(x,1)
+    # print(np.sum(y))
+    # print("Fibonacci number:",len(fib(x)))
+    # print()
+    # print(((1+1)*fib(y)))
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 2590, 1541, 382, 356, 4619, 1289, 698, 0, 1]
+first_step_topk_probs=[0.43431204557418823, 0.18875131011009216, 0.1532539427280426, 0.12443248927593231, 0.030493490397930145, 0.02747691608965397, 0.02117730863392353, 0.020102543756365776, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' No', ' There', ' The', ' I', ' Black', ' We', ' It', '', '']
+
+[New tokens 8] count=189 first30=[13676, 17, 1541, 330, 263, 3313, 288, 2833, 299, 2173, 357, 2645, 10676, 395, 453, 839, 2076, 2918, 614, 658, 1163, 3673, 289, 263, 1194, 357, 581, 491, 808, 1840]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Yes. There is a lot of evidence to suggest that black cats are not only social animals but also being born in a way that they have no control over their own behavior. In fact, black cats do have the ability to change their behavior if they have access to food or water. For example, they may be able to run away from their owners when they see a cat. Or they may be unable to find food because they cannot see the cat. They may not be able to leave them alone. In addition, they may not be aware of where they are going to be, which may be a sign of danger.
+As far as how much information we can obtain about the number of cats we have in our house, it seems like a good idea to keep an eye on these numbers for any cats who are likely to be there. If you're sure your cat is a good animal, you can ask your veterinarian about it.
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 2050, 382, 1541, 698, 4449, 798, 2590, 5517, 338]
+first_step_topk_probs=[0.3019448518753052, 0.2209075540304184, 0.17936277389526367, 0.054135728627443314, 0.046304743736982346, 0.04172403737902641, 0.035688456147909164, 0.028976768255233765, 0.02478514239192009, 0.018133196979761124]
+first_step_topk_text=[' 1', ' One', ' The', ' There', ' It', ' Each', ' 4', ' No', ' Two', ' A']
+
+[New tokens 9] count=256 first30=[2050, 13032, 330, 5405, 354, 17, 24, 10941, 15, 649, 406, 483, 5964, 263, 3359, 2140, 288, 10941, 702, 269, 2818, 1419, 791, 910, 299, 5964, 619, 13032, 339, 1148]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple is worth 1.5 apples, so he can buy a larger amount of apples than the average person would need to buy one apple for every dollar spent on apple purchases. He may also want to save some money for his own purchase or use another basket instead of buying just one apple.
+Hint: The average person can get more apples than they need. If you're going to save enough apples to make $3000 in cash, you might be able to cut back on your bills by 25%.
+But if you are saving enough apples to pay off your bills, you could cut back on the amount of money you'll spend on the apples. So if you want to save enough money to pay off all your bills, then you could cut down on your spending.
+Let's look at an example from the book.
+Example: The person who bought 20 apples and sells them for $4 per month will now have a total of $1,000 of money saved each year. This means that there are 10 apples in the house ($2) plus $1 in the piggy bank ($2), which represents $1,200 dollars saved each year!
+What about the cost of purchasing the apples? You'd think it would be cheaper to spend only
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 1278, 1289, 783, 382, 1509, 3919, 1348, 22089]
+first_step_topk_probs=[0.5484542846679688, 0.0725962221622467, 0.04785836115479469, 0.04785836115479469, 0.03501392528414726, 0.033236972987651825, 0.03155016899108887, 0.029948998242616653, 0.029948998242616653, 0.024316688999533653]
+first_step_topk_text=[' I', ' What', ' If', ' We', ' This', ' The', ' You', ' My', ' How', ' Thank']
+
+[New tokens 10] count=256 first30=[2575, 330, 4083, 34, 202, 7681, 17, 4341, 343, 17949, 677, 15, 263, 28505, 1727, 435, 269, 1442, 288, 3409, 3906, 8655, 15, 1763, 357, 4083, 483, 342, 263, 2023]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is stress?
+Dr. David Cummings, a psychiatrist at the University of California San Francisco, says that stress can be a big problem for people with depression and anxiety disorders. "The more we feel stress, the more likely it is to cause problems in the brain," he said.
+"It's not just going to make you depressed or anxious."
+For example, people who have had a stressful event are more likely to suffer from depression than those who do not.
+"There are things that may increase your risk of having depression," Dr. Cummings said. "People with depression should talk to their doctor about what they can do to manage their symptoms."
+Dr. Cummins recommends that people with depression take steps to deal with stress, including using alcohol or drugs as an opportunity to cope with stress.
+Dr. Michael G. Browne, a psychologist at the University at Buffalo, has been studying stress since childhood. He says that when stress is reduced, it causes more stress than it would otherwise.
+He also says that people with depressive illness might benefit from medications that help reduce stress.
+In addition, he suggests that people with major depression and anxiety disorder who experience stress may benefit from medication that helps relieve the
+
+================================================================================

@@ -1,0 +1,356 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=98 first30=[2827, 6087, 2857, 299, 269, 3843, 374, 610, 2553, 17, 1109, 2977, 263, 2023, 11913, 298, 3766, 299, 631, 351, 383, 17, 1358, 722, 581, 3500, 715, 15, 6087, 418]
+[Full output 1]
+Once upon a time, a curious child named Max went to the park with his mom. They saw a big slide and wanted to go on it. But when they got there, Max was not happy. He started to cry because he was having too much fun. His mom came running to him and said, "Max, you are hurting your knee! You should be careful and take care of yourself." Max felt bad and apologized for being selfish. From that day on, Max never went on the slide again.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=171 first30=[269, 9556, 15, 298, 269, 851, 22470, 547, 2317, 289, 269, 9556, 17, 202, 509, 2868, 330, 12092, 351, 263, 3569, 444, 4414, 440, 17687, 299, 269, 4978, 17, 698]
+[Full output 2]
+Paris is the capital of the province, and the most populous city in the province.
+The town is situated on a road from La Liga to the east. It has been called the "Chairman's Town" because it was built by the Portuguese in the 16th century. The first recorded mention of the town comes from the Portuguese, who were not only settlers but also traders. In 1555, the Portuguese conquered the area.
+In 1714, the Portuguese took over the town and built the town square. The town is now known as the Capital City of Portugal.
+- "Die Südliche Universität" (Germany). Astrid. Archiv für Naturwissenschaft. Retrieved 2012-11-12.
+|Wikimedia Commons has media related to: Delft|
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 483, 342, 6031, 359, 269, 1701, 288, 795, 22542, 4672, 28069, 17, 1220, 1373, 15, 490, 411, 491, 263, 4409, 400, 333, 353, 89, 20, 15]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that can be expressed as the sum of two linearly independent eigenvectors. For example, if we have a vector v = (v1, v2) and its corresponding eigenvector v = (vi, vi), then the eigenvalues of v are also linearly dependent.
+
+Now let's consider the given information about the eigenvalues of a matrix A:
+
+A = |0 0|
+|0 1|
+
+The determinant of this matrix is defined as follows:
+
+det(A) = det(vi) = -det(vi)
+
+Next, we need to find the eigenvalues of A using the definition of the square root function. This process involves finding the roots of the characteristic polynomial of A, which is given by:
+
+n(x) = (a^n + b^n)/n(x).
+
+Here, n(x) represents the number of terms in the matrix A. The coefficients a and b represent the eigenvalues of the characteristic equation, while n(x)=0 indicates the maximum possible values for the matrix A at each point along the diagonal.
+
+To solve this problem, we first notice that there exists some constant c such that A=c+d. Since the determinant of A is
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[1420, 483, 817, 1991, 491, 5546, 1085, 395, 14071, 20993]
+first_step_topk_probs=[0.20478016138076782, 0.20478016138076782, 0.10961093008518219, 0.10961093008518219, 0.08899703621864319, 0.07225994765758514, 0.05018353834748268, 0.027538802474737167, 0.02420405112206936, 0.01770806312561035]
+first_step_topk_text=[' allow', ' can', ' use', ' provide', ' have', ' describe', ' model', ' are', ' incorporate', ' simulate']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 4410, 17, 202, 509, 2790, 288, 12438, 2281, 870, 4410, 330, 2410, 2620, 419, 1191, 263, 2829, 1085, 15, 536, 728, 342, 1428]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data sets.
+The task of modeling complex data sets is usually done by using a simple model, which may be run on a computer or a small notebook. A simple model might be an image of a set of images and a list of images (for example, a map). The model could also be used for the training of the model itself. This model might have to be very complicated, and it might not always be able to predict the shape of the data set.
+In some cases, the model will be used as a tool in training and validation. This model can be used for training or validation of training and validation of the model.
+A simple model might include a collection of images, a list of pictures, a list containing all the images of each picture, and a list containing a list of names of each picture.
+This model may be used to build a model of a test dataset, or to train a model of the same type as the one described above.
+It is important to note that the model has its own specific features and needs. Some features are quite different from those found in other models, such as the ability to discriminate between different types of images and to infer the relative position of objects within the image
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=189 first30=[263, 647, 286, 3, 711, 4750, 2062, 263, 689, 715, 418, 263, 1809, 3510, 1255, 15781, 17, 1530, 6446, 299, 4196, 298, 619, 1266, 1024, 998, 2009, 1114, 1929, 17]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+Once upon a time there was a little girl called Lucy. She loved to explore and one day she found something very special. It was a big box with lots of toys inside! Lucy was so excited that she ran outside to play with her friends. When they got inside, Lucy's mom saw how much fun it had. "What are you doing?" asked Lucy. "I'm playing with my toys," said Mom. "Let's go play!" So Lucy and her friends played for hours until they were all ready to have some fun. They laughed and giggled as they played with their toys. After a while, Lucy's dad came home from work. He took out his toy and gave it back to Lucy. Lucy was so happy that she had been able to play with the toys. From then on, Lucy and her family would always remember the fun day when they played together in the backyard.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 8407, 81, 552, 354, 12, 864, 353, 81, 647, 354, 687, 711, 202, 6, 538, 330, 66, 5756, 1714, 202, 6, 265, 622, 1794, 202, 202, 6, 538, 1401]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return ((n - 1) * (n + 1))
+
+
+# def is_real():
+#     return True
+
+# def __init__(self, n=1):
+#         self.n = n
+#         print("is_real()")
+#         # print(self.n)
+#         if self.is_real():
+		#         print('is_real_real()')
+#         else:
+#             print('is not_real_imag()')
+
+#         elif self.is_:
+#             self.is_(False)
+#             else:
+
+#             return False
+
+
+
+# def get_length(self):
+#     """
+#     Returns the length of the given sequence
+#     :type self: list
+#     @return: the length of each sequence
+#    :rtype: int
+#     def get_lengths(self):
+
+
+#     # Return the length of all sequences
+#     pass
+
+#     '''
+#     if len(self.sequence) == 0:
+#         return None
+#     else:
+ #         return len(self._sequence)
+
+#
+#     while
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=157 first30=[622, 354, 1246, 622, 643, 1246, 622, 354, 711, 202, 6, 426, 13280, 2257, 29, 783, 330, 453, 263, 5360, 17, 698, 415, 263, 29279, 288, 269, 8695, 1173, 15]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1
+     return 0
+     return 1
+
+
+# FIXME: This is not a module. It's a subclass of the Python class, so we can use it as an interface to
+# make some other modules.
+class Solution:
+    def FibonacciNumber(self, n: int) -> int:
+        """
+        :type n: int
+        :rtype: int
+        """
+        # no need to do anything here, but if you want to get more interesting
+        # things like:
+        #   f = 1
+        #   d = 2
+        #     while d > 0 and d < len(n) - 1:
+        #         if n[d] == 0:
+        #             return d
+        #         else:
+        #                 return d
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 1541, 2590, 356, 338, 1906, 1289, 698, 1278]
+first_step_topk_probs=[0.3350382149219513, 0.2582243084907532, 0.170231893658638, 0.04171711951494217, 0.03759024664759636, 0.026105904951691628, 0.024781033396720886, 0.023523373529314995, 0.019099490717053413, 0.016336658969521523]
+first_step_topk_text=[' The', ' Yes', ' There', ' No', ' I', ' A', ' All', ' We', ' It', ' If']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 12052, 17, 202, 509, 3533, 330, 808, 17, 31412, 395, 453, 2645, 15, 614, 581, 395, 11458, 15, 649, 269, 2597, 339, 482, 330, 1091, 581, 491]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+The answer is no. Cats are not black, but they are gray, so the reason for this is because they have a coloration in their skin which makes them less visible than other cats. This is why it is important to note that dogs and cats do not necessarily have any coloration.
+Can you think of another way to describe a cat's coloration? We'll go over each one here.
+What does the coloration mean?
+Answer the following:
+- The coloration is the amount of melanin in the skin.
+- It has a specific color pattern in the skin (red, blue, green).
+- There is a general rule of thumb used by the pet owner: if you don't have a dog or cat, you won't see a brown or white cat.
+- A black cat is a dark grey or black cat with a darker skin color.
+- Because of its coloration, a black cat is more likely to be spotted on a day or two of the year.
+- Black cats are more likely to appear in a tan area because of their coloration. If you look at a red cat, you will see a yellow spot.
+- The pigmentation is an indication of
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 798, 409, 382, 2050, 1541, 2, 3, 1, 0]
+first_step_topk_probs=[0.6373084187507629, 0.20263808965682983, 0.04735235869884491, 0.047138385474681854, 0.03448718041181564, 0.031075555831193924, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' 4', ' 2', ' The', ' One', ' There', '', '', '', '']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 202, 22, 10941, 333, 1604, 10941, 202, 23, 10941, 333, 2341, 10941, 202, 24, 10941, 333, 2341, 1885, 1604, 202, 25, 10941, 333, 2234, 10941]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+3 apples = 12 apples
+4 apples = 13 apples
+5 apples = 13 times 12
+6 apples = 14 apples
+7 apples = 9 apples
+8 apples = 15 apples
+10 apples = 16 apples
+11 apples = 17 apples
+12 apples = 18 apples
+13 apples = 24 apples
+14 apples = 19 apples
+15 apples = 21 apples
+16 apples = 22 apples
+17 apples = 26 apples
+18 apples = 27 apples
+19 apples = 28 apples
+20 apples = 29 apples
+22 apples = 30 apples
+21 apples = 34 apples
+23 apples = 33 apples
+24 apples = 36 apples
+25 apples = 35 apples
+26 apples = 36 oranges
+27 apples = 36 bananas
+28 apples = 37 bananas
+29 apples = 38 bananas
+30 apples = 37 banana
+31 apples = 39 bananas
+32 apples = 38 oranges
+33 apples = 37 oranges
+34 apples = 38 orange
+35 apples = 38 green
+36 apples = 38 red
+37 apples = 38 blue
+38 apples = 38 yellow
+39 apples = 38 brown
+40 apples = 40 brown
+41 apples = 40 yellow
+42 apples = 41 yellow
+43 apples = 42 yellow
+44 apples = 43 yellow
+45 apples =
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 382, 1509, 22089, 360, 1289, 783, 1348, 338]
+first_step_topk_probs=[0.6236576437950134, 0.06522883474826813, 0.06522883474826813, 0.047722432762384415, 0.036781154572963715, 0.026909666135907173, 0.02554398961365223, 0.02301705628633499, 0.020740091800689697, 0.019687531515955925]
+first_step_topk_text=[' I', ' What', ' The', ' You', ' Thank', ' "', ' We', ' This', ' How', ' A']
+
+[New tokens 10] count=256 first30=[2575, 330, 669, 2942, 374, 269, 1759, 6863, 34, 202, 44, 491, 733, 2449, 351, 482, 339, 263, 1106, 689, 298, 1244, 356, 873, 2221, 751, 2061, 374, 1284, 713]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience with the following situations?
+I have been working on this for a long time and now I am having some problems with my work. I am trying to understand why it works so well, what you are trying to do in order to help me, but I am not sure how to do that or how to get my work done.
+Assertion: I feel like I can't make the right choice if I want to work hard.
+I need to know how to make an adjustment. How do I use the adjustment as an example?
+I've been working hard to help myself by making some changes.
+Assure me that I will be able to handle things that I may have difficulty with.
+Assume that I have a problem where I have to solve something.
+I have a hard time doing it because I don't have a lot of work.
+I can't figure out how to fix it.
+I just can't help myself when I have to.
+I cannot help myself when someone else is struggling with the same thing.
+Assuming that I have some work done, I can help myself.
+Asserts that I have to try harder than ever before.
+Assumes that I have no work done.
+
+================================================================================

@@ -1,0 +1,272 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=176 first30=[2827, 5273, 418, 4438, 374, 610, 6086, 1167, 17, 776, 9741, 299, 19352, 1378, 269, 3984, 298, 1137, 545, 269, 1943, 289, 269, 1165, 17, 2050, 1266, 15, 406, 2977]
+[Full output 1]
+Once upon a time, a curious child named Jack was playing with his toy car. He liked to zoom around the room and see all the things in the world. One day, he saw something unusual - a big box of old toys! It was full of cars and dolls and animals. "Wow!" Jack said, excitedly. "Can I play with your doll?" The toy car looked very scary. "Sure," Jack said. "Let's try it." They both got into the car and pushed the door. Inside the car, they found a small toy car that was just as cool as their old toys. "This is a great toy for you," Jack said, pointing to the toy car. "It's so nice to play with." The toy car nodded its head and then they played together inside the car. Jack and his sister played with the toy car until it was time for bed.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 7093, 263, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.9157060980796814, 0.0518481619656086, 0.0324457511305809, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' Italy', ' a', '', '#', '', '"', '!', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 4772, 288, 7093, 17, 202, 509, 2868, 418, 6214, 289, 1720, 7142, 419, 269, 7096, 15603, 1311, 29160, 24901, 13226, 14912, 370, 76, 657, 969, 272]
+[Full output 2]
+Paris is the capital of the province of the Republic of Italy.
+The town was founded in 1553 by the Italian nobleman Giovanni Battista dei Vittorio. It had a population of around 1,000 people and was one of the most important centres for trade between the two countries. In 1617 it became the seat of the National Assembly. The town has an area of 396 square miles (2,400 km2), and is a major industrial centre. It is the largest city in Italy.
+A new city was built in 1794, when the old town hall was built. In 1805 the town's name was changed to "Venice".
+In the 19th century the town became the main economic center of the country. The town's main industries are printing, manufacturing, paper production, and the manufacture of textiles.
+The area was once known as "Chile" due to its location on the Pacific Ocean. Today, the town is home to more than 100 factories, and its infrastructure is of great importance.
+The most famous and influential of all the businesses in the city is the school. This is also the place where the city has its best students from all over Europe.
+The biggest attraction of the town is the "Santi
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=108 first30=[263, 13742, 1239, 357, 6584, 269, 3286, 288, 263, 953, 17, 202, 202, 509, 18956, 395, 1255, 18956, 1091, 581, 5546, 806, 1264, 269, 953, 578, 299, 1643, 359, 411]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that describes the behavior of a system.
+
+The eigenvalues are called eigenvalues because they describe how much the system has to change as we move along the number line. In our case, the eigenvector of the system is 1 and the eigenvector is 2. The eigenvalues are given by the formula:
+
+* The eigenvalue = (1/2) × (2 / 2)
+* The eigenvector of 2 × (3 / 2) = 3 × (4 / 2) × (5 / 2)
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 330, 1420, 491, 1991, 395, 817, 3747, 5546, 1085]
+first_step_topk_probs=[0.5733934640884399, 0.07139580696821213, 0.057968869805336, 0.057968869805336, 0.04241093248128891, 0.03944633901119232, 0.03102850168943405, 0.03102850168943405, 0.015765471383929253, 0.012800564058125019]
+first_step_topk_text=[' can', ' is', ' allow', ' have', ' provide', ' are', ' use', ' allows', ' describe', ' model']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 9668, 298, 9668, 17, 202, 509, 1549, 2613, 330, 269, 851, 1384, 1085, 289, 6117, 13627, 15, 1091, 383, 2869, 263, 4869, 4379, 339]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex behaviors and behaviors.
+The human brain is the most important model in neuroscience, because it provides a powerful tool for understanding how neurons behave and respond to stimuli. The brain has many different types of neural circuits, each with its own set of rules and rules. It also has a wide range of uses for these circuits: it is an effective model for studying neural systems; it is a computer program that helps us understand how we learn and make decisions; it is also a model for understanding how we think about our environment; and it is one of the few examples of "all-in-one" models of learning.
+A network is like a computer program: it's a collection of nodes, called nodes, which act as a network to all of the nodes in the network. A network is simply a collection of connected nodes, or nodes, whose members are connected by connections. In other words, if you have a network, you have a node that connects to every other node in the network, and so on. This means that there are no loops between nodes.
+In addition to being a model for learning, it is also an example of a computational model. Computational models are just the tools that allow us to build algorithms that
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=152 first30=[263, 647, 286, 3, 711, 4750, 2062, 263, 689, 715, 418, 263, 1809, 3510, 2827, 3867, 17, 1530, 6446, 299, 1143, 3099, 289, 896, 23712, 298, 5317, 269, 4646, 7112]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+Once upon a time there was a little girl named Lily. She loved to play outside in her backyard and watch the birds fly around. One day, she saw a big bird flying above her. It had big wings and looked very pretty. Lily wanted to show it to the bird, so she asked the bird if he could join her. The bird said yes and they played together for hours. After playing with the bird, Lily's mom came home and asked what happened. "I'm sorry, Lily," said her mom. "We need to clean up after you eat your lunch." Lily felt happy that she got to help the bird. From then on, Lily always took care of the bird when she ate her lunch.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=162 first30=[622, 353, 81, 13, 20, 12, 647, 354, 711, 202, 350, 1401, 678, 626, 861, 8922, 3142, 9533, 346, 1083, 801, 18318, 903, 3, 711, 509, 775, 716, 289, 1284]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return (n*1) + 1
+
+
+if __name__ == "__main__":
+    print("Python")
+
+The first year in my life I had a problem with the moon. It was hard to get up and go outside on a sunny day, but it seemed like a good time for me. So I decided to try some fun activities together. I decided to play a game called "Shapes" where I played the same game with different shapes and sizes. Then I made up a puzzle and tried making triangles out of the ones I had been using. Afterwards, I had a little group of friends and they all went to the park. They all played their own games together and had lots of fun! The kids were so happy and excited as they played together. The end.
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1083, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.9081844091415405, 0.0918155312538147, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' print', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=54 first30=[622, 651, 19, 15, 20, 64, 711, 202, 350, 1401, 678, 626, 861, 8922, 3142, 9533, 346, 655, 9130, 555, 3546, 333, 9130, 17, 15289, 551, 346, 3546, 17, 1104]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return [0,1]
+
+
+if __name__ == "__main__":
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--algorithm', type=str)
+    args = parser.parse_args()
+    print(args)
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 2590, 382, 1541, 356, 1289, 1906, 698, 0, 1]
+first_step_topk_probs=[0.2947375476360321, 0.20469114184379578, 0.20469114184379578, 0.15776164829730988, 0.04519946873188019, 0.034836623817682266, 0.029797343537211418, 0.028285104781389236, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' No', ' The', ' There', ' I', ' We', ' All', ' It', '', '']
+
+[New tokens 8] count=256 first30=[2590, 17, 1541, 330, 808, 2395, 357, 269, 851, 1488, 3191, 1875, 289, 269, 1560, 1705, 395, 2645, 15, 614, 715, 330, 263, 1593, 1629, 288, 2833, 357, 760, 10676]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: No. There is no question that the most common cat species in the United States are black, but there is a large body of evidence that these cats are not black.
+The white cat is considered to be the most common animal in the United Kingdom, with an estimated 80% of the population being black.
+Pets are the primary food source for many of the people who live on the island. The white cat is the only one of the major breed groups of cats.
+All black cats have a black coat. They have black eyes, black legs, black ears, black-tails, and black-tail stripes.
+White cats are also known as "black cats" because they have black hair and white eyes.
+There are more than two hundred different breeds of cats in the UK. The black cat is the most popular breed of cat in the world.
+Black cats are a highly social animal and will often interact with other cats. Some of the dominant types of cats include the Black Cat, Black Rider, White Bull, White Tailed, White Bear, White Bear and White Pig.
+Brown and White cats are quite similar in appearance and behavior. Their fur is black, and their skin is white. Brown and White cats have a
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 798, 843, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.9143238663673401, 0.04947753995656967, 0.03619854152202606, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' 4', ' 5', '', '#', '', '"', '!', '', '']
+
+[New tokens 9] count=211 first30=[354, 13032, 333, 798, 10941, 202, 20, 13032, 333, 843, 10941, 202, 21, 10941, 333, 1218, 10941, 202, 22, 10941, 333, 1291, 10941, 202, 23, 10941, 333, 1604, 10941, 202]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+1 apple = 5 apples
+2 apples = 8 apples
+3 apples = 9 apples
+4 apples = 12 apples
+5 apples = 13 apples
+6 apples = 16 apples
+7 apples = 18 apples
+8 apples = 19 apples
+9 apples = 20 apples
+10 apples = 21 apples
+12 apples = 22 apples
+13 apples = 22 oranges
+14 apples = 23 oranges
+15 apples = 24 oranges
+16 apples = 25 oranges
+17 apples = 26 oranges
+18 apples = 26 bananas
+19 apples = 27 oranges
+20 apples = 28 oranges
+21 apples = 28 orange oranges
+22 apples = 29 oranges
+23 apples = 30 oranges
+24 apples = 32 oranges
+25 oranges = 33 oranges
+26 apples = 34 oranges
+27 apples = 35 oranges
+28 apples = 37 oranges
+29 apples = 39 oranges
+30 apples = 38 oranges
+31 apples = 39 bananas
+32 apples = 40 oranges
+33 oranges = 31 oranges
+34 apples = 36 oranges
+35 oranges = 36 oranges
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 22089, 783, 2575, 1289, 382, 15255, 1509, 338, 360]
+first_step_topk_probs=[0.4524000585079193, 0.08429417759180069, 0.06496813148260117, 0.0616709440946579, 0.05274995416402817, 0.04065601900219917, 0.025441884994506836, 0.02415068820118904, 0.02065717801451683, 0.02065717801451683]
+first_step_topk_text=[' I', ' Thank', ' This', ' What', ' We', ' The', ' Thanks', ' You', ' A', ' "']
+
+[New tokens 10] count=74 first30=[2575, 330, 669, 2942, 34, 202, 2379, 278, 343, 17, 426, 82, 268, 309, 15, 1622, 17, 39, 1155, 330, 263, 5414, 288, 3912, 18043, 435, 269, 1442, 288, 3409]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience?
+Alan C. Foerst, Ph.D., is a professor of psychiatry at the University of California, San Francisco. He has been involved in research on behavioral and neuropsychiatric disorders for more than 30 years. He also serves as an assistant professor of psychotherapy at the University at Buffalo, New York City.
+
+================================================================================

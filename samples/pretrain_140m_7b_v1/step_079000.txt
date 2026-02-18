@@ -1,0 +1,260 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 2857, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8411308526992798, 0.1588691920042038, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' went', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 1] count=73 first30=[2827, 8798, 2857, 299, 269, 3843, 374, 610, 13218, 17, 1109, 2977, 263, 2023, 3197, 374, 7336, 288, 4749, 351, 383, 17, 8798, 3609, 610, 13218, 490, 406, 982, 1143]
+[Full output 1]
+Once upon a time, a curious child named Timmy went to the park with his mommy. They saw a big tree with lots of leaves on it. Timmy asked his mommy if he could play in the tree. His mommy said yes and they went to the tree. When they got there, Timmy's friend came over to play. Timmy was very happy because he played with his friends all day long.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 263, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.9308382272720337, 0.0691617876291275, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' a', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 336, 7097, 1046, 320, 7762, 17, 382, 2317, 418, 20769, 419, 269, 437, 20780, 274, 289, 637, 1941, 8047, 15, 298, 1770, 2037, 263, 1829, 7913]
+[Full output 2]
+Paris is the capital of the province of the Seleucid Empire. The city was conquered by the Eumenes in 330 BC, and later became a major centre for the expansion of the empire. It was the center of the Eumenical empire until the early 20th century when it became part of the modern-day Ubaid Empire.
+The city's name comes from the Greek word for "city", which means "town". It is located on the right bank of the River Tigris, on the banks of the Euphrates river. In the Roman period, the city had a population of about 4,000 people. In the 18th century, the city was the site of the Battle of the Nile. The city lost its original importance after the Second World War because of the lack of water supply and the fact that the city was under siege.
+The area around the city has been called the "Wars of the Mediterranean" since ancient times. A large portion of the city was destroyed during the First Crusade in the 13th century. The city suffered the most damage from the Black Death, which caused an estimated 2 million deaths each year.
+The ancient city was rebuilt following the collapse of the Roman Empire in the fourth century AD. The city now
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1392, 357, 15353, 1939, 2242, 4734, 686, 18956, 17, 202, 202, 4551, 415, 1936, 269, 1496, 1373, 29, 15204, 411, 491, 795, 7527, 2714, 7469, 94, 88, 96, 333]
+[Full output 3]
+In linear algebra, an eigenvalue is a function that satisfies certain conditions involving its eigenvalues.
+
+Let's consider the given example: Suppose we have two vectors $\vec{u} = \hat{v}$ and $\hat{w} = \frac{\mathbf{2}{\sqrt{3}}}{2}$. We want to find their eigenvalues so that they satisfy the following condition:
+
+$$\begin{align*}
+\frac{\mathbf {2}{\sqrt{-3}} &= \frac{\boldsymbol{u}}{2}\cdot \frac{\lambda}{2}\\
+&=\boxed{\frac{\mathbf {{2}}{\sqrt{3}}\sqrt{3}}, \\
+\end{align*}$$
+
+To proceed further, let us denote the eigenvectors as $a\_1$ and $a\_2$ by $\mathbf{x}$, which means they are independent of each other. Now, suppose we define a new vector $\mathbf{y}$ as follows:
+
+$$
+\mathbf{y}= \mathbf{0} \qquad (\star)$$
+
+We know that $\mathbf{0}$ and $\mathbf{1}$ are independent of $\mathbf{2}$. This implies that the first component of our new vector $\hat{v}=\frac{\mathbf{(3)}^2-\
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[1420, 1085, 491, 1991, 483, 817, 5546, 395, 9845, 5663]
+first_step_topk_probs=[0.11346188932657242, 0.10223765671253204, 0.10223765671253204, 0.09212386608123779, 0.0830104872584343, 0.05472387745976448, 0.05472387745976448, 0.05230071395635605, 0.04003683850169182, 0.029291577637195587]
+first_step_topk_text=[' allow', ' model', ' have', ' provide', ' can', ' use', ' describe', ' are', ' rely', ' involve']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 10853, 289, 1623, 16, 7128, 2061, 17, 202, 509, 775, 2738, 288, 269, 1085, 418, 3385, 419, 6227, 609, 454, 1311, 15, 298, 383]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex phenomena in real-world problems.
+The first version of the model was designed by Richard Stallman, and it is now available as part of the Werner Miesenberger Computer Science Center (WCSC). The second version is called the "Lewis Model" and is based on the Werner model.
+In order to simulate the interaction between the brain and the visual system, we have been using a simulation system called the "Spatial Data Model". This model has been used for many years to predict how people will respond to different types of situations, such as when they want to use their computers or where they need to run programs. It also helps us understand what happens when we try to do something new. For example, we might think that the computer would start to respond to people who were trying to help them get through the same situation. We could then predict what would happen if someone did not respond. We would then see the person's response to the new situation.
+We've already had the model built with this model. You can download it here: http://www.wired.com/wired/model_spatial_data/models/1.0/
+The model is
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=201 first30=[263, 647, 286, 3, 711, 4750, 2062, 263, 689, 715, 418, 263, 1809, 3510, 2827, 15781, 17, 1530, 6446, 299, 1143, 3099, 298, 1313, 435, 269, 6437, 17, 2050, 1266]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+Once upon a time there was a little girl named Lucy. She loved to play outside and look at the sky. One day she saw something very interesting in the sky - it was a big, round ball! It was so shiny and sparkly. Lucy wanted to try it out, but her mom said no because it wasn't safe. So Lucy tried to hide from her mom, but she couldn't find her way home. Then, she heard a voice behind her. "What are you doing?" asked Lucy's mom. "I'm trying to get some ice cream," replied Lucy. Her mom smiled and said, "Let me help you find it." Together they took a piece of ice cream and started eating it. After a few minutes, they finally found the perfect ice cream! The ice cream was so delicious that Lucy had to take it home with her every time she looked for it. From then on, Lucy always remembered to be careful when playing outside.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=116 first30=[622, 354, 647, 353, 81, 864, 311, 12, 1341, 409, 711, 202, 350, 1401, 678, 626, 861, 8922, 3142, 9533, 346, 655, 9130, 555, 3546, 333, 9130, 17, 15289, 551]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return 1 + (n * n) / 2
+
+
+if __name__ == "__main__":
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--verbose", help="Print the output")
+    args = parser.parse_args()
+
+    print("Running:")
+    print("---------")
+    print("running...")
+    print("-----------------")
+    if args.verbose:
+        print("------")
+    print("\n----------")
+    print("-"*30)
+    print("------\n")
+    print(str(args))
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=71 first30=[622, 8049, 11, 81, 12, 1246, 202, 2318, 801, 20, 903, 202, 6, 1083, 11, 73, 5, 36, 333, 836, 19, 96, 330, 269, 775, 993, 289, 269, 1180, 288]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return fib(n)
+    
+print("1")
+# print(f"A = {0} is the first number in the list of integers, {1}, then the second number is the last number in the input list.")
+# print("2")
+# for i in range(4):
+#     fib(i)
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[1541, 382, 13676, 2590, 698, 535, 1289, 356, 1278, 1906]
+first_step_topk_probs=[0.2725077271461487, 0.24555008113384247, 0.15366131067276, 0.09127865731716156, 0.054221849888563156, 0.03393116593360901, 0.03057451732456684, 0.02615177445113659, 0.02615177445113659, 0.022368796169757843]
+first_step_topk_text=[' There', ' The', ' Yes', ' No', ' It', ' In', ' We', ' I', ' If', ' All']
+
+[New tokens 8] count=256 first30=[1541, 330, 808, 2079, 3533, 299, 482, 2395, 17, 1358, 269, 3533, 330, 12052, 17, 202, 3811, 2597, 2526, 411, 620, 453, 491, 263, 4511, 3864, 10447, 953, 339, 10676]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: There is no single answer to this question. But the answer is yes.
+One reason why we do not have a separate animal classification system for cats is because they are called "black cats." They are mostly brown or black in color and usually have a dark body and long tail. The black cat has white fur on its back and legs. The black cats have a very thin coat of fur on their backs and tails. When it comes to cats, they are called black cats because they have black fur on their front legs. Black cats are also known as black cats because the black cat's white fur is not too much like the black cat but rather less so than the black cat. It is thought that the black cat has a black coat and black fur on its front legs.
+The black cat is also known as the black cat because the black cats have black fur underneath their back legs. The cat has black fur on both sides of its head. The black Cat has black fur along its back and down the back of its neck. The black Cats have black fur along their back and down its back. The blackcat has black fur over its back and back. The cat's black cat has black hair on its back. This is why the black cat is called the
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 2050, 382, 798, 1541, 843, 1012, 409, 0, 1]
+first_step_topk_probs=[0.6206016540527344, 0.1602160781621933, 0.06274151802062988, 0.037270061671733856, 0.03537860885262489, 0.030260926112532616, 0.030260926112532616, 0.023270241916179657, 0.0, 0.0]
+first_step_topk_text=[' 1', ' One', ' The', ' 4', ' There', ' 5', ' 6', ' 2', '', '']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 17, 202, 3146, 578, 637, 10941, 15, 409, 10941, 15, 409, 3716, 10941, 15, 409, 611, 10941, 15, 409, 7711, 10941, 15, 354, 611, 10941]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples.
+He has 3 apples, 2 apples, 2 extra apples, 2 more apples, 2 fewer apples, 1 more apples, 1 extra apples, 1 additional apples, 1 added apples, 1 apples, 1 new apples, 1 apple, 1 extra apple, 1 new apple, 1 additional apple, 1 more apple, 1 little apple, 1 even apple, 1 apples.
+Now you can count the number of apples in your basket. Let's say we have three apples (1 + 2 + 3) and four apples (3 + 5). The first one is the number of days it takes to eat the fruit. So, the second apple is the number that we ate the last day.
+Answer: One apple is worth $2.25. That means we got a total of $4.25 apples. We also got two apples, one apple and one extra apple. Now we add up all the apples in our basket.
+So now we have the total apples left over.
+Answer 1 apple = 8 apples.
+The third apple is the amount of money we earned each month. This means we get a total of 7 dollars.
+Answer 2 apple = 9 dollars.
+We also had some apples, but they were not
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 22089, 2575, 15255, 382, 1289, 783, 1509, 776, 3919]
+first_step_topk_probs=[0.4071786105632782, 0.10114841163158417, 0.06329706311225891, 0.048785001039505005, 0.04630912095308304, 0.037600066512823105, 0.035691868513822556, 0.027508798986673355, 0.024787485599517822, 0.02233540080487728]
+first_step_topk_text=[' I', ' Thank', ' What', ' Thanks', ' The', ' We', ' This', ' You', ' He', ' My']
+
+[New tokens 10] count=113 first30=[2575, 330, 4083, 34, 202, 8104, 6804, 330, 263, 4035, 288, 5743, 1929, 2769, 289, 10944, 6753, 288, 269, 11007, 953, 15, 1433, 3759, 18309, 6188, 11365, 6113, 353, 3288]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is stress?
+Assistant is a doctor of medicine specializing in treating disorders of the nervous system, including attention deficit hyperactivity disorder (ADHD). It's often used to treat anxiety and depression.
+In this case, the treatment was an emergency care center that provides treatment for both the patient and the family. The emergency room staff will work with you to help make sure your child has enough rest and sleep to stay healthy.
+A parent or guardian can help keep your child safe by making sure that he or she is getting plenty of exercise.
+
+================================================================================

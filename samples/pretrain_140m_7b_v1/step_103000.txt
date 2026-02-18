@@ -1,0 +1,279 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=86 first30=[2827, 6087, 2857, 299, 269, 3843, 17, 776, 2977, 263, 2023, 3197, 374, 7336, 288, 4749, 17, 6087, 3766, 299, 15935, 383, 298, 1137, 922, 418, 351, 269, 613, 2071]
+[Full output 1]
+Once upon a time, a curious child named Max went to the park. He saw a big tree with lots of leaves. Max wanted to climb it and see what was on the other side. He climbed up the tree and sat down. Max climbed higher and higher until he reached the top. He looked around and saw a big pile of leaves. It was so much fun! Max felt happy that he could help his friend. They played together all day long.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 336, 321, 377, 263, 7093, 2, 3, 1, 0]
+first_step_topk_probs=[0.901055634021759, 0.03258398547768593, 0.01837339997291565, 0.016555825248360634, 0.015715602785348892, 0.015715602785348892, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' S', ' T', ' P', ' a', ' Italy', '', '', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 7535, 281, 8191, 17, 698, 330, 658, 269, 8492, 288, 269, 1723, 288, 269, 2317, 288, 7535, 281, 405, 5597, 15, 536, 418, 6214, 289, 1604, 1941]
+[Full output 2]
+Paris is the capital of the province of Catalonia. It is also the seat of the government of the city of Catalunya, which was founded in 1230 by the Pope Clement V.
+The town has a population of 655 and an area of . Of this, only the village of Arsès contains the villages of Arsél (the original inhabitants of Arsée were called Arsèse) and Arsèr (the original settlers of Arsère). The town is divided into four parts: Arsèn, Arsène-Arsènes, Arsénaïes, Arsoumées and Arséla-Arsénes. The first three are scattered over a large part of the territory. The last one is in the south, where it is known as Arsèon.
+The most important cultural activity in Arsènes is the making of ceramics. A small museum with a large collection of ceramics is located here. There are also two museums in Arsénes, the second one in the north, and the third one in the south.
+In the middle of the town there is a large shop that sells products such as porcelain, paper
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1929, 2331, 288, 993, 357, 6584, 269, 2690, 920, 795, 7527, 17, 1803, 486, 10381, 760, 1890, 1987, 298, 853, 780, 656, 15, 486, 835, 269, 3248, 3748, 299]
+[Full output 3]
+In linear algebra, an eigenvalue is a special kind of number that describes the relationship between two vectors. When you multiply these numbers together and add them up, you get the unique solution to the equation Ax = b.
+
+Now let's dive into the given problem involving a square matrix A:
+
+A = [[1 0], [0 1]]
+
+We want to find the eigenvalues of this matrix. To do so, we need to calculate the eigenvalues of A using the formula:
+
+(1 - sqrt[3]) * e^((-sqrt[3]2) + (1 - sqrt[-5]))
+
+Using the identity (1 - √3), we can rewrite our original matrix as follows:
+
+[(1 - sqrt(-5)) * e^(((-sqrt[-4]2) - (-sqrt[-5])))]
+
+To solve for the eigenvectors, we first factor out the square root term in the denominator:
+
+= [-sqrt[-4]/2*e^(-0.6)] * e^-0.6
+
+Next, we apply the Pythagorean Identity:
+
+x2 = sqrt([sqrt[-4]*e^(-0.*cos(θ)*sin(θ))) + (1/2)*(e^(-0.)*(e^(-0
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 1420, 817, 491, 395, 1991, 5546, 9845, 1005, 5663]
+first_step_topk_probs=[0.20788799226284027, 0.1370481699705124, 0.09034769237041473, 0.08576255291700363, 0.06260326504707336, 0.05366883426904678, 0.05094514414668083, 0.05094514414668083, 0.03727226331830025, 0.031880658119916916]
+first_step_topk_text=[' can', ' allow', ' use', ' have', ' are', ' provide', ' describe', ' rely', ' help', ' involve']
+
+[New tokens 4] count=131 first30=[22968, 269, 14457, 2673, 17, 202, 16, 24304, 450, 8485, 29, 382, 3392, 299, 3235, 922, 330, 2397, 351, 289, 269, 1815, 15, 857, 359, 263, 4769, 388, 263, 3127]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the neural network.
+- Adaptive Learning: The ability to predict what is going on in the environment, such as a teacher or a student, and how they will react to it.
+- Cross-Linked Learning: A system that combines information from multiple sources into one large network. This allows learners to learn more quickly than other systems.
+- Distributed Learning: A method for collecting data from different sources and then organizing it into a larger network.
+The following example shows how to use the Learning System-Based Learning model to improve your teaching.
+|This page uses Creative Commons Licensed content from Wikipedia (view authors).|
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=148 first30=[263, 647, 286, 3, 711, 4750, 2062, 263, 689, 715, 418, 263, 1809, 3510, 2827, 11183, 17, 1530, 699, 1106, 6133, 298, 1114, 2850, 10978, 17, 5706, 1266, 1024, 791]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+Once upon a time there was a little girl named Jane. She had long hair and very soft fur. Every day she would go outside to play in her garden. One day, Jane saw something very special. It was a big red ball! She wanted to play with it but it was too heavy for her. So she put it on and ran outside. The ball rolled down the hill and the little girl was so happy. She played all day until it was time to go home. When she got back inside, Jane said goodbye to the ball and went inside. She waved as she walked away, feeling very happy. She knew that she could always count on her friends to keep her special things safe.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.7587487697601318, 0.24125118553638458, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 6] count=136 first30=[622, 353, 81, 552, 354, 12, 864, 353, 81, 552, 409, 12, 711, 202, 6, 538, 28045, 66, 20, 1714, 202, 6, 265, 1083, 801, 10489, 288, 545, 9044, 903]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return (n - 1) * (n - 2)
+
+
+# def factorial_1():
+#     print("Sum of all integers")
+#     for i in range(0, len(self.n)):
+#         print("Sum is", self.n[i])
+#         if self.n == 0 or self.n < 1:
+#             break
+#         else:
+#                 return self.factorial(self.total)
+#     # print(f"The sum of {len(self.factorial)} is {self.total}")
+#     return self.sum(self.count())
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 339, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.5260182023048401, 0.4739817678928375, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' for', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=145 first30=[622, 651, 73, 62, 19, 64, 339, 284, 289, 311, 490, 284, 17, 277, 16652, 551, 298, 284, 861, 446, 5044, 64, 202, 202, 350, 1401, 678, 626, 861, 7200]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return [f[0] for f in n if f.isdigit() and f == '.']
+
+if __name__ == '__main__':
+    print(FUNCTION_TESTS)
+
+    # FILENAME = "abc"
+    # print(FILENAME)
+    # print("a")
+    # print('b')
+    # print()
+    # print([5,1])
+    # print((10,2))
+    # print({})
+    # print(-1)
+    # # print(f'{f}'())
+    # print([(3,4)])
+    # print(*f'{x}={y}')
+    # print (f'{f}'())
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 1541, 2590, 1289, 356, 3126, 4619, 0, 1]
+first_step_topk_probs=[0.3612160086631775, 0.26427125930786133, 0.14145421981811523, 0.10349012166261673, 0.04991438239812851, 0.03847051411867142, 0.02059178613126278, 0.02059178613126278, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' There', ' No', ' We', ' I', ' Not', ' Black', '', '']
+
+[New tokens 8] count=256 first30=[13676, 17, 1541, 330, 263, 3313, 288, 1170, 351, 269, 2442, 289, 269, 5879, 298, 383, 415, 453, 1414, 922, 4604, 330, 1163, 988, 672, 482, 5826, 17, 2575, 411]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Yes. There is a lot of information on the subject in the literature and it's not known what exactly is being said about this topic. What we do know is that most cats are black or brown, they have an average weight of 20-30 pounds (about 5-6 kg). Some cats may be white, some may be black, but none of these are true "black" cats. We don't know if any of them are black, they just look like their owners. In fact, there are several different types of cats in the world. One type is called "raccoon," which is actually a feral cat with a body length of 10 inches. The other type is called a "hairy cat." These cats are usually small and grey, they have no tail, and they are usually brown or gray. Most cats are black, some are brown, some are black, and some are very light. Some cats are quite light and some are hairy. All cats are black at birth. It is thought that these cats are only black as they grow.
+There are also two types of cats: a "white" cat and a "raccoons". Both are the same color and have a white coat. The white cat is more common
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 2050, 382, 798, 843, 1541, 409, 698, 4449, 1012]
+first_step_topk_probs=[0.38449856638908386, 0.20580725371837616, 0.08059527724981308, 0.08059527724981308, 0.05313171446323395, 0.043139539659023285, 0.03994274139404297, 0.038871992379426956, 0.02843935787677765, 0.025625986978411674]
+first_step_topk_text=[' 1', ' One', ' The', ' 4', ' 5', ' There', ' 2', ' It', ' Each', ' 6']
+
+[New tokens 9] count=256 first30=[2050, 13032, 15, 619, 1167, 5330, 15, 795, 26634, 15, 1237, 10941, 15, 1679, 10941, 15, 2436, 10941, 15, 4720, 10941, 15, 4185, 10941, 15, 3808, 10941, 15, 11252, 10941]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple, one carrot, two bananas, three apples, four apples, five apples, seven apples, eight apples, ten apples, twelve apples, fourteen apples, fifteen apples, twenty-one apples, forty-two apples, fifty-three apples, sixty-five apples, seventy-six apples, eighty-seven apples, ninety-nine apples, nineteen apples, twenty apples, thirty-eight apples, thirty apples, forty apples, sixty apples, fifty apples, sixty cents, ninety cents, nineteen dollars, ninety hundred pounds, ninety thousand pounds, nineteen hundred pounds, eighteen hundred pounds, seventeen hundred pounds, thirteen hundred pounds, fifteenth, fifty-one, sixty-four, ninety million, ninety, thousand, ninety millions, ninety billion, ninety trillion, ninety percent, ninety%, ninety%, ninety%
+You are correct in saying that the number of apples you get is equal to the number of ones you get from your parents' savings account. In other words, you can't have a lot of money out of your pocket or out of your wallet for the same amount of money you give away. And this is true even if you only have a few pennies (
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 1289, 22089, 382, 360, 1509, 3919, 1348, 15255]
+first_step_topk_probs=[0.49398288130760193, 0.09018538147211075, 0.0695086270570755, 0.03818689286708832, 0.03352474793791771, 0.02210087887942791, 0.020979249849915504, 0.019402634352445602, 0.016595952212810516, 0.016595952212810516]
+first_step_topk_text=[' I', ' What', ' We', ' Thank', ' The', ' "', ' You', ' My', ' How', ' Thanks']
+
+[New tokens 10] count=256 first30=[2575, 415, 669, 1112, 34, 202, 16, 356, 418, 21393, 490, 486, 982, 491, 269, 1134, 1112, 339, 263, 2024, 388, 649, 34, 202, 16, 2575, 330, 669, 1534, 1112]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What's your name?
+- I was wondering if you could have the same name for a month or so?
+- What is your last name?
+A. I'm trying to be honest with you, but it's not clear what your last name means.
+B. You're in love with me and want to share this information with me?
+C. I'm just really excited about this new name.
+D. I like you all.
+E. If you can't make it up now, how do you know where you are going?
+F. It's not that hard.
+G. I'll try to get it out of here.
+H. How did you get it?
+I'm looking for a name.
+You've got a few things on your list.
+Your last name has been changed from "I" to "J."
+You've also had a lot of fun with my name.
+What's your last name when you were younger?
+Do you know who your first name is?
+When you were young, I wanted to go back and talk more.
+The second time I went to school, I tried to find someone who would give me my last name.
+My first name is J
+
+================================================================================

@@ -1,0 +1,281 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 2857, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8545611500740051, 0.14543887972831726, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' went', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 1] count=132 first30=[2827, 5273, 2857, 299, 269, 3843, 374, 610, 2553, 17, 1109, 2977, 263, 2023, 3197, 298, 3766, 299, 15935, 383, 17, 5273, 988, 15, 360, 4551, 415, 631, 656, 1059]
+[Full output 1]
+Once upon a time, a curious child named Jack went to the park with his mom. They saw a big tree and wanted to climb it. Jack said, "Let's go up high!" His mom replied, "Yes, let's go!" So they climbed down the tree and took a deep breath. When they got to the top of the tree, they saw lots of different things. Jack was amazed by how many kinds of birds there were. He asked his mom, "What are these?" His mom smiled and said, "They are all in the tree! We can find them together." Jack was so happy that he couldn't wait to take more pictures and see new things.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 263, 16769, 336, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.9352644681930542, 0.027460549026727676, 0.02009056694805622, 0.017184371128678322, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' a', ' Peru', ' S', '', '', '!', '"', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 1548, 16, 1391, 14256, 17, 202, 509, 5566, 415, 1112, 15, 536, 1818, 360, 1044, 5566, 288, 269, 2903, 961, 418, 775, 5067, 289, 263, 3236]
+[Full output 2]
+Paris is the capital of the province of the present-day Philippines.
+The island's name, which means "the island of the sun," was first mentioned in a document in 1445 by the Spanish conquistador Francisco de Orozco, who named it after his wife, the Virgin Mary. In 1553, the Spaniards seized control of the island and annexed it to their own dominions. The islands were then part of the Philippine archipelago and were ruled by a series of kings (1563–1629) from the northern coast of the Philippines.
+In 1606, a new island was founded on the eastern side of the island. It was renamed Manila in honor of General Francisco de la Plata, who had been governor of the island since 1720. The island was named after the famous Admiral of the Pacific Fleet, General Antonio de San Martín, who commanded it during the Mexican War of Independence.
+The Philippines has many different ethnic groups that are distinct from each other. Among them are the Filipinos, the Mayans, the Filipinos and the Peruvians. There are also some ethnic groups that speak both Chinese and Filipino.
+The main languages spoken are the Arawak language, the Pahang language, and the Malay language
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=207 first30=[263, 13742, 357, 15353, 1939, 2242, 4734, 269, 18956, 17, 8533, 15, 339, 833, 4409, 400, 289, 423, 65, 81, 15, 411, 491, 29, 202, 202, 89, 333, 18062, 89]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar that satisfies certain conditions involving the eigenvalues. Specifically, for any vector v in R^n, we have:
+
+v = λv + λv = 0
+
+where λ is a nonzero constant and λ is a scalar. We can also represent the eigenvalues using matrices, which are arrays of numbers arranged in rows and columns. For example, consider the matrix A:
+
+A = [[1 1], [2 3]]
+
+Here, the eigenvalues are those of the first row and last column respectively; however, there exists another row with only one eigenvalue corresponding to each row. To calculate the eigenvectors of this matrix, we need to determine how many linearly independent eigenvectors exist within the matrix. This requires finding the eigenvalues of the second row and last row, then multiplying them together (for example, the eigenvalues of A) to obtain the third row and last entry. After performing all these calculations, we arrive at the desired eigenvector matrix.
+
+To illustrate, let us consider the following matrix A:
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 817, 1420, 1085, 491, 9845, 1991, 395, 5663, 14071]
+first_step_topk_probs=[0.24703802168369293, 0.16285745799541473, 0.1467469036579132, 0.07077758014202118, 0.06377589702606201, 0.05178198218345642, 0.037884511053562164, 0.03720433637499809, 0.02919873036444187, 0.023707520216703415]
+first_step_topk_text=[' can', ' use', ' allow', ' model', ' have', ' rely', ' provide', ' are', ' involve', ' incorporate']
+
+[New tokens 4] count=147 first30=[22968, 269, 2673, 2982, 17, 202, 16, 24304, 450, 8485, 29, 382, 1201, 288, 15454, 298, 13778, 719, 2269, 289, 1663, 299, 2936, 553, 3876, 15, 6732, 15, 388, 10656]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the network structure.
+- Adaptive Learning: The process of designing and implementing new models in order to improve their performance, efficiency, or effectiveness.
+- Network Modeling: The application of a network model to solve problems involving networks.
+- Analog Computing: A model used to represent data using digital functions and algorithms.
+- Digital Logic: The way computers store information on their systems.
+- Information Systems: The software system that processes information from many sources including computer networks, e-mail, and Web sites.
+- Computer Networks: The way people use and interact with each other through their networks.
+The next section will focus on how the future of computing is changing the way we think about it.
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=160 first30=[263, 647, 286, 3, 711, 4750, 2062, 263, 689, 715, 418, 263, 1809, 3510, 2827, 15781, 17, 1530, 6446, 299, 4196, 298, 2126, 3766, 299, 620, 2009, 1929, 17, 2050]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+Once upon a time there was a little girl named Lucy. She loved to explore and always wanted to do something special. One day she decided to go on an adventure with her family. As they were walking through the forest, Lucy noticed that some of the trees had fallen down. She picked up one of them and put it in his pocket. Then she started to feel brave again! Suddenly, she heard a voice from behind her. It said, "Don't worry, I will help you!" Lucy grabbed her hand and ran back inside. The voice said, "I'm here to help you." Lucy followed the voice and soon found herself in the middle of the forest. From then on, she knew that helping others would make sure they stayed safe and sound.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=134 first30=[622, 311, 864, 353, 20, 552, 311, 12, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 717, 18318, 802, 3, 711, 509, 316, 889, 2295, 547]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n * (1 - n)
+
+
+if __name__ == '__main__':
+    print('Python')
+
+The eponymous name of the species, Ephraimys cuniculus, is a genus of small, round-headed fish. It was named after the ancient Greek philosopher and naturalist Hipparchus who lived in the early 19th century.
+
+Ephraimyia cunica was first described by the American zoologist Walter Lippincott in his book "Ephraims," published in 1822. The genus name was changed to Ephraibinae in 1842.
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=256 first30=[622, 651, 19, 339, 1249, 289, 1457, 11, 20, 15, 311, 647, 354, 3830, 711, 202, 6, 655, 4160, 359, 1216, 202, 1018, 10212, 359, 4938, 202, 807, 13913, 17]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return [0 for i in range(1, n + 1)]
+
+
+# import numpy as np
+import pandas as pd
+from scipy.stats import tstats
+from sklearn.metrics import roc_curve
+from sklearn import preprocessing
+from sklearn._preprocessing import load_weights
+from sklearn_modeling import run_split_tests
+from sklearn2d import accuracy_score
+from sklearn3d import linear_model
+from sklearn4d import linear
+from sklearn5d import ck8
+from sklearn6d import linear
+
+
+class RandomForestClassifier():
+    def __init__(self, X, y=None, epochs=10, verbose=False):
+        self.X = X
+        self.y = y
+
+        # test cases
+        self.testcases = []
+        self.total_samples = 0
+
+    def train(self, X):
+        """Train the model"""
+        # test cases
+        
+        # test cases
+
+        # test case
+        # test case = np.random.randint(len(X), size=(20, 10))
+        # testcase = np.array([1, 2])
+        # testCase = np.append(testcase, axis=0)
+        # testcases[testcase] =
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 1541, 2590, 1278, 356, 338, 535, 1906, 698]
+first_step_topk_probs=[0.3117832541465759, 0.12209606915712357, 0.08932739496231079, 0.06884738057851791, 0.05888828635215759, 0.05036982521414757, 0.04781351238489151, 0.033205822110176086, 0.02840244583785534, 0.02696102112531662]
+first_step_topk_text=[' The', ' Yes', ' There', ' No', ' If', ' I', ' A', ' In', ' All', ' It']
+
+[New tokens 8] count=251 first30=[382, 3533, 330, 808, 17, 202, 43, 1477, 298, 269, 2645, 3191, 395, 795, 1108, 1943, 17, 2050, 288, 780, 330, 263, 2645, 3191, 15, 536, 578, 2645, 10978, 17]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is no.
+Hats and the black cat are two different things. One of them is a black cat, which has black fur. Another is a white cat, which is not black. Both of these cats have black fur but they don't have any black fur. And the other is a black-eyed cat, which does not have black fur. So there is no difference between black and white cats.
+The black cat is black in color. It doesn't have black fur as much as it does white. The black cat has black fur because its skin is black. But if you look at the surface of the black cat, you see that it's black. It looks like it's black in color with its eyes open.
+This is not true. The black is black in appearance and the black is black. If you look at your cat, you can't tell how long it is black from the color of its body. In fact, the black cat's skin is black, so it's only black in color and black in color, which means that it's dark brown or black. But it's not black in color because it's black because it's lighter on the face than it's on the side.
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 798, 409, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.866241991519928, 0.08313072472810745, 0.050627268850803375, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' 4', ' 2', '', '#', '', '"', '!', '', '']
+
+[New tokens 9] count=165 first30=[354, 13032, 15, 798, 10941, 15, 1291, 10941, 15, 1604, 10941, 15, 1720, 10941, 15, 2236, 10941, 15, 5764, 10941, 15, 3183, 10941, 15, 4023, 10941, 15, 6085, 10941, 15]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple, 4 apples, 9 apples, 12 apples, 15 apples, 30 apples, 35 apples, 40 apples, 60 apples, 70 apples, 70 oranges, 7 apples, 10 oranges, 8 apples, 5 apples, 5 bananas, 6 apples, 8 apples.
+What is the difference between a fair and a fair apple?
+Answer 1: a fair apple, a fair apple.
+Answer: a fair pear, a fair orange.
+Answer 2: a fair red apple, a not-a-red apple.
+See another brain teaser just like this one...
+Or, just get a random brain teaser
+If you become a registered user you can vote on this brain teaser, keep track of
+which ones you have seen, and even make your own.
+Back to Top
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 22089, 2575, 360, 382, 1509, 2, 3, 1, 0]
+first_step_topk_probs=[0.8104231953620911, 0.07865951210260391, 0.04210340231657028, 0.023741193115711212, 0.022536329925060272, 0.022536329925060272, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' I', ' Thank', ' What', ' "', ' The', ' You', '', '', '', '']
+
+[New tokens 10] count=100 first30=[2575, 330, 669, 2942, 374, 482, 5826, 34, 202, 43, 1640, 25205, 336, 3140, 47, 6135, 29, 356, 491, 263, 3215, 668, 330, 2449, 351, 1284, 4169, 298, 330, 658]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience with this topic?
+HARRY SHELTER: I have a friend who is working on my degree and is also a social worker. She has been very supportive of me, and I feel that she's not as good as I should be at work or in the workplace.
+I've been so proud of her for teaching me how to make my life better for myself and for others.
+SHOW: Do you have any questions about this topic?
+
+================================================================================

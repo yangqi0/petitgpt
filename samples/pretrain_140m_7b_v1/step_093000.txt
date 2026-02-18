@@ -1,0 +1,266 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=191 first30=[2827, 5273, 418, 4438, 374, 610, 6086, 1167, 17, 776, 6446, 299, 19352, 1378, 298, 1062, 383, 631, 6410, 298, 6410, 17, 14918, 15, 406, 5052, 263, 10603, 6387, 4834]
+[Full output 1]
+Once upon a time, a curious child named Jack was playing with his toy car. He loved to zoom around and make it go faster and faster. Suddenly, he heard a loud noise coming from the garage. It was a big truck! The truck had a big box of toys inside. Jack's eyes lit up as he saw all the toys inside. He wanted to play with them too. So, he opened the box and found lots of other toys inside. But when he opened the boxes, he noticed that the toys were not in the same place anymore. They were gone forever! Jack was sad because he thought his toy car was gone. He looked around for more toys but he couldn't find any. Then, he remembered the truck driver who drove his car back home. He said to his mom, "It's okay, Jack. We can look at your toy car together." His mom smiled and said, "Okay, let's go see what else we can do!"
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 7535, 281, 8191, 15, 298, 330, 12092, 351, 269, 9507, 288, 269, 321, 3537, 3345, 17, 202, 509, 2868, 418, 6214, 289, 2341, 3560, 419, 263, 1440]
+[Full output 2]
+Paris is the capital of the province of Catalonia, and is situated on the banks of the Tiber River.
+The town was founded in 1370 by a group of merchants who had been sent to Venice as slaves from the West Indies. They were granted a charter that allowed them to build a city for themselves. The first building of the city was built in 1492.
+During the reign of King Charles II (1415-1471), the town became a royal residence after his death. In 1534, the city was annexed by France.
+In 1613, the city became a part of the Kingdom of Naples. It remained under the control of the Kingdom until 1737 when it was again invaded by the French. In 1806, the city fell into disrepair. In 1829, the city suffered a series of earthquakes which resulted in the destruction of the old city walls. In 1841, the city reverted back to its original position, and the city was formally divided between the two states.
+After the Civil War, the city underwent an expansion into the cities of Bologna, Urbino, Pisa, Milan, and Rome. In 1895, the city's population increased to about 3,000 people. In 1923, the city gained its
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 6058, 500, 806, 1264, 269, 1926, 288, 545, 2944, 1378, 263, 1496, 1099, 330, 9347, 17, 202, 202, 509, 4409, 16, 27219, 1392, 744, 73, 11]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that tells us how much the space of all functions around a given point is finite.
+
+The vector-valued function $f(x) = \left(\frac{1}{2} x^2 + 1\right)\mathbf{B}$ is called a vector-valued one because it has both magnitude and direction. It can be written as:
+
+$$ f(x) := \left(\sqrt{a_1+b_1}\,\sqrt{a_{n+1}}+\sqrt{a_{\text{max}}+b_2\sqrt{a}_{n}}\right)$$
+
+Here, $\alpha$ represents the upper bound on the set of points in the complex plane. The determinant of this vector-valued map determines whether we want to calculate the surface area under the curve defined by $f$. This concept is known as the "non-trivial solution."
+
+To find the non-trivial solutions for the vector-valued functions, let's first recall some fundamental definitions from topology and differential equations. Specifically, we need to consider two cases based on whether there exists a constant $c > 0$ such that the line integral along the real axis converges towards zero. Let's denote the boundary of the
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 817, 9845, 491, 1420, 395, 1991, 5663, 1085, 20993]
+first_step_topk_probs=[0.15805189311504364, 0.15805189311504364, 0.10419419407844543, 0.0938868597149849, 0.07623010873794556, 0.044068679213523865, 0.04298453405499458, 0.040803033858537674, 0.034900687634944916, 0.031448159366846085]
+first_step_topk_text=[' can', ' use', ' rely', ' have', ' allow', ' are', ' provide', ' involve', ' model', ' simulate']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 4410, 17, 202, 2303, 1373, 15, 269, 1085, 330, 1431, 885, 289, 269, 1444, 288, 1593, 16, 4705, 2969, 17438, 15, 857, 359]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data sets.
+For example, the model is often used in the design of large-scale computer simulations, such as the creation of a simulation or the design of a new machine.
+The main difference between the two models is that they do not have a single name: "model" and "data".
+In the case of the model, the model's name is a function name, like the one described above. The name has an optional keyword that identifies the model's object (the model). In the model, it is a function. It may also contain a short description of what the model is doing.
+For instance, the model might have a function name for the model being built, but this would not qualify as a data model.
+However, if you want to build a model from scratch, you must first identify its parameters. This is done by defining parameters, which are the names of the classes that are being constructed. For instance, the parameters of the model could be the parameters of a model that contains the model itself.
+You can use the parameters of your model to define the data model. For instance:
+The parameter will be a string describing how the model should behave. The value of the parameter is the
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=55 first30=[263, 647, 286, 17, 595, 66, 1637, 551, 864, 263, 17, 595, 66, 731, 551, 711, 202, 856, 835, 66, 3139, 1714, 346, 622, 651, 20, 64, 647, 1180, 11]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get_value() * a.get_val()
+
+
+def get_values():
+    return [1] + list(map(int, input().split()))
+
+
+if __name__ == '__main__':
+    print('import unittest')
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1083, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.811277449131012, 0.18872256577014923, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' print', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 6] count=34 first30=[622, 311, 864, 353, 20, 552, 311, 12, 1341, 353, 21, 647, 354, 12, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 717, 2953, 1392, 22685]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n * (1 - n) / (2 + 1)
+
+
+if __name__ == '__main__':
+    print('Test function:')
+    print()
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1083, 490, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.586258590221405, 0.20687070488929749, 0.20687070488929749, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' print', ' if', '', '#', '', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 651, 73, 339, 284, 289, 1180, 11, 81, 12, 490, 453, 284, 64, 202, 202, 6, 18897, 269, 1392, 357, 31277, 269, 31393, 993, 13649, 1591, 29, 711, 538]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return [f for f in list(n) if not f]
+
+# Define the function that computes the Fibonacci number recursively:
+
+ def fib_recursive(n, n1, n2):
+ # The function uses the Fibonacci number to compute the Fibonacci number iteratively.
+ # The recursive function uses the following:
+ # 1 + 2 + 3 = 5
+ # 0 + 4 + 6 = 15
+ # 1 - 7 + 8 = 16
+ # 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 57, 58, 59, 60, 61, 62, 63, 64, 65, 65, 75, 77, 76, 78, 78, 79, 79, 80, 80, 82, 90, 95, 97, 98, 99, 100
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 13676, 2590, 356, 698, 338, 535, 1906, 1289]
+first_step_topk_probs=[0.4955093264579773, 0.19404423236846924, 0.0843312218785286, 0.058566864579916, 0.033024583011865616, 0.033024583011865616, 0.0313485823571682, 0.029757646843791008, 0.021771160885691643, 0.018621861934661865]
+first_step_topk_text=[' The', ' There', ' Yes', ' No', ' I', ' It', ' A', ' In', ' All', ' We']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 808, 17, 202, 509, 3533, 299, 269, 2395, 360, 3016, 620, 486, 3296, 490, 263, 3191, 415, 2419, 330, 2812, 299, 686, 2419, 3763, 330, 453, 3831]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is no.
+The answer to the question "How do you determine if a cat's color is related to its color?" is not easy. There are many factors involved in determining whether a cat's colour is related to his or her color. Some of these factors include the size of the animal, the color of the cat's skin, the type of pet it is, and the age of the cat. Other factors are the amount of time spent with the cat, and the color of your cat's skin.
+Why do cats have color?
+Most cats are born blind. They cannot see light because they don't know what colors their eyes make. Cats cannot see light unless they can see in bright sunlight, so they cannot see in bright sunshine. When they are born blind, they cannot see through the dark, but they can see through the darkness. This means that they cannot see at night, or when they get up early in the morning.
+What about color?
+There are two main ways to determine if a person has color. One way is to use the color of an object, such as a paper towel. The other way is to try to identify which color the person has. For example, if a cat sees a bird on a
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 2050, 382, 1541, 798, 409, 698, 338, 843, 637]
+first_step_topk_probs=[0.5599701404571533, 0.1302623450756073, 0.1302623450756073, 0.041418079286813736, 0.041418079286813736, 0.02551114559173584, 0.022169500589370728, 0.017086699604988098, 0.017086699604988098, 0.014814959838986397]
+first_step_topk_text=[' 1', ' One', ' The', ' There', ' 4', ' 2', ' It', ' A', ' 5', ' 3']
+
+[New tokens 9] count=80 first30=[354, 13032, 333, 798, 10941, 17, 202, 24771, 29, 409, 10941, 333, 1012, 10941, 17, 202, 22, 10941, 333, 1604, 10941, 17, 202, 509, 993, 288, 10941, 330, 409, 15]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples.
+Answer: 2 apples = 6 apples.
+3 apples = 12 apples.
+The number of apples is 2, so there are 7 apples in total.
+4 apples = 5 apples.
+So the total number of apples in the family is 3 apples.
+5 apples = 10 apples.
+What's the value of 5 apples?
+Answer by Tom
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 22089, 360, 382, 1289, 2575, 15255, 1509, 535, 783]
+first_step_topk_probs=[0.3412392735481262, 0.18599148094654083, 0.07672932744026184, 0.06563006341457367, 0.03898593410849571, 0.03512926027178764, 0.03334643319249153, 0.03334643319249153, 0.019808633252978325, 0.018803337588906288]
+first_step_topk_text=[' I', ' Thank', ' "', ' The', ' We', ' What', ' Thanks', ' You', ' In', ' This']
+
+[New tokens 10] count=256 first30=[360, 44, 1118, 486, 2068, 4006, 2843, 14887, 741, 202, 55, 13723, 29, 2340, 415, 1179, 15, 356, 491, 263, 9283, 298, 356, 1755, 847, 1418, 299, 631, 1842, 17]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: "I know you're getting really tired."
+Todd: That's right, I have a fever and I don't want to go home.
+Dorothy: And then it gets worse.
+Lynn: It's not going away.
+Greg: And the other thing that happens is we have some anxiety, which is what makes us feel more anxious or anxious than usual.
+Susan: We've had a lot of stress in our lives.
+Todd.: And it's just something we can do to get better.
+Dori: So this is a very stressful situation.
+Miranda: That's when I think about my family.
+Lisa: You know, these kids are going to be here at the same time every day, but they're going to be there every day.
+Rosalie: I'll tell you how much she loves me and her mother, who is 15 years old. She's very active.
+Dilah: But it's not normal for me to go into the car after school.
+Ross: And so what we're doing is we're getting them on their own, and if we're going to put in the car, we have to start with the
+
+================================================================================

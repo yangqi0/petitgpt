@@ -1,0 +1,299 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=124 first30=[2827, 6087, 2857, 299, 269, 3843, 374, 610, 2553, 17, 1109, 2977, 263, 2023, 3197, 374, 7336, 288, 8647, 17, 6087, 3766, 299, 15935, 269, 3197, 298, 1137, 922, 418]
+[Full output 1]
+Once upon a time, a curious child named Max went to the park with his mom. They saw a big tree with lots of branches. Max wanted to climb the tree and see what was on top. But when he got close, he accidentally dropped his stick! His mom tried to pull him off, but it was too late. The tree fell down and broke into many pieces. Max's mom was very sad because she loved her little brother. She told him that sometimes things can be broken and we should always ask for help when we need it. Max learned that even though he might not get hurt, he still had fun playing in the park.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=131 first30=[269, 9556, 288, 269, 9556, 17, 382, 2317, 330, 658, 1414, 359, 8836, 16, 40, 87, 3862, 818, 15, 298, 330, 2827, 994, 269, 4549, 357, 9480, 888, 383, 17]
+[Full output 2]
+Paris is the capital of the province of the province. The city is also known as Saint-Etienne, and is named after the river that flows through it.
+The municipality of Saint-Eliou was created in 1684 by King Louis XIV. The town was renamed Saint-Etrichéon in 1712. In 1805, Saint-Elephin became a French colony. After France's independence from Spain in 1821, Saint- Eliou became an independent municipality.
+St. Eliou has been a center for the arts, music, and literature. It is also home to the National Gallery of Art.
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 15353, 269, 3581, 744, 68, 65, 21, 647, 286, 65, 21, 333, 276, 65, 21, 2838, 535, 482, 1832, 15, 411, 1418, 299, 1098, 287, 10294, 8537]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that satisfies the equation $a^2 + b^2 = c^2$. In this case, we want to find an eigenvector associated with an eigenvalue.
+
+To begin, let's recall some fundamental properties of matrices and their eigenvalues:
+
+* A matrix is a rectangular array of numbers arranged in rows and columns. It can be represented as a square matrix where each entry is the identity matrix. For example, if we have two matrices, say $(A_1, B_1)$ and $(B_1, C_1)$, then the corresponding eigenvector would be $(A_2, B_2)$.
+* An eigenvalue is a scalar satisfying the following conditions:
+ * The product of two eigenvalues equals zero; i.e., for all scalars $c$ and $d$, there exists another vector $\mathbf{v}$ such that $\mathbf{u} = \mathbf{v}$.
+* The sum of an eigenvalue is also known as the determinant of a matrix. Specifically, given a matrix $A$ and its transpose $T,$ the determinant of $A$ is given by:
+ + $$\begin{align*}
+ T &= \frac{\partial A}{\partial x},\\[6pt]
+ T
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 491, 1420, 817, 1991, 395, 330, 5663, 1005, 9845]
+first_step_topk_probs=[0.20379675924777985, 0.18363629281520844, 0.12106048315763474, 0.07191301137208939, 0.05838875100016594, 0.04655681177973747, 0.03849225863814354, 0.029667146503925323, 0.02408784069120884, 0.02408784069120884]
+first_step_topk_text=[' can', ' have', ' allow', ' use', ' provide', ' are', ' is', ' involve', ' help', ' rely']
+
+[New tokens 4] count=256 first30=[22968, 269, 14457, 2673, 17, 202, 2303, 1373, 15, 490, 486, 586, 1496, 263, 2994, 993, 298, 486, 3766, 299, 1118, 806, 914, 1885, 383, 791, 1432, 299, 835, 269]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the neural network.
+For example, if you were given a random number and you wanted to know how many times it would take to get the same result, you could say that it would take 10 seconds. Then you could use this information to predict what the next time it will be. This is known as the "model-based" model. The model is used in many different ways. For example, if your brain was designed to recognize a specific sound, you might learn that the sound is coming from another sound. So you can predict the sound using a model. In fact, you can also predict the sound by taking the average of all the possible sounds you hear.
+In other words, you can make predictions about the future based on these kinds of data. For example:
+If you want to understand how a computer's computer learns, you can do this with just a few simple examples. You can think of each one as a separate file containing a list of all the things that you want to learn. These are called "data points." Each point in the list represents a single value. In other words, if you want to see which one is most important, you have to find the "best" one. (Note that there are two types of
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=189 first30=[263, 647, 286, 3, 711, 4750, 2062, 263, 689, 715, 418, 263, 1809, 3510, 1255, 15781, 17, 1530, 699, 1106, 6133, 298, 1114, 2850, 10978, 17, 2050, 1266, 1024, 4725]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+Once upon a time there was a little girl called Lucy. She had long hair and very soft fur. One day she decided to go for a walk in the park. As she walked, she saw something strange. There were two big trees! Lucy was so excited that she ran towards them. But when she got closer, she realized it was just a giant tree! The tree looked different from her but it was still too big. Lucy started to cry because she really wanted to get away from the giant tree. Suddenly, Lucy heard a voice behind her. "Why are you crying?" It was her mom. "I'm sorry," said Lucy. "It's okay my mom is here." Her mom smiled and said, "Don't worry, I'll help you find your way back home". So they went back home together. Lucy was happy that she could help her mom by helping her feel better.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=211 first30=[622, 353, 20, 647, 354, 12, 864, 353, 21, 552, 354, 12, 711, 202, 6, 538, 330, 66, 5756, 11, 81, 15, 311, 16, 20, 464, 202, 6, 265, 490]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return (1 + 1) * (2 - 1)
+
+
+# def is_real(n, n-1):
+#     if n == 0 or n < 0:
+#         return True
+#     else:
+#     return False
+
+
+class Solution:
+    def is_imag(self, n: int) -> bool:
+        """
+        :type n: int
+        :rtype: bool
+        """
+        n = 0
+        for i in range(0, n+1):
+            if n % 2 == 0:
+                n += 1
+            elif n % 2 > 0:
+                return True
+
+        return False
+
+    def is_exponential(self, i: int) → True:
+        """
+         :type i: int
+        """
+        return self.is_real(i)
+
+    def is_(self, n):
+        """
+         Return true if n is a positive integer.
+        
+        :type n : int
+        """
+
+        return self.get_decimal_number() & 0 <= n < 10
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.7185943722724915, 0.28140559792518616, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 651, 73, 62, 19, 64, 339, 284, 289, 21995, 11, 20, 15, 311, 14, 20, 3830, 202, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 717]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return [f[0] for f in xrange(1, n+1)]
+
+if __name__ == '__main__':
+    print('The following functions are available: ' + str(len(sys.argv)) + '\n')
+
+    print('The `Solve` function is implemented here.')
+
+    # Function that calculates the Fibonacci number recursively.
+    print('Function that returns a single Fibonacci number with the given parameters: ' + repr(int(sys.getsize()[0]), int(sys.maxsize()[1])).format(',', ','.join(str(i) for i in range(2, len(sys.stdin), 2)))
+
+    print('Function to compute the Fibonacci number of a given input file: ' + os.path.basename(__file__))
+
+    print('Method to calculate the Fibonacci number and write it to disk: ' + sys.stdout)
+
+    print('function to compute the Fragment Number of a given Input File: ' + args.FragmentNumber)
+
+    print()
+
+    print('A function to compute the recursion number of a specified input file: ')
+    print('\n')
+
+    if not args.recursive_recursive:
+        print('function called by recursively recursive
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 1541, 4619, 338, 356, 2590, 535, 698, 1289]
+first_step_topk_probs=[0.3060763478279114, 0.23590226471424103, 0.17258979380130768, 0.04944780096411705, 0.04693832993507385, 0.0422949492931366, 0.034340813755989075, 0.029373256489634514, 0.026467500254511833, 0.02512427605688572]
+first_step_topk_text=[' The', ' Yes', ' There', ' Black', ' A', ' I', ' No', ' In', ' It', ' We']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 12052, 17, 202, 509, 3533, 330, 808, 17, 382, 2645, 3191, 330, 263, 2076, 3864, 357, 578, 263, 16665, 339, 874, 288, 2419, 17, 382, 2886, 3191]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+The answer is no. The black cat is a social animal that has a preference for people of color. The white cat does not have a preference for everyone. So if you want to say something about the color of your cat, then you must say something like "I don't think it's a black cat."
+But what about the black cat? It's a very common breed in Europe and North America. A black cat is called a "black cat" because its color is gray or brownish-red. This means that it doesn't have any particular color patterns. The black cats are also called a "blue cat".
+How do I tell if my cat is black?
+In order to be able to say a black cat is black, you need to know the color of the cat. But the black cat can also be seen as a "black" cat.
+Why do I get so many black cats?
+Black cats are black, but they don't always look like a black cat. They are sometimes called a "white cat" because they look different from other cats. So when someone asks you about their color, you should ask them how they look. If they tell you this, you might find out that they
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 2050, 382, 1541, 338, 698, 5517, 798, 0, 1]
+first_step_topk_probs=[0.5626100301742554, 0.19852593541145325, 0.1308763325214386, 0.027433166280388832, 0.022273994982242584, 0.021143591031432152, 0.01905195601284504, 0.018085071817040443, 0.0, 0.0]
+first_step_topk_text=[' 1', ' One', ' The', ' There', ' A', ' It', ' Two', ' 4', '', '']
+
+[New tokens 9] count=70 first30=[354, 13032, 15, 409, 10941, 15, 637, 10941, 15, 798, 10941, 15, 843, 10941, 15, 1012, 10941, 15, 1186, 10941, 15, 1218, 10941, 15, 1171, 10941, 15, 1604, 10941, 15]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple, 2 apples, 3 apples, 4 apples, 5 apples, 6 apples, 7 apples, 8 apples, 10 apples, 12 apples, 15 apples, 16 apples, 17 apples, 18 apples, 19 apples, 20 apples, 20 trees, 12 trees, 12 fruit trees, 12 fruits, 14 apples, 17 oranges, 17 apples
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 382, 1509, 1278, 1348, 698, 783, 1803, 1289]
+first_step_topk_probs=[0.3180669844150543, 0.22139400243759155, 0.054254934191703796, 0.04640670493245125, 0.04640670493245125, 0.04405152425169945, 0.04181591421365738, 0.02904057316482067, 0.027566738426685333, 0.022382445633411407]
+first_step_topk_text=[' I', ' What', ' The', ' You', ' If', ' How', ' It', ' This', ' When', ' We']
+
+[New tokens 10] count=218 first30=[2575, 330, 4083, 34, 202, 11190, 18427, 29, 25799, 330, 269, 1144, 288, 1163, 4191, 15, 7495, 298, 12374, 17, 698, 415, 263, 2821, 645, 288, 1328, 17, 698, 483]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is stress?
+Emotional: Stress is the state of being happy, sad and angry. It's a normal part of life. It can be a result of:
+- Changing emotions or changing moods
+- Being more physically active
+- Feeling less stressed
+- Being a bit more relaxed
+- Being able to concentrate on your work, school, social activities, etc.
+- Becoming more comfortable with yourself
+- Being less stressed
+There are many things you can do to help yourself. These include:
+- Taking care of yourself
+- Taking time off from doing things that you enjoy
+- Noticing your feelings
+- Keeping a good night's sleep
+- Eating well
+- Being physically active
+It's important for people to take control of their energy level so they can get the most out of it. They also need to take some extra care in order to stay healthy.
+In addition to keeping your body healthy, you can help by taking regular breaks at home. This will help keep your muscles strong and help you feel better.
+
+================================================================================

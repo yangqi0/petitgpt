@@ -1,0 +1,267 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=155 first30=[2827, 6087, 2857, 299, 269, 3843, 374, 610, 2553, 17, 1109, 2977, 263, 2023, 3197, 298, 4725, 299, 15935, 383, 17, 6087, 418, 649, 8763, 4, 776, 23140, 656, 269]
+[Full output 1]
+Once upon a time, a curious child named Max went to the park with his mom. They saw a big tree and decided to climb it. Max was so excited! He climbed up the tree and looked around. Suddenly, he heard a loud noise coming from the tree. Max ran back to the tree and picked up a piece of paper. It said "I'm going to climb this tree." Max's mom smiled and said, "That's a great idea, but you have to be careful not to get too close." Max nodded and they started climbing the tree together. When they reached the top, Max felt like he had finally climbed down the tree. He laughed and clapped his hands as he climbed higher and higher. Max loved climbing the tree and never forgot how fun it was to climb.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 15, 298, 269, 851, 1384, 2317, 289, 269, 9556, 17, 202, 509, 1861, 288, 269, 2317, 8845, 1133, 299, 269, 689, 288, 269, 14473, 17, 698, 418, 263]
+[Full output 2]
+Paris is the capital of the province, and the most important city in the province.
+The history of the city dates back to the time of the Romans. It was a part of the kingdom of the Roman Empire. The city had its own well-known historical significance: it was the seat of the emperor, who ruled over the whole of Italy until his death. This was a period when the city was divided into two parts, one on the left and the other on the right.
+At the beginning of the 4th century, the city was the seat for the king of the Visigoths, who ruled the country from the time of Constantine. In the middle of the 6th century, this place became the seat of an emperor, who was responsible for the building of the great cathedrals at the same time as the city. He also built the Church of St. Peter (c. 710), which was built on the site of the old church.
+In the 13th century, a new town was created, with the first building being built by the Emperor Nero, who made it the capital of Italy. A new church was built here during the reigns of Emperor Claudius II, who was the last emperor of the Frankish empire.
+The city's
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 14274, 806, 1264, 288, 269, 1926, 383, 3448, 656, 17, 535, 613, 2351, 15, 383, 415, 269, 5043, 388, 5890, 1239, 288, 545, 1812, 7259, 1410]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that determines how much of the space it takes up. In other words, it's the maximum or minimum value of all possible outcomes within the given set of data points.
+
+Now let's dive into our main topic - finding the eigenvalues and eigenvectors for the given matrix. A vector $v$ is said to be orthogonal if its dot product with itself equals zero; i.e., $\| v \| = 0$. This means that any vector in the original space can be written as a linear combination of these vectors. For example, consider the following matrix:
+
+$$
+\begin{bmatrix}
+1 & 2 \\
+2 & 3
+\end{bmatrix},
+$$
+
+where $3$, $4$, and $5$ are scalars associated with each row and column, respectively. Note that since both matrices share the same dimension, their eigenvalues must also be identical. Therefore, we say that the eigenvalues of $v$ are equal when they are equal to zero.
+
+Next comes the concept of eigenvalues. An eigenvector of a square matrix $A$ is a nonzero vector whose entries belong to the same eigenvalue set as those of the corresponding eigenvector. Specifically, if $v$ denotes the transpose of $A
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 1420, 817, 5546, 491, 14071, 1085, 395, 9845, 4478]
+first_step_topk_probs=[0.39500078558921814, 0.09188655763864517, 0.09188655763864517, 0.07081974297761917, 0.06381388753652573, 0.046687230467796326, 0.0420687310397625, 0.03565879166126251, 0.023721640929579735, 0.01828298345208168]
+first_step_topk_text=[' can', ' allow', ' use', ' describe', ' have', ' incorporate', ' model', ' are', ' rely', ' aim']
+
+[New tokens 4] count=256 first30=[483, 342, 4491, 299, 1623, 16, 7128, 2061, 17, 382, 1085, 330, 1728, 351, 269, 2877, 357, 14457, 8119, 483, 342, 3385, 299, 22968, 1623, 16, 7128, 4621, 15, 298]
+[Full output 4]
+Neural networks are a class of machine learning models that can be applied to real-world problems. The model is based on the idea that neural networks can be designed to mimic real-world processes, and they are useful for modeling complex systems in many different fields such as engineering, biology, and social sciences.
+The model is also used to design algorithms that can be used to improve the accuracy of the predictions made by the model. This can be done using a combination of computer programs that allow the user to simulate the system's behavior, and the algorithms themselves can be customized to fit specific needs.
+In the case of neural networks, one might think that these algorithms could be very powerful tools. They are usually extremely simple, and have been shown to be highly efficient at estimating how much time passes before it becomes too long to perform any given task. However, they do not always work well with high precision or large scale computation. Some examples include:
+- BERT: A real-time flow of data (data that can be represented by a single graph)
+- GAMMA: A distributed network (a collection of nodes)
+- MAN: A network that contains a set of nodes
+- SIMD: A network where nodes are connected via an interface
+- NETT: A network whose
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=105 first30=[263, 647, 286, 17, 595, 551, 711, 202, 350, 1401, 678, 626, 861, 8922, 3142, 9533, 346, 655, 3715, 555, 1499, 29, 331, 444, 9879, 86, 22235, 17, 3506, 86]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+
+if __name__ == "__main__":
+    import sys
+
+    try:
+        from libsdk.libsdk_api import build_python_setup
+
+        with open("py-python/tests/test_python_test_python.py") as f:
+            for line in f:
+                if not line.startswith("#"):
+                    continue
+
+                print(line)
+                sys.exit(1)
+
+            python = parse_version(line)
+            print(python)
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=192 first30=[622, 353, 20, 12829, 311, 12, 647, 354, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 801, 7121, 15, 2176, 14364, 3, 711, 4750, 2062, 263]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return (1 << n) + 1
+
+
+if __name__ == '__main__':
+    print("Hello, World!")
+
+Once upon a time there was a little girl named Lily. She loved to play outside in her garden. One day, she found an old leaf on the ground and picked it up. It was so pretty! Lily's mom saw her looking at the leaf and said, "Lily, you look like new leaves." Lily replied, "I don't know what they are, but I can tell you something interesting about them." Her mom smiled and said, â€œYouâ€TMre very clever, Lily. But remember, you should always be careful with things we have in our house.â€ From then on, Lily made sure to always be careful around things she found inside. And whenever she found something new, she would remember how much fun it was to find it in the garden. The end.
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=45 first30=[622, 354, 17, 19, 647, 353, 20, 552, 311, 12, 864, 353, 20, 552, 353, 81, 16, 20, 687, 711, 202, 350, 1401, 678, 626, 861, 8922, 3142, 9533, 346]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1 - n) * (1 - (n-1))
+
+
+if __name__ == "__main__":
+    import sys
+
+    print("Please enter your program to run the script")
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 1541, 2590, 356, 1289, 698, 2, 1, 0]
+first_step_topk_probs=[0.3742355406284332, 0.3038555383682251, 0.12535320222377777, 0.11899153888225555, 0.027680231258273125, 0.024941980838775635, 0.024941980838775635, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' There', ' No', ' I', ' We', ' It', '', '', '']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 12052, 17, 202, 509, 3533, 330, 808, 17, 202, 6641, 10676, 289, 269, 1165, 395, 2645, 15, 614, 715, 395, 658, 751, 357, 395, 2645, 15, 536]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+The answer is no.
+Most cats in the world are black, but there are also some that are black, which means they have a black coat. Some of these cats are in fact black, but most don't have any black coats.
+The reason for this is that many people think that the black cat is black because it's a domesticated cat. But actually, the black cat has black hair on its head, just like other cats do. It's not really black at all, but rather white around the eyes, nose, mouth, and ears. In fact, it looks like it's black, but it's not black at all. It's just a little bit bigger than normal.
+There are two kinds of black cats in the house: black ones and white ones. The difference between black and white cats is that they're both black, while white cats are usually gray or brown. They look similar to each other, but they look different from one another.
+A black cat may be either black or white, depending on where it lives. Black cats live in the wild, but they often eat insects and small mammals. White cats live in groups called "cats." These cats tend to live together in groups
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 843, 798, 2050, 382, 409, 1012, 643, 637, 0]
+first_step_topk_probs=[0.41291797161102295, 0.13129109144210815, 0.13129109144210815, 0.10659993439912796, 0.07027505338191986, 0.06024562567472458, 0.03761552646756172, 0.027520107105374336, 0.022243591025471687, 0.0]
+first_step_topk_text=[' 1', ' 5', ' 4', ' One', ' The', ' 2', ' 6', ' 0', ' 3', '']
+
+[New tokens 9] count=53 first30=[354, 13032, 333, 798, 202, 21, 10941, 333, 843, 202, 22, 10941, 333, 1171, 202, 23, 10941, 333, 1604, 202, 24, 10941, 333, 1720, 202, 25, 10941, 333, 925, 202]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4
+2 apples = 5
+3 apples = 10
+4 apples = 12
+5 apples = 15
+6 apples = 18
+7 apples = 30
+8 apples = 50
+10 apples = 60
+10 apples + 1 apples = 12
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 338, 382, 1396, 368, 321, 421, 2766, 1289, 783]
+first_step_topk_probs=[0.3842313885688782, 0.07732241600751877, 0.05231896787881851, 0.030279895290732384, 0.028743192553520203, 0.026583107188344002, 0.025899766013026237, 0.025899766013026237, 0.020488401874899864, 0.017987029626965523]
+first_step_topk_text=[' I', ' A', ' The', ' <', ' M', ' T', ' D', ' Dr', ' We', ' This']
+
+[New tokens 10] count=256 first30=[338, 17, 368, 2026, 15, 263, 17, 336, 17, 389, 547, 18783, 15, 263, 17, 343, 17, 389, 750, 15, 263, 17, 431, 17, 389, 547, 381, 1287, 15, 263]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: A. Mott, a. S. Bousquet, a. C. Bode, a. W. Bousquets, a. F. Bouchard, a. H. Boulton, a. R. Bjornson, a. K. Böhmeyer, a. G. Bieber, a. L. Bruegel, a. P. Bembe, a. O. Brennan, a. D. Bruegmann, a. V. Bücher, a. T. Bummer, a. N. Bromley, a. B. Burgman, a. E. Boultham, a. J. Bismarck, a. M. Burbach, a. Thiele, a. Mehlke, a. Beerberg, a. Boissel, a. Kooy, a. Fleming, a. Chongqing, a. Ho-Ho, a. Seung-yen, a. Liang, a. Yunnan, a'an, a. Zhujiang, a'nai, a. Xiaowu, a. Q
+
+================================================================================

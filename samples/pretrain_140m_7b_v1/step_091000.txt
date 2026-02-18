@@ -1,0 +1,290 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=149 first30=[2827, 5273, 418, 4438, 374, 610, 6086, 6268, 17, 776, 6446, 299, 19352, 780, 1378, 269, 6291, 298, 1062, 27313, 916, 263, 2035, 19653, 17, 2050, 1266, 15, 406, 2977]
+[Full output 1]
+Once upon a time, a curious child named Jack was playing with his toy cars. He loved to zoom them around the floor and make noises like a superhero. One day, he saw a big red car in the corner of the room. It was so much fun! Jack wanted to play with it too, but he didn't know how to get it back. He asked his mom for help, but she said no because it was too expensive. Jack was sad, but he still had an idea. He decided to go on an adventure and explore the park. When they got there, Jack noticed something strange. There were lots of other kids playing with their cars and toys. They were all very excited and couldn't wait to come back and explore the playground again soon.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 17, 698, 418, 775, 5067, 289, 263, 3236, 14947, 1291, 401, 2162, 5986, 15, 722, 383, 418, 2827, 994, 269, 2317, 288, 609, 17, 4987, 415, 353, 1176]
+[Full output 2]
+Paris is the capital of the province. It was first mentioned in a document dated 9th century AD, when it was named after the city of St. Mark's (St. Mark's) Castle. The town was called "The Town" until 1783 when it became part of the newly formed County of Arras.
+During the French and Indian War, the town was renamed as Maree-de-Sabo, which means "town of the Indians". In 1821, the town had an estimated population of 12,942 inhabitants. By 1857, the town included a small hamlet called Maree. Maree's town has been incorporated into the municipality of Marlborough since 1938.
+Maree was once home to many famous artists including John Grayson, Louis Pasteur, Claude Lévi, and Paul Sartre. The town also boasts several notable buildings: the Maree Historic District, the Marees Monastery, the Mares de la Fayette, the Mound House, the Musee de Champlain, the Merengue (the Maree), the Marene Plantation, the Mule Ranch, the Mules House, the Tate Farm, the M
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 14274, 269, 3892, 288, 263, 4409, 289, 263, 4409, 1926, 17, 783, 1818, 357, 269, 8878, 288, 263, 4409, 483, 342, 7734, 1191, 686, 5147, 298]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that determines the direction of a vector in a vector space. This means that the magnitude of a vector can be calculated using its argument and the direction of the vector itself.
+
+Now let's consider the given problem:
+
+$$ \begin{align*}
+\sqrt{\frac{{x^2 - y^2}}{4} &= \sqrt{(y-0)^2 + (z-1)(y+2)} \\
+&= \sqrt{(x^2 + y^2) + (z^2 - 1)}{(x^2+y^2)}\
+&=\sqrt{9x^2+\sqrt{3x^2}+...\\
+&= \boxed{\sqrt{9}}
+\end{align*}$$
+
+This equation tells us that the maximum distance between any two points on the real number line is always less than or equal to the absolute value of the absolute value function. It is important to note that this condition does not hold true for all real numbers because it only applies when dealing with complex numbers. However, there may still exist some special values of x, y, and z within our system, which could lead to unexpected results like those found in the original post.
+
+To illustrate why
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 1085, 817, 491, 9845, 1420, 1991, 1337, 5546, 5663]
+first_step_topk_probs=[0.17107436060905457, 0.13890153169631958, 0.12516066431999207, 0.09156951308250427, 0.06699368357658386, 0.04901362583041191, 0.04416494444012642, 0.0291153434664011, 0.0291153434664011, 0.02490367367863655]
+first_step_topk_text=[' can', ' model', ' use', ' have', ' rely', ' allow', ' provide', ' study', ' describe', ' involve']
+
+[New tokens 4] count=256 first30=[22968, 269, 14457, 2673, 17, 202, 16, 24304, 450, 8485, 353, 2193, 12, 552, 8485, 444, 2579, 6705, 298, 1466, 870, 15, 857, 359, 2970, 388, 865, 7485, 17, 202]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the neural network.
+- Adaptive Learning (AL) - Learning from previous experiences and current data, such as training or test scores.
+- Pre-trainable Learning (PLO) - Learning to train yourself to use the system in your classroom.
+- Discrete Learning (DL) - Learning by making choices about what you want to learn, how you can be successful with it, and how you can get involved in the process.
+- Free-Learning (FLE) - Learning through free-learning programs.
+- Collaborative Learning (CEL) - Learning in groups based on a common problem.
+- Cognition: An understanding of the relationship between our perceptions and outcomes.
+- Consciousness: The capacity to understand and reason about things.
+- Relativism: A belief that people have an innate sense of the world around them.
+- Engagement: Teaching the learner to take ownership of his/her own life.
+- Attention: The ability to perceive the world and its consequences.
+- Creative Thinking: Working with ideas and ideas from different perspectives.
+- Emotional Intelligence: Working with emotions and feelings, and developing skills to cope with situations.
+- Egoism: Ability to
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=190 first30=[263, 647, 286, 3, 711, 4750, 2062, 263, 689, 715, 418, 263, 1809, 3510, 2827, 15781, 17, 1530, 6446, 299, 1143, 3099, 289, 896, 5786, 298, 5317, 269, 4646, 7112]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+Once upon a time there was a little girl named Lucy. She loved to play outside in her garden and watch the birds fly by. One day she saw a big, juicy apple on the ground. It looked yummy! Lucy picked it up and showed it to her mom. "Look what I found!" she said. Her mom smiled and said, "That's very kind of you, Lucy." Lucy wanted to share the apple with her friends, so she asked her mom if they could have some. Her mom said yes, but that they had to be careful not to touch the apples. Lucy carefully took the apple from her hands and put it back in the basket. Then she ran off to find her friends who had bought the apple. They all ate together and had lots of fun. When it was time for dinner, Lucy gave the apple to her friends and they all shared it happily. The end.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 494, 11, 81, 18, 21, 12, 711, 202, 1052, 16216, 29, 346, 538, 5111, 66, 68, 11, 492, 15, 338, 29, 3907, 62, 499, 935, 389, 29, 3907, 62]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return int(n/2)
+
+
+class Solution:
+    def generate_a(self, A: List[int], B: List[List[int]], N: int) -> int:
+        """
+        :param A: The first element in the list.
+        :param B: The second element in the array.
+        :return: The first and last elements in the array as a list.
+        """
+
+        if len(A) != len(B):
+            raise ValueError("Expected a value greater than 1")
+
+        if A[0] == 0 or A[1] == 0:
+            return 1
+
+        if B[0] > A[1]:
+            return 1
+        else:
+            return 0
+
+    def generate_b(self, B: List["str"], N: int = 100000) -> int :
+        """
+        从一个二维数组,关系数组的时候,需要自动情况
+        :param b: The number of elements in the list to generate.
+        :type b: int
+        :param N: The number to generate.
+
+        :return: A `None` integer, with the result
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=179 first30=[622, 354, 17, 19, 647, 353, 20, 552, 311, 12, 864, 353, 2809, 17, 1302, 11, 21, 13, 2240, 17, 3463, 687, 711, 202, 6, 538, 8049, 66, 70, 1785]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1 - n) * (math.log(2*np.pi))
+
+
+# def fib_cmp(x, y):
+#     return fib(x,y)
+
+# def cmp_test(x, x, y):
+
+ # print("filling in with code")
+# print("filled in with code " + str(str(i)))
+# print()
+# print(f"Filled in with {int(math.sqrt(2*x**2)+y})")
+# for i in range(len(x)):
+#     print(f"{i+1} : {fiss[i]}")
+# print("\t".join([f"{i}\n", f"{i+2}", f"{i-3}{i+4}")])
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 13676, 2590, 338, 535, 1289, 698, 1906, 356]
+first_step_topk_probs=[0.4022792875766754, 0.19402357935905457, 0.08883047103881836, 0.07598072290420532, 0.0527675598859787, 0.05008960887789726, 0.04754751920700073, 0.03478650748729706, 0.028244437649846077, 0.02545035071671009]
+first_step_topk_text=[' The', ' There', ' Yes', ' No', ' A', ' In', ' We', ' It', ' All', ' I']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 12052, 17, 202, 509, 2597, 339, 482, 330, 357, 269, 839, 1194, 299, 6797, 357, 263, 3191, 330, 2645, 330, 299, 1207, 357, 383, 415, 453, 17]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+The reason for this is that the only way to prove that a cat is black is to show that it's not. In fact, in most cases, cats are either black or white. This means that if you have a cat who has been black since its birth, it will be a black cat. It may also be a black person. So the problem of having a cat is more complicated than simply showing that it's black.
+But, as we said earlier, there are many different ways to prove that an animal is black. We have seen that when the animal is black, it must be black. In other words, if it is black, then it must be a black animal. But in the case of cats, black animals are usually black because they are black. And, even though the animal is white, it must still be black.
+So the next question is what exactly does a cat need to do? Well, the answer is yes! It depends on how much you want your cat to be. If you want your cats to be black, you should look at the number of times each cat needs to be black. For example, if you want your pet to be black and you want your dog to be black with
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 354, 2050, 698, 1541, 338, 1509, 4449, 1289, 1278]
+first_step_topk_probs=[0.34298282861709595, 0.3090531826019287, 0.10905434936285019, 0.07978586852550507, 0.05837258696556091, 0.022859035059809685, 0.022859035059809685, 0.02059771865606308, 0.01856008730828762, 0.015875283628702164]
+first_step_topk_text=[' The', ' 1', ' One', ' It', ' There', ' A', ' You', ' Each', ' We', ' If']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 17, 2069, 15, 490, 486, 395, 2179, 263, 19093, 2929, 15, 669, 2056, 330, 843, 10941, 17, 2340, 1818, 715, 395, 1218, 10941, 289, 2056]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples. So, if you are making a delicious pie, your total is 5 apples. That means there are 8 apples in total (which is 7 apples). Now, if you want to make a delicious pie with 6 apples, you need to add up all the apples. To do this, we'll use something called "calculating the area." Don't worry, it sounds complicated, but I promise it's not too hard once we break it down together!
+
+Let me show you an example using numbers instead of fruit. Suppose we have 9 apples, which we'll call "5". We know that the number is 5 because 5 x 5 equals 5 x 5. Similarly, we can write this as "7", which gives us 9 + 7 = 25. But wait, there's another way to represent these things! Let's say we want to find out how much money we would get when calculating the area of a rectangle or a circle. That's where our little helper comes in handy!
+
+First, let's think about the area of each rectangle:
+Area = Number of Rectangles / Length
+= (2 * 4) / (3 * 4)
+= 16 square units
+
+Now, here comes the fun part
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 1509, 382, 2575, 1278, 1803, 1289, 698, 22089, 0]
+first_step_topk_probs=[0.7071957588195801, 0.054483745247125626, 0.05171870067715645, 0.04909393563866615, 0.03591788932681084, 0.03236473351716995, 0.030722197145223618, 0.020253334194421768, 0.018249768763780594, 0.0]
+first_step_topk_text=[' I', ' You', ' The', ' What', ' If', ' When', ' We', ' It', ' Thank', '']
+
+[New tokens 10] count=256 first30=[2575, 330, 4083, 34, 202, 7681, 17, 437, 662, 625, 29, 25799, 330, 263, 2000, 357, 6584, 263, 2466, 8510, 2018, 299, 263, 4397, 388, 1957, 15, 298, 330, 2410]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is stress?
+Dr. Eckert: Stress is a term that describes a strong emotional response to a situation or event, and is usually expressed in the form of a negative emotion such as anger, sadness, or guilt. It can also be used to describe a person's own moods, thoughts, or feelings. The goal is to help people feel more secure about themselves, especially when they are feeling depressed. This type of depression may be treated with antidepressant medication.
+Assisted suicide: Is it a good idea to get suicidal thinking?
+Drinker: A drinker who has attempted suicide is going to die at an early age. You might have this warning message from someone you know, but your friend might not want to tell you so much about it. They will probably think you've been suicidal and don't want to talk about it. But if you're not sure what to do, ask your doctor for advice. If you suspect that something is wrong, call 911 immediately.
+Assigning to suicide: Is there anything you can do to make yourself feel better?
+Drinking alcohol or other drugs: Is there any way to reduce your risk of suicide?
+Drinks: Drinking alcohol or other drug use may cause
+
+================================================================================

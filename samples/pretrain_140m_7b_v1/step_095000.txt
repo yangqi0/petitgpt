@@ -1,0 +1,252 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 2446, 2857, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.7812667489051819, 0.14756232500076294, 0.07117094099521637, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' came', ' went', '', '#', '', '"', '!', '', '']
+
+[New tokens 1] count=169 first30=[2827, 5273, 2857, 299, 269, 3843, 17, 776, 418, 649, 8763, 4, 776, 2977, 7336, 288, 613, 4355, 4438, 298, 2221, 958, 17, 1358, 1000, 406, 10227, 2009, 10942, 289]
+[Full output 1]
+Once upon a time, a curious child named Jack went to the park. He was so excited! He saw lots of other kids playing and having fun. But then he noticed something strange in the grass. It was a big dog! Jack got scared and ran away as fast as he could. The little boy wanted to help him, but he couldn't find his way back home. He looked everywhere for the dog's owner, but they were nowhere to be found. Suddenly, Jack heard a noise behind him. He turned around and saw that it was an old man. The old man had come over to take a look. He smiled at Jack and said, "That is my dog. I am here to help you." Jack was very happy and thanked the old man. From that day on, Jack kept his promise to always be careful when he played with the dog.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 17, 698, 418, 269, 3796, 2317, 289, 269, 9556, 288, 336, 27189, 15, 298, 383, 699, 263, 2073, 288, 672, 2236, 15, 1086, 874, 17, 382, 1548, 16]
+[Full output 2]
+Paris is the capital of the province. It was the largest city in the province of Seville, and it had a population of about 30,000 people. The present-day town of Borges is located at the confluence of the Tiber and the Alps, with its two lakes, and the River Tiber and its tributaries.
+The city of Borga is situated on the west bank of the Tulalpas river, and is connected to the city by a canal that runs from the Tuxtlao de la Plata to the city of Tampico. The city of Bacia is also the main center of the region.
+Bosco's major industries are agriculture, forestry, and oil. There are many industries that produce wood products such as ploughs, woodstoves, and hand tools. Other important industries include:
+- Oil refining
+- Natural gas
+- Gas processing
+- Oil refineries
+- Manufacturing plants
+- Agriculture (for cattle)
+- Industrial plants
+- Food processing
+- Manufacturers of petroleum
+- Chemical manufacturing
+- Commercial plant construction
+- Agricultural research
+- Research for agriculture
+- Research in agriculture
+- Education and training
+- Research and development of materials
+
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 6058, 500, 806, 1264, 269, 28071, 288, 263, 3823, 2321, 359, 411, 1774, 1795, 269, 3823, 17, 202, 202, 2303, 1373, 15, 1936, 269, 1759, 3581]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that tells us how much the eigenvalue of a matrix changes as we move along the matrix.
+
+For example, consider the following equation:
+
+$$\lambda = \frac{1}{2} \sum\_{i=0}^{n} i^2 + \dots + (n-1) i$$
+
+Here, $a\_i$ represents the eigenvalue, and $a\_j$ denotes the jth eigenvector corresponding to the eigenvalue. The first term in this equation tells us that $\lambda$ is equal to the sum of squares of all eigenvalues of $a\_1$, and $a_2$. This means that if you multiply each row of the matrix by its respective entries, you get the total number of rows of the matrix multiplied together. In our case, since $a\_3 = 1$, we have $$(1)^3 = 3 * (1 - 1)\cdot 2 = 0.$$ Similarly, since $b\_3 = x\_1 + x\_2 = x\_3$, we have $$\begin{align*} & b\_3 &= x\_1\\& b\_2 &= x\_2 \\&= x\_3 \\& b\_3 = y\_1\\&\quad\end{align
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 9845, 1420, 817, 491, 1991, 1085, 5663, 395, 5546]
+first_step_topk_probs=[0.23381951451301575, 0.17106600105762482, 0.17106600105762482, 0.10161757469177246, 0.10161757469177246, 0.04192152991890907, 0.029113920405507088, 0.026233820244669914, 0.023319631814956665, 0.014041952788829803]
+first_step_topk_text=[' can', ' rely', ' allow', ' use', ' have', ' provide', ' model', ' involve', ' are', ' describe']
+
+[New tokens 4] count=256 first30=[9845, 351, 269, 10724, 357, 1010, 719, 1968, 330, 7499, 299, 263, 1496, 854, 288, 870, 17, 535, 613, 2351, 15, 490, 486, 491, 263, 854, 288, 870, 298, 486]
+[Full output 4]
+Neural networks are a class of machine learning models that rely on the assumption that each new input is assigned to a given set of data. In other words, if you have a set of data and you want to predict how many items will be in your collection, you need to know which one is likely to be most important.
+Theory of Educational Theory
+One approach to understanding this problem involves considering the general idea of an experiment as a group. This is done by using a special kind of mathematical model called a stochastic process. The goal of this model is to understand how the outcomes of experiments change over time. It turns out that this model has some similarities with the classical model of random variables. Specifically, it says that the average value of all observations must be equal to the mean of all observations (the mean). That means that, for every observation, there are only two possible outcomes: either it's true or false. So, we can say that the average of all observations is also true. However, in this case, we don't know whether the averages of all observations are the same or not. We do know that there are only three possible outcomes: one, that we could expect the average to be less than or equal to the average. This would mean that, on average, the mean is greater than or
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=185 first30=[263, 647, 286, 3, 711, 4750, 2062, 263, 689, 715, 418, 263, 1809, 3510, 2827, 11183, 17, 1530, 6446, 299, 1143, 3099, 298, 4196, 719, 1943, 17, 2050, 1266, 1024]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+Once upon a time there was a little girl named Jane. She loved to play outside and explore new things. One day she went out to the park with her mom. As they were walking, Jane saw something strange in the distance. It was a big, brown monster! The monster had sharp teeth and it looked very scary. Jane wanted to help the monster, so she asked her mom if she could help him find some food. Her mom said yes, but only if she was careful. So Jane carefully walked over to the monster's house. When she got there, she noticed that it was very quiet. Jane was scared of the monster and started to cry. But then, the monster came closer and touched her eyes. He felt brave and gentle. Jane knew that he had done something good for the monster. She thanked the monster and ran off to tell her friends about her adventure.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=34 first30=[622, 353, 81, 13, 20, 12, 864, 353, 21, 13, 19, 647, 354, 18, 21, 864, 354, 647, 409, 18, 22, 864, 643, 12, 711, 537, 8714, 29, 853, 751]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return (n*1) * (2*0 + 1/2 * 1 + 2/3 * 0)
+
+ # TODO: add some stuff here...
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 339, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.6970592141151428, 0.3029407858848572, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' for', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=76 first30=[622, 651, 73, 554, 11, 78, 12, 339, 520, 289, 7631, 11, 2862, 11, 19, 15, 311, 14, 20, 19742, 1246, 622, 8049, 11, 73, 554, 11, 81, 687, 1246]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return [fib(k) for k in sorted(range(0, n+1))]
+     return fib(fib(n))
+    
+#function to compute the Fibonacci number of a given integer n.
+def fib_number(n):
+    return fib(n)
+
+
+#function of function to calculate the Fibonacci number in the specified integer n.
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 13676, 2590, 698, 356, 1906, 338, 1289, 535]
+first_step_topk_probs=[0.34668809175491333, 0.1954900324344635, 0.15872538089752197, 0.05316634476184845, 0.04097694158554077, 0.03158216550946236, 0.03158216550946236, 0.03158216550946236, 0.02701365388929844, 0.025642715394496918]
+first_step_topk_text=[' The', ' There', ' Yes', ' No', ' It', ' I', ' All', ' A', ' We', ' In']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 12052, 17, 202, 509, 2597, 2526, 269, 2645, 3191, 330, 649, 1264, 611, 1488, 289, 269, 5537, 330, 1091, 383, 578, 263, 1114, 1059, 11829, 288, 1163]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+The reason why the black cat is so much more common in the UK is because it has a very high incidence of being infected with this disease.
+This means that many cats have been exposed to this disease for years before they become ill. It's also a big problem for people who don't know what is causing the black cat to get sick.
+So how do you figure out if your cat is infected? You'll need to find out whether it's red or black. If it's white, then it's probably black.
+What is the treatment for this condition? Is there anything I should be able to tell me about it?
+Answer : It depends on which is which.
+There are two main types of cats:
+- Bites - these are often caused by something outside the body such as a cat or dog. This may cause severe pain. Sometimes cats will hide their skin from other people, but it doesn't hurt to take them off. They can be extremely irritable and easily frightened.
+- Poisoning - this is usually an animal that is poisoned by eating poisoned meat.
+It's important to remember that no one knows exactly what causes this disease. It could be a virus or bacteria
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 798, 409, 843, 2050, 637, 382, 2, 1, 0]
+first_step_topk_probs=[0.4936114549636841, 0.21452294290065765, 0.09073178470134735, 0.07569783926010132, 0.0449664480984211, 0.04395962879061699, 0.03650987148284912, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' 4', ' 2', ' 5', ' One', ' 3', ' The', '', '', '']
+
+[New tokens 9] count=65 first30=[354, 13032, 333, 798, 10941, 17, 202, 3544, 15, 806, 914, 10941, 620, 486, 491, 490, 669, 3222, 10848, 263, 5034, 288, 7449, 410, 25100, 339, 553, 1293, 299, 1137]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples.
+So, how many apples do you have if your parents bought a pair of binoculars for their children to see? The answer is 9 apples!
+We're going to give our kids a challenge: Can we play outside in the park today? Let's try it out together!
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 22089, 1509, 382, 1289, 1490, 698, 783, 1278]
+first_step_topk_probs=[0.4261360764503479, 0.11253200471401215, 0.0668468177318573, 0.057177115231752396, 0.054275378584861755, 0.03578052297234535, 0.027577154338359833, 0.024849077686667442, 0.022390879690647125, 0.022390879690647125]
+first_step_topk_text=[' I', ' What', ' Thank', ' You', ' The', ' We', ' Is', ' It', ' This', ' If']
+
+[New tokens 10] count=159 first30=[2575, 330, 263, 360, 309, 604, 5, 34, 202, 43, 784, 269, 360, 1176, 604, 5, 8272, 351, 669, 15845, 299, 1840, 669, 6472, 298, 817, 383, 359, 263, 4379]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is a "stress"?
+Hold the "Stress" button on your keyboard to control your voice and use it as a tool for writing your thoughts, or in other words, to help you feel better.
+In this lesson, students will learn how to write their thoughts and thoughts with the help of the "stress". The goal of this lesson is to give students the opportunity to write their own thoughts and thoughts using the "stresses" tool. Students will be able to write their feelings in a variety of ways so that they can begin to see what works best for them. They will also be able to work through a few ideas about how to use the "stressing" tool to create their thoughts.
+To view the videos, please click here!
+
+================================================================================

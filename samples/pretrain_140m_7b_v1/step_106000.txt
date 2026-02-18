@@ -1,0 +1,312 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 2446, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8991213440895081, 0.10087861120700836, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' came', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 1] count=101 first30=[2827, 5273, 2857, 299, 269, 3843, 17, 776, 418, 1114, 8763, 298, 3766, 299, 631, 351, 287, 13555, 17, 1238, 406, 12562, 15, 406, 2977, 2009, 10209, 17, 1541, 586]
+[Full output 1]
+Once upon a time, a curious child named Jack went to the park. He was very excited and wanted to go on an adventure. As he walked, he saw something amazing. There were lots of trees and flowers! Jack started to climb up to the top of the tree. Suddenly, he heard a loud noise coming from behind him. It was a big bear! The bear was scared and it ran away. Jack felt safe and happy. He knew that if he kept going, he could find some more fun adventures in the park.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 4772, 288, 269, 14256, 17, 698, 418, 6214, 289, 925, 2725, 419, 269, 1560, 1705, 5001, 15, 298, 686, 775, 11031, 418, 3895, 8655, 343, 1727]
+[Full output 2]
+Paris is the capital of the province of the Republic of the Philippines. It was founded in 1824 by the United States Army, and its first governor was General Francisco Cristina Aguilar.
+The city has a population of about 215,000 (2002 census). The municipality is located at 15°45' N, 96°46' W. The population density is 1,700 people per square mile (1,400/km2).
+There are no towns or villages on the island. The town is divided into four districts: the urban area, the rural district, and the rural district. The population growth rate in the 1990s was 7%, but today it is 5%.
+Pecos is the only city with a population of approximately 1,500 people. The population is made up of Filipinos who make up the majority of the population. The Philippine government has a policy of not allowing the Filipino to leave the country for economic reasons.
+Peco is the most populous city in the Philippines, followed by the rest of the Philippines and Puerto Rico. Peco is home to the United Nations High Commissioner for Refugees (UNHCR), which has been designated as a Special Area of Refugee Status under the UNHCR.
+Peb
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 357, 15353, 269, 3581, 202, 202, 2302, 91, 65, 21, 647, 371, 65, 21, 333, 354, 2302, 202, 202, 3107, 744, 92, 7, 330, 833, 4409, 289, 2714]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar that satisfies the equation
+
+$$x^2 + y^2 = 1$$
+
+where $y$ is any vector in $\mathbb{R}^n$. An eigenvector of a square matrix is a scalar times a matrix that has determinant equal to zero. The eigenvalue of a matrix is called its eigenvalues.
+
+Now let's consider the problem at hand: finding the maximum value of the function $f(t)$ when $t=0$, where $t$ is a real number and $1 < t < \infty$. We are given that $f(0) = 0$, which means that the eigenvalues of $f(k)$ are the values of $k$ such that $f'(0)=0$. To find the maxima or minima of this function, we need to show that it does not have any nonzero eigenvalues. Let us first note that since $f(z)$ is a symmetric matrix, there exists some positive integer $m$ such that for all $z \in Z$, $f(w)$ is invertible; i.e., $f(r)$ is invertibility of $w$. Now, suppose that $g(x)$ is a square matrix with $g(u)$, where $
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 817, 491, 1420, 1991, 9845, 330, 3747, 395, 5546]
+first_step_topk_probs=[0.19558529555797577, 0.12893785536289215, 0.12893785536289215, 0.10468927025794983, 0.059032052755355835, 0.056036125868558884, 0.0504927895963192, 0.04099690541625023, 0.032102424651384354, 0.02847178466618061]
+first_step_topk_text=[' can', ' use', ' have', ' allow', ' provide', ' rely', ' is', ' allows', ' are', ' describe']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 4410, 17, 382, 3355, 2877, 330, 357, 1010, 25284, 578, 686, 1231, 854, 288, 14457, 3445, 15, 298, 357, 269, 12473, 289, 269]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data sets. The basic idea is that each neuron has its own set of neural properties, and that the neurons in the brain are all made up of neural elements.
+The study of neural networks was done using a variety of methods. One method is to use a collection of neurons from different parts of the brain (e.g., the hippocampus, the hypothalamus, etc.). Another technique is to take a group of neurons from one part of the brain and connect them with another part of the body (the cortex). This is called "cross-connection" or "conjugate connection." A third method is to divide the groups into groups based on their neural properties.
+A group of neurons will then be connected by a network of connections. The neurons in the group will receive inputs from other neurons that will be used to communicate with the other neurons. The neurons that receive input from the other neurons will be grouped together so that they may have the same kind of function as the original group. The neurons assigned to the group will also be linked to the other groups to obtain the information needed for communication.
+An important feature of this study is that it allows the researchers to compare the number of neurons in the two groups at
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 17, 595, 66, 73, 8753, 624, 551, 711, 202, 350, 1401, 678, 626, 861, 8922, 3142, 9533, 346, 655, 3715, 555, 1271, 551, 3, 711, 1018, 4160]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get_favorite()
+
+
+if __name__ == "__main__":
+    import sys
+
+    main()
+
+import numpy as np
+from scipy.stats import jitr
+from scipy import stats
+from scipy._linalg import lincs
+from scipy_math import linspace
+from scipy2.linalg import linspjoin
+from scipy3d.core.matrix import squareform
+from scipy4.linalg import norm
+from scipy5.linalg import rhs
+from math import sqrt
+from scipy6.linalg import eigvals
+from scipy7.linalg import jitrs
+from scipy8.linalg import djslabs
+from scipy9.linalg import sdist
+from scipy10.linalg import inv
+from scipy11.linalg import chisqr
+from sklearn.linear_model import LinearRegression
+from sklearn import preprocessing
+from sklearn1stering.feature_selection import train_test_split
+from sklearn10th.perception import read_kfold_data
+from sklearn12th.testing import assert_almost_equal
+from sklearn13th.util import cross_val_score
+from sklearn14th.optimization import SGDClassifier
+from
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=116 first30=[622, 353, 20, 18, 21, 12, 864, 353, 81, 552, 354, 12, 711, 202, 6, 538, 28045, 66, 5756, 11, 81, 464, 202, 6, 265, 490, 311, 861, 643, 29]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return (1/2) * (n - 1)
+
+
+# def factorial_real(n):
+#     if n == 0:
+#         return 1
+#     else:
+#     return n
+
+
+def factorial_imag(n):
+    if n == 1:
+        return 1
+
+    return factorial(n / 2) + factorial(n ** 2) +
+
+if __name__ == "__main__":
+    print("Number of primes:", len(prime))
+    print("Numbers of prime:", sum(factorial(3)))
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=256 first30=[622, 651, 73, 62, 19, 64, 339, 284, 289, 311, 490, 284, 17, 277, 66, 28058, 450, 551, 298, 284, 17, 277, 16652, 14081, 711, 202, 6, 11101, 299, 6519]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return [f[0] for f in n if f.is_recursive() and f.isdigit()]
+
+
+# Function to compute Fibonacci numbers recursion
+def fib_to_iterative(m, n):
+    # Calculate the recursive solution of recursively
+    # using recursively
+    while True:
+        # Iterate through all the numbers from 1 to n - 1 (i.e., there are n numbers)
+        m = len(m)
+
+        # Update the recursor with the number of elements from 1 to the number of numbers
+        m = list(filter(lambda x: x != 0, m))
+
+        # Set up the recursor recursively
+        while True:
+            # Initialize the recursor
+            i = len(M) + 1
+
+            # Check if the recursor is still working
+            if M[i] == 0:
+                break
+
+            # Return the recursor back to its previous position
+            m = M[-1].index(M[i])
+
+            # We need to check whether the recursor has been completed
+            if M[:i] == 2:
+                break
+            # Update the recursive solution
+            m = len([x for x in M[:i]])
+
+            # Add the recursor to the recursor
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 1541, 2590, 356, 698, 1906, 338, 1289, 4619]
+first_step_topk_probs=[0.36971715092658997, 0.14478331804275513, 0.14478331804275513, 0.09060309082269669, 0.05972927808761597, 0.04369886964559555, 0.03034823201596737, 0.0273460540920496, 0.02339031919836998, 0.02339031919836998]
+first_step_topk_text=[' The', ' Yes', ' There', ' No', ' I', ' It', ' All', ' A', ' We', ' Black']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 12052, 17, 202, 43, 1477, 15, 269, 2645, 3191, 15, 330, 263, 2997, 15705, 17, 698, 3822, 289, 263, 8152, 289, 269, 2389, 913, 383, 3822, 17]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+Hats, the black cat, is a living creature. It lives in a hole in the ground where it lives. In fact, its existence has been observed by many scientists.
+The most common explanation for black cats is that they were created to have a black appearance. However, there are other explanations as well.
+In a study of cats, a black cat was found to be able to live in a black hole in a dark place. This is because the black cat was placed inside a hole in which a black cat lived.
+One theory holds that the black cat would have been able to survive a black hole with no blackness. However, this theory does not hold up. A black cat cannot live in a hole outside of a black hole.
+This theory has led to a number of theories about how black cats came to be. Some believe that black cats originated from a black hole within an animal's body. Others say that black cats originate from a black spot in the eye.
+Some scientists believe that black cat research has shown that black cats are also a type of black cat. These studies have revealed that black cats were once very rare in the world.
+In the past, there was debate over whether black cats should
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 798, 843, 2050, 409, 3, 4, 2, 0, 1]
+first_step_topk_probs=[0.7753725647926331, 0.09654504805803299, 0.0465647429227829, 0.041958317160606384, 0.039559256285429, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' 4', ' 5', ' One', ' 2', '', '!', '', '', '']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 202, 20, 13032, 333, 637, 10941, 202, 21, 10941, 333, 409, 10941, 202, 22, 10941, 333, 637, 10941, 3, 711, 509, 1560, 1705, 3257, 288]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+1 apple = 3 apples
+2 apples = 2 apples
+3 apples = 3 apples
+
+The United States Department of Agriculture (USDA) recently released a report that shows the number of American children who are overweight or obese is growing at an alarming rate, according to the USDA. The study also found that nearly one in four children in the U.S. is overweight or obese, with one in five children being overweight or obese.
+"This is a very serious problem for our nation," said Dr. John Glover, director of the National Institute on Aging's Division of Nutrition, which oversees the report. "We need to take steps now to make sure we are getting enough healthy food."
+The report was based on data from the USDA's National Health and Nutrition Examination Survey, which measures how well people eat in the past year. The survey asked adults about their eating habits and found that most of them were either overweight or obese when they reached age 45.
+In addition, about 70 percent of those surveyed reported having a family member or other relative with obesity, compared to just 12 percent of those who did not have a parent or grandparent.
+For example, while the average age of the American child was 37
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 1289, 2575, 1509, 3919, 382, 783, 15255, 360, 5395]
+first_step_topk_probs=[0.6337863802909851, 0.035321224480867386, 0.033528655767440796, 0.0272231288254261, 0.0272231288254261, 0.022103454917669296, 0.018420090898871422, 0.017946597188711166, 0.017946597188711166, 0.015350538305938244]
+first_step_topk_text=[' I', ' We', ' What', ' You', ' My', ' The', ' This', ' Thanks', ' "', ' Mr']
+
+[New tokens 10] count=93 first30=[2575, 330, 269, 851, 1384, 3467, 486, 483, 620, 34, 202, 7681, 17, 440, 7896, 358, 29, 356, 491, 263, 1114, 1413, 2877, 288, 922, 383, 330, 357, 356, 483]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is the most important thing you can do?
+Dr. Lindsay: I have a very good idea of what it is that I can do in my life, and if I can do it, then I think that's what I want to accomplish. It's something I want to do in my lifetime.
+Assigned: You are currently working on your own research project for this project. Please send me any comments or questions about this work.
+
+================================================================================

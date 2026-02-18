@@ -1,0 +1,300 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=149 first30=[2827, 5273, 2857, 299, 269, 3843, 374, 610, 2553, 17, 1109, 2977, 263, 2023, 11913, 298, 3766, 299, 1499, 383, 17, 5273, 23140, 656, 269, 21924, 298, 5004, 339, 269]
+[Full output 1]
+Once upon a time, a curious child named Jack went to the park with his mom. They saw a big slide and wanted to try it. Jack climbed up the ladder and reached for the slide. He tried and tried, but he couldn't reach it. Suddenly, he heard a loud noise. It was a big dog! The dog barked and ran towards him. Jack was scared and dropped the slide. But then, he remembered that he had found a new friend. He asked if he could join in the fun. His mom said yes and they started to play together. Jack played on the swings and the slide until it was time to go home. When they got home, Jack felt happy again. He knew he would come back soon to the park next year.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 17, 382, 4223, 288, 269, 2317, 330, 269, 2868, 288, 336, 1242, 560, 15, 536, 418, 6214, 289, 2234, 7134, 419, 269, 3483, 2960, 5693, 657, 17, 202]
+[Full output 2]
+Paris is the capital of the province. The capital of the city is the town of Sarnia, which was founded in 1482 by the German King Charles V.
+The first post office was established at Sarnia on 17 February 1555 and then in 1662, when the town was renamed Sarnia. It became a part of the National Assembly for the Republic of Germany in 1848.
+In 1870, the town was home to about 2,000 inhabitants. In 1885, it became the largest town in the country. It had an estimated population of 3,500 people.
+- "Dietary Supplement". National Association of Jewish Women. Retrieved 2008-05-28.
+- Gottfried A. Lichtenstein (ed.), The History of the Jews in Germany. New York: The University Press, 1995. ISBN 0-8143-4781-7.
+- W. C. Browning (2004). Jews in the United States, 1765–1870. Washington, D.C.: The University Press. p. 185. ISBN 0806209492.
+- Zimmerman, David H.; Hecklehter, John; Heiss, John M.; von Freed, James E
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 483, 342, 6031, 359, 269, 1701, 288, 795, 10689, 288, 269, 1134, 2520, 17, 535, 613, 2351, 15, 383, 415, 269, 1677, 288, 269, 18956, 298, 553]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be expressed as the sum of two squares of the same length. In other words, it's the product of the eigenvalues and their corresponding eigenvectors.
+
+Now, let's talk about eigenvalues. A eigenvector is a way to describe how much the vectors are orthogonal (or perpendicular) to each other. Imagine you have a box full of different toys - cars, dolls, balls, etc., all mixed together in one big box. The vector v represents the size of the toy collection, while the matrix E denotes the size of your original toy collection.
+
+The determinant of a matrix tells us whether or not its eigenvalues are positive or negative. If the determinant is positive, then the matrix has a negative determinant because it has no negative values. Similarly, if the determinant is negative, then the matrices have a negative determinant since they have no nonzero entries.
+
+Let me give you an example using a regular matrix:
+```makefile
+A = [[1, 0], [0, 1]]
+B = [[2, 2], [3, 3]]
+
+# Matrix B contains only zero entries; therefore, the matrix does not contain any zeros.
+
+You may wonder why this works. Well, imagine you want to find out
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[1420, 483, 817, 491, 1991, 9845, 1085, 1005, 395, 5546]
+first_step_topk_probs=[0.1907351315021515, 0.1907351315021515, 0.1020931601524353, 0.1020931601524353, 0.06730393320322037, 0.04436947777867317, 0.03998025506734848, 0.03998025506734848, 0.035378411412239075, 0.02635660208761692]
+first_step_topk_text=[' allow', ' can', ' use', ' have', ' provide', ' rely', ' model', ' help', ' are', ' describe']
+
+[New tokens 4] count=179 first30=[22968, 269, 14457, 2673, 1085, 17, 382, 14457, 2673, 1085, 330, 1728, 351, 269, 14457, 2673, 8466, 298, 2869, 287, 5416, 299, 4061, 2970, 3036, 15, 857, 359, 263, 2259]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the neural network model. The neural network model is based on the neural network architecture and provides an alternative to traditional training methods, such as a language-learning algorithm or a cognitive-behavioral model.
+The neural network model consists of a set of neurons, which are connected via neural networks (NB), which are linked through neural networks. These connections allow the neural network to be trained and then allowed to learn new aspects of the neural network. This approach has been used in many other fields including psychology, medicine, and computer science.
+The model can be used to train, test, and evaluate a wide range of cognitive skills. For example, it can help students understand why certain types of memory problems are common among children with autism. It can also help students to develop problem solving skills.
+This article discusses how to use the neural network in a variety of educational settings.
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=191 first30=[263, 647, 286, 3, 711, 4750, 2062, 263, 689, 715, 418, 263, 1809, 3510, 2827, 15781, 17, 1530, 6446, 299, 1143, 3099, 298, 4196, 269, 1165, 1378, 896, 17, 2050]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+Once upon a time there was a little girl named Lucy. She loved to play outside and explore the world around her. One day she decided to go on an adventure with her family. As they were walking, Lucy noticed something strange in the grass. It was a big, shiny rock! She ran over to it and found it was very heavy. Lucy wanted to touch it but she was scared. "Don't worry," said her mother. "I can help you." Lucy looked at the rock and then said, "You must be careful not to touch anything else. That is why I am so sad!" Her mother smiled and said, "That's okay, Lucy. We will be safe when we get home." Lucy was happy that she could help her family by taking care of the rock. From that day on, Lucy and her family became best friends and always helped each other when they went on adventures together.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 311, 864, 353, 81, 552, 354, 12, 647, 354, 711, 202, 6, 11101, 299, 3296, 269, 28045, 288, 269, 993, 311, 17, 202, 35, 6137, 202, 856, 28045, 66]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n * (n - 1) + 1
+
+
+# Function to determine the factorial of the number n.
+@function
+def factorial_to_str(value, n=1):
+    if isinstance(value, str):
+        return value
+    else:
+        return "".join([f"{x}" for x in value])
+
+
+# Functions to calculate the factorial of
+def factorial_(n):
+    return factorial(n) + factorial(n-1) + factorial(-1)
+
+
+# The function to compute the factorial of a number.
+@functools.wraps(factorial_)
+def factored_down(factorial_, n=1, **kwargs):
+    # This is a basic function to check if the number is divisible by 5.
+    if not kwargs:
+        return False
+
+    # Check that the number is even and odd.
+    if n == 0 or n % 2 != 0:
+        return True
+    elif n % 2 == 0:
+        raise ValueError("Number must be an integer.")
+
+    # If the number is odd, then the result is odd.
+    return Factorial(n // 2)
+
+
+class Solution:
+    def __init__(self, n: int = None, n_remain
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=128 first30=[622, 284, 11, 81, 12, 1246, 202, 856, 8049, 66, 4203, 1714, 346, 490, 453, 8049, 11, 81, 15, 19, 464, 331, 622, 643, 3461, 622, 8049, 11, 20, 12]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return f(n)
+    
+def fib_number():
+    if not fib(n,0):
+        return 0
+    
+    return fib(1)
+
+
+# print(f"Something is wrong! : {f"{type(x)}"]")
+print(f"Solution: {f"{len(f"{type(-2)})}")
+print("Folders: " + str(f"{len((f"{type((-3)}))})/2.5"))
+print(str(f"{size(f"{num(i+1)})}") + "\n")
+print()
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 698, 13676, 4619, 535, 1278, 338, 1289, 2590]
+first_step_topk_probs=[0.39785701036453247, 0.16413292288780212, 0.06427538394927979, 0.04953896626830101, 0.04953896626830101, 0.04702487215399742, 0.03818117827177048, 0.03818117827177048, 0.036243487149477005, 0.031000694260001183]
+first_step_topk_text=[' The', ' There', ' It', ' Yes', ' Black', ' In', ' If', ' A', ' We', ' No']
+
+[New tokens 8] count=256 first30=[382, 2645, 3191, 330, 263, 1114, 1488, 1875, 289, 269, 3494, 17, 698, 578, 733, 1414, 299, 2915, 339, 656, 299, 2436, 973, 298, 3822, 839, 289, 619, 1505, 288]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The black cat is a very common species in the wild. It has been known to live for up to five years and lives only in one area of its range. In fact, it may be possible to assume that most cats will have lived there for a long time and that their habitat would have been uninhabitable. However, many people think that these cats are not "black" but rather "black" as they are more closely related to humans than to cats. They do not really have any coloration or hair, but instead are much smaller and darker in colour. They also have no fur on their skin. Their skin is completely covered with hairs and this does not make them black. Some cats are black at first but then become black at later stages when they begin to look like adults. This is because these cats are still looking like adults and can easily be seen by the naked eye.
+What about the fact that some cats seem to be black at first? How does this relate to your opinion of this article?
+Answer : It seems that there are two types of cats – black and white. Both types are considered to be brownish-gray in colour while the other type of cat is greyish-gray.
+The difference between black and white cats
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 382, 2050, 1541, 798, 698, 338, 409, 4449, 0]
+first_step_topk_probs=[0.5418855547904968, 0.23550257086753845, 0.08310084789991379, 0.030891215428709984, 0.029323488473892212, 0.02642265520989895, 0.019331226125359535, 0.01864335499703884, 0.014899159781634808, 0.0]
+first_step_topk_text=[' 1', ' The', ' One', ' There', ' 4', ' It', ' A', ' 2', ' Each', '']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 17, 202, 3016, 914, 10941, 395, 715, 289, 269, 7240, 34, 202, 24771, 354, 13032, 333, 1218, 10941, 17, 202, 3544, 15, 490, 486, 699]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples.
+How many apples are there in the bag?
+Answer 1 apple = 8 apples.
+So, if you had 4 apples, it would be 4 apples. But if you had 6 apples, it wouldn't be 5 apples.
+That's why we call the number of apples "nil" and "nice." The number of apples is the number of ways to pick one from a list that contains all the other fruits. For example, if we take the number of oranges (1) and count them, then the number of fruits is called the number of elements. In this case, the number of items is the number each fruit has.
+The number of apples = 1 + 2 + ... + n + 2
+Since the number of objects is the number for which the number of toys is the number, the number for the object is the number that the number of pieces of candy is on.
+So if you have a set of five apples, you can have as many different sets of three apples as you want. This means that if you have two sets of four apples, they will have the same number of items.
+What about the number of marbles? Well, it turns out that there are some things that are
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 382, 1509, 698, 783, 1289, 1348, 1803, 22089]
+first_step_topk_probs=[0.4946378469467163, 0.10391682386398315, 0.05279982089996338, 0.04757659137248993, 0.03666871413588524, 0.03666871413588524, 0.024173520505428314, 0.021782152354717255, 0.019627347588539124, 0.019627347588539124]
+first_step_topk_text=[' I', ' What', ' The', ' You', ' It', ' This', ' We', ' How', ' When', ' Thank']
+
+[New tokens 10] count=235 first30=[2575, 330, 4083, 34, 2575, 483, 411, 620, 299, 2323, 383, 34, 202, 48, 524, 17586, 29, 15351, 17586, 330, 263, 5749, 885, 289, 1663, 299, 1005, 500, 2336, 351]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is stress? What can we do to prevent it?
+Mindfulness: Mindfulness is a technique used in order to help us focus on what is important for us to do, but it also helps us to be more focused and focused on the things that are important for us.
+Attention: It's a great way to get your mind out of your work.
+Practice: Do you know how to practice meditation?
+Training: How to improve your concentration.
+Sleeping: How to sleep with your body.
+Eating: How to eat well.
+Fitness: How to make yourself fitter.
+Learning: How to learn about exercise.
+Therapy: Therapies for depression.
+Treatments: How to cope with stress.
+Lifestyle: How to stay healthy.
+Giving up: How to give up.
+Talking to someone: How to talk to someone.
+Being involved in an activity: How to be active.
+Getting back to your daily routine:
+Get enough rest.
+Make sure you have enough sleep.
+Be aware of any issues with your work.
+
+================================================================================

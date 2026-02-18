@@ -1,0 +1,304 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=138 first30=[2827, 5273, 418, 4438, 289, 269, 3843, 17, 776, 2977, 2009, 17935, 298, 12183, 337, 351, 269, 2389, 17, 698, 418, 263, 6086, 1167, 4, 5273, 3766, 299, 1143, 374]
+[Full output 1]
+Once upon a time, a curious child named Jack was playing in the park. He saw something shiny and sparkly on the ground. It was a toy car! Jack wanted to play with it, so he ran over to his mom. "Mommy, look what I found!" he said. His mom smiled and said, "That's wonderful Jack, but be careful not to touch it." Jack played with the toy car for hours until it started to get dark. Suddenly, the car stopped moving and Jack got scared. His mom hugged him and said, â€œDonâ€TMt worry, Jack. We can still have fun together.â€ Jack nodded and went back to his mom's house.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=155 first30=[269, 9556, 288, 269, 4772, 288, 31830, 15, 298, 269, 4223, 2317, 288, 31830, 17, 382, 4223, 2317, 330, 423, 5192, 1441, 68, 353, 54, 279, 6083, 504, 263, 5440]
+[Full output 2]
+Paris is the capital of the province of the Republic of Macedonia, and the capital city of Macedonia. The capital city is Rijeka (Sitka), a village in the municipality of Pogola, Macedonia.
+
+History
+The region was settled by the Greeks from the 1st century BC until their settlement was conquered by the Romans around Aegean. The Romans founded the town of Rijekes, which was located on the border between Greece and the Kingdom of Macedonia.
+After the fall of the Empire, the area became part of the Ottoman Empire.
+
+Rome
+
+The region has been inhabited since prehistoric times for many centuries. Ancient ruins found in the city are preserved as a UNESCO World Heritage Site.
+
+Geography
+
+Demographic evolution
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 20745, 14274, 269, 3892, 288, 287, 28071, 17, 1220, 1373, 15, 1936, 269, 1759, 4409, 1926, 29, 202, 202, 2302, 36, 333, 990, 7018, 94, 23203]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that uniquely determines the direction of an eigenvalue. For example, consider the following vector space:
+
+$$A = \begin{pmatrix} 1 & 0 \\ 2 & -1 \end{pmatrix}$$
+
+where $A$ and $B$ are vectors in $\mathbb{R}^n$. The concept of a basis for this vector space involves two primary components: the set of linearly independent vectors ($\mathbf{v}$) and the set of orthogonal bases ($D$). Here, we will delve into these topics using the provided text snippet as our foundation.
+
+**Theorems of Linear Algebra:**
+
+To begin with, let us define what constitutes a basis for a vector space. A basis consists of all vectors in a vector space V such that any vector in V can be written uniquely as a linear combination of other vectors within V. This means that if you have two vectors in V, their sum must also be a linear combination—that is, they must satisfy the equation $a + b = c$, where $c$ represents the constant of integration. Geometrically speaking, a basis provides a way to represent vectors in a two-dimensional space while preserving their inherent structure.
+
+Now, onto the main topic – orthonormal
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 1420, 817, 5546, 491, 14071, 9845, 1085, 1991, 395]
+first_step_topk_probs=[0.24217218160629272, 0.11680231988430023, 0.0999063178896904, 0.0999063178896904, 0.07700081169605255, 0.059346847236156464, 0.04818587750196457, 0.04818587750196457, 0.04121556133031845, 0.0348566509783268]
+first_step_topk_text=[' can', ' allow', ' use', ' describe', ' have', ' incorporate', ' rely', ' model', ' provide', ' are']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 4410, 17, 382, 775, 1993, 289, 269, 1201, 330, 299, 1557, 806, 269, 14457, 2673, 14102, 298, 1798, 444, 686, 1968, 15, 1150]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data sets. The first step in the process is to understand how the neural network operates and learn from its input, while the second step is to apply the neural network's learning curve.
+
+In this context, let us consider a simple example involving two learners who are given two different types of cards (A, B, C). We want to find out whether the number of cards in A and B represents their average score. To do so, we need to determine if there exists any relationship between the number of card pairs and the average score. Specifically, we will use the following information:
+
+* Number of cards in B: $0.25 = 0.5$
+* Number each card in A: $1.00 = 1.95$
+* Total number of cards: $2.25 + 1.95 = 2.9$
+
+We can then calculate the average score using the neural network, which has been described as follows:
+
+$$P(A) = \frac{1}{3} + \frac{3}{4} + \ldots + \frac{(1-a)^n}{n^n}$$
+
+where n denotes the total number of cards, and the sum of
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=96 first30=[263, 647, 286, 17, 595, 66, 1637, 551, 202, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 490, 1804, 11, 6022, 17, 8256, 12, 1396, 409, 29, 331]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get_value()
+
+if __name__ == '__main__':
+    if len(sys.argv) < 2:
+        print('usage: python3 python3 module')
+        sys.exit(1)
+
+    # get input data
+    data = [0] * 4
+    # print(data[0])
+    for i in range(4):
+        data[i].append(add(data[i], data[i+1]))
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=66 first30=[622, 354, 490, 311, 861, 643, 1107, 354, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 11, 73, 10, 51, 5741, 2944, 339, 836, 2809, 17]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return 1 if n == 0 else 1
+
+
+if __name__ == '__main__':
+    print(f'Possible functions for {math.log_2} are {math.exp(): {math.sum()}, math.exp(): '{math.log3d(1/math.pi)}'}')
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=39 first30=[622, 354, 17, 19, 647, 353, 73, 554, 11, 81, 12, 552, 284, 554, 11, 81, 687, 864, 353, 20, 17, 19, 1341, 311, 12, 711, 202, 350, 1401, 678]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (fib(n) - fib(n)) * (1.0 / n)
+
+
+if __name__ == '__main__':
+    main()
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 1541, 2590, 356, 1278, 338, 698, 1289, 535]
+first_step_topk_probs=[0.2673185169696808, 0.2537521421909332, 0.16728366911411285, 0.05902876332402229, 0.04549524560570717, 0.03891414776444435, 0.03693925589323044, 0.03506455942988396, 0.029992304742336273, 0.028470199555158615]
+first_step_topk_text=[' Yes', ' The', ' There', ' No', ' I', ' If', ' A', ' It', ' We', ' In']
+
+[New tokens 8] count=256 first30=[1541, 330, 808, 2079, 3133, 3533, 17, 382, 851, 1488, 3533, 330, 357, 10676, 395, 2645, 17, 783, 330, 1091, 715, 395, 914, 1108, 2584, 288, 10676, 17, 31412, 491]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: There is no single correct answer. The most common answer is that cats are black. This is because there are many different types of cats. Cats have a color pattern in their eyes which makes them look very white. A cat with a dark brown coloration may be black or brown. If you want to see what the color of a cat is, it's important to know that cats are not only black but also red.
+The color of a feline is its coat color. Feline fur color is the part of the fur that looks like a feline. Cats are sensitive to the amount of fur they have on their skin. It is the fur that they have on the body.
+Feline fur coloration is caused by the fact that the fur around the eyes and nose is yellowish-brown. Cat fur coloration causes the fur to turn gray. This can cause a small area of fur to appear on the face, chest, arms, legs, and tail. Cats tend to have smaller areas of fur than dogs. They also have a tendency to droop when they play outside. When a cat is born, it is often a big baby.
+Animal fur coloration results from the fact that cats have a different pigmentation pattern. In addition
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 798, 843, 409, 2050, 3, 4, 2, 0, 1]
+first_step_topk_probs=[0.5160555839538574, 0.22427669167518616, 0.18209844827651978, 0.03939935937523842, 0.03816991299390793, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' 4', ' 5', ' 2', ' One', '', '!', '', '', '']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 202, 21, 10941, 333, 1218, 202, 22, 934, 667, 333, 1291, 202, 24, 934, 667, 333, 1769, 202, 25, 934, 667, 333, 925, 202, 27, 934]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4
+2 apples = 8
+3 buys = 9
+5 buys = 16
+6 buys = 18
+8 buys = 13
+10 buys = 17
+9 buys = 14
+10 buy = 12
+11 buys = 15
+12 buys = 20
+13 buys = 30
+14 buys = 7
+15 buys = 26
+16 buys = 31
+17 buys = 29
+18 buys = 22
+19 buys = 5
+20 buys = 10
+21 buys = 21
+23 buys = 28
+24 buys = 27
+25 buys = 24
+26 buys = 6
+27 buys = 25
+28 buys = 11
+29 buys = 1
+1 cup of sugar
+1 cup (10) of milk
+1 cup milk (4)
+1 cup plain (1)
+1 teaspoon (1) of sugar
+Tips for Growing Food Safety in Your Home
+- Gather your food safety supplies together. Make sure you have a list of what to include on each item.
+- Choose the items that are safe for your family or home. For example, if you are going to use some equipment such
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 382, 3919, 360, 338, 1348, 1509, 1289, 776]
+first_step_topk_probs=[0.5154910087585449, 0.08013460785150528, 0.052827972918748856, 0.03574519604444504, 0.033931128680706024, 0.028276775032281876, 0.02482454478740692, 0.022368771955370903, 0.01864120364189148, 0.016797127202153206]
+first_step_topk_text=[' I', ' What', ' The', ' My', ' "', ' A', ' How', ' You', ' We', ' He']
+
+[New tokens 10] count=256 first30=[2575, 330, 4083, 34, 202, 11190, 926, 29, 25799, 483, 342, 3436, 419, 263, 993, 288, 1943, 15, 1433, 29, 202, 16, 382, 4083, 272, 2601, 353, 300, 1047, 359]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is stress?
+Emily: Stress can be caused by a number of things, including:
+- The stressor itself (as well as the person's own feelings)
+- The person's mood or experience (including how much you feel)
+- Other factors that affect your life and relationships
+- How often you feel sad, lonely, depressed, or angry
+- Your past experiences
+- The stresses of everyday life
+- Other thoughts about your life or activities
+- Other things that are difficult to manage in your life
+- Some people who have been diagnosed with depression
+- A personal history of depression
+- Other family members who were diagnosed with depression at the time of diagnosis
+- Any other symptoms of depression
+A great deal of information is available on this site, but it is important to understand what the symptoms of depression are so that you can take steps to help yourself recover from them. If you find yourself having difficulty coping with the symptoms of an illness, you may want to consult a health care professional for treatment.
+The best way to know if you are experiencing any of these symptoms is to see a doctor. It will probably depend on your age, your general health, and whether you have had previous episodes of depression. You should also ask
+
+================================================================================

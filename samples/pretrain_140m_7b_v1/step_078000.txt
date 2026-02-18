@@ -1,0 +1,298 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=156 first30=[2827, 6087, 2857, 299, 269, 3843, 374, 610, 2553, 17, 1109, 2977, 263, 2023, 11913, 298, 3766, 299, 631, 351, 383, 17, 1358, 722, 581, 3500, 715, 15, 6087, 418]
+[Full output 1]
+Once upon a time, a curious child named Max went to the park with his mom. They saw a big slide and wanted to go on it. But when they got there, Max was not looking. He looked down and saw that he had fallen from his feet. "Max, do you want to play?" asked his mom. "Yes, please!" said his mom. Max nodded and ran to the slide. His mom picked him up and put him in the car. Max played with his friends for a while and then came back to the park. He saw Lily's face and felt happy. "I'm sorry, I didn't mean to fall," said his mom, pointing at Lily. "You're right, Max. You can play with your toys later. And you can have fun too."
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 4844, 4328, 7762, 17, 202, 509, 2317, 418, 2793, 1378, 5986, 4070, 419, 269, 2602, 5903, 320, 2217, 12118, 373, 15, 263, 1440, 288, 1494, 12118, 86, 668, 586]
+[Full output 2]
+Paris is the capital of the Western Roman Empire.
+The city was built around AD 28 by the Abbasid Caliphate, a group of caliphs who were part of the Umayyad dynasty. The Caliphate was one of the most powerful state powers in the Islamic world. It had a total population of about 3 million people and it was ruled by a Muslim king named Ali ibn Zayd.
+Ahmad's son, Abu Bakr ibn al-Walid II, was a member of the Uighur dynasty (206 B.C.E.1–2), which ruled over much of modern Syria from his time as governor of Damascus until the fall of the Achaemenids. He was also responsible for building the first mosque at Damascus in 70 B.C., which was built on the site of the old mosque.
+Al-Hajj, the father of Muhammad, was born in Qasim in the year 701 B.C.. His mother, Abu Bakar ibn al-Jawzab, was a descendant of Abu Bakar. He was the son of Abu Bakr and Ali ibn Zaidi. He came to be known as Abu Bakar Ibn Al-Walidi,
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 483, 342, 5454, 359, 263, 1701, 288, 795, 4384, 18956, 17, 202, 202, 2152, 28071, 330, 263, 993, 357, 483, 342, 6031, 289, 269, 876, 288, 263]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be represented as a sum of two distinct eigenvalues.
+
+An eigenvalue is a number that can be expressed in the form of a linear combination of these eigenvectors. For example, consider the following matrix:
+
+A = | 4 |
+B = 2
+C = 3
+
+This matrix has three main eigenvalues and four other eigenvalues:
+
+1. The first one is a zero vector (0).
+2. The second one is a scalar multiple (λ), which means that there are no other nonzero vectors in the matrix.
+3. The third eigenvalue is a positive integer, meaning it cannot be written as a negative number.
+4. The fourth eigenvalue is a nonzero scalar multiple (σ), which means there are no nonzero vectors in its original matrix.
+5. The fifth eigenvalue is a scalar multiples of λ, which means that the resulting matrix has only one eigenvalue, λ.
+6. The sixth eigenvalue is a non-zero eigenvector (λ), meaning there are no additional zeros present in the original matrix. This characteristic makes it an eigenvalue of the standard basis for linear algebra.
+7. The eighth eigenvalue is a zero scalar multiple (τ), indicating that there are zero linearly independent eigenvectors within the matrix. Note that this
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 9845, 330, 491, 1420, 3747, 817, 1991, 3350, 8709]
+first_step_topk_probs=[0.1326581835746765, 0.10771003365516663, 0.10771003365516663, 0.07880234718322754, 0.054727133363485336, 0.049313247203826904, 0.04003923013806343, 0.03800720348954201, 0.03800720348954201, 0.03607834130525589]
+first_step_topk_text=[' can', ' rely', ' is', ' have', ' allow', ' allows', ' use', ' provide', ' uses', ' operate']
+
+[New tokens 4] count=256 first30=[9845, 351, 14457, 8119, 299, 1798, 444, 2942, 17, 202, 509, 8944, 1085, 330, 1728, 351, 269, 3207, 357, 269, 14457, 2673, 483, 342, 7749, 419, 7556, 1780, 12473, 289]
+[Full output 4]
+Neural networks are a class of machine learning models that rely on neural networks to learn from experience.
+The functional model is based on the theory that the neural network can be understood by studying individual neurons in the same way as the learning process. This is done by mapping neural activity to the neural network and applying it to different situations, such as playing games or playing video games. The neural network is then used to study how the brain learns from experience. This is an important feature for understanding neural networks and is also useful for studying human learning.
+A neural network is a set of interconnected neural networks which can be defined by their properties. These connections are made through neural networks which are connected via neural networks.
+- A neural network is an object that has been formed from two independent sets of neurons.
+- An environment (e.g., a computer) is a structure where each neuron is controlled by its own input.
+- Functional models of neural networks are presented in terms of the following:
+- The neural network contains all the information needed to understand the function of the system.
+- The network consists of multiple layers with varying levels of complexity.
+- Each layer contains a single layer containing the information needed for the next layer.
+- It contains a set of neurons, each with its own output.
+
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=167 first30=[263, 647, 286, 3, 711, 4750, 2062, 263, 689, 715, 418, 263, 1809, 3510, 1255, 15781, 17, 1530, 699, 1106, 6133, 298, 6446, 299, 4196, 896, 1165, 17, 2050, 1266]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+Once upon a time there was a little girl called Lucy. She had long hair and loved to explore her world. One day she decided to go on an adventure in the forest. As she walked around, she saw something very special - a big tree! She looked closer and noticed that it was just the right size for her. She reached out and touched it with all its strength. Suddenly, a voice said, "Let's see what's inside!" Lucy was so excited. She opened the door and found a magical box. Inside the box was a beautiful blue-green flower. Lucy ran over to the flower and started to take a look at it. It was so beautiful and delicious! The flowers were so beautiful and Lucy smiled. From then on, she always remembered to be careful when exploring.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=136 first30=[622, 28045, 11, 81, 18, 21, 12, 711, 202, 1052, 16216, 29, 346, 538, 1950, 7708, 11, 492, 15, 892, 29, 494, 12, 2249, 494, 29, 331, 490, 892, 5730]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return factorial(n/2)
+
+
+class Solution:
+    def maxCount(self, x: int) -> int:
+        if x <= 0:
+            return 0
+
+        result = [0] * (len(x)-1)
+        for i in range(1, len(x)):
+            result.append(x[i] + 1)
+        return result
+
+    def maxCountWithNumber(self, num: int) \
+                -> int:
+        
+        result = [self.maxCountWithNumber([num]) for num in range(num)]
+        while True:
+            result.sort()
+            if result == -1:
+                break
+
+        return result
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=38 first30=[622, 8049, 11, 81, 12, 202, 202, 2318, 11, 73, 5, 7863, 288, 31393, 17220, 29, 836, 1813, 11, 73, 554, 11, 21, 687, 8551, 202, 2318, 11, 41, 5813]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return fib(n)
+
+print(f"Number of Fibonacci Numbers: {len(fib(2))}")
+print(FiniteArray(fib(), n))
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 2590, 1541, 382, 356, 5531, 698, 1289, 0, 1]
+first_step_topk_probs=[0.36802881956100464, 0.19699163734912872, 0.1441221535205841, 0.12986497581005096, 0.0508558489382267, 0.04129168763756752, 0.03531865403056145, 0.033526234328746796, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' No', ' There', ' The', ' I', ' Well', ' It', ' We', '', '']
+
+[New tokens 8] count=256 first30=[2590, 17, 1541, 330, 808, 2395, 672, 269, 993, 288, 2645, 10676, 289, 269, 1165, 17, 382, 2597, 339, 482, 330, 357, 383, 330, 453, 2699, 357, 2645, 10676, 491]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: No. There is no question about the number of black cats in the world. The reason for this is that it is not true that black cats have a coloration similar to that of other animals. It does not mean that they have a color in their body. Some black cats have the same color as others.
+But I do know that there are many different types of black cats. These include black, white, gray, and yellow. Many people have noticed that black cats appear to be black. In fact, the coloration of black cats has been shown to be related to the color of other animals, including humans. Black cats are called "black cats" because they have dark eyes, brown fur, and dark skin. They also have darker hair than other animals.
+You will probably hear that black cats are black, but you cannot see why black cats are different from other animals. So what is wrong with black cats? Well, they are black. Black cats have black fur. Black cats, like most animals, are not black. They have black hair. They have red spots on their legs. They have dark ears. They have blue eyes.
+When you look at black cats, you will find that they have white or gray stripes on their heads.
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 354, 2050, 1541, 698, 338, 5517, 2590, 13676, 3744]
+first_step_topk_probs=[0.2902904748916626, 0.2615734338760376, 0.19137121737003326, 0.049404822289943695, 0.0343109667301178, 0.02785833179950714, 0.025102440267801285, 0.023828493431210518, 0.022619178518652916, 0.017433296889066696]
+first_step_topk_text=[' The', ' 1', ' One', ' There', ' It', ' A', ' Two', ' No', ' Yes', ' First']
+
+[New tokens 9] count=256 first30=[2050, 13032, 330, 5405, 354, 13032, 15, 614, 490, 486, 395, 263, 1413, 5585, 388, 263, 6301, 15, 486, 483, 5964, 10941, 444, 669, 1802, 4658, 17, 535, 2697, 299]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple is worth 1 apple, but if you are a good boy or a kid, you can buy apples from your local store. In addition to the apples, there are other products available in stores that sell apples for sale. Some of these products include:
+- Juice and juice drinks
+- Gatorade and tea bags
+- Fruits and vegetables
+- Fruit cookies
+- Coffee and chocolate
+- Milk and milk
+- Canned fruit and vegetable juices
+- Lunch and dinner items
+- Pumpkin seeds
+- Ice cream
+- Fruit and vegetable salad dressings
+- Whole grains
+- Butter and jelly
+- Mixed fruit and vegetable products
+- Milk, yogurt, cheese, and yogurt
+- Baked potatoes
+- Cheese and frozen meals
+- Vegetable and fruit salad dressings and salads
+- Food processing and packaging
+- Buy locally
+- Cooking with other foods
+- Recipes for dessert
+- Cream and egg substitutes
+- Food coloring
+- Hot water
+- Moderately hot water
+- Fresh fruit and vegetable dishes
+- Butter, butter, and cream
+- Mashed potato chips
+- Flavored ice cream
+- Butterballs, candy
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2766, 776, 2575, 3919, 1289, 382, 421, 368, 783]
+first_step_topk_probs=[0.2323356568813324, 0.1085612028837204, 0.06448812037706375, 0.055159613490104675, 0.04478606954216957, 0.042513180524110794, 0.040355633944272995, 0.0327661857008934, 0.031103305518627167, 0.02952481620013714]
+first_step_topk_text=[' I', ' Dr', ' He', ' What', ' My', ' We', ' The', ' D', ' M', ' This']
+
+[New tokens 10] count=256 first30=[2575, 330, 4083, 34, 202, 11190, 18427, 4571, 4674, 572, 29, 338, 1419, 415, 8510, 1144, 330, 263, 2466, 15, 8387, 15, 298, 3097, 2844, 357, 483, 342, 6534, 419]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is stress?
+Emotional Disturbance: A person's emotional state is a strong, sensitive, and positive force that can be measured by their emotions. It can also be measured by the ability to feel different feelings in an environment.
+Ambulatory Stress: A person has a high level of stress hormones. The higher the level of stress hormone, the greater the stress hormone levels.
+Gender-Modified Stress: A woman has been experiencing high levels of stress for many years. This may be due to a number of factors including lack of physical activity, lack of exercise, poor diet, and lack of sleep.
+Brain Injury: An injury to the brain occurs when a person gets a blow or blow on a piece of metal.
+Hormonal Stress: A chemical imbalance between the pituitary gland and the adrenal glands.
+Hypocrit (hormone) Levels: The level of hyperemesis (the removal of the thyroid gland from the body).
+Hormone Replacement Therapy: A treatment for low thyroid hormone levels that is used to treat hyperthyroidism.
+Hydration: A person needs to take a daily dose of vitamin D for 30 minutes every day.
+High Blood Pressure:
+
+================================================================================

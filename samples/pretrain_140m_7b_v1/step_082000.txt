@@ -1,0 +1,248 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=134 first30=[2827, 5273, 2857, 299, 269, 3843, 17, 1530, 2977, 263, 2023, 3197, 374, 7336, 288, 4749, 351, 383, 17, 1530, 3766, 299, 3466, 780, 656, 298, 1143, 374, 896, 3326]
+[Full output 1]
+Once upon a time, a curious child named Jack went to the park. She saw a big tree with lots of leaves on it. She wanted to pick them up and play with her friends. Suddenly, she heard a loud noise. It was coming from the tree! She ran over to the tree and picked up all the leaves. But when she got there, she found that some of the leaves were gone. The leaves were gone forever. She looked around for more leaves to find. Finally, she found a nice spot under a bush. She took off her shoes and put them in the right place. From then on, she made sure to always keep her things safe so they could play together.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 11438, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.9314190745353699, 0.06858091056346893, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' Greece', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 2] count=256 first30=[269, 4844, 4328, 7762, 17, 202, 509, 2317, 418, 2793, 351, 263, 9902, 3600, 15, 298, 330, 269, 9619, 14790, 20618, 2310, 289, 11438, 17, 382, 4376, 2868, 330, 12091]
+[Full output 2]
+Paris is the capital of the Western Roman Empire.
+The city was built on a hilltop, and is the oldest continuously inhabited site in Greece. The ancient town is surrounded by ruins of the great Roman fortifications. The city was first mentioned as a city in the early 1st century BC, but it was later destroyed by the Romans. It was later rebuilt and enlarged with a new church. The ancient city has been known for its historical significance since antiquity. The city's main buildings are the royal palace (the King's Palace), the city hall (the King Hall) and the temple complex. The ancient Greek city was founded in 2nd century BC by Phocas.
+The ancient city was the seat of the Achaemenid Dynasty (6th century BC). In 744 BC, the city was conquered by the Persians, who invaded it. During the Second Punic War, it was captured by the Persian army led by Mithradates I. The city became part of the Byzantine Empire. After the defeat of the Persians in 954 BC, the Persian empire was restored to the Roman Empire. In 1252 AD, the city fell into the hands of the Perses. The city then became a major military center during the reigns of the Persi
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 483, 342, 3020, 359, 269, 1701, 288, 795, 1108, 18956, 17, 783, 1818, 357, 490, 411, 491, 795, 7527, 357, 395, 1127, 289, 269, 1134, 3892, 298]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be written as the sum of two different eigenvalues. This means that if we have two vectors that are both in the same direction and have a unique solution, then their corresponding eigenvectors will also be equal to those of the original vectors.
+
+Now let's move on to the main question: How do I calculate the number of linearly independent solutions for the given matrix A? To answer this, first notice that since A has only one linearly independent solution, there must exist some other linearly independent solutions within its matrix B such that B = 0. However, because A has only two linearly independent solutions, it cannot satisfy the equation (1) + (2), which implies that A cannot be linearly independent due to the fact that A has no linearly independent solutions. Therefore, we need to show that A has exactly one linearly independent solutions in B.
+
+To proceed, recall that the given matrix B has four linearly independent solutions:
+
+B = [0, 2], [0, 3]
+
+We know that B = [0,-3]. Thus, we see that B = 4 - 3 = 8. Now, observe that the right side of the equation (4) is equal to 1 because we want to find all possible linearly independent solutions satisfying
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[1420, 483, 817, 491, 1991, 1085, 395, 9845, 1005, 5546]
+first_step_topk_probs=[0.26557058095932007, 0.19429558515548706, 0.10399893671274185, 0.08444054424762726, 0.06856030225753784, 0.03483527898788452, 0.033368244767189026, 0.022964825853705406, 0.022964825853705406, 0.021799361333251]
+first_step_topk_text=[' allow', ' can', ' use', ' have', ' provide', ' model', ' are', ' rely', ' help', ' describe']
+
+[New tokens 4] count=200 first30=[22968, 269, 2673, 283, 1815, 17, 382, 14457, 2673, 1085, 330, 1728, 351, 269, 2877, 357, 383, 601, 342, 2222, 299, 3235, 922, 5671, 289, 263, 1496, 4397, 15, 298]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the networked environment. The neural network model is based on the idea that it will be able to predict what happens in a given situation, and can then predict how those outcomes will behave in the future.
+The neural network model has been developed by John Nielsen at the University of Oxford, who was part of the team that developed the neural network model. In this paper, they describe how the neural network could be used to predict what will happen in a given scenario, and how the neural net network would respond to the behavior of the network. They also show how they can use these neural networks to predict which outcomes will occur over time. This is the first time that they have shown how the neural networks can be used to forecast what will happen.
+Other social bookmarking and sharing tools:
+Note: Materials may be edited for content and length. For further information, please contact the source cited above.
+Note: If no author is given, the source is cited instead.
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=191 first30=[263, 647, 286, 3, 711, 4750, 2062, 263, 689, 715, 418, 263, 1809, 3510, 2827, 3867, 17, 1530, 6446, 299, 1143, 374, 896, 5373, 298, 1219, 3685, 17, 2050, 1266]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+Once upon a time there was a little girl named Lily. She loved to play with her toys and read books. One day, she found a new toy that she really wanted. It was a big, red carrot! Lily was so happy and said, "Can I have it, please?" The carrot looked at her and said, â€œNo, sweetie, you can have it.â€ Lily felt sad for the carrot and decided to give it back. But when she got home, she saw that the carrot had been broken. She knew that she had done something wrong and needed help. So, she asked her mom if they could fix the carrot together. Her mom agreed and they fixed the carrot. From then on, Lily always remembered to be careful around things that were not yours. And whenever she needed help, she would call her mom and tell them about it.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 311, 864, 353, 81, 552, 354, 12, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 801, 18318, 903, 3, 711, 509, 775, 716, 339, 536]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n * (n - 1)
+
+
+if __name__ == '__main__':
+    print("Python")
+
+The first year for which the school is named, is the most important period in the history of the state. The first school was established by Governor Henry Clay and the school was built on the site of the present-day town of Fort Bentonville. In 1831, the school was reorganized as the University of Virginia. This school, however, had no formal school system and was not used for all classes until the early years of the twentieth century. It was called the "Old School" after its location near the present-year campus at the University of North Carolina.
+In 1863, the first school building was erected on the site where it now stands. At this time, the school had a population of about 1,500 students. In 1869, the school became known as the "Little School." The school was named after Thomas Paine, a famous writer who wrote about the school's success during the Civil War. The school was officially named the Little School in 1868.
+During the Civil War, the school moved to a new building in the west end of the town. In 1874, the school received an official charter from the U
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8545612096786499, 0.1454387605190277, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=54 first30=[622, 8049, 11, 81, 12, 202, 202, 2318, 11, 73, 5, 41, 554, 551, 330, 3020, 289, 836, 20, 96, 9069, 903, 202, 2318, 11, 74, 539, 801, 41, 554]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return fib(n)
+
+print(f"Fib() is written in {1} bytes")
+print(gcc("Fib() has been called since I was a kid, so it'll be hard to figure out how to write it!")
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[1541, 382, 13676, 1289, 2590, 698, 535, 356, 338, 1278]
+first_step_topk_probs=[0.27066770195961, 0.2438918650150299, 0.198024719953537, 0.06987618654966354, 0.05673503503203392, 0.0511225126683712, 0.03940166160464287, 0.024656929075717926, 0.023405591025948524, 0.022217759862542152]
+first_step_topk_text=[' There', ' The', ' Yes', ' We', ' No', ' It', ' In', ' I', ' A', ' If']
+
+[New tokens 8] count=256 first30=[1541, 330, 808, 2079, 3533, 299, 482, 2395, 17, 1358, 269, 3533, 330, 12052, 17, 202, 3811, 2597, 339, 482, 330, 357, 383, 728, 342, 2537, 299, 3296, 536, 3191]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: There is no single answer to this question. But the answer is yes.
+One reason for this is that it may be difficult to determine which cat is black or which is not. In fact, there are many other factors that could affect your results. Some of these include:
+- The number of cats in a litter
+- The length of time a cat has been born
+- The age at which the cat was born
+- A litter size that is larger than 100 inches (6 cm)
+- The amount of time that a cat lives in a litter, including the number of days she is in a litter (i.e., the number of times she spends in one litter).
+The number of cats that live in a litter is determined by how much space each cat occupies. A litter of cats that is 2 or more years old would have an average litter size of 3/4 inch (1/2 cm), while a litter of cats with a litter of 2/8 inch (0.5 cm) would have an adult litter size of 1/16 inch (3/4 cm).
+There are also several factors that influence your results.
+You should also know what the average litter size is. This means that if you live in a small
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2050, 354, 382, 1541, 698, 1289, 4449, 3744, 5517, 2590]
+first_step_topk_probs=[0.3750402331352234, 0.16299186646938324, 0.16299186646938324, 0.08724325895309448, 0.03791577368974686, 0.030785176903009415, 0.02773977443575859, 0.02252291515469551, 0.021379880607128143, 0.01926487125456333]
+first_step_topk_text=[' One', ' 1', ' The', ' There', ' It', ' We', ' Each', ' First', ' Two', ' No']
+
+[New tokens 9] count=256 first30=[2050, 13032, 330, 5405, 354, 13032, 15, 1150, 269, 613, 619, 330, 5405, 798, 10941, 17, 2575, 395, 269, 1108, 2722, 299, 1062, 10941, 34, 202, 24771, 354, 29, 1906]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple is worth 1 apple, while the other one is worth 4 apples. What are the different ways to make apples?
+Answer 1: All of the apples are in a basket with 2 apples each. The first fruit is the one that has 3 apples, so there are 3 apples left. The second fruit is the 2 apples which have 3 apples, and the third fruit is the 3 apples which have 2 apples. In order for apples to be in the basket, they must be picked out by the first fruit (the apple) and then placed into the basket with the second fruit (the fruit). For example, if you pick 3 apples from the first fruit, you will have 5 apples left.
+Answer 2: Each time you pick an apple, you get to choose its own fruit. If you have only one apple left, you will find that the second fruit is not in the basket with exactly the same number of apples as the first fruit. This means that when you pick the first fruit and place it into the basket, you will always have a smaller apple than the first fruit because it is less likely to be eaten.
+Answer 3: You can't eat all the apples at once. There are 3 apples in the basket but only one is eaten.
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 1509, 22089, 1289, 1278, 698, 783, 2575, 360]
+first_step_topk_probs=[0.4836161136627197, 0.06243902072310448, 0.05626222863793373, 0.05626222863793373, 0.039073340594768524, 0.03709033876657486, 0.030115000903606415, 0.030115000903606415, 0.030115000903606415, 0.018845485523343086]
+first_step_topk_text=[' I', ' The', ' You', ' Thank', ' We', ' If', ' It', ' This', ' What', ' "']
+
+[New tokens 10] count=207 first30=[2575, 330, 4083, 34, 2575, 620, 486, 2505, 722, 486, 2068, 18029, 598, 34, 202, 1921, 16653, 29, 1278, 486, 2068, 18029, 15, 4859, 483, 1005, 486, 4182, 656, 298]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is stress? What do you feel when you're stressed out?
+Exercise: If you're stressed, exercise can help you stay up and relaxing and relaxing.
+Browse Health Topics that contain supervised or completed ophthalmology or any of the professional programs are available in our database.
+Research the causes of these diseases that may be relevant to this article:
+- Diseases of the eye (otitis media)
+- Diseases which affect the eyes (kidney disease)
+- Disease patterns (lung and lung diseases)
+- Conditions which cause pain and discomfort in your upper back and neck
+Sleep disorders: Headache, sleep apnea, irritability, depression, insomnia, and sleep apnea are some of the conditions that can lead to insomnia. Sleep problems can also be a symptom of other medical conditions as well.
+Health Tools help you make wise health decisions or take action to improve your health.
+|Actionsets are designed for use in the classroom||Preview | Transcript|
+
+================================================================================

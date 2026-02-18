@@ -1,0 +1,281 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 418, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8991213440895081, 0.10087861120700836, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' was', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 1] count=129 first30=[2827, 6087, 2857, 299, 269, 3843, 17, 776, 2977, 263, 2023, 3197, 374, 7336, 288, 4749, 351, 383, 17, 6087, 3766, 299, 15935, 656, 269, 3197, 298, 1137, 922, 418]
+[Full output 1]
+Once upon a time, a curious child named Max went to the park. He saw a big tree with lots of leaves on it. Max wanted to climb up the tree and see what was inside. Max asked his mom if he could go down the tree. His mom said yes, but she had to be careful not to fall off the tree. Max climbed higher and higher until he reached the top. He looked around and saw that the sky was blue again. Max's eyes lit up as he saw the sun shining brightly in the sky. He smiled and felt very happy. Max knew that he would always remember the day he found out about the clouds and the sun.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 17, 382, 4223, 288, 269, 2317, 330, 269, 2868, 288, 336, 1242, 560, 15, 536, 418, 6214, 289, 2234, 7134, 419, 269, 3483, 4332, 5693, 657, 17, 202]
+[Full output 2]
+Paris is the capital of the province. The capital of the city is the town of Sarnia, which was founded in 1482 by the German king Charles V.
+The first post office was established in 1752 with the establishment of a post office and the first postal service. In 1867, the post office was expanded to include the following:
+- The post office was changed from a public office to a private one, but it still had a post office.
+- The Post Office was renamed the "New Post Office" (in honor of the Postmaster General's residence) after the Post Office.
+- A new post office was opened on June 18, 1903.
+- In the summer of 1905, the Post Office was closed for business.
+In 1907, the Post office was reopened as the "New Mobilier", a museum of the industrial revolution. In 1911, the Post Mobilier was moved to the new Mobilier Building, now known as the "Mobilier Building".
+In 1913, the Postmaster-General's office was renamed the Post Office, while the Post Office remained the administrative headquarters of the city.
+Post offices were located at the north end of the city center. There are many buildings that house the post office. The
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 357, 15353, 269, 1759, 3445, 29, 202, 202, 20, 17, 1278, 744, 89, 1602, 76, 333, 643, 2729, 1000, 400, 1602, 77, 333, 643, 30, 5292, 15, 490]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector that satisfies the following properties:
+
+1. If $v\_i = 0$, then v\_j = 0; otherwise, if $v\_k = 0$ for some positive integer k, then v\_k + 1 = 0$.
+2. If $x \in (0, 2)$, then x < -1$; otherwise, if $(x-1) > 0$, then x < 1.
+3. If $y \in (1, 0)$ and $z \in (2, 0)$, then y < z < 0$.
+4. If $z \not\in (0,\infty)$, then z < 0$; otherwise, when $z \neq 0$, then z < 1. This property implies that any scalar multiple of $z$ can be written as a linear combination of other vectors in the same space.
+5. For example, consider the given set $A = {(1, 1), (2, 2), ... , (n, n)}$. We want to find all possible values of $z_i$ such that $|z_i| <= |z_i|\cdot n.$ Since the product of two vectors forms a basis for the space, we have:
+
+
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 1420, 1991, 491, 1085, 9845, 395, 330, 5546]
+first_step_topk_probs=[0.23302462697029114, 0.18920105695724487, 0.13842244446277618, 0.07409218698740005, 0.07409218698740005, 0.04884461686015129, 0.044012654572725296, 0.041121955960989, 0.019127827137708664, 0.019127827137708664]
+first_step_topk_text=[' use', ' can', ' allow', ' provide', ' have', ' model', ' rely', ' are', ' is', ' describe']
+
+[New tokens 4] count=36 first30=[483, 342, 885, 299, 1085, 2281, 870, 4410, 17, 202, 2303, 611, 1170, 351, 269, 2851, 15, 1137, 2923, 1782, 3034, 17, 2830, 17, 9703, 8162, 17, 10215, 18, 97]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data sets.
+For more information on the paper, see http://www.cs.harvard.edu/~chamaric/
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=36 first30=[263, 647, 286, 17, 595, 66, 1637, 551, 202, 202, 856, 835, 66, 3139, 1714, 346, 622, 651, 20, 64, 864, 1171, 202, 202, 350, 1401, 678, 626, 861, 7200]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get_value()
+
+def get_values():
+    return [1] * 10
+
+if __name__ == '__main__':
+    main()
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 494, 11, 81, 12, 711, 202, 6, 11101, 299, 6519, 269, 28045, 288, 263, 1180, 15, 1249, 17, 72, 1155, 202, 6, 836, 20, 15, 409, 96, 202, 856]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return int(n)
+
+
+# Function to compute the factorial of a list, i.e.,
+# {1, 2}
+def factorial_list(a):
+    return [int(x) for x in a]
+
+# Function that calculates the factorial of the number 1:
+#
+# [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 46, 55, 57, 58, 60, 59, 60, 61, 62, 64, 65, 67, 68, 68, 69, 70, 69, 79, 82, 85, 86, 89, 93, 97, 98, 99, 100, 101, 102, 104, 104, 105, 104, 106, 107, 108, 110, 111, 111, 112, 113, 114, 114, 115, 118, 119, 120, 122, 123, 123, 124, 125, 126,
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1083, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8892728090286255, 0.11072725802659988, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' print', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=161 first30=[622, 651, 73, 339, 284, 289, 1180, 11, 2862, 11, 20, 15, 311, 647, 354, 687, 490, 453, 353, 73, 861, 643, 12, 298, 1804, 11, 1253, 11, 76, 17]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return [f for f in list(range(1, n + 1)) if not (f == 0) and len(list(i.argsort()) - i.counting_iterable())]
+
+
+def main():
+    parser = argparse.ArgumentParser()
+
+    # Setup arguments
+    parser.add_argument("--seed", type=int, default=0)
+    parser.set_defaults(func=main)
+
+    args = parser.parse_args()
+
+    # Start the generator
+    generator = generator.generator(args.seed)
+
+    # Start data storage
+    data_storage = generator.get_data_storage()
+
+    # Set up data storage
+    with open("data/data-storage.txt") as f:
+        data_storage.write(f)
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 13676, 356, 2590, 338, 535, 2, 1, 0]
+first_step_topk_probs=[0.4169037640094757, 0.3050132989883423, 0.10762881487607956, 0.05760955810546875, 0.04440145939588547, 0.03422154486179352, 0.03422154486179352, 0.0, 0.0, 0.0]
+first_step_topk_text=[' The', ' There', ' Yes', ' I', ' No', ' A', ' In', '', '', '']
+
+[New tokens 8] count=256 first30=[1541, 330, 808, 2395, 357, 10676, 395, 453, 2645, 17, 698, 330, 1114, 1384, 299, 4283, 357, 715, 395, 914, 1108, 2584, 288, 10676, 15, 614, 10676, 374, 2886, 388]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: There is no question that cats are not black. It is very important to remember that there are many different types of cats, but cats with white or gray coloration are called "black cats." They do not have the same color as humans. If you see a cat with black coloration, it may be a sign of a disease like the flu. The American Veterinary Medical Association has a page on this topic for people who want to know more about diseases in cats.
+How do I tell if my cat is black?
+A cat with black skin will show any signs of illness at any time. A cat with black fur may be a good choice for a pet owner because they will often feel better after being bitten by a cat.
+The following information should help your veterinarian determine whether your cat is black.
+What causes black cats?
+Black cats are the most common cause of childhood diarrhea in cats. Cats that live in areas where cats live have been exposed to the elements (chemicals) that make them sick. When an animal eats food from a food source, it does not produce any symptoms. In fact, a cat that eats a food source in one location may not develop symptoms of any other problems.
+How can I prevent a cat from getting sick
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 382, 1541, 798, 1289, 843, 2050, 698, 409, 338]
+first_step_topk_probs=[0.42221274971961975, 0.2783399820327759, 0.07974573224782944, 0.05257166549563408, 0.03465736284852028, 0.03122887946665287, 0.02813958376646042, 0.0253558699041605, 0.024900635704398155, 0.022847536951303482]
+first_step_topk_text=[' 1', ' The', ' There', ' 4', ' We', ' 5', ' One', ' It', ' 2', ' A']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 17, 202, 24771, 29, 409, 10941, 333, 1012, 10941, 17, 202, 3544, 15, 806, 914, 10941, 1352, 406, 491, 34, 698, 415, 354, 13032, 333]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples.
+Answer: 2 apples = 6 apples.
+So, how many apples did he have? It's 1 apple = 3 apples.
+That means there are 2 apples in total!
+What is the difference between a and b? What is the difference?
+Answer Answer: 1 apple + 2 apples = 7 apples.
+The number of apples is 10. Can you find all the ways to make 5 apples using just one apple?
+Answer : A * B * C = 0.5*C = 0.8
+Which is a + b + c = 0.9?
+Answer:- A + b + a + c = 1.
+Answer : a + b - c = 0
+Answer: a + b = 0.1
+Answer: (a + b) + (c + d) = 0.2
+Answer: A + b = 1.3
+Answer: b + c + d = 1.4
+Answer: c + d + e + f = 1.6
+Answer: d + e - f = 1
+Answer: e + f + g = 1.7
+Answer: g + h + i = 1.8
+Answer: i + j = k + i
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 22089, 360, 2575, 382, 1509, 15255, 3919, 1278, 1289]
+first_step_topk_probs=[0.4914799928665161, 0.13396817445755005, 0.06806881725788116, 0.06133509799838066, 0.036434613168239594, 0.034585557878017426, 0.02665613405406475, 0.02164308913052082, 0.018512316048145294, 0.017572809010744095]
+first_step_topk_text=[' I', ' Thank', ' "', ' What', ' The', ' You', ' Thanks', ' My', ' If', ' We']
+
+[New tokens 10] count=200 first30=[2575, 330, 269, 3593, 920, 263, 360, 11419, 16, 73, 3381, 5, 298, 263, 360, 10495, 16, 73, 3381, 13123, 202, 44, 3442, 733, 3968, 357, 269, 360, 10495, 16]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is the difference between a "super-firm" and a "hard-firm"?
+I've been told that the "hard-hard firmer" is not necessarily what you're talking about, but it's not true. It's actually a bit of a misunderstanding in some places. I think the hard-firm is really the reason why we have such a hard-fought battle over who gets to get to work. If I had to do a lot of work on my own, I'd probably say I would just have to take a little extra time to get to school. But if I didn't, I wouldn't be able to get to college. That would make me feel like I'm going to be a hard-bitten kid here at school.
+If you have any questions or comments regarding this article, contact us at
+Last updated: 05/20/2011
+|Print this article:||Copyright © 2012 American Academy of Pediatrics|
+
+================================================================================

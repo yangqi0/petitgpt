@@ -1,0 +1,270 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=113 first30=[2827, 8798, 2857, 299, 269, 3843, 374, 610, 2553, 17, 1109, 2977, 263, 2023, 3197, 374, 263, 14197, 17, 8798, 988, 15, 360, 21622, 1641, 15, 483, 411, 631, 351]
+[Full output 1]
+Once upon a time, a curious child named Timmy went to the park with his mom. They saw a big tree with a swing. Timmy said, "Mommy, can we go on the swing?" His mom replied, "Yes, let's go!" As they were playing, Timmy noticed that the swing was getting smaller and smaller. He asked his mom what it was. His mom explained that it was a swing. She showed him how to swing back and forth and make sure he was not sliding too hard. Timmy felt happy and proud of himself for being able to ride on the swing.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 7362, 263, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.9357268810272217, 0.04186460003256798, 0.022408505901694298, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' Spain', ' a', '', '#', '', '"', '!', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 4772, 288, 31772, 17, 382, 2317, 418, 6214, 289, 2234, 2543, 419, 8110, 1966, 404, 1182, 15, 668, 699, 2793, 263, 6088, 435, 336, 2905, 361]
+[Full output 2]
+Paris is the capital of the province of the Republic of Malta. The city was founded in 1499 by Sir John Hull, who had built a fort at Snaitha.
+The town was first mentioned in the 16th century as Borei (Bor), and was named after the city's king, Alexander II. It was also known as Boreo.
+- ↑ 1.0 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 1.10 1.11 1.12 1.13 1.14 1.15 1.16 1.17 1.18 1.19 1.20 1.21 1.22 1.23 1.24 1.25 1.26 1.27 1.28 1.29 1.30 1.31 1.32 1.33 1.34 1.35 1.36 1.37 1.38 1.39 1.40 1.41 1.42 1.43 1.44 1.45 1.46 1.47 1.49 1.50 1.51 1.52 1.53 1.55 1.56 1.57 1.59 1.60 1.65 1.69 1
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 6058, 500, 806, 1264, 288, 619, 8639, 288, 269, 4409, 1926, 10629, 299, 1163, 15043, 419, 1467, 17, 202, 202, 2774, 15, 1427, 415, 2861, 672]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that tells us how much of one dimension of the vector space corresponds to being multiplied by another.
+
+Now, let's talk about eigenvalues and eigenvectors. An eigenvector of a matrix A is a scalar which describes how many times you multiply it by itself. In other words, if A has a diagonal matrix A, then its corresponding eigenvector is called the eigenvector associated with each row of A. When A has a 1-1 matrix (or just a 2-1 matrix), there are two types of eigenvalues: positive and negative ones. Positive eigenvalues are those that occur when the number of rows in the matrix is equal to zero. They correspond to the eigenvalues of A.
+
+To understand this better, imagine having a bunch of toys scattered on your bedroom floor. Each toy represents a different kind of "matrix," which means that any time you pick a toy from your room, it will have a unique number of zeros. Similarly, when you arrange these toys in rows and columns, they form a set of vectors that describe their individual positions in the matrix. These vectors can be thought of as special numbers that tell us whether we're looking at the same thing or not.
+
+When working with matrices, there are several ways to represent them using
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 1420, 1991, 1085, 491, 9845, 3350, 395, 5546]
+first_step_topk_probs=[0.14739792048931122, 0.13281668722629547, 0.10783862322568893, 0.07109164446592331, 0.07109164446592331, 0.06405889242887497, 0.05201176181435585, 0.046866487711668015, 0.038398824632167816, 0.034288257360458374]
+first_step_topk_text=[' use', ' can', ' allow', ' provide', ' model', ' have', ' rely', ' uses', ' are', ' describe']
+
+[New tokens 4] count=256 first30=[22968, 269, 14457, 2673, 1085, 17, 382, 14457, 2673, 330, 3385, 299, 342, 885, 289, 14794, 374, 613, 14457, 8119, 15, 857, 359, 14457, 8119, 339, 4357, 2179, 298, 14457]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the neural network model. The neural network is designed to be used in conjunction with other neural networks, such as neural networks for decision making and neural networks for cognitive processes.
+The main difference between the two types of neural networks is that they do not have a set of instructions which can be executed on any given object. Instead, the neural network is constructed by using a set of rules called the "tree" or "rule", which is the rule of the tree. This rule is the same as the "rule of the tree".
+A network consists of a number of different parts:
+- A task (or task) is one which requires some knowledge about the problem or problem.
+- A goal is an objective value of the problem or task.
+- The task is a list of instructions.
+- An action is a list consisting of actions taken by the agent.
+- Each task has its own name.
+- Some tasks may be executed before others.
+- Other tasks may also be executed after others.
+For example, if you want to find out how many times a robot will perform a task in a game, you would type into the game's database and see what data it contains. If you want to learn more about the game,
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 17, 595, 551, 202, 202, 2318, 801, 21089, 435, 360, 647, 822, 11, 1813, 11, 1104, 687, 647, 360, 16797, 202, 2318, 11, 1104, 12, 3, 711]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+print("Starting at " + str(len(add)) + "...")
+print(add)
+
+A new study by researchers from the University of California, Los Angeles (UCLA), has found that a protein called "cysteine" is involved in a variety of important biological processes such as growth and development. The finding suggests that cysteine may be a key component of the growth-promoting pathway in human embryonic stem cells.
+The research was published online in the journal Cell Stem Cells.
+The findings were reported in the Proceedings of the National Academy of Sciences.
+The researchers report their work in the Journal of Neuroscience.
+The scientists also found that cysteines are essential for growth and development because they can carry out other functions like regulating blood pressure, breathing, heart rate and blood sugar levels. They also found that the cysteine plays an important role in cell signaling pathways and in regulating the formation of muscle tissue.
+"Our results indicate that cystein is involved in many different cellular functions," said lead author Dr. Rafael Vargas, professor of neurobiology and physiology at UCSF. "This is the first time we have shown that cysteins are involved
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=104 first30=[622, 353, 81, 13, 20, 12, 864, 353, 21, 13, 19, 14, 22, 13, 20, 12, 647, 409, 13, 19, 8257, 81, 16, 20, 6801, 20, 647, 637, 13, 20]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return (n*1) * (2*0+3*1) + 2*0*(n-1)*1 + 3*1*(n-2)*0 + 3*0*(2*n-1) + 3*2*(n-3)*1 + 5*3*(n-4)*0
+
+
+if __name__ == '__main__':
+    print("Example 1")
+    print("My function is called with the following parameters:")
+    print(factorial(10))
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8991213440895081, 0.10087861120700836, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=173 first30=[622, 651, 73, 62, 78, 64, 339, 520, 289, 7631, 11, 2862, 11, 19, 15, 311, 14, 20, 687, 490, 284, 62, 78, 64, 861, 284, 62, 78, 3971, 711]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return [f[k] for k in sorted(range(0, n+1)) if f[k] == f[k]]
+
+
+# # # # @param n = int(input())
+# #     print(f"Input of {n} : {f}")
+# # @return: a list of the first number of Fibonacci numbers from 0 to n-1.
+# @staticmethod
+# def get_root():
+#     #print("get_root")
+#     return [f for f in input().split()]
+#
+# # for i in range(3):
+# #  print(i)
+# # print(f"{len(f) - 1}{i + 1}")
+# print(f"\t{len(f)-1}{i + 2}")
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 13676, 535, 698, 356, 1289, 338, 1238, 3744]
+first_step_topk_probs=[0.39102208614349365, 0.2715591788291931, 0.07780300080776215, 0.05129093676805496, 0.03046809695661068, 0.03046809695661068, 0.03046809695661068, 0.027454057708382607, 0.024738159030675888, 0.023482702672481537]
+first_step_topk_text=[' The', ' There', ' Yes', ' In', ' It', ' I', ' We', ' A', ' As', ' First']
+
+[New tokens 8] count=256 first30=[1541, 330, 808, 3641, 2833, 299, 1447, 269, 2877, 357, 2645, 10676, 395, 15194, 1108, 444, 613, 10676, 17, 3987, 2629, 288, 482, 2331, 491, 733, 2620, 351, 2918, 353]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: There is no scientific evidence to support the idea that black cats are genetically different from other cats. Most studies of this kind have been done on animals (e.g., dogs) but few studies have examined whether there is any evidence for a genetic relationship between cats and humans.
+The most important thing about these studies is that they do not provide information that would indicate that a cat is a black cat. The fact that there is much more research in this area than has been done by many scientists suggests that there may be something wrong with the theory. It is possible that there is some sort of correlation between the two. If you look at a cat's DNA, it does appear to be related to its coloration and the amount of blood in its body. However, if you look at the genes that make up the red blood cells, they seem to be related.
+In general, cats tend to be less social than people. Some studies show that a cat's social behavior may be influenced by the way he or she eats. In one study, cats were given food supplements containing chocolate chips, which contained chocolate chips. These diets were often thought to help maintain a healthy weight because they also contain less fat than usual. Other studies suggest that cats who eat a lot of chocolate
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 382, 2050, 798, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.7711489200592041, 0.09601932018995285, 0.08652058988809586, 0.046311136335134506, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' The', ' One', ' 4', '', '', '!', '"', '', '']
+
+[New tokens 9] count=124 first30=[354, 13032, 333, 798, 10941, 17, 202, 24771, 29, 409, 10941, 333, 1012, 10941, 17, 202, 22, 10941, 333, 1604, 10941, 17, 202, 509, 993, 288, 10941, 357, 486, 491]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples.
+Answer: 2 apples = 6 apples.
+3 apples = 12 apples.
+The number of apples that you have is 6, so the total number of apples you have is 5 apples. So the number of apples in the bag is 8 apples.
+How many apples are there in a bag?
+Answer 1 apple = 6 apples + 4 apples = 6
+Which one is bigger than 6?
+Answer 2 apple = 6*2*3 = 10
+Which one of the following numbers is larger than or equal to the sum of the two numbers between which they appear?
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 22089, 2575, 1509, 1348, 382, 1803, 3919, 1490, 783]
+first_step_topk_probs=[0.4569084048271179, 0.13239699602127075, 0.1132451519370079, 0.06727050989866257, 0.03079868294298649, 0.02923562377691269, 0.026343507692217827, 0.025006555020809174, 0.016485348343849182, 0.014854531735181808]
+first_step_topk_text=[' I', ' Thank', ' What', ' You', ' How', ' The', ' When', ' My', ' Is', ' This']
+
+[New tokens 10] count=256 first30=[2575, 330, 4083, 34, 202, 8104, 6804, 932, 25799, 202, 8104, 6804, 552, 25799, 202, 8104, 625, 450, 932, 2575, 330, 4083, 290, 6082, 34, 202, 8104, 625, 292, 932]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is stress?
+Assistant : Stress
+Assistant - Stress
+Assertive : What is stressing yourself?
+Assertion : When you feel stressed, it's important to do some things that you can do in order to relax and avoid stress. Try to avoid situations where you're stressed out of your way and find ways to cope with the stress.
+Assignments : Assignments for things like:
+- Taking a break from stressful situations
+- Taking care of yourself when you are stressed out
+- Replacing an old job or a new job
+- Making sure you have enough time to concentrate on what you need to do each day
+- Being able to do a lot of work during your week
+- Keeping track of your progress and progress at every step of the way
+Assignment : Make sure you have a plan that will allow you to take action when needed. This is a good idea because it allows you to focus on what you want to accomplish in the long run. You'll be able to spend more time working on your plans than if you were just sitting down and taking a walk.
+Assessment : Your score is important because it helps you see how well you are doing in terms of performance. It
+
+================================================================================

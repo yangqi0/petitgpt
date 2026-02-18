@@ -1,0 +1,261 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=128 first30=[2827, 5273, 2857, 299, 269, 3843, 17, 776, 2977, 263, 2023, 3197, 374, 7336, 288, 4749, 351, 383, 17, 5273, 3766, 299, 15935, 269, 3197, 298, 1137, 922, 418, 656]
+[Full output 1]
+Once upon a time, a curious child named Jack went to the park. He saw a big tree with lots of leaves on it. Jack wanted to climb the tree and see what was up there. Suddenly, he heard a loud noise! It was his friend, Billy. "What's that?" asked Jack. "It's a monster!" said Billy. Jack thought for a moment and then said, "I want to climb it." So they started walking towards the monster. The monster moved closer and closer until it reached the top of the tree. Jack climbed down and looked at the monster. "Wow!" shouted the monster. Jack smiled. "That's amazing!"
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 4455, 7093, 7362, 263, 11438, 336, 24057, 16523, 7870]
+first_step_topk_probs=[0.6664473414421082, 0.05583171546459198, 0.03148229047656059, 0.020754417404532433, 0.018701281398534775, 0.016851263120770454, 0.01599605567753315, 0.015184255316853523, 0.015184255316853523, 0.013682150281965733]
+first_step_topk_text=[' the', ' France', ' Italy', ' Spain', ' a', ' Greece', ' S', ' Venezuela', ' Portugal', ' Brazil']
+
+[New tokens 2] count=254 first30=[269, 9556, 288, 7535, 281, 8191, 15, 298, 330, 269, 1408, 3796, 2317, 289, 269, 1165, 17, 698, 330, 3323, 351, 269, 5566, 288, 389, 2530, 358, 15, 263, 6821]
+[Full output 2]
+Paris is the capital of the province of Catalonia, and is the second largest city in the world. It is located on the island of Biscay, a vast expanse of land that extends from the Atlantic Ocean to the Pacific Ocean.
+The town was founded by the Roman emperor Justinian about A.D. 530. Its population was roughly 1,000, with around 3,500 inhabitants. The town has a rich history and culture. In the medieval era it was a religious center for the priests and the lay clergy. During the Middle Ages, the town had a high concentration of Christians, who were in turn attracted to the town by its beautiful churches. At that time, the town was considered one of the most important centers of Catholic learning in Europe.
+In the 17th century, the town grew up as a small industrial city with an industrial base. In the 19th century, it became a major centre for the production of cotton, woolen goods, and other products. The population was estimated at 8,825, and the economy was based on agriculture.
+Bibliography: http://www.britannica.com/eloc/index.php?option=com_content&view=article&id=3
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 14274, 269, 3892, 288, 269, 4409, 17, 382, 8639, 288, 287, 28071, 6128, 299, 269, 993, 288, 22542, 4672, 7527, 289, 269, 4054, 353, 1044, 4054]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that determines the direction of the vector. The dimension of an eigenvalue refers to the number of linearly independent vectors in the basis (the basis). For example, consider the vector v = [1, 2], which has a 1-dimensional eigenvalue λ1 = 0 and λ2 = 3. We can calculate the eigenvalues by finding the product of the dimensions of the basis and the eigenvectors of v:
+
+v = λ1 * λ2 = λ1*λ2 + λ2*λ3 = λ1*(λ1+λ2)*λ3 = (λ1+ λ2)*λ4 = (λ11+ λ22)/(λ12+ λ23) = (λ21+(λ22)/(λ23)) = (λ31+(λ22/(λ32))) = (λ42+(λ23)/(λ43)) = (0,(λ41-(λ22)/( λ44))) = (0,0), since there are no linearly independent vectors from the basis to the basis.
+
+Now let's apply this concept to our problem statement. Suppose we have two arbitrary vectors u and v belonging to the same basis. Let u = [1; 4] denote the set of all possible vectors from [1, 3]. Our goal
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 9845, 491, 817, 5546, 1420, 395, 3235, 5663, 330]
+first_step_topk_probs=[0.18578177690505981, 0.15084302425384521, 0.1431877464056015, 0.13592083752155304, 0.0655561313033104, 0.053227368742227554, 0.03807004541158676, 0.02849055826663971, 0.023132525384426117, 0.019786298274993896]
+first_step_topk_text=[' can', ' rely', ' have', ' use', ' describe', ' allow', ' are', ' predict', ' involve', ' is']
+
+[New tokens 4] count=256 first30=[9845, 351, 269, 10724, 357, 1010, 1419, 578, 263, 3248, 1968, 17, 1658, 2269, 1420, 500, 299, 1557, 806, 269, 2613, 4621, 1170, 298, 806, 383, 483, 342, 885, 289]
+[Full output 4]
+Neural networks are a class of machine learning models that rely on the assumption that each person has a unique input. These models allow us to understand how the brain processes information and how it can be used in the real world.
+
+Now, let's consider the concept of a "morphic network." A morphism between two languages is said to be morphologically identical if there exists an identity element (also known as a morphism) between them. That means there must exist some morphism between any pair of languages. This idea leads us to our main topic - whether we can construct a morphism from a language using only one morphism.
+
+To better understand this concept, imagine having a bunch of friends who love playing games together. Each friend will have their own favorite game, but they all want to play with different players. One way to do this would be by giving each friend a single game, where each player receives either a single game or two games. In other words, every friend gets a game with a limited number of rules – those are like the "morphisms" between languages.
+
+The question now becomes: Can we create a morphism between languages? Well, it turns out that yes! We can build a morphism that follows the rules described above. Specifically, given a language
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=60 first30=[263, 647, 286, 17, 595, 551, 202, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 655, 3715, 555, 1499, 29, 331, 444, 7298, 655, 3907, 62, 815, 64]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+if __name__ == '__main__':
+    import sys
+
+    try:
+        from typing import List[str]  # pragma: no cover
+    except ImportError:
+        print('Error when adding new function')
+
+        print('The function is already installed.')
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=111 first30=[622, 494, 11, 2809, 17, 2440, 4886, 11, 81, 687, 711, 202, 6, 5520, 274, 202, 1052, 8064, 290, 13163, 11, 2207, 464, 346, 538, 1401, 1285, 1737, 492, 15]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return int(math.factorial(n))
+
+
+# Classes
+class NumberingFunction(object):
+    def __init__(self, name=None):
+        self._name = name
+
+    def __call__(self, func):
+        if isinstance(func, NumberingFunction):
+            return func(*args)
+
+        elif isinstance(func.__name__, NumberingFunctionType):
+            return type(func.__module__) + type(func._name)(func.__name__ + "_" + func.__name__.replace(" ", "_"))
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.5774953961372375, 0.42250463366508484, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=65 first30=[622, 354, 17, 19, 647, 353, 20, 552, 311, 12, 864, 8049, 11, 81, 12, 711, 202, 6, 1083, 11, 73, 5, 41, 554, 11, 81, 15, 836, 70, 66]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1 - n) * fib(n)
+
+
+# print(f"Fib(n, {c_i})")
+print(f"{c_i} == {c_j}")
+print(len(c_i))
+print(c_j)
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 2590, 1541, 356, 1289, 2, 3, 1, 0]
+first_step_topk_probs=[0.49562934041023254, 0.23904751241207123, 0.10944392532110214, 0.07600722461938858, 0.05010708048939705, 0.029764855280518532, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' No', ' There', ' I', ' We', '', '', '', '']
+
+[New tokens 8] count=256 first30=[13676, 17, 1541, 330, 263, 3313, 288, 1170, 672, 269, 2419, 288, 269, 10676, 289, 269, 3494, 614, 486, 491, 299, 2033, 6082, 922, 581, 1313, 916, 17, 31412, 728]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Yes. There is a lot of information about the color of the cats in the wild but you have to ask yourself what they look like. Cats may be called brown or gray, depending on their appearance. They may have white fur or be more blue-gray than most other species. Some people use the term "brown" for the same reason. The fact that cats are sometimes called brown is because they have the same coat color as the other species.
+Why do we call them brown? Well, it's a very common sight when someone comes across a cat that looks like a brown cat. It might seem like a strange creature to a cat, but there is no way to tell if the cat is really brown. A cat with brown eyes may be a bit different from a cat with brown skin. In addition, a cat with dark eyes may not be an animal at all.
+What does this mean? What does it mean?
+The answer depends on how you define the word "white." It means that the cat has white fur and is a light colored one. But the word "black" refers to the color of its body. So, a white cat with black hair would be a black cat.
+In addition, the word "turkey"
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 382, 2050, 698, 798, 843, 1541, 1289, 1509, 1278]
+first_step_topk_probs=[0.40162408351898193, 0.23857496678829193, 0.09342729300260544, 0.05000802129507065, 0.04060330614447594, 0.03296731039881706, 0.03129421919584274, 0.025408897548913956, 0.01958342269062996, 0.017646130174398422]
+first_step_topk_text=[' 1', ' The', ' One', ' It', ' 4', ' 5', ' There', ' We', ' You', ' If']
+
+[New tokens 9] count=50 first30=[354, 13032, 333, 798, 202, 21, 10941, 333, 843, 202, 22, 10941, 333, 1171, 202, 23, 10941, 333, 1604, 202, 24, 10941, 333, 1720, 202, 25, 10941, 333, 925, 202]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4
+2 apples = 5
+3 apples = 10
+4 apples = 12
+5 apples = 15
+6 apples = 18
+7 apples = 24
+8 apples = 17
+10 apples = 16
+9 apples = 18
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 15255, 22089, 27614, 382, 1289, 1509, 3919, 783]
+first_step_topk_probs=[0.4915139675140381, 0.07976647466421127, 0.0499165914952755, 0.0499165914952755, 0.04497858136892319, 0.04052908718585968, 0.02814687415957451, 0.024075297638773918, 0.024075297638773918, 0.021693654358386993]
+first_step_topk_text=[' I', ' What', ' Thanks', ' Thank', ' Hi', ' The', ' We', ' You', ' My', ' This']
+
+[New tokens 10] count=256 first30=[2575, 330, 669, 2942, 374, 269, 1659, 34, 202, 43, 1640, 25205, 29, 5531, 15, 383, 415, 263, 1114, 1413, 689, 299, 835, 289, 6231, 374, 269, 1659, 298, 491]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience with the train?
+HARRY: Well, it's a very good time to get in touch with the train and have some fun and learn about it. And so we're going to be here for you today.
+A: We'll start at the end of the day when we will go into the station. It's really important that you know what kind of station you are going to be in. You want to see how it feels to be there and how it feels like to be there.
+A. That's right.
+B: There's still a lot of work ahead and it's going to be a little bit more challenging than just talking about it.
+C: It's not as easy as it sounds.
+D: The train has been getting so much better over the last few days because we've got a lot of people who are sitting on the platform. They're really coming out from behind the tracks. So if they're looking for a place where you can go, they could be going to a station that is very nice and cool.
+E: So you need to take the train and make sure you understand what you're doing. If you can't explain it well enough, then you can't do it
+
+================================================================================
