@@ -1,0 +1,106 @@
+{
+  "ckpt": "outputs/sft_bench_v1/step_000600.pt",
+  "bench": "pretrain/bench_v1.jsonl",
+  "time_s": 242.747,
+  "acc_arithmetic": 0.0,
+  "acc_syllogism": 0.6666666666666666,
+  "acc_code": 0.0,
+  "counts": {
+    "total": 9,
+    "arithmetic": {
+      "n": 3,
+      "correct": 0
+    },
+    "syllogism": {
+      "n": 3,
+      "correct": 2
+    },
+    "code": {
+      "n": 3,
+      "correct": 0
+    }
+  },
+  "results": [
+    {
+      "id": "arith_0001",
+      "task": "arithmetic",
+      "ok": false,
+      "prompt": "You are a precise assistant.\nRules for arithmetic questions:\n- Output ONLY the final numeric answer.\n- No explanation, no extra words, no punctuation.\n\nJohn has 3 apples and buys 2 more. How many apples does he have?\nAnswer:",
+      "gold": "5",
+      "gen": "5556655555555556555575555455553505555250555150555055485055495055500550550550056055056005505501004505505050205505405055025550580550570550560560570560530550530560540507555052055025252526525252631046",
+      "detail": "pred=5.556655555555556e+195 gold=5"
+    },
+    {
+      "id": "arith_0002",
+      "task": "arithmetic",
+      "ok": false,
+      "prompt": "You are a precise assistant.\nRules for arithmetic questions:\n- Output ONLY the final numeric answer.\n- No explanation, no extra words, no punctuation.\n\nCompute 17 + 25.\nAnswer:",
+      "gold": "42",
+      "gen": " 1855550660548548549446865745569666726055574705446255755755255756255255252525265252526\" \" \" \"\nAnswer: 20555 555 5 55 5 5 55 6 6 7 8 9 10 11 12 13 14 15 16 17 19 20 21 22 23 24 25 26 27 28 29 30 31 31 31 32 33 34 35 36 37 38 39 40 41 424242424342424244424242414242",
+      "detail": "pred=4.2424242434242425e+29 gold=42"
+    },
+    {
+      "id": "arith_0003",
+      "task": "arithmetic",
+      "ok": false,
+      "prompt": "You are a precise assistant.\nRules for arithmetic questions:\n- Output ONLY the final numeric answer.\n- No explanation, no extra words, no punctuation.\n\nWhat is 9 * 8?\nAnswer:",
+      "gold": "72",
+      "gen": " 9 9 8 1 1 1 0 0 0 1 1 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 27 28 29 30 31 31 32 33 34 35 36 37 38 39 40 41 4242424244444445444444444444443444444464444444744444448444444tingtonon55566665677708786769776758786758798808208408688890820830850860860",
+      "detail": "pred=5.556666567770879e+64 gold=72"
+    },
+    {
+      "id": "syll_0001",
+      "task": "syllogism",
+      "ok": false,
+      "prompt": "You are a logic assistant.\nRules:\n- Output ONLY one token: yes / no / unknown.\n- Do not explain.\n\nIf all cats are animals and some animals are black, can we conclude that some cats are black?\nAnswer:",
+      "gold": "unknown",
+      "gen": " Yes! No! No! Yes! No!! No!! No!!! No!! No?? No!! No?! No!! No!!!! No!! No!\"\nAnswer: No! No!!No!!No!!Yes!!No!!yes??Yes!!Yes!!Yes??Yes!!No??Yes!!yes??No!!Yes??No!!No??No!!yes?\"\nAnswer:Yes! No!No!Yes!Yes!yes!!Yes!Yes!!Yes!yes??Yes!Yes!\"Yes!\"Yes!Yes!\", \"Yes!\"Yes!\", \"No!\"Yes!\"yes?\", \"Yes!\"yes?\"Yes!\"Yes?\"Yes",
+      "detail": "pred=yes gold=unknown"
+    },
+    {
+      "id": "syll_0002",
+      "task": "syllogism",
+      "ok": true,
+      "prompt": "You are a logic assistant.\nRules:\n- Output ONLY one token: yes / no / unknown.\n- Do not explain.\n\nAll A are B. All B are C. Can we conclude all A are C?\nAnswer:",
+      "gold": "yes",
+      "gen": " Yes, you can.\nAnswer: No, you cannot.\nAnswer1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 27 28 29 30 31 31 32 33 34 35 36 37 38 39 40 41 424242424344444445446474648484849484848505467656666706706606706906706806706209012188406253305335355553686888428856756706",
+      "detail": "pred=yes gold=yes"
+    },
+    {
+      "id": "syll_0003",
+      "task": "syllogism",
+      "ok": true,
+      "prompt": "You are a logic assistant.\nRules:\n- Output ONLY one token: yes / no / unknown.\n- Do not explain.\n\nSome A are B. All B are C. Can we conclude some A are C?\nAnswer:",
+      "gold": "yes",
+      "gen": " Yes, yes, yes,yesyesyesYesyesyesyes0yesyesyes1yesyesyes2yesyesyes3yesyesyes4yesyes5yesyes5yrightyes5yes6yes6yes7yes7yes8yes9yes10yes10yes11yes12yes13yes14yes15yes16yes17yes18yes18yes19yes20yes21yes22yes23yes24yes24yes25yes26yes27yes28yes29yes30yes31yes32yes33yes34yes35yes36yes37yes38yes39yes40yes42yes52yes53yes54",
+      "detail": "pred=yes gold=yes"
+    },
+    {
+      "id": "code_add_0001",
+      "task": "code",
+      "ok": false,
+      "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n\nComplete the following Python function:\n\ndef add(a, b):\n    ",
+      "gold": null,
+      "gen": "\n   \n   \n   \n \n   \n   \n    \n   \n   \n   \n   \n\n   \n   \n    `\n       \n   \n   \n    \"\"\")\n\n\nif __name__ == \"__main__\":\n   \n   \n    #\n    #\n   \n   \n    def print_print():\n       \n       \n       \n   \n   \n\n    #\n   \n    #\n\n   \n   \n   \n   \n       \n   \n   \n       \n       \n        ----\n       \n       \n   \n       \n   \n\n   \n   \n\n   \n    def printPrint():\n       \n       \n   \n\n   \n\n   \n   \n   \n\n   \n\n   \n\n   \n   \n       \n   \n       \n       \n    ----\n       \n   \n   \n    \n   \n   \n   \n    ----\n   \n   \n    ###\n   \n   \n       \n   \n   \n   \n    --\n   \n   \n      \n   \n   \n   \"\"\"",
+      "detail": "File \"/tmp/tmpo7l0rhyn/tmp_eval.py\", line 21\n    \"\"\")\n    ^\nSyntaxError: unterminated triple-quoted string literal (detected at line 25)"
+    },
+    {
+      "id": "code_fact_0001",
+      "task": "code",
+      "ok": false,
+      "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n\nComplete the following Python function:\n\ndef factorial(n):\n    ",
+      "gold": null,
+      "gen": "\n   \n   \n   \n \n   \n   \n    \n   \n   \n   \n   \n\n   \n   \n    `\n       \n   \n   \n    \"\"\")\n\n\nif __name__ == \"__main__\":\n   \n   \n    #\n    #\n   \n   \n    def print_print():\n       \n       \n       \n   \n   \n\n    #\n   \n    #\n\n   \n   \n   \n   \n       \n   \n   \n       \n        if if if else else else return return return returns return return return returning return return return returned return return returnreturn return return return end return return return End return return return ends return end end end return end end\n   \n   \n   \n    \n   \n   \n   \n    ###########\n   \n   \n      \n   \n   \n     \n   \n   \n    }\n   ",
+      "detail": "File \"/tmp/tmpq_wa2b79/tmp_eval.py\", line 21\n    \"\"\")\n    ^\nSyntaxError: unterminated triple-quoted string literal (detected at line 26)"
+    },
+    {
+      "id": "code_fib_0001",
+      "task": "code",
+      "ok": false,
+      "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n\nComplete the following Python function:\n\ndef fib(n):\n    ",
+      "gold": null,
+      "gen": "\n   \n   \n   \n \n   \n   \n    \n   \n   \n   \n   \n\n   \n   \n   \n       \n   \n   \n    ##########################################\n    #\n    #\n    def fib fib fib (((( ( ( (( ( (( 0 0 0 1 0 0 0 -1 0 0 00 0 0 0 +1 0 0 1 1 1 0 0 1 2 0 0 0 3 0 0 0 2 0 0 1 3 0 0 1 4 0 0 0 5 0 0 0 9 0 0 0 )))\\\n        (( (( ((( ( ( ( 0 0 01 0 00 1 0 000 0 00  0 0 0",
+      "detail": "File \"/tmp/tmpss5_cz0_/tmp_eval.py\", line 25\n    (( (( ((( ( ( ( 0 0 01 0 00 1 0 000 0 00  0 0 0\n                        ^\nSyntaxError: leading zeros in decimal integer literals are not permitted; use an 0o prefix for octal integers"
+    }
+  ]
+}
