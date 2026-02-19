@@ -30,43 +30,60 @@ def read_jsonl(path: str) -> List[Dict[str, Any]]:
     return rows
 
 
+# @dataclass
+# class ChatFormat:
+#     # You can later swap to your repo's exact chat template.
+#     # For now, we use simple tags to separate roles.
+#     sys_open: str = "[SYS]\n"
+#     sys_close: str = "\n[/SYS]\n"
+#     user_open: str = "[USER]\n"
+#     user_close: str = "\n[/USER]\n"
+#     asst_open: str = "[ASSISTANT]\n"
+#     asst_close: str = "\n[/ASSISTANT]\n"
+
+#     def render(self, messages: List[Dict[str, str]]) -> Tuple[str, List[Tuple[int,int]]]:
+#         """
+#         Returns:
+#           full_text
+#           assistant_spans: list of (start_char, end_char) spans in full_text
+#         """
+#         parts: List[str] = []
+#         spans: List[Tuple[int,int]] = []
+
+#         for m in messages:
+#             role = m["role"]
+#             content = m["content"]
+#             if role == "system":
+#                 parts.append(self.sys_open + content + self.sys_close)
+#             elif role == "user":
+#                 parts.append(self.user_open + content + self.user_close)
+#             elif role == "assistant":
+#                 start = sum(len(p) for p in parts) + len(self.asst_open)
+#                 parts.append(self.asst_open + content + self.asst_close)
+#                 end = sum(len(p) for p in parts) - len(self.asst_close)
+#                 spans.append((start, end))
+#             else:
+#                 raise ValueError(f"unknown role: {role}")
+
+#         full = "".join(parts)
+#         return full, spans
+
 @dataclass
 class ChatFormat:
-    # You can later swap to your repo's exact chat template.
-    # For now, we use simple tags to separate roles.
-    sys_open: str = "[SYS]\n"
-    sys_close: str = "\n[/SYS]\n"
-    user_open: str = "[USER]\n"
-    user_close: str = "\n[/USER]\n"
-    asst_open: str = "[ASSISTANT]\n"
-    asst_close: str = "\n[/ASSISTANT]\n"
-
-    def render(self, messages: List[Dict[str, str]]) -> Tuple[str, List[Tuple[int,int]]]:
-        """
-        Returns:
-          full_text
-          assistant_spans: list of (start_char, end_char) spans in full_text
-        """
-        parts: List[str] = []
-        spans: List[Tuple[int,int]] = []
-
+    def render(self, messages):
+        parts=[]
+        spans=[]
         for m in messages:
-            role = m["role"]
-            content = m["content"]
-            if role == "system":
-                parts.append(self.sys_open + content + self.sys_close)
-            elif role == "user":
-                parts.append(self.user_open + content + self.user_close)
-            elif role == "assistant":
-                start = sum(len(p) for p in parts) + len(self.asst_open)
-                parts.append(self.asst_open + content + self.asst_close)
-                end = sum(len(p) for p in parts) - len(self.asst_close)
+            if m["role"] == "system":
+                parts.append(m["content"].rstrip() + "\n")
+            elif m["role"] == "user":
+                parts.append(m["content"].rstrip() + "\n")
+            elif m["role"] == "assistant":
+                start = sum(len(p) for p in parts)
+                parts.append(m["content"])
+                end = sum(len(p) for p in parts)
                 spans.append((start, end))
-            else:
-                raise ValueError(f"unknown role: {role}")
-
-        full = "".join(parts)
-        return full, spans
+        return "".join(parts), spans
 
 
 class SFTJsonlDataset(Dataset):
@@ -208,7 +225,8 @@ def main():
     else:
         autocast_dtype = None
 
-    opt = torch.optim.AdamW(model.parameters(), lr=args.lr, betas=(0.9,0.95), weight_decay=0.1)
+    # opt = torch.optim.AdamW(model.parameters(), lr=args.lr, betas=(0.9,0.95), weight_decay=0.1)
+    opt = torch.optim.AdamW(model.parameters(), lr=args.lr, betas=(0.9,0.95), weight_decay=0.0)
 
     os.makedirs(args.out_dir, exist_ok=True)
     def save(step: int):
