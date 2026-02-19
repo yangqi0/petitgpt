@@ -70,21 +70,26 @@ def read_jsonl(path: str) -> List[Dict[str, Any]]:
 
 @dataclass
 class ChatFormat:
-    def render(self, messages):
-        parts=[]
-        spans=[]
-        for m in messages:
-            if m["role"] == "system":
-                parts.append(m["content"].rstrip() + "\n")
-            elif m["role"] == "user":
-                parts.append(m["content"].rstrip() + "\n")
-            elif m["role"] == "assistant":
-                start = sum(len(p) for p in parts)
-                parts.append(m["content"])
-                end = sum(len(p) for p in parts)
-                spans.append((start, end))
-        return "".join(parts), spans
+    def render(self, messages: List[Dict[str, str]]) -> Tuple[str, List[Tuple[int, int]]]:
+        parts: List[str] = []
+        spans: List[Tuple[int, int]] = []
 
+        for m in messages:
+            role = m.get("role")
+            content = m.get("content", "")
+            if role == "system":
+                parts.append(content + "\n")
+            elif role == "user":
+                parts.append(content + "\n")
+            elif role == "assistant":
+                start = sum(len(p) for p in parts)
+                parts.append(content + "\n")
+                end = sum(len(p) for p in parts) - 1  # exclude the trailing newline
+                spans.append((start, end))
+            else:
+                raise ValueError(f"Unknown role in messages: {role}")
+
+        return "".join(parts), spans
 
 class SFTJsonlDataset(Dataset):
     def __init__(self, path: str, tok: Tokenizer, max_len: int, add_bos: bool, bos_id: int, eos_id: int):

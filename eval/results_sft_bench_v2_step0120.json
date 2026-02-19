@@ -1,0 +1,106 @@
+{
+  "ckpt": "outputs/sft_bench_v1/step_000120.pt",
+  "bench": "pretrain/bench_v1.jsonl",
+  "time_s": 210.718,
+  "acc_arithmetic": 0.0,
+  "acc_syllogism": 0.6666666666666666,
+  "acc_code": 0.0,
+  "counts": {
+    "total": 9,
+    "arithmetic": {
+      "n": 3,
+      "correct": 0
+    },
+    "syllogism": {
+      "n": 3,
+      "correct": 2
+    },
+    "code": {
+      "n": 3,
+      "correct": 0
+    }
+  },
+  "results": [
+    {
+      "id": "arith_0001",
+      "task": "arithmetic",
+      "ok": false,
+      "prompt": "You are a precise assistant.\nRules for arithmetic questions:\n- Output ONLY the final numeric answer.\n- No explanation, no extra words, no punctuation.\n\nJohn has 3 apples and buys 2 more. How many apples does he have?\nAnswer:",
+      "gold": "5",
+      "gen": " 4\n\nThe question is: \"What is the sum of the first two numbers?\"\n\nThis problem asks us to find the sum of all the numbers in the set {2,3,4,5}. To solve this problem, let's follow these steps:\n\nStep 1: Write down the given information\nWe know that the sum of any number is equal to 2^7 + 7^8 + 8^9 + 9^1 + 9^2 + 10^3 + 11^3 + 12^3 + 13^3 + 14^3 + 15^3 + 16^3 + 17^3",
+      "detail": "pred=3.0 gold=5"
+    },
+    {
+      "id": "arith_0002",
+      "task": "arithmetic",
+      "ok": false,
+      "prompt": "You are a precise assistant.\nRules for arithmetic questions:\n- Output ONLY the final numeric answer.\n- No explanation, no extra words, no punctuation.\n\nCompute 17 + 25.\nAnswer:",
+      "gold": "42",
+      "gen": " 17 + 25 = 18\n\nExample 1:\n\nInput: 17 + 26 = 18\nOutput: 18\n\nSolution:\n\nQuestion 1:\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 27 28 29 30 31 31 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 67 67 68 67 67 67 69 67 67 67 70 67 67 67 71 67 67 67 72 67 67 67 73 67 67 6767",
+      "detail": "pred=6767.0 gold=42"
+    },
+    {
+      "id": "arith_0003",
+      "task": "arithmetic",
+      "ok": false,
+      "prompt": "You are a precise assistant.\nRules for arithmetic questions:\n- Output ONLY the final numeric answer.\n- No explanation, no extra words, no punctuation.\n\nWhat is 9 * 8?\nAnswer:",
+      "gold": "72",
+      "gen": " 9 * 8 = 9\n\nCan you figure out how to solve this problem using basic arithmetic? Try solving it yourself!",
+      "detail": "pred=9.0 gold=72"
+    },
+    {
+      "id": "syll_0001",
+      "task": "syllogism",
+      "ok": false,
+      "prompt": "You are a logic assistant.\nRules:\n- Output ONLY one token: yes / no / unknown.\n- Do not explain.\n\nIf all cats are animals and some animals are black, can we conclude that some cats are black?\nAnswer:",
+      "gold": "unknown",
+      "gen": " No.\n\nThe answer is NO!\n\nNo, the answer is NO.\n\nYes, yes, yes.\n\nNo.\n\nIn this case, yes is NOT true.\n\nThere are two ways to say yes:\n\n1) Yes, yes, Yes\n2) Yes, Yes, yes\n\nCan you prove that yes is false?",
+      "detail": "pred=yes gold=unknown"
+    },
+    {
+      "id": "syll_0002",
+      "task": "syllogism",
+      "ok": true,
+      "prompt": "You are a logic assistant.\nRules:\n- Output ONLY one token: yes / no / unknown.\n- Do not explain.\n\nAll A are B. All B are C. Can we conclude all A are C?\nAnswer:",
+      "gold": "yes",
+      "gen": " Yes, yes, yes, no, yes, etc.\n\nThe answer is NO!\n\nThere are only two ways to say \"yes\" or \"no\". The first way is \"Yes\", the second is \"No\", and so on.",
+      "detail": "pred=yes gold=yes"
+    },
+    {
+      "id": "syll_0003",
+      "task": "syllogism",
+      "ok": true,
+      "prompt": "You are a logic assistant.\nRules:\n- Output ONLY one token: yes / no / unknown.\n- Do not explain.\n\nSome A are B. All B are C. Can we conclude some A are C?\nAnswer:",
+      "gold": "yes",
+      "gen": " Yes, yes, yes, no, yes, etc.\n\nThe A are B and the B are C, so they can be either true or false.\n\nA is B and the A are C.\n\nIf A is B then A is C.\nIf A and B are both A and B then A and B must be true.\n\nIn this case, A is B and B is C.",
+      "detail": "pred=yes gold=yes"
+    },
+    {
+      "id": "code_add_0001",
+      "task": "code",
+      "ok": false,
+      "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n\nComplete the following Python function:\n\ndef add(a, b):\n    ",
+      "gold": null,
+      "gen": " print(a)\n    print(b)\n    print(\"hello world\")\n\n\n#\n#\n\n#\nclass Solution:\n    def is_valid(self, s1: str, s2: str) -> bool:\n        \"\"\"\n        :type s1: string\n        :rtype: bool\n        \"\"\"\n        if not s1 == s2:\n            return False\n\n        # check if s1 is a valid string\n        if s1 != s2:\n\n            # check if the string is a valid character\n            if s1 in s2:\n                return True\n\n            # check for invalid string\n            if s2[s1",
+      "detail": "File \"/tmp/tmpo2ibwszt/tmp_eval.py\", line 3\n    print(b)\nIndentationError: unexpected indent"
+    },
+    {
+      "id": "code_fact_0001",
+      "task": "code",
+      "ok": false,
+      "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n\nComplete the following Python function:\n\ndef factorial(n):\n    ",
+      "gold": null,
+      "gen": " return n! = 1\n\n# Function to find the factorial of a number n.\n\ndef factor():\n    print(\"Number of integers in the range 0..5\")\n    print(\"The factorial of the number is: \" + str(factorial))\n    print(\"the factorial of the factorial of the integer is: \")\n    print(\"This function returns: \" + factorial(factorial(2)))\n    print(\"this function returns: \"+ factorial(factored(2)))\n\n# The function to calculate the factorial of an integer n.\n#\n# This function returns:\n#\ndef factorial_of",
+      "detail": "File \"/tmp/tmpvvlgzhcx/tmp_eval.py\", line 2\n    return n! = 1\n            ^\nSyntaxError: invalid syntax"
+    },
+    {
+      "id": "code_fib_0001",
+      "task": "code",
+      "ok": false,
+      "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n\nComplete the following Python function:\n\ndef fib(n):\n    ",
+      "gold": null,
+      "gen": " print n\n    return\n\n# Function to check if the input is a string or not.\ndef fib_check(n,string):\n    print n\n    print n\n\n# The function will return true if the input string is a string.\ndef f(n,str):\n    print str\n    return\n\"\"\"\ndef fib2(n,f):\n    print f\n    return\n'''\ndef fib3(n,s):\n    print s\n    return\n'''.join([str(x) for x in s])\n\n# This function will return false if the input has a string. If it does",
+      "detail": "File \"/tmp/tmp9s9ry8zs/tmp_eval.py\", line 2\n    print n\n    ^^^^^^^\nSyntaxError: Missing parentheses in call to 'print'. Did you mean print(...)?"
+    }
+  ]
+}
