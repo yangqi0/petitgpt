@@ -152,9 +152,42 @@ def generate_one(prompt: str, args, seed: int) -> str:
         "--prompt", prompt,
         "--quiet",
     ]
+    if args.greedy:
+        cmd.insert(cmd.index("--quiet"), "--greedy")
+
     out = subprocess.check_output(cmd, text=True)
     return out
 
+def wrap_with_task_rules(task: str, user_prompt: str) -> str:
+    if task == "arithmetic":
+        sys = (
+            "You are a precise assistant.\n"
+            "Rules for arithmetic questions:\n"
+            "- Output ONLY the final numeric answer.\n"
+            "- No explanation, no extra words, no punctuation.\n"
+        )
+    elif task == "syllogism":
+        sys = (
+            "You are a logic assistant.\n"
+            "Rules:\n"
+            "- Output ONLY one token: yes / no / unknown.\n"
+            "- Do not explain.\n"
+        )
+    elif task == "code":
+        sys = (
+            "You are a coding assistant.\n"
+            "Rules:\n"
+            "- Output ONLY Python code.\n"
+            "- Do NOT write any explanation.\n"
+            "- Do NOT write extra functions.\n"
+            "- Do NOT write a main block.\n"
+            "- Implement exactly the requested function.\n"
+        )
+    else:
+        sys = ""
+    if not sys:
+        return user_prompt
+    return sys + "\n" + user_prompt
 
 def main():
     ap = argparse.ArgumentParser()
@@ -168,6 +201,7 @@ def main():
     ap.add_argument("--temperature", type=float, default=0.2)
     ap.add_argument("--top_p", type=float, default=0.9)
     ap.add_argument("--top_k", type=int, default=0)
+    ap.add_argument("--greedy", action="store_true")
     ap.add_argument("--max_new_tokens", type=int, default=128)
     ap.add_argument("--min_new_tokens", type=int, default=8)
 
@@ -202,6 +236,7 @@ def main():
             raise KeyError(f"Missing prompt in item id={_id} keys={list(it.keys())}")
 
         # ---- generate FIRST ----
+        prompt = wrap_with_task_rules(task, prompt)
         gen = generate_one(prompt, args, seed=args.seed_base + i + 1)
 
         ok = False
