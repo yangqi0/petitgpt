@@ -27,18 +27,18 @@ def read_jsonl(path: str) -> List[Dict[str, Any]]:
 
 _NUM_RE = re.compile(r"[-+]?\d+(?:\.\d+)?")
 
-def extract_last_number(text: str) -> Optional[float]:
-    nums = _NUM_RE.findall(text or "")
+def extract_first_number(text: str):
+    nums = _NUM_RE.findall((text or "").strip())
     if not nums:
         return None
     try:
-        return float(nums[-1])
+        return float(nums[0])
     except Exception:
         return None
 
 def arithmetic_correct(gen: str, gold: str) -> bool:
     # gold is an integer string like "5"
-    pred = extract_last_number(gen)
+    pred = extract_first_number(gen)
     if pred is None:
         return False
     try:
@@ -134,9 +134,7 @@ def run_python_tests(signature: str, body: str, tests: str, timeout_s: float = 2
             return (True, "")
         return (False, (r.stderr or r.stdout or "FAILED").strip()[:2000])
 
-
 def generate_one(prompt: str, args, seed: int) -> str:
-    # Call your CURRENT pretrain/sample.py as a black-box CLI
     cmd = [
         sys.executable, "pretrain/sample.py",
         "--ckpt", args.ckpt,
@@ -157,16 +155,9 @@ def generate_one(prompt: str, args, seed: int) -> str:
     ]
     if args.greedy:
         cmd += ["--greedy", "--temperature", "0"]
-
-    cmd += ["--repetition_penalty", str(args.repetition_penalty)]
-    cmd += ["--no_repeat_ngram_size", str(args.no_repeat_ngram_size)]
-    cmd += ["--max_repeat_token", str(args.max_repeat_token)]
-
     if args.avoid_first_whitespace:
         cmd += ["--avoid_first_whitespace", "--ban_first_steps", str(args.ban_first_steps)]
-
-    out = subprocess.check_output(cmd, text=True)
-    return out
+    return subprocess.check_output(cmd, text=True)
 
 def wrap_with_task_rules(task: str, user_prompt: str) -> str:
     if task == "arithmetic":
@@ -261,7 +252,7 @@ def main():
 
         if task == "arithmetic":
             stats["arithmetic"]["n"] += 1
-            pred = extract_last_number(gen)
+            pred = extract_first_number(gen)
             ok = arithmetic_correct(gen, gold)
             if ok:
                 stats["arithmetic"]["correct"] += 1
