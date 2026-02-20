@@ -1,0 +1,259 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=183 first30=[2827, 5273, 2857, 299, 269, 3843, 17, 776, 418, 1114, 8763, 298, 8739, 847, 4440, 299, 1137, 922, 406, 982, 1098, 17, 1238, 406, 12562, 1378, 15, 406, 10227, 2009]
+[Full output 1]
+Once upon a time, a curious child named Jack went to the park. He was very excited and couldn't wait to see what he could find. As he walked around, he noticed something strange. It was a big tree with lots of leaves. Jack's eyes lit up as he saw it. Suddenly, he heard a voice from behind him. "What are you doing here?" asked Jack. The voice said, "I'm looking for some yummy food!" Jack looked around and saw a little bird sitting on a branch. "Hello there," said the bird. "Do you want some of your lunch?" Jack smiled and nodded his head. The bird offered the two of its feathers to Jack. He then took one of them home and brought them back to the park! Jack was so happy that he had found such a special meal. From then on, he always made sure to keep an eye out for any new animals in the park.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 263, 336, 24057, 7362, 15913, 11438, 11605, 16523, 24251]
+first_step_topk_probs=[0.8483016490936279, 0.05983047932386398, 0.018058180809020996, 0.013211647048592567, 0.0125411506742239, 0.00966584775596857, 0.00966584775596857, 0.00966584775596857, 0.007258261553943157, 0.006889904849231243]
+first_step_topk_text=[' the', ' a', ' S', ' Venezuela', ' Spain', ' Argentina', ' Greece', ' Lat', ' Portugal', ' Romania']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 9556, 15, 298, 269, 9556, 288, 440, 24171, 17, 698, 330, 263, 1204, 2868, 374, 263, 2073, 288, 672, 409, 15, 1086, 10894, 353, 9494, 573]
+[Full output 2]
+Paris is the capital of the province of the province, and the province of Laval. It is a small town with a population of about 2,000 inhabitants (2006).
+The municipality of La Sauvage contains the following municipalities:
+
+Police station
+La Sauvages is located in the center of the municipality of La Chien-de-Fonds, in the department of La Sérieur. The village has a population (2006) of 344 and a population density of .
+
+History
+In the medieval period, La Sauve was a settlement on the right bank of the River Leith. In the 11th century, it became part of the municipality La Défense. In the 12th century, the castle was seized by the French, who took control of the village. The castle became a royal residence until it was destroyed by fire in 1762. The castle was restored in 1826 and reopened to the public in 1885. The remains of the castle are preserved at the Museum of the Hundred Years' War, which is located in La Sauvesque.
+
+Demographics
+
+According to the 2011 census, the municipality La Sauvenet had a total population of 1,965. Males constitute 53
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 14274, 269, 1986, 288, 269, 3823, 17, 382, 9256, 6847, 288, 263, 3592, 3823, 338, 330, 1496, 419, 29, 202, 202, 36, 333, 18062, 20, 864]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that determines the size of the matrix. The characteristic polynomial of a square matrix A is given by:
+
+A = λ1 * λ2 * ... * λn
+
+where λi and i are the eigenvalues of A. If A has no eigenvalues, then the characteristic polynomial of A can be written as:
+
+P(A) = λ1*λ2 + λ3*... + λk*λk + λn*λn
+
+For example, if A has three eigenvalues (λ1=0), they are:
+
+| λ1 | λ2 | λ3 | λ4 | λ5 | λ6 | λ7 | λ8 | λ9 | λ10 | λ11 | λ12 | λ13 | λ14 | λ15 | λ16 | λ17 | λ18 | λ19 | λ20 | λ21 | λ22 | λ23 | λ28 | λ29 | λ32 | λ33 | λ34 | λ35 | λ36 | λ37 | λ38 | λ39 | λ42 | λ43 | λ44 | λ46 | λ47 | λ48 | λ49 | λ52 | λ53 | λ54 | λ55 | λ56 | λ57 |
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 5546, 483, 1085, 491, 395, 1420, 9845, 3235, 20993]
+first_step_topk_probs=[0.26942500472068787, 0.12994664907455444, 0.12994664907455444, 0.10550834983587265, 0.05360846966505051, 0.05088779330253601, 0.04585375264286995, 0.04352668300271034, 0.030228646472096443, 0.024543747305870056]
+first_step_topk_text=[' use', ' describe', ' can', ' model', ' have', ' are', ' allow', ' rely', ' predict', ' simulate']
+
+[New tokens 4] count=256 first30=[22968, 269, 14457, 2673, 1085, 17, 1109, 483, 342, 885, 299, 20993, 1549, 3286, 15, 857, 359, 18185, 298, 1655, 16, 345, 6059, 5465, 17, 202, 509, 10447, 288, 14457]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the neural network model. They can be used to simulate human behavior, such as verbal and non-verbal communication.
+The classification of neural networks is a major task in the field of artificial intelligence. The following table shows the classification of neural network models.
+|System||Generalized Learning Rate (GLR)||Automatic Neural Network (ANN)|
+|Models||Sparse RNN||Random SNP||Fewer than 100|
+|Inferring neural networks||L1||Faster than 10%|
+|Neural Networks||Amp: BMP, PAM, SAM||BMP-OPS||0.01%|
+These models are not supported by the Cray XK8 and the Cray DT9. They are also supported by the NIST-II2.
+The following list provides examples of neural networks that use the Cray-XK8. These include:
+|Modeling the Neural Networks||Sparse Reinforcement Learning Rate (SRLR)||Sparse Reconditioned Neural Networks|
+|Model-based Learning Rate (MLR)||Amp: Amp: BQ||Amp : BQ||1.4%|
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=201 first30=[263, 647, 286, 3, 711, 4750, 2062, 263, 689, 715, 418, 263, 1809, 3510, 2827, 11183, 17, 1530, 6446, 299, 4196, 298, 619, 1266, 1024, 4725, 299, 631, 351, 287]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+Once upon a time there was a little girl named Jane. She loved to explore and one day she decided to go on an adventure. As she walked along the path, she saw lots of different things. One of them was a big box with a bow inside. Jane wanted to try it out, so she grabbed her stick and started to push it around the box. Suddenly, she heard a voice from behind her. It said "Hello Jane! I'm here to help you." Jane looked up and saw a friendly old man standing by the box. He asked her what was wrong. Jane told him about the bow and how it had been used for some time. The old man smiled and said that he could help her carry the bow home. Jane was very happy and thanked the old man. She took the bow home and showed it to all her friends. They were amazed at how amazing it was. From then on, they would always remember the special bow together.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=94 first30=[622, 354, 490, 311, 861, 643, 1107, 354, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 11, 73, 10, 6, 6137, 66, 20, 10628, 81, 63]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return 1 if n == 0 else 1
+
+
+if __name__ == '__main__':
+    print(f'#function_1:\n\t[1,2,3]\n')
+
+    # function_1.value = factorial(5)
+    # function_2.value = f'{5}\n'.format(f'{len(self)} factorial numbers')
+    # print(f'sense: {factorial(5)}\n')
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 339, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.6630873680114746, 0.3369126617908478, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' for', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=32 first30=[490, 311, 861, 643, 29, 341, 622, 354, 1246, 1107, 29, 341, 622, 643, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 717, 7121, 15, 2176]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     if n == 0:
+         return 1
+     else:
+         return 0
+
+
+if __name__ == '__main__':
+    print('Hello, World!')
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 1541, 2590, 698, 535, 1906, 1289, 1278, 356]
+first_step_topk_probs=[0.2685982882976532, 0.21808460354804993, 0.18653762340545654, 0.1680845320224762, 0.027154695242643356, 0.02577659673988819, 0.022047890350222588, 0.020928943529725075, 0.020928943529725075, 0.020928943529725075]
+first_step_topk_text=[' The', ' Yes', ' There', ' No', ' It', ' In', ' All', ' We', ' If', ' I']
+
+[New tokens 8] count=256 first30=[1541, 330, 808, 3641, 2833, 299, 1447, 269, 5630, 288, 2645, 16, 392, 16, 10235, 2419, 325, 289, 269, 1549, 4091, 17, 783, 330, 453, 2699, 339, 10676, 15, 536]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: There is no scientific evidence to support the existence of black-and-white coloration in the human diet. This is not true for cats, which have been bred for a variety of reasons. Some may be black or white, but most will only show one color at a time. For example, a cat with a black coat may show a black coat, but a black coat is a dark brown coat. A black cat has black hair on its head, but a white cat has black skin on its legs. The hair on a black cat's body is actually a series of hairs that are not part of the animal's body. The black cat is also not considered as a species because it does not have the same white coat as other cats. The hair of a black cat is covered by a layer of white pigment called melanin. These pigments are produced when the pigment in the pigmentation process is turned into melanin. As the pigment melts away from the melanin, it becomes darker and more dense. When this happens, the melanin production stops.
+The coloration of a black-and -white cat is not the same as that of a black dog, a black cat with black fur, or a black cat who has a black coat. In
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 843, 798, 2050, 409, 3, 4, 2, 0, 1]
+first_step_topk_probs=[0.43225324153900146, 0.284959077835083, 0.13743890821933746, 0.11159157752990723, 0.03375716134905815, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' 5', ' 4', ' One', ' 2', '', '!', '', '', '']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 202, 24771, 29, 643, 17, 24, 10941, 333, 409, 202, 509, 993, 288, 10941, 330, 843, 15, 649, 411, 853, 656, 269, 1890, 29, 409, 647]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4
+Answer: 0.5 apples = 2
+The number of apples is 5, so we add up the numbers: 2 + 4 = 8. The total number of apples you have is 5 + 4 = 16.
+How many apples did you get when you started with $2?
+Answer 1 apple = $1 + $2 = $4
+Answer: 2 apples = $1+$3 = $8
+There are four apples in total. Can you find all the ways to make both apples equal each other?
+Answer by Sharon
+Answer: Sharon is a little girl who loves playing with her toys. She always takes them everywhere she goes. One day, Sharon sees her brother crying because he lost his toy car. She asks him what was wrong and he tells her that he lost it. He says he lost his car and that he must go home. Sharon decides to help him find his car. She helps him look for it, but they cannot find it. Finally, Sharon has an idea! She asks her brother if he can take her back to his house. He says yes and gives her a hug. They run off together, taking turns holding the car. When they reach their destination, Sh
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 2575, 1289, 783, 421, 15255, 22089, 321, 338]
+first_step_topk_probs=[0.6701980829238892, 0.039125218987464905, 0.030154988169670105, 0.023854559287428856, 0.02324136719107628, 0.020942222326993942, 0.01656666211783886, 0.014927802607417107, 0.014544076286256313, 0.013105306774377823]
+first_step_topk_text=[' I', ' The', ' What', ' We', ' This', ' D', ' Thanks', ' Thank', ' T', ' A']
+
+[New tokens 10] count=256 first30=[2575, 330, 4083, 34, 202, 7681, 17, 437, 662, 625, 29, 25799, 330, 263, 2821, 645, 288, 1328, 298, 383, 415, 1384, 299, 1499, 299, 6856, 269, 4083, 359, 1264]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is stress?
+Dr. Eckert: Stress is a normal part of life and it's important to try to manage the stress as much as possible. It can be hard for you to deal with stress in your life, but if you don't take care of yourself, you will get better and your life will improve.
+Assistance: Dr. Eckerts, take charge of your life and don't let it get too stressed out. If you feel stressed out, you have a lot of stress in your body and you may not feel as happy or stressed at all.
+Dr. Soto: There are many things that can cause stress. For example, you may feel sad, angry, anxious, depressed, or very upset. In addition, your immune system is weak and you may develop an infection called Lyme disease. This infection is often spread through direct contact with infected animals or by people who come into contact with infected animal droppings.
+Ice Cream: Ice cream is one of the most popular ice creams sold today. You might think that ice cream is the best choice because it helps relieve the pain and discomfort of arthritis. But it doesn't help you to feel more relaxed when you eat chocolate or other foods that make you
+
+================================================================================

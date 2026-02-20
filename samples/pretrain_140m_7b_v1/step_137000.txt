@@ -1,0 +1,268 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 2857, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.9081844091415405, 0.0918155312538147, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' went', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 1] count=233 first30=[2827, 5273, 418, 4438, 289, 269, 3843, 17, 776, 2977, 2009, 17935, 298, 2239, 351, 269, 2389, 17, 776, 10225, 383, 656, 298, 4965, 435, 383, 6325, 17, 360, 2664]
+[Full output 1]
+Once upon a time, a curious child named Jack was playing in the park. He saw something shiny and red on the ground. He picked it up and looked at it closely. "What is this?" he asked his mom. "It's a coin," said his mom. Jack took the coin and started to play with it. He made a lot of noise when he heard someone calling him. "Jenny! What are you doing?" asked his mom, pointing to the coin. "I'm looking for something else," said Jack. His mom smiled and said, "Let's go find it." They went to the park and found a big tree. Jack and his mom ran around the tree, looking for more coins. When they got there, Jack saw that the coin had been dropped from the tree. He looked at it and saw that it had disappeared. "Wow!" he exclaimed. Jack smiled and said to his mom, "Maybe I can find another coin." His mom laughed and said, â€œBe careful, Jack. We don't want to lose our coins.â€ So Jack and his friends continued to play with the coin until it was all gone.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 7535, 281, 8191, 15, 298, 330, 658, 269, 8492, 288, 269, 1723, 17, 202, 509, 11718, 3399, 269, 10921, 288, 338, 3116, 88, 4426, 5605, 353, 24833]
+[Full output 2]
+Paris is the capital of the province of Catalonia, and is also the seat of the government.
+The municipality contains the villages of Araguária (formerly Araguán), Alcázarías (formerly Altaíja), Castellón de la Vérito (formerly Almeida) and El Castillo (formerly Alpacó). The municipality is divided into three municipalities: Araguín, Araguíra and Casteljos.
+
+Demographics
+In the 2011 Census of Population conducted by Statistics Canada, the municipality had a population of living in 420 of its total private dwellings, a change from its 2016 population of . With a land area of , it had a population density of in 2021.
+
+Culture
+
+The village has a community centre which is located on the main street of Aragún. The village also has a church dedicated to St. Paul and the church of the Immaculate Conception in Aragúns. There are many statues and statues of saints, the most famous being the St. Peter in Araguéné. The village has a history dating back to the 13th century when it was part of the Kingdom of Portugal. In the 17th century
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 14274, 269, 1986, 288, 269, 4409, 1926, 17, 535, 613, 2351, 15, 490, 486, 491, 263, 854, 288, 7527, 15, 1721, 836, 89, 20, 15, 400]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that determines the size of the vector space. In other words, if you have a set of vectors, say {v1, v2, ..., vn}, then the eigenvalue will be any scalar multiple of that vector.
+
+Now let's take a look at an example: suppose we want to find the eigenvalues of the matrix P with respect to the form (x - y)y = 0. We start by finding the eigenvalues of P using the following formula:
+
+P = (-b ± sqrt(a^2 + b^2)) / 2a
+
+Here, a and b are constants and b is a real number. To find the eigenvalues, we need to solve for x in terms of y, which gives us the following expression:
+
+(-b ± sqrt((-b)^2 + b^(2a))) / 2a = (-b + sqrt(a)) / 2
+
+Using this formula, we can now compute the eigenvalues of our original matrix P. The first step in solving this problem involves finding the eigenvalues based on the given information about the basis vectors. Specifically, we'll use the following identity:
+
+A = (-b/sqrt(a)) * (e^(-t) \* cos(t
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 5546, 9845, 491, 1085, 1420, 14071, 3235, 1991]
+first_step_topk_probs=[0.4842679798603058, 0.09146637469530106, 0.0824180468916893, 0.060298334807157516, 0.04647378996014595, 0.0340009480714798, 0.02908255159854889, 0.02241479977965355, 0.020197411999106407, 0.019172394648194313]
+first_step_topk_text=[' use', ' can', ' describe', ' rely', ' have', ' model', ' allow', ' incorporate', ' predict', ' provide']
+
+[New tokens 4] count=256 first30=[22968, 269, 1194, 4383, 1798, 298, 4116, 553, 2794, 299, 1623, 16, 7128, 2061, 17, 1658, 2269, 1005, 2703, 1557, 806, 1549, 14424, 1798, 15, 298, 806, 581, 817, 482]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the way humans learn and apply their knowledge to real-world problems. These models help researchers understand how human brains learn, and how they use this information to make better decisions about how to improve their lives.
+Theories of Learning and Memory
+While most people think of learning as a process of learning, studies have shown that it is actually a process of cognitive processes that are used by many different people throughout life. For example, people who have learned how to learn tend to remember things in the past, while those who don't have learned how can remember things now may be able to recall new things later on. However, there is no evidence that learning is the same for all individuals.
+In addition, some people think that learning is a normal part of growing up, but not everyone has developed the skills necessary to learn. The reasons behind this belief are complex and may include:
+- Difficulty with abstract thinking or memory
+- Difficulties with having difficulty remembering things from day to day
+- Problems with memory processing (such as forgetting where you left your phone number)
+- Differences between groups of people
+- Difference between age and gender
+- Differing abilities related to mental functions such as memory and language
+- Differative intelligence
+
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=180 first30=[263, 647, 286, 3, 711, 4750, 2062, 263, 689, 715, 418, 263, 1809, 3510, 2827, 15781, 17, 1530, 6446, 299, 1143, 3099, 298, 4196, 896, 5786, 17, 2050, 1266, 1024]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+Once upon a time there was a little girl named Lucy. She loved to play outside and explore her garden. One day she saw something very special - it was a big, green bush with lots of flowers! It looked so pretty that Lucy wanted to take it home. So, Lucy took the bush home and started to pick some flowers from the ground. As she picked one, she noticed that the flowers were getting bigger and bigger. She knew that this was an important thing in her garden. So, she decided to keep the flower safe so that it wouldn't get lost again. Lucy kept picking flowers until they became small enough to fit inside the bush. She was so happy when she had finished picking all the beautiful flowers. From then on, every time she went out to collect more flowers, she would always remember how much fun she had playing in the garden.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=108 first30=[622, 354, 490, 311, 861, 643, 1107, 28045, 11, 20, 552, 311, 12, 711, 202, 6, 11101, 299, 1098, 269, 28045, 288, 263, 993, 202, 856, 28045, 66, 1911, 11]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return 1 if n == 0 else factorial(1 - n)
+
+
+# Function to find the factorial of a number
+def factorial_count(number):
+    if not isint(number):
+        return 0
+
+    # Get the factorial of the number
+    factorial = 0
+    for i in range(0, len(number)):
+        if number[i] != number[i]:
+            break
+
+        if number[number[i]] > number[i + 1]:
+            break
+        else:
+            factorial += 1
+
+    return factorial
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8545612096786499, 0.1454387605190277, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=59 first30=[622, 354, 17, 19, 647, 353, 20, 552, 311, 12, 864, 8049, 11, 81, 12, 711, 202, 6, 1083, 11, 73, 5, 41, 554, 26310, 993, 836, 4203, 66, 1459]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1 - n) * fib(n)
+
+
+# print(f"Fibonacci number {number_of_numbers} = {number_to_prime}")
+print(f"Number of Fibonacci numbers = {number\_of_numbers}")
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 2590, 1541, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.4703267216682434, 0.27938607335090637, 0.16596229374408722, 0.08432494103908539, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' No', ' There', '', '', '!', '"', '', '']
+
+[New tokens 8] count=256 first30=[13676, 17, 1541, 330, 263, 3313, 288, 2833, 299, 2173, 357, 2645, 10676, 395, 453, 359, 2076, 359, 486, 1628, 1645, 17, 1109, 728, 342, 1114, 1413, 435, 8035, 15]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Yes. There is a lot of evidence to suggest that black cats are not as social as you might think. They may be very good at fighting, but they do not have the same social skills as other cats. Black cats are not related to humans, so they are not considered bad pets. In fact, many people believe that black cats have been used in movies for a long time. However, there is no evidence that black cats actually exist in the wild or that they are not dangerous.
+There is also a lot of research being done on the subject of black cats. One study showed that black cats were more likely to get into fights if they were kept with other cats. This was one of the studies which showed that black cat fights are much less likely than other cats to get into bad situations. It has been found that black cats tend to become aggressive when threatened.
+In conclusion, black cats are an important part of our environment. When a cat becomes aggressive, it will often attack and kill him or her, just like any other animal. The reason why this happens is because cats are an excellent source of food and shelter. They need plenty of space and water to grow and thrive. Therefore, it is important to keep your cat away from a black cat,
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 2050, 798, 843, 409, 3, 4, 2, 0, 1]
+first_step_topk_probs=[0.6861242651939392, 0.11677216738462448, 0.08543234318494797, 0.07698100805282593, 0.03469018265604973, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' One', ' 4', ' 5', ' 2', '', '!', '', '', '']
+
+[New tokens 9] count=48 first30=[354, 13032, 333, 798, 10941, 202, 22, 10941, 333, 1604, 10941, 202, 23, 10941, 333, 1604, 24847, 202, 24, 10941, 333, 2341, 24847, 202, 25, 10941, 333, 2234, 24847, 202]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+3 apples = 12 apples
+4 apples = 12 oranges
+5 apples = 13 oranges
+6 apples = 14 oranges
+7 apples = 15 oranges
+8 oranges = 16 oranges
+9 apples = 16 oranges
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 22089, 2575, 15255, 27614, 1509, 382, 1289, 783, 3189]
+first_step_topk_probs=[0.4234626889228821, 0.1386663019657135, 0.10145044326782227, 0.0668802335858345, 0.06026415526866913, 0.0322570726275444, 0.026190688833594322, 0.024861499667167664, 0.020185962319374084, 0.016389714553952217]
+first_step_topk_text=[' I', ' Thank', ' What', ' Thanks', ' Hi', ' You', ' The', ' We', ' This', ' Do']
+
+[New tokens 10] count=256 first30=[2575, 330, 4083, 34, 202, 45, 358, 29, 25799, 330, 2009, 357, 486, 2505, 722, 486, 2068, 6968, 18029, 15, 536, 483, 342, 263, 1623, 1811, 339, 874, 668, 395]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is stress?
+Jay: Stress is something that you feel when you're feeling stressed, which can be a real problem for people who are having problems with their emotions and moods.
+I'm not sure if it's really important to talk about it because there have been some studies done in the past that have shown that people who are stressed out may be more likely to experience depression than those who are not stressed. But the fact is that many of us are living in a stressful world where we need to do things differently and deal with situations that we might not normally think about.
+We're all made up of our thoughts and feelings, so when we're feeling stressed or depressed, we're most likely to become overwhelmed by them. And when we get into trouble, we have to go through a process called "psychological adjustment." This is what happens after a stressor has occurred. We can't change ourselves without thinking about how we feel. So if you're worried about your feelings, you should talk to someone who knows about it.
+In the past, people often said they would never feel like they were happy at the end of the day, but now it's possible to feel like they could be happy once again. And that's why it's
+
+================================================================================

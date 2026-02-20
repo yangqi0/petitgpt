@@ -1,0 +1,300 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 2857, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8670357465744019, 0.13296423852443695, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' went', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 1] count=152 first30=[2827, 5273, 2857, 299, 269, 3843, 17, 776, 2977, 263, 2023, 3197, 298, 3766, 299, 15935, 383, 17, 1358, 406, 418, 11251, 288, 269, 2023, 3197, 1091, 383, 699, 263]
+[Full output 1]
+Once upon a time, a curious child named Jack went to the park. He saw a big tree and wanted to climb it. But he was scared of the big tree because it had a sign that said "Please don't climb on the tree". Suddenly, Jack heard a voice behind him. It was his friend, Sally. She said, "Hey, that's my tree! Don't be scared!" Jack felt sad for her friend and decided to help. Together, they climbed the tree and found a new place to play. They played in the sun until it was time to go home. When they got home, Jack told his mom about the big tree and how he helped his friend. His mom smiled and said, "That's great! You did a good job helping me."
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 9556, 536, 3261, 269, 9556, 288, 8613, 3403, 76, 15, 298, 289, 482, 716, 15, 269, 2317, 288, 8613, 3403, 68, 418, 658, 3199, 17, 202]
+[Full output 2]
+Paris is the capital of the province of the province which includes the province of Tripoli, and in this year, the city of Tripola was also established.
+The first post office was established in 1752 by Mario Bella Bello, a prominent Italian architect, who died in 1824. The first newspaper was founded in 1822 by Mario Tavani, a wealthy Italian merchant, and later became the most important newspaper in Tripola.
+In the 19th century, the town grew rapidly as the industrial center of the country. During the industrial revolution, the city was a major employer, but in the 20th century it had become one of the largest cities in the world. In the 1980s, the city began to attract new businessmen from abroad. The city's population increased steadily during the last decade, with more than 300,000 people living there in 2000. The city has been hit hardest since the 1990s, when the number of inhabitants dropped from 6 to 8.
+- "City of Tripolo". Retrieved 2007-10-25.
+- The World Factbook - Tripolo - Tripoli
+- The City of Tripolini - Tripolian Gazetteer - Tripolia
+- The History of Tripol
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=154 first30=[263, 13742, 1239, 357, 6058, 500, 806, 1264, 269, 4409, 1926, 288, 263, 4409, 1926, 578, 4374, 17, 535, 482, 1832, 15, 411, 483, 1645, 288, 269, 4409, 1926, 359]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that tells us how much the vector space of a vector space has changed. In this case, we can think of the vector space as having a set of vectors that change in size according to some rule.
+
+Now, let's talk about eigenvalues and eigenvectors. An eigenvector of a matrix A is a nonzero vector x such that when you multiply it by its transpose (denoted as A^T), you get a new vector x = A. The concept behind these concepts is similar to what mathematicians call "the determinant." It helps them determine whether a matrix is invertible or not.
+
+For example, consider the following 2x2 matrix:
+```css
+[ 1 0 ]
+ [ 0 1 ]
+ [ 1 0 ]
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 5546, 1085, 9845, 483, 1991, 1420, 491, 3350, 395]
+first_step_topk_probs=[0.4759068489074707, 0.13634958863258362, 0.059257302433252335, 0.059257302433252335, 0.048113130033016205, 0.03171814978122711, 0.027129972353577614, 0.027129972353577614, 0.02320549450814724, 0.0232054702937603]
+first_step_topk_text=[' use', ' describe', ' model', ' rely', ' can', ' provide', ' allow', ' have', ' uses', ' are']
+
+[New tokens 4] count=157 first30=[22968, 269, 1194, 4383, 1798, 298, 4856, 1170, 17, 1109, 395, 658, 885, 299, 3235, 922, 3660, 601, 620, 289, 1939, 6863, 15, 857, 359, 722, 581, 835, 707, 263]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the way humans learn and interpret information. They are also used to predict what individuals will do in certain situations, such as when they get into a car or a train.
+The main difference between these two models is that the former model can be applied to a set of data, while the latter model has the ability to predict the outcome of the experiment. In this case, the model predicts the outcome of an experiment, whereas the model does not. The key difference between the two models is the ability to forecast events based on their predictions. This allows us to make predictions about future events based on observations from previous experiments, rather than relying solely on past observations.
+This article is licensed under the Creative Commons Attribution-NonCommercial 3.0 Unported License.
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=79 first30=[263, 647, 286, 17, 595, 551, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 655, 3715, 555, 490, 1804, 11, 6022, 17, 8256, 12, 1396, 409, 29]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+
+if __name__ == '__main__':
+    import sys
+
+    if len(sys.argv) < 2:
+        print("Usage: python add_test.py")
+        sys.exit(1)
+
+    input = sys.stdin.read().strip()
+    # print(input)
+    print('Input:')
+    print(add(input))
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=71 first30=[622, 494, 11, 81, 18, 21, 12, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 655, 3715, 555, 537, 1968, 5147, 346, 490, 1804, 11, 6022, 17]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return int(n/2)
+
+
+if __name__ == '__main__':
+    import sys
+
+    # input argument
+    if len(sys.argv) < 2:
+        print("Usage: python3 function f()")
+        sys.exit(1)
+    else:
+        print("\nUsage: python 3 function f()\n")
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.7391713261604309, 0.2608286738395691, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=84 first30=[622, 354, 17, 19, 647, 353, 20, 552, 311, 12, 864, 8049, 11, 81, 16, 20, 12, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 717]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1 - n) * fib(n-1)
+
+
+if __name__ == '__main__':
+    print('The following functions are available: \n')
+
+    # Create the function for you
+    # print('Fib(1,2,3)')
+    # print()
+
+    # Fib(5,6,7)
+    # print(fib(5))
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 13676, 2590, 698, 535, 356, 338, 1289, 1278]
+first_step_topk_probs=[0.38069212436676025, 0.2261408418416977, 0.157051682472229, 0.07190349698066711, 0.03848716989159584, 0.03291982039809227, 0.031249111518263817, 0.025372296571731567, 0.018562769517302513, 0.017620710656046867]
+first_step_topk_text=[' The', ' There', ' Yes', ' No', ' It', ' In', ' I', ' A', ' We', ' If']
+
+[New tokens 8] count=256 first30=[1541, 330, 808, 1194, 299, 6797, 357, 263, 3191, 330, 2645, 17, 382, 839, 1194, 299, 6797, 482, 330, 419, 6163, 357, 383, 330, 453, 2645, 17, 382, 3191, 330]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: There is no way to prove that a cat is black. The only way to prove this is by showing that it is not black. The cat is a dog and the cat is not a cat. It is a human being who is a person.
+The reason for this is because the human being has no moral obligation to show that he does not have a human being. He is a human having a human being and an animal being. A human being is a human with a human being if they do not possess a human being but do not have a natural human being.
+Why do we need to show that cats are not black?
+This is the point of the article. We know that cats are in fact not black. Cats don't have to be black, and cats aren't allowed to have a human having an animal as well.
+But what about the question why cats are not white?
+Answers: There is a great deal of evidence that cats are black. One study found that cats were more likely to be black than other cats. This is true even though cats are not necessarily black. Cat owners are often told that cats will get their blood tested for redness or inflammation before any treatment is given. However, this is not true. If you
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 2050, 843, 798, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.7394347786903381, 0.12584513425827026, 0.0673600509762764, 0.0673600509762764, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' One', ' 5', ' 4', '', '', '!', '"', '', '']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 202, 22, 10941, 333, 1604, 10941, 202, 23, 10941, 333, 2341, 10941, 202, 24, 10941, 333, 2341, 24847, 202, 25, 10941, 333, 2234, 24847, 202]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+3 apples = 12 apples
+4 apples = 13 apples
+5 apples = 13 oranges
+6 apples = 14 oranges
+7 apples = 15 oranges
+8 apples = 16 oranges
+9 apples = 18 oranges
+10 apples = 22 oranges
+11 apples = 23 oranges
+12 apples = 24 oranges
+13 apples = 27 oranges
+14 apples = 29 oranges
+15 apples = 30 oranges
+16 apples = 31 oranges
+17 apples = 32 oranges
+18 apples = 32 orange trees
+19 apples = 33 oranges
+20 apples = 36 oranges
+21 apples = 37 oranges
+22 apples = 41 oranges
+23 apples = 42 oranges
+24 apples = 40 oranges
+25 apples = 43 oranges
+26 apples = 43 orange trees
+27 apples = 44 oranges
+28 apples = 45 oranges
+29 apples = 46 oranges
+30 apples = 48 oranges
+31 apples = 49 oranges
+32 apples = 52 oranges
+33 apples = 54 oranges
+34 apples = 56 oranges
+35 apples = 58 oranges
+36 apples = 57 oranges
+37 apples = 62 oranges
+38 apples = 63 oranges
+39 apples = 59 oranges
+40 apples = 50 oranges
+41 apples = 51 oranges
+42 apples = 53 oranges
+43 apples = 54 fruits
+44 apples
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 22089, 27614, 15255, 1509, 1348, 2005, 3189, 382]
+first_step_topk_probs=[0.5057081580162048, 0.09046338498592377, 0.0858723446726799, 0.04842156544327736, 0.04596415162086487, 0.03931521996855736, 0.026602009311318398, 0.025918196886777878, 0.023354241624474525, 0.02275390364229679]
+first_step_topk_text=[' I', ' What', ' Thank', ' Hi', ' Thanks', ' You', ' How', ' Can', ' Do', ' The']
+
+[New tokens 10] count=256 first30=[2575, 330, 669, 2942, 374, 269, 1659, 34, 202, 43, 1640, 25205, 29, 5531, 15, 356, 4575, 263, 1659, 20548, 435, 269, 1659, 3785, 298, 383, 415, 733, 1114, 15655]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience with the train?
+HARRY: Well, I'm a train conductor at the train station and it's been very calm in my head for some time now. The train has been overrun by the oncoming trains, so I'm feeling much more relaxed than I was before. It's a great place to talk about what you're doing because we're going to have to keep up the pace of the train and just see how it feels to be here and there. And it's really nice to hear that the train is getting ready to go out again, and then that it's coming back.
+And then, this is the last thing I want to do. We've got to get out and put on our seats, but we're not going to have any lights anymore. We'll have to go out and have some sort of exercise. And when we're done, we'll have to take off our seats and we'll have a little bit of light down on us. So I'm going to do that.
+I think it's very important to do this because if you are in a hurry, it will make you feel like you're being rushed through the train. It's also very helpful to have a good night's sleep
+
+================================================================================

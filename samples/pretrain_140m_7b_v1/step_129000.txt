@@ -1,0 +1,309 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1255, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.9081844091415405, 0.0918155312538147, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' called', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 1] count=164 first30=[2827, 5273, 418, 7948, 289, 269, 3843, 17, 776, 2977, 2009, 17935, 298, 2239, 351, 269, 2389, 17, 698, 418, 263, 6086, 1167, 4, 5273, 10225, 383, 656, 298, 4911]
+[Full output 1]
+Once upon a time, a curious child named Jack was walking in the park. He saw something shiny and red on the ground. It was a toy car! Jack picked it up and showed it to his mom. "Mommy, look what I found!" he said. His mom smiled and said, "That's a special toy car, Jack. Do you want to play with it?" Jack nodded and ran over to his mom and they started playing together. They pretended to be racing cars and having lots of fun. But then, something bad happened. The toy car broke into pieces and broke into many pieces. Jack felt sad and scared. His mom tried to comfort him, but it was too late. The broken piece had been left behind by the toy car. Jack learned that sometimes things can break easily, even when we're careful.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 7535, 281, 8191, 15, 298, 330, 658, 269, 8492, 288, 269, 1723, 288, 269, 3163, 11718, 288, 389, 729, 2905, 17, 202, 202, 6880, 202, 202, 509]
+[Full output 2]
+Paris is the capital of the province of Catalonia, and is also the seat of the government of the former municipality of Bologna.
+
+History
+
+The first mention of the name was in 952 when it was mentioned as a place where the town of Girona was founded. In 1296, the first man to be born in the city of Giron was Isabella of Castile. She was married to Alfonso II of Aragon who had been deposed by his uncle. Alfonso III was the father of the future King Ferdinand I of Castile (1521–1603). He became King of Castile on his death in 1532 and in his will he named his son Alfonso IV. Alfonso IV was the first king of Castile, but did not succeed him as head of state until 1604. The new king, Alfonso IV, was not succeeded by his nephew Alfonso V, who would become the second ruler of Castile after his father's death. Alfonso V was the first to make a claim to the throne in the year 1074, but the king was forced to resign due to ill health. Alfonso VI was crowned King of Castiles on January 3, 1078.
+
+In the early years of
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 2686, 374, 269, 854, 288, 545, 18956, 17, 1153, 10294, 8537, 744, 89, 7, 288, 263, 3592, 3823, 338, 330, 263, 16204, 4409, 892, 857, 357, 5453, 333]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar associated with the set of all eigenvalues. An eigenvector $v$ of a square matrix A is a nonzero vector x such that Av = 0 for some nonzero vector x. The set of all vectors in the plane satisfying the equation Ax + By = 0, where A is an n × n matrix, has been established as the subspace spanned by the vectors A and B.
+
+Now let's consider the given problem: finding the eigenvalues of the following matrix:
+
+A = \begin{bmatrix} 1 & 2 \\ 3 & 4 \end{bmatrix}.
+
+To solve this, we will utilize the fact that there are two distinct eigenvalues corresponding to each row in the matrix. Specifically, we need to find the eigenvectors corresponding to the first row (a1) and second column (b2). This can be done using the formula mentioned earlier:
+
+|A| = |a1 - b2|
+|a3 - ab1|
+
+Here, a1 and a2 represent the respective eigenvalues, while b1 and b2 denote the respective eigenvectors corresponding to those particular eigenvalues. Since both matrices share the same size and dimensions, their eigenvalues must also be identical; hence, they cannot be equal to zero. Therefore, we
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 5546, 9845, 1085, 491, 1420, 483, 1991, 395, 3235]
+first_step_topk_probs=[0.24670986831188202, 0.22230404615402222, 0.06709637492895126, 0.057390570640563965, 0.05171319469809532, 0.04659745842218399, 0.04659745842218399, 0.0359141007065773, 0.030718928202986717, 0.027680078521370888]
+first_step_topk_text=[' use', ' describe', ' rely', ' model', ' have', ' allow', ' can', ' provide', ' are', ' predict']
+
+[New tokens 4] count=256 first30=[22968, 269, 14457, 2673, 1085, 17, 1109, 4478, 299, 1557, 806, 12473, 10273, 298, 1201, 1170, 15, 298, 806, 581, 8646, 374, 1010, 613, 17, 202, 509, 2475, 360, 25349]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the neural network model. They aim to understand how neurons communicate and process information, and how they interact with each other.
+The word "neuron" comes from Greek words for "neurons," which means "to make." It's a term that has been used in science since ancient times, but is now applied in the field of artificial intelligence. Neurons are important building blocks for the brain, and have been used to predict what will happen next.
+A neuron is a small collection of nerve cells (called axons) connected by a network of fibers. These fibers connect to one another, forming a network. The network can be thought of as a set of interconnected wires that connect different parts of the body. Each wire carries a specific number of messages between them. For example, the red, blue, green, and yellow "nodes" in a neuron are called "nodes of interest".
+In order to read and write data, neurons must use very large numbers of neurons to complete their tasks. This is done by sending out signals, which are sent to each neuron. Some neurons send out pulses of light or sound, while others send out pulses that are either loud or soft. When these pulses are received, they create a pattern known as a "
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=82 first30=[263, 647, 286, 17, 526, 77, 551, 711, 202, 6, 5062, 269, 870, 339, 263, 1496, 854, 288, 1992, 289, 263, 1496, 1457, 202, 917, 333, 651, 91, 62, 19]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.conj()
+
+
+# Get the data for a given set of values in a given range
+data = [x[0] for x in range(len(a))]
+for i in range(10):
+    data[i] = list(range(len(b))) - 1
+print(f'Added {len(data)} values to {data}')
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=33 first30=[622, 354, 647, 353, 81, 552, 354, 12, 864, 353, 81, 552, 409, 12, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 11, 2440, 4886, 11]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return 1 + (n - 1) * (n - 2)
+
+
+if __name__ == '__main__':
+    print(factorial(10))
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.5260182023048401, 0.4739817678928375, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 354, 647, 353, 20, 18, 21, 12, 864, 311, 1190, 22, 711, 202, 6, 22018, 269, 1392, 299, 342, 1255, 722, 8427, 269, 1392, 17, 202, 856, 8049, 66]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1 + (1/2) * n**3
+
+
+# Initialize the function to be called when calling the function.
+def fib_init():
+    print('Starting the function...')
+
+    # Initialise the function
+    def fib(n, p):
+        print('Fib: {} -> {}'.format(p[0], p[1]))
+
+        # Get the first two digits of the number, which is 0 and 1.
+        p = int(p[1])
+        p = p[2]
+        p = 1 - p
+        for i in range(len(p)):
+            if p[i] == 0:
+                p[i+1] = 1
+            else:
+                p[-1] = 0
+            fib(n)
+            p[i-1] = p[i][:-1] + 1
+            fib(p)
+            p = 1
+            while p > 0:
+                fib(n), p < p[-1].length() - 1
+                fib(p).append(1)
+                p += 1
+
+            p -= 1
+            if p >= 0:
+                break
+            fib(f(n))
+            p = 2
+            while p <= 0:
+                f(n)
+                p = 1
+                fib(-1
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 1541, 2590, 4619, 698, 356, 535, 1906, 1278]
+first_step_topk_probs=[0.2765783369541168, 0.24921776354312897, 0.16429460048675537, 0.16429460048675537, 0.031031226739287376, 0.027961459010839462, 0.025195391848683357, 0.021550757810473442, 0.020457040518522263, 0.01941884495317936]
+first_step_topk_text=[' The', ' Yes', ' There', ' No', ' Black', ' It', ' I', ' In', ' All', ' If']
+
+[New tokens 8] count=256 first30=[1541, 330, 808, 3641, 2833, 299, 1447, 269, 2877, 357, 2645, 10676, 395, 2645, 17, 1783, 15, 715, 330, 808, 3641, 7567, 357, 2645, 10676, 491, 833, 1929, 3083, 388]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: There is no scientific evidence to support the idea that black cats are black. However, there is no scientific proof that black cats have any special condition or coloration. Therefore, it would be an interesting question whether black cats are actually black.
+Question: How do you explain why black cats have black stripes on their heads?
+Answer : Black cats have a black stripe on the back of their head, but they also have white spots on their sides. This has been proven by many studies which show that black cats live in a variety of habitats including forests, deserts, mountains, rivers, and oceans. The black cat's black markings are usually the result of its diet. When it comes to food, black cats tend to eat mostly fruits and vegetables, although other animals like dogs and cats may also eat small amounts of meat.
+Question : Can you explain how black cats were originally found in Africa?
+Answer – In the United States, black cats were first discovered in the early 1900s in the Southeastern states, and from there, they spread throughout the eastern half of the country. Today, only a few hundred black cats remain in the U.S., though several are thought to be extinct.
+Question – What does this mean for us?
+Answer -
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 843, 2050, 798, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.46146008372306824, 0.2741188108921051, 0.13221053779125214, 0.13221053779125214, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' 5', ' One', ' 4', '', '', '!', '"', '', '']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 202, 22, 10941, 333, 1604, 10941, 202, 23, 10941, 333, 2341, 10941, 202, 24, 10941, 333, 1769, 10941, 202, 25, 10941, 333, 3041, 10941, 202]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+3 apples = 12 apples
+4 apples = 13 apples
+5 apples = 16 apples
+6 apples = 24 apples
+7 apples = 9 apples
+8 apples = 8 apples
+9 apples = 10 apples
+10 apples = 12 oranges
+11 apples = 12 cherries = 4 bananas
+12 cherries = 8 cherries = 5 cherries
+13 cherries = 11 cherries = 6 cherries
+14 cherries = 14 cherries = 7 cherries
+15 cherries = 15 cherries = 10 cherries
+16 cherries = 16 cherries = 17 cherries
+17 cherries = 18 cherries = 19 cherries
+18 cherries = 20 cherries = 21 cherries
+19 cherries = 22 cherries = 23 cherries
+20 cherries = 24 cherries = 25 cherries
+21 cherries = 26 cherries = 27 cherries
+22 cherries = 28 cherries = 29 cherries
+23 cherries = 30 cherries = 31 cherries
+24 cherries = 32 cherries = 33 cherries
+25 cherries = 34 cherries = 36 cherries
+26 cherries = 35 cherries = 38 cherries
+27 cherries = 37 cherries = 40 cherries
+
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 22089, 27614, 15255, 1289, 1509, 360, 382, 1348]
+first_step_topk_probs=[0.8421072363853455, 0.04281839355826378, 0.02478138543665409, 0.01860879547894001, 0.015916945412755013, 0.012591340579092503, 0.01195233128964901, 0.01076994463801384, 0.010493098758161068, 0.009960570372641087]
+first_step_topk_text=[' I', ' What', ' Thank', ' Hi', ' Thanks', ' We', ' You', ' "', ' The', ' How']
+
+[New tokens 10] count=256 first30=[2575, 330, 669, 2942, 374, 482, 34, 202, 55, 3422, 29, 5531, 15, 356, 418, 21393, 490, 486, 491, 263, 3215, 668, 578, 733, 9529, 374, 269, 2754, 298, 383]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience with this?
+Tony: Well, I was wondering if you have a friend who has been diagnosed with the flu and it's not that scary at all. And so we're trying to find out. It turns out that there are actually some things that can cause a person to get sick from the flu and also from the flu itself.
+Assisted: You've got to know about the flu. If you're like me, you know how to tell someone they're sick when they're in their home or school. There are many different ways of telling someone they are sick. One way is by asking them what symptoms they might be experiencing. Then you'll come up with a list of possible symptoms. And then you'll go to the doctor for an evaluation. The doctor will ask you questions about the symptoms you're experiencing and what kind of treatment you'd like to take.
+Assistive technology is a great tool for those who need it most. We have a variety of assistive technologies available today. These include:
+- Electronic handheld devices (EAP)
+- Computerized smart cards
+- Computers with speech recognition software
+- Personal digital assistants
+- Digital cameras
+- Digital video recorders
+- Audio/
+
+================================================================================

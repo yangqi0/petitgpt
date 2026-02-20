@@ -1,0 +1,338 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 418, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8892728090286255, 0.11072725802659988, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' was', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 1] count=136 first30=[2827, 5273, 418, 4438, 289, 269, 3843, 17, 776, 2977, 2009, 17935, 298, 4207, 351, 269, 2389, 17, 698, 418, 263, 6086, 1167, 4, 5273, 418, 649, 8763, 357, 406]
+[Full output 1]
+Once upon a time, a curious child named Jack was playing in the park. He saw something shiny and round on the ground. It was a toy car! Jack was so excited that he ran over to it and started to play with it. But then, Jack accidentally dropped his toy car and it broke into many pieces. Jack's mom came running and asked what happened. She told him that she had broken her toy car and that she had to help fix it. Jack was sad but he knew he had to be more careful next time. So, he hugged his mom and said goodbye to the toy car. From that day on, Jack never forgot how important it was to be careful when playing with things.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 7535, 281, 8191, 15, 298, 330, 269, 1408, 3796, 2317, 289, 7535, 281, 8191, 17, 698, 578, 263, 2073, 288, 409, 2202, 15, 5280, 21, 10894, 353]
+[Full output 2]
+Paris is the capital of the province of Catalonia, and is the second largest city in Catalonia. It has a population of 217,892 inhabitants (2001 census).
+The town is located on the right bank of the Tiber River in the south-east of Catalunya, between the Alba, the largest river in Cataluny and the largest port in Cataluña. The town was founded by a Spanish explorer and a Spanish nobleman who founded the first European settlement there in 1521. In 1638, the town was taken from the Caledonians, which were in turn conquered by the Spaniards. During the 18th century, the town became part of the municipality of Cataluna.
+The town has a population (2016) of 597 people, making it the fifth most populated town in Cataluna after Barcelona and Barcelona. The population density is 1,610/km2 (12,730/mi2). The main industry is fishing, which is the main source of income for the town.
+Notable people
+Leopoldo Guglielmo (1825–1903), painter
+José Antonio López de Santa Anna (1840–1926), military officer
+
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 357, 483, 342, 3020, 359, 269, 1701, 288, 795, 613, 7527, 289, 269, 1134, 3892, 17, 382, 775, 4409, 578, 263, 2520, 288, 354, 298, 686, 1408, 619]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar that can be written as the sum of two other vectors in the same direction. The first vector has a length of 1 and its second one has a length equal to 2.
+
+Now let's consider the given problem: "Find the eigenvalues of the following matrix: A = [[1, 0], [0, 1]]." We are asked to find the eigenvalues for this matrix, which means finding the eigenvalues of A using the formula:
+
+λ = λ1 * A = λ2 * A = (3/2) × (-1)^(3/2).
+
+To solve this equation, we need to understand what each term represents. Let's start by finding the eigenvalues:
+
+* λ1 = 3/2 = -1
+* λ2 = -3/2 = 1
+* λ3 = -1/2 = 0
+* λ4 = -1/(2) = 1
+
+Next, we have the eigenvalues: λ1 = 5/2 = 3, λ2 = 4/2 = 6, and λ3 = 3/6 = 0.
+
+We want to find the eigenvectors of A, since they form a 2x2 matrix. To do so, we must first understand how these
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 491, 1085, 5546, 395, 1420, 1991, 9845, 14071]
+first_step_topk_probs=[0.27754905819892883, 0.1648712307214737, 0.10317377001047134, 0.07165275514125824, 0.0552249401807785, 0.047882575541734695, 0.038352955132722855, 0.03280502185225487, 0.028059622272849083, 0.02663557417690754]
+first_step_topk_text=[' use', ' can', ' have', ' model', ' describe', ' are', ' allow', ' provide', ' rely', ' incorporate']
+
+[New tokens 4] count=100 first30=[22968, 269, 1194, 4383, 1798, 298, 4116, 553, 2794, 299, 1623, 16, 7128, 2061, 17, 202, 509, 414, 7490, 2269, 491, 733, 2657, 289, 1663, 299, 1005, 874, 1557, 806]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the way humans learn and apply their knowledge to real-world problems.
+Theoretical models have been developed in order to help people understand how they learn, so that they can design better solutions for the real world. They also provide a means of understanding how different parts of the brain work together. Theories like these help people learn how to think more efficiently, and they may be used by scientists to improve future computer vision.
+This article was originally published with the title Cognitive Science.
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=99 first30=[263, 647, 286, 17, 595, 551, 202, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 655, 3715, 555, 490, 1804, 11, 6022, 17, 8256, 12, 1396, 409, 29]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+if __name__ == '__main__':
+    import sys
+
+    if len(sys.argv) < 2:
+        print("Usage: python3 -m test_files/test_files/tests/example.txt")
+        exit(-1)
+
+    for file in sys.argv[1:]:
+        if file != ".":
+            print("Error: File %s is not found" % file)
+            exit(-1, file)
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=236 first30=[622, 354, 490, 311, 861, 643, 1107, 354, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 11, 2440, 4886, 11, 1161, 687, 3, 711, 807, 5210]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return 1 if n == 0 else 1
+
+
+if __name__ == '__main__':
+    print(factorial(10))
+
+from django.db import models
+from django.contrib.auth.models import User
+# Create your models here.
+class Book(models.Model):
+    title = models.CharField(max_length=100)
+    author = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='books')
+
+    def __str__(self):
+        return self.title
+    
+    class Meta:
+        verbose_name_plural = 'Books'
+
+
+
+class BookItem(models.TextField):
+    title   = models.TextField()
+    author       = models.ManyToManyField(User)
+    author_id    = models.AutoField(primary_key=True)
+    author      = models.OneToOneField(User, on_delete = models.CASCADE, null=True)
+
+
+    def __str_(self):
+        if self.author:
+            return self.author.text
+        
+        return self.date.strftime('%Y-%m-%d %H:%M')
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=87 first30=[622, 354, 17, 19, 647, 353, 20, 552, 311, 12, 864, 353, 21, 864, 353, 81, 16, 20, 687, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1 - n) * (2 * (n-1))
+
+
+if __name__ == '__main__':
+    print(f'Functions with {len(funct_args)} input arguments')
+
+    print(f"Function: {function} = fib({input_arg})")
+
+    print(func(*[int(x) for x in range(5, 5)]))
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 2590, 1541, 535, 698, 3126, 1906, 338, 1289]
+first_step_topk_probs=[0.32469284534454346, 0.2636300027370453, 0.15660294890403748, 0.10875848680734634, 0.029578469693660736, 0.02807736210525036, 0.026652412489056587, 0.02279701456427574, 0.021640067920088768, 0.017570365220308304]
+first_step_topk_text=[' Yes', ' The', ' No', ' There', ' In', ' It', ' Not', ' All', ' A', ' We']
+
+[New tokens 8] count=188 first30=[382, 3533, 330, 12052, 17, 202, 509, 3533, 330, 808, 17, 382, 3533, 330, 8547, 4, 202, 4218, 10676, 491, 263, 12153, 288, 10978, 15, 1722, 339, 269, 2886, 12153]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+The answer is no. The answer is NO!
+All cats have a coat of fur, except for the white coat. This is what most people think of when they say "all cats" or "all dogs."
+This is because cats have two coats. In addition to being black, some cats also have black coat. Some cats are even black if their coat is black, but they do not have any color.
+Why does this happen? Because it is true that cats are not human beings. They cannot be domesticated. Cats are not humans. But cats are not humans in the sense that they are domesticated. So cats are not living in the wild.
+How do you know that cats are human beings? How do you know there is a human being who has a human face?
+Answer : We know that cats have human faces. And that is why cats are human.
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 2050, 798, 843, 382, 409, 338, 2, 1, 0]
+first_step_topk_probs=[0.49248006939888, 0.23752857744693756, 0.07552427053451538, 0.06805307418107986, 0.06132091209292412, 0.042298175394535065, 0.022794926539063454, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' One', ' 4', ' 5', ' The', ' 2', ' A', '', '', '']
+
+[New tokens 9] count=256 first30=[2050, 13032, 7670, 619, 934, 667, 354, 13032, 17, 202, 2774, 15, 356, 1118, 357, 356, 418, 5035, 672, 482, 1811, 614, 356, 1755, 847, 1557, 806, 299, 5951, 383]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple plus one buys 1 apple.
+Now, I know that I was thinking about this problem but I don't understand how to solve it. The problem is in the first place.
+The second question asks for the number of apples. If you add up all the apples, you get the same total as if you had added them all together.
+You can find the answer by going through the problem like this:
+1 + 2 = 4
+2 + 3 = 6
+3 + 4 = 9
+4 + 5 = 10
+5 + 6 = 15
+6 + 7 = 20
+7 + 8 = 22
+8 + 16 = 24
+9 + 25 = 30
+10 + 35 = 45
+100 + 100 = 120
+100 + 120 = 150
+150 + 150 = 180
+180 + 180 = 180
+270 + 180 = 270
+270 + 270 = 270
+27 + 27 = 270
+28 + 28 = 270
+29 + 29 = 270
+30 + 31 = 270
+31 - 32 = 270
+32 - 33 = 270
+33 - 34 = 270
+34 - 34 = 280
+35 - 36 = 270
+36 - 37 = 270
+37 - 38 = 270
+38 - 39 = 270
+39
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 1509, 382, 783, 1278, 22089, 2, 1, 0]
+first_step_topk_probs=[0.8415997624397278, 0.07352155447006226, 0.024626635015010834, 0.022775914520025253, 0.01462884247303009, 0.011572366580367088, 0.011274894699454308, 0.0, 0.0, 0.0]
+first_step_topk_text=[' I', ' What', ' You', ' The', ' This', ' If', ' Thank', '', '', '']
+
+[New tokens 10] count=256 first30=[2575, 330, 4083, 34, 202, 11190, 926, 29, 25799, 483, 342, 3436, 419, 263, 993, 288, 1943, 15, 1433, 29, 202, 16, 382, 4083, 272, 2601, 353, 7507, 359, 269]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is stress?
+Emily: Stress can be caused by a number of things, including:
+- The stressor itself (such as the weather)
+- The stresses that trigger it
+- A person's emotional state (for example, an alcoholic or drug addict)
+What causes stress in children and adolescents?
+- Physical activity
+- Emotional disturbance
+- Mental illness
+- Problems with school
+- Depression or other mental health problems
+- Difficulty concentrating
+- Poor eating habits
+- Lack of sleep
+- Repeatedly sleeping too much
+- Uncontrolled weight gain
+- Sexual abuse
+- Loss of interest in sex
+- Having difficulty concentrating
+- Changing social roles
+- Trouble sleeping
+- Increased physical symptoms such as headaches, stomachaches, muscle aches, fatigue, and night sweats
+- Tiredness or irritability
+- Feeling uncontrollable or unresponsive to stimuli
+How do you know if your child has stress?
+- If you suspect your child has a problem, talk to his doctor. He may be able to provide information about your child's medical history.
+- Ask your child's doctor for a referral to a psychiatrist. This will help determine what type of treatment is
+
+================================================================================

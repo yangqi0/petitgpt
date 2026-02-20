@@ -325,7 +325,7 @@ def main():
     print("SUP_DECODED_HEAD:", repr(tok.decode(sup)[:200]))
     print("SUP_DECODED_TAIL:", repr(tok.decode(sup)[-200:]))
 
-    raise SystemExit
+    # raise SystemExit
 
     while step < args.steps:
         try:
