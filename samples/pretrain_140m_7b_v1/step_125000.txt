@@ -1,0 +1,306 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 2857, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8545611500740051, 0.14543887972831726, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' went', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 1] count=159 first30=[2827, 5273, 418, 4438, 289, 269, 3843, 17, 776, 6446, 299, 4196, 298, 1098, 719, 1943, 17, 2050, 1266, 15, 406, 998, 287, 1608, 2716, 374, 263, 17935, 8569, 351]
+[Full output 1]
+Once upon a time, a curious child named Jack was playing in the park. He loved to explore and find new things. One day, he found an old box with a shiny lock on it. He opened the lock and saw that there were lots of toys inside! Jack was so excited and wanted to keep all his favorite toys. But then, something bad happened. The lock started to shake and break. Jack's mom came running over and said, "Jack, why did you do this? You need to be careful." Jack replied, "I don't know how to fix the lock. It's too broken!" His mom laughed and said, â€œThatâ€TMs okay. We can still have fun exploring the park without breaking anything.â€ So they went back to the park and had some fun.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 263, 7093, 336, 11605, 3, 4, 2, 0, 1]
+first_step_topk_probs=[0.8831228017807007, 0.07653990387916565, 0.01522942166775465, 0.013370098546147346, 0.01173777598887682, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' a', ' Italy', ' S', ' Lat', '', '!', '', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 7535, 281, 8191, 15, 298, 330, 269, 8492, 288, 269, 16991, 1723, 17, 202, 509, 11718, 288, 389, 729, 2905, 418, 4047, 289, 15102, 444, 269, 3163]
+[Full output 2]
+Paris is the capital of the province of Catalonia, and is the seat of the provincial government.
+The municipality of Bologna was formed in 1912 from the former part of the municipality of Alessandria. It had a population of 5,080 (2001) and an area of 154.85 km2. The municipal territory is bounded on the north by the provinces of Corsica, Corsica and Pavia, on the south by the province of Sardinia, on the east by the province Biscay, on the west by the province Monzón, on the northeast by the province Trabajo, and on the southwest by the province Istria.
+The town of Bolognese was founded in 1419, when it was united with the city of Pavia.
+In the 18th century, the municipality of Brescia was created from the municipalities of Alessi and Bressa. In 1768, the municipality was separated from the municipality of Venezia-Corsica to become the new municipality of Alvero.
+In 1688, the first large scale fortification of the Alva Valley was built. This fortification was used for several years as a base for the construction of the first
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 2686, 374, 263, 3592, 3823, 338, 357, 15353, 269, 1759, 2242, 29, 202, 202, 20, 17, 3827, 8977, 29, 1220, 833, 16204, 4409, 400, 289, 423, 65]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value associated with a square matrix A that satisfies the following conditions:
+
+1. Additivity: For any nonzero vector v in R^n, v = (v + 1)v.
+2. Adjacentness of zero: For all vectors v in R, 0 < v < 1.
+3. Adjacency relations: For each v in R and every u in V, there exists a unique v in R such that (u + 1)(v + 1)=0.
+4. Adjunction property: If v is an eigenvector for some nonzero vector v, then v = 0.
+5. Inverse property: If u is an eigenfunction of v, then u = uv.
+6. Distributive law: If u=v+1, then v is also an eigenvector of v.
+7. Distributivity: If u = 0, then u(0)=0. Similarly, if u = 1, then u(-1)=0. So multiplying both sides by (-1) results in -1 = -1.
+8. Distributiveness: If u=(u+1)(u+1), then u(u+1)+1 = u(u).
+
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 5546, 491, 3235, 9845, 1085, 395, 1420, 14071]
+first_step_topk_probs=[0.2519795596599579, 0.16611512005329132, 0.12153242528438568, 0.061750251799821854, 0.05281778797507286, 0.05013728886842728, 0.042884692549705505, 0.03917093575000763, 0.03305252641439438, 0.02295452356338501]
+first_step_topk_text=[' use', ' can', ' describe', ' have', ' predict', ' rely', ' model', ' are', ' allow', ' incorporate']
+
+[New tokens 4] count=256 first30=[22968, 269, 14457, 2673, 1085, 17, 1109, 483, 342, 885, 299, 3235, 806, 874, 601, 14667, 289, 1623, 16, 7128, 6863, 15, 857, 359, 2179, 6245, 388, 12609, 263, 5063]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the neural network model. They can be used to predict how people will behave in real-world situations, such as making decisions or managing a financial transaction.
+
+The main difference between neural networks and machine learning is that they use a system of neurons instead of an image. For example, when you play a video game, you start with the same neuron, but it's not clear whether the game is played by a computer or not. The brain is also trained on the images and the neural network is more flexible than the image.
+
+Models
+In the above discussion, the most common model for neural networks is the Neuromolecular Modeling Language (NML). This language has been developed over time to help describe the nature of complex systems and their properties. It is a generalization of the Neuroptera, which include all animals and plants.
+
+This model is similar to the Neurolab:
+
+It is a system of neural networks that are similar to the neural network, but the neural network has a lot of features, including the ability to learn from input data and adapt to new inputs.
+
+Unlike the Neurograph, the Neurophilic model does not have any particular feature of its own
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=65 first30=[263, 647, 286, 17, 595, 551, 202, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 655, 3715, 555, 1499, 29, 331, 444, 9879, 86, 22235, 655, 853, 66]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+if __name__ == '__main__':
+    import sys
+
+    try:
+        from libsdk import add_list_of_lists
+        add_list = add_list(sys.argv[1:])
+
+        print("Adding lists")
+        print(add_list)
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.878592312335968, 0.12140767276287079, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 6] count=87 first30=[622, 354, 490, 311, 861, 643, 1107, 354, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 655, 3715, 555, 537, 22018, 269, 1960, 7445, 346, 679, 333]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return 1 if n == 0 else 1
+
+
+if __name__ == '__main__':
+    import sys
+
+    # Initialize the user interface
+    app = Flask(__name__)
+    app.config['SECRET_KEY'] = 'hsa-secret'
+    app.logger.setLevel('DEBUG')
+    app.debug = True
+    app.secret_key = '<KEY>'
+    app.register_blueprint(sys.argv)
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.7185943722724915, 0.28140559792518616, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=77 first30=[622, 354, 647, 353, 20, 18, 21, 12, 864, 353, 81, 552, 354, 12, 711, 202, 6, 18897, 269, 1392, 299, 6519, 31393, 1890, 13649, 292, 202, 856, 8049, 66]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1 + (1/2) * (n - 1)
+
+
+# Define the function to compute Fibonacci numbers recursion
+def fib_recursive():
+    while True:
+        try:
+            fib = fib(n)
+            print("Fib:", fib.get())
+            print()
+            print()
+        except Exception as e:
+            print("Exception occured")
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 2590, 382, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.5653501152992249, 0.2726743817329407, 0.16197553277015686, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' No', ' The', '', '#', '', '"', '!', '', '']
+
+[New tokens 8] count=256 first30=[2590, 17, 1541, 330, 808, 3641, 2833, 299, 1447, 269, 5630, 288, 2645, 10676, 289, 4383, 17, 1783, 15, 383, 330, 1812, 357, 263, 1593, 993, 288, 10676, 491, 733]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: No. There is no scientific evidence to support the existence of black cats in humans. However, it is possible that a large number of cats have been infected with rabies and it has not been shown that this could be due to rabies. The presence of rabies in cats may indicate that the cat was killed by an animal bite or that the bite had been exposed to a person. It is also possible that an animal bite is caused by rabies.
+There is no evidence that rabies is a risk factor for the development of schizophrenia. In fact, there is no proof that rabies causes schizophrenia. However, the evidence suggests that rabies does cause schizophrenia. It is likely that there is no link between rabies and schizophrenia.
+The only other explanation for the absence of rabies in dogs is that they are more aggressive than people. They are not aggressive but are more agile and can attack their own territory at will. If a dog bites someone then it would be very difficult to find them. However, if you look closely at the dog's head you will see a dark line running down its back. This indicates that the dog was not bitten by a human. A dog that is bitten by another human can be considered to be a dog that is not bitten on its own by a
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 798, 843, 2050, 643, 3, 4, 2, 0, 1]
+first_step_topk_probs=[0.607139527797699, 0.14123520255088806, 0.12726348638534546, 0.08389723300933838, 0.04046456515789032, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' 4', ' 5', ' One', ' 0', '', '!', '', '', '']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 202, 20, 13032, 333, 1604, 10941, 202, 21, 10941, 333, 2341, 24847, 202, 22, 24847, 333, 1769, 24847, 202, 23, 26634, 333, 3041, 24847, 202]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+1 apple = 12 apples
+2 apples = 13 oranges
+3 oranges = 16 oranges
+4 bananas = 24 oranges
+5 oranges = 7 oranges
+6 oranges = 8 oranges
+7 oranges = 5 oranges
+8 oranges = 15 oranges
+9 oranges = 11 oranges
+10 oranges = 20 oranges
+11 oranges = 10 oranges
+12 oranges = 14 oranges
+13 oranges = 15 orange juice
+14 oranges = 18 oranges
+15 oranges = 19 oranges
+16 oranges = 21 oranges
+17 oranges = 22 oranges
+18 oranges = 25 oranges
+19 oranges = 26 oranges
+20 oranges = 27 oranges
+21 oranges = 28 oranges
+22 oranges = 29 oranges
+23 oranges = 30 oranges
+24 oranges = 31 oranges
+25 oranges = 31 orange juice
+26 oranges = 33 oranges
+27 oranges = 35 oranges
+28 oranges = 34 oranges
+29 oranges = 45 oranges
+30 oranges = 46 oranges
+31 oranges = 47 oranges
+32 oranges = 48 oranges
+33 oranges = 49 oranges
+34 oranges = 50 oranges
+35 oranges = 51 oranges
+36 oranges = 52 oranges
+37 oranges = 54 oranges
+38 oranges = 55 oranges
+39 oranges = 56 oranges
+40 oranges = 57 oranges
+41 oranges = 58 oranges
+42 oranges
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 382, 22089, 360, 1509, 783, 1289, 1348, 3919]
+first_step_topk_probs=[0.7009401917457581, 0.08474539965391159, 0.03318677470088005, 0.020767753943800926, 0.019713781774044037, 0.01776360161602497, 0.016862090677022934, 0.015194013714790344, 0.010552027262747288, 0.010552027262747288]
+first_step_topk_text=[' I', ' What', ' The', ' Thank', ' "', ' You', ' This', ' We', ' How', ' My']
+
+[New tokens 10] count=256 first30=[2575, 330, 4083, 34, 202, 11190, 926, 29, 13676, 15, 383, 415, 263, 1114, 1384, 645, 288, 829, 1328, 17, 1289, 2068, 2997, 289, 263, 1165, 913, 411, 2505, 4083]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is stress?
+Emily: Yes, it's a very important part of our life. We're living in a world where we feel stress and have to deal with it. And when we're stressed, the stress goes on. It's like, 'I can't cope,' or 'I can not cope.' The stress makes you feel guilty, so it's really hard for me to handle it.
+Assisting us with stress management techniques is essential because this is something that you're not going to do without. If you're struggling with stress, then you need to make sure you understand what it means and how to manage it. That's why I'm here today.
+I'm also a health care professional who has been working with many people who are suffering from chronic stress. They've found that they take the time to talk about their problems and help them through the process. They'll be able to talk about things that might seem impossible to cope with during times of stress.
+And yet, there's no such thing as a "normal" person. People who are suffering by nature are all too happy to talk about the stress they experience in life. But if you don't know what to say, you can still go out and try to explain it
+
+================================================================================

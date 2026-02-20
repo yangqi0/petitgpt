@@ -1,0 +1,295 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=164 first30=[2827, 5273, 418, 7948, 289, 269, 3843, 17, 776, 2977, 2009, 17935, 351, 269, 2389, 298, 406, 10225, 383, 656, 17, 698, 418, 263, 2023, 2239, 3043, 4, 5273, 3766]
+[Full output 1]
+Once upon a time, a curious child named Jack was walking in the park. He saw something shiny on the ground and he picked it up. It was a big red ball! Jack wanted to play with it but his mom said no. "It's too dangerous," he said. Suddenly, a man came running towards him. He had an idea. He took out some tape from the bench and started to pick up the ball. Jack was so excited that he ran away as fast as he could. But then, a little girl came running into the park. She saw the ball and she asked her what it was. Jack told her about the ball and the man laughed. The man smiled back at him and said, "That's not a toy, you're very foolish." Jack felt better knowing that he didn't have to be foolish again.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 263, 336, 321, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.9012696743011475, 0.06414470076560974, 0.021485785022377968, 0.013099838979542255, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' a', ' S', ' T', '', '', '!', '"', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 7535, 281, 8191, 15, 298, 330, 269, 1408, 3796, 2317, 289, 269, 2027, 17, 698, 330, 3323, 351, 269, 1179, 5358, 288, 269, 3345, 657, 560, 17]
+[Full output 2]
+Paris is the capital of the province of Catalonia, and is the second largest city in the country. It is located on the right bank of the River Via. The town was founded by Saint-Maurice I de Béarnon, the first bishop of Catalonian origin.
+The town is known for its many churches, which are still active today.
+Famous people named Catalona:
+- Pascal II (1477–1558), a French nobleman who had been appointed to the throne of Spain as King of Spain. He was a son of the Duke of Alba.
+- Leopoldo I (1496–1648), the son of the Count of Aragon and the father of the Counts of Córdoba.
+- Louis XIV (1700–1775), the king of France from 1707 to 1792.
+- Napoleon Bonaparte (1813–1890), the great military leader who ruled Italy from 1821 until his death in 1815.
+- Charles IX (1724–1778), the last ruler of the Roman Catholic Church.
+- Marie Antoinette (1764–1833), queen consort of King George III of England. She was the daughter of
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 6058, 500, 672, 269, 2690, 920, 269, 3823, 288, 18956, 298, 269, 2819, 4409, 288, 269, 28069, 17, 535, 613, 2351, 15, 490, 486, 491, 263]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that tells us about the relationship between the matrix of eigenvalues and the row vector of the eigenvectors. In other words, if you have a system of linear equations with complex numbers in them, then those equations will be equal to zero because their real or imaginary parts are just constants multiplied by real numbers.
+
+Now let's think about how we can create an example using matrices instead of vectors. We can take two matrices A and B, where A = [a1 b1 , a2 b2 ] and B = [b1 c1 , b2 c2]. Then, we can define a new matrix P as follows:
+
+P = [[a1 a2 a3],
+[a2 a1 a3]]
+
+This means that for every entry in the first row of our new matrix, there exists another entry in the second column containing the same number of rows, which we call the "orthogonal" version of the original matrix P. This means that any vector (or matrix) in the initial matrix P can be written as a combination of these orthogonal vectors.
+
+So now, let's see how we can do this! First, we need to find a way to express the matrix P as a product of two special
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 5546, 9845, 491, 1085, 3235, 395, 1420, 22968]
+first_step_topk_probs=[0.23148788511753082, 0.18795348703861237, 0.11164916306734085, 0.0460599847137928, 0.0460599847137928, 0.04372243955731392, 0.04150349274277687, 0.03799530491232872, 0.03739779070019722, 0.03549981862306595]
+first_step_topk_text=[' use', ' can', ' describe', ' rely', ' have', ' model', ' predict', ' are', ' allow', ' mimic']
+
+[New tokens 4] count=256 first30=[22968, 269, 14457, 2673, 1085, 17, 1109, 4478, 299, 1557, 806, 12473, 289, 1108, 2613, 4899, 4773, 299, 2175, 23527, 15, 298, 581, 483, 342, 885, 299, 1444, 719, 14457]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the neural network model. They aim to understand how neurons in different brain regions respond to various stimuli, and they can be used to design new neural networks that match existing ones.
+"The most common neural network is a neural network with a limited number of neurons," says John Dennison, an associate professor of neuroscience at the University of California, San Diego. "But this neural network has been very difficult to study because it is so complex."
+Dennison's group has recently developed a novel algorithm for predicting which neural networks will be improved over the next decade. The algorithm uses neural networks as input to determine which neural networks should be improved, and then adds a third neural network to the mix.
+"We've already seen that neural networks are robust to many different types of problems," he says. "They have to work well together."
+Daryl Sturm, a graduate student in Dennison's lab, explains that it's important to consider the complexity of neural networks when trying to predict what the network will look like. "What we're looking at is a neural architecture that looks good on the average," he says, "but we don't know if it's better than other neural networks."
+Sturm believes that the
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=173 first30=[263, 647, 286, 17, 595, 551, 202, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 655, 3715, 555, 1499, 29, 331, 444, 9879, 86, 22235, 17, 3506, 86]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+if __name__ == '__main__':
+    import sys
+
+    try:
+        from libsdk.libsdk_api import _GetSdkApi
+        from libsddk.libsddk_api.sdk_test_api import test_api
+        from libSDK.util import check_config_file
+
+        if len(sys.argv) > 1 and sys.argv[1] != 'db':
+            print('The config file is not yet installed')
+            exit(-1)
+        elif len(sys._getargs()) == 2 or sys.argv[-1] in ('-h', '--help'):
+            print('You need to create the test api version')
+            exit(0)
+        else:
+            print('There are no tests for this version')
+            sys.exit()
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=199 first30=[622, 354, 490, 311, 861, 643, 1107, 354, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 717, 7121, 15, 2176, 18379, 3, 711, 4750, 2062, 263]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return 1 if n == 0 else 1
+
+
+if __name__ == '__main__':
+    print('Hello, World!')
+
+Once upon a time there was a little girl named Jane. She was three years old and loved to explore her world. One day she went for a walk in the park with her mom. As they walked, Jane noticed something strange. It was a big tree! She looked up at it and saw that it had a long trunk. "Mommy," Jane said, "What's this?" Her mom smiled and said, "It's a tree." Jane picked up the trunk and showed it to her dad. He smiled and said he would take care of it. So Jane carefully put the trunk down and watched as the tree grew bigger and bigger. Suddenly, the trunk started to grow bigger and bigger until it was so tall that it could reach the sky! Jane and her dad were very happy. They hugged each other and laughed. The end.
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=120 first30=[622, 354, 647, 353, 20, 864, 353, 21, 13, 81, 552, 354, 687, 711, 202, 6, 11101, 299, 1083, 269, 31393, 993, 359, 287, 4067, 288, 9044, 17, 202, 856]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1 + (1 * (2*n - 1))
+
+
+# Function to print the Fibonacci number as an array of integers.
+def fib_print(*args, **kwargs):
+    print("Printing Fibonacci number:", args[0], ".")
+    print("Number of Fibonacci Numbers:", n)
+    print("Fibonacci Number:", fib(n), ".")
+    for i in range(1, len(args)):
+        print(f"Fibonacci number {i}:\t{i}")
+
+
+if __name__ == "__main__":
+    main()
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 2590, 382, 1541, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.5196245908737183, 0.25062045454978943, 0.14131954312324524, 0.08843550086021423, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' No', ' The', ' There', '', '', '!', '"', '', '']
+
+[New tokens 8] count=256 first30=[2590, 17, 1541, 330, 808, 3641, 2833, 299, 1447, 269, 5630, 288, 2645, 10676, 289, 4383, 17, 1783, 15, 383, 330, 453, 1812, 299, 1721, 490, 833, 288, 780, 586]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: No. There is no scientific evidence to support the existence of black cats in humans. However, it is not possible to say if any of them were black or even a brown color. Some cats may have been domesticated for their size but other cats have been reported as black-and-white. The reason why these cats are black is unknown.
+The American Animal Hospital Association (AAHA) has published a number of studies showing that cats with white fur are more likely to be black than those without. In addition, cats with white coats tend to be more aggressive toward people. It is not known whether these cats will become aggressive towards people, or if they will become more aggressive towards people.
+The AAHA report suggests that cats with black hair may be more likely to become aggressive towards humans. This is because these cats are generally larger than their white counterparts.
+In general, cats with black skin tend to be less aggressive towards people and more aggressive towards dogs.
+However, this does not mean that black cats are more aggressive towards humans and are more likely than white cats to become aggressive toward humans.
+It seems like a good thing to keep your cat indoors during the summer months when you are home from work.
+© 2010 J.J. Brenner
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 843, 798, 2050, 643, 1218, 2, 3, 1, 0]
+first_step_topk_probs=[0.3546817898750305, 0.2338208109140396, 0.2106902301311493, 0.1251552551984787, 0.039794232696294785, 0.03585758060216904, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' 5', ' 4', ' One', ' 0', ' 8', '', '', '', '']
+
+[New tokens 9] count=256 first30=[354, 13032, 15, 409, 10941, 15, 637, 10941, 15, 798, 10941, 15, 843, 10941, 15, 1012, 10941, 15, 1186, 10941, 15, 1218, 10941, 15, 1291, 10941, 15, 1171, 10941, 15]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple, 2 apples, 3 apples, 4 apples, 5 apples, 6 apples, 7 apples, 8 apples, 9 apples, 10 apples, 11 apples, 12 apples, 13 apples, 14 apples, 15 apples, 16 apples, 17 apples, 18 apples, 19 apples, 20 apples, 22 apples, 23 apples, 23 fruits, 1 apple, 1 apple (not counting the apples), 1 apple, 0 apples, 1 apple
+So you're going to multiply 2 by itself three times. You're done! The number of apples is 2 x 2 x 2 = 16. So we know that the number of apples in the basket is 16. We also know that the fruit count is 1. And so on...
+Answer: 7
+The number of apples from the basket is 6. Therefore, the number of fruits in the basket must be greater than or equal to 6. That means the number of fruit counts is 6.
+Answer: 12
+There are two ways to find out how many apples there are in the basket. The first way is if you want to find out what number of apples are in the total basket. If you can't find a single number that is more than 100, then you need to divide it by 1000. But this method
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 27614, 2575, 382, 3919, 2766, 1348, 360, 1509, 22089]
+first_step_topk_probs=[0.582946240901947, 0.04911362752318382, 0.04311747848987579, 0.02561287023127079, 0.01825709082186222, 0.015214694663882256, 0.014823593199253082, 0.014442546293139458, 0.014071292243897915, 0.013357171788811684]
+first_step_topk_text=[' I', ' Hi', ' What', ' The', ' My', ' Dr', ' How', ' "', ' You', ' Thank']
+
+[New tokens 10] count=256 first30=[2575, 330, 4083, 34, 202, 11190, 926, 29, 25799, 483, 342, 3436, 419, 263, 993, 288, 1943, 15, 1433, 29, 202, 16, 382, 4083, 272, 2601, 353, 262, 5563, 1676]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is stress?
+Emily: Stress can be caused by a number of things, including:
+- The stressor itself (involving a social or psychological condition)
+- The cause(s) of the problem
+- How it's treated
+- How to cope with it
+- How the person feels about it
+- Whether the person is in control of what happens
+- How he/she will respond to the situation
+- How much support and encouragement will be needed
+- How long will it take for him/her to feel better
+- How well he/she does at home
+What you need to know:
+- How stress affects your life
+- How people handle stress
+- How you feel about yourself
+- How others react to stress
+- What you think about stress
+- Is there a way to deal with stress?
+- How do you manage stress?
+The following are some ways that you can try to help yourself and others cope with stress:
+- Set realistic goals
+- Use strategies to deal with the stressors
+- Take time out to relax
+- If you're feeling stressed, make sure you understand how you can cope with it.
+- Get help from a professional if you need it
+-
+
+================================================================================

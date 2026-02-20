@@ -1,0 +1,320 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 418, 1255, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.6051429510116577, 0.29186713695526123, 0.10298988223075867, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' was', ' called', '', '#', '', '"', '!', '', '']
+
+[New tokens 1] count=169 first30=[1255, 5273, 418, 7948, 289, 269, 3843, 17, 776, 2977, 2009, 17935, 298, 12183, 337, 351, 269, 2389, 17, 698, 418, 263, 6052, 8660, 79, 603, 4, 5273, 10225, 383]
+[Full output 1]
+Once upon a time, a curious child called Jack was walking in the park. He saw something shiny and sparkly on the ground. It was a beautiful necklace! Jack picked it up and said: "Wow, look at this!" Jack's eyes lit up with excitement. He reached out to touch the necklace. Suddenly, he heard a voice. "What are you doing?" It was his mum. She had come from far away to find the necklaces. Jack smiled and said: â€œI found them in my garden!â€ His mum said: âself, why don't you take a closer look? That way, you can get the pretty ones you like.â€ Jack nodded and carefully put the necklacing back into the pocket of his mum. He followed her inside and soon enough, they were all very happy.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 7535, 281, 8191, 15, 298, 330, 269, 1408, 3796, 2317, 289, 2100, 17, 202, 509, 4376, 2317, 418, 2793, 351, 263, 9902, 357, 17621, 86, 269, 4549]
+[Full output 2]
+Paris is the capital of the province of Catalonia, and is the second largest city in Europe.
+The ancient city was built on a hill that overlooks the river Avon. The site was first excavated by the German explorer Wilhelm von Humboldt in the late 18th century. It is now known as the City of the Stars, and is located at the junction of two major rivers: the Avon and the Avon.
+The town has long been known for its "Cannabis" (a type of chocolate), which is made from cocoa beans. This chocolate is said to have originated in the area around the village of Cannagos, where it is called "Pompey".
+During the 19th century, the city was used for several military campaigns. In the late 20th century, during World War II, the city became home to the First World War, and during the Second World War, it was used as a base for the Battle of Britain.
+In the 1930's, the city began to develop into a modern urban center. Its population was more than 2 million people. The new government created a new system of government called the Federal Government, which was supposed to be a combination of the old one and the new government. The
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 6058, 500, 806, 1264, 269, 4409, 1926, 288, 263, 4409, 1926, 578, 4374, 17, 698, 415, 1384, 299, 4310, 357, 482, 1818, 357, 10888, 833, 4409]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that tells us how much the vector space of a vector space has changed. It's important to note that this means that multiplying any vector by a nonzero number will always result in zero.
+
+Now let's consider the case where we have two vectors, say $u$ and $v$, with their respective eigenvalues being 0 and 1 respectively. We want to show that if there exists a positive integer $k$ such that $\lambda_1 = 0$, then the set of all possible values for $u$ must also be non-negative (i.e., $0 < u \leq k$). To do so, we need to demonstrate that the sum of these three values equals unity. This means that no matter what values of $u$ are chosen from our original set of vectors, their sum will always equal zero.
+```scss
+u + v - 0 = 0
+u - 0 = 1
+v - 0 = 2
+\end{align*}
+```
+Since both sides of the equation are nonnegative, they satisfy the condition:
+
+$$\sum_{i=1}^{n} u\_ix + \sum_{j=1}^{2n} v\_j = 0$$
+
+We now know that the sum
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[5546, 817, 9845, 483, 491, 1420, 395, 1991, 1085, 5663]
+first_step_topk_probs=[0.19306549429893494, 0.19306549429893494, 0.11468572914600372, 0.09311754256486893, 0.06466884166002274, 0.0404687263071537, 0.036964189261198044, 0.03119046799838543, 0.02810494601726532, 0.025324681773781776]
+first_step_topk_text=[' describe', ' use', ' rely', ' can', ' have', ' allow', ' are', ' provide', ' model', ' involve']
+
+[New tokens 4] count=256 first30=[22968, 269, 14457, 2673, 17, 698, 330, 1728, 351, 269, 2877, 357, 15, 722, 1496, 263, 854, 288, 6579, 15, 383, 601, 342, 2222, 299, 3235, 806, 619, 1968, 7973]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the neural network. It is based on the idea that, when given a set of inputs, it will be able to predict how one input affects another.
+The model was developed by researchers at MIT, who are working with colleagues from various universities and institutions around the world. The model can be used for more than just training the model itself. For example, it could be used to predict the future behavior of a computer program. It would also be useful in predicting the future behavior that the computer might use in its future experiments.
+This research has been funded by the National Science Foundation (NSF), the U.S. Department of Energy (DOE) and the Defense Advanced Research Projects Agency (DARPA).
+Other social bookmarking and sharing tools:
+Note: Materials may be edited for content and length. For further information, please contact the source cited above.
+- Giorgio Baccini, Yuan Zhuang, Ting Qi, Jianhua Wang, Yan Wang, Guan-Yu Lin, Xiaohui Zhang, Lingwu Liu, Caitlin A. Calderon, Tao Wang, Shihong Li, Seung-Huang Zhang, Dan Shouk
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 17, 595, 551, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 655, 3715, 555, 1499, 29, 331, 444, 9879, 86, 1072, 655, 864, 726]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+
+if __name__ == '__main__':
+    import sys
+
+    try:
+        from libspy import *
+
+        from libs2 import *
+
+            from libs3 import *
+
+                from libs4 import *
+
+                    from libs5 import *
+
+                        from libs6 import *
+
+                        import libs4 as libs4
+                    import libs5 as libs5
+
+                import libs1 import *
+                    import libf1_libs = libf1.read_source()
+
+                    from libf1 import *
+                        import libf0_libs  # noqa
+                    from libf0 import *
+                        from libf10 import *
+                            import libf00_libs   # noqa
+                        import libfsupr_libs    # noqa
+                        from libfsuprs import *
+                            from libf01 import *
+                            libf11_libs     # noqa
+                        libf12_libs      = libf11.read_library()
+
+                    for f in range(len(list(list(set(self._map))))):
+                        for i in range(0, len(list(range(len(self._glob)))))):
+                            self._add_file_to_directory(f)
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=212 first30=[622, 354, 490, 311, 330, 453, 974, 1107, 643, 711, 202, 6, 11101, 299, 1098, 269, 993, 288, 3248, 12642, 289, 263, 7534, 3292, 17, 202, 856, 3911, 727, 66]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return 1 if n is not None else 0
+
+
+# Function to find the number of unique digits in a binary string.
+def factorize_binary():
+    '''
+    :return: The number of unique digit combinations in a binary.
+    '''
+
+    # Get the integer value from the binary, and check whether it's a factor or not.
+    # If yes, then use the first non-zero digit combination.
+    if len(numbers) == 0:
+        return 0
+
+    # Check if it's a positive integer, and check if it's an odd number.
+    if numbers[0] != 0:
+        raise ValueError("Invalid value for `number`.")
+
+    # Check whether there are any possible values for the number of combinations.
+    # Otherwise, return 0.
+    if not numbers[1]:
+        raise ValueError('Invalid value for ' + str(numbers))
+
+    # Return the number of possible combinations.
+    return (number_of_combinations(random.randint(0, 1))) * factorize_Binary()
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 339, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.6513549089431763, 0.3486451506614685, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' for', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=188 first30=[622, 354, 17, 19, 647, 353, 20, 17, 19, 552, 311, 12, 864, 353, 21, 864, 353, 81, 552, 354, 687, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1.0 - n) * (2 * (n - 1))
+
+
+if __name__ == '__main__':
+    # Build the function
+    from numpy import array, zeros
+    for i in range(10):
+        # Initialize the function
+        x = array([0., 0., 0., 1.], dtype=int)
+        y = array([1., 0., 2., 3.], dtype=float)
+
+        # Create the function
+        if i % 10 == 0:
+            print("Function initialized")
+            # Print the Fibonacci number
+            print("Fibonacci number: ", fib(x), ".")
+            print()
+
+            # Print the result of the Fibonacci number and its neighbors
+            print("\t{}\t\t{}".format(i, sum(y)))
+
+    # Function to calculate the Fibonacci number
+    f = fib(3)
+    print(f.__repr__(f))
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 1541, 2590, 356, 698, 535, 5531, 338, 0]
+first_step_topk_probs=[0.27995455265045166, 0.20481911301612854, 0.20481911301612854, 0.1578604131937027, 0.04075360298156738, 0.034858401864767075, 0.03141002729535103, 0.026866424828767776, 0.018658358603715897, 0.0]
+first_step_topk_text=[' The', ' Yes', ' There', ' No', ' I', ' It', ' In', ' Well', ' A', '']
+
+[New tokens 8] count=256 first30=[1541, 330, 808, 3641, 2833, 299, 1447, 269, 5630, 288, 2645, 10676, 17, 1783, 15, 263, 993, 288, 2629, 491, 3400, 357, 2645, 10676, 620, 453, 2720, 299, 342, 263]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: There is no scientific evidence to support the existence of black cats. However, a number of studies have shown that black cats do not appear to be a separate species from other cats (e.g., P. vivax). The most recent study, which was conducted by Dr. Anders Hjelmsson at the University of Copenhagen in Denmark, looked at the occurrence of black cats among cats living in caves.
+The results showed that black cats were not found in caves and that they did not occur in caves, but rather in a variety of habitats. In addition, there was no evidence that black cats could exist anywhere in the world, even though their numbers are thought to be small.
+To determine if the presence of black cats may be related to their diet, Dr. Ander Böllmann and his colleagues from the University of Oslo used a combination of genetic and behavioral analysis to examine the relationship between black cat diet and black cat behavior. They discovered that black cats had an increased tendency to eat a variety of foods such as fruits, vegetables, nuts, berries, insects, grasshoppers, frogs, snakes, birds, fish, reptiles, amphibians, and mammals. Their diet consisted of mostly fruits, such as apples, pears, bananas
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2050, 354, 382, 798, 843, 698, 1541, 5517, 409, 4449]
+first_step_topk_probs=[0.3136635422706604, 0.22948114573955536, 0.12283241003751755, 0.08097609132528305, 0.07296551764011383, 0.03519207239151001, 0.02857370674610138, 0.02857370674610138, 0.021480830386281013, 0.017880970612168312]
+first_step_topk_text=[' One', ' 1', ' The', ' 4', ' 5', ' It', ' There', ' Two', ' 2', ' Each']
+
+[New tokens 9] count=256 first30=[2050, 13032, 15, 795, 10941, 15, 1237, 10941, 15, 795, 10941, 17, 202, 3016, 914, 10941, 1352, 406, 491, 34, 2575, 330, 269, 2056, 993, 288, 10941, 34, 202, 24771]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple, two apples, three apples, two apples.
+How many apples did he have? What is the total number of apples?
+Answer 1: It's easy to say that 2 apples equals 4 apples. But it turns out that the answer is a lot like 2 or 3.
+Answer: Because of this, we can't say that 2 or 3 is equal to 4.
+Answer 2: There are 6 apples in one cup.
+Answer 3: This is not a very simple question because there are so many different ways to calculate the amount of apples you get.
+Answer 4: We're going to talk about how to find the total amount of apples in the basket. Let's call the total number "n" apples. The first thing we will do is add up all the apples. We'll do this by multiplying each apple by itself. Then we'll subtract the sum from 1.
+Answer 5: We want to know what percentage of apples is left over after taking out the apples. In other words, we need to figure out how much extra apple was left over when we took out the apples, so we multiply that number by 100%.
+Answer 6: To find the final amount of apples, we just need to divide the total number
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 15255, 1289, 382, 776, 3919, 22089, 783, 360]
+first_step_topk_probs=[0.6331876516342163, 0.07201354950666428, 0.031296953558921814, 0.02676970325410366, 0.025411143898963928, 0.021176578477025032, 0.018113287165760994, 0.018113287165760994, 0.01719404011964798, 0.01590188778936863]
+first_step_topk_text=[' I', ' What', ' Thanks', ' We', ' The', ' He', ' My', ' Thank', ' This', ' "']
+
+[New tokens 10] count=256 first30=[2575, 330, 669, 2942, 374, 269, 4083, 34, 202, 43, 1640, 25205, 16283, 23197, 29, 5531, 15, 356, 491, 263, 3215, 668, 330, 289, 610, 4608, 298, 406, 578, 733]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience with the stress?
+HARRY SMITH: Well, I have a friend who is in his office and he has been on a phone call for several days. He was not happy about it because he had to get a job, but now that he's been diagnosed with depression, he will be able to take care of himself, so he can go back to work and get some help. And if you're going to see him, he'll probably want to do some research on what he's dealing with, and he'll probably think about what he needs to do, but there are things you can do right now to make sure he's healthy enough to deal with these situations.
+Assigator: The most important thing to remember here is that it's very stressful, especially when you're out of the office or out of the house.
+HARY SMITH: If you're experiencing these symptoms, then you should try to stay calm, and try to avoid any negative thoughts. It might be hard to cope with these feelings, but if you can, it could be worthwhile.
+Assuator: When you feel stressed, you may need to take some time to relax. It's also important to find ways to relax yourself, like
+
+================================================================================

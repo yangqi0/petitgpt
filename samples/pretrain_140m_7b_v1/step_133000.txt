@@ -1,0 +1,250 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 2857, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8785924315452576, 0.12140755355358124, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' went', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 1] count=171 first30=[2827, 6087, 4928, 289, 263, 1204, 2422, 17, 2050, 1266, 15, 6087, 3766, 299, 631, 3099, 298, 1143, 374, 610, 3326, 17, 776, 3609, 610, 2553, 490, 406, 982, 12071]
+[Full output 1]
+Once upon a time, a curious child named Max lived in a small house. One day, Max wanted to go outside and play with his friends. He asked his mom if he could borrow some toys from the park. His mom said yes, but only for a little while so Max would be happy to have his own toy car. Max was very excited and ran out of the house with all his new toys. But as he played, he started to feel cold. Suddenly, he heard a loud noise coming from the nearby bush. He looked around and saw that it was a big bear! The bear had been looking for him and was running away. Max quickly ran back to his mom and told her what happened. She explained that the bear was not friendly and that they should always be careful when playing together. Max learned an important lesson that day: never give up on your dreams.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 1134, 1112, 17, 698, 418, 269, 4223, 288, 263, 11295, 444, 536, 269, 4376, 5387, 2317, 16, 9287, 586, 4047, 15, 298, 383, 418, 289, 269]
+[Full output 2]
+Paris is the capital of the province of the same name. It was the capital of a kingdom from which the ancient Greek city-states were formed, and it was in the territory that the first ruler of the empire was born.
+The city-state of the same names is situated on the northern bank of the River Tiber. The city-state is bounded by the rivers Paphos and Camino, with its capital at Paphos, on the north. In the north the city-state consists of two parts: the city-city-town (or the city-town) and the city-district. The city town is bounded by a narrow strip of land extending along the river Giacobatina.
+The cities of the ancient world are divided into three main regions: the eastern region, the western region, and the southern region. The western region is characterized by the fertile soil of the northern region; the eastern region is dominated by the great cities of Rome and Constantinople. The western area includes the western part of the country, and the eastern part of the territory, while the eastern part comprises the territories of the eastern region.
+The western region of the country has its capital at the city-county town of Syracuse. The city of Syrac
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 11547, 374, 2685, 299, 1467, 4409, 17, 382, 854, 288, 545, 1812, 18956, 3071, 269, 4054, 339, 829, 5122, 1621, 17, 202, 202, 2774, 1427, 415]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that varies with respect to another vector. The set of all possible eigenvalues forms the basis for our discussion here.
+
+Now let's consider two matrices A and B, where A is a square matrix and B is a diagonal matrix containing the eigenvalues of A. We can compute their eigenvalues using the following formula:
+
+A = λ\_1 * λ\_2 * ... * λ\_{n-1}
+
+where λ\_i represents the i-th eigenvector associated with the eigenvalue λ\_j. If we have n linearly independent eigenvectors {λ\_i}, then the resulting matrix A will have n linearly dependent eigenvectors since every single eigenvalue of A has a corresponding eigenvector in B. Moreover, if A is nonsingular (meaning its eigenvalues are non-zero), then it also possesses a unique solution to the system Ax = 0.
+
+However, there may be cases when only one eigenvalue is known. For instance, when λ > 1, the system becomes unstable due to the presence of multiple eigenpairs. Thus, finding the roots of the characteristic equation becomes more straightforward than merely finding the eigenvalues themselves. To do so, we need to understand how these eigenvalues relate to each other through matrix multiplication.
+
+Matrix multiplication involves multiplying corresponding entries
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 5546, 483, 1420, 491, 9845, 395, 1991, 5663, 22968]
+first_step_topk_probs=[0.17052829265594482, 0.1536588966846466, 0.12476115673780441, 0.1124192550778389, 0.06017369031906128, 0.05422099679708481, 0.04863640293478966, 0.04402400925755501, 0.04402400925755501, 0.03765572980046272]
+first_step_topk_text=[' use', ' describe', ' can', ' allow', ' have', ' rely', ' are', ' provide', ' involve', ' mimic']
+
+[New tokens 4] count=256 first30=[22968, 269, 2613, 415, 3392, 299, 1798, 298, 4283, 17, 1658, 2269, 483, 342, 885, 299, 2936, 2970, 298, 2418, 15, 298, 581, 395, 5746, 885, 289, 1481, 15, 5743]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the brain's ability to learn and remember. These models can be used to improve training and education, and they are widely used in research, medicine, and engineering.
+The brain is made up of two parts: the hippocampus (the part of the brain that is responsible for memory) and the amygdala (the part that controls thought processes). The hippocampus is like a brain cell, but it has two halves – one on each side. It makes up about 10% of the brain, while the other half is located near the back of the brain. When you think about how much your brain weighs, it gives you an idea of how heavy it is.
+In the hippocampal region, there are four layers of cells: the outer layer, the middle layer, the outer layer and the inner layer. Each layer has its own number of neurons; these numbers tell us which neuron is important and which are not. In the hippocampa, the number of neurons is the same as the number of other neurons. This means that if you were to take a single neuron from your brain, it would have over 100 million neurons!
+The amygdalar cortex is the part of the cerebral cortex that controls thought and language. The
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=161 first30=[263, 647, 286, 3, 711, 4750, 2062, 263, 689, 715, 418, 263, 1809, 3510, 2827, 15781, 17, 1530, 6446, 299, 1143, 3099, 298, 4196, 17, 2050, 1266, 1024, 2857, 351]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+Once upon a time there was a little girl named Lucy. She loved to play outside and explore. One day she went on an adventure with her mom. They walked through the woods and saw lots of trees and flowers. It was so exciting! At the end of their walk, Lucy's mom said "Let's go home now". So they left the forest and started walking back home. When they got home, Lucy couldn't wait to tell her friends about her adventure. But when they arrived home, it was all gone. Lucy felt sad because she had never seen anything like this before. Her mom smiled and said "Don't worry, we can still have fun together!" Lucy was happy that her mom could help her and they continued their journey together. The End.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=207 first30=[622, 354, 1246, 1107, 29, 341, 622, 643, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 801, 7121, 15, 2176, 14364, 3, 711, 4750, 2062, 263]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return 1
+     else:
+         return 0
+
+
+if __name__ == '__main__':
+    print("Hello, World!")
+
+Once upon a time there was a little girl who loved to play in her garden. One day she saw something special - it was a big, shiny coin! She ran over and picked it up. It was so shiny and sparkly! The little girl decided to take it home with her. When she got home, she showed her mom the coin. Her mom said "That's a very special coin, but I can't tell you what." The little girl was so excited and asked if she could have it. Her mom smiled and said yes. So the little girl took the coin and went outside to play. She had lots of fun playing with it. Everywhere she looked, the coins were different. The little girl liked to share her new toy with her friends. They all played together until it was time for dinner. Then they all went back inside and enjoyed their special treat.
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.5518959164619446, 0.4481040835380554, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=72 first30=[622, 354, 17, 19, 647, 353, 20, 552, 311, 12, 864, 8049, 11, 81, 16, 20, 12, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 717]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1 - n) * fib(n-1)
+
+
+if __name__ == '__main__':
+    print('The following functions are available:')
+
+    print('Here is the function for your example...')
+
+    print('#'*20)
+
+    print('// A few examples of Fibonacci numbers in Python...')
+
+    print()
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 1541, 2590, 698, 356, 4619, 5531, 535, 338]
+first_step_topk_probs=[0.27861759066581726, 0.203840970993042, 0.16550596058368683, 0.14913325011730194, 0.04995338246226311, 0.03469192981719971, 0.025381160899996758, 0.025381160899996758, 0.025381160899996758, 0.025381160899996758]
+first_step_topk_text=[' The', ' Yes', ' There', ' No', ' It', ' I', ' Black', ' Well', ' In', ' A']
+
+[New tokens 8] count=214 first30=[1541, 330, 808, 3641, 2833, 299, 1447, 269, 5630, 288, 2645, 10676, 17, 1783, 15, 263, 993, 288, 2629, 491, 3400, 357, 2645, 10676, 728, 342, 611, 2433, 702, 613]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: There is no scientific evidence to support the existence of black cats. However, a number of studies have shown that black cats may be more likely than other cats to be carriers of a disease called zoonotic diseases (see below). The most common diseases in cats are rabies, dengue fever, yellow fever, and leptospirosis.
+Black cats are also known to carry a variety of infections such as rabies, which are transmitted by the bite of an infected animal. In addition, they may be exposed to germs from their environment or from contact with people who have close contact with them. For example, dogs may become infected when they come into contact with their owners' pet's saliva, which contains bacteria.
+This is why it is important for people to be aware of these potential health risks. It is essential that everyone should know about these risks before making any changes in their lifestyle.
+The information provided on this Web page does not constitute medical advice. It is intended for informational purposes only. It has been reviewed by a qualified healthcare professional.
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 2050, 843, 798, 1012, 409, 1218, 698, 382, 0]
+first_step_topk_probs=[0.3421503007411957, 0.2778043746948242, 0.14869795739650726, 0.09802770614624023, 0.034590642899274826, 0.033058978617191315, 0.026660073548555374, 0.019504928961396217, 0.019504928961396217, 0.0]
+first_step_topk_text=[' 1', ' One', ' 5', ' 4', ' 6', ' 2', ' 8', ' It', ' The', '']
+
+[New tokens 9] count=256 first30=[2050, 13032, 7670, 619, 934, 667, 354, 13032, 17, 202, 2774, 15, 1427, 415, 1721, 411, 1418, 299, 1098, 598, 806, 914, 10941, 1010, 288, 500, 5269, 444, 269, 2056]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple plus one buys 1 apple.
+Now, let's say we want to find out how many apples each of us gets from the total amount spent on these three things. We could do this by dividing the number of apples in the first group (1 + 1/2) by the number of items in the second group (1+1/4), then multiply that result by the number in the third group (1*3+5=12). This gives us our answer!
+
+Here's another way to think about it: imagine you have a bag full of different colored marbles - red, blue, green, etc., all mixed together. Now, let's put those marbles into the same bag without any leftovers. The question now is: if you take out just one marble from the bag, what happens when you add up all the numbers of each color in the bag? That would give you an answer like (1 + 0.7)/0.6 = 0.8 or simply written as 0.8 x 0.8 = 0.009.
+
+So, even though you don't know exactly how many marbles there are altogether, you can still figure out the exact number of marbles based on the information provided in the problem
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 22089, 2575, 783, 1289, 776, 1509, 360, 5395]
+first_step_topk_probs=[0.641201376914978, 0.04182513803243637, 0.02830030396580696, 0.025500692427158356, 0.024206532165408134, 0.024206532165408134, 0.02238738350570202, 0.014758668839931488, 0.014009666629135609, 0.012623758055269718]
+first_step_topk_text=[' I', ' The', ' Thank', ' What', ' This', ' We', ' He', ' You', ' "', ' Mr']
+
+[New tokens 10] count=256 first30=[2575, 330, 669, 2942, 374, 269, 5988, 34, 202, 43, 784, 29, 1509, 491, 733, 289, 263, 5988, 339, 914, 973, 298, 486, 3442, 3555, 2595, 269, 18808, 298, 8359]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience with the hospital?
+Hold: You have been in a hospital for many years and you've probably seen the nurses and doctors on TV and they've talked to me about what kind of stress you're experiencing, what you're going through, what you are doing, what you don't want to do, how you feel when you need it, how you're feeling when you're in a hospital, what you can do if you need it or not, what you think you might be feeling. And then we talk about what you feel as though there's something else going on that may cause you anxiety.
+Assertion: What is it that you're feeling?
+Lee: It's the most common complaint that you hear. There are different types of anxiety, but most people think of anxiety as a normal part of life, and that's because anxiety causes the body to react. People who suffer from anxiety have other problems, like heart disease, high blood pressure, diabetes, obesity, depression, and even cancer.
+Asserts: What are some of the things that you can do to help ease anxiety?
+Lees: I think that if you're having trouble coping with anxiety, you should try to find a way to make yourself
+
+================================================================================

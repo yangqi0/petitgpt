@@ -1,0 +1,276 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=114 first30=[2827, 8798, 2857, 299, 269, 3843, 374, 610, 13218, 17, 1109, 2977, 263, 2023, 11913, 298, 3766, 299, 1499, 383, 17, 8798, 415, 13218, 988, 581, 982, 631, 351, 269]
+[Full output 1]
+Once upon a time, a curious child named Timmy went to the park with his mommy. They saw a big slide and wanted to try it. Timmy's mommy said they could go on the slide if they took turns pushing each other. Timmy was happy because he loved going on the slide. When they got to the top of the slide, Timmy's mommy asked him what he wanted for lunch. Timmy thought that was very nice of him to eat. He told her about the slide and how much fun she had to have. His mommy smiled and said, "I'm glad you like it, Timmy."
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 7535, 281, 8191, 17, 698, 418, 2793, 289, 2234, 7916, 419, 269, 2602, 69, 2305, 370, 4414, 5564, 302, 15, 668, 418, 263, 2940, 3215, 298, 27742]
+[Full output 2]
+Paris is the capital of the province of Catalonia. It was built in 1491 by the Abbé de La Salle, who was a close friend and ally of the Pope. The town's inhabitants were called "Saint-Joseph" (French for "the Sister"), and the city's name is still used today as the official nickname for the city's mayor.
+The first recorded use of the word "saint" came from the Latin "sanguineus," meaning "a great general." In the 16th century, Saint Thomas Aquinas was given the title of "son of the Father," and in 1751 he became a member of the Franciscan Order. In 1756, Saint Augustine was born in the cathedral of St. Peter's at Rome, where he studied theology and philosophy. He was ordained a priest in 1761, and was made a bishop in 1765.
+In 1808, Saint Thomas was granted the title of Bishop of the diocese of Catalunya, but his diocese was destroyed during the Spanish–American War. He returned to Spain, where he died on July 25, 1833.
+For more information about Saint Thomas see:
+- Saint Thomas Aquino, A History of the Diocese of Cataluña
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 6058, 500, 806, 1264, 269, 4409, 1926, 288, 263, 4409, 1926, 578, 4374, 17, 382, 854, 288, 545, 18956, 3071, 287, 1384, 2097, 289, 4759, 6749]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that tells us how much the vector space of a vector space has changed. The set of all eigenvalues forms an important concept in linear algebra and has many applications in various fields such as physics, engineering, computer science, and mathematics.
+
+Now let's consider a matrix A of size n x n where n is the number of rows (or columns) of A. We want to find the determinant of this matrix, which gives us the determinant of the matrix when we have n rows and n columns. To do so, first notice that the row vectors are linearly independent since they have only one nonzero vector, i.e., there exists another nonzero vector u = <u1, ..., un> such that u1 = <u2, ..., uk>. Since both sides of the equation are zero, their product equals zero. Therefore, our goal is to find the eigenvalues of A, which are the eigenvectors of A.
+
+To solve this problem, recall that the eigenvalue of A is equal to its own conjugate. Thus, if we take the transpose of the matrix A, then it becomes:
+
+A^T = det(A)^T = det((det(A))^T) = det(det(A)).
+
+
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 5546, 483, 9845, 491, 1085, 1420, 395, 1991, 1005]
+first_step_topk_probs=[0.2869248688220978, 0.13838692009449005, 0.11236139386892319, 0.10124602168798447, 0.06674553453922272, 0.04635380953550339, 0.037636350840330124, 0.032632458955049515, 0.02355222776532173, 0.021222321316599846]
+first_step_topk_text=[' use', ' describe', ' can', ' rely', ' have', ' model', ' allow', ' are', ' provide', ' help']
+
+[New tokens 4] count=256 first30=[22968, 269, 1194, 4383, 1798, 298, 4116, 553, 2465, 299, 1623, 16, 7128, 6863, 17, 1658, 2269, 9845, 351, 269, 10724, 357, 2465, 330, 263, 2136, 1201, 15, 453, 287]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the way humans learn and apply their learning to real-world situations. These models rely on the assumption that learning is a natural process, not an automatic one.
+This article will examine how the brain works in terms of the neural network model (NLP). The NLP model consists of four parts: the neuron, the cortex, the visual cortex, and the hippocampus. The neuron is a small molecule that has been shown to be involved in memory formation. It is known that the NLP model allows for the activation of the hippocampal neurons (the areas responsible for memory formation) through a variety of mechanisms including the activation of cortical neurons, which are thought to be involved with memory formation.
+The visual cortex contains a large number of nerve cells that are active during a particular task. These cells are called the "visual cortex". The visual cortex receives information from the eye, the "eyes" and the "lenses", and it processes visual input. When the visual cortex is activated, the visual system senses light and the brain interprets this information as sound. This is similar to what happens when we read a book or watch a movie. In order for the visual cortex to recognize a scene, it must first detect the scene itself.
+
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=165 first30=[263, 647, 286, 3, 711, 4750, 2062, 263, 689, 715, 418, 263, 1809, 3510, 2827, 15781, 17, 1530, 6446, 299, 1143, 3099, 289, 896, 5786, 298, 5317, 269, 4646, 7112]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+Once upon a time there was a little girl named Lucy. She loved to play outside in her garden and watch the birds fly by. One day, she saw a big bird flying above her. The bird looked very hungry and wanted to eat it. Lucy asked her mom if they could help. Her mom said yes and they went inside. They found some food and soon the bird was eating all of Lucy's food. Lucy was so happy that she started to cry. But then, something bad happened. A big storm came and the wind blew away the food. Lucy felt sad for the bird and decided to take it home with her. She put it on the ground and took care of it until it was safe. From then on, Lucy always remembered to be careful when looking at things.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=75 first30=[622, 354, 490, 311, 1319, 409, 861, 643, 1107, 552, 20, 711, 202, 6, 21612, 263, 1180, 288, 9044, 17, 202, 1052, 16216, 29, 346, 538, 28045, 11, 492, 15]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return 1 if n % 2 == 0 else -1
+
+
+# Generate a list of integers.
+class Solution:
+    def factorial(self, n: int) -> List[int]:
+        res = []
+
+        for i in range(0, len(self)):
+            res.append([i])
+
+        # Return the result of the factorial operation
+        return res
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.6970593929290771, 0.30294057726860046, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 354, 17, 19, 647, 353, 20, 552, 311, 12, 864, 353, 21, 864, 311, 12, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 537, 22018, 269]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1 - n) * (2 * n)
+
+
+if __name__ == '__main__':
+    # Initialize the program
+    import sys
+
+    if len(sys.argv) < 2:
+        print("Please specify one of the following arguments: " + str(sys.stdin))
+
+        parser = argparse.ArgumentParser()
+        parser.add_argument("--input", help="Input file")
+        parser.set_defaults(func=lambda x: x.__enter__)
+
+        args = parser.parse_args()
+
+        # Find the first integer in the input file, and return it
+        f = open(args.input)
+        result = 0
+        for line in f:
+            line = line.strip().split("\t")
+
+            if not line[0] == '>':
+                continue
+
+            if not int(line[0]) == int(line[-1]):
+                continue
+
+            result += int(line[:-1])
+
+            if not float(line[1]) > float(line[-2]):
+                continue
+            
+            result += int(-float(line[3]))
+
+            if not bool(result):
+                continue
+
+            # If the last value is negative, raise an exception.
+            if not bool((int(line[4]),
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 13676, 2590, 535, 4619, 356, 698, 338, 1289]
+first_step_topk_probs=[0.41519734263420105, 0.20025408267974854, 0.10718828439712524, 0.06707671284675598, 0.03984528034925461, 0.03984528034925461, 0.03408147394657135, 0.03235183656215668, 0.023669112473726273, 0.02024526335299015]
+first_step_topk_text=[' The', ' There', ' Yes', ' No', ' In', ' Black', ' I', ' It', ' A', ' We']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 12052, 17, 202, 509, 3533, 330, 808, 17, 382, 2645, 3191, 330, 263, 2076, 3864, 357, 578, 263, 16665, 339, 874, 288, 2419, 17, 382, 2886, 3191]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+The answer is no. The black cat is a social animal that has a preference for people of color. The white cat does not have a preference for dogs or cats. It does not need to be in the presence of other cats. Some cats do not go into the presence of dogs. A black cat is not a good candidate for a dog. Other cats may have an opinion about what they should do with their owners. They might not like their owners and want to keep them away from them.
+There are two types of cats: those that live alone and those that live in groups. There are cats that live alone but there are cats that are only in one group. Cats that live alone live alone but it is more likely that they will stay together.
+What if I were to say that I would only love my cats because they are black? I don't know why this is so. I am sure that if you are going to try to please your cats, you will find out soon enough. But if you are looking at the cats, you can still see how happy they are when they come back to you.
+It is not possible to tell whether the cats are black without asking us first. We must ask them to say
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 2050, 843, 798, 382, 409, 2, 3, 1, 0]
+first_step_topk_probs=[0.5045885443687439, 0.19759969413280487, 0.10576749593019485, 0.09530442953109741, 0.0566132590174675, 0.04012659564614296, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' One', ' 5', ' 4', ' The', ' 2', '', '', '', '']
+
+[New tokens 9] count=256 first30=[2050, 13032, 333, 354, 18, 21, 15, 409, 18, 22, 15, 798, 18, 23, 15, 843, 18, 27, 15, 1012, 18, 28, 15, 1186, 18, 1161, 15, 1218, 18, 1699]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple = 1/2, 2/3, 4/4, 5/8, 6/9, 7/10, 8/11, 9/12, 10/15, 11/16, 12/17, 13/18, 14/19, 15/20, 16/21, 17/22, 18/23, 19/24, 20/25, 21/26, 22/27, 23/28, 24/29, 25/30, 26/31, 27/32, 28/33, 29/34, 30/36, 31/37, 32/38, 33/39, 34/40, 35/41, 36/42, 37/43, 38/44, 39/45, 40/46, 41/47, 42/48, 43/49, 44/50, 45/51, 46/52, 48/53, 49/54, 50/54, 51/55, 52/56, 53/57, 54/58, 55/58, 56/58, 57/59, 58/60, 59/61, 60/62, 61/63, 62/64, 63/66, 64/67, 65/68, 67
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 27614, 15255, 1509, 776, 22089, 1289, 1348, 3189]
+first_step_topk_probs=[0.5806784629821777, 0.07703579217195511, 0.06254815310239792, 0.03914163261651993, 0.03526955470442772, 0.030167652294039726, 0.02718331106007099, 0.013110805302858353, 0.012125512585043907, 0.010925999842584133]
+first_step_topk_text=[' I', ' What', ' Hi', ' Thanks', ' You', ' He', ' Thank', ' We', ' How', ' Do']
+
+[New tokens 10] count=247 first30=[2575, 330, 4083, 34, 202, 11190, 18427, 4571, 604, 29, 25799, 483, 342, 263, 2821, 645, 288, 1328, 298, 383, 415, 1384, 299, 1499, 299, 6856, 383, 17, 698, 483]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is stress?
+Emotional Distress: Stress can be a normal part of life and it's important to try to manage it. It can make you feel like you're in danger, or that your family is at risk for depression.
+You may have been told by a counselor that you need help with stress. Someone who has trouble coping with stress may not want to talk about it, so you'll need to tell them what's going on. For example, if you are worried about someone getting hurt, you might ask them what they do to cope with the situation. You could also ask them how they can help.
+If you're worried about someone being abused, you should get help from a therapist. The therapist will give you some ideas of ways to deal with the situation before you go away. He or she can suggest ways to support you, such as helping you find a new job, helping you learn about yourself, and taking care of yourself.
+At home, you can help reduce stress by keeping your mind open.
+For more information on stress management, visit the National Institute of Mental Health website at www.nimh.nih.gov/health/practice/stress.
+
+================================================================================

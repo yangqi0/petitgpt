@@ -1,0 +1,286 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 2857, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8267117738723755, 0.17328819632530212, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' went', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 1] count=131 first30=[2827, 5273, 2857, 299, 269, 3843, 17, 776, 2977, 263, 2023, 3197, 374, 7336, 288, 4749, 17, 5273, 3766, 299, 15935, 269, 3197, 298, 1137, 922, 418, 351, 269, 613]
+[Full output 1]
+Once upon a time, a curious child named Jack went to the park. He saw a big tree with lots of leaves. Jack wanted to climb the tree and see what was on the other side. Suddenly, he heard a loud noise! It was his friend, Billy. "What are you doing?" asked Jack. "I'm climbing the tree," said Billy. Jack thought for a moment and then said, "Let's go up there!" So they both climbed down from the tree. When they got to the top, they saw that the sky was very dark and it looked like a beautiful rainbow. They both smiled and laughed as they watched the light come out of the trees.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 17, 698, 418, 269, 4223, 288, 263, 11295, 357, 10398, 289, 6055, 18451, 1761, 686, 8943, 419, 269, 6972, 1562, 17, 202, 509, 2317, 288, 336, 1641, 85]
+[Full output 2]
+Paris is the capital of the province. It was the capital of a kingdom that existed in Asia Minor until its destruction by the Persians.
+The city of Smyrna was founded by the Romans, and it was also the seat of the Roman province of the same name. The Roman town of Smyreus was founded by them in AD 470. It was renamed Smyrnice after the ancient city of Sphynx, which became part of the Kingdom of the Two Sicilies.
+Smyrna's name is derived from the Greek word "Tos" (Greek: Αράτα) meaning "land of the Titans". This means "the land of the Tartars", or "the land where the Tartarids live". In the Middle Ages, the city was known as Smyrnoe, but later it was called Smyrnia.
+In the early 12th century, the city of Scythia was founded by an Armenian king named Zakariya. He built the first church on the site, which was dedicated to Saint Cyril of Alexandria.
+It was during this period that the city of Styria was established. It was then that the city became the capital
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 11547, 374, 269, 2819, 388, 3074, 288, 269, 3823, 17, 382, 18956, 395, 3097, 1623, 1890, 857, 359, 18062, 20, 15, 18062, 21, 15, 15240, 18062]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that varies with the row or column of the matrix. The eigenvalues are positive real numbers such as λ1, λ2, ..., λn where λi denotes the i-th row and j-th column of the vector space. When dealing with matrices, there are several methods to determine whether they have nonzero eigenvalues. One common method involves using the determinant of a matrix, which can be found through the following formula:
+
+det(A) = det(B - A) \* det(C).
+
+For example, if A has a 2x2 matrix A, then det(A) would equal det(A)/det(A), since the determinant of A equals det(A)*det(A). Similarly, if A does not have any nonzero eigenvalues, it could also be det(A)=0 due to the presence of an eigenvalue in the original matrix.
+
+Another important property of matrices is their rank. If a matrix A has rank n, then its dimension (the number of rows or columns) is equal to the sum of all its elements. For instance, consider the following matrix:
+
+[a b c] = [a b c], where a, b, and c are scalars from 1 to n
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 491, 5546, 9845, 395, 1420, 20993, 3069, 14071]
+first_step_topk_probs=[0.24076785147190094, 0.17614951729774475, 0.09428603947162628, 0.06898114830255508, 0.062157172709703445, 0.04672784358263016, 0.038896963000297546, 0.03327034041285515, 0.02997908927500248, 0.024341097101569176]
+first_step_topk_text=[' use', ' can', ' have', ' describe', ' rely', ' are', ' allow', ' simulate', ' attempt', ' incorporate']
+
+[New tokens 4] count=256 first30=[22968, 269, 14457, 2673, 1085, 17, 1109, 4478, 299, 1557, 806, 12473, 289, 269, 2613, 1201, 1170, 298, 806, 581, 1062, 6245, 1728, 351, 870, 6383, 444, 1108, 17684, 15]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the neural network model. They aim to understand how neurons in the brain process information and how they make decisions based on data collected from different senses, such as sight, smell, taste or touch.
+
+The main goal of the study is to understand how these neural networks behave when given input data. This can be achieved through the use of neural networks, which are algorithms that simulate neural activity. These networks are designed to capture important features like neuron density, activation coefficients, and dynamics – all of which can then be used to predict future states of the network.
+
+One key feature of the study involves determining whether neural networks have enough memory to store new information efficiently while keeping other properties unchanged. To do this, researchers employ neural networks, also known as neural networks, that are capable of performing tasks like image processing, recognition, and prediction. These networks encode complex patterns of information called "information" and "activation functions," which help them to identify potential areas of interest. By analyzing these networks, researchers can learn more about the underlying mechanisms governing their behavior.
+
+In order to create a neural network model, it's essential first to understand some fundamental concepts related to neural networks. These include:
+
+1. **Bias:** A bias refers to an effect caused
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=107 first30=[263, 647, 286, 17, 595, 551, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 655, 3715, 555, 1499, 29, 331, 444, 9879, 86, 22235, 17, 3506, 86]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+
+if __name__ == '__main__':
+    import sys
+
+    try:
+        from libsdk.libsdk_api import add as add_pyd2_ext
+        import pyd2_path
+
+        print('Adding python')
+        python = add_pyD2_ext("python")
+        print('Added python', python)
+        python = pyd2.version.add_pyd3_ext("Python")
+        print('\n' * 20)
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=166 first30=[622, 354, 490, 311, 861, 643, 1107, 354, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 801, 7121, 2176, 14364, 3, 711, 4750, 2062, 263, 689]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return 1 if n == 0 else 1
+
+
+if __name__ == '__main__':
+    print("Hello World!")
+
+Once upon a time, there was a little girl named Lily. She loved to play outside in the sunshine and pick flowers. One day, she found a shiny coin on the ground. It was so pretty! She picked it up and showed it to her mom. "Look, Mommy! I found a coin!" she said. Her mom smiled and said, "That's great, Lily. You can keep it as a reminder for everyone who likes to see what you have." From that day on, Lily would always take care of her coins. They were her favorite things to do with her. And whenever she saw them, she would remember how much fun they had together. The end.
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8112776875495911, 0.18872226774692535, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 354, 17, 19, 647, 353, 20, 552, 311, 12, 864, 353, 21, 864, 353, 20, 552, 354, 687, 711, 202, 6, 9419, 269, 775, 993, 289, 269, 1180, 288]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1 - n) * (2 * (1 - 1))
+
+
+# Find the first number in the list of integers, given by
+# 
+#   - 1 <= n <= 10^9
+#  
+#
+# The function will return the next integer, which is a sum of digits 0 and 1.
+#
+def fib_sum(n):
+    return (len(i) / 2) + (len(j) % 2) + i
+
+
+# Calculate Fibonacci numbers recursion for all integers.
+def fibs(n):
+    
+    # Compute Fibonacci numbers recursional to the given integer
+    Fibonacci = []
+
+    # Iterate through the integers starting from 0 up to n
+    for i in range(n):
+        if i == 0:
+            Fibonacci.append(0)
+
+        # Check if there are more than one positive integer between 0 and n-1
+        if i < n - 1:
+            break
+        
+        # If there are more negative integers, return the last number in the sequence
+        # then check if there are at least two consecutive positive integers
+        # such as 0, 1, 2, 3, 5, 7, 8, 9, ...
+        # else return the last negative
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 1541, 2590, 698, 535, 1289, 2, 1, 0]
+first_step_topk_probs=[0.47292640805244446, 0.22809743881225586, 0.13549569249153137, 0.11001380532979965, 0.019724389538168907, 0.016871163621544838, 0.016871163621544838, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' There', ' No', ' It', ' In', ' We', '', '', '']
+
+[New tokens 8] count=256 first30=[13676, 17, 1541, 330, 263, 3313, 288, 1170, 1882, 351, 269, 2442, 672, 2645, 10676, 15, 614, 715, 330, 808, 2597, 299, 1645, 357, 2645, 10676, 395, 453, 2918, 388]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Yes. There is a lot of information available on the subject about black cats, but there is no reason to think that black cats are not animals or any other animal.
+As for what black cats do in their own environment, it seems clear that most of them are not dogs, cats or ferrets. They are simply pets, not people. So it would be very hard to determine if they were any kind of pets or if they were actually dogs. However, we know that many of these cats have been domesticated, and as such, there is an increased awareness among pet owners that they should consider keeping them in their own home. It is also important to note that the number of cats found in our area has grown over the past few years, so it's important to keep in mind that many of the cats listed here are from the United States.
+The question remains whether or not the cat is a "cat" or not. In fact, it is quite possible that the cat could possibly be a dog, a cat-killer, or even a human. But we don't know exactly how many cats are considered to be cats. If you look at the numbers of cats in the United States, the number of people who are considered to have a cat
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 2050, 798, 843, 382, 409, 1218, 5517, 4449, 0]
+first_step_topk_probs=[0.47292566299438477, 0.2280970811843872, 0.08048776537179947, 0.0725255012512207, 0.06535090506076813, 0.029051851481199265, 0.017773140221834183, 0.017773140221834183, 0.016014927998185158, 0.0]
+first_step_topk_text=[' 1', ' One', ' 4', ' 5', ' The', ' 2', ' 8', ' Two', ' Each', '']
+
+[New tokens 9] count=243 first30=[2050, 13032, 7670, 619, 934, 667, 354, 13032, 17, 202, 2774, 15, 356, 1118, 357, 356, 483, 847, 4201, 598, 806, 299, 1062, 482, 2692, 3581, 15, 614, 356, 4575]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple plus one buys 1 apple.
+Now, I know that I can't figure out how to make this whole equation, but I'm sure you could figure it out by yourself.
+Let's start with the first equation:
+2 + (x - 5) = 6
+To find x, we need to take the derivative of both sides of the equation. That means finding a point on the graph where the slope is equal to zero. In other words, we want to find the value of x when x equals 5. So let's call this point "A".
+Next, we'll go over our second equation:
+3 + (x + 5) = 12
+So now we've got two equations. But wait! We're not done yet. What do we do next?
+We don't need to calculate anything else here. Instead, we just need to multiply both sides of each equation by the product of their greatest common divisor (GCD), which is 5. And then subtract that from both sides of our second equation. This gives us our final answer:
+4 + 4 = 7
+And so we have a new equation:
+4 - 4 = 7
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2766, 408, 1966, 5395, 338, 1289, 382, 421, 27614]
+first_step_topk_probs=[0.2585594654083252, 0.17594344913959503, 0.05040864273905754, 0.045421961694955826, 0.03500809147953987, 0.03323141485452652, 0.029174283146858215, 0.023687658831477165, 0.019740309566259384, 0.01645074412226677]
+first_step_topk_text=[' I', ' Dr', ' N', ' John', ' Mr', ' A', ' We', ' The', ' D', ' Hi']
+
+[New tokens 10] count=115 first30=[5395, 17, 368, 2026, 15, 5395, 17, 426, 8728, 1087, 202, 48, 1930, 1267, 29, 338, 1419, 374, 263, 7162, 288, 6952, 330, 1431, 20103, 339, 269, 775, 689, 15]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: Mr. Mott, Mr. Froggy
+Mental health: A person with a diagnosis of depression is often depressed for the first time, and sometimes they are not happy about this. Depression can be a real problem in many cases. The good news is that there are many treatment options available to help people who have been diagnosed with depression. For example, it may be possible to get the person to talk about their symptoms and make changes to help them feel better.
+For more information on depression, visit www.mentalhealth.org/depression.
+
+================================================================================

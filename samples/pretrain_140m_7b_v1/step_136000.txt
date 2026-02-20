@@ -1,0 +1,325 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 418, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.794809877872467, 0.20519010722637177, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' was', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 1] count=157 first30=[2827, 5273, 418, 7948, 289, 269, 3843, 17, 776, 2977, 2009, 17935, 298, 2239, 351, 269, 2389, 17, 776, 10225, 383, 656, 298, 4965, 435, 383, 6325, 17, 698, 418]
+[Full output 1]
+Once upon a time, a curious child named Jack was walking in the park. He saw something shiny and red on the ground. He picked it up and looked at it closely. It was a piece of paper! Jack's eyes lit up with excitement as he picked up the paper. Suddenly, he heard a voice from behind him. "Hey!" said Jack. "What are you doing here?" The voice replied, "I'm looking for my paper." Jack thought about what the voice said and decided to help. He took out his paper and started to look around. Soon, he found lots of interesting things. He even found some other treasures! Jack was so happy that he had helped someone else. From then on, whenever Jack went to the park, he always remembered the special day he found the paper.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 7535, 281, 8191, 15, 298, 330, 269, 1408, 3796, 2317, 289, 7535, 281, 8191, 17, 698, 578, 263, 2073, 288, 1378, 1186, 2909, 15, 1086, 10894, 353]
+[Full output 2]
+Paris is the capital of the province of Catalonia, and is the second largest city in Catalonia. It has a population of around 780,000 inhabitants (2003).
+The province's economy is based on agriculture, livestock raising, and forestry. The main industry is food processing and transport, with a total production of 5.8 million tons in 2002. There are also two oil refineries and one gas company.
+Sicily is a small town which has been the seat of the municipality since it was founded in 1751. Its population is estimated to be around 30,000 people. Sicily is famous for its beaches, especially the beautiful beach at Avaris.
+It is a major tourist destination, and the most popular tourist attraction in Catalunya. The town has a number of attractions including the Roussillon, the oldest house in Cataluña, the oldest hospital in Cataluna, the oldest railway station in Catalüria, the oldest school in Catalúa, the oldest university in Cataluese, the first university in Catalan language, the oldest national museum in Cataluidel and the oldest post-medieval cathedral in Cataluel.
+Cities in Catalona
+There are
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 1223, 453, 1643, 269, 3892, 288, 269, 4409, 17, 1220, 1373, 15, 490, 411, 491, 795, 7527, 289, 263, 1237, 16, 9359, 1926, 353, 2835, 829]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that does not change the direction of the vector. For example, if we have two vectors in a three-dimensional space (like our plane), their eigenvalues will always be zero.
+
+Now let's talk about the concept of a "linear transformation." A linear transformation is a mathematical operation that takes one variable and changes it to another. For example:
+
+* **Linear Transform**: The transformation that takes one number as input and changes it back into its original form through addition or subtraction. This means that when you add or subtract a number, you get another number.
+* **Square Matrix**: The matrix where each entry is multiplied by itself. It has both real and imaginary parts. When you multiply a square matrix by itself, you get a new matrix whose entries are the real ones.
+
+The formula for finding the linear transformation of a vector using matrices is given by:
+
+$$A = \begin{pmatrix}a & b \\c & d\end{pmatrix}$$
+
+Here, $a$ and $b$ represent the components of the vector, while $c$ represents the matrix containing the transformed vector.
+
+When you take the dot product between two vectors, you get the same result as if you took the
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 5546, 9845, 491, 1085, 395, 1420, 3235, 3069]
+first_step_topk_probs=[0.3536069393157959, 0.12477584928274155, 0.10131008177995682, 0.07412003725767136, 0.044029153883457184, 0.044029153883457184, 0.03808894380927086, 0.03766012564301491, 0.02356710657477379, 0.021235747262835503]
+first_step_topk_text=[' use', ' can', ' describe', ' rely', ' have', ' model', ' are', ' allow', ' predict', ' attempt']
+
+[New tokens 4] count=256 first30=[22968, 269, 1194, 4383, 1798, 298, 1776, 6876, 17, 382, 1085, 330, 1728, 351, 263, 2829, 1085, 1255, 269, 621, 16, 1424, 15, 536, 3350, 263, 2079, 1968, 4905, 299]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the way humans learn and perform tasks. The model is based on a simple model called the K-model, which uses a single input signal to generate an output model. This model has been widely used in many fields including computer vision, artificial intelligence, neuroscience, and biology.
+The K-model is often used in the field of artificial intelligence because it allows for more efficient use of human knowledge than any other method available today. However, it is not yet clear whether or not this improvement is due to improvements in the quality of the models being developed.
+Some examples of recent improvements include:
+- Improved the accuracy of predictions made by the model
+- Increased computational power
+- Reduced computational time
+- Increased the number of training sessions
+- Reduces the need for additional training
+- Increased testing time
+- Increases the number of questions answered
+- Increased reliability of test results
+- Reducing the number of tests performed per question
+- Reductive methods such as the K-Model
+- Reduction of the training set (training set)
+- Reduce the number of items required to complete a task
+- Redeemed the training set from the number of "invisible" items to the number of objects needed to complete
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=173 first30=[263, 647, 286, 3, 711, 4750, 2062, 263, 689, 715, 418, 263, 1809, 3510, 2827, 15781, 17, 1530, 6446, 299, 4196, 298, 1098, 719, 1943, 17, 2050, 1266, 1024, 4725]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+Once upon a time there was a little girl named Lucy. She loved to explore and find new things. One day she decided to go on an adventure in her backyard. As she walked around, she noticed something strange. It was a big, brown bear! The bear looked so scary, but Lucy knew it must be something dangerous. She slowly approached the bear and said "What is this?" The bear replied "I'm scared, I don't know what to do." Lucy was brave and decided to take a closer look. When she got close enough, the bear started to move away from her. Lucy was so relieved that she had gone back home. She thanked the bear for being so kind and telling her about her adventure. From then on, Lucy always remembered to be careful when exploring and never leave the house without permission.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=213 first30=[622, 1701, 2619, 20, 490, 1249, 861, 643, 1107, 354, 12, 339, 1249, 289, 1457, 11, 19, 15, 311, 14, 20, 687, 711, 202, 350, 1401, 678, 626, 861, 7200]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return sum((1 if i == 0 else 1) for i in range(0, n+1))
+
+
+if __name__ == '__main__':
+    print('Testing function')
+
+    # Get the function's input
+    f = open("input.txt", "r")
+    # Get the number of steps
+    steps = int(input())
+    # Get a list of integers
+    # For each step
+    # For every step
+    for step in steps:
+        # Check if the current step is in the right place
+        if step not in ['up', 'down']:
+            break
+
+        # Calculate the factorial of the number of iterations
+        factorial_number = factorial(step)
+
+        # Determine the number of leftover steps
+        leftover_steps = int(total_steps / step)
+
+        # Compute the factorial of all the steps
+        factorial_sum = factorial(leftover_steps)
+
+        # Calculate factorial of the total steps
+        factorial = factorial(total_step)
+
+        print('Total steps = ', factorial.total_steps)
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8112776279449463, 0.1887224316596985, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=46 first30=[622, 354, 17, 19, 647, 353, 20, 552, 1249, 12, 864, 353, 76, 1341, 311, 12, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 11, 73]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1 - i) * (i / n)
+
+
+if __name__ == '__main__':
+    print(f'Fibonacci Numbers: {len(fib(n))}')
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 1541, 2590, 356, 1278, 698, 535, 338, 2660]
+first_step_topk_probs=[0.34082043170928955, 0.1731698215007782, 0.15603896975517273, 0.09764669090509415, 0.03445622697472572, 0.03445622697472572, 0.029471972957253456, 0.029471972957253456, 0.026556450873613358, 0.018443088978528976]
+first_step_topk_text=[' The', ' Yes', ' There', ' No', ' I', ' If', ' It', ' In', ' A', ' Some']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 12052, 17, 202, 509, 3533, 330, 808, 17, 382, 3533, 330, 808, 15, 269, 3533, 330, 808, 339, 10676, 289, 2224, 17, 31412, 395, 453, 2798, 299]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+The answer is no. The answer is no, the answer is no for cats in general. Cats are not considered to be a race or group of animals because they do not have any other kind of animal that does not belong to the same group. Cats are also considered to be part of the same group as dogs.
+Why did the Cat-Eye breed of cat get the red eye?
+Answer : A cat is a member of the cat family. It is not the only species of cat. The cat is a species that has been bred for its coloration, size, and color pattern. It is the only species which has a color difference between the eyes.
+How do I find out if my cat is a white cat?
+Answer - Your cat's coloration depends on your cat's age. If your cat is older than 6 months old, he may have a grayish coloration. If your dog is an adult, he may show a reddish coloration.
+What are the different colors of a cat?
+|1/2||1/4||1/8||1/16||1/24|
+|3/4||0||0||1/10||0/20|
+
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 2050, 843, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.6910668015480042, 0.17840752005577087, 0.13052573800086975, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' One', ' 5', '', '#', '', '"', '!', '', '']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 202, 20, 13032, 333, 1604, 10941, 202, 21, 10941, 333, 2341, 10941, 202, 22, 10941, 333, 1769, 10941, 202, 23, 10941, 333, 3041, 10941, 202]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+1 apple = 12 apples
+2 apples = 13 apples
+3 apples = 16 apples
+4 apples = 24 apples
+5 apples = 48 apples
+6 apples = 26 apples
+7 apples = 27 apples
+8 apples = 22 apples
+9 apples = 23 apples
+10 apples = 21 apples
+11 apples = 22 oranges
+12 apples = 22 bananas
+13 apples = 22 grapes
+14 apples = 22 cherries
+15 apples = 22 walnuts
+16 apples = 22 maple syrup
+17 apples = 22 strawberries
+18 apples = 22 pears
+19 apples = 22 pearls
+20 apples = 22 tomatoes
+21 apples = 22 carrots
+22 apples = 22 kiwi
+23 apples = 22 pumpkin
+24 apples = 22 berries
+25 apples = 22 jam
+26 apples = 22 tsp
+27 apples = 22 oz
+28 apples = 22 cans
+29 apples = 22 cups of water
+30 apples = 22 cucumbers
+31 apples = 22 red peppers
+32 apples = 22 gingerbread
+33 apples = 22 cloves
+34 apples = 22 popsicles
+35 apples = 22 quarts of sugar
+36 apples = 22 grains of wheat
+37 apples = 22
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 382, 22089, 15255, 338, 1509, 783, 0, 1]
+first_step_topk_probs=[0.891991376876831, 0.021850362420082092, 0.021850362420082092, 0.01820918172597885, 0.01820918172597885, 0.010538666509091854, 0.009014198556542397, 0.00833677127957344, 0.0, 0.0]
+first_step_topk_text=[' I', ' What', ' The', ' Thank', ' Thanks', ' A', ' You', ' This', '', '']
+
+[New tokens 10] count=256 first30=[356, 873, 6968, 20103, 1244, 17, 202, 45, 1976, 10961, 29, 2575, 330, 669, 6349, 299, 269, 4008, 34, 202, 27815, 297, 29, 5531, 15, 383, 415, 263, 1114, 3097]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I am feeling depressed now.
+Jennifer: What is your reaction to the news?
+Joel: Well, it's a very positive thing for me. It helps me to be more confident in my abilities and in my work.
+I think that this is something that can help you in your future.
+Assigned: You are worried about how much you will have.
+Joel : This is something that is going to be hard to deal with because of the situation.
+Joels: We don't know what we're going to do.
+Joins: How can I help?
+Joins & the CPR System
+A. The CPR system is a system that monitors the heart rate during an emergency. When someone has a heart attack or stroke, it sends a signal to the brain telling it to stop. The brain then sends out a message to the person who has had a heart attack, which means they need to take a deep breath before they go to bed.
+It's called the CPR system. If someone has a low blood pressure, or if their blood pressure drops too fast, the person may feel like they've been having a heart attack. This can make it difficult for them to get to sleep.
+The
+
+================================================================================

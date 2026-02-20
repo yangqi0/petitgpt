@@ -1,0 +1,293 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 2857, 418, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.6594892144203186, 0.1702553927898407, 0.1702553927898407, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' went', ' was', '', '#', '', '"', '!', '', '']
+
+[New tokens 1] count=143 first30=[2827, 5273, 418, 4438, 289, 269, 3843, 17, 776, 6446, 299, 4196, 298, 1098, 719, 1943, 17, 2050, 1266, 406, 2446, 2326, 263, 2023, 3197, 374, 7336, 288, 8647, 17]
+[Full output 1]
+Once upon a time, a curious child named Jack was playing in the park. He loved to explore and find new things. One day he came across a big tree with lots of branches. Jack decided to climb up the tree and see what was there. As he got closer, he noticed that the branch was very tall. Jack asked his mom if he could get up from the top of the tree. His mom said yes and showed him how to climb up. Jack climbed higher and higher until he reached the top of a tall tree. When he reached the bottom, he felt so happy! He looked down at the tree and saw that it had grown bigger and taller than before. Jack smiled and went back home with a smile on his face.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 7535, 281, 8191, 17, 698, 330, 658, 269, 8492, 288, 269, 1723, 288, 269, 9556, 15, 536, 5733, 288, 269, 14901, 288, 269, 14901, 298, 288, 269]
+[Full output 2]
+Paris is the capital of the province of Catalonia. It is also the seat of the government of the province, which consists of the provinces of the provinces and of the autonomous communities of the province.
+The municipality of Catalan is divided into 12 municipalities: Almería, Matemática, Córdoba, Pesaro, Seville, and Valladolid. The largest city is Barcelona.
+The region is a member of the European Union, and the only country in Europe to have a single EU member.
+Casablanca is the capital city of the province and the second most populous city in Spain.
+It is located in the foothills of the Andes Mountains.
+The capital city of Catalunya is situated on the border between the provinces of Cataluña and Marco Polo.
+Catalunya has its own government.
+The population of Cataluna is about 5.5 million.
+The area of the municipality of Cataluel contains an estimated 8.3% of the total land area of the country.
+The national language is Catalan.
+Catalan is the official language of the country as well as the national language of the province itself.
+It should
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 6058, 500, 806, 1264, 269, 4409, 1926, 288, 263, 1496, 3823, 483, 342, 3258, 299, 2601, 17, 1220, 1373, 15, 490, 411, 491, 263, 409, 91]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that tells us how much the vector space of a given matrix can be added to itself. For example, if we have a 2x2 matrix A and its transpose A^T, then A^T = A^TA = I. We can find the eigenvalues by solving for A in terms of A:
+
+* If A is a 2x1 matrix, then the eigenvector (the sum of all eigenvalues) is always 1.
+* If B is a 2 x2 matrix, then it has only one eigenvalue; otherwise, there are no eigenvalues.
+
+Now let's consider a general case where our matrix has two linearly independent eigenvectors, say v1 and v2. The characteristic polynomial is defined as follows:
+
+v1(t) = (-1)^t * v1(t - t0), where t0 > 0
+
+The characteristic polynomial of a square matrix is given by:
+
+p(t) := (1 / sqrt(n)) \* v1(0) + (1 / (sqrt(n))) \* v2(0)
+
+where p(t) represents the feature vector associated with the eigenvalue.
+
+As you may notice, these equations imply that the characteristic polynomial of
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 491, 1420, 5546, 9845, 22968, 395, 1085, 1991]
+first_step_topk_probs=[0.3000877797603607, 0.09541559219360352, 0.0629018172621727, 0.056679241359233856, 0.05380277708172798, 0.05380277708172798, 0.03736528009176254, 0.03736524656414986, 0.03366891294717789, 0.03196021914482117]
+first_step_topk_text=[' use', ' can', ' have', ' allow', ' describe', ' rely', ' mimic', ' are', ' model', ' provide']
+
+[New tokens 4] count=256 first30=[22968, 269, 14457, 2673, 415, 3392, 299, 1798, 719, 1170, 17, 382, 1337, 998, 357, 269, 2413, 269, 993, 288, 12473, 289, 269, 2613, 15, 269, 611, 2281, 298, 6374]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the neural network's ability to learn new information. The study found that the higher the number of neurons in the brain, the more complex and detailed the model was, with fewer neurons being used for learning.
+"We wanted to see if there were differences between different groups of people in terms of how they learn," said Dr. Ben Lahr, an assistant professor at the University of Washington who is part of the research team. "But we also wanted to know whether there were some differences between the groups."
+The researchers examined the brains of 671 young adults aged 18 to 50 years old who had participated in the UW-Madison Neuroscience Study. They then used functional magnetic resonance imaging (fMRI) to compare the brains of these individuals.
+They found that those who had been exposed to the same high levels of fMRI during the study period showed a greater degree of neural activation than those who did not have exposure to the same levels of fMRIs. These findings suggest that the brain may be more responsive to fMRI than previously thought.
+"What this means is that the brain has a lot of processing power over its lifetime," said Dr Michael J. Shapiro, a neuroscientist at the National Institute on Drug Abuse and lead
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=137 first30=[263, 647, 286, 17, 595, 551, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 655, 9130, 555, 3546, 333, 9130, 17, 15289, 11, 5659, 1094, 4518, 86]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+
+if __name__ == '__main__':
+    import argparse
+
+    parser = argparse.ArgumentParser(description='Adds a random number to a string')
+    parser.add_argument('--input', type=str, required=True)
+    args = parser.parse_args()
+
+    # Get the input string and output string
+    input = input().strip().split(' ')
+    output = int(input[0])
+
+    # Get a string with the given input
+    input = ''.join([x for x in input if x != ''])
+
+    # Get an empty string and return it as a string
+    return str(input).lower()
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.7185943722724915, 0.28140559792518616, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 6] count=117 first30=[622, 494, 11, 81, 18, 21, 12, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 655, 9130, 555, 3546, 333, 9130, 17, 15289, 551, 346, 3546, 17]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return int(n/2)
+
+
+if __name__ == '__main__':
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-f', '--file', help='File containing the data')
+    args = parser.parse_args()
+
+    print('Input file: {}'.format(args.file))
+
+    # Read in the file to get the input
+    input_file = open(args.input, 'r')
+    for line in input_file:
+        if not line:
+            break
+
+        if not line[0]:
+            break
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.5, 0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=54 first30=[622, 354, 17, 19, 647, 353, 20, 552, 311, 12, 864, 353, 21, 864, 353, 81, 16, 20, 687, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1 - n) * (2 * (n-1))
+
+
+if __name__ == '__main__':
+    print(f'Fib() function is called on {len(str(input()))} lines of code')
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 2590, 1541, 4619, 356, 5531, 2, 1, 0]
+first_step_topk_probs=[0.5496382713317871, 0.1658930629491806, 0.12785878777503967, 0.08001198619604111, 0.02823353372514248, 0.025440525263547897, 0.022923817858099937, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' No', ' There', ' Black', ' I', ' Well', '', '', '']
+
+[New tokens 8] count=256 first30=[13676, 17, 1541, 330, 263, 3313, 288, 2833, 299, 1447, 482, 2810, 17, 1783, 15, 383, 415, 453, 2401, 2161, 2645, 10676, 395, 2896, 2645, 388, 490, 581, 586, 3377]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Yes. There is a lot of evidence to support this claim. However, it's not clear whether black cats are actually black or if they were simply black cats. We do know that black cats are not black in the sense that they're black in appearance. The reason for this is that black cats have very small eyes, which means that they are able to see fine detail. They also have large ears, which means they can hear. Black cats are so well-suited to their coloration that even though they look different from other cats, they still tend to be white. This makes them seem as though they're black, but it doesn't make any difference whether they're black or not.
+The problem with this argument is that it does not explain why black cats are black. It just says that black cats aren't black because they don't have teeth (which is exactly what it sounds like).
+Why did the researchers conclude that black cats don't appear to be black? Well, there was no scientific proof that black cats actually appear to be brown. Instead, they were black, which meant that they weren't black at all. So they didn't really know that there was something wrong with their behavior.
+Well, this isn't a big surprise,
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 2050, 843, 798, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.5575174689292908, 0.24229641258716583, 0.10530151426792145, 0.09488463401794434, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' One', ' 5', ' 4', '', '', '!', '"', '', '']
+
+[New tokens 9] count=256 first30=[2050, 13032, 7670, 619, 934, 667, 354, 13032, 17, 202, 2774, 15, 922, 415, 269, 993, 288, 10941, 486, 835, 722, 486, 853, 656, 545, 269, 1890, 444, 354, 299]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple plus one buys 1 apple.
+Now, what's the number of apples you get when you add up all the numbers from 1 to 9? What is the total number of apples that you can make with just 1 apple?
+Answer 1 + 2 = 5
+Answer: 1 + 2 + 3 = 8
+I know you don't understand this problem but I think it was a good question. Do you mean how would you do it?
+Answer : 2
+Answer: 2 + 4 = 6
+Well, you could say that the answer is 6 because it's the sum of the two numbers in the original equation. But there are other ways to find the value of a certain number of times. For example, if you want to find the number of whole numbers less than 10 that you can count on by adding 1 to each of them and then multiplying their result by 100, you could try different combinations of these methods.
+Answer: A multiple of 10 equals 20 or more.
+Answer : The answer is 20/20 = 7.5.
+The answer is 10/4 = 0.
+Answer 2 + 4=0
+Answer: 0
+Answer: 3
+Answer: 9
+Answer: 4
+You may be wondering why we
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 27614, 15255, 22089, 1509, 1289, 783, 382, 1348]
+first_step_topk_probs=[0.6570577025413513, 0.06464638561010361, 0.061365555971860886, 0.038401585072278976, 0.026669370010495186, 0.025315890088677406, 0.021653827279806137, 0.020554885268211365, 0.015038276091217995, 0.012210127897560596]
+first_step_topk_text=[' I', ' What', ' Hi', ' Thanks', ' Thank', ' You', ' We', ' This', ' The', ' How']
+
+[New tokens 10] count=256 first30=[2575, 330, 269, 851, 1488, 3467, 357, 356, 1118, 672, 1284, 1844, 34, 202, 45, 1976, 10961, 29, 5531, 15, 383, 415, 619, 288, 1103, 1943, 357, 874, 817, 299]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is the most common thing that I know about my family?
+Jennifer: Well, it's one of those things that people use to talk about what they're talking about. It's not a lot of stuff that's really important or just because it's something that's been around for a long time and it's really important to understand what you're talking about when you talk about your family."
+And I think it's a very important topic in our conversation with families and we have a lot of people who are concerned about the health of their children and families," said Jenna. "We all know that some kids are going through a period of stress, and that's where they get exposed to something that's really scary. But if you're worried about your child being diagnosed with autism, you might want to talk to a doctor. They can be there for you and ask questions about how they're doing at school and about the way they're doing so well. And they'll also be able to answer questions about how the school system works and what the resources are available to help them do that."
+Jenna: How much of your work in the classroom can you teach me about my children?
+Jenna. I would say that's very important.
+
+================================================================================

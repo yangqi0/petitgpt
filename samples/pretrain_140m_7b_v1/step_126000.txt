@@ -1,0 +1,262 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=176 first30=[2827, 5273, 418, 4438, 289, 269, 3843, 17, 776, 2977, 2009, 17935, 351, 269, 2389, 298, 406, 10225, 383, 656, 299, 1137, 922, 383, 418, 17, 698, 418, 263, 8660]
+[Full output 1]
+Once upon a time, a curious child named Jack was playing in the park. He saw something shiny on the ground and he picked it up to see what it was. It was a necklace! Jack wanted to show his mom, so he ran over to her and showed her the necklace. His mom said "That's very cool, Jack! You can have this one." Jack was excited and took the necklaces from his friend. They went back home together and Jack put the necklacing away. Then he asked his mom if they could go play with him again tomorrow. His mom smiled and said yes. So Jack and his mom went to the store and bought lots of toys. When they got home, Jack found out that his mom had been very careful when she held the necklaced toy. She gave him a big hug and told him to be more careful next time.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 263, 7362, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.9346083402633667, 0.04485538229346275, 0.020536288619041443, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' a', ' Spain', '', '#', '', '"', '!', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 7535, 281, 8191, 17, 698, 330, 658, 269, 8492, 288, 269, 1723, 288, 269, 3163, 11718, 288, 389, 403, 285, 380, 560, 15, 536, 418, 3199, 289]
+[Full output 2]
+Paris is the capital of the province of Catalonia. It is also the seat of the government of the former municipality of Bessarabia, which was established in 1786.
+
+Geography
+The municipality is located at . It has an average elevation of 229 metres (564 feet).
+
+Demographics
+
+As per 2011 Census of 2017, Catalan had a population of 8,417 inhabitants. With a total area of , it had a population density of : 1,299. With a land area of , this means that the municipality has a population density (as of ) of : 1.3 /km2 (1.9 /mi2).
+
+Infrastructure
+According to the 2011 census, there were 7,716 households out of which 20.6% had children under the age of 18 living with them, and 16.8% were married couples living together. The median age was 38 years. For every 100 females there were 101.0 males. For every 200 females age 18 and over, there were 105.0 males; for every 100 females age 18 or over, 11.8%. The gender distribution of the population was 1.61% male and 1.06% female. There were 665 people who were single
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 6584, 269, 3286, 288, 263, 4409, 17, 382, 28071, 18062, 330, 1255, 269, 28071, 2686, 374, 269, 4409, 17, 698, 483, 342, 7734, 1191, 269, 4641]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that describes the behavior of a vector. The eigenvalue λ is called the eigenvalue associated with the vector. It can be calculated using the formula:
+
+λ = sqrt(2 * (1 - r^2))
+
+where r represents the length of the vector, r denotes its magnitude and r stands for the position along the x-axis. This equation allows us to find the eigenvalues of any given matrix A, which are those of the original matrix A.
+
+Now let's discuss the concept of eigenvalues and eigenvectors in the context of matrices. An eigenvector v of a square matrix A is a nonzero vector v such that vv = 0. Here, v0 = 1/3 and v1 = 0. These vectors satisfy the condition v0 = 0, where v0 = v1 + v0 = 2. Note that if v0 = 3, then v1 = 1/6, meaning there exists some vector v = v0 that also has a nonzero determinant.
+
+The question asks whether every eigenvalue of a square matrices A and B, denoted as λ1, is necessarily equal to zero. To answer this question, recall that the dot product between two vectors u and v is defined as follows:
+
+u · v
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 5546, 483, 491, 395, 9845, 1420, 1991, 1085, 22968]
+first_step_topk_probs=[0.17770898342132568, 0.16012923419475555, 0.16012923419475555, 0.06959183514118195, 0.06591060012578964, 0.0536365769803524, 0.04354945942759514, 0.03356491029262543, 0.027252554893493652, 0.027252554893493652]
+first_step_topk_text=[' use', ' describe', ' can', ' have', ' are', ' rely', ' allow', ' provide', ' model', ' mimic']
+
+[New tokens 4] count=256 first30=[22968, 269, 14457, 2673, 1085, 17, 1109, 483, 342, 885, 299, 1798, 15, 8793, 298, 3235, 1623, 16, 7128, 4465, 17, 202, 509, 851, 1488, 1375, 288, 14457, 2673, 330]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the neural network model. They can be used to learn, analyze and predict real-world applications.
+The most common type of neural network is the neural network, which consists of thousands of neurons in the brain. The neural network is also known as the "model" because it has many layers of information about the neuron's behavior.
+In the brain, there are two types of neural networks: the central nervous system (CNS) and the peripheral nervous system (PNS). The central nervous system contains nerves and muscles that are connected by the CNS.
+For example, the spinal cord and the brain are the two main components of the central nervous network. The central nervous network includes the nervous system and the peripheral nerves. It also includes the peripheral nerves and the brain.
+A central nervous system is made up of many parts, including the cerebral cortex, the cerebellum, the hippocampus, the amygdala, the hypothalamus, the pituitary gland, the hypocretin and the thalamic nucleus. These parts work together to make up the brain. Each part of the brain is responsible for some aspect of our daily lives.
+The central nervous system consists of neurons, which are connected by two major branches
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=94 first30=[263, 647, 286, 17, 595, 551, 202, 202, 350, 1401, 678, 626, 861, 8922, 3142, 9533, 346, 655, 9130, 555, 3546, 333, 9130, 17, 15289, 11, 5659, 1094, 4518, 86]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+if __name__ == "__main__":
+    import argparse
+
+    parser = argparse.ArgumentParser(description='Adds a random number generator to the graph')
+    parser.add_argument('graph', nargs=argparse.REMAINDER)
+    args = parser.parse_args()
+
+    print("Generating a random number Generator")
+    generate_random_number_generator(args.graph, args.graph)
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 494, 11, 81, 18, 21, 12, 711, 202, 350, 1401, 678, 626, 861, 8922, 3142, 9533, 346, 1083, 801, 19085, 1165, 903, 3, 711, 509, 775, 1811, 4610, 4963]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return int(n/2)
+
+
+if __name__ == "__main__":
+    print("hello world")
+
+The first problem presented involves finding the number of ways to choose 3 distinct integers from 1 to 5 in a given set of n numbers. This can be solved using the formula for combinations, which is given by C(n, k), where n represents the total number of items, and k denotes the size of the subset. Here, we are asked to find the number of unique combinations when choosing 3 distinct integers between 1 and 5. Let's break down this concept step-by-step through an example similar to the one provided earlier.
+
+First, let us define our variables:
+
+* The number of elements in our set {1, 2, ..., 6} is 3.
+* There are 3 distinct integer pairs (i, j).
+
+We want to determine how many different arrangements exist within these three sets. To do so, follow these steps:
+
+Step 1: Identify all possible combinations. For each combination, add up their respective counts. Since there are 3 choices per pair, the sum of the first and second possibilities should equal 9. Similarly, since there are 6 choices for each pair, the product would be
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.73917156457901, 0.2608284652233124, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=44 first30=[622, 354, 17, 19, 647, 353, 20, 552, 311, 12, 864, 353, 21, 864, 353, 81, 16, 20, 687, 711, 202, 350, 1401, 678, 626, 861, 8922, 3142, 9533, 346]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1 - n) * (2 * (n-1))
+
+
+if __name__ == "__main__":
+    import sys
+
+    print("Please provide a python library to use")
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 8] count=211 first30=[13676, 17, 1541, 330, 808, 2395, 357, 2645, 10676, 395, 269, 851, 1488, 12445, 288, 3191, 289, 269, 1560, 1705, 17, 1109, 395, 658, 1414, 359, 360, 10733, 10676, 741]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Yes. There is no question that black cats are the most common breed of cat in the United States. They are also known as "black cats." Black cats have a short life span, and they do not live long enough to become a full-fledged cat. Although there are many varieties of black cats, the average lifespan for a black cat is between 10 and 20 years. Most black cats have a red coat and black hair, but some have a yellow or white coat and black fur. In fact, the average black cat lives for about 6 years. Black cats have been known to live for more than one year! The best time to see a black cat in your yard is when it is in its prime, so don't wait until you find them.
+Did you know that there are three types of black cats? These include black cats with black hair (or black cats with white hair), black cats with dark eyes (the black cats have black eyes) and black cats with light eyes (the white cats have black ears).
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 843, 798, 2050, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.48150601983070374, 0.23223523795604706, 0.23223523795604706, 0.05402347445487976, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' 5', ' 4', ' One', '', '', '!', '"', '', '']
+
+[New tokens 9] count=256 first30=[354, 13032, 15, 409, 10941, 15, 637, 10941, 15, 798, 10941, 15, 843, 10941, 15, 1012, 10941, 15, 1186, 10941, 15, 1218, 10941, 15, 1291, 10941, 15, 1171, 10941, 15]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple, 2 apples, 3 apples, 4 apples, 5 apples, 6 apples, 7 apples, 8 apples, 9 apples, 10 apples, 11 apples, 12 apples, 13 apples, 14 apples, 15 apples, 16 apples, 17 apples, 18 apples, 19 apples, 20 apples, 21 apples, 22 apples, 23 apples, 24 apples, 25 apples, 26 apples, 27 apples, 28 apples, 29 apples, 30 apples, 35 apples, 36 apples, 37 apples, 38 apples, 39 apples, 40 apples, 41 apples, 42 apples, 43 apples, 44 apples, 45 apples, 46 apples, 47 apples, 48 apples, 49 apples, 50 apples, 55 apples, 56 apples, 57 apples, 60 apples, 65 apples, 67 apples, 68 apples, 69 apples, 70 apples, 69 apple, 70 apples
+Let's say you want to know how many apples you have by doing all the calculations on your calculator. First, let's divide the number of apples in each calculation by the total number of calculations. For example, if you wanted to find out how many apples are in each calculation, you would multiply the number of apple units by the number of calculations (which is 3), which equals 15 apples. So, for example,
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 22089, 3189, 1509, 360, 27614, 1348, 2005, 783]
+first_step_topk_probs=[0.5944035649299622, 0.2045847773551941, 0.04070695489645004, 0.028270402923226357, 0.024180958047509193, 0.021788863465189934, 0.019633403047919273, 0.01679334230720997, 0.014364105649292469, 0.013635123148560524]
+first_step_topk_text=[' I', ' What', ' Thank', ' Do', ' You', ' "', ' Hi', ' How', ' Can', ' This']
+
+[New tokens 10] count=256 first30=[2575, 330, 4083, 34, 202, 11190, 926, 29, 13676, 15, 383, 415, 263, 1114, 1488, 1811, 289, 829, 3969, 17, 1289, 1645, 357, 4083, 330, 4012, 339, 500, 298, 383]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is stress?
+Emily: Yes, it's a very common problem in our culture. We think that stress is bad for us and it can make people feel worse. But it also makes them feel more depressed. It's not just another feeling of being sad or feeling hopeless, but the feeling of being frustrated.
+Assisted: How do you cope with stress?
+Ann: I've been working on this for about 20 years now. It was hard to get me to focus on my stress and I felt like I had to deal with it all myself. So I decided to try to help myself by talking to someone who has the same kind of stress that I have. And I started thinking about how I could manage this situation. I really didn't know what I wanted to do because I don't know what the right thing to do would be. That way I'd never give up and I wouldn't be able to do anything.
+I got a call from the person who did the work that I needed. He said I need to talk to someone. And he told me to go to the doctor. The doctor gave me some medicine and I took it. I tried to take it and then I went back home.
+A friend of mine came over
+
+================================================================================

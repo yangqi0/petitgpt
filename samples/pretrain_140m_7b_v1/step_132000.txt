@@ -1,0 +1,278 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 1] count=121 first30=[2827, 8798, 2857, 299, 269, 3843, 374, 610, 2553, 17, 1109, 2977, 263, 2023, 11913, 298, 3766, 299, 631, 351, 383, 17, 1358, 722, 581, 3500, 715, 15, 581, 2977]
+[Full output 1]
+Once upon a time, a curious child named Timmy went to the park with his mom. They saw a big slide and wanted to go on it. But when they got there, they saw that the slide was dirty. Timmy's mom said, "We need to clean up this mess." Timmy didn't want to do it because he loved the slide. He said, "I don't want to clean it up!" His mom said, ""Don't worry, we can clean it up together." So, they took the dirty slide and put it back in its place. Timmy felt happy again because he helped make the park clean again.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 7535, 281, 8191, 15, 298, 330, 269, 1408, 3796, 2317, 289, 269, 2027, 17, 698, 330, 3323, 351, 269, 5566, 288, 338, 3116, 2020, 72, 17, 202]
+[Full output 2]
+Paris is the capital of the province of Catalonia, and is the second largest city in the country. It is located on the island of Aragonese.
+The city was founded by the Roman emperor Hadrian (c.390-420), who ruled from Aragonesa until his death. The city was destroyed during the Battle of Seville, and was rebuilt in 496 after a fire.
+Apollonius of Aragon (c.450-441) was the first to introduce Christianity into Catalonia as early as the 5th century. He built a church on the site of an old church. In 711 he was defeated at Aragon by the Visigoths and became the first pope. He was buried in the cathedral of Aragon.
+In the late Middle Ages, the city was occupied by the Visogalli, a people who had been forced to flee from their native lands for fear of persecution. They were converted to Catholicism and their faith became known as the "Liber Pontifical".
+During the Renaissance, the city's name was changed to Catalonia (the capital).
+Catalan City
+Following the collapse of the Empire, Catalonia was occupied by France, Spain, Portugal, and
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 357, 483, 342, 3258, 299, 1467, 4409, 299, 1062, 269, 2189, 3823, 707, 263, 719, 619, 17, 535, 482, 1832, 15, 269, 10294, 8537, 288, 269, 1496, 3823]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar that can be added to another vector to make the original matrix into a new one. In this case, the eigenvector of the given matrix is a 2x2 matrix with the same length as the original matrix.
+
+Now let's consider two matrices A and B:
+
+A = |a b|
+B = |c c|
+
+The eigenvalues of A are given by the following equations:
+
+* The eigenvalues are found by finding the product of the first row (n) and second column (m):
+ + (1)(a)(b)(c) = 1
+ + (0)(ab)(bc)(cd)(e) = 0
+* The eigenvectors of A are formed by the shared eigenvalues of B:
+ - (1)(ab)(cc)(ce) = 1, which means AB = 0
+ + (2)(ab)(cd)(ea)(cd)(f) = 0
+
+ For these pairs of eigenvalues, we have:
+
+(1)(ab) * (-1)(ac) = 1 * (ac)^(-1) = 1/3
+
+This equation has three solutions since both A and B are symmetric in the first row; however, there may still exist multiple solutions due to the presence of
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 9845, 5546, 1420, 483, 491, 1991, 3069, 395, 1085]
+first_step_topk_probs=[0.45719772577285767, 0.10635504126548767, 0.07781101018190384, 0.07011354714632034, 0.05997128784656525, 0.03381650522351265, 0.026063423603773117, 0.020087866112589836, 0.01937307044863701, 0.018100671470165253]
+first_step_topk_text=[' use', ' rely', ' describe', ' allow', ' can', ' have', ' provide', ' attempt', ' are', ' model']
+
+[New tokens 4] count=234 first30=[22968, 269, 14457, 2673, 1085, 17, 1109, 4478, 299, 1557, 806, 12473, 8646, 374, 1010, 613, 298, 553, 7328, 289, 1663, 299, 3235, 719, 870, 15, 857, 359, 263, 10839]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the neural network model. They aim to understand how neurons interact with each other and their connections in order to predict new data, such as a prediction for a particular type of learning algorithm.
+The current study is an attempt to build a neural network model from a set of neural networks (N-NNs). NNs can be thought of as "models" which describe the different types of training processes used by various brain regions. NNs may be described as either linear or nonlinear models, depending on whether they use the same model.
+In this paper, we will examine the structure of the neural network, the neural network architecture, and its function in learning. We will also look at the neural network's properties, including its structure, structure, and neural network architecture.
+This research project was supported by the National Science Foundation under contract DE-AC0012014 and by the National Institute of Mental Health.
+Other social bookmarking and sharing tools:
+Note: Materials may be edited for content and length. For further information, please contact the source cited above.
+Note: If no author is given, the source is cited instead.
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=158 first30=[263, 647, 286, 3, 711, 4750, 2062, 263, 689, 715, 418, 263, 1809, 3510, 2827, 15781, 17, 1530, 6446, 299, 1143, 3099, 298, 4196, 719, 4241, 17, 2050, 1266, 1024]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+Once upon a time there was a little girl named Lucy. She loved to play outside and explore new places. One day she found an old box in her backyard. It had a big lock on it. Lucy wanted to open the box but she couldn't find any inside. The next day, Lucy went back to the park with her mom. But when they got there, she saw that the lock was broken. Lucy's mom said "Oh no! We need to fix it." So Lucy and her mom fixed the lock and they were able to play again. They played together all day long. Lucy learned that sometimes things can be broken, but it's important to stay safe and ask for help when you need it. And they lived happily ever after.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=37 first30=[622, 353, 20, 12829, 311, 12, 647, 354, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 11, 73, 10, 51, 17978, 66, 24, 333, 836, 1813]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return (1 << n) + 1
+
+
+if __name__ == '__main__':
+    print(f'Pizza_5 = {len(binomials)}')
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.5260180234909058, 0.473982036113739, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=36 first30=[622, 354, 17, 19, 647, 353, 20, 552, 311, 12, 864, 8049, 11, 81, 12, 711, 202, 6, 1083, 11, 73, 554, 11, 24, 687, 202, 2318, 11, 73, 554]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1 - n) * fib(n)
+
+
+# print(fib(5))
+print(fib(-2, 5))
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 1541, 2590, 1289, 535, 356, 698, 338, 0]
+first_step_topk_probs=[0.3617411255836487, 0.2148832529783249, 0.19362607598304749, 0.08414949476718903, 0.03657122701406479, 0.029693519696593285, 0.029693519696593285, 0.026756083592772484, 0.02288568764925003, 0.0]
+first_step_topk_text=[' The', ' Yes', ' There', ' No', ' We', ' In', ' I', ' It', ' A', '']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 12052, 17, 202, 37, 1477, 395, 269, 851, 1488, 1875, 288, 26291, 289, 269, 1165, 15, 298, 581, 395, 269, 851, 1384, 3864, 289, 829, 3822, 17]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+Bats are the most common species of mammal in the world, and they are the most important animal in our lives. In fact, many people consider them to be one of the top 10 mammals on Earth. They're also among the largest mammals in the world! There are approximately 1,200 species of bats, but only a few are very rare or endangered.
+The World's Most Endangered Wildlife Biosecurity Plan (WBP) was developed by the IUCN Species Survival Commission in 2001 as an effort to protect the world's most threatened species from extinction. It provides guidelines for how to conduct research and control activities, and recommends ways to reduce the impact of human activity on the biodiversity of the world's ecosystems. The WBP consists of eight chapters which cover various aspects of bat conservation, including:
+- A detailed description of bat species and their distribution
+- A list of known bat species and threats
+- How to report bats to authorities
+- What to do if you suspect a bat is being infected with rabies
+- How bats are monitored
+- How you can help prevent bat-related deaths
+- What you can do about bat-related diseases
+- What is the best way to help bats avoid getting sick?
+See the
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 2050, 843, 798, 409, 1541, 2, 3, 1, 0]
+first_step_topk_probs=[0.38683488965034485, 0.2830144464969635, 0.16811780631542206, 0.11083005368709564, 0.027971522882580757, 0.02323123998939991, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' One', ' 5', ' 4', ' 2', ' There', '', '', '', '']
+
+[New tokens 9] count=113 first30=[2050, 13032, 15, 798, 10941, 15, 354, 27320, 15, 843, 10941, 15, 409, 26634, 15, 409, 24847, 15, 354, 28627, 15, 354, 28627, 17, 202, 24771, 29, 8704, 10941, 15]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple, 4 apples, 1 banana, 5 apples, 2 bananas, 2 oranges, 1 cherry, 1 cherry.
+Answer: Three apples, 4 apples and 1 banana, 4 apples.
+If you have a basket of apples, how many apples do you have?
+See another brain teaser just like this one...
+Or, just get a random brain teaser
+If you become a registered user you can vote on this brain teaser, keep track of
+which ones you have seen, and even make your own.
+Back to Top
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 22089, 1509, 382, 1289, 15255, 783, 776, 3189]
+first_step_topk_probs=[0.6494047045707703, 0.07780659198760986, 0.06655150651931763, 0.03562247008085251, 0.026061953976750374, 0.02008674480021, 0.01906733587384224, 0.01809966005384922, 0.012901603244245052, 0.012901603244245052]
+first_step_topk_text=[' I', ' What', ' Thank', ' You', ' The', ' We', ' Thanks', ' This', ' He', ' Do']
+
+[New tokens 10] count=256 first30=[2575, 330, 4083, 34, 202, 11190, 926, 29, 25799, 483, 342, 3436, 419, 263, 993, 288, 1943, 15, 1433, 29, 202, 16, 382, 4083, 272, 2601, 353, 7507, 359, 269]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is stress?
+Emily: Stress can be caused by a number of things, including:
+- The stressor itself (such as the weather)
+- The way in which you react to the stressor
+- How your body responds to the stressors
+- The degree of the stressor's effect on your body
+What are the causes of stress?
+There are many possible causes for stress. Some of these may include:
+- Physical or mental health problems such as depression and anxiety
+- Physical illnesses such as heart disease and diabetes
+- Medications that have been prescribed to treat depression
+- Certain medical conditions such as HIV/AIDS
+- Chemicals used to treat cancer
+- Certain medications used to treat other diseases
+- Personal history of illness or injury
+- Stressors that cause an individual to experience stress over time
+- Threats or dangers associated with the use of drugs or alcohol
+- Changes in diet or exercise habits
+How do we know if our stress is causing us stress?
+If you feel stressed about something, it is important to report it to your doctor. Your doctor will determine what kind of stress you need to avoid, and how much you need to take care of yourself. If you're worried about something, ask
+
+================================================================================
