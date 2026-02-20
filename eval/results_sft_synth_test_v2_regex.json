@@ -1,0 +1,106 @@
+{
+  "ckpt": "outputs/sft_synth_test_v2/latest.pt",
+  "bench": "pretrain/bench_v1.jsonl",
+  "time_s": 298.63,
+  "acc_arithmetic": 0.0,
+  "acc_syllogism": 0.0,
+  "acc_code": 0.3333333333333333,
+  "counts": {
+    "total": 9,
+    "arithmetic": {
+      "n": 3,
+      "correct": 0
+    },
+    "syllogism": {
+      "n": 3,
+      "correct": 0
+    },
+    "code": {
+      "n": 3,
+      "correct": 1
+    }
+  },
+  "results": [
+    {
+      "id": "arith_0001",
+      "task": "arithmetic",
+      "ok": false,
+      "prompt": "You are a precise assistant.\nRules for arithmetic questions:\n- Output ONLY the final numeric answer.\n- No explanation, no extra words, no punctuation.\n\nJohn has 3 apples and buys 2 more. How many apples does he have?\nAnswer:",
+      "gold": "5",
+      "gen": " 4 apples",
+      "detail": "pred=4.0 gold=5"
+    },
+    {
+      "id": "arith_0002",
+      "task": "arithmetic",
+      "ok": false,
+      "prompt": "You are a precise assistant.\nRules for arithmetic questions:\n- Output ONLY the final numeric answer.\n- No explanation, no extra words, no punctuation.\n\nCompute 17 + 25.\nAnswer:",
+      "gold": "42",
+      "gen": " 158.2\n",
+      "detail": "pred=158.2 gold=42"
+    },
+    {
+      "id": "arith_0003",
+      "task": "arithmetic",
+      "ok": false,
+      "prompt": "You are a precise assistant.\nRules for arithmetic questions:\n- Output ONLY the final numeric answer.\n- No explanation, no extra words, no punctuation.\n\nWhat is 9 * 8?\nAnswer:",
+      "gold": "72",
+      "gen": " 8208644648\n",
+      "detail": "pred=8208644648.0 gold=72"
+    },
+    {
+      "id": "syll_0001",
+      "task": "syllogism",
+      "ok": false,
+      "prompt": "You are a logic assistant.\nRules:\n- Output ONLY one token: yes / no / unknown.\n- Do not explain.\n\nIf all cats are animals and some animals are black, can we conclude that some cats are black?\nAnswer:",
+      "gold": "unknown",
+      "gen": " No. The answer is \"no\".\n",
+      "detail": "pred=no gold=unknown"
+    },
+    {
+      "id": "syll_0002",
+      "task": "syllogism",
+      "ok": false,
+      "prompt": "You are a logic assistant.\nRules:\n- Output ONLY one token: yes / no / unknown.\n- Do not explain.\n\nAll A are B. All B are C. Can we conclude all A are C?\nAnswer:",
+      "gold": "yes",
+      "gen": " No, it is not possible to conclude ALL A by any means.",
+      "detail": "pred=no gold=yes"
+    },
+    {
+      "id": "syll_0003",
+      "task": "syllogism",
+      "ok": false,
+      "prompt": "You are a logic assistant.\nRules:\n- Output ONLY one token: yes / no / unknown.\n- Do not explain.\n\nSome A are B. All B are C. Can we conclude some A are C?\nAnswer:",
+      "gold": "yes",
+      "gen": " No. It is possible that all B were created by accident or by chance.",
+      "detail": "pred=no gold=yes"
+    },
+    {
+      "id": "code_add_0001",
+      "task": "code",
+      "ok": true,
+      "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n\nComplete the following Python function:\n\ndef add(a, b):\n    ",
+      "gold": null,
+      "gen": " return a + b\na = a * b\n\n",
+      "detail": ""
+    },
+    {
+      "id": "code_fact_0001",
+      "task": "code",
+      "ok": false,
+      "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n\nComplete the following Python function:\n\ndef factorial(n):\n    ",
+      "gold": null,
+      "gen": " if n < 0:\n    raise ValueError('n must be non-negative')\nr = 1\nfor i in range(2, n + 1):",
+      "detail": "Traceback (most recent call last):\n  File \"/tmp/tmpz9rt_nu5/tmp_eval.py\", line 5, in <module>\n    assert factorial(0)==1\nAssertionError"
+    },
+    {
+      "id": "code_fib_0001",
+      "task": "code",
+      "ok": false,
+      "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n\nComplete the following Python function:\n\ndef fib(n):\n    ",
+      "gold": null,
+      "gen": " if n < 0:\n    raise ValueError('n must be non-negative')\na, b = 0, 1\nfor _ in range(2,",
+      "detail": "Traceback (most recent call last):\n  File \"/tmp/tmpnukoz71g/tmp_eval.py\", line 5, in <module>\n    assert fib(0)==0\nAssertionError"
+    }
+  ]
+}

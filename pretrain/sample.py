@@ -440,7 +440,7 @@ def generate(
                     if s in gen_text_buf:
                         stopped_by = s
                         if not stop_cfg.include_stop_in_output:
-                            stop_cut = j
+                            stop_cut = gen_text_buf.find(s)
                         break
 
             # stop on regex (truncate to match end by default)
@@ -475,7 +475,12 @@ def generate(
         gen_text = tokenizer.decode(generated)
         if stop_cfg.stop_on_newline:
             # treat newline as a stop string too
-            stop_cfg2 = StopConfig(stop_strings=stop_cfg.stop_strings + ["\n"], stop_on_newline=False, include_stop_in_output=stop_cfg.include_stop_in_output)
+            stop_cfg2 = StopConfig(
+                stop_strings=stop_cfg.stop_strings + ["\n"],
+                stop_regexes=stop_cfg.stop_regexes,
+                stop_on_newline=False,
+                include_stop_in_output=stop_cfg.include_stop_in_output,
+            )
             gen_text = _postprocess_stop(gen_text, stop_cfg2)
         else:
             gen_text = _postprocess_stop(gen_text, stop_cfg)
