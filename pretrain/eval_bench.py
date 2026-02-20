@@ -167,11 +167,11 @@ def generate_one(prompt: str, task: str, args, seed: int) -> str:
         cmd[cmd.index("--no_repeat_ngram_size") + 1] = "0"
         cmd[cmd.index("--max_repeat_token") + 1] = "0"
         # stop when we have a number followed by a delimiter
-        cmd += ["--stop_regex", r"[-+]?\d+(?:\.\d+)?(?=[^\d\.])"]
+        cmd += ["--stop_regex", r"[-+]?\d+(?:\.\d+)?(?=(?:\s|$|[^\d\.]))"]
         cmd += ["--stop_on_newline"]
     elif task == "syllogism":
-        if args.greedy:
-            cmd += ["--greedy", "--temperature", "0"]
+        cmd += ["--greedy", "--temperature", "0"]
+        # stop early; then we will postprocess to first token
         cmd += ["--stop_on_newline"]
     elif task == "code":
         if args.greedy:
@@ -184,6 +184,16 @@ def generate_one(prompt: str, task: str, args, seed: int) -> str:
     if args.avoid_first_whitespace:
         cmd += ["--avoid_first_whitespace", "--ban_first_steps", str(args.ban_first_steps)]
     return subprocess.check_output(cmd, text=True)
+
+def normalize_syllogism(gen: str) -> str:
+    # Take first token-like word only
+    s = gen.strip().lower()
+    # common variants
+    for w in ["yes", "no", "unknown"]:
+        if s.startswith(w):
+            return w
+    # fallback: first word
+    return s.split()[0] if s.split() else ""
 
 def wrap_with_task_rules(task: str, user_prompt: str) -> str:
     if task == "arithmetic":
@@ -286,7 +296,7 @@ def main():
 
         elif task == "syllogism":
             stats["syllogism"]["n"] += 1
-            pred = normalize_yes_no_unknown(gen)
+            pred = normalize_syllogism(gen)
             ok = (pred == gold)
             if ok:
                 stats["syllogism"]["correct"] += 1
