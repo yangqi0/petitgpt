@@ -280,17 +280,47 @@ def main():
     dl_it = iter(train_dl)
     opt.zero_grad(set_to_none=True)
 
-# ---- SANITY: verify supervision spans ----
-    ex = train_ds[0]
-    input_ids = ex["input_ids"]
-    labels = ex["labels"]
+    # ---- SANITY: verify supervision spans ----
+    row = train_ds.rows[0]
+    text, asst_spans = train_ds.fmt.render(row["messages"])
 
-    sup = [tid for tid, lab in zip(input_ids, labels) if lab != -100]
-    print("rendered_tail:", repr(ex["text"][-200:]))
+    enc = tok.encode(text)
+    ids = enc.ids
+    offsets = enc.offsets
+    if args.add_bos:
+        ids = [args.bos_id] + ids
+        offsets = [(0,0)] + offsets
 
-    print("supervised_token_count:", len(sup))
-    print("supervised_decoded:", repr(tok.decode(sup)[:200]))
-    print("supervised_decoded_tail:", repr(tok.decode(sup)[-200:]))
+    # truncate like dataset
+    ids = ids[:args.max_len]
+    offsets = offsets[:args.max_len]
+
+    labels = [-100] * len(ids)
+    def token_is_in_asst(tok_span):
+        ts, te = tok_span
+        if ts == te == 0:
+            return False
+        for a0, a1 in asst_spans:
+            if te > a0 and ts < a1:
+                return True
+        return False
+
+    for i, off in enumerate(offsets):
+        if token_is_in_asst(off):
+            labels[i] = ids[i]
+
+    # mask BOS/EOS
+    for i, t in enumerate(ids):
+        if t == args.bos_id or t == args.eos_id:
+            labels[i] = -100
+
+    sup = [tid for tid, lab in zip(ids, labels) if lab != -100]
+
+    print("TEXT_TAIL:", repr(text[-200:]))
+    print("ASST_SPANS:", asst_spans[:3], "...")
+    print("SUP_TOKENS:", len(sup))
+    print("SUP_DECODED_HEAD:", repr(tok.decode(sup)[:200]))
+    print("SUP_DECODED_TAIL:", repr(tok.decode(sup)[-200:]))
 
     raise SystemExit
 
