@@ -151,9 +151,19 @@ def generate_one(prompt: str, args, seed: int) -> str:
         "--seed", str(seed),
         "--prompt", prompt,
         "--quiet",
+        "--repetition_penalty", str(args.repetition_penalty),
+        "--no_repeat_ngram_size", str(args.no_repeat_ngram_size),
+        "--max_repeat_token", str(args.max_repeat_token),
     ]
     if args.greedy:
-        cmd.insert(cmd.index("--quiet"), "--greedy")
+        cmd += ["--greedy", "--temperature", "0"]
+
+    cmd += ["--repetition_penalty", str(args.repetition_penalty)]
+    cmd += ["--no_repeat_ngram_size", str(args.no_repeat_ngram_size)]
+    cmd += ["--max_repeat_token", str(args.max_repeat_token)]
+
+    if args.avoid_first_whitespace:
+        cmd += ["--avoid_first_whitespace", "--ban_first_steps", str(args.ban_first_steps)]
 
     out = subprocess.check_output(cmd, text=True)
     return out
@@ -207,6 +217,14 @@ def main():
 
     ap.add_argument("--seed_base", type=int, default=1234)
     ap.add_argument("--limit", type=int, default=0)
+
+    ap.add_argument("--repetition_penalty", type=float, default=1.2)
+    ap.add_argument("--no_repeat_ngram_size", type=int, default=2)
+    ap.add_argument("--max_repeat_token", type=int, default=2)
+    ap.add_argument("--avoid_first_whitespace", action="store_true")
+    ap.add_argument("--ban_first_steps", type=int, default=4)
+    ap.add_argument("--greedy", action="store_true")
+
     args = ap.parse_args()
 
     items = read_jsonl(args.bench)

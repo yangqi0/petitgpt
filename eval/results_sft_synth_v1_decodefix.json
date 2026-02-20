@@ -1,0 +1,106 @@
+{
+  "ckpt": "outputs/sft_synth_v1/latest.pt",
+  "bench": "pretrain/bench_v1.jsonl",
+  "time_s": 206.727,
+  "acc_arithmetic": 0.0,
+  "acc_syllogism": 0.6666666666666666,
+  "acc_code": 0.0,
+  "counts": {
+    "total": 9,
+    "arithmetic": {
+      "n": 3,
+      "correct": 0
+    },
+    "syllogism": {
+      "n": 3,
+      "correct": 2
+    },
+    "code": {
+      "n": 3,
+      "correct": 0
+    }
+  },
+  "results": [
+    {
+      "id": "arith_0001",
+      "task": "arithmetic",
+      "ok": false,
+      "prompt": "You are a precise assistant.\nRules for arithmetic questions:\n- Output ONLY the final numeric answer.\n- No explanation, no extra words, no punctuation.\n\nJohn has 3 apples and buys 2 more. How many apples does he have?\nAnswer:",
+      "gold": "5",
+      "gen": " 444455566671fbf8a0bb3ceb2e946dbc6156d0b1fbfb2e9650eeae6a6b6b6c1b1b1c1b2b2b3b3b4b4b5b6b5b5b7b6b7b7b8b8b9b9b3b1b2bc6bd6adb6178b6b3b6b4b6bacacac\nThis is a list",
+      "detail": "pred=6.0 gold=5"
+    },
+    {
+      "id": "arith_0002",
+      "task": "arithmetic",
+      "ok": false,
+      "prompt": "You are a precise assistant.\nRules for arithmetic questions:\n- Output ONLY the final numeric answer.\n- No explanation, no extra words, no punctuation.\n\nCompute 17 + 25.\nAnswer:",
+      "gold": "42",
+      "gen": "17171718181819191921212122222223222222242222222622222225222222272222222822222229222222302020205020202060202020802020204020202030202050302020303030 303030300030303020303020502050203020505020205050502050501050505010605050501005050506050502060205020605020206050",
+      "detail": "pred=3.03030300030303e+110 gold=42"
+    },
+    {
+      "id": "arith_0003",
+      "task": "arithmetic",
+      "ok": false,
+      "prompt": "You are a precise assistant.\nRules for arithmetic questions:\n- Output ONLY the final numeric answer.\n- No explanation, no extra words, no punctuation.\n\nWhat is 9 * 8?\nAnswer:",
+      "gold": "72",
+      "gen": "444555666 6ge8gggglggg gggghggg\nTo be of any use, please use the 'Getty' menu on the top right of this screen. This will take you to the article about how to do arithmetic problems.",
+      "detail": "pred=8.0 gold=72"
+    },
+    {
+      "id": "syll_0001",
+      "task": "syllogism",
+      "ok": false,
+      "prompt": "You are a logic assistant.\nRules:\n- Output ONLY one token: yes / no / unknown.\n- Do not explain.\n\nIf all cats are animals and some animals are black, can we conclude that some cats are black?\nAnswer:",
+      "gold": "unknown",
+      "gen": " No No No Yes Yes YesYesYesYesyesyesyes010000000000000000000000001000001000002000003000003000005000003000002000002000005000002000000030000035000030000032000030000030040000300000330000300000301000000300000003010000000030100000300050000030000035000000001000100010000000100010000000000000000000000000000001000100000000000000000000000000000000000000000000000000000000000000000000000000000000000001000100",
+      "detail": "pred=yes gold=unknown"
+    },
+    {
+      "id": "syll_0002",
+      "task": "syllogism",
+      "ok": true,
+      "prompt": "You are a logic assistant.\nRules:\n- Output ONLY one token: yes / no / unknown.\n- Do not explain.\n\nAll A are B. All B are C. Can we conclude all A are C?\nAnswer:",
+      "gold": "yes",
+      "gen": " No No No Yes Yes YesYesYesYesyesyesyes0100000000000000000000000000000100000100000200000300000300000500000300000200000200000500000200000003000003500003000003200003000003400003000003300003000003010000003000000030100000000301000003000FFFF000000FF00FF00F00FF00FD00FF00DF00FF00FE00FF00FAFF00FFFF00FF0FF00FF1FF00FF2FF00FF3FF00FF4FF",
+      "detail": "pred=yes gold=yes"
+    },
+    {
+      "id": "syll_0003",
+      "task": "syllogism",
+      "ok": true,
+      "prompt": "You are a logic assistant.\nRules:\n- Output ONLY one token: yes / no / unknown.\n- Do not explain.\n\nSome A are B. All B are C. Can we conclude some A are C?\nAnswer:",
+      "gold": "yes",
+      "gen": " No No No Yes Yes YesYesYesYesyesyesyesnoyesyesyesynoyesyesnoynoyesnoyesnonoyesyesyyesyesyescannoyesyes0yesyesyes0noyesyes1yesyesyes2yesyesyes3yesyesyes4yesyesyes5yesyesyes6yesyesyes7yesyesyesCanyesyesyes?\"\n---Aa,---aa,-+-aaa,+-aaaaaaaaaaaaaaaaaaaeaaaaeaeaeaaeaeaaaaeaeas",
+      "detail": "pred=yes gold=yes"
+    },
+    {
+      "id": "code_add_0001",
+      "task": "code",
+      "ok": false,
+      "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n\nComplete the following Python function:\n\ndef add(a, b):\n    ",
+      "gold": null,
+      "gen": " return return return Return return return return returns return return returnreturn return return return returning return return return = another other other other two other two other three other four other four other five other six other six other seven other six other 7 other 7 other 8 other 9 other 10 other 10 other 13 other 14 other 15 other 16 other 17 other 18 other 19 other 19 other 20 other 21 other 23 other 22 other 25 other 27 other 28 other 28 other 29 other 28 other 26 other 28 other 27 other 27 other 31 Other 31",
+      "detail": "File \"/tmp/tmpsyfcx45q/tmp_eval.py\", line 2\n    return return return Return return return return returns return return returnreturn return return return returning return return return = another other other other two other two other three other four other four other five other six other six other seven other six other 7 other 7 other 8 other 9 other 10 other 10 other 13 other 14 other 15 other 16 other 17 other 18 other 19 other 19 other 20 other 21 other 23 other 22 other 25 other 27 other 28 other 28 other 29 other 28 other 26 other 28 other 27 other 27 other 31 Other 31\n           ^^^^^^\nSyntaxError: invalid syntax"
+    },
+    {
+      "id": "code_fact_0001",
+      "task": "code",
+      "ok": false,
+      "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n\nComplete the following Python function:\n\ndef factorial(n):\n    ",
+      "gold": null,
+      "gen": " return return returnreturn return return return returns return return return returning return return return returned return return return Return return return return Returns with as of = and with = and with a = and with an = and with and with a b b c d e f g h i j j j k l m n n n p q r r r s t t t T T U V V V W W W",
+      "detail": "File \"/tmp/tmp91w4oqpb/tmp_eval.py\", line 2\n    return return returnreturn return return return returns return return return returning return return return returned return return return Return return return return Returns with as of = and with = and with a = and with an = and with and with a b b c d e f g h i j j j k l m n n n p q r r r s t t t T T U V V V W W W\n           ^^^^^^\nSyntaxError: invalid syntax"
+    },
+    {
+      "id": "code_fib_0001",
+      "task": "code",
+      "ok": false,
+      "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n\nComplete the following Python function:\n\ndef fib(n):\n    ",
+      "gold": null,
+      "gen": " return return returnreturnreturnreturn return return return else return return return",
+      "detail": "File \"/tmp/tmp1qcrigdq/tmp_eval.py\", line 2\n    return return returnreturnreturnreturn return return return else return return return\n           ^^^^^^\nSyntaxError: invalid syntax"
+    }
+  ]
+}

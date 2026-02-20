@@ -36,6 +36,7 @@ SYS_CODE = (
     "- Do NOT write extra functions.\n"
     "- Do NOT write a main block.\n"
     "- Implement exactly the requested function.\n"
+    "- Output ONLY the function body (no def line).\n"
 )
 
 def ex(system: str, user: str, assistant: str, meta: Dict) -> Dict:
@@ -86,41 +87,38 @@ def gen_code(rng: random.Random, i: int) -> Dict:
     k = rng.choice(["add", "factorial", "fib", "is_even", "clamp"])
     if k == "add":
         user = "Complete the following Python function:\n\ndef add(a, b):\n    "
-        assistant = "def add(a, b):\n    return a + b\n"
+        assistant = "return a + b\n"
     elif k == "factorial":
         user = "Complete the following Python function:\n\ndef factorial(n):\n    "
         assistant = (
-            "def factorial(n):\n"
-            "    if n < 0:\n"
-            "        raise ValueError('n must be non-negative')\n"
-            "    r = 1\n"
-            "    for i in range(2, n + 1):\n"
-            "        r *= i\n"
-            "    return r\n"
+            "if n < 0:\n"
+            "    raise ValueError('n must be non-negative')\n"
+            "r = 1\n"
+            "for i in range(2, n + 1):\n"
+            "    r *= i\n"
+            "return r\n"
         )
     elif k == "fib":
         user = "Complete the following Python function:\n\ndef fib(n):\n    "
         assistant = (
-            "def fib(n):\n"
-            "    if n < 0:\n"
-            "        raise ValueError('n must be non-negative')\n"
-            "    a, b = 0, 1\n"
-            "    for _ in range(n):\n"
-            "        a, b = b, a + b\n"
-            "    return a\n"
+            "if n < 0:\n"
+            "    raise ValueError('n must be non-negative')\n"
+            "a, b = 0, 1\n"
+            "for _ in range(n):\n"
+            "    a, b = b, a + b\n"
+            "return a\n"
         )
     elif k == "is_even":
         user = "Complete the following Python function:\n\ndef is_even(n):\n    "
-        assistant = "def is_even(n):\n    return (n % 2) == 0\n"
+        assistant = "return (n % 2) == 0\n"
     else:
         user = "Complete the following Python function:\n\ndef clamp(x, lo, hi):\n    "
         assistant = (
-            "def clamp(x, lo, hi):\n"
-            "    if x < lo:\n"
-            "        return lo\n"
-            "    if x > hi:\n"
-            "        return hi\n"
-            "    return x\n"
+            "if x < lo:\n"
+            "    return lo\n"
+            "if x > hi:\n"
+            "    return hi\n"
+            "return x\n"
         )
     return ex(SYS_CODE, user, assistant, {"id": f"syn_code_{i:06d}", "task":"code", "kind": k})
 
