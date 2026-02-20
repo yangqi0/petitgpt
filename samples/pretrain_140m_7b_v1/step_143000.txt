@@ -1,0 +1,291 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 2446, 418, 12562, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.5979132652282715, 0.17130503058433533, 0.1390886902809143, 0.0916929766535759, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' came', ' was', ' walked', '', '', '!', '"', '', '']
+
+[New tokens 1] count=138 first30=[2827, 5273, 418, 4438, 289, 269, 3843, 17, 776, 2977, 2009, 17935, 298, 2239, 351, 269, 2389, 17, 698, 418, 263, 6086, 1167, 4, 5273, 418, 649, 8763, 357, 406]
+[Full output 1]
+Once upon a time, a curious child named Jack was playing in the park. He saw something shiny and red on the ground. It was a toy car! Jack was so excited that he ran to his mom and said, "Mommy, what is this?" His mom smiled and said, â€œThat's a car, Jack. You can use it to drive around the park.â€ Jack was so happy and excited to have found such a fun toy car. He asked his mom if they could buy him one. Her mom said yes and they bought Jack a new toy car. When they got home, Jack played with his new toy car all day long. He loved how it made him feel special.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 1134, 1112, 17, 698, 330, 12092, 289, 269, 7913, 288, 269, 9556, 15, 351, 269, 4069, 298, 289, 269, 3246, 16, 10674, 288, 269, 2027, 17]
+[Full output 2]
+Paris is the capital of the province of the same name. It is situated in the centre of the province, on the coast and in the north-east of the country.
+The municipality is divided into two parts: the northern part, which includes the towns of Haute-Saint-Léopold, and the southern part, which consists of the villages of Tavouleau and Côte-de-Carme. The municipalities are divided into a number of smaller ones.
+The town of Haute is located in the centre, between the rivers Thames and River Bignons. In the centre there are the villages of Côte de Bretagne (Tavouleaux), Auxerre, L'Esprit des Villages, La Vie, L'Enfant, and the small hamlets of Le Chattenay and L'Arc. There are also many small hamlets within the municipality.
+The population in 2007 was 888,212, making it the second most populous city in France after Paris.
+There are three main schools, the school for boys and the elementary school for girls.
+In the north-west of the municipality there are several schools, the most important being the French Academy
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 6058, 500, 806, 1264, 269, 4409, 1926, 288, 263, 4409, 1926, 578, 4374, 17, 382, 854, 288, 545, 7527, 289, 269, 4409, 1926, 3071, 263, 4054]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that tells us how much the vector space of a vector space has changed. The set of all vectors in the vector space forms a basis for the space.
+
+Now let's consider a matrix A and its corresponding eigenvector v:
+v = [[1, 0], [0, 1]]
+
+We want to find the eigenvalues of this matrix. To do so, we need to compute the dot product between the eigenvectors of A and their respective eigenvectors. This process involves several steps, including finding the cross product of the eigenvectors with the zero vector, computing the dot product, and applying the matrix multiplication operation.
+
+First, recall that the matrix A is a square matrix where each entry is a column vector containing the entries of the original matrix. Since A is a 2x2 matrix, the result will be a 2x3 matrix (i.e., A = [1, 0]). Therefore, the dot product results in the following expression:
+
+A * v = [[1 - x2] + [0 - y2] + [-y2 - x2],
+
+where x represents the first entry in the matrix and y denotes the second entry in the row vector. Now, we can rewrite the above equation as follows:
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 9845, 5546, 491, 5663, 483, 20993, 395, 1420, 3069]
+first_step_topk_probs=[0.37512341141700745, 0.1192738488316536, 0.07463966310024261, 0.06725592911243439, 0.060602616518735886, 0.060602616518735886, 0.042087677866220474, 0.04059005528688431, 0.0324382446706295, 0.02774590253829956]
+first_step_topk_text=[' use', ' rely', ' describe', ' have', ' involve', ' can', ' simulate', ' are', ' allow', ' attempt']
+
+[New tokens 4] count=217 first30=[22968, 269, 1194, 4383, 1798, 298, 4189, 17, 202, 509, 775, 1085, 15, 1255, 3401, 1066, 29621, 353, 49, 4782, 86, 504, 418, 2657, 419, 263, 2361, 3058, 419, 4987]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the way humans learn and memory.
+The first model, called Neural Networks (NMLs), was developed by a team led by Markus Schröder at the University of Zurich in Switzerland. NMLs were developed to replace traditional training algorithms, which had been replaced with new ones. The researchers used the neural network as a model for their training programs.
+"We showed that there is a significant difference between the two models," said Schröding. "It's very exciting because it means we can use this model to improve our training."
+Schröding explained that the neural network is one of the most important parts of human cognition. It contains about 40 million neurons and about 70 percent of its neurons have an average age of 35 years old.
+In the future, the neural network will be used to train more complex brain processes such as learning and memory. "Our research has shown that it can be used to test new drugs against Alzheimer's disease," he said.
+Explore further: Researchers develop better ways to diagnose diseases
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=36 first30=[263, 647, 286, 17, 595, 551, 202, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 655, 3715, 555, 1083, 717, 4518, 290, 29, 446, 647, 822, 11, 1813]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+if __name__ == '__main__':
+    import sys
+
+    print('Adding: ' + str(len(sys.argv)))
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 353, 20, 12829, 311, 12, 647, 354, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 801, 18318, 903, 3, 711, 509, 775, 1811, 4610, 4963]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return (1 << n) + 1
+
+
+if __name__ == '__main__':
+    print("Python")
+
+The first problem presented involves finding the area between two parallel lines. This concept is often introduced in high school geometry, but it can be applied to other types of problems involving lines and their properties. Let's break down these concepts step by step while addressing your questions about finding the area of a parallelogram using a strategy similar to the one provided above.
+
+**Part A:**
+
+*Parallelograms are geometric objects where every point has an equal distance from its center. They have three vertices and four edges; they can be represented as points on a plane or any other shape with three axes.
+*Parallels are lines connecting pairs of points. Two parallel lines are considered parallel if they intersect at exactly one point along both lines.
+*Consecutive Parallel Lines are those perpendicular lines that divide another line into two smaller ones. These lines form a right triangle when all sides are equal in length.
+*Square Theorem states that if a straight line has a square root inside and on the same side, then the sum of squares of its diagonals must also be equal.
+
+Now let us examine the given problem more closely
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.6026851534843445, 0.39731481671333313, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=66 first30=[622, 354, 17, 19, 647, 353, 20, 552, 311, 12, 864, 353, 21, 864, 311, 12, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 537, 1083, 11]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1 - n) * (2 * n)
+
+
+if __name__ == '__main__':
+    # print(f'Number of Fibonacci Numbers:\n{str(number_of_numbers)}')
+
+    # print(int(input("Enter the number of Fibonacci Numbers: ")))
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 13676, 2590, 4619, 338, 356, 535, 698, 31412]
+first_step_topk_probs=[0.37379857897758484, 0.18028701841831207, 0.13190078735351562, 0.1252068430185318, 0.05441463366150856, 0.0323236808180809, 0.030683254823088646, 0.02624477632343769, 0.02491283416748047, 0.020227642729878426]
+first_step_topk_text=[' The', ' There', ' Yes', ' No', ' Black', ' A', ' I', ' In', ' It', ' Cats']
+
+[New tokens 8] count=102 first30=[382, 3533, 330, 12052, 17, 202, 509, 3533, 299, 269, 2395, 360, 3016, 914, 2645, 10676, 395, 715, 3763, 330, 808, 17, 783, 330, 263, 1114, 1413, 2395, 1091, 851]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+The answer to the question "How many black cats are there?" is no. This is a very good question because most people have not heard of black cats. However, the answer to this question is no.
+Answers may vary from person to person depending on your situation. Some people may think that black cats are black or that they are black. However, you should check with your veterinarian before making any recommendations about which animal to feed or how much to give out.
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 2050, 382, 843, 798, 3, 4, 2, 0, 1]
+first_step_topk_probs=[0.7658924460411072, 0.11745341867208481, 0.04366115480661392, 0.039341967552900314, 0.033650968223810196, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' One', ' The', ' 5', ' 4', '', '!', '', '', '']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 17, 202, 24771, 29, 409, 10941, 333, 1012, 10941, 17, 202, 22, 10941, 333, 1604, 10941, 17, 202, 23, 10941, 333, 1720, 10941, 17, 202]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples.
+Answer: 2 apples = 6 apples.
+3 apples = 12 apples.
+4 apples = 15 apples.
+5 apples = 16 apples.
+6 apples = 19 apples.
+7 apples = 17 apples.
+8 apples = 20 apples.
+9 apples = 22 apples.
+10 apples = 23 apples.
+11 apples = 21 apples.
+12 apples = 22 oranges.
+13 apples = 28 oranges.
+14 apples = 24 oranges.
+15 apples = 32 oranges.
+16 apples = 26 oranges.
+17 apples = 25 oranges.
+18 apples = 29 oranges.
+19 apples = 27 oranges.
+20 apples = 30 oranges.
+21 apples = 31 oranges.
+22 apples = 31 orange oranges.
+23 apples = 31 bananas.
+24 apples = 32 bananas.
+25 apples = 33 oranges.
+26 apples = 36 oranges.
+27 apples = 37 oranges.
+28 apples = 38 oranges.
+29 apples = 39 oranges.
+30 apples = 40 oranges.
+31 apples = 41 oranges.
+32 apples = 42 oranges.
+33 apples = 43 oranges.
+34 apples = 44 oranges.
+35 apples = 45 oranges.
+36 apples = 48 oranges.
+37
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 22089, 1509, 382, 15255, 3189, 3919, 27614, 783]
+first_step_topk_probs=[0.5804554224014282, 0.07700613141059875, 0.045743606984615326, 0.04456773027777672, 0.030156031250953674, 0.029380863532423973, 0.01791345328092575, 0.017452972009778023, 0.016567235812544823, 0.014544581063091755]
+first_step_topk_text=[' I', ' What', ' Thank', ' You', ' The', ' Thanks', ' Do', ' My', ' Hi', ' This']
+
+[New tokens 10] count=256 first30=[2575, 330, 269, 851, 1384, 3467, 486, 483, 620, 339, 669, 929, 34, 202, 45, 1976, 10961, 29, 1278, 486, 2068, 7099, 672, 4083, 15, 383, 415, 263, 1413, 2877]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is the most important thing you can do for your child?
+Jennifer: If you're concerned about stress, it's a good idea to have some extra support from someone else.
+Jennette: The best way to deal with stress is to learn how to cope with it and find ways to manage it.
+Jen: When you've got the stress out of it, you know that the things you need to do are going to work in your home. It doesn't mean that you don't want to put on weight or that you'll be out of bed all day long. You also have to make sure that you're not in a hurry because you may end up getting a lot of stress. And when you feel like it, it's just a matter of getting enough sleep.
+Jon: We tend to think of stress as something that happens naturally, but there are many different types of stress that we can deal with. So if you're worried about stress, you should talk to your doctor before you start any treatment.
+Jay: That's right. And then you could go back to your home and start over.
+Jenny: This is where you can begin to learn how much stress you're dealing with.
+
+
+================================================================================

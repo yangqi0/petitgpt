@@ -1,0 +1,280 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1255, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8411308526992798, 0.1588691920042038, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' called', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 1] count=135 first30=[1255, 5273, 2857, 299, 269, 3843, 17, 776, 2977, 263, 2023, 3197, 298, 3766, 299, 15935, 383, 17, 5273, 418, 11251, 614, 406, 5420, 2397, 17, 14918, 15, 5273, 5052]
+[Full output 1]
+Once upon a time, a curious child called Jack went to the park. He saw a big tree and wanted to climb it. Jack was scared but he kept going. Suddenly, Jack heard a voice from behind him. It said "I can help you!" Jack looked up and saw a little girl standing on the tree. She had a big smile on her face and asked Jack if he could help her. Jack smiled and said yes. The two of them climbed the tree together. They reached the top and found lots of new things. Jack was so happy that he thanked the little girl for helping him. From then on, Jack visited the tree every day and made sure to be careful when climbing it.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 263, 4455, 7362, 336, 321, 11605, 15913, 7093, 0]
+first_step_topk_probs=[0.8398064970970154, 0.06382714211940765, 0.029222194105386734, 0.018286781385540962, 0.017358729615807533, 0.009291458874940872, 0.00859319418668747, 0.007161206565797329, 0.0064527858048677444, 0.0]
+first_step_topk_text=[' the', ' a', ' France', ' Spain', ' S', ' T', ' Lat', ' Argentina', ' Italy', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 7535, 281, 8191, 15, 298, 330, 269, 1408, 3796, 2317, 289, 269, 9556, 17, 698, 330, 3323, 351, 269, 5566, 288, 389, 3116, 68, 15, 263, 1204]
+[Full output 2]
+Paris is the capital of the province of Catalonia, and is the second largest city in the province. It is located on the island of Braga, a small island that was once part of the Netherlands West Indies.
+The city has a population of about 1,000 inhabitants (2007). The main street is the former town hall, which is now a museum. There are two churches, one with a nave and one with a transept. The main streets are: the former town halls and the former town rooms. The population of the municipality is estimated at 2,080, and the population of the city is estimated to be around 7,500.
+The most important cultural centres of Catalonian culture are the cathedral, the royal palace, the porticoes, the church of Saint John the Baptist, the church for the Virgin Mary, the Church of St. Nicholas, the Cathedral of St. Eustatius, the Cathedral for the Most Holy Trinity, the Cathedral dedicated to Our Lady of Sorrows, the Cathedral, the Cathedral and the Cathedral of the Assumption.
+The main road from Catalonia to Catalonia is the city-city road, which connects Catalonia's major cities, including Catalonia itself, with its
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 14274, 269, 3892, 288, 263, 4409, 289, 1926, 17, 1803, 411, 1721, 357, 263, 3823, 578, 18956, 15, 383, 1818, 357, 715, 395, 795, 22542, 4672]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that determines the direction of a vector in space. When we say that a matrix has eigenvalues, it means that there are two linearly independent eigenvectors associated with it.
+
+Now let's consider the problem at hand: find all possible pairs (a1, a2) where a1 = a2 and a2 = a3. To solve this problem, first note that any given matrix can be written as a linear combination of its corresponding eigenvectors. This means that every eigenvector of the matrix must satisfy the equation (a1 - a2)(a2 - a3). Therefore, any other vector within the same matrix can also be represented as a linear combinations of these vectors.
+
+Next, let us examine the case when the characteristic polynomial of a square matrix is a linear combination. Recall that the characteristic polynomial is a special type of polynomial that arises from solving systems of linear equations using the concept of determinants. For instance, if you have a system of three linear equations Ax + By = C, then its characteristic polynomial can be expressed as ax^2 + bx + c = 0. Since A and B are linearly dependent, the characteristic polynomial can also be expressed as a linear transformation represented by the coefficients a1, a3, and a4
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 5546, 483, 491, 1085, 1420, 9845, 3235, 14071, 20993]
+first_step_topk_probs=[0.21847356855869293, 0.17738668620586395, 0.15983866155147552, 0.08555547147989273, 0.053539250046014786, 0.04824291542172432, 0.0352952741086483, 0.030189644545316696, 0.02582257241010666, 0.02582257241010666]
+first_step_topk_text=[' use', ' describe', ' can', ' have', ' model', ' allow', ' rely', ' predict', ' incorporate', ' simulate']
+
+[New tokens 4] count=256 first30=[22968, 269, 1194, 4383, 1798, 17, 1109, 483, 342, 885, 299, 3235, 806, 874, 601, 14667, 289, 1108, 6863, 15, 298, 581, 483, 658, 342, 885, 339, 4357, 16, 9663]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the way humans learn. They can be used to predict how people will behave in different situations, and they can also be used for decision-making purposes.
+
+The most popular model is the "Hamiltonian Model", which describes a network of neurons (or nodes) that can act as a source of information for an experiment. It was first proposed by John von Neumann and David Hilbert in 1935.
+
+A Hamiltonian model is a generalization of the linear model that uses a network of atoms or molecules to represent a particular situation. The Hamiltonian is a mathematical representation of the world around us, which allows us to understand and predict how things work together.
+
+One important concept in the Hamiltonian model involves the idea of a "zero-dimensional" Hamiltonian. A zero-dimensional Hamiltonian is one that has no dimensions at all; it cannot be expressed as a single vector, but rather as a matrix with elements of the form $a\_1x\_2... x\_n$, where $a\_i$ represents the i-th element of the matrix. This means that if we have a set of vectors $\{v\_1, ..., v\_n\}$ that satisfy this equation, then there should be some number of vectors that
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=94 first30=[263, 647, 286, 17, 595, 551, 711, 202, 350, 1401, 678, 626, 861, 8922, 3142, 9533, 346, 655, 9130, 555, 3546, 333, 9130, 17, 15289, 11, 5659, 1350, 4518, 86]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+
+if __name__ == "__main__":
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Adds a random number to a string")
+    parser.add_argument("--input", type=str, help="the input string")
+    args = parser.parse_args()
+
+    add(
+        " ".join([
+            "<" * 20 for _ in range(20)])
+        " ".split(" ")
+    )
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=76 first30=[622, 354, 490, 311, 1396, 643, 1107, 354, 711, 202, 350, 1401, 678, 626, 861, 8922, 3142, 9533, 346, 655, 9130, 555, 3546, 333, 9130, 17, 15289, 551, 346, 3546]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return 1 if n < 0 else 1
+
+
+if __name__ == "__main__":
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--input", type=str, help="Input file name")
+    args = parser.parse_args()
+    input = args.input.strip().lower()
+    print("Input file:", input)
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=118 first30=[622, 354, 490, 311, 1396, 643, 1107, 552, 20, 711, 202, 6, 382, 1392, 330, 1255, 374, 269, 775, 5147, 15, 298, 269, 1408, 5147, 17, 202, 856, 8049, 66]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1 if n < 0 else -1
+
+
+# The function is called with the first argument, and the second argument.
+def fib_result(n):
+    if n == 0:
+        return 0
+    elif n > 0:
+        # print("Fib:", fib(n))
+        return fib(n) + fib(n-1) * fib(n+1) * (1-1*n)
+
+print(f"Fib:", f"{len(fib_result)}")
+print(str(fib(0)))
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 13676, 2590, 338, 535, 698, 4619, 1906, 3987]
+first_step_topk_probs=[0.45343777537345886, 0.1870623528957367, 0.1368577480316162, 0.06953693926334381, 0.03533150255680084, 0.028686942532658577, 0.025849081575870514, 0.017951829358935356, 0.015355014242231846, 0.015355014242231846]
+first_step_topk_text=[' The', ' There', ' Yes', ' No', ' A', ' In', ' It', ' Black', ' All', ' Most']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 12052, 17, 202, 509, 3533, 330, 808, 17, 382, 3533, 330, 808, 15, 269, 3533, 330, 808, 339, 10676, 17, 202, 1465, 330, 263, 1114, 2829, 2395]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+The answer is no. The answer is no, the answer is no for cats.
+This is a very simple question. There is no one "right" way to do it. No one can tell you what is wrong with cats or dogs. Cats are not simply creatures of habit. They have evolved from a common ancestor in which humans and other mammals were able to adapt to new environments. As long as they did so, their descendants would be able to survive on earth. But if they could, then there would be no reason why they should not be able to live in an environment where they had never been. Humans have lived in an environment with only certain adaptations. We are used to living in an environment that has adapted to our environment. If we want to live in such a world, we must live in an animal-like environment.
+In short, humans cannot live in an Earth-like environment without being a species that does not have special adaptations. It would seem that we are just going to get into an evolutionary battle over how to live in a place like an Earth-type habitat.
+Susan Glover is a writer, journalist, and the founder of the Center for Media and Human Rights (MHR). She
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 2050, 798, 843, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.5409857034683228, 0.3213590085506439, 0.08296284824609756, 0.05469246208667755, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' One', ' 4', ' 5', '', '', '!', '"', '', '']
+
+[New tokens 9] count=252 first30=[2050, 13032, 7670, 619, 934, 667, 354, 13032, 17, 202, 20, 9105, 288, 5781, 202, 21, 17362, 288, 10437, 202, 22, 28966, 11749, 288, 6869, 202, 23, 28966, 11749, 288]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple plus one buys 1 apple.
+1 cup of sugar
+2 cups of flour
+3 teaspoons of salt
+4 teaspoons of baking powder
+1/4 cup of baking soda
+1/2 cup of water
+1/8 teaspoon of baking soda or vanilla extract
+1/16 teaspoon of lemon juice
+1/5 teaspoon of salt
+1/6 teaspoon of cinnamon
+1/7 teaspoon of dried beans
+1/9 teaspoon of crushed pineapple
+1/10 teaspoon of black pepper
+1/3 teaspoon of white pepper
+1 tablespoon of crushed black pepper
+- Add the following ingredients to the bowl:
+salt, vanilla extract, vanilla, cinnamon, cocoa powder, cinnamonyl gum, cinnamaldehyde, cinnamopyrum, cinnamite, cinnamone, cinnamonium, cinnamium, cinnamum, cinnamatum, cinnamphum, cinnum, cinxum, cinquatamium, cinqumum, cinqurum, cinubumum, or cinubum
+For more information on this topic see our Favorites page
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 22089, 1509, 3189, 27614, 15255, 1348, 8151, 1289]
+first_step_topk_probs=[0.5459495782852173, 0.15326164662837982, 0.08203504979610443, 0.056972209364175797, 0.022310636937618256, 0.022310636937618256, 0.02117837406694889, 0.01632281020283699, 0.01632281020283699, 0.015494429506361485]
+first_step_topk_text=[' I', ' What', ' Thank', ' You', ' Do', ' Hi', ' Thanks', ' How', ' Please', ' We']
+
+[New tokens 10] count=256 first30=[2575, 330, 669, 2942, 374, 482, 34, 202, 55, 3422, 29, 5531, 15, 356, 3442, 733, 289, 263, 3313, 288, 760, 11764, 298, 356, 1755, 847, 2505, 357, 356, 483]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience with this?
+Tony: Well, I've been in a lot of these meetings and I don't feel that I can talk to people about it or even about it.
+I think you're going to be able to talk to people because you have a lot of different experiences with the same things. And, you know, if you have a sense of how things are going, then you can talk to them and they will be interested in what they are doing.
+Assutor: How do you explain to someone what you want to say?
+Tonight, I would like to ask you about the work we did last year. We were working on this project for a year now.
+We had a great time working on this.
+I'd like to invite you to join us at the next meeting.
+Assizer: That's a great opportunity.
+Tonightsdatch: Thank you so much for coming.
+Assologist: We have been working on this for many years.
+Tony's interest in the topic was growing, but he also has a passion for learning more about the world around him. He loves to play with his friends, and he likes to learn from them. And he's very excited about
+
+================================================================================

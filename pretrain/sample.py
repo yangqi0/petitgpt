@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import random
 from pathlib import Path
 from dataclasses import dataclass
@@ -233,6 +234,7 @@ class StopConfig:
     - include_stop_in_output: whether to keep stop marker in final output text.
     """
     stop_strings: List[str]
+    stop_regexes: List["re.Pattern"]
     stop_on_newline: bool = False
     include_stop_in_output: bool = False
 
@@ -288,6 +290,7 @@ def generate(
     stop_strings: Optional[List[str]] = None,
     stop_on_newline: bool = False,
     include_stop_in_output: bool = False,
+    stop_regex: Optional[List[str]] = None,
 ) -> Dict[str, Any]:
     if seed is not None:
         _set_seed(int(seed))
@@ -307,8 +310,22 @@ def generate(
     ids = torch.tensor(prompt_ids, device=device, dtype=torch.long)[None, :]
     generated: List[int] = []
 
+    # stop_cfg = StopConfig(
+    #     stop_strings=list(stop_strings or []),
+    #     stop_on_newline=bool(stop_on_newline),
+    #     include_stop_in_output=bool(include_stop_in_output),
+    # )
+
+    # compile regex once
+    compiled: List[re.Pattern] = []
+    for pat in (stop_regex or []):
+        if not pat:
+            continue
+        compiled.append(re.compile(pat))
+
     stop_cfg = StopConfig(
-        stop_strings=List(stop_strings or []),
+        stop_strings=list(stop_strings or []),
+        stop_regexes=compiled,
         stop_on_newline=bool(stop_on_newline),
         include_stop_in_output=bool(include_stop_in_output),
     )
@@ -321,6 +338,7 @@ def generate(
         dbg["ban_first_steps"] = int(ban_first_steps)
         dbg["stop_on_newline"] = bool(stop_cfg.stop_on_newline)
         dbg["stop_strings"] = stop_cfg.stop_strings
+        dbg["stop_regex"] = (stop_regex or [])
         dbg["include_stop_in_output"] = bool(stop_cfg.include_stop_in_output)
 
     whitespace_ban_ids: List[int] = []
@@ -334,8 +352,11 @@ def generate(
         dbg["banned_ids_head"] = whitespace_ban_ids[:32]
 
     # incremental decoded after for stop detection (generated part only)
-    gen_text_buf: str = ""
+    # gen_text_buf: str = ""
+    # stopped_by: Optional[str] = None
+    gen_text_buf: str = ""   # generated text only (no prompt)
     stopped_by: Optional[str] = None
+    stop_cut: Optional[int] = None  # truncate generated text to this length (in chars)
 
     for step in range(max_new_tokens):
         if ids.size(1) > max_seq_len:
@@ -395,7 +416,7 @@ def generate(
         ids = torch.cat([ids, torch.tensor([[nxt]], device=device, dtype=torch.long)], dim=1)
 
         # ---- string-level stop detection ----
-        if stop_cfg.stop_on_newline or stop_cfg.stop_strings:
+        if stop_cfg.stop_on_newline or stop_cfg.stop_strings or stop_cfg.stop_regexes:
             # decode only the newly generated token for efficiency
             try:
                 piece = tokenizer.decode([nxt])
@@ -407,6 +428,9 @@ def generate(
             # stop on newline
             if stopped_by is None and stop_cfg.stop_on_newline and "\n" in gen_text_buf:
                 stopped_by = "\n"
+                # truncate at first newline unless include_stop_in_output
+                if not stop_cfg.include_stop_in_output:
+                    stop_cut = gen_text_buf.find("\n")
 
             # stop on strings
             if stopped_by is None and stop_cfg.stop_strings:
@@ -415,6 +439,18 @@ def generate(
                         continue
                     if s in gen_text_buf:
                         stopped_by = s
+                        if not stop_cfg.include_stop_in_output:
+                            stop_cut = j
+                        break
+
+            # stop on regex (truncate to match end by default)
+            if stopped_by is None and stop_cfg.stop_regexes:
+                for rx in stop_cfg.stop_regexes:
+                    m = rx.search(gen_text_buf)
+                    if m is not None:
+                        stopped_by = f"re:{rx.pattern}"
+                        if not stop_cfg.include_stop_in_output:
+                            stop_cut = m.end()
                         break
 
             if stopped_by is not None and (step + 1) >= min_new_tokens:
@@ -424,7 +460,12 @@ def generate(
             break
 
     full_ids = prompt_ids + generated
-    out_text = tokenizer.decode(full_ids)
+    # build final output with optional truncation
+    prompt_text = tokenizer.decode(prompt_ids)
+    gen_text = tokenizer.decode(generated)
+    if stop_cut is not None:
+        gen_text = gen_text[:stop_cut]
+    out_text = prompt_text + gen_text
 
      # if we stopped by string/newline, optionally truncate output_text to remove stop marker
     if stopped_by is not None:
@@ -642,7 +683,6 @@ def main() -> None:
     ap.add_argument("--repetition_penalty", type=float, default=1.15)
     ap.add_argument("--no_repeat_ngram_size", type=int, default=4)
     ap.add_argument("--max_repeat_token", type=int, default=3)
-    ap.add_argument("--stop_on_newline")
 
     # first-token handling
     ap.add_argument("--avoid_first_whitespace", action="store_true")
@@ -652,7 +692,8 @@ def main() -> None:
 
     # stopping controls
     ap.add_argument("--stop_on_newline", action="store_true", help="Stop generation when a newline is generated (after min_new_tokens).")
-    ap.add_argument("--stop_string", action="append", default=None, help="Stop generation when this string appears in generated text. Can be repeated.")
+    ap.add_argument("--stop_strings", action="append", default=None, help="Stop generation when this string appears in generated text. Can be repeated.")
+    ap.add_argument("--stop_regex", action="append", default=None, help="Stop when this regex matches generated text (can repeat).")
     ap.add_argument("--include_stop_in_output", action="store_true", help="If set, keep the stop marker in output text (default: truncate it).")
 
     # mode
@@ -710,9 +751,10 @@ def main() -> None:
                 ban_first_steps=args.ban_first_steps,
                 first_whitespace_resample_tries=args.first_whitespace_resample_tries,
                 extra_ban_token_ids=extra_ban,
-                stop_string=args.stop_string,
+                stop_strings=args.stop_strings,
                 stop_on_newline=args.stop_on_newline,
                 include_stop_in_output=args.include_stop_in_output,
+                stop_regex=args.stop_regex,
             )
 
         completion = tok.decode(res["new_tokens"])
@@ -754,9 +796,10 @@ def main() -> None:
         ban_first_steps=args.ban_first_steps,
         first_whitespace_resample_tries=args.first_whitespace_resample_tries,
         extra_ban_token_ids=extra_ban,
-        stop_strings=args.stop_string,
+        stop_strings=args.stop_strings,
         stop_on_newline=args.stop_on_newline,
         include_stop_in_output=args.include_stop_in_output,
+        stop_regex=args.stop_regex,
         seed_base=args.seed,
         step_tag=ckpt.get("global_step", None),
     )

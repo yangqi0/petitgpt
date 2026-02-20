@@ -134,7 +134,7 @@ def run_python_tests(signature: str, body: str, tests: str, timeout_s: float = 2
             return (True, "")
         return (False, (r.stderr or r.stdout or "FAILED").strip()[:2000])
 
-def generate_one(prompt: str, args, seed: int) -> str:
+def generate_one(prompt: str, task: str, args, seed: int) -> str:
     cmd = [
         sys.executable, "pretrain/sample.py",
         "--ckpt", args.ckpt,
@@ -146,6 +146,7 @@ def generate_one(prompt: str, args, seed: int) -> str:
         "--top_k", str(args.top_k),
         "--max_new_tokens", str(args.max_new_tokens),
         "--min_new_tokens", str(args.min_new_tokens),
+        "--max_seq_len", str(args.max_seq_len),
         "--seed", str(seed),
         "--prompt", prompt,
         "--quiet",
@@ -153,8 +154,33 @@ def generate_one(prompt: str, args, seed: int) -> str:
         "--no_repeat_ngram_size", str(args.no_repeat_ngram_size),
         "--max_repeat_token", str(args.max_repeat_token),
     ]
-    if args.greedy:
+
+    # task-specific decoding + stopping
+    if task == "arithmetic":
+        # deterministic, short
         cmd += ["--greedy", "--temperature", "0"]
+        # clamp length
+        cmd[cmd.index("--max_new_tokens") + 1] = str(min(int(args.max_new_tokens), 16))
+        cmd[cmd.index("--min_new_tokens") + 1] = "1"
+        # turn off sampling guards that can induce weird artifacts
+        cmd[cmd.index("--repetition_penalty") + 1] = "1.0"
+        cmd[cmd.index("--no_repeat_ngram_size") + 1] = "0"
+        cmd[cmd.index("--max_repeat_token") + 1] = "0"
+        # stop when we have a number followed by a delimiter
+        cmd += ["--stop_regex", r"[-+]?\d+(?:\.\d+)?(?=[^\d\.])"]
+        cmd += ["--stop_on_newline"]
+    elif task == "syllogism":
+        if args.greedy:
+            cmd += ["--greedy", "--temperature", "0"]
+        cmd += ["--stop_on_newline"]
+    elif task == "code":
+        if args.greedy:
+            cmd += ["--greedy", "--temperature", "0"]
+        cmd += ["--stop_string", "\n\n"]
+    else:
+        if args.greedy:
+            cmd += ["--greedy", "--temperature", "0"]
+
     if args.avoid_first_whitespace:
         cmd += ["--avoid_first_whitespace", "--ban_first_steps", str(args.ban_first_steps)]
     return subprocess.check_output(cmd, text=True)
@@ -245,7 +271,7 @@ def main():
 
         # ---- generate FIRST ----
         prompt = wrap_with_task_rules(task, prompt)
-        gen = generate_one(prompt, args, seed=args.seed_base + i + 1)
+        gen = generate_one(prompt, task, args, seed=args.seed_base + i + 1)
 
         ok = False
         detail = ""

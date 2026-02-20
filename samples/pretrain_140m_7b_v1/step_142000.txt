@@ -1,0 +1,305 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 418, 2857, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.6473886370658875, 0.18547995388507843, 0.1671314686536789, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' was', ' went', '', '#', '', '"', '!', '', '']
+
+[New tokens 1] count=133 first30=[2827, 5273, 418, 4438, 289, 269, 3843, 17, 776, 2977, 2009, 17935, 298, 2239, 351, 269, 2389, 17, 698, 418, 263, 6086, 1167, 4, 5273, 10225, 383, 656, 298, 4965]
+[Full output 1]
+Once upon a time, a curious child named Jack was playing in the park. He saw something shiny and red on the ground. It was a toy car! Jack picked it up and looked at it closely. "What is this?" he asked his mom. "It's a car," her mom said. "It can be very useful." Jack thought for a moment and then said, "I want to play with it!" His mom smiled and said, "Okay, let's go find some more toys together." So they went off to find lots of fun things to do. They found many different cars that were really helpful. Jack was so happy when he got to play with them all.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=172 first30=[269, 9556, 17, 698, 418, 775, 9397, 419, 269, 321, 332, 79, 541, 1844, 15, 668, 9397, 289, 269, 11158, 435, 269, 3300, 288, 269, 9902, 2080, 269, 5440, 17]
+[Full output 2]
+Paris is the capital of the province. It was first settled by the Tiglath family, who settled in the valley at the foot of the hill above the village. The first settlement was made up of a few settlers and the first post office opened in 1745. In 1826 the town was incorporated as a city with a population of 6,570.
+The city was founded on October 25, 1746 by the British army under General Sir John Barrowman. It was the scene of many battles during the American Revolution. On September 10, 1776, the city was officially declared a national holiday. In May, 1778, it became a federal republic. Its present boundaries are the city's two-thirds streets, the main street of the city, and the southernmost street of the town. Its population has increased to 2,415 by 1970.
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 6058, 500, 806, 1264, 269, 4409, 1926, 288, 545, 1812, 7527, 289, 269, 1926, 330, 22542, 4672, 17, 535, 829, 1832, 15, 411, 1418, 299, 1098]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that tells us how much the vector space of all possible vectors in the space is linearly independent. In our case, we want to find the eigenvalues of the matrix A = [1, 2], which means we need to compute the following two matrix representations:
+
+A = [[2, 1], [3, 0]] and
+
+B = [[0, 0], [1, 0]],
+
+where [1, 1] represents the coefficient matrix associated with each row of the matrix representation. Since both matrices are real-valued, they satisfy the equation Ax + By = C, where A is a constant matrix representing the column vectors of the matrix representations. Now let's apply this formula to our original problem involving the matrix A:
+
+[4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 55, 59
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 5546, 483, 1420, 491, 1991, 1085, 9845, 3235, 395]
+first_step_topk_probs=[0.35537368059158325, 0.21110105514526367, 0.0917440727353096, 0.06048145890235901, 0.06048145890235901, 0.03592749685049057, 0.030730415135622025, 0.024951146915555, 0.023684879764914513, 0.022533832117915154]
+first_step_topk_text=[' use', ' describe', ' can', ' allow', ' have', ' provide', ' model', ' rely', ' predict', ' are']
+
+[New tokens 4] count=256 first30=[22968, 269, 1194, 4383, 1798, 17, 1109, 4478, 299, 1557, 806, 874, 1798, 298, 806, 581, 1798, 17, 202, 509, 775, 1085, 418, 2657, 419, 263, 1440, 288, 2703, 435]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the way humans learn. They aim to understand how people learn and how they learn.
+The first model was developed by a group of researchers at the University of Illinois in the early 1990s, but it has since been adapted for use with other models. The model is based on a model of neural network development. It incorporates the work of the team led by John Fogarty, who wrote the book Brain Development: A Cognitive Approach (2001).
+"We are interested in the neural networks of human beings," says Fogartyshee, "and we hope to develop our model as a tool for understanding what happens when you learn new things."
+Other social bookmarking and sharing tools:
+- J. C. Vogel, K. G. Martin, R. L. Sessler, D. M. Rauch, T. J. Wong, M. B. Becker, J. P. Schwartz, D. J. McAfee, M. A. Noll, E. C. Ridley, C. M. Koenig, P. L. Hennig, T. L. Wilson, G. A. Lehmann, D. A. Martin, M
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=107 first30=[263, 647, 286, 17, 595, 551, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 655, 3715, 555, 1499, 29, 331, 444, 7298, 655, 3907, 62, 815, 64]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+
+if __name__ == '__main__':
+    import sys
+
+    try:
+        from typing import List[str]
+
+        print("The input is " + str(len(sys.argv)) + " items.")
+        print("The output is " + list(sys.stdout.readline().strip()))
+        print("This function returns the input with a number of items.")
+        for i in range(1, len(sys.stdin)):
+            print(i)
+        print("\n")
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 353, 20, 552, 311, 12, 864, 353, 20, 552, 354, 12, 711, 202, 6, 538, 330, 66, 506, 66, 1459, 11, 91, 15, 371, 464, 202, 6, 265, 490]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return (1 - n) * (1 - 1)
+
+
+# def is_one_of(x, y):
+#     if x == y:
+#         return True
+#     else:
+#     return False
+
+
+# @pytest.mark.parametrize('n', [3, 7])
+# def test_is_two_of(self, n):
+#    assert is_one(n) == True
+#    print("is two of:", is_one())
+#    # print("is one of:", is_(n))
+#    result = is_one()
+#    for i in range(len(result)):
+#        print(i + 1)
+#        if result[i] != result[i+1]:
+#            print(i)
+#            result[i + 1] = result[i-1]
+#            if result[0] not in ['a','b']:
+#                result[0].append(result[0])
+#                else:
+##                 return result
+#             print(i % len(result))
+#         print(i - 1)
+
+# @unittest.skipIf(not
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=215 first30=[622, 354, 17, 19, 647, 353, 20, 552, 311, 12, 864, 353, 20, 552, 353, 20, 1341, 311, 687, 711, 202, 6, 11101, 299, 6519, 269, 31393, 993, 13649, 1591]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1 - n) * (1 - (1 / n))
+
+
+# Function to compute the Fibonacci number recursively from n = 2 to n = 3:
+def fib_m(n, m):
+    if n == 0:
+        return 1.5
+    else:
+        return 0.5 + (1 / (2 * m) + 1) * (3 / (4 * m) - 1)
+
+
+# Functions to calculate Fibonacci numbers recursion recursively:
+
+ def fib_r(n, r):
+ #     if n == 1:
+ #         return 1.25
+ #     else:
+ #             return 0.75 + (1.25 * (1 / r) + 1.25 * r)
+
+
+def fibs(n, n):
+    if not n or not n:
+        return n
+
+    if n == 2:
+        return fib(n)
+
+
+if __name__ == '__main__':
+    print('fib()', fib.__name__)
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 1541, 2590, 356, 5531, 338, 2340, 698, 3987]
+first_step_topk_probs=[0.37133467197418213, 0.23237532377243042, 0.13803686201572418, 0.11806918680667877, 0.03048100695014, 0.026071785017848015, 0.02474864386022091, 0.02349262870848179, 0.01907452754676342, 0.016315307468175888]
+first_step_topk_text=[' Yes', ' The', ' There', ' No', ' I', ' Well', ' A', ' That', ' It', ' Most']
+
+[New tokens 8] count=256 first30=[13676, 17, 1541, 330, 263, 3313, 288, 1170, 351, 269, 2442, 289, 269, 5879, 298, 383, 415, 453, 1414, 922, 4604, 330, 2397, 351, 1621, 17, 1358, 383, 415, 4430]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Yes. There is a lot of information on the subject in the literature and it's not known what exactly is going on here. But it's interesting to note that some people are more likely than others to believe that black cats are black and other cats are black. Some people think that the black cat may be a darker color than the black cat but I don't see any reason why they should be black or white cats.
+The fact that some people believe that black and white cats are black is something that has been around for a long time. It's not really true. The fact that some cats have black skin is just as strong as the fact that most cats have white skin. It also doesn't seem like there's a problem with black cats being black because they don't have white skin or a black skin rash.
+Some people think that black cats may be black because they're black. However, this is not true. They are black cats because black cats are red and white cats because they're not black. So if you see someone who says that black cats look like dogs, you might be wrong. But they don't look like dogs either.
+One of the things that can cause black cats to become black is called "white coat disease." This is
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 798, 843, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.7971603870391846, 0.12224850803613663, 0.08059115707874298, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' 4', ' 5', '', '#', '', '"', '!', '', '']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 202, 22, 10941, 333, 1604, 10941, 202, 23, 10941, 333, 2341, 10941, 202, 24, 10941, 333, 1769, 10941, 202, 25, 10941, 333, 3041, 10941, 202]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+3 apples = 12 apples
+4 apples = 13 apples
+5 apples = 16 apples
+6 apples = 24 apples
+7 apples = 9 apples
+8 apples = 8 apples
+9 apples = 11 apples
+10 apples = 12 oranges
+11 apples = 12 cherries
+12 oranges = 12 apricots
+13 apricots = 12 aprum
+14 apricots + 10 apricots=16 apricots+15 apricots-15 apricot
+So the total number of apples is 5 apples, which means that the number of apples in the basket is 5 apples.
+Now let's think about how many apples each person needs to eat. We know there are 7 people in the group who need to eat one apple a day (1 cup), so we want to find out how many apples they need for their meal. To do this, we would add up all the fruits (the numbers) and then divide by the number of people who needed to eat it. So we get:
+Total fruit required = Total number of fruits / Number of people needed
+Therefore, if everyone had enough fruit, we could make sure that no child or adult wants to eat any apple. But what happens when someone gets too
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 22089, 1509, 15255, 382, 27614, 1289, 1348, 783]
+first_step_topk_probs=[0.7596113681793213, 0.06047544628381729, 0.0256069153547287, 0.02494867891073227, 0.024307353422045708, 0.016024397686123848, 0.014068017713725567, 0.01112871803343296, 0.01112871803343296, 0.010842650197446346]
+first_step_topk_text=[' I', ' What', ' Thank', ' You', ' Thanks', ' The', ' Hi', ' We', ' How', ' This']
+
+[New tokens 10] count=256 first30=[2575, 330, 269, 3593, 920, 263, 360, 44, 5, 298, 263, 360, 44, 13123, 202, 45, 267, 10960, 29, 356, 491, 263, 619, 289, 795, 5220, 288, 1163, 9529, 374]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is the difference between a "I" and a "I"?
+Jonathan: I have a one in two chance of being diagnosed with cancer. I know it's not a big deal, but what you're saying is that you don't feel stressed because you're not feeling well or at all. You're not feeling as good about yourself, so your body has to work harder for you to make up for it. And then there are those things that cause you to feel worse than normal.
+So, how do you deal with stress? Well, there are three things you can do to help you cope. First, get enough sleep. This means getting enough rest each night. Then, get some exercise. The more you do this, the better. If you're feeling tired or anxious, you might need to try something new. For example, if you're feeling stressed out, you might want to take a break from doing other activities. Or you could try a different activity or try a different diet. If you've been feeling depressed or anxious, then you might be able to go back to a regular routine.
+Second, talk to someone who's been having trouble sleeping. It may sound scary, but it's actually very helpful. Talking to
+
+================================================================================
