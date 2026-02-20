@@ -280,6 +280,20 @@ def main():
     dl_it = iter(train_dl)
     opt.zero_grad(set_to_none=True)
 
+# ---- SANITY: verify supervision spans ----
+    ex = train_ds[0]
+    input_ids = ex["input_ids"]
+    labels = ex["labels"]
+
+    sup = [tid for tid, lab in zip(input_ids, labels) if lab != -100]
+    print("rendered_tail:", repr(ex["text"][-200:]))
+
+    print("supervised_token_count:", len(sup))
+    print("supervised_decoded:", repr(tok.decode(sup)[:200]))
+    print("supervised_decoded_tail:", repr(tok.decode(sup)[-200:]))
+
+    raise SystemExit
+
     while step < args.steps:
         try:
             input_ids, labels, attn = next(dl_it)
