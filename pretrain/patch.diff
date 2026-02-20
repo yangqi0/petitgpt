@@ -2,151 +2,139 @@ diff --git a/pretrain/sample.py b/pretrain/sample.py
 index 1111111..2222222 100644
 --- a/pretrain/sample.py
 +++ b/pretrain/sample.py
-@@ -1,6 +1,6 @@
+@@ -1,6 +1,7 @@
  #!/usr/bin/env python3
  # -*- coding: utf-8 -*-
  """
  Sampling / text generation for petitgpt.
-@@ -20,6 +20,7 @@ import argparse
+@@
+ from __future__ import annotations
+
+ import argparse
  import json
++import re
  import random
  from pathlib import Path
-+from dataclasses import dataclass
  from typing import Any, Dict, List, Optional, Tuple
 
- import numpy as np
- import torch
-@@ -141,6 +142,52 @@ def _build_whitespace_ban_ids(tokenizer: Tokenizer) -> List[int]:
-     return sorted(candidates)
-
-+
-+@dataclass
-+class StopConfig:
-+    """
-+    String-level stopping.
-+    - stop_strings: if any appears in generated text, stop (the stop marker can be removed).
-+    - stop_on_newline: stop when a newline is generated (first '\\n').
-+    - include_stop_in_output: whether to keep stop marker in final output text.
-+    """
+@@
+ class StopConfig:
+@@
+-    stop_strings: List[str]
 +    stop_strings: List[str]
-+    stop_on_newline: bool = False
-+    include_stop_in_output: bool = False
-+
-+
++    stop_regexes: List["re.Pattern"]
+     stop_on_newline: bool = False
+     include_stop_in_output: bool = False
+
+
+-def _postprocess_stop(text: str, stop_cfg: StopConfig) -> str:
 +def _postprocess_stop(text: str, stop_cfg: StopConfig) -> str:
-+    """
-+    If include_stop_in_output is False, truncate text at earliest stop marker.
-+    """
-+    if stop_cfg.include_stop_in_output:
-+        return text
-+    cut = None
-+    for s in stop_cfg.stop_strings:
-+        if not s:
-+            continue
-+        i = text.find(s)
-+        if i >= 0:
-+            cut = i if cut is None else min(cut, i)
-+    if cut is not None:
-+        return text[:cut]
-+    return text
-+
+@@
+     return text
 
- # -------------------------
- # Generation core
- # -------------------------
-@@ -172,6 +219,10 @@ def generate(
-     ban_first_steps: int = 0,
-     first_whitespace_resample_tries: int = 32,
+
+ @torch.no_grad()
+ def generate(
+@@
      extra_ban_token_ids: Optional[List[int]] = None,
-+    # stopping:
-+    stop_strings: Optional[List[str]] = None,
-+    stop_on_newline: bool = False,
-+    include_stop_in_output: bool = False,
+     # stopping:
+     stop_strings: Optional[List[str]] = None,
+     stop_on_newline: bool = False,
+     include_stop_in_output: bool = False,
++    stop_regex: Optional[List[str]] = None,
  ) -> Dict[str, Any]:
-     if seed is not None:
-         _set_seed(int(seed))
-@@ -201,6 +252,12 @@ def generate(
-     ids = torch.tensor(prompt_ids, device=device, dtype=torch.long)[None, :]
-     generated: List[int] = []
-
+@@
+-    stop_cfg = StopConfig(
+-        stop_strings=list(stop_strings or []),
+-        stop_on_newline=bool(stop_on_newline),
+-        include_stop_in_output=bool(include_stop_in_output),
+-    )
++    # compile regex once
++    compiled: List[re.Pattern] = []
++    for pat in (stop_regex or []):
++        if not pat:
++            continue
++        compiled.append(re.compile(pat))
++
 +    stop_cfg = StopConfig(
 +        stop_strings=list(stop_strings or []),
++        stop_regexes=compiled,
 +        stop_on_newline=bool(stop_on_newline),
 +        include_stop_in_output=bool(include_stop_in_output),
 +    )
-+
+
      dbg: Dict[str, Any] = {}
      if debug:
-         dbg["bos_id"] = bos_id
-@@ -209,6 +266,9 @@ def generate(
-         dbg["avoid_first_whitespace"] = bool(avoid_first_whitespace)
-         dbg["ban_first_steps"] = int(ban_first_steps)
-+        dbg["stop_on_newline"] = bool(stop_cfg.stop_on_newline)
-+        dbg["stop_strings"] = stop_cfg.stop_strings
-+        dbg["include_stop_in_output"] = bool(stop_cfg.include_stop_in_output)
-
-     whitespace_ban_ids: List[int] = []
-     if avoid_first_whitespace and ban_first_steps > 0:
-@@ -219,6 +279,10 @@ def generate(
-         dbg["banned_ids_count"] = len(whitespace_ban_ids)
-         dbg["banned_ids_head"] = whitespace_ban_ids[:32]
-
-+    # incremental decoded buffer for stop detection (generated part only)
-+    gen_text_buf: str = ""
+@@
+         dbg["stop_on_newline"] = bool(stop_cfg.stop_on_newline)
+         dbg["stop_strings"] = stop_cfg.stop_strings
++        dbg["stop_regex"] = (stop_regex or [])
+         dbg["include_stop_in_output"] = bool(stop_cfg.include_stop_in_output)
+@@
+-    gen_text_buf: str = ""
+-    stopped_by: Optional[str] = None
++    gen_text_buf: str = ""   # generated text only (no prompt)
 +    stopped_by: Optional[str] = None
-+
++    stop_cut: Optional[int] = None  # truncate generated text to this length (in chars)
+
      for step in range(max_new_tokens):
-         if ids.size(1) > max_seq_len:
-             ids = ids[:, -max_seq_len:]
-@@ -303,12 +367,51 @@ def generate(
+@@
          generated.append(nxt)
          ids = torch.cat([ids, torch.tensor([[nxt]], device=device, dtype=torch.long)], dim=1)
 
-+        # ---- string-level stop detection ----
-+        if stop_cfg.stop_on_newline or stop_cfg.stop_strings:
-+            # decode only the newly generated token for efficiency
-+            try:
-+                piece = tokenizer.decode([nxt])
-+            except Exception:
-+                piece = ""
-+            if piece:
-+                gen_text_buf += piece
-+
-+            # stop on newline
-+            if stopped_by is None and stop_cfg.stop_on_newline and "\n" in gen_text_buf:
-+                stopped_by = "\\n"
-+
-+            # stop on strings
-+            if stopped_by is None and stop_cfg.stop_strings:
-+                for s in stop_cfg.stop_strings:
-+                    if not s:
-+                        continue
-+                    if s in gen_text_buf:
-+                        stopped_by = s
+         # ---- string-level stop detection ----
+-        if stop_cfg.stop_on_newline or stop_cfg.stop_strings:
++        if stop_cfg.stop_on_newline or stop_cfg.stop_strings or stop_cfg.stop_regexes:
+             try:
+                 piece = tokenizer.decode([nxt])
+             except Exception:
+                 piece = ""
+             if piece:
+                 gen_text_buf += piece
+
+             # stop on newline
+             if stopped_by is None and stop_cfg.stop_on_newline and "\n" in gen_text_buf:
+                 stopped_by = "\\n"
++                # truncate at first newline unless include_stop_in_output
++                if not stop_cfg.include_stop_in_output:
++                    stop_cut = gen_text_buf.find("\n")
+
+             # stop on strings
+             if stopped_by is None and stop_cfg.stop_strings:
+                 for s in stop_cfg.stop_strings:
+                     if not s:
+                         continue
+                     j = gen_text_buf.find(s)
+                     if j >= 0:
+                         stopped_by = s
++                        if not stop_cfg.include_stop_in_output:
++                            stop_cut = j
+                         break
+
++            # stop on regex (truncate to match end by default)
++            if stopped_by is None and stop_cfg.stop_regexes:
++                for rx in stop_cfg.stop_regexes:
++                    m = rx.search(gen_text_buf)
++                    if m is not None:
++                        stopped_by = f"re:{rx.pattern}"
++                        if not stop_cfg.include_stop_in_output:
++                            stop_cut = m.end()
 +                        break
 +
-+            if stopped_by is not None and (step + 1) >= min_new_tokens:
-+                break
-+
+             if stopped_by is not None and (step + 1) >= min_new_tokens:
+                 break
+
          if eos_id is not None and nxt == eos_id and (step + 1) >= min_new_tokens:
              break
 
      full_ids = prompt_ids + generated
-     out_text = tokenizer.decode(full_ids)
-+
-+    # if we stopped by string/newline, optionally truncate output_text to remove stop marker
-+    if stopped_by is not None:
-+        # out_text includes prompt+generated; we only want to truncate based on generated region.
-+        # easiest: rebuild final text as prompt_text + processed_generated_text
-+        prompt_text = tokenizer.decode(prompt_ids)
-+        gen_text = tokenizer.decode(generated)
-+        if stop_cfg.stop_on_newline:
-+            # treat newline as a stop string too
-+            stop_cfg2 = StopConfig(stop_strings=stop_cfg.stop_strings + ["\n"], stop_on_newline=False, include_stop_in_output=stop_cfg.include_stop_in_output)
-+            gen_text = _postprocess_stop(gen_text, stop_cfg2)
-+        else:
-+            gen_text = _postprocess_stop(gen_text, stop_cfg)
-+        out_text = prompt_text + gen_text
+-    out_text = tokenizer.decode(full_ids)
++    # build final output with optional truncation
++    prompt_text = tokenizer.decode(prompt_ids)
++    gen_text = tokenizer.decode(generated)
++    if stop_cut is not None:
++        gen_text = gen_text[:stop_cut]
++    out_text = prompt_text + gen_text
 
      return {
          "prompt_tokens": len(prompt_ids),
@@ -154,63 +142,28 @@ index 1111111..2222222 100644
          "output_text": out_text,
          "debug": dbg if debug else None,
      }
-@@ -337,6 +440,11 @@ def generate_default_samples(
-     ban_first_steps: int = 4,
-     first_whitespace_resample_tries: int = 32,
-     extra_ban_token_ids: Optional[List[int]] = None,
-+    # stopping (optional, usually leave off for story prompts)
-+    stop_strings: Optional[List[str]] = None,
-+    stop_on_newline: bool = False,
-+    include_stop_in_output: bool = False,
-     seed_base: Optional[int] = None,
-     step_tag: Optional[int] = None,
- ) -> None:
-@@ -430,6 +538,9 @@ def generate_default_samples(
-                         seed=int(seed_base) + i * 9973,  # different per prompt
-                         avoid_first_whitespace=avoid_first_whitespace,
-                         ban_first_steps=ban_first_steps,
-                         first_whitespace_resample_tries=first_whitespace_resample_tries,
-                         extra_ban_token_ids=extra_ban_token_ids,
-+                        stop_strings=stop_strings,
-+                        stop_on_newline=stop_on_newline,
-+                        include_stop_in_output=include_stop_in_output,
-                     )
-
-                 if debug and res.get("debug"):
-@@ -505,6 +616,14 @@ def main() -> None:
-     ap.add_argument("--avoid_first_whitespace", action="store_true")
-     ap.add_argument("--ban_first_steps", type=int, default=0)
-     ap.add_argument("--first_whitespace_resample_tries", type=int, default=32)
-     ap.add_argument("--extra_ban_token_ids", type=str, default=None, help="comma-separated ints, e.g. '202,224'")
-+
-+    # stopping controls
-+    ap.add_argument("--stop_on_newline", action="store_true", help="Stop generation when a newline is generated (after min_new_tokens).")
-+    ap.add_argument("--stop_string", action="append", default=None, help="Stop generation when this string appears in generated text. Can be repeated.")
-+    ap.add_argument("--include_stop_in_output", action="store_true", help="If set, keep the stop marker in output text (default: truncate it).")
-
-     # mode
-     ap.add_argument("--prompt", type=str, default=None, help="If set, generate single completion to stdout.")
-     ap.add_argument("--out", type=str, default=None, help="If set, write default prompts to this file (like training).")
-@@ -543,6 +662,9 @@ def main() -> None:
-                 seed=args.seed,
-                 avoid_first_whitespace=args.avoid_first_whitespace,
-                 ban_first_steps=args.ban_first_steps,
-                 first_whitespace_resample_tries=args.first_whitespace_resample_tries,
-                 extra_ban_token_ids=extra_ban,
-+                stop_strings=args.stop_string,
-+                stop_on_newline=args.stop_on_newline,
-+                include_stop_in_output=args.include_stop_in_output,
+@@
+ def main() -> None:
+@@
+     ap.add_argument("--stop_on_newline", action="store_true", help="Stop when a newline is generated (after min_new_tokens).")
+     ap.add_argument("--stop_string", action="append", default=None, help="Stop when this string appears (can repeat).")
++    ap.add_argument("--stop_regex", action="append", default=None, help="Stop when this regex matches generated text (can repeat).")
+     ap.add_argument("--include_stop_in_output", action="store_true", help="Keep stop marker; default truncates it.")
+@@
+             res = generate(
+@@
+                 stop_strings=args.stop_string,
+                 stop_on_newline=args.stop_on_newline,
+                 include_stop_in_output=args.include_stop_in_output,
++                stop_regex=args.stop_regex,
              )
-
-         completion = tok.decode(res["new_tokens"])
-@@ -588,6 +710,9 @@ def main() -> None:
-         avoid_first_whitespace=args.avoid_first_whitespace,
-         ban_first_steps=args.ban_first_steps,
-         first_whitespace_resample_tries=args.first_whitespace_resample_tries,
-         extra_ban_token_ids=extra_ban,
-+        stop_strings=args.stop_string,
-+        stop_on_newline=args.stop_on_newline,
-+        include_stop_in_output=args.include_stop_in_output,
+@@
+     generate_default_samples(
+@@
+         stop_strings=args.stop_string,
+         stop_on_newline=args.stop_on_newline,
+         include_stop_in_output=args.include_stop_in_output,
++        stop_regex=args.stop_regex,
          seed_base=args.seed,
          step_tag=ckpt.get("global_step", None),
      )

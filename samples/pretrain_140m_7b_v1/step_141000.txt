@@ -1,0 +1,303 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 418, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8991213440895081, 0.10087861120700836, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' was', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 1] count=143 first30=[2827, 5273, 418, 4438, 289, 269, 3843, 17, 776, 2977, 263, 2023, 3197, 298, 3766, 299, 15935, 383, 17, 1358, 610, 2553, 988, 808, 1091, 406, 1628, 2550, 2009, 1384]
+[Full output 1]
+Once upon a time, a curious child named Jack was playing in the park. He saw a big tree and wanted to climb it. But his mom said no because he might break something important. Jack didn't listen and kept climbing. Suddenly, he heard a loud noise coming from the tree. It was a big dog! The dog was barking and growling at Jack. Jack felt scared but he knew he had to be careful. He took a deep breath and stepped closer to the tree. When he got there, he saw that the dog was not moving anymore. He felt scared again and realized that he should have listened to his mom. From then on, Jack made sure to always listen to his mom before he climbed down the tree.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 17, 382, 2868, 288, 13520, 10, 40, 496, 270, 2717, 330, 3323, 289, 269, 9556, 288, 657, 1585, 2327, 15, 536, 658, 3261, 269, 11301, 7378, 288, 389]
+[Full output 2]
+Paris is the capital of the province. The town of Sant'Eustatius is located in the province of Viterbo, which also includes the hamlets of Braga and Borgo.
+The town of Santella, located on the northern bank of the Sasso River, was founded by the Romans. It was an important Roman settlement during the Roman period.
+On May 17, 149 BC, the city of Santella was destroyed by a fire that killed several hundred people. In the early years of the Republic, the town remained a small but important Roman colony until the fall of Rome in 327 AD. After the fall of the Roman Empire, it became part of the Roman province of Capua. During the Roman period, the town was re-named Santella.
+In the late Middle Ages, the town's name was changed to Santella (Latin: Santorina) in honor of the Emperor Vespasian who conquered the island of Cyprus in 323 AD.
+When the Roman Empire was dissolved in 226 AD, the town became part of Italy. The city was renamed Santella after its first governor, Basil II, who was buried there.
+Saint Peter's Cathedral
+The church of Saint Peter is one of the oldest in
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 14274, 269, 1986, 288, 269, 3823, 17, 382, 8639, 288, 269, 3823, 6128, 299, 269, 993, 288, 22542, 4672, 7234, 353, 272, 6141, 12, 289, 269]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that determines the size of the matrix. The dimension of the matrix refers to the number of linearly independent rows (or columns) in the matrix. When working with matrices, it's important to understand how they behave under different transformations and operations.
+
+Consider the following matrix:
+```css
+[ 2 0 1 ]
+ [ 0 0 -1 ]
+ [ 1 0 0 ]
+ [ -2 0 ]
+```
+Here, we have two linearly independent rows and three linearly dependent columns, which means our matrix has only one nonzero entry in each row. We can think of this as being like a small box where you can put your toys or books into the box. Now let's say we want to find out how many unique ways we could arrange these toys or books in the box so that their arrangement doesn't change when we add more or fewer items. This problem comes up often in mathematics, particularly in linear algebra!
+
+To solve this problem, mathematicians use something called "linear transformations." A transformation is just a fancy name for transforming a vector into another vector through a process known as linearization. It involves breaking down a vector into smaller parts, taking its direction from one side to the other, and then turning those directions into new ones based
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 9845, 5546, 1085, 491, 395, 14071, 1420, 4478]
+first_step_topk_probs=[0.4261113107204437, 0.13548590242862701, 0.08048208057880402, 0.06534628570079803, 0.06534628570079803, 0.06534628570079803, 0.021061666309833527, 0.01872202567756176, 0.016013797372579575, 0.01520109549164772]
+first_step_topk_text=[' use', ' can', ' rely', ' describe', ' model', ' have', ' are', ' incorporate', ' allow', ' aim']
+
+[New tokens 4] count=256 first30=[22968, 269, 1194, 4383, 1798, 298, 1776, 6876, 17, 382, 1085, 330, 1728, 351, 263, 2829, 854, 288, 3677, 15, 1414, 359, 263, 14457, 2673, 17, 4449, 3380, 330, 5454]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the way humans learn and perform tasks. The model is based on a simple set of rules, known as a neural network. Each rule is represented by a number (one for each input) and a set of features (such as colors or shapes). A neural network can be thought of as a mathematical model, where each feature corresponds to a particular input.
+
+The original poster was interested in exploring how different types of neural networks could represent real-world problems using an unconstrained problem called "Waldstein's Inequality". They wanted to find a solution involving a linear system of equations with multiple variables and a limited number of variables. To do this, they looked at two main classes of neural networks:
+
+1. Linear Linear System - A classification of all possible linear systems based on their underlying equations. These systems have unique properties; they cannot be solved simultaneously.
+2. Nonlinear Linear System - This type involves adding or subtracting some constant terms from a given equation. It does not depend on the input values nor the output value; instead, it depends only on the variable being considered.
+3. Nonlinear Neural Network - Similar to linear systems but has more complex structures than linear ones due to its structure. However, unlike linear systems, non
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=38 first30=[263, 647, 286, 17, 595, 551, 711, 202, 350, 1401, 678, 626, 861, 8922, 3142, 9533, 346, 1083, 801, 12960, 354, 903, 346, 1083, 11, 1104, 2067, 20, 15, 409]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+
+if __name__ == "__main__":
+    print("Example 1")
+    print(add([1, 2, 3, 4, 5]))
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=179 first30=[622, 354, 17, 19, 490, 311, 1396, 643, 1107, 552, 20, 17, 19, 711, 202, 6, 11101, 299, 1098, 269, 28045, 288, 263, 993, 202, 856, 28045, 66, 19405, 11]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return 1.0 if n < 0 else -1.0
+
+
+# Function to find the factorial of a number
+def factorial_prime(number):
+    if not isinstance(number, int):
+        raise TypeError("Number must be an integer")
+
+    return factorial(number)
+
+
+# Method to print out the factorial of an integer
+def factorial():
+    print('The factorial of the number is {2}'.format(int(input().strip())))
+    print('It's {3} times'.format(int((input().strip()) / 2)) + ' times')
+    print('There are more than 4 numbers in this range.')
+
+
+# FUNCTION!
+print('The factorial is {4} times.' )
+print('It's 5 times' )
+print()
+
+# FINDING!
+print(factorial(5))
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=256 first30=[622, 354, 17, 19, 647, 353, 20, 552, 311, 12, 864, 353, 21, 864, 311, 12, 711, 202, 856, 8049, 66, 3134, 1714, 346, 1083, 801, 41, 554, 11, 23]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1 - n) * (2 * n)
+
+
+def fib_check():
+    print("Fib(4,6)")
+
+    while True:
+        try:
+            # Fib(5,7)
+            # F(8,9)
+            # L(3,10)
+            # S(4,11)
+            # R(12,13)
+            # H(4,14)
+            # I(6,15)
+            # P(4,17)
+            # M(7,18)
+            # D(6,20)
+            # T(1,22)
+            # V(1,23)
+            # U(4,26)
+            # N(2,19)
+            # E(12,21)
+            # J(8,24)
+            # G(4,32)
+            # C(7,27)
+            # A(8,31)
+            # B(7,28)
+            # K(16,39)
+            # Z(8,30)
+            # Q(6,35)
+            # X(8,36)
+            # Y(8,38)
+            # (Z(8,33))
+            # D(-1,
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 2590, 1541, 535, 698, 338, 356, 1289, 3126]
+first_step_topk_probs=[0.3993263244628906, 0.15637843310832977, 0.15637843310832977, 0.12052568793296814, 0.04480316862463951, 0.04037104919552803, 0.026614226400852203, 0.02051238715648651, 0.017545174807310104, 0.017545174807310104]
+first_step_topk_text=[' The', ' Yes', ' No', ' There', ' In', ' It', ' A', ' I', ' We', ' Not']
+
+[New tokens 8] count=184 first30=[382, 3533, 330, 360, 13134, 1385, 1278, 263, 3191, 330, 2645, 15, 1000, 383, 578, 263, 2645, 12153, 17, 1358, 490, 715, 330, 808, 2645, 12153, 289, 269, 3191, 415]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is "yes". If a cat is black, then it has a black coat. But if there is no black coat in the cat's body, then it is not black. So, what does this mean for you? It means that your cat's skin color is different from the rest of his body. A black cat is a black cat with a dark brownish tinge on its face, neck, back, and ears. A black dog is a black dog who is black but has a dark brown skin. Black dogs have a white patch on their cheeks, which makes them look like they're black. A black Dog is a dog who looks like he's black because he's black. He's also a black dog, so the other two things are very similar to him.
+Now, how do I know when a cat is a dog or a cat?
+Answer by a friend
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 2050, 798, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.7548249959945679, 0.19486750662326813, 0.050307486206293106, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' One', ' 4', '', '#', '', '"', '!', '', '']
+
+[New tokens 9] count=247 first30=[354, 13032, 333, 798, 10941, 202, 21, 934, 667, 409, 10941, 333, 1012, 10941, 202, 22, 934, 667, 409, 934, 667, 409, 1885, 637, 10941, 333, 1291, 10941, 202, 23]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+2 buys 2 apples = 6 apples
+3 buys 2 buys 2 times 3 apples = 9 apples
+4 buys 2 apple = 12 apples
+5 buys 2 bushels of corn = 8 bushels
+6 buys 2 burger = 10 bushels + 5 burger = 20 bushels (or 0,1)
+7 buys 2 kettle = 15 bushels * 2 burgers = 25 kettles
+8 buys 2 biscuits = 15 biscuits + 7 biscuits
+9 buys 2 bungs = 13 bungs + 14 biscuits - 15 biscuit = 30 biscuits (or 0 or 1)
+10 buys 2 hamburgers = 11 hamburger + 12 biscuit - 12 biscuits x 100 biscuits= 1 biscuit
+11 buys 2 eggs = 12 eggs + 12 eggs = 2 eggs
+12 eggs = 12 egg + 12 eggs + 24 eggs = 3 eggs
+13 eggs = 12 + 24 eggs + 16 eggs = 2 pints
+14 eggs = 12 pairs + 26 pairs + 27 pairs = 3 eggs
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 1509, 1289, 22089, 27614, 15255, 3189, 1278, 776]
+first_step_topk_probs=[0.8044692277908325, 0.04766020178794861, 0.029824992641806602, 0.017716797068715096, 0.015553795732557774, 0.015153979882597923, 0.014015140943229198, 0.012304066680371761, 0.01167963445186615, 0.011086888611316681]
+first_step_topk_text=[' I', ' What', ' You', ' We', ' Thank', ' Hi', ' Thanks', ' Do', ' If', ' He']
+
+[New tokens 10] count=255 first30=[2575, 330, 669, 2942, 374, 482, 34, 202, 55, 3422, 29, 5531, 15, 356, 3442, 733, 289, 263, 3313, 288, 760, 11764, 298, 356, 418, 2843, 8763, 299, 2861, 672]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience with this?
+Tony: Well, I've been in a lot of these meetings and I was really excited to talk about it. It's really exciting because it gives me an opportunity to be involved in the process of getting my students interested in this topic. So, you know, it's a great way for them to get out into the world of online learning so they can see what it's all about.
+I have two classes here at our school where we're going to be working on a project that will give you some ideas as to how to make this happen. You know, it'll be fun to do this project in a different way than what we did before. And I think it will be very interesting to see if we can actually create something like this that will take off and show the students that there are other ways to help them learn more about the topic.
+And I hope that through this project, we'll be able to start thinking about it again. So, I'm sure that it would be really cool to have the students come up with some ideas to help them in their own classroom. And I just hope that this project will encourage them to think about how they might use technology to better understand the topic.
+
+================================================================================
