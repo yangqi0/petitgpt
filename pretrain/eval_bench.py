@@ -223,7 +223,6 @@ def main():
     ap.add_argument("--max_repeat_token", type=int, default=2)
     ap.add_argument("--avoid_first_whitespace", action="store_true")
     ap.add_argument("--ban_first_steps", type=int, default=4)
-    ap.add_argument("--greedy", action="store_true")
 
     args = ap.parse_args()
 
