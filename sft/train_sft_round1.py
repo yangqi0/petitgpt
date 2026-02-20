@@ -70,24 +70,31 @@ def read_jsonl(path: str) -> List[Dict[str, Any]]:
 
 @dataclass
 class ChatFormat:
-    def render(self, messages: List[Dict[str, str]]) -> Tuple[str, List[Tuple[int, int]]]:
-        parts: List[str] = []
-        spans: List[Tuple[int, int]] = []
+    sep: str = "\n\n"  # 消息之间的分隔
 
-        for m in messages:
-            role = m.get("role")
-            content = m.get("content", "")
-            if role == "system":
-                parts.append(content + "\n")
-            elif role == "user":
-                parts.append(content + "\n")
+    def render(self, messages):
+        parts = []
+        spans = []
+        for idx, m in enumerate(messages):
+            role = m["role"]
+            content = m["content"]  # 不做 rstrip()
+
+            if role in ("system", "user"):
+                parts.append(content)
+                # 如果不是最后一条消息，加 sep；但如果 content 末尾是空格/制表符，就不要加换行去破坏 code signature
+                if idx != len(messages) - 1:
+                    if len(content) > 0 and content[-1] in (" ", "\t"):
+                        parts.append("")  # 不加任何东西
+                    else:
+                        parts.append(self.sep)
+
             elif role == "assistant":
                 start = sum(len(p) for p in parts)
-                parts.append(content + "\n")
-                end = sum(len(p) for p in parts) - 1  # exclude the trailing newline
+                parts.append(content)
+                end = sum(len(p) for p in parts)
                 spans.append((start, end))
             else:
-                raise ValueError(f"Unknown role in messages: {role}")
+                raise ValueError(f"unknown role: {role}")
 
         return "".join(parts), spans
 
