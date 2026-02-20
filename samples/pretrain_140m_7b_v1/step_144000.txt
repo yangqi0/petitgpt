@@ -1,0 +1,293 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 418, 2857, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.4181291460990906, 0.4181291460990906, 0.16374172270298004, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' was', ' went', '', '#', '', '"', '!', '', '']
+
+[New tokens 1] count=167 first30=[2827, 5273, 418, 4438, 289, 269, 3843, 17, 776, 2977, 2009, 17935, 298, 2239, 351, 269, 2389, 17, 776, 10225, 383, 656, 298, 4965, 435, 383, 6325, 17, 698, 418]
+[Full output 1]
+Once upon a time, a curious child named Jack was playing in the park. He saw something shiny and red on the ground. He picked it up and looked at it closely. It was a piece of paper with a picture of a flower on it. Jack wanted to know what it was so he decided to take it home. When he got home, he showed his mom the paper. She said that the paper had been lost and they could not find it anywhere. Jack was very sad because he loved the paper so much. But then he remembered how important it was for him to find it. So he asked his mom if she could help him look for it. His mom smiled and gave him a big hug. Together, they searched high and low until they found the hidden paper! Jack was so happy that he couldn't wait to show his friends the paper.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 263, 11605, 336, 4455, 321, 2, 3, 1, 0]
+first_step_topk_probs=[0.8861212730407715, 0.04000593349337578, 0.029268965125083923, 0.02255847491323948, 0.014489189721643925, 0.007556142285466194, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' a', ' Lat', ' S', ' France', ' T', '', '', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 17, 698, 578, 263, 2073, 288, 672, 3183, 15, 1086, 298, 287, 1505, 288, 637, 1913, 5056, 21, 353, 2008, 22, 6616, 11423, 573, 202, 509, 2868, 330]
+[Full output 2]
+Paris is the capital of the province. It has a population of about 40,000 and an area of 316 km2 (153 sq mi).
+The town is located in the northeast corner of the province and is surrounded by several small towns and villages. The name of the town comes from the city of Lima. In the early years of its existence, it was called Lima. Its population is about 60,000, but today it is mostly a rural district with many small farms and a few large cities.
+Agriculture is the main occupation of the region. There are many crops and livestock, especially cattle, sheep, goats, pigs, camels, chickens, and poultry. A large number of trees are planted throughout the year. Forests cover most of the territory, except for some small areas that are more open than the surrounding mountains. Forests grow on the plains and in the valleys, where they provide habitat for wildlife. They also protect against erosion by eroding them. The forests have been used as a source of fuel since ancient times. They have also been used to create medicine, to treat cancer, and to make medicines.
+Lima's economy is based mainly on agriculture, which is the mainstay of the local economy. It produces timber,
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 6058, 500, 672, 269, 2690, 920, 795, 7527, 17, 1803, 411, 2861, 672, 18956, 288, 263, 4759, 9220, 321, 932, 657, 12913, 431, 15, 383, 1818]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that tells us about the relationship between two vectors. When we talk about eigenvalues of a linear transformation T : V → W, it means that if there exists a nonzero vector v in V such that v = 0 and v = 1, then T(v) = 0.
+
+Now let's consider the given problem: finding the eigenvalues of the following linear transformation T:
+
+T(t + 1) = t2 - 4t + 3
+
+To solve this equation, we need to find the values of t for which T(t + 2) = t3. Let's assume t = 1; then our goal is to find t1 = t0. Since t0 = 1, we can express t1 as follows:
+
+t1 = (t0)^2 - 4(t0)^3 = t4 - 4t^2 + 3t + 1 = t2
+
+We already know that t1 = 1 since t0 = 0. Therefore, we have:
+
+1 = t1 * t0 + t1*t1 + t1*(t0-1) + t1\*t1 + ... + t\_1 \* t\_n
+
+Substituting these expressions into the
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 5546, 483, 1420, 491, 9845, 395, 1991, 3069, 3235]
+first_step_topk_probs=[0.31020548939704895, 0.12147821485996246, 0.12147821485996246, 0.08008342236280441, 0.07216116040945053, 0.07216116040945053, 0.042865533381700516, 0.03666486591100693, 0.029769519343972206, 0.02825871668756008]
+first_step_topk_text=[' use', ' describe', ' can', ' allow', ' have', ' rely', ' are', ' provide', ' attempt', ' predict']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 4410, 17, 382, 3355, 2877, 330, 357, 1010, 2790, 578, 686, 1231, 854, 288, 3267, 15, 298, 269, 2790, 728, 491, 1108, 2371]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data sets. The basic idea is that each task has its own set of features, and the task may have different levels of complexity.
+The basic idea behind the classification algorithm is that it is based on the fact that tasks tend to be relatively simple (i.e., they can be divided into categories), but the difficulty level is not always optimal for some tasks. This means that there may be more problems than expected with the same task.
+In order to make an algorithm more efficient, we need to think about how we will fit the task into the dataset. We can start by creating a dataset containing the relevant information:
+- The task is a classification problem.
+- The training set contains the task's features.
+- There are two main types of features: the classification feature and the classification feature.
+- Each classification feature consists of a single feature value.
+- A classification feature is a combination of the features in the classification feature, such as the category of the classification, the category of classification, or the category of classes.
+The classification feature is then added to the classifier. If the classification feature is not present, the classifier will not be able to classify the class of the classification. In this case, the classifier
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=53 first30=[263, 647, 286, 17, 595, 551, 202, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 655, 3715, 555, 1499, 29, 331, 444, 9879, 86, 17, 3106, 655, 853]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+if __name__ == '__main__':
+    import sys
+
+    try:
+        from libs.utils import add_path
+
+        add_path('src/cmp', 'src/cpp-1.0')
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=207 first30=[622, 353, 20, 13, 81, 12, 647, 354, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 801, 7351, 290, 28045, 339, 1373, 18620, 346, 1083, 8493]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return (1*n) + 1
+
+
+if __name__ == '__main__':
+    print("Checking factorial for example:")
+    print("\n[c] ", end="")
+
+    # Get the function's data
+    f = open('data/f.txt', 'r')
+    f.write('5\n')
+    f = sys.stdin.readline()
+    f.close()
+
+    # Check if it's a list
+    if len(f) > 0:
+        print("    f")
+        print(f"\n")
+        print("  f")
+        for i in range(0, len(f)):
+            print("  " * (i+1))
+            f.write(str(i)+" ")
+            f.close(True)
+
+        # Check if its a list
+        if len(list(f)) > 0:
+            print("    list")
+            print(f"{len(list(list(filter(lambda x: x != 2, f))))}")
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=219 first30=[622, 354, 17, 19, 647, 353, 20, 552, 311, 12, 864, 353, 21, 864, 353, 81, 16, 20, 687, 711, 202, 6, 11101, 299, 1083, 269, 31393, 993, 289, 7534]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1 - n) * (2 * (n-1))
+
+
+# Function to print the Fibonacci number in binary format:
+def fib_print(number, length=100):
+    return fib(number)
+
+# Function prints the Fibonacci number using the following functions:
+def printFib(number, index=-1):
+    return
+
+# Call this function to print the next Fibonacci number in the same order as it was printed on the previous one:
+def fib(index=-1):
+	return fib(index)
+
+if __name__ == '__main__':
+    # Parse the arguments and pass them to the main function.
+    args = parseArgs()
+
+    # Set up the argument parser
+    parser = argparse.ArgumentParser(description='Print Fibonacci numbers')
+    parser.add_argument('input', nargs='?',
+                        help='Input file for the input.')
+    parser.set_defaults(func=fib)
+
+    # Print the result of the print
+    print(fib(args.output))
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 1541, 13676, 2590, 535, 338, 4619, 698, 356, 3987]
+first_step_topk_probs=[0.3955921232700348, 0.23499183356761932, 0.10212705284357071, 0.07471775263547897, 0.049256958067417145, 0.027774926275014877, 0.025027312338352203, 0.025027312338352203, 0.023757154121994972, 0.0214069951325655]
+first_step_topk_text=[' The', ' There', ' Yes', ' No', ' In', ' A', ' Black', ' It', ' I', ' Most']
+
+[New tokens 8] count=256 first30=[1541, 330, 808, 1194, 299, 6797, 357, 263, 3191, 578, 833, 2419, 388, 28381, 17, 698, 728, 342, 1812, 299, 1207, 357, 269, 3864, 418, 3673, 289, 269, 1134, 1144]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: There is no way to prove that a cat has any color or markings. It may be possible to show that the animal was born in the same state as its parents. If there were no markings on the body of a cat, it would not have been considered black. However, if the owner of a cat had a dark-colored coat, the cat would have been given a white coat. The black cat is known to have black hair and should therefore be considered a black cat. However, this does not mean that the cat is black. Some people believe that a cat is black because of the coloration of the skin of the cat's head. This is not true. In fact, the skin of a cat is colored with different shades of brown, red, orange, yellow, blue, etc. These colors appear to be due to the pigment in the body of the cat.
+The color of a cat's face depends upon the color of the body. For example, a cat whose head is black will have a darker face than a cat whose tail is black. A cat who has a black nose, or a black nose will have a lighter facial face than a pure white nose. The color of a dog's nose is determined by how much pigment is present in
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 382, 2050, 843, 798, 338, 1541, 2, 1, 0]
+first_step_topk_probs=[0.5610336065292358, 0.17838546633720398, 0.1059655249118805, 0.06294622272253036, 0.03549399971961975, 0.028818883001804352, 0.02735629677772522, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' The', ' One', ' 5', ' 4', ' A', ' There', '', '', '']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 17, 202, 24771, 29, 409, 10941, 333, 1012, 10941, 17, 202, 509, 993, 288, 10941, 289, 269, 7240, 330, 843, 15, 649, 411, 910, 299]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples.
+Answer: 2 apples = 6 apples.
+The number of apples in the bag is 5, so we need to find out how many apples there are in total. To do this, multiply the number of apples by the number of items in the bag. So if there were 5 apples, then we would get 5 × 5 = 120 apples. That means that each item in the bag has a count of 120 apples.
+Let's say you want to know how many apples you have in total. First, you can add up all the apples in the bags. But first, you will need to subtract one from the total amount of apples in your bag. In other words, you need to subtract 1/2 from the total number of apples. Then, you can subtract 1/4 from the total quantity of apples in both bags.
+Now, let's go back to our original problem. The number of apples you have is 3, so we don't need to calculate it directly because it doesn't matter which way you go. We can just divide the number of fruits into two equal parts, like so:
+Total Fruits = Total Fruits / Number of Fruit Parts
+= 3 + 1/3
+= 3/
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 1509, 22089, 3189, 1490, 8151, 15255, 27614, 3919]
+first_step_topk_probs=[0.6488316655158997, 0.10577510297298431, 0.04596966505050659, 0.041422128677368164, 0.018964432179927826, 0.018476935103535652, 0.017539232969284058, 0.015804162248969078, 0.01424073800444603, 0.013518014922738075]
+first_step_topk_text=[' I', ' What', ' You', ' Thank', ' Do', ' Is', ' Please', ' Thanks', ' Hi', ' My']
+
+[New tokens 10] count=256 first30=[2575, 330, 669, 2942, 374, 482, 34, 202, 55, 3422, 29, 5531, 15, 356, 3442, 733, 299, 263, 3313, 288, 4241, 289, 269, 1165, 298, 383, 415, 733, 1114, 22143]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience with this?
+Tony: Well, I've been to a lot of places in the world and it's been very pleasant. I've seen people who have been living here for years. They're quite happy. They're like, you know, those guys who live there. It's really amazing that they can do anything at all. They're not going to be able to go anywhere. And if you get into trouble, you can always come back. You can't just go home. But, we can also see that there are some people who have no problems, that they don't have a problem. So, there's a lot of things that you can do to help them. It's kind of fun to work on. There's something about yourself that helps you feel better. You can also talk to someone who has a good relationship. I think, if you have a friend or family member, maybe you can try to bring that friend along. We have a lot of friends in our area. We have lots of kids. We have children. We have kids from other countries. We have families from different countries. We can be together. We can make things happen. We can put things in order. We can do things at the
+
+================================================================================
