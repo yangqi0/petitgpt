@@ -265,9 +265,12 @@ def main():
                 with torch.autocast("cuda", dtype=autocast_dtype, enabled=(autocast_dtype is not None and device.type=="cuda")):
                     out = model(input_ids)
                     logits = out["logits"] if isinstance(out, dict) else out
+                    # shift for causal LM
+                    logits = logits[:, :-1, :].contiguous()
+                    tgt = labels[:, 1:].contiguous()
                     loss = torch.nn.functional.cross_entropy(
                         logits.view(-1, logits.size(-1)),
-                        labels.view(-1),
+                        tgt.view(-1),
                         ignore_index=-100,
                     )
                 losses.append(loss.item())
@@ -337,9 +340,12 @@ def main():
         with torch.autocast("cuda", dtype=autocast_dtype, enabled=(autocast_dtype is not None and device.type=="cuda")):
             out = model(input_ids)
             logits = out["logits"] if isinstance(out, dict) else out
+            # shift for causal LM
+            logits = logits[:, :-1, :].contiguous()
+            tgt = labels[:, 1:].contiguous()
             loss = torch.nn.functional.cross_entropy(
                 logits.view(-1, logits.size(-1)),
-                labels.view(-1),
+                tgt.view(-1),
                 ignore_index=-100,
             ) / args.grad_accum
 
