@@ -489,6 +489,7 @@ def generate(
     return {
         "prompt_tokens": len(prompt_ids),
         "new_tokens": generated,
+        "completion_text": gen_text,   # IMPORTANT: truncated completion
         "output_text": out_text,
         "debug": dbg if debug else None,
     }
@@ -698,7 +699,8 @@ def main() -> None:
     # stopping controls
     ap.add_argument("--stop_on_newline", action="store_true", help="Stop generation when a newline is generated (after min_new_tokens).")
     ap.add_argument("--stop_strings", action="append", default=None, help="Stop generation when this string appears in generated text. Can be repeated.")
-    ap.add_argument("--stop_regex", action="append", default=None, help="Stop when this regex matches generated text (can repeat).")
+    ap.add_argument("--stop_regex", action="append", default=None,
+                    help="Stop when this regex matches generated text (can repeat).")
     ap.add_argument("--include_stop_in_output", action="store_true", help="If set, keep the stop marker in output text (default: truncate it).")
 
     # mode
@@ -764,7 +766,8 @@ def main() -> None:
 
         completion = tok.decode(res["new_tokens"])
         if args.quiet:
-            print(completion, end="")
+            # IMPORTANT: print truncated completion, not raw decoded new_tokens
+            print(res.get("completion_text", ""), end="")
         else:
             print(res["output_text"])
 

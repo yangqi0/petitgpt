@@ -1,0 +1,300 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 2857, 1255, 2446, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.69209223985672, 0.1061357855796814, 0.1061357855796814, 0.09563618898391724, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' went', ' called', ' came', '', '', '!', '"', '', '']
+
+[New tokens 1] count=130 first30=[1255, 5273, 418, 7948, 289, 269, 3843, 17, 776, 2977, 2009, 17935, 298, 719, 17, 698, 418, 263, 2023, 15, 2239, 3043, 4, 5273, 3766, 299, 1143, 374, 383, 649]
+[Full output 1]
+Once upon a time, a curious child called Jack was walking in the park. He saw something shiny and new. It was a big, red ball! Jack wanted to play with it so he reached out to touch it. But when he touched the ball, it suddenly started to shake. Jack's eyes lit up as he saw his finger sticking out of the ball. He couldn't help but feel scared. Suddenly, a kind old man appeared from behind him. "What are you doing here?" he asked. Jack turned around and saw that the old man had taken the ball away. He quickly grabbed it and ran away. Jack never forgot about the shiny thing on the ball.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 4455, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8751697540283203, 0.12483024597167969, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' France', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 7630, 288, 269, 1144, 288, 6967, 30201, 15, 298, 383, 418, 2827, 994, 269, 4376, 2317, 288, 6967, 30201, 17, 698, 418, 658, 269, 4223, 288]
+[Full output 2]
+Paris is the capital of the province of the department of the state of Galicia, and it was named after the ancient city of Galicia. It was also the capital of Galicia until the 16th century when it became part of the city of Galician origin.
+The town of Galicia has a long history as a commercial centre. The earliest known mention of Galicia dates back to the 12th century when the city was ruled by the Counts of Puglia. In 1344 the town was captured by the Habsburg monarchy and the castle was returned to the city in 1415. In 1761 it was given to the Kingdom of Poland. After the Thirty Years' War, the town was again taken over by the Polish government in 1802, when it was annexed by Austria.
+In 1806 Galicia was made a part of the Austrian Empire. In 1812 it was occupied by France, which had been defeated by Napoleon's army during the Napoleonic Wars. During the Franco-Prussian war Galicia was besieged by the French Army and finally the French Army took possession of it.
+The modern Galicia is divided into four districts: Galicia (the capital), Galicia (town) and Galicia (district). The districts are:
+|
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 6058, 500, 806, 1264, 263, 4409, 353, 262, 482, 1832, 15, 263, 4409, 12, 483, 342, 15043, 419, 17, 382, 993, 288, 22542, 4672, 7527, 289]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that tells us how much a vector (in this case, a vector) can be multiplied by. The number of linearly independent vectors in the set of all possible eigenvectors gives us the total number of linearly dependent vectors in the subspace spanned by them.
+
+Now let's consider a particular type of matrix called the *symmetric matrix*, which has some unique properties when dealing with systems of linear equations. When considering a system of three equations with two unknowns and one unknown, we need to find their eigenvalues and eigenvectors. This process involves several steps:
+
+1. **Determine the eigenvalues**: We start by finding the eigenvalues of our system. These are the values of the first few unknowns along the diagonal line connecting the given points. Since there are four possibilities for each solution, we should look up the corresponding eigenvalues in both directions separately.
+2. **Find the eigenvalues**: To do so, we calculate the eigenvalues using the formula below:
+
+* E[e^T x] = e^(-λx), where λ represents the position or magnitude of the eigenvector, e is Euler's Number, and λ is the eigenvalue associated with the eigenvalue.
+* E[(e^T y)] = e^(-(λy)), where
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 5546, 491, 9845, 1420, 395, 3235, 1991, 3069]
+first_step_topk_probs=[0.27545514702796936, 0.18159116804599762, 0.11971235275268555, 0.10786978155374527, 0.07891922444105148, 0.06082542613148689, 0.03263132646679878, 0.022610735148191452, 0.021463241428136826, 0.01654236763715744]
+first_step_topk_text=[' use', ' can', ' describe', ' have', ' rely', ' allow', ' are', ' predict', ' provide', ' attempt']
+
+[New tokens 4] count=256 first30=[22968, 269, 1194, 4383, 1798, 298, 4116, 553, 2794, 299, 1623, 16, 7128, 2061, 17, 202, 509, 414, 7490, 2269, 491, 733, 2657, 289, 1663, 299, 1005, 3057, 1557, 806]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the way humans learn and apply their knowledge to real-world problems.
+Theoretical models have been developed in order to help scientists understand how the brain works, and to improve our understanding of how the human brain works. Theories can be applied to many different areas of science, including psychology, biology, chemistry, physics, medicine, economics, and social sciences.
+To date, the theory has been widely accepted by other researchers, including two groups at the University of California, San Diego (UCSD) who have published papers on the subject. In one study, they used functional magnetic resonance imaging (fMRI), which measures brain activity in response to visual stimuli, to demonstrate that the neural network is an efficient model for learning. They also studied the neural basis of learning and memory.
+In another study, they showed that people with more severe learning difficulties may have better results than people without such deficits. This finding suggests that the neural networks that encode visual information might be better at discriminating between different types of visual information.
+"We're really excited about this work," said co-author Dr. Tara Wilson, a postdoctoral fellow in neuroscience at UCSD and the senior author of the paper. "It's very exciting because it shows
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=83 first30=[263, 647, 286, 17, 595, 551, 711, 202, 350, 1401, 678, 626, 861, 8922, 3142, 9533, 346, 655, 9130, 555, 3546, 333, 9130, 17, 15289, 11, 5659, 1094, 28751, 263]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+
+if __name__ == "__main__":
+    import argparse
+
+    parser = argparse.ArgumentParser(description='Generate a random number generator')
+    parser.add_argument('-s', '--input-file', type=str, help="The input file containing the generated numbers")
+    args = parser.parse_args()
+    generate_numbers(args.input_file)
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 353, 20, 12829, 311, 12, 647, 354, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 11, 2440, 4886, 11, 1161, 687, 3, 711, 807, 4894]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return (1 << n) + 1
+
+
+if __name__ == '__main__':
+    print(factorial(10))
+
+from datetime import date, timedelta
+import json
+import os
+import requests
+import re
+import time
+import unittest
+
+class Test_Fee(unittest.TestCase):
+    def setUp(self):
+        self.client = requests.Client()
+
+    def test_fee_get(self):
+
+        response = self.client.get('/api/v3')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Fee API')
+
+    def test0_add(self):
+        
+        response = self._create_json('a')
+        self._save_json('b', 'a')
+        response = self.__get_json("a")
+        self.assertTrue(len(response['data']['total']) > 0)
+        self._write_json('c', 'b')
+        response2 = self.__post_json('d')
+        self.__put_json('e', 'd')
+        response3 = self.__put(response)
+        self.__delete_json('g')
+        self().assertContainsEqual(response2,
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.7772998809814453, 0.22270014882087708, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=63 first30=[622, 354, 647, 353, 20, 1341, 311, 12, 864, 353, 20, 552, 311, 12, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 801, 5288, 330, 269]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1 + (1 / n) * (1 - n)
+
+
+if __name__ == '__main__':
+    print("Here is the code to generate Fibonacci numbers:")
+    print("\n")
+
+    print("This function will compute Fibonacci numbers in ascending order:")
+    print(fib(0))
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 2590, 382, 1541, 356, 535, 698, 338, 0, 1]
+first_step_topk_probs=[0.27416327595710754, 0.27416327595710754, 0.24704186618328094, 0.11915091425180435, 0.0341373048722744, 0.019249282777309418, 0.016464784741401672, 0.015629198402166367, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' No', ' The', ' There', ' I', ' In', ' It', ' A', '', '']
+
+[New tokens 8] count=256 first30=[2590, 17, 1541, 330, 808, 3641, 2833, 299, 1447, 269, 5630, 288, 2645, 10676, 289, 2311, 2574, 17, 202, 4168, 17, 382, 1152, 357, 751, 10676, 620, 453, 491, 263]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: No. There is no scientific evidence to support the existence of black cats in North America.
+No. The fact that some cats do not have a black color does not mean they are black or brown. They may be black or brown but their colors are not black at all. Some cats have black eyes, while others lack a black eye. So it's impossible for a cat to have black eyes.
+A more accurate explanation might be that some cats have a black eye because they are black. A black eye is not an actual black or brown, but is something that is made up of white.
+What about the color of the eyes? Is there any reason why they should be black?
+The answer is yes! If you have a black nose, you will probably see your cat's eyes as black if he has a black nose. But if you have a yellow nose, you won't see your cat in a dark room.
+There are many different types of black eyes. A black nose is the most common type. It is actually quite rarer than a black nose because you don't see a black nose when you look inside. It is possible for a black nose to be black without a black nose on the other hand. In fact, if you look
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 2050, 843, 798, 382, 409, 637, 338, 0, 1]
+first_step_topk_probs=[0.47174322605133057, 0.18473729491233826, 0.10973857343196869, 0.08910075575113297, 0.06518751382827759, 0.03717635199427605, 0.021589256823062897, 0.020726950839161873, 0.0, 0.0]
+first_step_topk_text=[' 1', ' One', ' 5', ' 4', ' The', ' 2', ' 3', ' A', '', '']
+
+[New tokens 9] count=256 first30=[2050, 13032, 7670, 619, 934, 667, 354, 13032, 17, 202, 2774, 15, 356, 1118, 357, 356, 1755, 847, 491, 263, 1811, 374, 482, 1811, 1091, 356, 3442, 733, 3968, 357]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple plus one buys 1 apple.
+Now, I know that I don't have a problem with this problem because I've been told that the problem is for both apples and bues. So if you can solve it by adding up all the apples in both groups of apples, then you can add up all the numbers in each group of apples.
+You can do this by finding the number of apples in each group or by multiplying the number of groups by itself (or by a factor). For example, if you multiply 5 apples and 4 apples together, you get 15.
+So, if you want to find out how many apples are in each group, you need to divide 7 by 5.
+This is called "The Number Of Arithmetic," so I think we can simplify it.
+But now, we're going to use an arithmetic progression instead of just addition. We'll call this the "consecutive" number of apples. So if we divide 7 by 2, we get 6.
+That's a little bit more complicated than the usual division of 8 or 9. But let me tell you about another method of dividing things like this.
+I'm going to take the first number in each group and multiply it by itself, which gives
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 22089, 15255, 2575, 1509, 1289, 783, 27614, 3919, 8151]
+first_step_topk_probs=[0.49982893466949463, 0.15466460585594177, 0.07081060856580734, 0.037902191281318665, 0.030774174258112907, 0.023718586191534996, 0.02028757892549038, 0.019257985055446625, 0.017352895811200142, 0.01647222973406315]
+first_step_topk_text=[' I', ' Thank', ' Thanks', ' What', ' You', ' We', ' This', ' Hi', ' My', ' Please']
+
+[New tokens 10] count=256 first30=[2575, 395, 486, 3573, 34, 202, 16, 356, 491, 263, 3313, 288, 3048, 672, 269, 2519, 298, 356, 483, 847, 1098, 4453, 598, 715, 357, 791, 1005, 627, 17, 202]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What are you doing?
+- I have a lot of questions about the future and I can't find anything out there that would help me.
+- I am trying to figure out how to get more information on the future.
+- How do I go from there to the next stage?
+- Are there any things I could learn from this story?
+- How did you feel when you got to the next level?
+- Is there anything I can do to help me improve?
+- Can you give me advice?
+- Do I need to be more aware of my future?
+- Where do I start?
+- If I can, what will it take for me to get better?
+- Will I ever be able to read or write again?
+- What is the most important thing I've learned so far?
+- Have I improved?
+- When should I stop reading?
+- Why is this important?
+- Who can I contact?
+- To what extent does this happen?
+- Has anyone else noticed me?
+- In what ways does this happen in my life?
+- Does anyone else notice me?
+I've been working with this story since last week. I love this story because it's interesting and
+
+================================================================================

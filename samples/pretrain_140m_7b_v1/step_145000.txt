@@ -1,0 +1,273 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 2857, 418, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.6699253916740417, 0.2623465359210968, 0.06772804260253906, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' went', ' was', '', '#', '', '"', '!', '', '']
+
+[New tokens 1] count=140 first30=[2827, 5273, 418, 4438, 289, 269, 3843, 17, 776, 2977, 2009, 17935, 298, 2239, 289, 269, 6035, 17, 360, 2664, 330, 357, 3763, 406, 3609, 17, 360, 44, 1755, 847]
+[Full output 1]
+Once upon a time, a curious child named Jack was playing in the park. He saw something shiny and red in the grass. "What is that?" he asked. "I don't know," said his mom. "It's a toy." Jack wanted to see what it was, so he reached out and touched it. Suddenly, a big voice came from behind him. It was an old man who had come to the park. "Hello," said Jack. "Can I play with you?" The old man smiled and nodded. "Of course!" He handed Jack some of his toys and gave him some of them. Jack played with them for hours until the sun went down. Then he went home feeling happy and content.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 11438, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.9626568555831909, 0.03734317049384117, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' Greece', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 17, 698, 418, 269, 3796, 2317, 289, 269, 9556, 1761, 383, 418, 7334, 419, 3025, 289, 16920, 15, 722, 383, 418, 21461, 298, 2037, 263, 1829, 5664, 7913]
+[Full output 2]
+Paris is the capital of the province. It was the largest city in the province until it was destroyed by fire in 1915, when it was rebuilt and became a major industrial centre.
+The City of Saint-Michel was named after Saint-Michele in France. The name of the city comes from the word for "city", which means "city of the sea".
+The city was an important trading center with many industries, including iron, steel, and textiles. In the 16th century the city had several ports such as Bastia and Saint-Micas.
+The first European settlement on the site was founded in 1498 by the Frenchman William de Boulais. This city is now called Saint-Miches. It was at that time called Saint-Pierre. The town was very famous in France.
+In 1590 the city was completely destroyed by fire. Many buildings were demolished and replaced with new ones. Some of these are still standing today.
+The most important landmark of Saint-Malo is the Cathedral of Saint-Boniface. It was built in the early 16th century. It is said that the church was built during the reign of Louis XIV. The cathedral was finished in 1640 and is one of the oldest in
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 6058, 500, 806, 1264, 269, 4409, 1926, 578, 4374, 17, 535, 482, 1832, 15, 269, 28071, 330, 3636, 15, 298, 269, 28071, 330, 619, 353, 1044]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that tells us how much the vector space has changed. In this case, the eigenvalue is zero, and the eigenvalue is one (the other two are negative).
+
+Now, let's talk about the symmetric group S3. This group consists of all possible ways to arrange these vectors in a way that satisfies certain conditions. For example, if we have three vectors, say v1, v2, and v3, they can be arranged in a particular order. So, for example, if v1 = 1, then v2 = 2, and v4 = 4, you could create a permutation matrix with the eigenvalues as follows:
+
+v1 = v2 = 1 + 2*v1 + 3*v2 - 4*v3
+v2 = v3 = 3 * 2 * 2 * 0
+v3 = 3 \* 2 * 2 \* 0
+v4 = 4 \* 2 \* 2 \* 0^2
+v5 = 5 \* 2 \* 1 \* 0^0
+v6 = 6 \* 2 \* 3 \* 0^1
+v7 = 7 \* 2 \* 4 \* 0^3
+v8 = 8 \* 2 \* 8 \* 0^4
+v9 = 9 \* 2 \* 16 \*
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 9845, 483, 491, 1420, 5546, 3069, 395, 1085, 5663]
+first_step_topk_probs=[0.29569584131240845, 0.1756507009267807, 0.1582745760679245, 0.10434099286794662, 0.07246338576078415, 0.04086052253842354, 0.028377069160342216, 0.025281989946961403, 0.02076110430061817, 0.018707307055592537]
+first_step_topk_text=[' use', ' rely', ' can', ' have', ' allow', ' describe', ' attempt', ' are', ' model', ' involve']
+
+[New tokens 4] count=256 first30=[22968, 269, 3286, 288, 1623, 16, 7128, 2304, 17, 382, 1085, 415, 4941, 483, 342, 5213, 1191, 14457, 8119, 15, 536, 1991, 9799, 707, 806, 263, 953, 26388, 758, 689]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the behavior of real-world systems. The model's parameters can be estimated using neural networks, which provide insights into how a system behaves over time and how it learns. This allows researchers to design better models for modeling complex systems with simpler components, such as a computer.
+Theory and Theory of Learning
+A theory is an understanding of how people learn. It describes how they learn, and how this learning process may be used to improve their ability to solve problems in various fields. A theory is an explanation of how people think about the world. There are two main theories: the theory of learning theory and the theory of development theory.
+In theory, the theory of knowledge theory states that all human beings have the capacity to learn from experience. Knowledge is learned through the process of knowing. Knowledge is the foundation of human society. People learn by doing. However, this knowledge does not replace what they learn, but rather serves as a means to enhance their abilities to learn. Knowledge is essential for human life, and it is essential for people to develop skills in the areas of science, technology, engineering, and mathematics.
+A theory or theory is an account of the ways in which humans perceive and respond to information. It includes concepts like the nature of the mind,
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=35 first30=[263, 647, 286, 17, 595, 551, 202, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 655, 3715, 555, 339, 1249, 289, 1457, 11, 1161, 464, 331, 1083, 11]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+if __name__ == '__main__':
+    import sys
+
+    for i in range(10):
+        print(add(i))
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=34 first30=[622, 353, 20, 647, 353, 81, 864, 353, 21, 552, 311, 687, 1341, 409, 12, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 11, 2440, 4886]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return (1 + (n * (2 - n)) / 2)
+
+
+if __name__ == '__main__':
+    print(factorial(20))
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.5518959164619446, 0.4481040835380554, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=71 first30=[622, 354, 17, 19, 647, 353, 20, 552, 353, 20, 1341, 311, 12, 864, 353, 21, 1341, 311, 687, 711, 202, 6, 202, 6, 1772, 1053, 66, 678, 717, 73]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1 - (1 / n) * (2 / n))
+
+
+#
+# @file_name('fib')
+# def fib(n):
+#     if n > 0:
+#         return fib(n)
+# else:
+#     return fib(1.0)
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 2590, 1541, 698, 2340, 1289, 338, 3987, 356]
+first_step_topk_probs=[0.3152635097503662, 0.2078346610069275, 0.1300595998764038, 0.11719343066215515, 0.04135357216000557, 0.02871948666870594, 0.025878405198454857, 0.025878405198454857, 0.0245650764554739, 0.022134972736239433]
+first_step_topk_text=[' The', ' Yes', ' No', ' There', ' It', ' That', ' We', ' A', ' Most', ' I']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 12052, 17, 202, 509, 3533, 299, 269, 2395, 288, 2645, 10676, 330, 808, 17, 783, 330, 263, 1114, 4430, 2395, 1091, 383, 578, 733, 3400, 289, 914]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+The answer to the question of black cats is no. This is a very interesting question because it has been shown in many studies that black cats have a higher risk for contracting the disease than other cats. So why does this matter? Well, black cats are more likely to get it than other cats because they live longer. So it's not just black cats that suffer from it but also black cats. They tend to be more active in their daily lives and their behavior may be influenced by their diet. Black cats are also more likely to have a higher incidence of getting the disease if they eat a lot of fruits and vegetables. It's not only that the body gets rid of the disease, it's also that the black cat gets sicker as well.
+So what do you think about this? Is it possible that black cats could actually be affected by the disease? And is there any evidence that it could be that black cats would be more at risk of developing the disease?
+Answer 1: It is absolutely impossible to say whether black cats are much more susceptible to the disease than others. But it seems clear that black cats might be more at-risk than other cats and that it might be because of their diet.
+Answer 2: We
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 843, 798, 2050, 409, 382, 776, 2, 1, 0]
+first_step_topk_probs=[0.40417778491973877, 0.2163407802581787, 0.1285119503736496, 0.09402135014533997, 0.08170570433139801, 0.045347489416599274, 0.029894927516579628, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' 5', ' 4', ' One', ' 2', ' The', ' He', '', '', '']
+
+[New tokens 9] count=94 first30=[354, 13032, 333, 798, 10941, 17, 202, 24771, 29, 409, 10941, 333, 1012, 10941, 17, 202, 22, 10941, 333, 1604, 10941, 17, 202, 509, 2056, 993, 288, 10941, 330, 798]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples.
+Answer: 2 apples = 6 apples.
+3 apples = 12 apples.
+The total number of apples is 4. The total number of oranges is 6.
+4 apples = 16 oranges
+So, the total number of fruits is 8 apples.
+5 apples = 17 oranges
+6 apples = 9 oranges
+9 apples = 10 oranges
+8 apples = 10 bananas
+10 oranges = 10 apples
+8 oranges = 10 bananas
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 382, 22089, 1509, 15255, 783, 1289, 1278, 8151]
+first_step_topk_probs=[0.5556254386901855, 0.12380854040384293, 0.03736817091703415, 0.033671535551548004, 0.031962692737579346, 0.030340587720274925, 0.02880079112946987, 0.025951679795980453, 0.024634622037410736, 0.02052946574985981]
+first_step_topk_text=[' I', ' What', ' The', ' Thank', ' You', ' Thanks', ' This', ' We', ' If', ' Please']
+
+[New tokens 10] count=256 first30=[2575, 395, 486, 6968, 34, 202, 16, 356, 491, 263, 1114, 4012, 1266, 435, 713, 17, 202, 16, 356, 873, 2397, 299, 342, 289, 269, 5988, 339, 263, 1685, 2233]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What are you feeling?
+- I have a very bad day at work.
+- I am going to be in the hospital for a few days and I am going into the hospital.
+- If I feel like it is time to go home, I will be there until I get home.
+- It's a great day, but I want to stay here.
+- You've been having so much fun that you think it's time to go back home.
+I am feeling quite overwhelmed by the stress of my job, and I don't know what to do next.
+- Thank you for taking care of me.
+- Thanks for staying with me.
+It's a good thing to take care of yourself when you're sick or in need of medical attention.
+- Well, I hope you'll stay here all night long.
+- That's OK. I'm sorry if I didn't eat right now.
+- The day was terrible. I had a lot of stress.
+- But it was good.
+- So what about you?
+- And I can't help you.
+- How could you help me?
+- Your job is getting better.
+- Maybe you can get some help from your doctor.
+-
+
+================================================================================
