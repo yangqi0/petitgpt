@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Generate synthetic SFT data in canonical chat jsonl:
 {"messages":[...], "meta": {...}}
@@ -13,8 +12,11 @@ This dataset is designed to teach *format/behavior* first.
 """
 
 from __future__ import annotations
-import argparse, json, os, random
-from typing import Dict, List
+
+import argparse
+import json
+import os
+import random
 
 SYS_ARITH = (
     "You are a precise assistant.\n"
@@ -39,14 +41,19 @@ SYS_CODE = (
     "- Output ONLY the function body (no def line).\n"
 )
 
-def ex(system: str, user: str, assistant: str, meta: Dict) -> Dict:
-    return {"messages":[
-        {"role":"system","content":system},
-        {"role":"user","content":user},
-        {"role":"assistant","content":assistant},
-    ], "meta": meta}
 
-def gen_arith(rng: random.Random, i: int, max_n: int) -> Dict:
+def ex(system: str, user: str, assistant: str, meta: dict) -> dict:
+    return {
+        "messages": [
+            {"role": "system", "content": system},
+            {"role": "user", "content": user},
+            {"role": "assistant", "content": assistant},
+        ],
+        "meta": meta,
+    }
+
+
+def gen_arith(rng: random.Random, i: int, max_n: int) -> dict:
     op = rng.choice(["+", "-", "*"])
     a = rng.randint(0, max_n)
     b = rng.randint(0, max_n)
@@ -59,11 +66,13 @@ def gen_arith(rng: random.Random, i: int, max_n: int) -> Dict:
     else:
         ans = a * b
         q = f"What is {a} * {b}?\nAnswer:"
-    return ex(SYS_ARITH, q, str(ans), {"id": f"syn_arith_{i:06d}", "task":"arithmetic"})
+    # IMPORTANT: enforce a newline terminator so inference can stop reliably on newline
+    return ex(SYS_ARITH, q, f"{ans}\n", {"id": f"syn_arith_{i:06d}", "task": "arithmetic"})
 
-def gen_syll(rng: random.Random, i: int) -> Dict:
+
+def gen_syll(rng: random.Random, i: int) -> dict:
     # 3 templates with known labels
-    t = rng.choice([0,1,2,3])
+    t = rng.choice([0, 1, 2, 3])
     if t == 0:
         # All A are B. All B are C. => all A are C (yes)
         q = "All A are B. All B are C. Can we conclude all A are C?\nAnswer:"
@@ -80,9 +89,11 @@ def gen_syll(rng: random.Random, i: int) -> Dict:
         # Some A are B. No B are C. => some A are C? (no)
         q = "Some A are B. No B are C. Can we conclude some A are C?\nAnswer:"
         ans = "no"
-    return ex(SYS_SYLL, q, ans, {"id": f"syn_syll_{i:06d}", "task":"syllogism"})
+    # IMPORTANT: enforce newline terminator
+    return ex(SYS_SYLL, q, f"{ans}\n", {"id": f"syn_syll_{i:06d}", "task": "syllogism"})
 
-def gen_code(rng: random.Random, i: int) -> Dict:
+
+def gen_code(rng: random.Random, i: int) -> dict:
     # rotate among a few tiny functions; keep answers short and exact
     k = rng.choice(["add", "factorial", "fib", "is_even", "clamp"])
     if k == "add":
@@ -113,14 +124,11 @@ def gen_code(rng: random.Random, i: int) -> Dict:
         assistant = "return (n % 2) == 0\n"
     else:
         user = "Complete the following Python function:\n\ndef clamp(x, lo, hi):\n    "
-        assistant = (
-            "if x < lo:\n"
-            "    return lo\n"
-            "if x > hi:\n"
-            "    return hi\n"
-            "return x\n"
-        )
-    return ex(SYS_CODE, user, assistant, {"id": f"syn_code_{i:06d}", "task":"code", "kind": k})
+        assistant = "if x < lo:\n    return lo\nif x > hi:\n    return hi\nreturn x\n"
+    # IMPORTANT: make code completions end with a blank line so --stop_string "\n\n" works at inference time.
+    assistant = assistant.rstrip() + "\n\n"
+    return ex(SYS_CODE, user, assistant, {"id": f"syn_code_{i:06d}", "task": "code", "kind": k})
+
 
 def main():
     ap = argparse.ArgumentParser()
@@ -133,7 +141,7 @@ def main():
     args = ap.parse_args()
 
     rng = random.Random(args.seed)
-    rows: List[Dict] = []
+    rows: list[dict] = []
     for i in range(args.n_arith):
         rows.append(gen_arith(rng, i, args.arith_max_n))
     for i in range(args.n_syll):
@@ -147,6 +155,7 @@ def main():
         for r in rows:
             f.write(json.dumps(r, ensure_ascii=False) + "\n")
     print("wrote", len(rows), "examples to", args.out)
+
 
 if __name__ == "__main__":
     main()
