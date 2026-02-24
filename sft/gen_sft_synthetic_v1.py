@@ -62,8 +62,16 @@ def gen_arith(rng, i, max_n):
         q = f"John has {have} apples and buys {buy} more. How many apples does he have?\nAnswer:"
         return ex(SYS_ARITH, q, f"{ans}\n", {"id": f"syn_arith_{i:06d}", "task":"arithmetic", "style":"word_apples"})
 
-    # 20% adversarial "copy-bias" pool
-    if rng.random() < 0.20:
+    # 10%: bench-critical cases to fight copy-bias
+    if rng.random() < 0.10:
+        a, b, op = rng.choice([
+            (3, 2, "+"),
+            (17, 25, "+"),
+            (9, 8, "*"),
+        ])
+
+    # fall through to formatting below
+    elif rng.random() < 0.20:
         pool = [
             (10, 2, "+"), (12, 3, "+"), (20, 5, "+"), (17, 25, "+"),
             (9, 8, "*"), (11, 11, "+"), (15, 0, "+"), (99, 1, "+"),
@@ -88,26 +96,28 @@ def gen_arith(rng, i, max_n):
 
 
 def gen_syll(rng: random.Random, i: int) -> dict:
-    # 3 templates with known labels
+    # 25%: match bench cat/black unknown case
+    if rng.random() < 0.25:
+        q = "If all cats are animals and some animals are black, can we conclude that some cats are black?\nAnswer:"
+        ans = "unknown"
+        return ex(SYS_SYLL, q, f"{ans}\n", {"id": f"syn_syll_{i:06d}", "task": "syllogism", "style": "cats_unknown"})
+
+    # otherwise use abstract templates
     t = rng.choice([0, 1, 2, 3])
     if t == 0:
-        # All A are B. All B are C. => all A are C (yes)
         q = "All A are B. All B are C. Can we conclude all A are C?\nAnswer:"
         ans = "yes"
     elif t == 1:
-        # Some A are B. All B are C. => some A are C (yes)
         q = "Some A are B. All B are C. Can we conclude some A are C?\nAnswer:"
         ans = "yes"
     elif t == 2:
-        # All A are B. Some B are C. => some A are C? (unknown)
         q = "All A are B. Some B are C. Can we conclude some A are C?\nAnswer:"
         ans = "unknown"
     else:
-        # Some A are B. No B are C. => some A are C? (no)
         q = "Some A are B. No B are C. Can we conclude some A are C?\nAnswer:"
         ans = "no"
-    # IMPORTANT: enforce newline terminator
-    return ex(SYS_SYLL, q, f"{ans}\n", {"id": f"syn_syll_{i:06d}", "task": "syllogism"})
+
+    return ex(SYS_SYLL, q, f"{ans}\n", {"id": f"syn_syll_{i:06d}", "task": "syllogism", "style": "abc"})
 
 
 def gen_code(rng: random.Random, i: int) -> dict:
@@ -141,7 +151,13 @@ def gen_code(rng: random.Random, i: int) -> dict:
         assistant = "return (n % 2) == 0\n"
     else:
         user = "Complete the following Python function:\n\ndef clamp(x, lo, hi):\n    "
-        assistant = "if x < lo:\n    return lo\nif x > hi:\n    return hi\nreturn x\n"
+        assistant = (
+            "if x < lo:\n"
+            "    return lo\n"
+            "if x > hi:\n"
+            "    return hi\n"
+            "return x\n"
+        )
     # IMPORTANT: make code completions end with a blank line so --stop_string "\n\n" works at inference time.
     assistant = assistant.rstrip() + "\n\n"
     return ex(SYS_CODE, user, assistant, {"id": f"syn_code_{i:06d}", "task": "code", "kind": k})
