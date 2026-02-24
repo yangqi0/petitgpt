@@ -54,6 +54,27 @@ def ex(system: str, user: str, assistant: str, meta: dict) -> dict:
 
 
 def gen_arith(rng: random.Random, i: int, max_n: int) -> dict:
+    """
+    Mix two styles:
+    - 70%: symbolic arithmetic (Compute a+b / a-b / a*b)
+    - 30%: word problems (apples) to match bench style
+    Always end assistant with '\n' so stop_on_newline works.
+    """
+    if rng.random() < 0.30:
+        # word problem template: apples
+        have = rng.randint(0, max_n)
+        buy = rng.randint(0, max_n)
+        ans = have + buy
+        # keep prompt structure consistent with bench
+        q = f"John has {have} apples and buys {buy} more. How many apples does he have?\nAnswer:"
+        return ex(
+            SYS_ARITH,
+            q,
+            f"{ans}\n",
+            {"id": f"syn_arith_{i:06d}", "task": "arithmetic", "style": "word_apples"},
+        )
+
+    # symbolic arithmetic
     op = rng.choice(["+", "-", "*"])
     a = rng.randint(0, max_n)
     b = rng.randint(0, max_n)
@@ -66,8 +87,13 @@ def gen_arith(rng: random.Random, i: int, max_n: int) -> dict:
     else:
         ans = a * b
         q = f"What is {a} * {b}?\nAnswer:"
-    # IMPORTANT: enforce a newline terminator so inference can stop reliably on newline
-    return ex(SYS_ARITH, q, f"{ans}\n", {"id": f"syn_arith_{i:06d}", "task": "arithmetic"})
+
+    return ex(
+        SYS_ARITH,
+        q,
+        f"{ans}\n",
+        {"id": f"syn_arith_{i:06d}", "task": "arithmetic", "style": "symbolic"},
+    )
 
 
 def gen_syll(rng: random.Random, i: int) -> dict:
