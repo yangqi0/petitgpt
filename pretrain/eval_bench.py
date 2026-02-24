@@ -146,7 +146,6 @@ def generate_one(prompt: str, task: str, args, seed: int) -> str:
         "--top_k", str(args.top_k),
         "--max_new_tokens", str(args.max_new_tokens),
         "--min_new_tokens", str(args.min_new_tokens),
-        "--max_seq_len", str(args.max_seq_len),
         "--seed", str(seed),
         "--prompt", prompt,
         "--quiet",
@@ -240,7 +239,7 @@ def main():
     ap.add_argument("--top_k", type=int, default=0)
     ap.add_argument("--greedy", action="store_true")
     ap.add_argument("--max_new_tokens", type=int, default=128)
-    ap.add_argument("--min_new_tokens", type=int, default=8)
+    ap.add_argument("--min_new_tokens", type=int, default=1)
 
     ap.add_argument("--seed_base", type=int, default=1234)
     ap.add_argument("--limit", type=int, default=0)
