@@ -210,7 +210,7 @@ def generate_one(prompt: str, task: str, args, seed: int) -> str:
         # deterministic, short
         cmd += ["--greedy", "--temperature", "0"]
         # clamp length
-        cmd[cmd.index("--max_new_tokens") + 1] = str(min(int(args.max_new_tokens), 16))
+        cmd[cmd.index("--max_new_tokens") + 1] = str(min(int(args.max_new_tokens), 128))
         cmd[cmd.index("--min_new_tokens") + 1] = "1"
         # turn off sampling guards that can induce weird artifacts
         cmd[cmd.index("--repetition_penalty") + 1] = "1.0"
@@ -226,7 +226,6 @@ def generate_one(prompt: str, task: str, args, seed: int) -> str:
     elif task == "code":
         if args.greedy:
             cmd += ["--greedy", "--temperature", "0"]
-        cmd += ["--stop_string", "\n\n"]
     else:
         if args.greedy:
             cmd += ["--greedy", "--temperature", "0"]
@@ -238,8 +237,7 @@ def generate_one(prompt: str, task: str, args, seed: int) -> str:
 _SYLL_RE = re.compile(r"\b(yes|no|unknown)\b", re.I)
 
 def normalize_syllogism(gen: str) -> str:
-    s = (gen or "").lower()
-    m = _SYLL_RE.search(s)
+    m = _SYLL_RE.search((gen or ""))
     return m.group(1).lower() if m else "unknown"
 
 def wrap_with_task_rules(task: str, user_prompt: str) -> str:
