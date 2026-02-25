@@ -1,7 +1,7 @@
 {
   "ckpt": "outputs/sft_synth_v3/latest.pt",
   "bench": "pretrain/bench_v1.jsonl",
-  "time_s": 124.401,
+  "time_s": 127.966,
   "acc_arithmetic": 0.0,
   "acc_syllogism": 0.3333333333333333,
   "acc_code": 0.3333333333333333,
@@ -91,7 +91,7 @@
       "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n\nComplete the following Python function:\n\ndef factorial(n):\n    ",
       "gold": null,
       "gen": " if n < 0:\n    raise ValueError('n must be non-negative')\nr = 1\nfor i in range(2, n + 1):\n    r *= i\nreturn r",
-      "detail": "File \"/tmp/tmpi4_hhoeb/tmp_eval.py\", line 3\n    raise ValueError('n must be non-negative')\n                                              ^\nIndentationError: unindent does not match any outer indentation level"
+      "detail": "File \"/tmp/tmpu8n3ocab/tmp_eval.py\", line 3\n    raise ValueError('n must be non-negative')\n    ^\nIndentationError: expected an indented block after 'if' statement on line 2"
     },
     {
       "id": "code_fib_0001",
@@ -100,7 +100,7 @@
       "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n\nComplete the following Python function:\n\ndef fib(n):\n    ",
       "gold": null,
       "gen": " if n < 0:\n    raise ValueError('n must be non-negative')\na, b = 0, 1\nfor _ in range(2, n + 1):\n    a,b = b, a + b\nreturn a",
-      "detail": "File \"/tmp/tmpxtt1a4r5/tmp_eval.py\", line 3\n    raise ValueError('n must be non-negative')\n                                              ^\nIndentationError: unindent does not match any outer indentation level"
+      "detail": "File \"/tmp/tmpygou7c4s/tmp_eval.py\", line 3\n    raise ValueError('n must be non-negative')\n    ^\nIndentationError: expected an indented block after 'if' statement on line 2"
     }
   ]
 }

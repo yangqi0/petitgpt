@@ -103,21 +103,42 @@ def try_extract_code_body(generation: str, signature: str) -> str:
     return body if body.strip() else "pass"
 
 
-def run_python_tests(
-    signature: str, body: str, tests: str, timeout_s: float = 2.0
-) -> tuple[bool, str]:
+_LEADING_SPACES_RE = re.compile(r"^ +")
+
+def normalize_body_indent(body: str) -> str:
+    """
+    Normalize model-generated code body to 'relative indentation':
+    - dedent common indentation
+    - convert tabs to 4 spaces
+    - for each non-empty line, reduce leading spaces to nearest lower multiple of 4
+      (so 1/2/3 -> 0, 5/6/7 -> 4, etc.)
+    """
+    s = (body or "").replace("\r\n", "\n").replace("\r", "\n").strip("\n")
+    s = s.replace("\t", "    ")
+    s = textwrap.dedent(s)
+
+    out_lines = []
+    for ln in s.splitlines():
+        if not ln.strip():
+            out_lines.append("")
+            continue
+        m = _LEADING_SPACES_RE.match(ln)
+        if m:
+            n = len(m.group(0))
+            n2 = 0 if n < 4 else (n // 4) * 4
+            ln = (" " * n2) + ln[n:]
+        out_lines.append(ln)
+    return "\n".join(out_lines)
+
+def indent_as_function_body(body: str) -> str:
+    s = normalize_body_indent(body)
+    lines = s.splitlines() if s else ["pass"]
+    return "\n".join(("    " + ln) if ln.strip() else "" for ln in lines)
+
+def run_python_tests(signature: str, body: str, tests: str, timeout_s: float = 2.0) -> tuple[bool, str]:
     prog = []
     prog.append(signature.rstrip())
-
-    fixed = []
-    for ln in body.splitlines() or ["pass"]:
-        if ln.strip() == "":
-            fixed.append("")
-        elif ln.startswith((" ", "\t")):
-            fixed.append(ln)
-        else:
-            fixed.append("    " + ln)
-    prog.append("\n".join(fixed))
+    prog.append(indent_as_function_body(body))
     prog.append("")
     prog.append(tests.rstrip())
     code = "\n".join(prog) + "\n"
@@ -140,7 +161,6 @@ def run_python_tests(
         if r.returncode == 0:
             return (True, "")
         return (False, (r.stderr or r.stdout or "FAILED").strip()[:2000])
-
 
 def generate_one(prompt: str, task: str, args, seed: int) -> str:
     cmd = [
@@ -207,16 +227,14 @@ def generate_one(prompt: str, task: str, args, seed: int) -> str:
         cmd += ["--avoid_first_whitespace", "--ban_first_steps", str(args.ban_first_steps)]
     return subprocess.check_output(cmd, text=True)
 
+_SYLL_RE = re.compile(r"\b(yes|no|unknown)\b", re.I)
 
 def normalize_syllogism(gen: str) -> str:
-    # Take first token-like word only
-    s = gen.strip().lower()
-    # common variants
-    for w in ["yes", "no", "unknown"]:
-        if s.startswith(w):
-            return w
-    return "unknown"
-
+    s = (gen or "").strip().lower()
+    m = _SYLL_RE.search(s)
+    if not m:
+        return "unknown"
+    return m.group(1).lower()
 
 def wrap_with_task_rules(task: str, user_prompt: str) -> str:
     if task == "arithmetic":
@@ -332,7 +350,6 @@ def main():
             tests = it["tests"]
             body = try_extract_code_body(gen, signature)
             # remove any accidental leading indentation from the model
-            body = textwrap.dedent(body).strip("\n")
             ok, err = run_python_tests(signature, body, tests, timeout_s=2.0)
             if ok:
                 stats["code"]["correct"] += 1

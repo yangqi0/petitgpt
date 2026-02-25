@@ -1,7 +1,7 @@
 {
   "ckpt": "outputs/sft_synth_v3/latest.pt",
   "bench": "pretrain/bench_v1.jsonl",
-  "time_s": 80.192,
+  "time_s": 123.984,
   "acc_arithmetic": 0.0,
   "acc_syllogism": 0.3333333333333333,
   "acc_code": 0.3333333333333333,
@@ -73,7 +73,7 @@
       "prompt": "You are a logic assistant.\nRules:\n- Output ONLY one token: yes / no / unknown.\n- Do not explain.\n\nSome A are B. All B are C. Can we conclude some A are C?\nAnswer:",
       "gold": "yes",
       "gen": " all B can be true or false",
-      "detail": "pred=all gold=yes"
+      "detail": "pred=unknown gold=yes"
     },
     {
       "id": "code_add_0001",
@@ -91,7 +91,7 @@
       "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n\nComplete the following Python function:\n\ndef factorial(n):\n    ",
       "gold": null,
       "gen": " if n < 0:\n    raise ValueError('n must be non-negative')\nr = 1\nfor i in range(2, n + 1):\n    r *= i\nreturn r",
-      "detail": "Traceback (most recent call last):\n  File \"/tmp/tmps62e565g/tmp_eval.py\", line 5, in <module>\n    assert factorial(0)==1\nAssertionError"
+      "detail": "File \"/tmp/tmp0nf7j_zf/tmp_eval.py\", line 3\n    raise ValueError('n must be non-negative')\n    ^\nIndentationError: expected an indented block after 'if' statement on line 2"
     },
     {
       "id": "code_fib_0001",
@@ -100,7 +100,7 @@
       "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n\nComplete the following Python function:\n\ndef fib(n):\n    ",
       "gold": null,
       "gen": " if n < 0:\n    raise ValueError('n must be non-negative')\na, b = 0, 1\nfor _ in range(2, n + 1):\n    a,b = b, a + b\nreturn a",
-      "detail": "Traceback (most recent call last):\n  File \"/tmp/tmp6vnd28a3/tmp_eval.py\", line 5, in <module>\n    assert fib(0)==0\nAssertionError"
+      "detail": "File \"/tmp/tmppsu3ne0w/tmp_eval.py\", line 3\n    raise ValueError('n must be non-negative')\n    ^\nIndentationError: expected an indented block after 'if' statement on line 2"
     }
   ]
 }
