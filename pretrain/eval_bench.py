@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 from __future__ import annotations
 
@@ -10,14 +9,16 @@ import re
 import subprocess
 import sys
 import tempfile
+import textwrap
 import time
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 _NUM_RE = re.compile(r"[-+]?\d+(?:\.\d+)?")
 
-def read_jsonl(path: str) -> List[Dict[str, Any]]:
+
+def read_jsonl(path: str) -> list[dict[str, Any]]:
     rows = []
-    with open(path, "r", encoding="utf-8") as f:
+    with open(path, encoding="utf-8") as f:
         for line in f:
             line = line.strip()
             if not line:
@@ -25,7 +26,9 @@ def read_jsonl(path: str) -> List[Dict[str, Any]]:
             rows.append(json.loads(line))
     return rows
 
+
 _NUM_RE = re.compile(r"[-+]?\d+(?:\.\d+)?")
+
 
 def extract_first_number(text: str):
     nums = _NUM_RE.findall((text or "").strip())
@@ -35,6 +38,7 @@ def extract_first_number(text: str):
         return float(nums[0])
     except Exception:
         return None
+
 
 def arithmetic_correct(gen: str, gold: str) -> bool:
     # gold is an integer string like "5"
@@ -47,6 +51,7 @@ def arithmetic_correct(gen: str, gold: str) -> bool:
         return False
     # allow exact int match, tolerate "5.0"
     return abs(pred - g) < 1e-6
+
 
 def normalize_yes_no_unknown(text: str) -> str:
     t = (text or "").strip().lower()
@@ -77,7 +82,7 @@ def try_extract_code_body(generation: str, signature: str) -> str:
     # if it repeats signature, cut after last occurrence
     idx = g.rfind(signature.strip())
     if idx != -1:
-        g = g[idx + len(signature.strip()):]
+        g = g[idx + len(signature.strip()) :]
 
     # handle fenced block
     g = g.replace("```python", "```").replace("```py", "```")
@@ -87,7 +92,7 @@ def try_extract_code_body(generation: str, signature: str) -> str:
             g = max(parts[1::2], key=len)
 
     lines = g.splitlines()
-    kept: List[str] = []
+    kept: list[str] = []
     for line in lines:
         # stop when it starts a new top-level thing (often storytelling)
         if kept and line and (not line.startswith((" ", "\t"))):
@@ -98,12 +103,14 @@ def try_extract_code_body(generation: str, signature: str) -> str:
     return body if body.strip() else "pass"
 
 
-def run_python_tests(signature: str, body: str, tests: str, timeout_s: float = 2.0) -> Tuple[bool, str]:
+def run_python_tests(
+    signature: str, body: str, tests: str, timeout_s: float = 2.0
+) -> tuple[bool, str]:
     prog = []
     prog.append(signature.rstrip())
 
     fixed = []
-    for ln in (body.splitlines() or ["pass"]):
+    for ln in body.splitlines() or ["pass"]:
         if ln.strip() == "":
             fixed.append("")
         elif ln.startswith((" ", "\t")):
@@ -134,24 +141,40 @@ def run_python_tests(signature: str, body: str, tests: str, timeout_s: float = 2
             return (True, "")
         return (False, (r.stderr or r.stdout or "FAILED").strip()[:2000])
 
+
 def generate_one(prompt: str, task: str, args, seed: int) -> str:
     cmd = [
-        sys.executable, "pretrain/sample.py",
-        "--ckpt", args.ckpt,
-        "--tokenizer_path", args.tokenizer_path,
-        "--precision", args.precision,
-        "--max_seq_len", str(args.max_seq_len),
-        "--temperature", str(args.temperature),
-        "--top_p", str(args.top_p),
-        "--top_k", str(args.top_k),
-        "--max_new_tokens", str(args.max_new_tokens),
-        "--min_new_tokens", str(args.min_new_tokens),
-        "--seed", str(seed),
-        "--prompt", prompt,
+        sys.executable,
+        "pretrain/sample.py",
+        "--ckpt",
+        args.ckpt,
+        "--tokenizer_path",
+        args.tokenizer_path,
+        "--precision",
+        args.precision,
+        "--max_seq_len",
+        str(args.max_seq_len),
+        "--temperature",
+        str(args.temperature),
+        "--top_p",
+        str(args.top_p),
+        "--top_k",
+        str(args.top_k),
+        "--max_new_tokens",
+        str(args.max_new_tokens),
+        "--min_new_tokens",
+        str(args.min_new_tokens),
+        "--seed",
+        str(seed),
+        "--prompt",
+        prompt,
         "--quiet",
-        "--repetition_penalty", str(args.repetition_penalty),
-        "--no_repeat_ngram_size", str(args.no_repeat_ngram_size),
-        "--max_repeat_token", str(args.max_repeat_token),
+        "--repetition_penalty",
+        str(args.repetition_penalty),
+        "--no_repeat_ngram_size",
+        str(args.no_repeat_ngram_size),
+        "--max_repeat_token",
+        str(args.max_repeat_token),
     ]
 
     # task-specific decoding + stopping
@@ -166,7 +189,7 @@ def generate_one(prompt: str, task: str, args, seed: int) -> str:
         cmd[cmd.index("--no_repeat_ngram_size") + 1] = "0"
         cmd[cmd.index("--max_repeat_token") + 1] = "0"
         # stop when we have a number followed by a delimiter
-        cmd += ["--stop_regex", r"[-+]?\d+(?:\.\d+)?(?=(?:\s|$|[^\d\.]))"]
+        cmd += ["--stop_regex", r"[-+]?\d+(?:\.\d+)?(?=(?:\s|$|[^\d]))"]
         cmd += ["--stop_on_newline"]
     elif task == "syllogism":
         cmd += ["--greedy", "--temperature", "0"]
@@ -184,6 +207,7 @@ def generate_one(prompt: str, task: str, args, seed: int) -> str:
         cmd += ["--avoid_first_whitespace", "--ban_first_steps", str(args.ban_first_steps)]
     return subprocess.check_output(cmd, text=True)
 
+
 def normalize_syllogism(gen: str) -> str:
     # Take first token-like word only
     s = gen.strip().lower()
@@ -191,8 +215,8 @@ def normalize_syllogism(gen: str) -> str:
     for w in ["yes", "no", "unknown"]:
         if s.startswith(w):
             return w
-    # fallback: first word
-    return s.split()[0] if s.split() else ""
+    return "unknown"
+
 
 def wrap_with_task_rules(task: str, user_prompt: str) -> str:
     if task == "arithmetic":
@@ -224,6 +248,7 @@ def wrap_with_task_rules(task: str, user_prompt: str) -> str:
     if not sys:
         return user_prompt
     return sys + "\n" + user_prompt
+
 
 def main():
     ap = argparse.ArgumentParser()
@@ -296,7 +321,7 @@ def main():
         elif task == "syllogism":
             stats["syllogism"]["n"] += 1
             pred = normalize_syllogism(gen)
-            ok = (pred == gold)
+            ok = pred == gold
             if ok:
                 stats["syllogism"]["correct"] += 1
             detail = f"pred={pred} gold={gold}"
@@ -306,6 +331,8 @@ def main():
             signature = it["signature"]
             tests = it["tests"]
             body = try_extract_code_body(gen, signature)
+            # remove any accidental leading indentation from the model
+            body = textwrap.dedent(body).strip("\n")
             ok, err = run_python_tests(signature, body, tests, timeout_s=2.0)
             if ok:
                 stats["code"]["correct"] += 1
@@ -315,17 +342,20 @@ def main():
             detail = f"Unknown task={task}"
 
         stats["total"] += 1
-        results.append({
-            "id": _id,
-            "task": task,
-            "ok": ok,
-            "prompt": prompt,
-            "gold": gold,
-            "gen": gen,
-            "detail": detail,
-        })
+        results.append(
+            {
+                "id": _id,
+                "task": task,
+                "ok": ok,
+                "prompt": prompt,
+                "gold": gold,
+                "gen": gen,
+                "detail": detail,
+            }
+        )
 
-    def acc(d): return (d["correct"] / d["n"]) if d["n"] else 0.0
+    def acc(d):
+        return (d["correct"] / d["n"]) if d["n"] else 0.0
 
     summary = {
         "ckpt": args.ckpt,
@@ -342,7 +372,9 @@ def main():
     with open(args.out, "w", encoding="utf-8") as f:
         json.dump(summary, f, ensure_ascii=False, indent=2)
 
-    print(json.dumps({k: summary[k] for k in summary if k != "results"}, ensure_ascii=False, indent=2))
+    print(
+        json.dumps({k: summary[k] for k in summary if k != "results"}, ensure_ascii=False, indent=2)
+    )
 
 
 if __name__ == "__main__":
