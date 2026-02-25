@@ -93,18 +93,29 @@ def try_extract_code_body(generation: str, signature: str) -> str:
 
     lines = g.splitlines()
     kept: list[str] = []
+
+    STOP_PREFIXES = (
+        "if __name__",
+        "class ",
+        "def ",
+        "import ",
+        "from ",
+    )
+
     for line in lines:
-        # stop when it starts a new top-level thing (often storytelling)
-        if kept and line and (not line.startswith((" ", "\t"))):
-            break
         line = line.rstrip()
+        # Stop if model starts a new top-level program structure.
+        s = line.lstrip()
+        if kept and s.startswith(STOP_PREFIXES):
+            break
         kept.append(line)
 
-    body = "\n".join(kept).rstrip()
+    body = "\n".join(kept).strip("\n")
     return body if body.strip() else "pass"
 
 
 _LEADING_SPACES_RE = re.compile(r"^ +")
+
 
 def normalize_body_indent(body: str) -> str:
     """
@@ -134,12 +145,16 @@ def normalize_body_indent(body: str) -> str:
         out_lines.append(ln)
     return "\n".join(out_lines)
 
+
 def indent_as_function_body(body: str) -> str:
     s = normalize_body_indent(body)
     lines = s.splitlines() if s else ["pass"]
     return "\n".join(("    " + ln) if ln.strip() else "" for ln in lines)
 
-def run_python_tests(signature: str, body: str, tests: str, timeout_s: float = 2.0) -> tuple[bool, str]:
+
+def run_python_tests(
+    signature: str, body: str, tests: str, timeout_s: float = 2.0
+) -> tuple[bool, str]:
     prog = []
     prog.append(signature.rstrip())
     prog.append(indent_as_function_body(body))
@@ -169,6 +184,7 @@ def run_python_tests(signature: str, body: str, tests: str, timeout_s: float = 2
         if r.returncode == 0:
             return (True, "")
         return (False, (r.stderr or r.stdout or "FAILED").strip()[:2000])
+
 
 def generate_one(prompt: str, task: str, args, seed: int) -> str:
     cmd = [
@@ -234,11 +250,14 @@ def generate_one(prompt: str, task: str, args, seed: int) -> str:
         cmd += ["--avoid_first_whitespace", "--ban_first_steps", str(args.ban_first_steps)]
     return subprocess.check_output(cmd, text=True)
 
+
 _SYLL_RE = re.compile(r"\b(yes|no|unknown)\b", re.I)
 
+
 def normalize_syllogism(gen: str) -> str:
-    m = _SYLL_RE.search((gen or ""))
+    m = _SYLL_RE.search(gen or "")
     return m.group(1).lower() if m else "unknown"
+
 
 def wrap_with_task_rules(task: str, user_prompt: str) -> str:
     if task == "arithmetic":
