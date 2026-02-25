@@ -129,8 +129,6 @@ def gen_code(rng: random.Random, i: int) -> dict:
     elif k == "factorial":
         user = "Complete the following Python function:\n\ndef factorial(n):\n    "
         assistant = (
-            "if n < 0:\n"
-            "    raise ValueError('n must be non-negative')\n"
             "r = 1\n"
             "for i in range(2, n + 1):\n"
             "    r *= i\n"
@@ -139,8 +137,6 @@ def gen_code(rng: random.Random, i: int) -> dict:
     elif k == "fib":
         user = "Complete the following Python function:\n\ndef fib(n):\n    "
         assistant = (
-            "if n < 0:\n"
-            "    raise ValueError('n must be non-negative')\n"
             "a, b = 0, 1\n"
             "for _ in range(n):\n"
             "    a, b = b, a + b\n"
