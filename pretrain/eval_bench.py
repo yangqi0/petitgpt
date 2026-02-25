@@ -97,6 +97,7 @@ def try_extract_code_body(generation: str, signature: str) -> str:
         # stop when it starts a new top-level thing (often storytelling)
         if kept and line and (not line.startswith((" ", "\t"))):
             break
+        line = line.rstrip()
         kept.append(line)
 
     body = "\n".join(kept).rstrip()
@@ -125,7 +126,10 @@ def normalize_body_indent(body: str) -> str:
         m = _LEADING_SPACES_RE.match(ln)
         if m:
             n = len(m.group(0))
-            n2 = 0 if n < 4 else (n // 4) * 4
+            if 0 < n < 4:
+                n2 = 4
+            else:
+                n2 = ((n + 3) // 4) * 4  # ceil to multiple of 4
             ln = (" " * n2) + ln[n:]
         out_lines.append(ln)
     return "\n".join(out_lines)
@@ -158,6 +162,10 @@ def run_python_tests(signature: str, body: str, tests: str, timeout_s: float = 2
             )
         except subprocess.TimeoutExpired:
             return (False, "TIMEOUT")
+        if r.returncode != 0:
+            snippet = "\n".join(code.splitlines()[:60])
+            err = (r.stderr or r.stdout or "FAILED").strip()[:1200]
+            return (False, err + "\n\n[CODE_SNIPPET]\n" + snippet)
         if r.returncode == 0:
             return (True, "")
         return (False, (r.stderr or r.stdout or "FAILED").strip()[:2000])
@@ -230,11 +238,9 @@ def generate_one(prompt: str, task: str, args, seed: int) -> str:
 _SYLL_RE = re.compile(r"\b(yes|no|unknown)\b", re.I)
 
 def normalize_syllogism(gen: str) -> str:
-    s = (gen or "").strip().lower()
+    s = (gen or "").lower()
     m = _SYLL_RE.search(s)
-    if not m:
-        return "unknown"
-    return m.group(1).lower()
+    return m.group(1).lower() if m else "unknown"
 
 def wrap_with_task_rules(task: str, user_prompt: str) -> str:
     if task == "arithmetic":
