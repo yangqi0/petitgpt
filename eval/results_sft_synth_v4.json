@@ -1,10 +1,10 @@
 {
   "ckpt": "outputs/sft_synth_v4/latest.pt",
   "bench": "pretrain/bench_v1.jsonl",
-  "time_s": 126.082,
+  "time_s": 119.711,
   "acc_arithmetic": 0.0,
   "acc_syllogism": 0.3333333333333333,
-  "acc_code": 0.3333333333333333,
+  "acc_code": 0.6666666666666666,
   "counts": {
     "total": 9,
     "arithmetic": {
@@ -17,7 +17,7 @@
     },
     "code": {
       "n": 3,
-      "correct": 1
+      "correct": 2
     }
   },
   "results": [
@@ -87,11 +87,11 @@
     {
       "id": "code_fact_0001",
       "task": "code",
-      "ok": false,
+      "ok": true,
       "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n\nComplete the following Python function:\n\ndef factorial(n):\n    ",
       "gold": null,
       "gen": " r = 1;\n    for i in range(2, n + 1):\n        r *= i\nreturn r\n\n\nclass Solution:\n    def factorize(self, s: str) -> int:\n        return sum([x % 2 for x in s])\n\n    def __init__(self):\n\n        self.factors = {}  # type: List[int]\n        self._factorized_s = set()  ## type of factorization\n        for _ in xrange(5):\n            self.__setitem__('factor', 0)\n            if self == 0:\n                self['factor'] = 0\n            else: iz",
-      "detail": "Traceback (most recent call last):\n  File \"/tmp/tmpd8q_mgs7/tmp_eval.py\", line 7, in <module>\n    assert factorial(0)==1\nAssertionError\n\n[CODE_SNIPPET]\ndef factorial(n):\n    r = 1;\n    for i in range(2, n + 1):\n        r *= i\n        return r\n\nassert factorial(0)==1\nassert factorial(1)==1\nassert factorial(5)==120\nassert factorial(8)==40320"
+      "detail": ""
     },
     {
       "id": "code_fib_0001",
@@ -100,7 +100,7 @@
       "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n\nComplete the following Python function:\n\ndef fib(n):\n    ",
       "gold": null,
       "gen": " for i in range(2, n + 1):\n        return i\n\n\nif __name__ == '__main__':\n    n = int(input())\n    print(fib(1) * fib((n)) / 2)",
-      "detail": "Traceback (most recent call last):\n  File \"/tmp/tmp6bqwldkp/tmp_eval.py\", line 5, in <module>\n    assert fib(0)==0\nAssertionError\n\n[CODE_SNIPPET]\ndef fib(n):\n    for i in range(2, n + 1):\n        return i\n\nassert fib(0)==0\nassert fib(1)==1\nassert fib(2)==1\nassert fib(7)==13"
+      "detail": "Traceback (most recent call last):\n  File \"/tmp/tmpvpuedljn/tmp_eval.py\", line 5, in <module>\n    assert fib(0)==0\nAssertionError\n\n[CODE_SNIPPET]\ndef fib(n):\n    for i in range(2, n + 1):\n            return i\n\nassert fib(0)==0\nassert fib(1)==1\nassert fib(2)==1\nassert fib(7)==13"
     }
   ]
 }
