@@ -102,6 +102,8 @@ def try_extract_code_body(generation: str, signature: str) -> str:
         "from ",
         "assert ",
         "print(",
+        "input(",
+        "end"
     )
 
     for line in lines:
@@ -161,14 +163,44 @@ def normalize_body_indent(body: str) -> list[str]:
 
 def indent_as_function_body(body: str) -> str:
     s = (body or "").replace("\t", "    ").strip("\n")
-    s = textwrap.dedent(s)
     if not s.strip():
-        s = "pass"
-    out = []
+        return "    pass"
+
+    # 1) normalize indentation to multiples of 4 (floor), keep relative structure
+    raw = []
     for ln in s.splitlines():
         ln = ln.rstrip()
-        out.append(("    " + ln) if ln.strip() else "")
-    return "\n".join(out)
+        if not ln.strip():
+            raw.append("")
+            continue
+        lead = len(ln) - len(ln.lstrip(" "))
+        lead2 = (lead // 4) * 4
+        raw.append((" " * lead2) + ln.lstrip(" "))
+
+    # 2) FIX unexpected-indent noise:
+    # if current indent > prev indent but previous code line is NOT a block opener (no ':'),
+    # then snap current indent back to prev indent.
+    fixed = []
+    prev_indent = 0
+    prev_ends_colon = False
+    for ln in raw:
+        if not ln.strip():
+            fixed.append("")
+            continue
+        cur_indent = len(ln) - len(ln.lstrip(" "))
+        txt = ln.lstrip(" ")
+
+        if (cur_indent > prev_indent) and (not prev_ends_colon):
+            cur_indent = prev_indent  # snap back
+
+        fixed_ln = (" " * cur_indent) + txt
+        fixed.append(fixed_ln)
+
+        prev_indent = cur_indent
+        prev_ends_colon = fixed_ln.rstrip().endswith(":")
+
+    # 3) indent into function body
+    return "\n".join(("    " + ln) if ln.strip() else "" for ln in fixed)
 
 
 def run_python_tests(
