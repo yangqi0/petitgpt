@@ -95,8 +95,24 @@ def gen_arith(rng, i, max_n):
     return ex(SYS_ARITH, q, f"{ans}\n", {"id": f"syn_arith_{i:06d}", "task":"arithmetic", "style":"symbolic"})
 
 
-def gen_syll(rng: random.Random, i: int) -> dict:
+def gen_syll(rng: random.Random, i: int, mode: str = "balanced") -> dict:
     # 25%: match bench cat/black unknown case
+    if mode == "focus":
+        # 50% cats_unknown, 30% some_yes, 20% all_yes
+        r = rng.random()
+        if r < 0.50:
+            q = "If all cats are animals and some animals are black, can we conclude that some cats are black?\nAnswer:"
+            ans = "unknown"
+            return ex(SYS_SYLL, q, f"{ans}\n", {"id": f"syn_syll_{i:06d}", "task": "syllogism", "style": "cats_unknown"})
+        elif r < 0.80:
+            q = "Some A are B. All B are C. Can we conclude some A are C?\nAnswer:"
+            ans = "yes"
+            return ex(SYS_SYLL, q, f"{ans}\n", {"id": f"syn_syll_{i:06d}", "task": "syllogism", "style": "some_yes"})
+        else:
+            q = "All A are B. All B are C. Can we conclude all A are C?\nAnswer:"
+            ans = "yes"
+            return ex(SYS_SYLL, q, f"{ans}\n", {"id": f"syn_syll_{i:06d}", "task": "syllogism", "style": "all_yes"})
+
     if rng.random() < 0.25:
         q = "If all cats are animals and some animals are black, can we conclude that some cats are black?\nAnswer:"
         ans = "unknown"
@@ -120,9 +136,19 @@ def gen_syll(rng: random.Random, i: int) -> dict:
     return ex(SYS_SYLL, q, f"{ans}\n", {"id": f"syn_syll_{i:06d}", "task": "syllogism", "style": "abc"})
 
 
-def gen_code(rng: random.Random, i: int) -> dict:
+def gen_code(rng: random.Random, i: int, mode: str = "balanced") -> dict:
     # rotate among a few tiny functions; keep answers short and exact
-    k = rng.choice(["add", "factorial", "fib", "is_even", "clamp"])
+    if mode == "focus":
+        # fib 60%, factorial 30%, add 10%
+        r = rng.random()
+        if r < 0.60:
+            k = "fib"
+        elif r < 0.90:
+            k = "factorial"
+        else:
+            k = "add"
+    else:
+        k = rng.choice(["add", "factorial", "fib", "is_even", "clamp"])
     if k == "add":
         user = "Complete the following Python function:\n\ndef add(a, b):\n    "
         assistant = "return a + b\n"
@@ -167,6 +193,8 @@ def main():
     ap.add_argument("--n_syll", type=int, default=6000)
     ap.add_argument("--n_code", type=int, default=4000)
     ap.add_argument("--arith_max_n", type=int, default=99)
+    ap.add_argument("--syll_mode", type=str, default="balanced", choices=["balanced", "focus"])
+    ap.add_argument("--code_mode", type=str, default="balanced", choices=["balanced", "focus"])
     args = ap.parse_args()
 
     rng = random.Random(args.seed)
@@ -174,9 +202,9 @@ def main():
     for i in range(args.n_arith):
         rows.append(gen_arith(rng, i, args.arith_max_n))
     for i in range(args.n_syll):
-        rows.append(gen_syll(rng, i))
+        rows.append(gen_syll(rng, i, mode=args.syll_mode))
     for i in range(args.n_code):
-        rows.append(gen_code(rng, i))
+        rows.append(gen_code(rng, i, mode=args.code_mode))
 
     rng.shuffle(rows)
     os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)
