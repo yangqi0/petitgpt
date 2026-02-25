@@ -100,6 +100,8 @@ def try_extract_code_body(generation: str, signature: str) -> str:
         "def ",
         "import ",
         "from ",
+        "assert ",
+        "print(",
     )
 
     for line in lines:
@@ -114,42 +116,59 @@ def try_extract_code_body(generation: str, signature: str) -> str:
     return body if body.strip() else "pass"
 
 
-_LEADING_SPACES_RE = re.compile(r"^ +")
+_COLON_BLOCK_RE = re.compile(r"^\s*(if|for|while|elif|else|try|except|finally|with|match|case)\b.*:\s*$")
+_DEF_CLASS_RE = re.compile(r"^\s*(def|class)\b.*:\s*$")
 
-
-def normalize_body_indent(body: str) -> str:
+def normalize_body_indent(body: str) -> list[str]:
     """
-    Normalize model-generated code body to 'relative indentation':
-    - dedent common indentation
-    - convert tabs to 4 spaces
-    - for each non-empty line, reduce leading spaces to nearest lower multiple of 4
-      (so 1/2/3 -> 0, 5/6/7 -> 4, etc.)
+    Return a list of lines with *relative* indentation fixed:
+    - tabs -> 4 spaces
+    - strip trailing whitespace
+    - repair missing indentation after ':' block starters by forcing next non-empty line to be +4
     """
-    s = (body or "").replace("\r\n", "\n").replace("\r", "\n").strip("\n")
+    s = (body or "").replace("\r\n", "\n").replace("\r", "\n")
     s = s.replace("\t", "    ")
-    s = textwrap.dedent(s)
+    lines = [ln.rstrip() for ln in s.splitlines()]
 
-    out_lines = []
-    for ln in s.splitlines():
+    out = []
+    force_next_indent = None  # (base_indent)
+    for ln in lines:
         if not ln.strip():
-            out_lines.append("")
+            out.append("")
             continue
-        m = _LEADING_SPACES_RE.match(ln)
-        if m:
-            n = len(m.group(0))
-            if 0 < n < 4:
-                n2 = 4
-            else:
-                n2 = ((n + 3) // 4) * 4  # ceil to multiple of 4
-            ln = (" " * n2) + ln[n:]
-        out_lines.append(ln)
-    return "\n".join(out_lines)
+
+        # count current leading spaces
+        cur_indent = len(ln) - len(ln.lstrip(" "))
+        txt = ln.lstrip(" ")
+
+        # If previous line started a block, ensure this line is indented deeper.
+        if force_next_indent is not None and cur_indent <= force_next_indent:
+            ln = (" " * (force_next_indent + 4)) + txt
+            cur_indent = force_next_indent + 4
+            force_next_indent = None
+        else:
+            force_next_indent = None
+
+        out.append(ln)
+
+        # If this line starts a block, require next non-empty line to indent deeper
+        if _COLON_BLOCK_RE.match(ln) or _DEF_CLASS_RE.match(ln):
+            base = len(ln) - len(ln.lstrip(" "))
+            force_next_indent = base
+
+    return out
 
 
 def indent_as_function_body(body: str) -> str:
-    s = normalize_body_indent(body)
-    lines = s.splitlines() if s else ["pass"]
-    return "\n".join(("    " + ln) if ln.strip() else "" for ln in lines)
+    s = (body or "").replace("\t", "    ").strip("\n")
+    s = textwrap.dedent(s)
+    if not s.strip():
+        s = "pass"
+    out = []
+    for ln in s.splitlines():
+        ln = ln.rstrip()
+        out.append(("    " + ln) if ln.strip() else "")
+    return "\n".join(out)
 
 
 def run_python_tests(

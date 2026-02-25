@@ -1,9 +1,9 @@
 {
-  "ckpt": "outputs/sft_synth_test_v2/latest.pt",
+  "ckpt": "outputs/sft_synth_v4/latest.pt",
   "bench": "pretrain/bench_v1.jsonl",
-  "time_s": 298.63,
+  "time_s": 126.082,
   "acc_arithmetic": 0.0,
-  "acc_syllogism": 0.0,
+  "acc_syllogism": 0.3333333333333333,
   "acc_code": 0.3333333333333333,
   "counts": {
     "total": 9,
@@ -13,7 +13,7 @@
     },
     "syllogism": {
       "n": 3,
-      "correct": 0
+      "correct": 1
     },
     "code": {
       "n": 3,
@@ -27,8 +27,8 @@
       "ok": false,
       "prompt": "You are a precise assistant.\nRules for arithmetic questions:\n- Output ONLY the final numeric answer.\n- No explanation, no extra words, no punctuation.\n\nJohn has 3 apples and buys 2 more. How many apples does he have?\nAnswer:",
       "gold": "5",
-      "gen": " 4 apples",
-      "detail": "pred=4.0 gold=5"
+      "gen": " 3",
+      "detail": "pred=3.0 gold=5"
     },
     {
       "id": "arith_0002",
@@ -36,8 +36,8 @@
       "ok": false,
       "prompt": "You are a precise assistant.\nRules for arithmetic questions:\n- Output ONLY the final numeric answer.\n- No explanation, no extra words, no punctuation.\n\nCompute 17 + 25.\nAnswer:",
       "gold": "42",
-      "gen": " 158.2\n",
-      "detail": "pred=158.2 gold=42"
+      "gen": " 25",
+      "detail": "pred=25.0 gold=42"
     },
     {
       "id": "arith_0003",
@@ -45,8 +45,8 @@
       "ok": false,
       "prompt": "You are a precise assistant.\nRules for arithmetic questions:\n- Output ONLY the final numeric answer.\n- No explanation, no extra words, no punctuation.\n\nWhat is 9 * 8?\nAnswer:",
       "gold": "72",
-      "gen": " 8208644648\n",
-      "detail": "pred=8208644648.0 gold=72"
+      "gen": " 8",
+      "detail": "pred=8.0 gold=72"
     },
     {
       "id": "syll_0001",
@@ -54,17 +54,17 @@
       "ok": false,
       "prompt": "You are a logic assistant.\nRules:\n- Output ONLY one token: yes / no / unknown.\n- Do not explain.\n\nIf all cats are animals and some animals are black, can we conclude that some cats are black?\nAnswer:",
       "gold": "unknown",
-      "gen": " No. The answer is \"no\".\n",
+      "gen": " no. No. The answer is no, because the answer must be \"unknown.\"",
       "detail": "pred=no gold=unknown"
     },
     {
       "id": "syll_0002",
       "task": "syllogism",
-      "ok": false,
+      "ok": true,
       "prompt": "You are a logic assistant.\nRules:\n- Output ONLY one token: yes / no / unknown.\n- Do not explain.\n\nAll A are B. All B are C. Can we conclude all A are C?\nAnswer:",
       "gold": "yes",
-      "gen": " No, it is not possible to conclude ALL A by any means.",
-      "detail": "pred=no gold=yes"
+      "gen": " Yes, you can. (yes)",
+      "detail": "pred=yes gold=yes"
     },
     {
       "id": "syll_0003",
@@ -72,8 +72,8 @@
       "ok": false,
       "prompt": "You are a logic assistant.\nRules:\n- Output ONLY one token: yes / no / unknown.\n- Do not explain.\n\nSome A are B. All B are C. Can we conclude some A are C?\nAnswer:",
       "gold": "yes",
-      "gen": " No. It is possible that all B were created by accident or by chance.",
-      "detail": "pred=no gold=yes"
+      "gen": " all B can be true",
+      "detail": "pred=unknown gold=yes"
     },
     {
       "id": "code_add_0001",
@@ -81,7 +81,7 @@
       "ok": true,
       "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n\nComplete the following Python function:\n\ndef add(a, b):\n    ",
       "gold": null,
-      "gen": " return a + b\na = a * b\n\n",
+      "gen": " return a + b\n\n return b",
       "detail": ""
     },
     {
@@ -90,8 +90,8 @@
       "ok": false,
       "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n\nComplete the following Python function:\n\ndef factorial(n):\n    ",
       "gold": null,
-      "gen": " if n < 0:\n    raise ValueError('n must be non-negative')\nr = 1\nfor i in range(2, n + 1):",
-      "detail": "Traceback (most recent call last):\n  File \"/tmp/tmpz9rt_nu5/tmp_eval.py\", line 5, in <module>\n    assert factorial(0)==1\nAssertionError"
+      "gen": " r = 1;\n    for i in range(2, n + 1):\n        r *= i\nreturn r\n\n\nclass Solution:\n    def factorize(self, s: str) -> int:\n        return sum([x % 2 for x in s])\n\n    def __init__(self):\n\n        self.factors = {}  # type: List[int]\n        self._factorized_s = set()  ## type of factorization\n        for _ in xrange(5):\n            self.__setitem__('factor', 0)\n            if self == 0:\n                self['factor'] = 0\n            else: iz",
+      "detail": "Traceback (most recent call last):\n  File \"/tmp/tmpd8q_mgs7/tmp_eval.py\", line 7, in <module>\n    assert factorial(0)==1\nAssertionError\n\n[CODE_SNIPPET]\ndef factorial(n):\n    r = 1;\n    for i in range(2, n + 1):\n        r *= i\n        return r\n\nassert factorial(0)==1\nassert factorial(1)==1\nassert factorial(5)==120\nassert factorial(8)==40320"
     },
     {
       "id": "code_fib_0001",
@@ -99,8 +99,8 @@
       "ok": false,
       "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n\nComplete the following Python function:\n\ndef fib(n):\n    ",
       "gold": null,
-      "gen": " if n < 0:\n    raise ValueError('n must be non-negative')\na, b = 0, 1\nfor _ in range(2,",
-      "detail": "Traceback (most recent call last):\n  File \"/tmp/tmpnukoz71g/tmp_eval.py\", line 5, in <module>\n    assert fib(0)==0\nAssertionError"
+      "gen": " for i in range(2, n + 1):\n        return i\n\n\nif __name__ == '__main__':\n    n = int(input())\n    print(fib(1) * fib((n)) / 2)",
+      "detail": "Traceback (most recent call last):\n  File \"/tmp/tmp6bqwldkp/tmp_eval.py\", line 5, in <module>\n    assert fib(0)==0\nAssertionError\n\n[CODE_SNIPPET]\ndef fib(n):\n    for i in range(2, n + 1):\n        return i\n\nassert fib(0)==0\nassert fib(1)==1\nassert fib(2)==1\nassert fib(7)==13"
     }
   ]
 }

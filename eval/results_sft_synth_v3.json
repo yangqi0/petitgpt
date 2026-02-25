@@ -1,7 +1,7 @@
 {
   "ckpt": "outputs/sft_synth_v3/latest.pt",
   "bench": "pretrain/bench_v1.jsonl",
-  "time_s": 130.258,
+  "time_s": 104.729,
   "acc_arithmetic": 0.0,
   "acc_syllogism": 0.3333333333333333,
   "acc_code": 0.3333333333333333,
@@ -81,7 +81,7 @@
       "ok": true,
       "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n\nComplete the following Python function:\n\ndef add(a, b):\n    ",
       "gold": null,
-      "gen": " return a + b",
+      "gen": " return a + b\n\n if a < 0:\n    raise ValueError('a must be non-negative')\n return b\nreturn a\n\n return add\n\n\nif __name__ == '__main__':\n    print(add)",
       "detail": ""
     },
     {
@@ -90,8 +90,8 @@
       "ok": false,
       "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n\nComplete the following Python function:\n\ndef factorial(n):\n    ",
       "gold": null,
-      "gen": " if n < 0:\n    raise ValueError('n must be non-negative')\nr = 1\nfor i in range(2, n + 1):\n    r *= i\nreturn r",
-      "detail": "Traceback (most recent call last):\n  File \"/tmp/tmpv756gqwb/tmp_eval.py\", line 5, in <module>\n    assert factorial(0)==1\nAssertionError"
+      "gen": " if n < 0:\n    raise ValueError('n must be non-negative')\nr = 1\nfor i in range(2, n + 1):\n    r *= i\nreturn r\n\n\nclass Solution:\n  def factorize(self, s: str) -> int:\n      return 2\n\n  def __init__(self):\n\n    self.count = 0\n    for _ in xrange(s):\n      self._factorized_result = []\n      for i, j in enumerate(range(len(str(i)))):\n        self[i][j] = s[j].value\n    return self.__dict__",
+      "detail": "Traceback (most recent call last):\n  File \"/tmp/tmp7d7yx6_v/tmp_eval.py\", line 9, in <module>\n    assert factorial(0)==1\nAssertionError\n\n[CODE_SNIPPET]\ndef factorial(n):\n    if n < 0:\n        raise ValueError('n must be non-negative')\n        r = 1\n        for i in range(2, n + 1):\n            r *= i\n            return r\n\nassert factorial(0)==1\nassert factorial(1)==1\nassert factorial(5)==120\nassert factorial(8)==40320"
     },
     {
       "id": "code_fib_0001",
@@ -99,8 +99,8 @@
       "ok": false,
       "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n\nComplete the following Python function:\n\ndef fib(n):\n    ",
       "gold": null,
-      "gen": " if n < 0:\n    raise ValueError('n must be non-negative')\na, b = 0, 1\nfor _ in range(2, n + 1):\n    a,b = b, a + b\nreturn a",
-      "detail": "Traceback (most recent call last):\n  File \"/tmp/tmpti0hvm3x/tmp_eval.py\", line 5, in <module>\n    assert fib(0)==0\nAssertionError"
+      "gen": " if n < 0:\n    raise ValueError('n must be non-negative')\na, b = 0, 1\nfor _ in range(2, n + 1):\n    a,b = b, a + b\nreturn a\n\n return a\nend\n# end\nif __name__ == '__main__':\n    print(f'Fib({n})')",
+      "detail": "Traceback (most recent call last):\n  File \"/tmp/tmp9vim4xns/tmp_eval.py\", line 13, in <module>\n    assert fib(0)==0\nAssertionError\n\n[CODE_SNIPPET]\ndef fib(n):\n    if n < 0:\n        raise ValueError('n must be non-negative')\n        a, b = 0, 1\n        for _ in range(2, n + 1):\n            a,b = b, a + b\n            return a\n\n            return a\n            end\n            # end\n\nassert fib(0)==0\nassert fib(1)==1\nassert fib(2)==1\nassert fib(7)==13"
     }
   ]
 }
