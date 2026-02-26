@@ -71,14 +71,14 @@ def read_jsonl(path: str) -> List[Dict[str, Any]]:
 @dataclass
 class ChatFormat:
 
-    def render(messages):
+    def render(self, messages: List[Dict[str, str]]) -> Tuple[str, List[Tuple[int,int]]]:
         """
         Return:
         text: the full concatenated string fed to tokenizer
         asst_spans: list[(start_char, end_char)] spans of assistant CONTENT only
         """
-        parts = []
-        spans = []
+        parts: List[str] = []
+        spans: List[Tuple[int, int]] = []
         cur = 0
 
         def add(s: str):
