@@ -255,6 +255,10 @@ def gen_syll(rng: random.Random, i: int, mode: str = "balanced") -> dict:
 def _maybe_add_user_anti(user: str, anti: bool, task: str) -> str:
     if not anti:
         return user
+    # IMPORTANT: don't always add reminders; keep some prompts "clean" to match eval/real usage
+    # This reduces prompt dependence and improves generalization.
+    if random.random() >= 0.5:
+        return user
     if task == "code":
         return (
             user
@@ -295,7 +299,9 @@ def gen_code(rng: random.Random, i: int, mode: str = "balanced", anti: bool = Fa
     elif k == "fib":
         # add a second prompt variant to reduce prompt-overfitting
         if anti and rng.random() < 0.5:
-            user = "Write ONLY the function body for Fibonacci (return fib(n)):\n\ndef fib(n):\n    "
+            user = (
+                "Write ONLY the function body for Fibonacci (return fib(n)):\n\ndef fib(n):\n    "
+            )
         else:
             user = "Complete the following Python function:\n\ndef fib(n):\n    "
         assistant = "a, b = 0, 1\nfor _ in range(n):\n    a, b = b, a + b\nreturn a\n"
@@ -321,7 +327,11 @@ def main():
     ap.add_argument("--arith_max_n", type=int, default=99)
     ap.add_argument("--syll_mode", type=str, default="balanced", choices=["balanced", "focus"])
     ap.add_argument("--code_mode", type=str, default="balanced", choices=["balanced", "focus"])
-    ap.add_argument("--anti", action="store_true", help="Round A3: add extra anti-pattern constraints into USER prompts.")
+    ap.add_argument(
+        "--anti",
+        action="store_true",
+        help="Round A3: add extra anti-pattern constraints into USER prompts.",
+    )
     ap.add_argument(
         "--strict",
         action="store_true",
@@ -345,7 +355,9 @@ def main():
             exi = gen_syll(rng, i, mode=args.syll_mode)
             if args.anti:
                 # add explicit token-only instruction in user
-                exi["messages"][1]["content"] = _maybe_add_user_anti(exi["messages"][1]["content"], anti=True, task="syll")
+                exi["messages"][1]["content"] = _maybe_add_user_anti(
+                    exi["messages"][1]["content"], anti=True, task="syll"
+                )
             rows.append(exi)
         else:
             rows.append(
@@ -356,7 +368,9 @@ def main():
                 )
             )
             if args.anti:
-                rows[-1]["messages"][1]["content"] = _maybe_add_user_anti(rows[-1]["messages"][1]["content"], anti=True, task="syll")
+                rows[-1]["messages"][1]["content"] = _maybe_add_user_anti(
+                    rows[-1]["messages"][1]["content"], anti=True, task="syll"
+                )
 
     for i in range(args.n_code):
         if not args.strict:
