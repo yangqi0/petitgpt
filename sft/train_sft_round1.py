@@ -70,33 +70,45 @@ def read_jsonl(path: str) -> List[Dict[str, Any]]:
 
 @dataclass
 class ChatFormat:
-    sep: str = "\n\n"  # 消息之间的分隔
 
-    def render(self, messages):
+    def render(messages):
+        """
+        Return:
+        text: the full concatenated string fed to tokenizer
+        asst_spans: list[(start_char, end_char)] spans of assistant CONTENT only
+        """
         parts = []
         spans = []
-        for idx, m in enumerate(messages):
+        cur = 0
+
+        def add(s: str):
+            nonlocal cur
+            parts.append(s)
+            cur += len(s)
+
+        for m in messages:
             role = m["role"]
-            content = m["content"]  # 不做 rstrip()
+            content = m.get("content", "")
 
-            if role in ("system", "user"):
-                parts.append(content)
-                # 如果不是最后一条消息，加 sep；但如果 content 末尾是空格/制表符，就不要加换行去破坏 code signature
-                if idx != len(messages) - 1:
-                    if len(content) > 0 and content[-1] in (" ", "\t"):
-                        parts.append("")  # 不加任何东西
-                    else:
-                        parts.append(self.sep)
-
+            if role == "system":
+                add(content.rstrip() + "\n\n")
+            elif role == "user":
+                add(content.rstrip() + "\n\n")
             elif role == "assistant":
-                start = sum(len(p) for p in parts)
-                parts.append(content)
-                end = sum(len(p) for p in parts)
+                # IMPORTANT: record span exactly where we append assistant content
+                start = cur
+                add(content)  # keep exact, DO NOT rstrip here
+                end = cur
                 spans.append((start, end))
+                # ensure separation between turns (but do NOT include in span)
+                if not content.endswith("\n\n"):
+                    add("\n\n")
             else:
-                raise ValueError(f"unknown role: {role}")
+                # ignore unknown roles
+                continue
 
-        return "".join(parts), spans
+        text = "".join(parts)
+        return text, spans
 
 class SFTJsonlDataset(Dataset):
     def __init__(self, path: str, tok: Tokenizer, max_len: int, add_bos: bool, bos_id: int, eos_id: int):

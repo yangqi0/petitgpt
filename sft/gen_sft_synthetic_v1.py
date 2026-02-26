@@ -273,7 +273,7 @@ def _maybe_add_user_anti(user: str, anti: bool, task: str) -> str:
     return user
 
 
-def gen_code(rng: random.Random, i: int, mode: str = "balanced", anti: bool = False) -> dict:
+def gen_code(rng: random.Random, i: int, mode: str = "balanced", anti: bool = False, bench_exact: bool = False) -> dict:
     # rotate among a few tiny functions; keep answers short and exact
     if mode == "focus":
         # fib 60%, factorial 30%, add 10%
@@ -290,20 +290,10 @@ def gen_code(rng: random.Random, i: int, mode: str = "balanced", anti: bool = Fa
         user = "Complete the following Python function:\n\ndef add(a, b):\n    "
         assistant = "return a + b\n"
     elif k == "factorial":
-        # add a second prompt variant to reduce prompt-overfitting
-        if anti and rng.random() < 0.5:
-            user = "Write ONLY the function body for factorial:\n\ndef factorial(n):\n    "
-        else:
-            user = "Complete the following Python function:\n\ndef factorial(n):\n    "
+        user = "Complete the following Python function:\n\ndef factorial(n):\n    "
         assistant = "r = 1\nfor i in range(2, n + 1):\n    r *= i\nreturn r\n"
     elif k == "fib":
-        # add a second prompt variant to reduce prompt-overfitting
-        if anti and rng.random() < 0.5:
-            user = (
-                "Write ONLY the function body for Fibonacci (return fib(n)):\n\ndef fib(n):\n    "
-            )
-        else:
-            user = "Complete the following Python function:\n\ndef fib(n):\n    "
+        user = "Complete the following Python function:\n\ndef fib(n):\n    "
         assistant = "a, b = 0, 1\nfor _ in range(n):\n    a, b = b, a + b\nreturn a\n"
     elif k == "is_even":
         user = "Complete the following Python function:\n\ndef is_even(n):\n    "
@@ -314,6 +304,8 @@ def gen_code(rng: random.Random, i: int, mode: str = "balanced", anti: bool = Fa
     # IMPORTANT: make code completions end with a blank line so --stop_string "\n\n" works at inference time.
     assistant = assistant.rstrip() + "\n\n"
     user = _maybe_add_user_anti(user, anti=anti, task="code")
+    if not bench_exact:
+        user = _maybe_add_user_anti(user, anti=anti, task="code")
     return ex(SYS_CODE, user, assistant, {"id": f"syn_code_{i:06d}", "task": "code", "kind": k})
 
 
@@ -332,6 +324,7 @@ def main():
         action="store_true",
         help="Round A3: add extra anti-pattern constraints into USER prompts.",
     )
+    ap.add_argument("--bench_code_exact", action="store_true", help="Use EXACT bench code prompts (no variants, no extra text).")
     ap.add_argument(
         "--strict",
         action="store_true",
@@ -374,11 +367,11 @@ def main():
 
     for i in range(args.n_code):
         if not args.strict:
-            rows.append(gen_code(rng, i, mode=args.code_mode, anti=args.anti))
+            rows.append(gen_code(rng, i, mode=args.code_mode, anti=args.anti, bench_exact=args.bench_code_exact))
         else:
             rows.append(
                 _gen_with_retries(
-                    fn=lambda: gen_code(rng, i, mode=args.code_mode, anti=args.anti),
+                    fn=lambda: gen_code(rng, i, mode=args.code_mode, anti=args.anti, bench_exact=args.bench_code_exact),
                     max_tries=int(args.strict_max_tries),
                     accept_fn=_is_good_code_answer,
                 )
