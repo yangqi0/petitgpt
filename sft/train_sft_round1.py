@@ -335,7 +335,7 @@ def main():
     ids = ids[: args.max_len]
     offsets = offsets[: args.max_len]
 
-    labels = [-100] * len(ids)
+    labels = [-100] * len(ids)  # next-token targets at position i-1
 
     def token_is_in_asst(tok_span):
         ts, te = tok_span
@@ -346,9 +346,13 @@ def main():
                 return True
         return False
 
+    is_asst = [False] * len(ids)
     for i, off in enumerate(offsets):
         if token_is_in_asst(off):
-            labels[i] = ids[i]
+            is_asst[i] = True
+    for i in range(1, len(ids)):
+        if is_asst[i]:
+            labels[i - 1] = ids[i]
 
     # mask BOS/EOS
     for i, t in enumerate(ids):

@@ -273,17 +273,21 @@ def _maybe_add_user_anti(user: str, anti: bool, task: str) -> str:
     return user
 
 
-def gen_code(rng: random.Random, i: int, mode: str = "balanced", anti: bool = False, bench_exact: bool = False) -> dict:
+def gen_code(
+    rng: random.Random,
+    i: int,
+    mode: str = "balanced",
+    anti: bool = False,
+    bench_exact: bool = False,
+) -> dict:
     # rotate among a few tiny functions; keep answers short and exact
     if mode == "focus":
-        # fib 60%, factorial 30%, add 10%
+        # NOTE: focus mode should be pure for bench repair: fib 70%, factorial 30%
         r = rng.random()
-        if r < 0.60:
+        if r < 0.70:
             k = "fib"
-        elif r < 0.90:
-            k = "factorial"
         else:
-            k = "add"
+            k = "factorial"
     else:
         k = rng.choice(["add", "factorial", "fib", "is_even", "clamp"])
     if k == "add":
@@ -300,10 +304,11 @@ def gen_code(rng: random.Random, i: int, mode: str = "balanced", anti: bool = Fa
         assistant = "return (n % 2) == 0\n"
     else:
         user = "Complete the following Python function:\n\ndef clamp(x, lo, hi):\n    "
+        # FIX indentation (relative indentation must be valid Python)
         assistant = "if x < lo:\n    return lo\nif x > hi:\n    return hi\nreturn x\n"
     # IMPORTANT: make code completions end with a blank line so --stop_string "\n\n" works at inference time.
     assistant = assistant.rstrip() + "\n\n"
-    user = _maybe_add_user_anti(user, anti=anti, task="code")
+    # bench_exact MUST be clean: no extra reminder text.
     if not bench_exact:
         user = _maybe_add_user_anti(user, anti=anti, task="code")
     return ex(SYS_CODE, user, assistant, {"id": f"syn_code_{i:06d}", "task": "code", "kind": k})
@@ -324,7 +329,11 @@ def main():
         action="store_true",
         help="Round A3: add extra anti-pattern constraints into USER prompts.",
     )
-    ap.add_argument("--bench_code_exact", action="store_true", help="Use EXACT bench code prompts (no variants, no extra text).")
+    ap.add_argument(
+        "--bench_code_exact",
+        action="store_true",
+        help="Use EXACT bench code prompts (no variants, no extra text).",
+    )
     ap.add_argument(
         "--strict",
         action="store_true",
@@ -367,11 +376,21 @@ def main():
 
     for i in range(args.n_code):
         if not args.strict:
-            rows.append(gen_code(rng, i, mode=args.code_mode, anti=args.anti, bench_exact=args.bench_code_exact))
+            rows.append(
+                gen_code(
+                    rng, i, mode=args.code_mode, anti=args.anti, bench_exact=args.bench_code_exact
+                )
+            )
         else:
             rows.append(
                 _gen_with_retries(
-                    fn=lambda: gen_code(rng, i, mode=args.code_mode, anti=args.anti, bench_exact=args.bench_code_exact),
+                    fn=lambda: gen_code(
+                        rng,
+                        i,
+                        mode=args.code_mode,
+                        anti=args.anti,
+                        bench_exact=args.bench_code_exact,
+                    ),
                     max_tries=int(args.strict_max_tries),
                     accept_fn=_is_good_code_answer,
                 )
