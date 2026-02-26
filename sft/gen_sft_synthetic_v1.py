@@ -295,10 +295,44 @@ def gen_code(
         assistant = "return a + b\n"
     elif k == "factorial":
         user = "Complete the following Python function:\n\ndef factorial(n):\n    "
-        assistant = "r = 1\nfor i in range(2, n + 1):\n    r *= i\nreturn r\n"
+        # Two equivalent implementations to reduce "partial memorization"
+        if rng.random() < 0.5:
+            # Variant A (your original)
+            assistant = (
+                "r = 1\n"
+                "for i in range(2, n + 1):\n"
+                "    r *= i\n"
+                "return r\n"
+            )
+        else:
+            # Variant B (starts from 1; also correct for n=0)
+            assistant = (
+                "r = 1\n"
+                "for i in range(1, n + 1):\n"
+                "    r *= i\n"
+                "return r\n"
+            )
     elif k == "fib":
         user = "Complete the following Python function:\n\ndef fib(n):\n    "
-        assistant = "a, b = 0, 1\nfor _ in range(n):\n    a, b = b, a + b\nreturn a\n"
+        # Two equivalent implementations to reduce shortcut bugs (like a *= b, return i, etc.)
+        if rng.random() < 0.5:
+            # Variant A (your original)
+            assistant = (
+                "a, b = 0, 1\n"
+                "for _ in range(n):\n"
+                "    a, b = b, a + b\n"
+                "return a\n"
+            )
+        else:
+            # Variant B (explicit base cases; loop from 2..n)
+            assistant = (
+                "if n <= 1:\n"
+                "    return n\n"
+                "a, b = 0, 1\n"
+                "for _ in range(2, n + 1):\n"
+                "    a, b = b, a + b\n"
+                "return b\n"
+            )
     elif k == "is_even":
         user = "Complete the following Python function:\n\ndef is_even(n):\n    "
         assistant = "return (n % 2) == 0\n"
