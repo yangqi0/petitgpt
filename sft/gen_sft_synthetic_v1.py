@@ -252,7 +252,24 @@ def gen_syll(rng: random.Random, i: int, mode: str = "balanced") -> dict:
     )
 
 
-def gen_code(rng: random.Random, i: int, mode: str = "balanced") -> dict:
+def _maybe_add_user_anti(user: str, anti: bool, task: str) -> str:
+    if not anti:
+        return user
+    if task == "code":
+        return (
+            user
+            + "\n\nRules reminder (must follow):\n"
+            + "- Do NOT use yield.\n"
+            + "- Do NOT use semicolons.\n"
+            + "- ONE statement per line.\n"
+            + "- Output ONLY the function body.\n"
+        )
+    if task == "syll":
+        return user + "\n\nOutput exactly one token: yes / no / unknown."
+    return user
+
+
+def gen_code(rng: random.Random, i: int, mode: str = "balanced", anti: bool = False) -> dict:
     # rotate among a few tiny functions; keep answers short and exact
     if mode == "focus":
         # fib 60%, factorial 30%, add 10%
@@ -269,10 +286,18 @@ def gen_code(rng: random.Random, i: int, mode: str = "balanced") -> dict:
         user = "Complete the following Python function:\n\ndef add(a, b):\n    "
         assistant = "return a + b\n"
     elif k == "factorial":
-        user = "Complete the following Python function:\n\ndef factorial(n):\n    "
+        # add a second prompt variant to reduce prompt-overfitting
+        if anti and rng.random() < 0.5:
+            user = "Write ONLY the function body for factorial:\n\ndef factorial(n):\n    "
+        else:
+            user = "Complete the following Python function:\n\ndef factorial(n):\n    "
         assistant = "r = 1\nfor i in range(2, n + 1):\n    r *= i\nreturn r\n"
     elif k == "fib":
-        user = "Complete the following Python function:\n\ndef fib(n):\n    "
+        # add a second prompt variant to reduce prompt-overfitting
+        if anti and rng.random() < 0.5:
+            user = "Write ONLY the function body for Fibonacci (return fib(n)):\n\ndef fib(n):\n    "
+        else:
+            user = "Complete the following Python function:\n\ndef fib(n):\n    "
         assistant = "a, b = 0, 1\nfor _ in range(n):\n    a, b = b, a + b\nreturn a\n"
     elif k == "is_even":
         user = "Complete the following Python function:\n\ndef is_even(n):\n    "
@@ -282,6 +307,7 @@ def gen_code(rng: random.Random, i: int, mode: str = "balanced") -> dict:
         assistant = "if x < lo:\n    return lo\nif x > hi:\n    return hi\nreturn x\n"
     # IMPORTANT: make code completions end with a blank line so --stop_string "\n\n" works at inference time.
     assistant = assistant.rstrip() + "\n\n"
+    user = _maybe_add_user_anti(user, anti=anti, task="code")
     return ex(SYS_CODE, user, assistant, {"id": f"syn_code_{i:06d}", "task": "code", "kind": k})
 
 
@@ -295,6 +321,7 @@ def main():
     ap.add_argument("--arith_max_n", type=int, default=99)
     ap.add_argument("--syll_mode", type=str, default="balanced", choices=["balanced", "focus"])
     ap.add_argument("--code_mode", type=str, default="balanced", choices=["balanced", "focus"])
+    ap.add_argument("--anti", action="store_true", help="Round A3: add extra anti-pattern constraints into USER prompts.")
     ap.add_argument(
         "--strict",
         action="store_true",
@@ -315,7 +342,11 @@ def main():
 
     for i in range(args.n_syll):
         if not args.strict:
-            rows.append(gen_syll(rng, i, mode=args.syll_mode))
+            exi = gen_syll(rng, i, mode=args.syll_mode)
+            if args.anti:
+                # add explicit token-only instruction in user
+                exi["messages"][1]["content"] = _maybe_add_user_anti(exi["messages"][1]["content"], anti=True, task="syll")
+            rows.append(exi)
         else:
             rows.append(
                 _gen_with_retries(
@@ -324,14 +355,16 @@ def main():
                     accept_fn=_is_good_syll_answer,
                 )
             )
+            if args.anti:
+                rows[-1]["messages"][1]["content"] = _maybe_add_user_anti(rows[-1]["messages"][1]["content"], anti=True, task="syll")
 
     for i in range(args.n_code):
         if not args.strict:
-            rows.append(gen_code(rng, i, mode=args.code_mode))
+            rows.append(gen_code(rng, i, mode=args.code_mode, anti=args.anti))
         else:
             rows.append(
                 _gen_with_retries(
-                    fn=lambda: gen_code(rng, i, mode=args.code_mode),
+                    fn=lambda: gen_code(rng, i, mode=args.code_mode, anti=args.anti),
                     max_tries=int(args.strict_max_tries),
                     accept_fn=_is_good_code_answer,
                 )
