@@ -18,8 +18,6 @@ import json
 import os
 import random
 import re
-from pathlib import Path
-from typing import Any, Dict, List
 
 SYS_ARITH = (
     "You are a precise assistant.\n"
@@ -42,6 +40,9 @@ SYS_CODE = (
     "- Do NOT write a main block.\n"
     "- Implement exactly the requested function.\n"
     "- Output ONLY the function body (no def line).\n"
+    "- Do NOT use 'yield'.\n"
+    "- Do NOT use semicolons ';'.\n"
+    "- Write exactly ONE statement per line (no two statements on one line).\n"
 )
 
 
@@ -52,14 +53,31 @@ SYS_CODE = (
 _SYLL_OK_RE = re.compile(r"^(yes|no|unknown)\n$", re.IGNORECASE)
 
 _CODE_BAN_SUBSTRS = [
-    "if __name__", "class ", "def ", "import ", "from ",
-    "async", "await", "@", "yield",
-    "pytest", "unittest",
-    "raw_input", "input(", "print(",
+    "if __name__",
+    "class ",
+    "def ",
+    "import ",
+    "from ",
+    "async",
+    "await",
+    "@",
+    "yield",
+    "pytest",
+    "unittest",
+    "raw_input",
+    "input(",
+    "print(",
 ]
+
+# Detect "glued lines" like: "r = 1 for i in ...", "return a for ..."
+_CODE_GLUED_RE = re.compile(
+    r"(^|[\s])\b(for|while|if|return)\b.*\b(for|while|if|return)\b", re.IGNORECASE
+)
+
 
 def _is_good_syll_answer(a: str) -> bool:
     return bool(_SYLL_OK_RE.match(a or ""))
+
 
 def _is_good_code_answer(a: str) -> bool:
     if not a:
@@ -72,11 +90,15 @@ def _is_good_code_answer(a: str) -> bool:
     # ban semicolons to reduce "glued lines"
     if ";" in a:
         return False
+    # ban glued control-flow on same line (common failure mode)
+    if _CODE_GLUED_RE.search(a):
+        return False
     low = a.lower()
     for s in _CODE_BAN_SUBSTRS:
         if s in low:
             return False
     return True
+
 
 def _gen_with_retries(fn, max_tries: int, accept_fn):
     last = None
@@ -113,22 +135,36 @@ def gen_arith(rng, i, max_n):
         buy = rng.randint(0, max_n)
         ans = have + buy
         q = f"John has {have} apples and buys {buy} more. How many apples does he have?\nAnswer:"
-        return ex(SYS_ARITH, q, f"{ans}\n", {"id": f"syn_arith_{i:06d}", "task":"arithmetic", "style":"word_apples"})
+        return ex(
+            SYS_ARITH,
+            q,
+            f"{ans}\n",
+            {"id": f"syn_arith_{i:06d}", "task": "arithmetic", "style": "word_apples"},
+        )
 
     # 10%: bench-critical cases to fight copy-bias
     if rng.random() < 0.10:
-        a, b, op = rng.choice([
-            (3, 2, "+"),
-            (17, 25, "+"),
-            (9, 8, "*"),
-        ])
+        a, b, op = rng.choice(
+            [
+                (3, 2, "+"),
+                (17, 25, "+"),
+                (9, 8, "*"),
+            ]
+        )
 
     # fall through to formatting below
     elif rng.random() < 0.20:
         pool = [
-            (10, 2, "+"), (12, 3, "+"), (20, 5, "+"), (17, 25, "+"),
-            (9, 8, "*"), (11, 11, "+"), (15, 0, "+"), (99, 1, "+"),
-            (30, 12, "-"), (100, 1, "-"),
+            (10, 2, "+"),
+            (12, 3, "+"),
+            (20, 5, "+"),
+            (17, 25, "+"),
+            (9, 8, "*"),
+            (11, 11, "+"),
+            (15, 0, "+"),
+            (99, 1, "+"),
+            (30, 12, "-"),
+            (100, 1, "-"),
         ]
         a, b, op = rng.choice(pool)
     else:
@@ -145,7 +181,12 @@ def gen_arith(rng, i, max_n):
     else:
         ans = a * b
         q = f"What is {a} * {b}?\nAnswer:"
-    return ex(SYS_ARITH, q, f"{ans}\n", {"id": f"syn_arith_{i:06d}", "task":"arithmetic", "style":"symbolic"})
+    return ex(
+        SYS_ARITH,
+        q,
+        f"{ans}\n",
+        {"id": f"syn_arith_{i:06d}", "task": "arithmetic", "style": "symbolic"},
+    )
 
 
 def gen_syll(rng: random.Random, i: int, mode: str = "balanced") -> dict:
@@ -156,20 +197,40 @@ def gen_syll(rng: random.Random, i: int, mode: str = "balanced") -> dict:
         if r < 0.50:
             q = "If all cats are animals and some animals are black, can we conclude that some cats are black?\nAnswer:"
             ans = "unknown"
-            return ex(SYS_SYLL, q, f"{ans}\n", {"id": f"syn_syll_{i:06d}", "task": "syllogism", "style": "cats_unknown"})
+            return ex(
+                SYS_SYLL,
+                q,
+                f"{ans}\n",
+                {"id": f"syn_syll_{i:06d}", "task": "syllogism", "style": "cats_unknown"},
+            )
         elif r < 0.80:
             q = "Some A are B. All B are C. Can we conclude some A are C?\nAnswer:"
             ans = "yes"
-            return ex(SYS_SYLL, q, f"{ans}\n", {"id": f"syn_syll_{i:06d}", "task": "syllogism", "style": "some_yes"})
+            return ex(
+                SYS_SYLL,
+                q,
+                f"{ans}\n",
+                {"id": f"syn_syll_{i:06d}", "task": "syllogism", "style": "some_yes"},
+            )
         else:
             q = "All A are B. All B are C. Can we conclude all A are C?\nAnswer:"
             ans = "yes"
-            return ex(SYS_SYLL, q, f"{ans}\n", {"id": f"syn_syll_{i:06d}", "task": "syllogism", "style": "all_yes"})
+            return ex(
+                SYS_SYLL,
+                q,
+                f"{ans}\n",
+                {"id": f"syn_syll_{i:06d}", "task": "syllogism", "style": "all_yes"},
+            )
 
     if rng.random() < 0.25:
         q = "If all cats are animals and some animals are black, can we conclude that some cats are black?\nAnswer:"
         ans = "unknown"
-        return ex(SYS_SYLL, q, f"{ans}\n", {"id": f"syn_syll_{i:06d}", "task": "syllogism", "style": "cats_unknown"})
+        return ex(
+            SYS_SYLL,
+            q,
+            f"{ans}\n",
+            {"id": f"syn_syll_{i:06d}", "task": "syllogism", "style": "cats_unknown"},
+        )
 
     # otherwise use abstract templates
     t = rng.choice([0, 1, 2, 3])
@@ -186,7 +247,9 @@ def gen_syll(rng: random.Random, i: int, mode: str = "balanced") -> dict:
         q = "Some A are B. No B are C. Can we conclude some A are C?\nAnswer:"
         ans = "no"
 
-    return ex(SYS_SYLL, q, f"{ans}\n", {"id": f"syn_syll_{i:06d}", "task": "syllogism", "style": "abc"})
+    return ex(
+        SYS_SYLL, q, f"{ans}\n", {"id": f"syn_syll_{i:06d}", "task": "syllogism", "style": "abc"}
+    )
 
 
 def gen_code(rng: random.Random, i: int, mode: str = "balanced") -> dict:
@@ -207,32 +270,16 @@ def gen_code(rng: random.Random, i: int, mode: str = "balanced") -> dict:
         assistant = "return a + b\n"
     elif k == "factorial":
         user = "Complete the following Python function:\n\ndef factorial(n):\n    "
-        assistant = (
-            "r = 1\n"
-            "for i in range(2, n + 1):\n"
-            "    r *= i\n"
-            "return r\n"
-        )
+        assistant = "r = 1\nfor i in range(2, n + 1):\n    r *= i\nreturn r\n"
     elif k == "fib":
         user = "Complete the following Python function:\n\ndef fib(n):\n    "
-        assistant = (
-            "a, b = 0, 1\n"
-            "for _ in range(n):\n"
-            "    a, b = b, a + b\n"
-            "return a\n"
-        )
+        assistant = "a, b = 0, 1\nfor _ in range(n):\n    a, b = b, a + b\nreturn a\n"
     elif k == "is_even":
         user = "Complete the following Python function:\n\ndef is_even(n):\n    "
         assistant = "return (n % 2) == 0\n"
     else:
         user = "Complete the following Python function:\n\ndef clamp(x, lo, hi):\n    "
-        assistant = (
-            "if x < lo:\n"
-            "    return lo\n"
-            "if x > hi:\n"
-            "    return hi\n"
-            "return x\n"
-        )
+        assistant = "if x < lo:\n    return lo\nif x > hi:\n    return hi\nreturn x\n"
     # IMPORTANT: make code completions end with a blank line so --stop_string "\n\n" works at inference time.
     assistant = assistant.rstrip() + "\n\n"
     return ex(SYS_CODE, user, assistant, {"id": f"syn_code_{i:06d}", "task": "code", "kind": k})
@@ -248,8 +295,17 @@ def main():
     ap.add_argument("--arith_max_n", type=int, default=99)
     ap.add_argument("--syll_mode", type=str, default="balanced", choices=["balanced", "focus"])
     ap.add_argument("--code_mode", type=str, default="balanced", choices=["balanced", "focus"])
-    ap.add_argument("--strict", action="store_true", help="Filter bad code/syll samples; resample until passing heuristics.")
-    ap.add_argument("--strict_max_tries", type=int, default=200, help="Max resample tries per example in strict mode.")
+    ap.add_argument(
+        "--strict",
+        action="store_true",
+        help="Filter bad code/syll samples; resample until passing heuristics.",
+    )
+    ap.add_argument(
+        "--strict_max_tries",
+        type=int,
+        default=200,
+        help="Max resample tries per example in strict mode.",
+    )
     args = ap.parse_args()
 
     rng = random.Random(args.seed)
