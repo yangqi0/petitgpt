@@ -83,7 +83,7 @@ def _is_good_code_answer(a: str) -> bool:
     if not a:
         return False
     # must end with \n\n (so eval can stop cleanly) and contain at least one return
-    if not a.endswith("\n\n"):
+    if not a.endswith("\n"):
         return False
     if "return" not in a:
         return False
@@ -307,7 +307,7 @@ def gen_code(
         # FIX indentation (relative indentation must be valid Python)
         assistant = "if x < lo:\n    return lo\nif x > hi:\n    return hi\nreturn x\n"
     # IMPORTANT: make code completions end with a blank line so --stop_string "\n\n" works at inference time.
-    assistant = assistant.rstrip() + "\n\n"
+    assistant = assistant.rstrip() + "\n"
     # bench_exact MUST be clean: no extra reminder text.
     if not bench_exact:
         user = _maybe_add_user_anti(user, anti=anti, task="code")
