@@ -17,6 +17,9 @@ import argparse
 import json
 import os
 import random
+import re
+from pathlib import Path
+from typing import Any, Dict, List
 
 SYS_ARITH = (
     "You are a precise assistant.\n"
@@ -40,6 +43,56 @@ SYS_CODE = (
     "- Implement exactly the requested function.\n"
     "- Output ONLY the function body (no def line).\n"
 )
+
+
+# ---------------------------------------------------------------------
+# Strict filters (to avoid "bad style" samples that poison SFT)
+# ---------------------------------------------------------------------
+
+_SYLL_OK_RE = re.compile(r"^(yes|no|unknown)\n$", re.IGNORECASE)
+
+_CODE_BAN_SUBSTRS = [
+    "if __name__", "class ", "def ", "import ", "from ",
+    "async", "await", "@", "yield",
+    "pytest", "unittest",
+    "raw_input", "input(", "print(",
+]
+
+def _is_good_syll_answer(a: str) -> bool:
+    return bool(_SYLL_OK_RE.match(a or ""))
+
+def _is_good_code_answer(a: str) -> bool:
+    if not a:
+        return False
+    # must end with \n\n (so eval can stop cleanly) and contain at least one return
+    if not a.endswith("\n\n"):
+        return False
+    if "return" not in a:
+        return False
+    # ban semicolons to reduce "glued lines"
+    if ";" in a:
+        return False
+    low = a.lower()
+    for s in _CODE_BAN_SUBSTRS:
+        if s in low:
+            return False
+    return True
+
+def _gen_with_retries(fn, max_tries: int, accept_fn):
+    last = None
+    for _ in range(max_tries):
+        ex = fn()
+        # find assistant content
+        a = ""
+        for m in ex.get("messages", []):
+            if m.get("role") == "assistant":
+                a = m.get("content", "")
+                break
+        if accept_fn(a):
+            return ex
+        last = ex
+    # If we failed too many times, return the last one (and let caller decide)
+    return last
 
 
 def ex(system: str, user: str, assistant: str, meta: dict) -> dict:
@@ -195,16 +248,38 @@ def main():
     ap.add_argument("--arith_max_n", type=int, default=99)
     ap.add_argument("--syll_mode", type=str, default="balanced", choices=["balanced", "focus"])
     ap.add_argument("--code_mode", type=str, default="balanced", choices=["balanced", "focus"])
+    ap.add_argument("--strict", action="store_true", help="Filter bad code/syll samples; resample until passing heuristics.")
+    ap.add_argument("--strict_max_tries", type=int, default=200, help="Max resample tries per example in strict mode.")
     args = ap.parse_args()
 
     rng = random.Random(args.seed)
     rows: list[dict] = []
     for i in range(args.n_arith):
         rows.append(gen_arith(rng, i, args.arith_max_n))
+
     for i in range(args.n_syll):
-        rows.append(gen_syll(rng, i, mode=args.syll_mode))
+        if not args.strict:
+            rows.append(gen_syll(rng, i, mode=args.syll_mode))
+        else:
+            rows.append(
+                _gen_with_retries(
+                    fn=lambda: gen_syll(rng, i, mode=args.syll_mode),
+                    max_tries=int(args.strict_max_tries),
+                    accept_fn=_is_good_syll_answer,
+                )
+            )
+
     for i in range(args.n_code):
-        rows.append(gen_code(rng, i, mode=args.code_mode))
+        if not args.strict:
+            rows.append(gen_code(rng, i, mode=args.code_mode))
+        else:
+            rows.append(
+                _gen_with_retries(
+                    fn=lambda: gen_code(rng, i, mode=args.code_mode),
+                    max_tries=int(args.strict_max_tries),
+                    accept_fn=_is_good_code_answer,
+                )
+            )
 
     rng.shuffle(rows)
     os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)
