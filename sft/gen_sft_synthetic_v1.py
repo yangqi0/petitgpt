@@ -279,15 +279,35 @@ def gen_code(
     mode: str = "balanced",
     anti: bool = False,
     bench_exact: bool = False,
+    fib_only: bool = False,
+    fib_force_variant_b: bool = False,
+    p_add: float = 0.0,
+    p_fact: float = 0.3,
+    p_fib: float = 0.7,
 ) -> dict:
     # rotate among a few tiny functions; keep answers short and exact
     if mode == "focus":
         # NOTE: focus mode should be pure for bench repair: fib 70%, factorial 30%
-        r = rng.random()
-        if r < 0.70:
+        # Focus mode supports explicit proportions (useful for replay).
+        # If fib_only is enabled, override everything.
+        if fib_only:
             k = "fib"
         else:
-            k = "factorial"
+            pa = max(0.0, float(p_add))
+            pf = max(0.0, float(p_fact))
+            pb = max(0.0, float(p_fib))
+            s = pa + pf + pb
+            if s <= 0:
+                pa, pf, pb = 0.0, 0.3, 0.7
+                s = 1.0
+            pa, pf, pb = pa / s, pf / s, pb / s
+            r = rng.random()
+            if r < pa:
+                k = "add"
+            elif r < pa + pf:
+                k = "factorial"
+            else:
+                k = "fib"
     else:
         k = rng.choice(["add", "factorial", "fib", "is_even", "clamp"])
     if k == "add":
@@ -315,7 +335,7 @@ def gen_code(
     elif k == "fib":
         user = "Complete the following Python function:\n\ndef fib(n):\n    "
         # Two equivalent implementations to reduce shortcut bugs (like a *= b, return i, etc.)
-        if rng.random() < 0.5:
+        if (not fib_force_variant_b) and (rng.random() < 0.5):
             # Variant A (your original)
             assistant = (
                 "a, b = 0, 1\n"
@@ -358,6 +378,19 @@ def main():
     ap.add_argument("--arith_max_n", type=int, default=99)
     ap.add_argument("--syll_mode", type=str, default="balanced", choices=["balanced", "focus"])
     ap.add_argument("--code_mode", type=str, default="balanced", choices=["balanced", "focus"])
+    ap.add_argument(
+        "--fib_only",
+        action="store_true",
+        help="Generate ONLY fib examples in code_mode=focus (useful for a short correction round).",
+    )
+    ap.add_argument(
+        "--fib_force_variant_b",
+        action="store_true",
+        help="Force fib Variant B (with base cases) to correct common failure modes.",
+    )
+    ap.add_argument("--p_add", type=float, default=0.30, help="In code_mode=focus: probability of add.")
+    ap.add_argument("--p_fact", type=float, default=0.35, help="In code_mode=focus: probability of factorial.")
+    ap.add_argument("--p_fib", type=float, default=0.35, help="In code_mode=focus: probability of fib.")
     ap.add_argument(
         "--anti",
         action="store_true",
@@ -424,6 +457,11 @@ def main():
                         mode=args.code_mode,
                         anti=args.anti,
                         bench_exact=args.bench_code_exact,
+                        fib_only=bool(args.fib_only),
+                        fib_force_variant_b=bool(args.fib_force_variant_b),
+                        p_add=float(args.p_add),
+                        p_fact=float(args.p_fact),
+                        p_fib=float(args.p_fib),
                     ),
                     max_tries=int(args.strict_max_tries),
                     accept_fn=_is_good_code_answer,
