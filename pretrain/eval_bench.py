@@ -9,7 +9,6 @@ import re
 import subprocess
 import sys
 import tempfile
-import textwrap
 import time
 from typing import Any
 
@@ -103,7 +102,7 @@ def try_extract_code_body(generation: str, signature: str) -> str:
         "assert ",
         "print(",
         "input(",
-        "end"
+        "end",
     )
 
     for line in lines:
@@ -118,8 +117,11 @@ def try_extract_code_body(generation: str, signature: str) -> str:
     return body if body.strip() else "pass"
 
 
-_COLON_BLOCK_RE = re.compile(r"^\s*(if|for|while|elif|else|try|except|finally|with|match|case)\b.*:\s*$")
+_COLON_BLOCK_RE = re.compile(
+    r"^\s*(if|for|while|elif|else|try|except|finally|with|match|case)\b.*:\s*$"
+)
 _DEF_CLASS_RE = re.compile(r"^\s*(def|class)\b.*:\s*$")
+
 
 def normalize_body_indent(body: str) -> list[str]:
     """
@@ -293,6 +295,8 @@ def generate_one(prompt: str, task: str, args, seed: int) -> str:
     elif task == "code":
         if args.greedy:
             cmd += ["--greedy", "--temperature", "0"]
+        # stop once we reach the blank line that ends the function body (your synth answers end with \n\n)
+        cmd += ["--stop_string", "\n\n"]
     else:
         if args.greedy:
             cmd += ["--greedy", "--temperature", "0"]
@@ -334,6 +338,10 @@ def wrap_with_task_rules(task: str, user_prompt: str) -> str:
             "- Do NOT write extra functions.\n"
             "- Do NOT write a main block.\n"
             "- Implement exactly the requested function.\n"
+            "- Output ONLY the function body (no def line).\n"
+            "- Do NOT use 'yield'.\n"
+            "- Do NOT use semicolons ';'.\n"
+            "- Write exactly ONE statement per line (no two statements on one line).\n"
         )
     else:
         sys = ""
