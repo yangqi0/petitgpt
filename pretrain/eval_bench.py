@@ -14,6 +14,8 @@ from typing import Any
 
 _NUM_RE = re.compile(r"[-+]?\d+(?:\.\d+)?")
 
+_EOC_LINE = "###EOC###"
+
 
 def read_jsonl(path: str) -> list[dict[str, Any]]:
     rows = []
@@ -26,7 +28,7 @@ def read_jsonl(path: str) -> list[dict[str, Any]]:
     return rows
 
 
-_NUM_RE = re.compile(r"[-+]?\d+(?:\.\d+)?")
+# _NUM_RE = re.compile(r"[-+]?\d+(?:\.\d+)?")
 
 
 def extract_first_number(text: str):
@@ -78,6 +80,11 @@ def normalize_yes_no_unknown(text: str) -> str:
 def try_extract_code_body(generation: str, signature: str) -> str:
     g = generation or ""
 
+    # 0) hard stop at end marker (best-effort)
+    # keep everything BEFORE the marker line
+    if _EOC_LINE in g:
+        g = g.split(_EOC_LINE, 1)[0]
+
     # if it repeats signature, cut after last occurrence
     idx = g.rfind(signature.strip())
     if idx != -1:
@@ -107,6 +114,8 @@ def try_extract_code_body(generation: str, signature: str) -> str:
 
     for line in lines:
         line = line.rstrip()
+        if line.strip() == _EOC_LINE:
+            break
         # Stop if model starts a new top-level program structure.
         s = line.lstrip()
         if kept and s.startswith(STOP_PREFIXES):
@@ -296,7 +305,8 @@ def generate_one(prompt: str, task: str, args, seed: int) -> str:
         if args.greedy:
             cmd += ["--greedy", "--temperature", "0"]
         # stop once we reach the blank line that ends the function body (your synth answers end with \n\n)
-        cmd += ["--stop_regex", r"(?s)\r?\nreturn[^\r\n]*\r?\n"]
+        cmd += ["--stop_string", "\n\n"]
+        cmd += ["--stop_regex", r"(?s)\nreturn[^\n]*\n"]
     else:
         if args.greedy:
             cmd += ["--greedy", "--temperature", "0"]
@@ -342,6 +352,7 @@ def wrap_with_task_rules(task: str, user_prompt: str) -> str:
             "- Do NOT use 'yield'.\n"
             "- Do NOT use semicolons ';'.\n"
             "- Write exactly ONE statement per line (no two statements on one line).\n"
+            f"- End your output with exactly: {_EOC_LINE}\n"
         )
     else:
         sys = ""
