@@ -1,0 +1,9 @@
+{"id": "arith_0001", "task": "arithmetic", "prompt": "John has 3 apples and buys 2 more. How many apples does he have?\nAnswer:", "answer": "5", "gold": "5"}
+{"id": "arith_0002", "task": "arithmetic", "prompt": "Compute 17 + 25.\nAnswer:", "answer": "42", "gold": "42"}
+{"id": "arith_0003", "task": "arithmetic", "prompt": "What is 9 * 8?\nAnswer:", "answer": "72", "gold": "72"}
+{"id": "syll_0001", "task": "syllogism", "prompt": "If all cats are animals and some animals are black, can we conclude that some cats are black?\nAnswer:", "answer": "unknown", "gold": "unknown"}
+{"id": "syll_0002", "task": "syllogism", "prompt": "All A are B. All B are C. Can we conclude all A are C?\nAnswer:", "answer": "yes", "gold": "yes"}
+{"id": "syll_0003", "task": "syllogism", "prompt": "Some A are B. All B are C. Can we conclude some A are C?\nAnswer:", "answer": "yes", "gold": "yes"}
+{"id": "code_add_0001", "task": "code", "lang": "python", "entry": "add", "signature": "def add(a, b):\n    ", "tests": "assert add(1,2)==3\nassert add(-1,5)==4\nassert add(0,0)==0\n"}
+{"id": "code_fact_0001", "task": "code", "lang": "python", "entry": "factorial", "signature": "def factorial(n):\n    ", "tests": "assert factorial(0)==1\nassert factorial(1)==1\nassert factorial(5)==120\nassert factorial(8)==40320\n"}
+{"id": "code_fib_0001", "task": "code", "lang": "python", "entry": "fib", "signature": "def fib(n):\n    ", "tests": "assert fib(0)==0\nassert fib(1)==1\nassert fib(2)==1\nassert fib(7)==13\n"}
