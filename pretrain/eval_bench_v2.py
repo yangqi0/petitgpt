@@ -376,6 +376,8 @@ def main() -> None:
             cnt["code"]["n"] += 1
             signature = it.get("signature") or it.get("entry")
             tests = it.get("tests") or []
+            if isinstance(tests, str):
+                tests = [x.strip() for x in tests.splitlines() if x.strip() != ""]
             if not signature or not isinstance(tests, list):
                 ok = False
                 detail = "missing signature/tests"
