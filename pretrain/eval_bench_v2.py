@@ -299,6 +299,8 @@ def main() -> None:
         task = it.get("task")
         if task not in ("arithmetic", "syllogism", "code"):
             continue
+        if task in ("arithmetic", "syllogism") and "gold" not in it:
+            print(f"[WARN] missing gold: id={it.get('id')} task={task} keys={list(it.keys())}", flush=True)
 
         _, prompt = _build_prompt(task, it)
 
@@ -337,24 +339,39 @@ def main() -> None:
         ok = False
         detail = ""
 
+        # --- arithmetic ---
         if task == "arithmetic":
             cnt["arithmetic"]["n"] += 1
-            gold = str(it["gold"]).strip()
-            pred_num = extract_last_number(gen)
-            ok = (
-                (pred_num is not None and str(int(pred_num)) == gold)
-                if gold.isdigit()
-                else (str(pred_num) == gold)
-            )
-            detail = f"pred={pred_num} gold={gold}"
+            gold_raw = it.get("gold", None)
+            if gold_raw is None:
+                ok = False
+                detail = "missing gold"
+                gold = None
+            else:
+                gold = str(gold_raw).strip()
+                pred_num = extract_last_number(gen)
+                # compare as int if gold is integer-like
+                if re.fullmatch(r"[-+]?\d+", gold) and pred_num is not None:
+                    ok = (int(pred_num) == int(gold))
+                else:
+                    ok = (pred_num is not None and str(pred_num) == gold)
+                detail = f"pred={pred_num} gold={gold}"
 
+        # --- syllogism ---
         elif task == "syllogism":
             cnt["syllogism"]["n"] += 1
-            gold = str(it["gold"]).strip().lower()
-            pred = extract_ynu(gen)
-            ok = pred == gold
-            detail = f"pred={pred} gold={gold}"
+            gold_raw = it.get("gold", None)
+            if gold_raw is None:
+                ok = False
+                detail = "missing gold"
+                gold = None
+            else:
+                gold = str(gold_raw).strip().lower()
+                pred = extract_ynu(gen)
+                ok = (pred == gold)
+                detail = f"pred={pred} gold={gold}"
 
+        # --- code ---
         else:
             cnt["code"]["n"] += 1
             signature = it.get("signature") or it.get("entry")
@@ -365,6 +382,7 @@ def main() -> None:
             else:
                 body = try_extract_code_body(gen)
                 ok, detail = run_python_tests(signature, body, tests)
+            gold = None
 
         if ok:
             cnt[task]["correct"] += 1

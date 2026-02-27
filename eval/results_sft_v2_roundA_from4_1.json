@@ -1,0 +1,106 @@
+{
+  "ckpt": "outputs/sft_v2_roundA_2/latest.pt",
+  "bench": "pretrain/bench_v1.jsonl",
+  "time_s": 143.111,
+  "acc_arithmetic": 0.0,
+  "acc_syllogism": 0.0,
+  "acc_code": 0.0,
+  "counts": {
+    "total": 9,
+    "arithmetic": {
+      "n": 3,
+      "correct": 0
+    },
+    "syllogism": {
+      "n": 3,
+      "correct": 0
+    },
+    "code": {
+      "n": 3,
+      "correct": 0
+    }
+  },
+  "results": [
+    {
+      "id": "arith_0001",
+      "task": "arithmetic",
+      "ok": false,
+      "prompt": "You are a precise assistant.\nRules for arithmetic questions:\n- Output ONLY the final numeric answer.\n- No explanation, no extra words, no punctuation.\n\nJohn has 3 apples and buys 2 more. How many apples does he have?\nAnswer:",
+      "gold": null,
+      "gen": " 4",
+      "detail": "missing gold"
+    },
+    {
+      "id": "arith_0002",
+      "task": "arithmetic",
+      "ok": false,
+      "prompt": "You are a precise assistant.\nRules for arithmetic questions:\n- Output ONLY the final numeric answer.\n- No explanation, no extra words, no punctuation.\n\nCompute 17 + 25.\nAnswer:",
+      "gold": null,
+      "gen": " N/20",
+      "detail": "missing gold"
+    },
+    {
+      "id": "arith_0003",
+      "task": "arithmetic",
+      "ok": false,
+      "prompt": "You are a precise assistant.\nRules for arithmetic questions:\n- Output ONLY the final numeric answer.\n- No explanation, no extra words, no punctuation.\n\nWhat is 9 * 8?\nAnswer:",
+      "gold": null,
+      "gen": " 8",
+      "detail": "missing gold"
+    },
+    {
+      "id": "syll_0001",
+      "task": "syllogism",
+      "ok": false,
+      "prompt": "You are a logic assistant.\nRules:\n- Output ONLY one token: yes / no / unknown.\n- Do not explain.\n\nIf all cats are animals and some animals are black, can we conclude that some cats are black?\nAnswer:",
+      "gold": null,
+      "gen": "",
+      "detail": "missing gold"
+    },
+    {
+      "id": "syll_0002",
+      "task": "syllogism",
+      "ok": false,
+      "prompt": "You are a logic assistant.\nRules:\n- Output ONLY one token: yes / no / unknown.\n- Do not explain.\n\nAll A are B. All B are C. Can we conclude all A are C?\nAnswer:",
+      "gold": null,
+      "gen": " Yes",
+      "detail": "missing gold"
+    },
+    {
+      "id": "syll_0003",
+      "task": "syllogism",
+      "ok": false,
+      "prompt": "You are a logic assistant.\nRules:\n- Output ONLY one token: yes / no / unknown.\n- Do not explain.\n\nSome A are B. All B are C. Can we conclude some A are C?\nAnswer:",
+      "gold": null,
+      "gen": " all B",
+      "detail": "missing gold"
+    },
+    {
+      "id": "code_add_0001",
+      "task": "code",
+      "ok": false,
+      "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n- Output ONLY the function body (no def line).\n- Do NOT use 'yield'.\n- Do NOT use semicolons ';'.\n- Write exactly ONE statement per line (no two statements on one line).\n- End your output with exactly: ###EOC###\n\nComplete the following Python function:\n\ndef add(a, b):\n    ",
+      "gold": null,
+      "gen": " return a + b\nclass Solution:\n    def addLarg(self, s1, t1):\n        return s2 = s3 = '' if s0 == 0 else s4 = \"\"\n        for i in range(s0, len(t1), 2):\n            if t2[i] < 0:\n                continue\n            a, _ = t0 + i, a+i\n            b = b + 1\n            return b\n\n\nif __name__ == '__main__':\n    import doctest\n    dof = doCTF('add', 'add')\n    print(add)",
+      "detail": "missing signature/tests"
+    },
+    {
+      "id": "code_fact_0001",
+      "task": "code",
+      "ok": false,
+      "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n- Output ONLY the function body (no def line).\n- Do NOT use 'yield'.\n- Do NOT use semicolons ';'.\n- Write exactly ONE statement per line (no two statements on one line).\n- End your output with exactly: ###EOC###\n\nComplete the following Python function:\n\ndef factorial(n):\n    ",
+      "gold": null,
+      "gen": " r = 1\n\n\n for i in range(2, n + 1):\n    r *= i\nreturn r\n###EOPS OF TERMS\n\n\n\n#import numpy as np\n\n\nclass Solution:\n    # @param A, a list of integers\n    def factorize(self, A):\n        return A[0] if A < 0 else 0\n\n    #@param B, an integer\n    @staticmethod\n    import numbers_to_numbers\n    a, b = 0, 1\n    while b < A:\n        a += b\n    return a\n\n\n\n\n\t# @return a\n    ##########\n    KLINES = []\n    LAYERS = {}\n    SHOW = ['A', 'B']\n    RIGHTS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,",
+      "detail": "missing signature/tests"
+    },
+    {
+      "id": "code_fib_0001",
+      "task": "code",
+      "ok": false,
+      "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n- Output ONLY the function body (no def line).\n- Do NOT use 'yield'.\n- Do NOT use semicolons ';'.\n- Write exactly ONE statement per line (no two statements on one line).\n- End your output with exactly: ###EOC###\n\nComplete the following Python function:\n\ndef fib(n):\n    ",
+      "gold": null,
+      "gen": " if n < 0:\n        raise ValueError('n must be non-negative')\na, b = 0, 1\nfor _ in range(2, n + 1):\n    a,b = b, a + b\nreturn a\n###EOG###\n\n\n\n#function to calculate the number of steps taken by a given sequence\n@_\nclass EOC():\n    def __init__(self, length):\n        self.length = length\n\n    #function for calculating the length of a sequence\n    @property\n    return self\n\n\nif __name__ == '__main__':\n    pass",
+      "detail": "missing signature/tests"
+    }
+  ]
+}

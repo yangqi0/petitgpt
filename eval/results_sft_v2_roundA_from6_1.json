@@ -1,0 +1,106 @@
+{
+  "ckpt": "outputs/sft_v2_roundA_1/latest.pt",
+  "bench": "pretrain/bench_v1.jsonl",
+  "time_s": 152.544,
+  "acc_arithmetic": 0.0,
+  "acc_syllogism": 0.0,
+  "acc_code": 0.0,
+  "counts": {
+    "total": 9,
+    "arithmetic": {
+      "n": 3,
+      "correct": 0
+    },
+    "syllogism": {
+      "n": 3,
+      "correct": 0
+    },
+    "code": {
+      "n": 3,
+      "correct": 0
+    }
+  },
+  "results": [
+    {
+      "id": "arith_0001",
+      "task": "arithmetic",
+      "ok": false,
+      "prompt": "You are a precise assistant.\nRules for arithmetic questions:\n- Output ONLY the final numeric answer.\n- No explanation, no extra words, no punctuation.\n\nJohn has 3 apples and buys 2 more. How many apples does he have?\nAnswer:",
+      "gold": null,
+      "gen": " 4",
+      "detail": "missing gold"
+    },
+    {
+      "id": "arith_0002",
+      "task": "arithmetic",
+      "ok": false,
+      "prompt": "You are a precise assistant.\nRules for arithmetic questions:\n- Output ONLY the final numeric answer.\n- No explanation, no extra words, no punctuation.\n\nCompute 17 + 25.\nAnswer:",
+      "gold": null,
+      "gen": " N/A",
+      "detail": "missing gold"
+    },
+    {
+      "id": "arith_0003",
+      "task": "arithmetic",
+      "ok": false,
+      "prompt": "You are a precise assistant.\nRules for arithmetic questions:\n- Output ONLY the final numeric answer.\n- No explanation, no extra words, no punctuation.\n\nWhat is 9 * 8?\nAnswer:",
+      "gold": null,
+      "gen": " 0",
+      "detail": "missing gold"
+    },
+    {
+      "id": "syll_0001",
+      "task": "syllogism",
+      "ok": false,
+      "prompt": "You are a logic assistant.\nRules:\n- Output ONLY one token: yes / no / unknown.\n- Do not explain.\n\nIf all cats are animals and some animals are black, can we conclude that some cats are black?\nAnswer:",
+      "gold": null,
+      "gen": "",
+      "detail": "missing gold"
+    },
+    {
+      "id": "syll_0002",
+      "task": "syllogism",
+      "ok": false,
+      "prompt": "You are a logic assistant.\nRules:\n- Output ONLY one token: yes / no / unknown.\n- Do not explain.\n\nAll A are B. All B are C. Can we conclude all A are C?\nAnswer:",
+      "gold": null,
+      "gen": " \\yes",
+      "detail": "missing gold"
+    },
+    {
+      "id": "syll_0003",
+      "task": "syllogism",
+      "ok": false,
+      "prompt": "You are a logic assistant.\nRules:\n- Output ONLY one token: yes / no / unknown.\n- Do not explain.\n\nSome A are B. All B are C. Can we conclude some A are C?\nAnswer:",
+      "gold": null,
+      "gen": " all B",
+      "detail": "missing gold"
+    },
+    {
+      "id": "code_add_0001",
+      "task": "code",
+      "ok": false,
+      "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n- Output ONLY the function body (no def line).\n- Do NOT use 'yield'.\n- Do NOT use semicolons ';'.\n- Write exactly ONE statement per line (no two statements on one line).\n- End your output with exactly: ###EOC###\n\nComplete the following Python function:\n\ndef add(a, b):\n    ",
+      "gold": null,
+      "gen": " return a + b\nreturn a\n###EOG###\n\n\n\nif __name__ == '__main__':\n    a,b = 0,1,2\n    for _ in range(n):\n        a , b = b, a+b\nfor _i in xrange(0, n):\n    i = i + 1\nprint('Added:', a)",
+      "detail": "missing signature/tests"
+    },
+    {
+      "id": "code_fact_0001",
+      "task": "code",
+      "ok": false,
+      "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n- Output ONLY the function body (no def line).\n- Do NOT use 'yield'.\n- Do NOT use semicolons ';'.\n- Write exactly ONE statement per line (no two statements on one line).\n- End your output with exactly: ###EOC###\n\nComplete the following Python function:\n\ndef factorial(n):\n    ",
+      "gold": null,
+      "gen": " r = 1\n\n\nfor i in range(2, n + 1):\n    r *= i\nreturn r\n###EOG###\n\n\n\nif __name__ == '__main__':\n    n = int(input())\n    a, b = 0, 1\n    for _ in xrange(a):\n        a *= b\n\n    b, x = b , a + b\nfor _x in a:\n    x *= a\nprint('b', b)",
+      "detail": "missing signature/tests"
+    },
+    {
+      "id": "code_fib_0001",
+      "task": "code",
+      "ok": false,
+      "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n- Output ONLY the function body (no def line).\n- Do NOT use 'yield'.\n- Do NOT use semicolons ';'.\n- Write exactly ONE statement per line (no two statements on one line).\n- End your output with exactly: ###EOC###\n\nComplete the following Python function:\n\ndef fib(n):\n    ",
+      "gold": null,
+      "gen": " return n * b = 0\nfor _ in range(2, n + 1):\n    a, b=0, 1\nreturn a\n###EOG###\n\n\n\nif n < 0:\n    raise ValueError('n must be non-negative')\na,b = 1, 2\nr = b\nprint r\n# print a\n\n\nn_iter = int(input())\nresult = a + b\n\n\nfor i in xrange(r):\n      a , b  = i, i +1\noutput = result\n##EO\\x01\\u0020\n'''",
+      "detail": "missing signature/tests"
+    }
+  ]
+}
