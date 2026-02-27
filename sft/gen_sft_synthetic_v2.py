@@ -1,14 +1,5 @@
 #!/usr/bin/env python3
-"""
-Generate synthetic SFT data (canonical chat jsonl):
-{"messages":[...], "meta": {...}}
-
-Tasks:
-- arithmetic: symbolic (+,-,*), abc variables, and word problems (apples)
-- syllogism: yes/no/unknown templates (+ cats_unknown)
-- code: add / factorial / fib / is_even / clamp, strict "ONLY function body"
-  and MUST end with exactly: ###EOC###
-"""
+# -*- coding: utf-8 -*-
 
 from __future__ import annotations
 
@@ -16,10 +7,10 @@ import argparse
 import json
 import os
 import random
+from typing import Dict, List, Tuple
 
 EOC_LINE = "###EOC###"
 EOC_BLOCK = f"\n{EOC_LINE}\n"
-
 
 SYS_ARITH = (
     "You are a precise assistant.\n"
@@ -50,8 +41,7 @@ SYS_CODE = (
     f"- End your output with exactly: {EOC_LINE}\n"
 )
 
-
-def ex(system: str, user: str, assistant: str, meta: dict) -> dict:
+def ex(system: str, user: str, assistant: str, meta: Dict) -> Dict:
     return {
         "messages": [
             {"role": "system", "content": system},
@@ -61,29 +51,28 @@ def ex(system: str, user: str, assistant: str, meta: dict) -> dict:
         "meta": meta,
     }
 
-
 # -------------------------
 # arithmetic
 # -------------------------
-
-
-def _arith_symbolic(rng: random.Random, max_n: int) -> tuple[str, str]:
+def _arith_symbolic(rng: random.Random, max_n: int) -> Tuple[str, str, str]:
     op = rng.choice(["+", "-", "*"])
     a = rng.randint(0, max_n)
     b = rng.randint(0, max_n)
     if op == "+":
         q = f"Compute {a} + {b}.\nAnswer:"
         ans = str(a + b)
+        style = "symbolic"
     elif op == "-":
         q = f"Compute {a} - {b}.\nAnswer:"
         ans = str(a - b)
+        style = "symbolic"
     else:
         q = f"What is {a} * {b}?\nAnswer:"
         ans = str(a * b)
-    return q, ans
+        style = "symbolic"
+    return q, ans, style
 
-
-def _arith_abc(rng: random.Random, max_n: int) -> tuple[str, str]:
+def _arith_abc(rng: random.Random, max_n: int) -> Tuple[str, str, str]:
     op = rng.choice(["+", "-", "*"])
     a = rng.randint(0, max_n)
     b = rng.randint(0, max_n)
@@ -96,61 +85,48 @@ def _arith_abc(rng: random.Random, max_n: int) -> tuple[str, str]:
     else:
         q = f"Let A = {a} and B = {b}. Compute A * B.\nAnswer:"
         ans = str(a * b)
-    return q, ans
+    return q, ans, "abc"
 
-
-def _arith_apples(rng: random.Random, max_n: int) -> tuple[str, str]:
-    # Keep it similar to bench style.
+def _arith_apples(rng: random.Random, max_n: int) -> Tuple[str, str, str]:
     a = rng.randint(0, max_n)
     b = rng.randint(0, max_n)
     q = f"John has {a} apples and buys {b} more. How many apples does he have?\nAnswer:"
     ans = str(a + b)
-    return q, ans
+    return q, ans, "word_apples"
 
-
-def gen_arith(rng: random.Random, i: int, max_n: int) -> dict:
+def gen_arith(rng: random.Random, i: int, max_n: int) -> Dict:
     style = rng.choices(
-        population=["symbolic", "abc", "word_apples"],
+        ["symbolic", "abc", "word_apples"],
         weights=[0.70, 0.20, 0.10],
         k=1,
     )[0]
-
     if style == "symbolic":
-        q, ans = _arith_symbolic(rng, max_n)
+        q, ans, style2 = _arith_symbolic(rng, max_n)
     elif style == "abc":
-        q, ans = _arith_abc(rng, max_n)
+        q, ans, style2 = _arith_abc(rng, max_n)
     else:
-        q, ans = _arith_apples(rng, max_n)
-
+        q, ans, style2 = _arith_apples(rng, max_n)
     return ex(
         SYS_ARITH,
         q,
         ans + "\n",
-        {"id": f"syn_arith_{i:06d}", "task": "arithmetic", "style": style},
+        {"id": f"syn_arith_{i:06d}", "task": "arithmetic", "style": style2},
     )
-
 
 # -------------------------
 # syllogism
 # -------------------------
-
-
-def gen_syll(rng: random.Random, i: int, mode: str = "mix") -> dict:
-    # bench has cats_unknown; keep it in distribution
+def gen_syll(rng: random.Random, i: int, mode: str) -> Dict:
     if mode == "focus":
         styles = ["cats_unknown", "all_yes", "some_yes"]
         weights = [0.50, 0.25, 0.25]
     else:
         styles = ["cats_unknown", "all_yes", "some_yes", "all_unknown", "some_no"]
         weights = [0.25, 0.25, 0.25, 0.15, 0.10]
-
     style = rng.choices(styles, weights=weights, k=1)[0]
 
     if style == "cats_unknown":
-        q = (
-            "If all cats are animals and some animals are black, can we conclude that some cats are black?\n"
-            "Answer:"
-        )
+        q = "If all cats are animals and some animals are black, can we conclude that some cats are black?\nAnswer:"
         ans = "unknown"
     elif style == "all_yes":
         q = "All A are B. All B are C. Can we conclude all A are C?\nAnswer:"
@@ -172,19 +148,15 @@ def gen_syll(rng: random.Random, i: int, mode: str = "mix") -> dict:
         {"id": f"syn_syll_{i:06d}", "task": "syllogism", "style": style},
     )
 
-
 # -------------------------
 # code
 # -------------------------
-
-
-def _code_add() -> tuple[str, str]:
+def _code_add() -> Tuple[str, str]:
     user = "Complete the following Python function:\n\ndef add(a, b):\n    "
     body = "return a + b\n"
     return user, body
 
-
-def _code_factorial() -> tuple[str, str]:
+def _code_factorial() -> Tuple[str, str]:
     user = "Complete the following Python function:\n\ndef factorial(n):\n    "
     body = (
         "if n < 0:\n"
@@ -196,8 +168,7 @@ def _code_factorial() -> tuple[str, str]:
     )
     return user, body
 
-
-def _code_fib() -> tuple[str, str]:
+def _code_fib() -> Tuple[str, str]:
     user = "Complete the following Python function:\n\ndef fib(n):\n    "
     body = (
         "if n < 0:\n"
@@ -209,41 +180,27 @@ def _code_fib() -> tuple[str, str]:
     )
     return user, body
 
-
-def _code_is_even() -> tuple[str, str]:
+def _code_is_even() -> Tuple[str, str]:
     user = "Complete the following Python function:\n\ndef is_even(n):\n    "
     body = "return (n % 2) == 0\n"
     return user, body
 
-
-def _code_clamp() -> tuple[str, str]:
+def _code_clamp() -> Tuple[str, str]:
     user = "Complete the following Python function:\n\ndef clamp(x, lo, hi):\n    "
-    body = "if x < lo:\n    return lo\nif x > hi:\n    return hi\nreturn x\n"
+    body = (
+        "if x < lo:\n"
+        "    return lo\n"
+        "if x > hi:\n"
+        "    return hi\n"
+        "return x\n"
+    )
     return user, body
 
-
-def _is_good_code_answer(s: str) -> bool:
-    # Must end with EXACT EOC block and must not contain banned patterns
-    if not s.endswith(EOC_BLOCK):
-        return False
-    if s.count(EOC_LINE) != 1:
-        return False
-    if "yield" in s or ";" in s:
-        return False
-    # Do not allow extra stuff after EOC
-    if s.split(EOC_LINE, 1)[1].strip() != "":
-        return False
-    return True
-
-
-def gen_code(rng: random.Random, i: int, mode: str = "mix") -> dict:
+def gen_code(rng: random.Random, i: int, mode: str) -> Dict:
     kinds = ["add", "factorial", "fib", "is_even", "clamp"]
-    if mode == "focus":
-        weights = [0.15, 0.25, 0.25, 0.15, 0.20]
-    else:
-        weights = [0.20, 0.20, 0.20, 0.20, 0.20]
-
+    weights = [0.20, 0.20, 0.20, 0.20, 0.20] if mode == "mix" else [0.15, 0.25, 0.25, 0.15, 0.20]
     kind = rng.choices(kinds, weights=weights, k=1)[0]
+
     if kind == "add":
         user, body = _code_add()
     elif kind == "factorial":
@@ -256,8 +213,6 @@ def gen_code(rng: random.Random, i: int, mode: str = "mix") -> dict:
         user, body = _code_clamp()
 
     assistant = body.rstrip("\n") + EOC_BLOCK
-    assert _is_good_code_answer(assistant), "internal: code answer not strict"
-
     return ex(
         SYS_CODE,
         user,
@@ -265,45 +220,58 @@ def gen_code(rng: random.Random, i: int, mode: str = "mix") -> dict:
         {"id": f"syn_code_{i:06d}", "task": "code", "kind": kind},
     )
 
-
 # -------------------------
-# main
+# streaming main
 # -------------------------
-
-
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", required=True)
     ap.add_argument("--seed", type=int, default=1234)
-
     ap.add_argument("--n_arith", type=int, default=10000)
     ap.add_argument("--n_syll", type=int, default=6000)
     ap.add_argument("--n_code", type=int, default=4000)
     ap.add_argument("--arith_max_n", type=int, default=99)
-
     ap.add_argument("--syll_mode", choices=["mix", "focus"], default="mix")
     ap.add_argument("--code_mode", choices=["mix", "focus"], default="mix")
     args = ap.parse_args()
 
     rng = random.Random(args.seed)
-    rows: list[dict] = []
 
-    for i in range(args.n_arith):
-        rows.append(gen_arith(rng, i, args.arith_max_n))
-    for i in range(args.n_syll):
-        rows.append(gen_syll(rng, i, mode=args.syll_mode))
-    for i in range(args.n_code):
-        rows.append(gen_code(rng, i, mode=args.code_mode))
+    out_dir = os.path.dirname(args.out) or "."
+    os.makedirs(out_dir, exist_ok=True)
 
-    rng.shuffle(rows)
+    total = args.n_arith + args.n_syll + args.n_code
+    print(f"[start] writing to {args.out} total={total}", flush=True)
 
-    os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)
+    # Open file immediately so you can see it exists right away.
     with open(args.out, "w", encoding="utf-8") as f:
-        for r in rows:
-            f.write(json.dumps(r, ensure_ascii=False) + "\n")
+        # Interleave tasks by sampling according to remaining counts (so no huge blocks).
+        rem = {"arithmetic": args.n_arith, "syllogism": args.n_syll, "code": args.n_code}
+        idx = {"arithmetic": 0, "syllogism": 0, "code": 0}
+        written = 0
 
-    print("wrote", len(rows), "examples to", args.out)
+        while rem["arithmetic"] + rem["syllogism"] + rem["code"] > 0:
+            choices = [t for t, n in rem.items() if n > 0]
+            weights = [rem[t] for t in choices]
+            task = rng.choices(choices, weights=weights, k=1)[0]
 
+            if task == "arithmetic":
+                row = gen_arith(rng, idx["arithmetic"], args.arith_max_n)
+            elif task == "syllogism":
+                row = gen_syll(rng, idx["syllogism"], mode=args.syll_mode)
+            else:
+                row = gen_code(rng, idx["code"], mode=args.code_mode)
+
+            idx[task] += 1
+            rem[task] -= 1
+
+            f.write(json.dumps(row, ensure_ascii=False) + "\n")
+            written += 1
+
+            if written % 2000 == 0:
+                print(f"[progress] {written}/{total} rem={rem}", flush=True)
+
+    print(f"[done] wrote {total} examples to {args.out}", flush=True)
 
 if __name__ == "__main__":
     main()

@@ -4,8 +4,8 @@ from collections import Counter, defaultdict
 import json
 import re
 
-TRAIN = "datasets/sft/synth_vNEW.train.jsonl"
-VAL = "datasets/sft/synth_vNEW.val.jsonl"
+TRAIN = "datasets/sft/synth_v2_roundA_1.train.jsonl"
+VAL = "datasets/sft/synth_v2_roundA_1.val.jsonl"
 
 EOC_LINE = "###EOC###"
 EOC_BLOCK = "\n" + EOC_LINE + "\n"
