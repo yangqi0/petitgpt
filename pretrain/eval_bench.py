@@ -15,6 +15,7 @@ from typing import Any
 _NUM_RE = re.compile(r"[-+]?\d+(?:\.\d+)?")
 
 _EOC_LINE = "###EOC###"
+_EOC_BLOCK = "\n" + _EOC_LINE + "\n"
 
 
 def read_jsonl(path: str) -> list[dict[str, Any]]:
@@ -26,9 +27,6 @@ def read_jsonl(path: str) -> list[dict[str, Any]]:
                 continue
             rows.append(json.loads(line))
     return rows
-
-
-# _NUM_RE = re.compile(r"[-+]?\d+(?:\.\d+)?")
 
 
 def extract_first_number(text: str):
@@ -80,10 +78,13 @@ def normalize_yes_no_unknown(text: str) -> str:
 def try_extract_code_body(generation: str, signature: str) -> str:
     g = generation or ""
 
-    # 0) hard stop at end marker (best-effort)
-    # keep everything BEFORE the marker line
-    if _EOC_LINE in g:
-        g = g.split(_EOC_LINE, 1)[0]
+     # 0) STRICT stop at end marker: keep everything BEFORE the marker line
+     if _EOC_LINE in g:
+         g = g.split(_EOC_LINE, 1)[0]
+     else:
+         # If the model didn't output the marker, treat as "no valid code body"
+         # (prevents evaluating long junk that accidentally passes).
+         return "pass"
 
     # if it repeats signature, cut after last occurrence
     idx = g.rfind(signature.strip())
@@ -114,8 +115,6 @@ def try_extract_code_body(generation: str, signature: str) -> str:
 
     for line in lines:
         line = line.rstrip()
-        if line.strip() == _EOC_LINE:
-            break
         # Stop if model starts a new top-level program structure.
         s = line.lstrip()
         if kept and s.startswith(STOP_PREFIXES):
@@ -304,10 +303,13 @@ def generate_one(prompt: str, task: str, args, seed: int) -> str:
     elif task == "code":
         if args.greedy:
             cmd += ["--greedy", "--temperature", "0"]
+         # STRICT: require explicit marker, otherwise the model tends to continue into junk.
+         # We stop as soon as "\n###EOC###\n" appears.
+         cmd += ["--stop_string", _EOC_BLOCK]
+         # Also clamp to avoid long spill even if marker missing.
+         cmd[cmd.index("--max_new_tokens") + 1] = str(min(int(args.max_new_tokens), 192))
         # Prefer explicit end marker used by synth data; fallback to blank line.
-        cmd += ["--stop_string", "\n" + _EOC_LINE + "\n", "--stop_string", _EOC_LINE]
-        cmd += ["--stop_string", "\n\n"]
-        cmd += ["--stop_regex", r"(?s)\nreturn[^\n]*\n"]
+        # cmd += ["--stop_regex", r"(?s)\nreturn[^\n]*\n"]
     else:
         if args.greedy:
             cmd += ["--greedy", "--temperature", "0"]

@@ -71,11 +71,15 @@ _CODE_BAN_SUBSTRS = [
 ]
 
 _EOC_LINE = "###EOC###"
+_EOC_BLOCK = "\n" + _EOC_LINE + "\n"
 
 # Detect "glued lines" like: "r = 1 for i in ...", "return a for ..."
 _CODE_GLUED_RE = re.compile(
     r"(^|[\s])\b(for|while|if|return)\b.*\b(for|while|if|return)\b", re.IGNORECASE
 )
+
+# Reject tokens like "1k", "1`", "120abc" (common model garbage)
+_CODE_BAD_NUM_TAIL_RE = re.compile(r"\d(?:[A-Za-z`])")
 
 
 def _is_good_syll_answer(a: str) -> bool:
@@ -86,7 +90,8 @@ def _is_good_code_answer(a: str) -> bool:
     if not a:
         return False
     # Must end with explicit end marker so decoding/eval can stop deterministically.
-    if not a.endswith("\n" + _EOC_LINE + "\n"):
+    # STRICT: end marker must be exact and on its own line.
+    if not a.endswith(_EOC_BLOCK):
         return False
     if "return" not in a:
         return False
@@ -95,6 +100,9 @@ def _is_good_code_answer(a: str) -> bool:
         return False
     # ban semicolons to reduce "glued lines"
     if ";" in a:
+        return False
+    # ban "1k", "1`" etc
+    if _CODE_BAD_NUM_TAIL_RE.search(a):
         return False
     # ban glued control-flow on same line (common failure mode)
     if _CODE_GLUED_RE.search(a):
@@ -324,31 +332,16 @@ def gen_code(
         # Two equivalent implementations to reduce "partial memorization"
         if rng.random() < 0.5:
             # Variant A (your original)
-            assistant = (
-                "r = 1\n"
-                "for i in range(2, n + 1):\n"
-                "    r *= i\n"
-                "return r\n"
-            )
+            assistant = "r = 1\nfor i in range(2, n + 1):\n    r *= i\nreturn r\n"
         else:
             # Variant B (starts from 1; also correct for n=0)
-            assistant = (
-                "r = 1\n"
-                "for i in range(1, n + 1):\n"
-                "    r *= i\n"
-                "return r\n"
-            )
+            assistant = "r = 1\nfor i in range(1, n + 1):\n    r *= i\nreturn r\n"
     elif k == "fib":
         user = "Complete the following Python function:\n\ndef fib(n):\n    "
         # Two equivalent implementations to reduce shortcut bugs (like a *= b, return i, etc.)
         if (not fib_force_variant_b) and (rng.random() < 0.5):
             # Variant A (your original)
-            assistant = (
-                "a, b = 0, 1\n"
-                "for _ in range(n):\n"
-                "    a, b = b, a + b\n"
-                "return a\n"
-            )
+            assistant = "a, b = 0, 1\nfor _ in range(n):\n    a, b = b, a + b\nreturn a\n"
         else:
             # Variant B (explicit base cases; loop from 2..n)
             assistant = (
@@ -397,9 +390,15 @@ def main():
         action="store_true",
         help="Force fib Variant B (with base cases) to correct common failure modes.",
     )
-    ap.add_argument("--p_add", type=float, default=0.30, help="In code_mode=focus: probability of add.")
-    ap.add_argument("--p_fact", type=float, default=0.35, help="In code_mode=focus: probability of factorial.")
-    ap.add_argument("--p_fib", type=float, default=0.35, help="In code_mode=focus: probability of fib.")
+    ap.add_argument(
+        "--p_add", type=float, default=0.30, help="In code_mode=focus: probability of add."
+    )
+    ap.add_argument(
+        "--p_fact", type=float, default=0.35, help="In code_mode=focus: probability of factorial."
+    )
+    ap.add_argument(
+        "--p_fib", type=float, default=0.35, help="In code_mode=focus: probability of fib."
+    )
     ap.add_argument(
         "--anti",
         action="store_true",
