@@ -459,32 +459,12 @@ def generate(
         if eos_id is not None and nxt == eos_id and (step + 1) >= min_new_tokens:
             break
 
-    full_ids = prompt_ids + generated
-    # build final output with optional truncation
+    # Final decode (prompt + completion). Apply stop_cut (strings/newline/regex) if set.
     prompt_text = tokenizer.decode(prompt_ids)
     gen_text = tokenizer.decode(generated)
     if stop_cut is not None:
         gen_text = gen_text[:stop_cut]
     out_text = prompt_text + gen_text
-
-     # if we stopped by string/newline, optionally truncate output_text to remove stop marker
-    if stopped_by is not None:
-        # out_text includes prompt+generated; we only want to truncate based on generated region.
-        # easiest: rebuild final text as prompt_text + processed_generated_text
-        prompt_text = tokenizer.decode(prompt_ids)
-        gen_text = tokenizer.decode(generated)
-        if stop_cfg.stop_on_newline:
-            # treat newline as a stop string too
-            stop_cfg2 = StopConfig(
-                stop_strings=stop_cfg.stop_strings + ["\n"],
-                stop_regexes=stop_cfg.stop_regexes,
-                stop_on_newline=False,
-                include_stop_in_output=stop_cfg.include_stop_in_output,
-            )
-            gen_text = _postprocess_stop(gen_text, stop_cfg2)
-        else:
-            gen_text = _postprocess_stop(gen_text, stop_cfg)
-        out_text = prompt_text + gen_text
 
     return {
         "prompt_tokens": len(prompt_ids),
