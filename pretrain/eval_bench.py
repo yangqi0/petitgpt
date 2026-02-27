@@ -304,7 +304,8 @@ def generate_one(prompt: str, task: str, args, seed: int) -> str:
     elif task == "code":
         if args.greedy:
             cmd += ["--greedy", "--temperature", "0"]
-        # stop once we reach the blank line that ends the function body (your synth answers end with \n\n)
+        # Prefer explicit end marker used by synth data; fallback to blank line.
+        cmd += ["--stop_string", "\n" + _EOC_LINE + "\n", "--stop_string", _EOC_LINE]
         cmd += ["--stop_string", "\n\n"]
         cmd += ["--stop_regex", r"(?s)\nreturn[^\n]*\n"]
     else:
