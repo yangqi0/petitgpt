@@ -43,6 +43,7 @@ SYS_CODE = (
     "- Do NOT use 'yield'.\n"
     "- Do NOT use semicolons ';'.\n"
     "- Write exactly ONE statement per line (no two statements on one line).\n"
+    "- End your output with exactly: ###EOC###\n"
 )
 
 
@@ -69,6 +70,8 @@ _CODE_BAN_SUBSTRS = [
     "print(",
 ]
 
+_EOC_LINE = "###EOC###"
+
 # Detect "glued lines" like: "r = 1 for i in ...", "return a for ..."
 _CODE_GLUED_RE = re.compile(
     r"(^|[\s])\b(for|while|if|return)\b.*\b(for|while|if|return)\b", re.IGNORECASE
@@ -82,10 +85,13 @@ def _is_good_syll_answer(a: str) -> bool:
 def _is_good_code_answer(a: str) -> bool:
     if not a:
         return False
-    # must end with \n\n (so eval can stop cleanly) and contain at least one return
-    if not a.endswith("\n"):
+    # Must end with explicit end marker so decoding/eval can stop deterministically.
+    if not a.endswith("\n" + _EOC_LINE + "\n"):
         return False
     if "return" not in a:
+        return False
+    # marker must appear exactly once and on its own line
+    if a.count(_EOC_LINE) != 1:
         return False
     # ban semicolons to reduce "glued lines"
     if ";" in a:
@@ -360,8 +366,11 @@ def gen_code(
         user = "Complete the following Python function:\n\ndef clamp(x, lo, hi):\n    "
         # FIX indentation (relative indentation must be valid Python)
         assistant = "if x < lo:\n    return lo\nif x > hi:\n    return hi\nreturn x\n"
-    # IMPORTANT: make code completions end with a blank line so --stop_string "\n\n" works at inference time.
-    assistant = assistant.rstrip() + "\n"
+    # IMPORTANT:
+    # Use an explicit end marker so decoding/eval can stop deterministically.
+    # The model must output the function body only, then "# <EOC>" on its own line.
+    assistant = assistant.rstrip() + "\n" + _EOC_LINE + "\n"
+
     # bench_exact MUST be clean: no extra reminder text.
     if not bench_exact:
         user = _maybe_add_user_anti(user, anti=anti, task="code")
