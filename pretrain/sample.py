@@ -225,6 +225,69 @@ def _build_whitespace_ban_ids(tokenizer: Tokenizer) -> List[int]:
 
     return sorted(candidates)
 
+
+# -------------------------
+# Output restriction (task-aware decoding helpers)
+# -------------------------
+
+def _get_vocab_size(tokenizer: Tokenizer) -> int:
+    try:
+        return int(tokenizer.get_vocab_size())
+    except Exception:
+        try:
+            return len(tokenizer.get_vocab())
+        except Exception:
+            raise RuntimeError("Cannot determine tokenizer vocab size")
+
+def _build_allowed_token_ids(tokenizer: Tokenizer, mode: str, eos_id: Optional[int]) -> Optional[List[int]]:
+    """
+    Build an allowlist of token ids for constrained decoding.
+
+    mode:
+      - "digits": only characters in 0-9 + '+-.' + space + newline
+      - "ynu": only tokens used to spell 'yes'/'no'/'unknown' (plus optional leading space/newline)
+    """
+    mode = (mode or "").lower().strip()
+    if mode in ("", "none", "off", "false"):
+        return None
+
+    allowed: set[int] = set()
+    if eos_id is not None and eos_id >= 0:
+        allowed.add(int(eos_id))
+
+    if mode == "digits":
+        allowed_chars = set("0123456789+-.
+ ")
+        vsz = _get_vocab_size(tokenizer)
+        for tid in range(vsz):
+            try:
+                txt = tokenizer.decode([tid])
+            except Exception:
+                continue
+            if not txt:
+                continue
+            if all((c in allowed_chars) for c in txt):
+                allowed.add(tid)
+        out = sorted(allowed)
+        return out if out else None
+
+    if mode == "ynu":
+        variants = [
+            "yes", " yes", "\nyes",
+            "no", " no", "\nno",
+            "unknown", " unknown", "\nunknown",
+            "\n", " \n",
+        ]
+        for s in variants:
+            try:
+                allowed.update(tokenizer.encode(s).ids)
+            except Exception:
+                pass
+        out = sorted(allowed)
+        return out if out else None
+
+    raise ValueError(f"Unknown restrict mode: {mode}")
+
 @dataclass
 class StopConfig:
     """
@@ -291,6 +354,8 @@ def generate(
     stop_on_newline: bool = False,
     include_stop_in_output: bool = False,
     stop_regex: Optional[List[str]] = None,
+    # restriction:
+    allowed_token_ids: Optional[List[int]] = None,
 ) -> Dict[str, Any]:
     if seed is not None:
         _set_seed(int(seed))
@@ -351,6 +416,26 @@ def generate(
         dbg["banned_ids_count"] = len(whitespace_ban_ids)
         dbg["banned_ids_head"] = whitespace_ban_ids[:32]
 
+    # Allowed-token mask (optional): constrain decoding to a whitelist.
+    allowed_mask: Optional[torch.Tensor] = None
+    if allowed_token_ids:
+        vsz = None
+        try:
+            vsz = _get_vocab_size(tokenizer)
+        except Exception:
+            pass
+        if vsz is None:
+            # fallback: infer from logits size later (rare)
+            vsz = None
+        if vsz is not None:
+            allowed_mask = torch.zeros(int(vsz), device=device, dtype=torch.bool)
+            idx = torch.tensor(list(set(int(x) for x in allowed_token_ids)), device=device, dtype=torch.long)
+            idx = idx[(idx >= 0) & (idx < allowed_mask.numel())]
+            if idx.numel() > 0:
+                allowed_mask[idx] = True
+            else:
+                allowed_mask = None
+
     # incremental decoded after for stop detection (generated part only)
     # gen_text_buf: str = ""
     # stopped_by: Optional[str] = None
@@ -375,6 +460,10 @@ def generate(
         if avoid_first_whitespace and step < ban_first_steps and whitespace_ban_ids:
             idx = torch.tensor(whitespace_ban_ids, device=next_logits.device, dtype=torch.long)
             next_logits.index_fill_(0, idx, -float("inf"))
+
+        # Allowed-token restriction (optional)
+        if allowed_mask is not None:
+            next_logits = next_logits.masked_fill(~allowed_mask, -float("inf"))
 
         # Debug preview for first step (after bans/penalties)
         if debug and step == 0:
@@ -683,6 +772,7 @@ def main() -> None:
     ap.add_argument("--stop_regex", action="append", default=None,
                     help="Stop when this regex matches generated text (can repeat).")
     ap.add_argument("--include_stop_in_output", action="store_true", help="If set, keep the stop marker in output text (default: truncate it).")
+    ap.add_argument("--restrict", choices=["none", "digits", "ynu"], default="none", help="Constrain output tokens (useful for eval): digits or yes/no/unknown.")
 
     # mode
     ap.add_argument("--prompt", type=str, default=None, help="If set, generate single completion to stdout.")
@@ -691,6 +781,8 @@ def main() -> None:
     ap.add_argument("--quiet", action="store_true", help="print only generated text")
 
     args = ap.parse_args()
+
+    allowed_ids = None
 
     model, ckpt = _load_ckpt_and_build_model(args.ckpt, device=args.device)
 
@@ -708,6 +800,8 @@ def main() -> None:
 
     if args.prompt is not None:
         tok = Tokenizer.from_file(args.tokenizer_path)
+
+        allowed_ids = _build_allowed_token_ids(tok, args.restrict, eos_id=(None if args.eos_id < 0 else args.eos_id))
 
         device_type = "cuda" if ("cuda" in str(args.device) and torch.cuda.is_available()) else "cpu"
         with torch.autocast(
@@ -743,6 +837,7 @@ def main() -> None:
                 stop_on_newline=args.stop_on_newline,
                 include_stop_in_output=args.include_stop_in_output,
                 stop_regex=args.stop_regex,
+                allowed_token_ids=allowed_ids,
             )
 
         if args.quiet:
