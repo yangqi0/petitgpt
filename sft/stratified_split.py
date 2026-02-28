@@ -4,9 +4,9 @@ from collections import Counter, defaultdict
 import json
 import random
 
-SRC = "datasets/sft/synth_v2_roundA_1.canon.jsonl"
-OUT_TRAIN = "datasets/sft/synth_v2_roundA_1.train.jsonl"
-OUT_VAL = "datasets/sft/synth_v2_roundA_1.val.jsonl"
+SRC = "dataset/sft/syn_mix_v4.jsonl"
+OUT_TRAIN = "dataset/sft/syn_mix_v4.train.jsonl"
+OUT_VAL = "dataset/sft/syn_mix_v4.val.jsonl"
 
 SEED = 1234
 N_VAL = 2000
