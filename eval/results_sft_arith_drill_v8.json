@@ -1,10 +1,10 @@
 {
-  "ckpt": "outputs/sft_roundA8c_eoc/latest.pt",
-  "bench": "pretrain/bench_v1.jsonl",
-  "time_s": 130.559,
+  "ckpt": "outputs/sft_arith_drill_v8/latest.pt",
+  "bench": "pretrain/bench_v1.eval.jsonl",
+  "time_s": 113.727,
   "acc_arithmetic": 0.0,
-  "acc_syllogism": 0.3333333333333333,
-  "acc_code": 0.3333333333333333,
+  "acc_syllogism": 0.0,
+  "acc_code": 1.0,
   "counts": {
     "total": 9,
     "arithmetic": {
@@ -13,11 +13,11 @@
     },
     "syllogism": {
       "n": 3,
-      "correct": 1
+      "correct": 0
     },
     "code": {
       "n": 3,
-      "correct": 1
+      "correct": 3
     }
   },
   "results": [
@@ -27,7 +27,7 @@
       "ok": false,
       "prompt": "You are a precise assistant.\nRules for arithmetic questions:\n- Output ONLY the final numeric answer.\n- No explanation, no extra words, no punctuation.\n\nJohn has 3 apples and buys 2 more. How many apples does he have?\nAnswer:",
       "gold": "5",
-      "gen": " 3",
+      "gen": "3 3 3 3",
       "detail": "pred=3.0 gold=5"
     },
     {
@@ -36,8 +36,8 @@
       "ok": false,
       "prompt": "You are a precise assistant.\nRules for arithmetic questions:\n- Output ONLY the final numeric answer.\n- No explanation, no extra words, no punctuation.\n\nCompute 17 + 25.\nAnswer:",
       "gold": "42",
-      "gen": " 25",
-      "detail": "pred=25.0 gold=42"
+      "gen": " 353",
+      "detail": "pred=353.0 gold=42"
     },
     {
       "id": "arith_0003",
@@ -45,8 +45,8 @@
       "ok": false,
       "prompt": "You are a precise assistant.\nRules for arithmetic questions:\n- Output ONLY the final numeric answer.\n- No explanation, no extra words, no punctuation.\n\nWhat is 9 * 8?\nAnswer:",
       "gold": "72",
-      "gen": " 8",
-      "detail": "pred=8.0 gold=72"
+      "gen": " 83 3 3",
+      "detail": "pred=3.0 gold=72"
     },
     {
       "id": "syll_0001",
@@ -54,17 +54,17 @@
       "ok": false,
       "prompt": "You are a logic assistant.\nRules:\n- Output ONLY one token: yes / no / unknown.\n- Do not explain.\n\nIf all cats are animals and some animals are black, can we conclude that some cats are black?\nAnswer:",
       "gold": "unknown",
-      "gen": " no. No. The answer is no because the animal is not black. It is a fact of life in the wild. If it is, then there must be a reason for its existence. So, if it was, why did it exist? Why didn't it have to be? Because it has been living on other worlds. Therefore, it cannot be an animal or a black cat.",
+      "gen": " no unknown unknown unknown",
       "detail": "pred=no gold=unknown"
     },
     {
       "id": "syll_0002",
       "task": "syllogism",
-      "ok": true,
+      "ok": false,
       "prompt": "You are a logic assistant.\nRules:\n- Output ONLY one token: yes / no / unknown.\n- Do not explain.\n\nAll A are B. All B are C. Can we conclude all A are C?\nAnswer:",
       "gold": "yes",
-      "gen": " Yes, you can. You just need to check the answer and see if it is true or false. If so, then you have found your answer. Otherwise, return to the previous step. Return to Step 1",
-      "detail": "pred=yes gold=yes"
+      "gen": " no nono no",
+      "detail": "pred=no gold=yes"
     },
     {
       "id": "syll_0003",
@@ -72,8 +72,8 @@
       "ok": false,
       "prompt": "You are a logic assistant.\nRules:\n- Output ONLY one token: yes / no / unknown.\n- Do not explain.\n\nSome A are B. All B are C. Can we conclude some A are C?\nAnswer:",
       "gold": "yes",
-      "gen": " all B is C",
-      "detail": "pred=unknown gold=yes"
+      "gen": " no no no no",
+      "detail": "pred=no gold=yes"
     },
     {
       "id": "code_add_0001",
@@ -81,26 +81,26 @@
       "ok": true,
       "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n- Output ONLY the function body (no def line).\n- Do NOT use 'yield'.\n- Do NOT use semicolons ';'.\n- Write exactly ONE statement per line (no two statements on one line).\n- End your output with exactly: ###EOC###\n\nComplete the following Python function:\n\ndef add(a, b):\n    ",
       "gold": null,
-      "gen": " return a + b\n###EOG###\n\n\n\nreturn a\n##EOOP###\n\n\n\n\n\n\n# EOC####\n\n\n\treturn \n'''\n@author: <NAME>\n<EMAIL>'''\n\n\n\n\n\n\n\n\n\nfrom collections import OrderedDict\nimport time\nclass TimeoutError(Exception):\n    pass\n\"\"\"\nEOF of time in seconds\n----------\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n27\n28\n29\n30\n31\n34\n35\n36\n37\n38\n39\n40\n41\n42\n43\n44\n46\n47\n48\n49\n50\n51\n52\n53\n54\n55\n57\n58\n59\n60\n61\n63\n",
+      "gen": " return a + b",
       "detail": ""
     },
     {
       "id": "code_fact_0001",
       "task": "code",
-      "ok": false,
+      "ok": true,
       "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n- Output ONLY the function body (no def line).\n- Do NOT use 'yield'.\n- Do NOT use semicolons ';'.\n- Write exactly ONE statement per line (no two statements on one line).\n- End your output with exactly: ###EOC###\n\nComplete the following Python function:\n\ndef factorial(n):\n    ",
       "gold": null,
-      "gen": " r = 1k\nfor i in range(2, n + 1):\n    r *= i\nreturn r\n###EOG###\n\n\n\n#EOA###\n\n\nclass Solution:\n    #EOB###\n\n    def factorize(self, A, b):\n        return b\na, c = 0, 1\nif A <= b: return a\nb = b",
-      "detail": "File \"/tmp/tmp06hy6zxt/tmp_eval.py\", line 2\n    r = 1k\n        ^\nSyntaxError: invalid decimal literal\n\n[CODE_SNIPPET]\ndef factorial(n):\n    r = 1k\n    for i in range(2, n + 1):\n        r *= i\n    return r\n    ###EOG###\n\n\n\n    #EOA###\n\nassert factorial(0)==1\nassert factorial(1)==1\nassert factorial(5)==120\nassert factorial(8)==40320"
+      "gen": " r = 1.\nfor i in range(2, n + 1):\n    r *= i\nreturn r",
+      "detail": ""
     },
     {
       "id": "code_fib_0001",
       "task": "code",
-      "ok": false,
+      "ok": true,
       "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n- Output ONLY the function body (no def line).\n- Do NOT use 'yield'.\n- Do NOT use semicolons ';'.\n- Write exactly ONE statement per line (no two statements on one line).\n- End your output with exactly: ###EOC###\n\nComplete the following Python function:\n\ndef fib(n):\n    ",
       "gold": null,
-      "gen": " a, b = 0, 1\nfor _ in range(2, n + 1):\n    a *= b\nreturn a\n###EOG###\n\n\n\nif n <= 1:\n    return a\n    n = b\n    print('Fib', a)\nelse: \n    return b\n\n\na,b = 1, 2\nprint('fib:', a), b",
-      "detail": "Traceback (most recent call last):\n  File \"/tmp/tmpq4w5mdve/tmp_eval.py\", line 15, in <module>\n    assert fib(1)==1\nAssertionError\n\n[CODE_SNIPPET]\ndef fib(n):\n    a, b = 0, 1\n    for _ in range(2, n + 1):\n        a *= b\n    return a\n    ###EOG###\n\n\n\n    if n <= 1:\n        return a\n        n = b\n\nassert fib(0)==0\nassert fib(1)==1\nassert fib(2)==1\nassert fib(7)==13"
+      "gen": " a, b = 0, 1\nfor _ in range(n):\n    a, b = b, a + b\nreturn a",
+      "detail": ""
     }
   ]
 }

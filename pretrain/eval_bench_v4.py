@@ -54,12 +54,12 @@ _NUM_RE = re.compile(r"[-+]?\d+(?:\.\d+)?")
 _YNU_RE = re.compile(r"\b(yes|no|unknown)\b", re.IGNORECASE)
 
 
-def extract_last_number(text: str) -> float | None:
+def extract_first_number(text: str) -> float | None:
     ms = list(_NUM_RE.finditer(text))
     if not ms:
         return None
     try:
-        return float(ms[-1].group(0))
+        return float(ms[0].group(0))
     except Exception:
         return None
 
@@ -82,10 +82,10 @@ def _build_prompt(task: str, item: dict[str, Any]) -> tuple[str, str]:
     """
     if task == "arithmetic":
         user = item["prompt"]
-        return task, SYS_ARITH + "\n" + user
+        return task, (SYS_ARITH + "\n" + user.rstrip() + "\n\n")
     if task == "syllogism":
         user = item["prompt"]
-        return task, SYS_SYLL + "\n" + user
+        return task, (SYS_SYLL + "\n" + user.rstrip() + "\n\n")
     if task == "code":
         if "prompt" in item:
             user = item["prompt"]
@@ -311,7 +311,10 @@ def main() -> None:
         if task not in ("arithmetic", "syllogism", "code"):
             continue
         if task in ("arithmetic", "syllogism") and "gold" not in it:
-            print(f"[WARN] missing gold: id={it.get('id')} task={task} keys={list(it.keys())}", flush=True)
+            print(
+                f"[WARN] missing gold: id={it.get('id')} task={task} keys={list(it.keys())}",
+                flush=True,
+            )
 
         _, prompt = _build_prompt(task, it)
 
@@ -326,14 +329,14 @@ def main() -> None:
         elif task == "arithmetic":
             stop_on_newline = True
             stop_string = None
-            stop_regex = None
+            stop_regex = r"[-+]?\d+(?:\.\d+)?"
             restrict = "digits"
             extra_ban = str(args.eos_id)
-            max_new = min(args.max_new_tokens, 4)
+            max_new = min(args.max_new_tokens, 32)
         else:
             stop_on_newline = True
             stop_string = None
-            stop_regex = None
+            stop_regex = r"\b(?:yes|no|unknown)\b"
             restrict = "ynu"
             extra_ban = str(args.eos_id)
             max_new = min(args.max_new_tokens, 16)
@@ -375,12 +378,12 @@ def main() -> None:
                 gold = None
             else:
                 gold = str(gold_raw).strip()
-                pred_num = extract_last_number(gen)
+                pred_num = extract_first_number(gen)
                 # compare as int if gold is integer-like
                 if re.fullmatch(r"[-+]?\d+", gold) and pred_num is not None:
-                    ok = (int(pred_num) == int(gold))
+                    ok = int(pred_num) == int(gold)
                 else:
-                    ok = (pred_num is not None and str(pred_num) == gold)
+                    ok = pred_num is not None and str(pred_num) == gold
                 detail = f"pred={pred_num} gold={gold}"
 
         # --- syllogism ---
@@ -394,7 +397,7 @@ def main() -> None:
             else:
                 gold = str(gold_raw).strip().lower()
                 pred = extract_ynu(gen)
-                ok = (pred == gold)
+                ok = pred == gold
                 detail = f"pred={pred} gold={gold}"
 
         # --- code ---
