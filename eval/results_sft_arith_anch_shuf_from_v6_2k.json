@@ -1,0 +1,106 @@
+{
+  "ckpt": "outputs/sft_arith_anchor_v9_from_mixv6/latest.pt",
+  "bench": "pretrain/bench_v1.eval.jsonl",
+  "time_s": 106.74,
+  "acc_arithmetic": 0.6666666666666666,
+  "acc_syllogism": 0.6666666666666666,
+  "acc_code": 0.0,
+  "counts": {
+    "total": 9,
+    "arithmetic": {
+      "n": 3,
+      "correct": 2
+    },
+    "syllogism": {
+      "n": 3,
+      "correct": 2
+    },
+    "code": {
+      "n": 3,
+      "correct": 0
+    }
+  },
+  "results": [
+    {
+      "id": "arith_0001",
+      "task": "arithmetic",
+      "ok": false,
+      "prompt": "You are a precise assistant.\nRules for arithmetic questions:\n- Output ONLY the final numeric answer.\n- No explanation, no extra words, no punctuation.\n\nJohn has 3 apples and buys 2 more. How many apples does he have?\nAnswer:\n\n",
+      "gold": "5",
+      "gen": "-5",
+      "detail": "pred=-5.0 gold=5"
+    },
+    {
+      "id": "arith_0002",
+      "task": "arithmetic",
+      "ok": true,
+      "prompt": "You are a precise assistant.\nRules for arithmetic questions:\n- Output ONLY the final numeric answer.\n- No explanation, no extra words, no punctuation.\n\nCompute 17 + 25.\nAnswer:\n\n",
+      "gold": "42",
+      "gen": "42",
+      "detail": "pred=42.0 gold=42"
+    },
+    {
+      "id": "arith_0003",
+      "task": "arithmetic",
+      "ok": true,
+      "prompt": "You are a precise assistant.\nRules for arithmetic questions:\n- Output ONLY the final numeric answer.\n- No explanation, no extra words, no punctuation.\n\nWhat is 9 * 8?\nAnswer:\n\n",
+      "gold": "72",
+      "gen": "72",
+      "detail": "pred=72.0 gold=72"
+    },
+    {
+      "id": "syll_0001",
+      "task": "syllogism",
+      "ok": false,
+      "prompt": "You are a logic assistant.\nRules:\n- Output ONLY one token: yes / no / unknown.\n- Do not explain.\n\nIf all cats are animals and some animals are black, can we conclude that some cats are black?\nAnswer:\n\n",
+      "gold": "unknown",
+      "gen": " yes",
+      "detail": "pred=yes gold=unknown"
+    },
+    {
+      "id": "syll_0002",
+      "task": "syllogism",
+      "ok": true,
+      "prompt": "You are a logic assistant.\nRules:\n- Output ONLY one token: yes / no / unknown.\n- Do not explain.\n\nAll A are B. All B are C. Can we conclude all A are C?\nAnswer:\n\n",
+      "gold": "yes",
+      "gen": " yes",
+      "detail": "pred=yes gold=yes"
+    },
+    {
+      "id": "syll_0003",
+      "task": "syllogism",
+      "ok": true,
+      "prompt": "You are a logic assistant.\nRules:\n- Output ONLY one token: yes / no / unknown.\n- Do not explain.\n\nSome A are B. All B are C. Can we conclude some A are C?\nAnswer:\n\n",
+      "gold": "yes",
+      "gen": " yes",
+      "detail": "pred=yes gold=yes"
+    },
+    {
+      "id": "code_add_0001",
+      "task": "code",
+      "ok": false,
+      "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n- Output ONLY the function body (no def line).\n- Do NOT use 'yield'.\n- Do NOT use semicolons ';'.\n- Write exactly ONE statement per line (no two statements on one line).\n- End your output with exactly: ###EOC###\n\nComplete the following Python function:\n\ndef add(a, b):\n    ",
+      "gold": null,
+      "gen": " return a + b\n\n\n@pytest.fixture\n\n9\n\n9\n\n9\n\n9\n\n9\n\n9\n\n9\n\n9\n\n9\n\n9\n\n9\n\n9\n\n9\n\n9\n\n\n\n\n42\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nwith\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nwith\n\n\n\n\n\n\n\n\nwith\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nwith\n\n\n\n\n\n\n\n\nwith\n\n\n\n\n\n\n\n\nwith\n\n\n\n\n\n\n\n\nwith\n\n\n\n\n\nwith\n\n\n\n\n\n\n\n\nwith\n\n\n\n\n\n\n\n\nwith\n\n\n\n\n\nwith\n\n\n\n\n\nwith\n\n\n\n\n\nwith\n\n\n\n\n\n",
+      "detail": "File \"/tmp/tmpo1jbv3mh/tmp_eval.py\", line 7\n    9\n    ^\nSyntaxError: invalid syntax\n\n[CODE_SNIPPET]\ndef add(a, b):\n    return a + b\n\n\n    @pytest.fixture\n\n    9\n\n    9\n\n    9\n\n    9\n\n    9\n\n    9\n\n    9\n\n    9\n\n    9\n\n    9\n\n    9\n\n    9\n\n    9\n\n    9\n\n\n\n\n    42\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n    with\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n    with\n\n\n\n\n\n\n\n\n    with\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n    with\n\n\n\n\n\n\n\n\n    with\n\n\n\n\n\n\n\n\n    with\n\n\n\n\n\n\n\n\n    with\n\n\n\n\n\n    with\n\n\n\n\n\n\n\n\n    with\n\n\n\n\n\n\n\n\n    with\n\n\n\n\n\n    with\n\n\n\n\n\n    with\n\n\n\n\n\n    with\n\nassert add(1,2)==3\nassert add(-1,5)==4\nassert add(0,0)==0\n"
+    },
+    {
+      "id": "code_fact_0001",
+      "task": "code",
+      "ok": false,
+      "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n- Output ONLY the function body (no def line).\n- Do NOT use 'yield'.\n- Do NOT use semicolons ';'.\n- Write exactly ONE statement per line (no two statements on one line).\n- End your output with exactly: ###EOC###\n\nComplete the following Python function:\n\ndef factorial(n):\n    ",
+      "gold": null,
+      "gen": " r = 1\n\n\n\nif n < 0\n\n\nif n < 0\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nwith\n\n\n\n\n\n\n\n\nwith\n\n\n\n\n\n\n\n\nwith\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nwith\n\n\n\n\n\n\n\n\nwith\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nwith\n\n\n\n\n\nwith\n\n\n\n\n\nwith\n\n\n\n\n\nwith\n\n\n\n\n\nwith\n\n\n\n\n\n\n\n\nwith\n\n\n\n\n\nwith\n\n\n\n\n\nwith\n\n\n\n\n\nwith\n\n\n",
+      "detail": "File \"/tmp/tmpmcp4__3u/tmp_eval.py\", line 6\n    if n < 0\n            ^\nSyntaxError: expected ':'\n\n[CODE_SNIPPET]\ndef factorial(n):\n    r = 1\n\n\n\n    if n < 0\n\n\n    if n < 0\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n    with\n\n\n\n\n\n\n\n\n    with\n\n\n\n\n\n\n\n\n    with\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n    with\n\n\n\n\n\n\n\n\n    with\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n    with\n\n\n\n\n\n    with\n\n\n\n\n\n    with\n\n\n\n\n\n    with\n\n\n\n\n\n    with\n\n\n\n\n\n\n\n\n    with\n\n\n\n\n\n    with\n\n\n\n\n\n    with\n\n\n\n\n\n    with\n\nassert factorial(0)==1\nassert factorial(1)==1\nassert factorial(5)==120\nassert factorial(8)==40320\n"
+    },
+    {
+      "id": "code_fib_0001",
+      "task": "code",
+      "ok": false,
+      "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n- Output ONLY the function body (no def line).\n- Do NOT use 'yield'.\n- Do NOT use semicolons ';'.\n- Write exactly ONE statement per line (no two statements on one line).\n- End your output with exactly: ###EOC###\n\nComplete the following Python function:\n\ndef fib(n):\n    ",
+      "gold": null,
+      "gen": " a, b = 0\n\n\ndef _get_n(n):\n\n\nif n < 0\n\n\ndef _get_fib(n):\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nwith\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nwith\n\n\n\n\n\n\n\n\nwith\n\n\n\n\n\n\n\n\n\n\n\nwith\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nwith\n\n\n\n\n\n\n\n\nwith\n\n\n\n\n\nwith\n\n\n\n\n\n\n\n\n\n\n\nwith\n\n\n\n\n\nwith\n\n\n\n\n\nwith\n\n\n\n\n\nwith\n\n\n\n\n\n",
+      "detail": "Traceback (most recent call last):\n  File \"/tmp/tmp11to6g9k/tmp_eval.py\", line 4, in <module>\n    assert fib(0)==0\n  File \"/tmp/tmp11to6g9k/tmp_eval.py\", line 2, in fib\n    a, b = 0\nTypeError: cannot unpack non-iterable int object\n\n[CODE_SNIPPET]\ndef fib(n):\n    a, b = 0\n\nassert fib(0)==0\nassert fib(1)==1\nassert fib(2)==1\nassert fib(7)==13\n"
+    }
+  ]
+}

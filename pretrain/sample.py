@@ -256,8 +256,7 @@ def _build_allowed_token_ids(tokenizer: Tokenizer, mode: str, eos_id: Optional[i
         allowed.add(int(eos_id))
 
     if mode == "digits":
-        allowed_chars = set("0123456789+-.
- ")
+        allowed_chars = set("0123456789-\n ")
         vsz = _get_vocab_size(tokenizer)
         for tid in range(vsz):
             try:
