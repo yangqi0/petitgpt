@@ -1,0 +1,342 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 418, 1255, 3609, 791, 2857, 2446, 288, 1628, 0]
+first_step_topk_probs=[0.3073343336582184, 0.18256425857543945, 0.16450421512126923, 0.10844781994819641, 0.09771959483623505, 0.042468782514333725, 0.0344819538295269, 0.0344819538295269, 0.027997136116027832, 0.0]
+first_step_topk_text=[' named', ' was', ' called', ' asked', ' would', ' went', ' came', ' of', ' might', '']
+
+[New tokens 1] count=225 first30=[1255, 5273, 418, 4438, 374, 610, 5373, 17, 776, 699, 649, 914, 5373, 357, 406, 3766, 299, 1143, 374, 780, 545, 1266, 1106, 4, 1358, 5273, 415, 2553, 988, 383]
+[Full output 1]
+Once upon a time, a curious child called Jack was playing with his toys. He had so many toys that he wanted to play with them all day long! But Jack's mom said it was time for him to go home and get some new toys. Jack didn't want to leave the house, but he knew he had to be careful when playing with his new toys. So he went back to the kitchen and started playing with his old toys. Jack made sure to keep his toys clean and safe from any bad guys who might come in. When Jack was done playing with his toy cars, he noticed something strange. All of his old cars were really dirty! Jack quickly realized that his old cars must have been very dirty because they were not his old ones anymore. He decided to clean up his old cars and put them away. Jack learned an important lesson about being careful when playing around with your old cars. He also learned that even though he was playing with older cars, it wasn't always nice to make them dirty. The moral of this story is that it's okay to be careless or careless when you're playing with your old toys.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 7093, 4455, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.9408167600631714, 0.03266298025846481, 0.0265202559530735, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' Italy', ' France', '', '#', '', '"', '!', '', '']
+
+[New tokens 2] count=51 first30=[269, 9556, 288, 7535, 281, 8191, 15, 298, 330, 658, 269, 8492, 288, 269, 1723, 288, 269, 2317, 17, 698, 330, 12092, 351, 269, 338, 3116, 2020, 72, 4069, 17]
+[Full output 2]
+Paris is the capital of the province of Catalonia, and is also the seat of the government of the city. It is situated on the Aragonese coast.
+
+The municipality has a population (2021) of 2,399 and an area of .
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 15353, 269, 3581, 744, 91, 65, 21, 647, 371, 65, 21, 333, 354, 2838, 535, 482, 1832, 15, 411, 491, 795, 18956, 288, 269, 876, 2714, 4820]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that satisfies the equation $x^2 + y^2 = 1$. In this case, we have two eigenvalues of the form $\lambda_1 = \frac{1}{2} x^2$, where $x$ and $y$ are real numbers. The corresponding eigenvalue is known as the eigenvalue of the eigenvector associated with the eigenvalue.
+
+Now let's consider the given problem:
+
+Find the eigenvalues of the following matrix:
+
+$$A=\begin{pmatrix}a & b \\ c & d\end{pmatrix}$$
+
+The problem asks us to find the eigenvalues of this matrix. To do so, we will use the concept of determinants.
+
+To solve this problem, we first need to understand what determinant means in mathematics. A determinant is a number that tells us how many times a vector (in our case, a single number) can be written as a combination of other vectors. For example, if we know the determinant of the matrix, we can calculate its inverse using the formula:
+
+$$\det(A) = \left(\begin{array}{ccc}\frac{\partial}{\partial x}\right)\cdot\left(\frac{1}{\partial x}-\frac{1}{(1-x
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 491, 5546, 1420, 395, 1991, 1085, 9845, 330]
+first_step_topk_probs=[0.26115453243255615, 0.13269181549549103, 0.11956526339054108, 0.10226958245038986, 0.08303642272949219, 0.05624889209866524, 0.05196286365389824, 0.025062240660190582, 0.021436870098114014, 0.017405377700924873]
+first_step_topk_text=[' use', ' can', ' have', ' describe', ' allow', ' are', ' provide', ' model', ' rely', ' is']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 17, 202, 509, 3355, 2877, 330, 357, 1010, 25284, 578, 263, 3248, 1968, 298, 1999, 15, 298, 269, 2673, 483, 342, 25095, 419]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data.
+The basic idea is that each neuron has a unique input and output, and the network can be modeled by a single neuron or multiple neurons. The model is then trained on an input and output. In this way, it becomes easier for the neural network to learn how to use the network and see how the training process works.
+For example, if you have a neural network that uses an input signal (the neuron) and an output signal (the network), the neural network learns how to train the network using a single input signal. It also learns how to apply the network to different inputs. This is called learning. If you have a network with many neurons, you can learn about how to train it using a simple network. A neural network is a computer program that is able to predict the actions of a network based on its input signals.
+You can think of neural networks as a set of instructions that can be executed in a specific order. Each instruction corresponds to a specific input signal. For example, the network could be described as a set consisting of a series of inputs and outputs. These inputs and outputs represent the inputs we want to make. When we give these inputs and outputs a particular output, they are called inputs.
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 17, 595, 551, 711, 202, 6, 11101, 299, 835, 269, 1759, 8695, 2944, 29, 202, 856, 835, 66, 2525, 80, 2594, 1714, 346, 622, 651, 331, 446]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+
+# Function to get the following Python functions:
+def get_summaries():
+    return [
+        'A',
+        'B',
+        'C',
+        'D',
+        'E',
+        'F',
+        'G',
+        'H',
+        'I',
+        'J',
+        'K',
+        'L',
+        'M',
+        'N',
+        'O',
+        'P',
+        'Q',
+        'R',
+        'S',
+        'T',
+        'U',
+        'V',
+        'W',
+        'X',
+        'Y',
+        'Z',
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9',
+        '10',
+        '11',
+        '12',
+        '13',
+        '14',
+        '15',
+        '16',
+        '17',
+        '18',
+        '19',
+        '20',
+        '21',
+        '22',
+        '23',
+        '24',
+        '25',
+        '26',
+        '27',
+        '28',
+        '29',
+        '30',
+        '31',
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 354, 1246, 622, 353, 20, 12829, 311, 12, 711, 202, 6, 538, 28045, 66, 72, 12196, 659, 11, 81, 15, 316, 32, 19, 17, 24, 464, 202, 6, 265]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return 1
+     return (1 << n)
+
+
+# def factorial_eulerian(n, e=0.5):
+#     """
+#     The Eulerian function is defined as follows:
+#         f = f(x)
+#     for x in range(2, n+1), f(x-1)
+#         if f(x)+f(x-x)<0 or f(x)-f(x)=0:
+#             raise ValueError("Finite factorial function does not exist.")
+#     return f(n)
+
+# def __init__(self, n=None, e=None, ni=None, iou=0.01, m=None, r=None, g=None, h=None, s=None, l=None, a=None, b=None, c=None, d=None, f=None, y=None, z=None, k=None, w=None, u=None, v=None, j=None, q=None, x=None, m= None, r= None, g= None, h= None, s= None, l= None, a=
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=36 first30=[622, 354, 17, 19, 647, 353, 20, 552, 311, 12, 864, 8049, 11, 81, 12, 711, 202, 6, 1083, 11, 73, 554, 11, 81, 687, 202, 2318, 11, 73, 554]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1 - n) * fib(n)
+
+
+# print(fib(n))
+print(fib(-2, 2))
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 2590, 1541, 356, 1289, 338, 3126, 698, 5531]
+first_step_topk_probs=[0.3525286316871643, 0.2579154670238495, 0.16139937937259674, 0.07389401644468307, 0.0338311493396759, 0.026074685156345367, 0.022302856668829918, 0.02117099054157734, 0.019076647236943245, 0.01631711982190609]
+first_step_topk_text=[' Yes', ' The', ' No', ' There', ' I', ' We', ' A', ' Not', ' It', ' Well']
+
+[New tokens 8] count=256 first30=[13676, 17, 1541, 330, 263, 3313, 288, 1170, 351, 269, 2442, 614, 356, 1645, 383, 330, 269, 839, 619, 357, 578, 733, 14665, 29170, 298, 357, 914, 288, 760, 10676]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Yes. There is a lot of information on the subject but I think it is the only one that has been thoroughly researched and that many of these cats have been bred for breeding purposes. Some of the cats have been genetically engineered to have a genetic mutation which makes them more likely to develop a disease or other health problem than others. So if you think about it, there are many other things that you can do to help your cat get better at her best. For example, she can learn to run faster, be alert, and take care of herself by eating right. She also learns to eat less fat and more fresh air. If you believe that the cat is not an animal, then you should certainly consider this as a possible answer.
+But what if you want to know more about how the body works? How does the nervous system work? What happens when you feed your cat? Can you imagine a whole world where everything is going as well as a wild world? Do you think that your cat would like to live in a different environment? Does your cat want to be able to go outside and play with a friend? Does your house smell like a kitchen? Do you want to live in the same place? Do you feel so happy or sad after a while? Is
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 843, 798, 409, 2050, 3, 4, 2, 0, 1]
+first_step_topk_probs=[0.4783824682235718, 0.20790404081344604, 0.20790404081344604, 0.057446010410785675, 0.04836341366171837, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' 5', ' 4', ' 2', ' One', '', '!', '', '', '']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 202, 20, 13032, 333, 843, 10941, 202, 21, 10941, 333, 1604, 10941, 202, 22, 10941, 333, 2341, 10941, 202, 23, 10941, 333, 2234, 10941, 202]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+1 apple = 5 apples
+2 apples = 12 apples
+3 apples = 13 apples
+4 apples = 14 apples
+5 apples = 15 apples
+6 apples = 16 apples
+7 apples = 20 apples
+8 apples = 22 apples
+9 apples = 21 apples
+10 apples = 21 trees
+11 apples = 10 trees
+12 apples = 19 trees
+13 apples = 20 trees
+14 apples = 11 trees
+15 apples = 18 trees
+16 apples = 21 fruit
+17 apples = 20 fruits
+18 trees = 17 apples
+19 trees = 17 trees
+20 trees = 17 fruits
+21 trees = 17 oranges
+22 trees = 17 bananas
+23 trees = 17 nuts
+24 trees = 17 pearls
+25 trees = 17 cherries
+26 trees = 17 figs
+27 trees = 17 watermelons
+28 trees = 17 pineapples
+29 trees = 17 firapples
+30 trees = 17 peaches
+31 trees = 17 apricots
+32 trees = 17 carrots
+33 trees = 17 gingerbread
+34 trees = 17 cloves
+35 trees = 17 popcorn
+36 trees = 17 flax seeds
+37 trees = 17 eggshells
+38 trees = 17 pigeon
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 1772, 783, 1509, 368, 338, 15255, 3919, 360]
+first_step_topk_probs=[0.6274206042289734, 0.03330482169985771, 0.021391507238149643, 0.020841624587774277, 0.014856101013720036, 0.014856101013720036, 0.014856101013720036, 0.01338646188378334, 0.01338646188378334, 0.013042354956269264]
+first_step_topk_text=[' I', ' The', ' @', ' This', ' You', ' M', ' A', ' Thanks', ' My', ' "']
+
+[New tokens 10] count=256 first30=[356, 873, 6968, 20103, 1244, 17, 202, 45, 1976, 10961, 29, 5531, 15, 356, 491, 263, 3313, 288, 2061, 374, 1284, 6952, 298, 9792, 17, 2575, 330, 383, 34, 202]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I am feeling depressed now.
+Jennifer: Well, I have a lot of problems with my depression and anxiety. What is it?
+Jenni: It's not a big deal to me. But it's not really going away anytime soon. And I've been diagnosed with depression for years. There are so many things that can cause it. So I think there is something that we can do to help ourselves. We can try to reduce the stress in our lives.
+Assistance: How do you feel about the issue?
+Jen: You know, it's important to get some support from family and friends who may be able to help you. If you're having a hard time coping with your depression, then you need to talk to your doctor or therapist. They will probably refer you to a mental health professional. They'll be able to give you specific advice on how to cope with your symptoms.
+Assessment: What are the steps you should take?
+Jens: The first step is to learn what is causing your depression. And if you don't know what is causing it, then you should seek help right away.
+Assistence: What can you do to help yourself?
+Jae: Once you start talking to
+
+================================================================================

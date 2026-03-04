@@ -1,0 +1,276 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 1255, 418, 2446, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.6432234048843384, 0.2045184224843979, 0.08009056746959686, 0.07216765731573105, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' called', ' was', ' came', '', '', '!', '"', '', '']
+
+[New tokens 1] count=165 first30=[1255, 5273, 718, 2857, 299, 269, 3843, 17, 776, 2977, 2009, 357, 1164, 1169, 1418, 299, 1499, 383, 598, 4, 698, 418, 263, 2023, 3129, 3043, 4, 5273, 718, 3766]
+[Full output 1]
+Once upon a time, a curious child called Jackie went to the park. He saw something that made him want to try it out! It was a big green ball! Jackie wanted to play with it and he started to get very excited. But then Jackie noticed a mean old man walking by. He asked him why he couldn't play with the ball. The old man said that he had an idea for a game but his plan wasn't as simple as it sounds. So Jackie decided to go on a long walk in the park. When they arrived at the park, Jackie found himself in front of a huge tree. He was so happy to see all the other kids playing games there. He told them about the game and how they were all playing together. The children enjoyed their day at the park and played until the sun set.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 336, 4455, 321, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.9563975930213928, 0.019413750618696213, 0.014578147791326046, 0.00961050484329462, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' S', ' France', ' T', '', '', '!', '"', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 7535, 281, 8191, 15, 298, 330, 269, 1408, 3796, 2317, 289, 7535, 281, 8191, 17, 698, 578, 263, 2073, 288, 1378, 1186, 2153, 874, 353, 9494, 573]
+[Full output 2]
+Paris is the capital of the province of Catalonia, and is the second largest city in Catalonia. It has a population of around 7 million people (2006).
+The municipality is named after the Catalan-Italian family, who ruled from 1580 to 1754. The castle was built by Bernardo de Orsini in 1640 on the site of a former fortress. The castle is situated on the right bank of the river Ria de Aragón, which flows into the Catalan Gulf.
+A history of the town as a whole:
+In 1228, the Spanish King Ferdinand II conquered Catalonia; this meant that Spain had been defeated at the Battle of Buna, and many Castilian villages were destroyed or taken by Spanish troops.
+Spanish rule lasted until 1821 when the Spanish Republic was established with the Treaty of Madrid, which was signed in 1821. In 1848, the Spanish Crown was restored to Catalonia and Catalonia became part of the new Kingdom of Spain.
+During the Franco-Prussian War of 1870–1871, Catalonia was invaded by the Germans. After the war, Catalans again lost their independence and the country was divided between France and Britain.
+After World War I, Catal
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=196 first30=[263, 13742, 1239, 357, 6058, 500, 806, 1264, 269, 4409, 1926, 288, 5487, 299, 287, 3581, 578, 4374, 17, 535, 482, 1832, 15, 411, 601, 817, 269, 1152, 357, 269]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that tells us how much the vector space of solutions to an equation has changed. In this case, we will use the fact that the system has an eigenvalue of 1 and the solution is 0.
+
+Let's consider a simple example using two linear equations:
+
+x = 2 + 3y
+y = -2 + 4
+
+We can rewrite this as:
+
+4x + y = 2 + 4
+y = 4 + 5
+
+Now let's say we want to find out what happens when we multiply both sides by x. To do so, we need to isolate x on one side of the equation. Since the first equation has the same form as the second one, we can cancel it out by multiplying both sides by 2:
+
+(2 + 4)x = 2
+
+Substitute this expression into our equation for x:
+
+8x = 2 * (2)
+
+Solve for x:
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 491, 5546, 1420, 1991, 395, 9845, 1085, 3235]
+first_step_topk_probs=[0.27979838848114014, 0.22717835009098053, 0.09873132407665253, 0.0889643132686615, 0.0501650907099247, 0.042908474802970886, 0.0411946065723896, 0.03139250725507736, 0.03139250725507736, 0.021801643073558807]
+first_step_topk_text=[' use', ' can', ' have', ' describe', ' allow', ' provide', ' are', ' rely', ' model', ' predict']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 4410, 17, 382, 3355, 2877, 330, 357, 1010, 25284, 289, 269, 2673, 3399, 751, 1170, 672, 686, 1231, 2492, 15, 857, 359, 269]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data sets. The basic idea is that each neuron in the network contains some information about its own position, such as the strength of their connections with other neurons or the strength of the connections between neighboring neurons.
+The main goal of neural networks is to model neural systems by using both the neuron and neuron-to-neuron communication. In order for neural networks to work well, they must have a very high degree of accuracy. To make this possible, neural networks use a special type of model called a neural network model. This model is based on the fact that all neurons in a network are connected through a single neuron. This model was developed by researchers at the University of California, San Diego (UCSD) and published in the journal Nature Neuroscience.
+For example, the model predicts that a neuron will "turn off" its connection to another neuron if it is not connected to the same neuron at the same time. The model also predicts that a second neuron's turn is likely to happen after the first one has been turned on.
+In addition to these predictions, the model also shows how the neurons in the network can be used as input to the network. This is because the neurons in a neural network do not have to be
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=69 first30=[263, 647, 286, 17, 595, 551, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 655, 9130, 555, 3546, 333, 9130, 17, 15289, 11, 5659, 1094, 4518, 86]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+
+if __name__ == '__main__':
+    import argparse
+
+    parser = argparse.ArgumentParser(description='Adds a random number to a list of integers.')
+    parser.add_argument('n', type=int)
+    args = parser.parse_args()
+    print(args.n)
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 353, 20, 12829, 311, 12, 647, 354, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 717, 7121, 15, 1165, 18379, 3, 711, 509, 2311, 6699]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return (1 << n) + 1
+
+
+if __name__ == '__main__':
+    print('Hello, world!')
+
+The North Carolina State University Library has a great collection of information about the history and culture of North Carolina. The library also provides a wonderful resource for students in grades K-12.
+A good place to start is with this list of books. This list includes the book series, a reference list, and a bibliography. There are also links to other books in the library's collections.
+For more information on North Carolina history, see our online catalog.
+Narrative Resources from the NC Office of Archives and History
+This is an excellent resource for information about North Carolina's past.
+Courtesy of the NC Office
+The North Carolina Museum of Natural Sciences offers a variety of free research materials for students and teachers. These include a number of historical documents, photographs, maps, and other artifacts.
+National Park Service
+This site contains a lot of information for everyone in North Carolina. It provides information about park resources, including parks, historic sites, and park maps.
+The North Carolinian Society has many interesting articles and resources related to North Carolina history. They have a variety of resources for students, teachers, and parents.
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=80 first30=[622, 311, 13, 21, 647, 354, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 655, 3715, 555, 1083, 801, 44, 491, 263, 993, 288, 4084, 15, 614]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return n*2 + 1
+
+
+if __name__ == '__main__':
+    import sys
+
+    print("I have a number of steps, but I need to find the Fibonacci number first.")
+    print("The number is: " + str(len(fib(1))) + "")
+    print("Number is: " * (len(fiber_numbers)) + "")
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 2590, 1541, 356, 3126, 338, 2, 1, 0]
+first_step_topk_probs=[0.3663214147090912, 0.26800647377967834, 0.17668086290359497, 0.09962649643421173, 0.05061991512775421, 0.020882848650217056, 0.017862046137452126, 0.0, 0.0, 0.0]
+first_step_topk_text=[' The', ' Yes', ' No', ' There', ' I', ' Not', ' A', '', '', '']
+
+[New tokens 8] count=206 first30=[382, 3533, 330, 12052, 17, 202, 509, 3533, 330, 808, 17, 31412, 395, 839, 263, 1204, 645, 288, 269, 3864, 11295, 298, 383, 415, 453, 2401, 2161, 581, 2068, 545]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+The answer is no. Cats are only a small part of the animal kingdom and it's not clear whether they're all black or just a little bit white. So far as I know, cats are not considered to be any kind of animal. But the answer is yes for cats.
+But what does this mean in terms of how many people are actually aware of the fact that cats are an important part of our society?
+Why should we care about cats? Well, there are several reasons why cats are so important to us. They help to keep our environment clean. They provide us with food, shelter, water, air, and even warmth. And because cats have been domesticated since the beginning of time, they have provided us with many more useful services than any other animal. And they've also provided us with countless opportunities to explore new worlds and learn from them.
+What do you think? Do you think cats would be a good thing if they were so valuable to us?
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 798, 843, 2050, 409, 382, 637, 2, 1, 0]
+first_step_topk_probs=[0.45319193601608276, 0.1599160134792328, 0.14409643411636353, 0.08559687435626984, 0.08180665969848633, 0.03918910399079323, 0.036202989518642426, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' 4', ' 5', ' One', ' 2', ' The', ' 3', '', '', '']
+
+[New tokens 9] count=82 first30=[354, 13032, 333, 798, 10941, 202, 30736, 29, 354, 13032, 647, 409, 934, 667, 333, 1218, 10941, 202, 30736, 552, 354, 13032, 333, 1604, 10941, 202, 30736, 354, 13032, 333]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+Solution: 1 apple + 2 buys = 8 apples
+Solution - 1 apple = 12 apples
+Solution 1 apple = 15 apples
+Solution 2 apple = 16 apples
+Solution 3 apple = 18 apples
+Solution 4 apple = 19 apples
+Solution 5 apple = 20 apples
+Solution 6 apple = 20 oranges
+Solution 7 apple = 10 oranges
+Solution 8 orange = 10 oranges
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 1509, 22089, 783, 3919, 382, 3189, 8151, 1278]
+first_step_topk_probs=[0.5824170112609863, 0.07009746134281158, 0.04386589303612709, 0.04163968190550804, 0.027450576424598694, 0.027450576424598694, 0.026057448238134384, 0.023479724302887917, 0.020083269104361534, 0.019064035266637802]
+first_step_topk_text=[' I', ' What', ' You', ' Thank', ' This', ' My', ' The', ' Do', ' Please', ' If']
+
+[New tokens 10] count=193 first30=[2575, 330, 669, 2942, 374, 269, 1659, 34, 202, 42, 1660, 29, 5531, 15, 356, 3442, 733, 263, 1659, 20548, 339, 758, 2236, 973, 298, 383, 415, 733, 1114, 4520]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience with the train?
+Greg: Well, I've been a train conductor for over 30 years and it's been very successful in keeping me from being depressed. And so this train is a real positive experience that has not changed since I was first introduced to it. It's not just the train itself but also the train itself. So it's really a way of dealing with that negative experience. And if you're going to have to train yourself or somebody else to do that, it's really important to understand how the train works. If you want to have a good relationship with the train, you need to be able to say something about what you are doing. You don't have to know everything at once. So that's why we have to have a relationship with the coach. And that's a good thing because it helps us get through the day and the night.
+I hope this helps to keep you from feeling depressed.
+
+================================================================================
