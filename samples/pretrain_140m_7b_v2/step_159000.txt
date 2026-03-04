@@ -1,0 +1,290 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[791, 418, 2827, 3609, 1628, 1255, 2, 3, 1, 0]
+first_step_topk_probs=[0.5888078808784485, 0.13697068393230438, 0.10020989179611206, 0.09029661864042282, 0.0627097487449646, 0.021005133166909218, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' would', ' was', ' named', ' asked', ' might', ' called', '', '', '', '']
+
+[New tokens 1] count=165 first30=[3609, 896, 3577, 299, 1432, 896, 299, 269, 21958, 17, 3230, 3577, 14618, 357, 1024, 791, 342, 2222, 299, 631, 715, 1091, 288, 269, 21958, 415, 6276, 298, 6276, 17]
+[Full output 1]
+Once upon a time, a curious child asked her mother to take her to the zoo. Her mother replied that she would be able to go there because of the zoo's facilities and facilities.
+"Oh, my dear," said the mother. "I'm so glad I can come here."
+The little girl then walked over to the zoo's entrance, but when she reached the zoo's gate, she saw that it was closed. The mother rushed out to see what had happened. She knew that this was the end of her journey and that she would have to leave before she could go on.
+She called the zoo's official representative, who told them that the zoo was not going to be open until the day after the visit. They were all very upset with the situation.
+They decided to stay at home for the rest of their lives.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 4455, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.9549893140792847, 0.04501069709658623, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' France', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 7535, 281, 8191, 15, 298, 330, 269, 1408, 3796, 2317, 289, 269, 9556, 17, 698, 330, 3323, 435, 269, 11141, 288, 269, 338, 3116, 2020, 72, 16]
+[Full output 2]
+Paris is the capital of the province of Catalonia, and is the second largest city in the province. It is located at the intersection of the Aragonese-Sicily-Livaresi highway and the Aragonea-Rey de Gijs (River Road).
+The town is situated on the southern bank of the River Tavola river, which flows into the Atlantic Ocean from the Mediterranean Sea. The region is a natural barrier between the Atlantic Ocean and the Mediterranean Sea, but it has been inhabited since the Neolithic period. It was first mentioned as "Batton" in the year 834. In the 11th century, the area was known as Batavianus. From the 13th century, it was ruled by the bishopric of Ljubljana, and later by the Counts of Riga. In the 12th century, its population was estimated to be around 5,000. During the 14th century, there were numerous churches, monasteries, and castles. In the 16th century, during the rule of King Alfonso II of Castile, the region was occupied by the Kingdom of Castile until 1798 when it was annexed by Portugal. In 1802, the region became part of
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 11547, 374, 2685, 299, 269, 2819, 388, 3074, 288, 269, 3823, 17, 1220, 1373, 15, 490, 411, 491, 263, 4409, 400, 289, 269, 6603, 298, 1418]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that varies with respect to the row or column of the matrix. For example, if we have a vector v in the plane and want to find its eigenvalues, we can say that v = (1/2)v + 1/4v^2.
+
+The eigenvalue equation for a vector v is given by:
+
+${\displaystyle \mathbf {V} = {\left( {\begin{array}{l}1 & 0 & -1 \\ 0 & 0 & 1\\0 & 0 & 0\end{array}}}\text{ }}$
+
+where ${\displaystyle v}$ represents the vector from the origin to the point $(0, 0)$ in the plane. The eigenvectors are defined as follows:
+
+$\mathbf {A} = {\begin{bmatrix}0 & 1 & 0 \\0 & 0& 0\\0 & 1& 0 \end{bmatrix}$
+
+Where ${\displaystyle A}$ is the eigenvector corresponding to the eigenvalue $\lambda$. The eigenvalue equation for this system is given by
+
+$E[v] = {\left(\begin{array}1 & 1 & 1 \\ 0 & 1 & 2 \\0 & 1 \end{array}}\text{ }$
+
+If
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 491, 395, 1420, 5546, 330, 9845, 1991, 14071]
+first_step_topk_probs=[0.2047005295753479, 0.1844506710767746, 0.12159734219312668, 0.10377240180969238, 0.061783235520124435, 0.061783235520124435, 0.045201580971479416, 0.03483821824193001, 0.03307018429040909, 0.022966761142015457]
+first_step_topk_text=[' use', ' can', ' have', ' are', ' allow', ' describe', ' is', ' rely', ' provide', ' incorporate']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 4410, 17, 382, 3355, 2877, 330, 299, 817, 269, 1085, 359, 1968, 339, 269, 1902, 1993, 15, 298, 1000, 4116, 383, 299, 269]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data sets. The basic idea is to use the model as input for the next step, and then apply it to the next step.
+This tutorial uses the model to train the neural network. It is designed to teach you how to build your own neural network using the model.
+You will learn how to create your own neural networks with the model. You will also learn how to use the network to learn new features in your own code.
+In this tutorial, we will go through some basic concepts about neural networks. We will start by explaining what a neural network is and how it works. Then we will take a look at the different types of neural networks: neural networks with input and output, neural networks with output and neural networks with loss function. Finally, we will talk about the two main types of neural network:
+- A neural network with input and a loss function.
+- A set of neural networks that are trained on the input and output.
+A neural network is a type of neural network which has both input and output inputs.
+The neural network is an example of a neural network. In the above example, we will create a neural network with inputs and outputs. In this example, we'll create a neural net
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 17, 595, 551, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 655, 3715, 555, 1499, 29, 331, 444, 7298, 655, 3907, 15, 13854, 15]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+
+if __name__ == '__main__':
+    import sys
+
+    try:
+        from typing import List, Tuple, Optional
+        from collections import OrderedDict
+
+        from functools import lru_cache
+        from itertools import chain
+        from itertools._typecheck import iteritems
+        from operator import attrgetter
+        from operator.__call__ import func
+        from operator._checkable import checkable
+        from operator.type import (
+            type,
+            bool,
+            bool_to_bool,
+            bool_,
+            bool_from_str,
+            bool2from_strs,
+            bool3from_strtypes,
+            bool4from_strnames,
+            bool1from_strids,
+            bool0from_strlists,
+            bool6from_strlistsets,
+            bool8from_strmatrices,
+            bool9from_strkeys,
+            bool10from_strranges,
+            bool11from_strsets,
+            intone = False,
+            bool__maxlen = None,
+            inttwo = True,
+            intthree = True,  # noqa: E501
+            intfive = False,  # FIRST: EAST: NONE
+            intsix = False,
+        ) as _:
+            def is
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=45 first30=[622, 494, 11, 2809, 17, 2440, 4886, 11, 81, 687, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 11, 73, 10, 509, 28045, 288, 836, 1813]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return int(math.factorial(n))
+
+
+if __name__ == '__main__':
+    print(f'The factorial of {len(sys.argv)} is {sys.argv[1]}')
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=41 first30=[622, 354, 17, 19, 647, 353, 20, 552, 311, 12, 864, 353, 21, 864, 353, 20, 552, 409, 13, 81, 687, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1 - n) * (2 * (1 - 2*n))
+
+
+if __name__ == '__main__':
+    # print(fib(n))
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 1541, 2590, 356, 1289, 2660, 698, 1278, 31412]
+first_step_topk_probs=[0.3294648826122284, 0.17634984850883484, 0.15890440344810486, 0.0807388424873352, 0.04552687704563141, 0.03330817073583603, 0.030013184994459152, 0.02704412303864956, 0.02704412303864956, 0.025671634823083878]
+first_step_topk_text=[' The', ' Yes', ' There', ' No', ' I', ' We', ' Some', ' It', ' If', ' Cats']
+
+[New tokens 8] count=234 first30=[382, 3533, 330, 12052, 17, 202, 509, 3533, 299, 482, 2395, 418, 2428, 419, 263, 2361, 288, 2703, 435, 269, 1442, 288, 4897, 5865, 17433, 435, 6967, 4267, 267, 668]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+The answer to this question was provided by a team of researchers at the University of Texas Medical Branch at Galveston who first described the behavior in a paper published online September 5 in the journal PLoS ONE.
+"We used an animal model to show that black cats have very high-quality offspring," said lead author Dr. Michael J. Kronenfeld, associate professor of psychology at the University's School of Psychology. "When you see one of these kittens, it appears that they are being raised by other cats."
+Kronenfeld's research team found that kittens raised for the same reasons as white cats do not display the same behavioral patterns. They also discovered that the behavior of kittens is more pronounced when their mothers are white.
+"Our study shows that kittens with white cat behavior tend to be less social than kittens with black cats," Kronenstock said. "The reason we studied kittens raised in white cats is because they are raised by kittens with a higher frequency of aggressive behaviors, such as aggression, and they are not always allowed to get along with other cats."
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[843, 798, 354, 1012, 409, 3, 4, 2, 0, 1]
+first_step_topk_probs=[0.42549484968185425, 0.28050369024276733, 0.13528989255428314, 0.08918856829404831, 0.06952301412820816, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 5', ' 4', ' 1', ' 6', ' 2', '', '!', '', '', '']
+
+[New tokens 9] count=126 first30=[843, 647, 637, 333, 1291, 202, 1974, 1098, 269, 3533, 15, 411, 910, 299, 8098, 1127, 4717, 419, 637, 17, 1289, 483, 620, 482, 419, 10399, 1127, 4717, 419, 798]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 5 + 3 = 9
+To find the answer, we need to divide both sides by 3. We can do this by dividing both sides by 4 (which is 6):
+(5/4)2 = 6
+So, 6 divided by 4 equals 6.
+Hence, 6 divided 2 by 4 equals 3.
+
+Question 1:
+Find the value of x that gives a = 3/6.
+Solution:
+x = 3/3
+Now we know that 3/3 = 0.5.
+We can solve for x in terms of y, so we get y = 0.
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 15255, 783, 382, 1509, 22089, 2575, 1278, 27614, 3919]
+first_step_topk_probs=[0.7190007567405701, 0.05809104070067406, 0.03731155022978783, 0.0280179213732481, 0.025912344455718994, 0.023348970338702202, 0.019458061084151268, 0.01579870469868183, 0.014235821552574635, 0.013513348065316677]
+first_step_topk_text=[' I', ' Thanks', ' This', ' The', ' You', ' Thank', ' What', ' If', ' Hi', ' My']
+
+[New tokens 10] count=124 first30=[356, 3442, 733, 289, 263, 3313, 288, 2832, 339, 973, 298, 491, 699, 299, 4560, 374, 269, 1134, 2061, 359, 613, 874, 15, 614, 715, 395, 1885, 722, 356, 483]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I've been in a lot of business for years and have had to deal with the same problems as other people, but there are times when I can't get back to work or even find time to go home.
+I'd like to know what happens to my body during this process, so I'll do some research on it and maybe put that information into my mind.
+For example, I think it's important to understand how the body reacts to stress because it is one of the most important things we can do to prevent and treat stress.
+I would love to hear your thoughts on this topic.
+
+================================================================================

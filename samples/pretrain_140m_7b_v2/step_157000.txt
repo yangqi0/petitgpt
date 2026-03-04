@@ -1,0 +1,323 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[418, 2827, 791, 3609, 288, 2446, 2977, 1255, 2857, 15]
+first_step_topk_probs=[0.31745877861976624, 0.25775617361068726, 0.09095346182584763, 0.09095346182584763, 0.0356178842484951, 0.033810246735811234, 0.028919439762830734, 0.028919439762830734, 0.024736108258366585, 0.024568621069192886]
+first_step_topk_text=[' was', ' named', ' would', ' asked', ' of', ' came', ' saw', ' called', ' went', ',']
+
+[New tokens 1] count=187 first30=[3609, 896, 3577, 922, 1024, 2747, 288, 269, 2475, 360, 397, 262, 292, 741, 382, 929, 14618, 357, 383, 418, 269, 2475, 360, 27257, 961, 298, 357, 383, 699, 299]
+[Full output 1]
+Once upon a time, a curious child asked her mother what she thought of the word "opinion." The child replied that it was the word "love," and that it had to be true. But when the child tried to explain the word, she realized that it was not the word as such but the word itself. She quickly realized that the word is not just an adjective but also a noun.
+The child's understanding of the word was so great that she decided to write her own words in English. Her mother told her that the word "happy" was not only "good," but also "worry" and "disgraceful." The child said that this word was "lovely" because it could be used with any meaning, and that the word was "a pleasant one."
+This child learned the word from his mother. And she became a more confident child than she would have been if she had known the word.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=147 first30=[269, 9556, 17, 698, 418, 269, 3796, 2317, 289, 269, 9556, 1761, 383, 418, 7334, 419, 269, 3388, 289, 1691, 7480, 15, 722, 383, 418, 6397, 374, 263, 719, 2868]
+[Full output 2]
+Paris is the capital of the province. It was the largest city in the province until it was destroyed by the French in 1792, when it was replaced with a new town.
+The first European settlers arrived in the province during the first half of the 19th century. The first municipality was formed in 1860 and was named after the town of Pisa. The first real estate and commercial development in the province took place in the early 20th century. In 1976, the provincial government changed its name to the Municipality of Pisa and the municipality became the first municipality in the province to be granted a municipal status.
+In 2006, the municipality had a population of 2,095 people. This represents the total number of residents of the municipality.
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 6058, 500, 806, 1264, 288, 619, 1467, 17, 535, 482, 7349, 411, 601, 1313, 435, 269, 18956, 298, 28069, 288, 263, 3823, 338, 15, 298, 4196]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that tells us how much of one another. In this lesson we will look at the eigenvalues and eigenvectors of a matrix A, and explore how they relate to each other.
+
+### What is the generalization of the concept of eigenvalues?
+
+The generalization of eigenvalues is a fundamental concept in mathematics. It describes the relationship between two vectors (or matrices) when their corresponding eigenvectors are equal. The idea behind this concept is to find out whether there exists a unique solution for any given vector within the matrix. If you have any further questions about this topic, please feel free to ask!
+
+### Is it possible to find the generalization to non-linear equations?
+
+Non-linear equations can be defined as equations involving only one variable. Non-linear equations cannot be solved by solving them using techniques like elimination or elimination. However, if we consider the problem of finding the generalization, then the generalization may not always be straightforward. For example, consider the following system of equations:
+
+\begin{align*}
+& \begin{bmatrix} 1 & 0 & -1 \\ 0 & 1 & -2 \\ 0 & 2 & -3 \\ 0 & 3 & 4 \\ 0 & 5 & 7 \\ 0 & 6 &
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 5546, 1420, 491, 395, 1991, 1085, 9845, 14071]
+first_step_topk_probs=[0.2950277030467987, 0.1422950029373169, 0.13507354259490967, 0.08023712038993835, 0.07616502046585083, 0.05447584018111229, 0.03869921341538429, 0.026876071467995644, 0.022988319396972656, 0.018665039911866188]
+first_step_topk_text=[' use', ' can', ' describe', ' allow', ' have', ' are', ' provide', ' model', ' rely', ' incorporate']
+
+[New tokens 4] count=256 first30=[22968, 269, 1194, 4383, 1798, 298, 269, 14457, 2673, 357, 3350, 780, 299, 1062, 9909, 17, 202, 509, 1085, 330, 1728, 351, 263, 719, 1085, 357, 17289, 1170, 444, 914]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the way humans learn and the neural network that uses them to make predictions.
+The model is based on a new model that combines information from many different sources: speech, music, and visual images. The key ingredient in the new model is a set of rules for how each source can be used. The rules are written in the language of the model.
+"We want to use the language of our model to build a better model," says Douglas Hertz, who studies neural networks at the University of California, San Diego. "This allows us to create more complex models."
+To do this, he and his colleagues built a model called the "Spectral Modeling Language" (SNL). They created a model that could simulate all kinds of data, including video clips, sounds, and even people's faces.
+For example, they wanted to predict which faces would appear when someone talks to you or not. To do so, they took two datasets—one with the same number of words and another with similar meaning—and added a set of features, such as eye movements.
+In their model, the researchers were able to see how much the human brain has changed over time. They found that, after adjusting for other factors, the human brain
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=103 first30=[263, 647, 286, 17, 595, 551, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 655, 3715, 555, 1083, 801, 24091, 6230, 2070, 903, 346, 1083, 801, 6]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+
+if __name__ == '__main__':
+    import sys
+
+    print("Running python program")
+    print("#list_of_numbers", list_of_number)
+    print("##printing numbers")
+    print("-"*20)
+    print("\n\nThe numbers are: " * (len(str(x)) * len(str(y))) + "\n")
+    print(f"\n{input():[{output()}}]")
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=203 first30=[622, 494, 11, 81, 18, 21, 12, 711, 202, 6, 11101, 299, 1098, 269, 1239, 288, 311, 289, 263, 1180, 288, 9044, 17, 202, 856, 28045, 66, 1253, 11, 81]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return int(n/2)
+
+
+# Function to find the value of n in a list of integers.
+def factorial_list(n):
+    if n == 0:
+        return 1
+    else:
+        return factorial(n-1)/factorial(n-2)
+
+
+
+
+
+def main():
+    print("Started")
+
+    # Load data from file
+    data = open('data.txt', 'r')
+    data = pd.read_csv(data, delimiter=',', usecols=['date','title'])
+    
+    # Get values for each integer
+    values = data['values']
+    print(values)
+
+    # Create array with nth elements
+    n = len(values)
+    # Iterate over values
+    for i in range(0, n):
+        values[i] = values[i+1] + values[i-1] + 1
+        
+    # Print result
+    print("\n")
+
+if __name__ == '__main__':
+    main()
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.7772998809814453, 0.22270014882087708, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 354, 17, 19, 647, 353, 20, 17, 19, 1341, 311, 12, 864, 353, 21, 17, 19, 552, 354, 17, 19, 1341, 409, 17, 19, 12, 711, 202, 6, 535]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1.0 / n) * (2.0 - 1.0 / 2.0)
+
+
+# In[6]:
+
+
+def fib_to_s(n, f):
+    # print("f = ", f)
+    # print(f)
+
+    # print("sum of f = ", sum(f))
+    # print()
+
+    # print(str(f))
+
+    # print("\t" + str(f))
+
+
+# ### Test Problem 4: Slices
+#
+# We have to find the largest number of roots for each integer n in the following list:
+#  [3, 5]
+#  where 3 is the number of numbers in the list and 5 is the number
+#  of integers from 0 to 9.
+# 
+# The first few roots are found by subtracting the last number from the first.
+#   For example, if we want to find the number of integers between 1 and 9, we need to check the number of left hand sides of the square root of each integer.
+# 
+
+# In [7]:
+
+
+# print("The given list has 2,3,5,9 elements.")
+#
+print("
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 2590, 1541, 356, 1289, 31412, 535, 698, 0]
+first_step_topk_probs=[0.44562408328056335, 0.2385254055261612, 0.11504332721233368, 0.0648704245686531, 0.03657905384898186, 0.03128771856427193, 0.02676180750131607, 0.021728867664933205, 0.019579356536269188, 0.0]
+first_step_topk_text=[' Yes', ' The', ' No', ' There', ' I', ' We', ' Cats', ' In', ' It', '']
+
+[New tokens 8] count=130 first30=[13676, 17, 1541, 330, 263, 3313, 288, 2833, 299, 2173, 357, 2645, 10676, 395, 453, 359, 2076, 1125, 359, 613, 10676, 17, 783, 728, 342, 1091, 581, 491, 611, 2076]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Yes. There is a lot of evidence to suggest that black cats are not as socialized as other cats. This may be because they have more social skills than other cats. However, the lack of socialization in black cats is probably due to the fact that they are less socialized than other cats, and therefore, may be a problem for them.
+The concept of "black cats" has been around since at least the 17th century. The earliest documented reference to black cats was in the book, which lists the first known mention of black cats in the Bible.
+Black Cat Facts
+- Black Cat Facts
+• Black Cat Facts
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[843, 354, 798, 637, 409, 1012, 2, 3, 1, 0]
+first_step_topk_probs=[0.32365304231643677, 0.32365304231643677, 0.15610143542289734, 0.08508247882127762, 0.05922253057360649, 0.05228743702173233, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 5', ' 1', ' 4', ' 3', ' 2', ' 6', '', '', '', '']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 202, 509, 3533, 330, 637, 10941, 15, 649, 269, 2056, 993, 288, 10941, 289, 269, 7240, 330, 637, 10941, 17, 202, 202, 2774, 1427, 415]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+The answer is 3 apples, so the total number of apples in the bag is 3 apples.
+
+Now let's think about the problem with this equation. We want to find out how many apples are left after the first few rounds. Let's call the number of apples that were left after the second round "x".
+
+First, we need to find the number of ways to pick x from a set of n items without replacement. This means picking any item (let's say x) that leaves no remainder when divided by 5. Since there are 4 apples in the box, the number of choices for x would be 4 x 4 x 4 = 24. Therefore, the number (4 x 4) of ways to choose x from the set of n numbers is 24.
+
+Next, we need the number of possibilities for x in the set of all possible combinations of choosing x from the list of n numbers. In other words, we need three cases where the values of x are chosen at random:
+
+1. If x was picked randomly from the set {0, 1} or not, then the number of options for x would also be chosen.
+2. If x could not be picked, then the value of
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 783, 360, 368, 338, 14506, 6389, 4341, 3919]
+first_step_topk_probs=[0.6318930983543396, 0.041781794279813766, 0.021789303049445152, 0.01863737963140011, 0.015531616285443306, 0.015531616285443306, 0.014364396221935749, 0.013814104720950127, 0.012610680423676968, 0.012127573601901531]
+first_step_topk_text=[' I', ' The', ' This', ' "', ' M', ' A', ' Chris', ' Michael', ' David', ' My']
+
+[New tokens 10] count=256 first30=[356, 3442, 733, 289, 263, 3313, 288, 314, 1460, 298, 491, 699, 751, 2061, 374, 1284, 2415, 17, 202, 44, 1118, 357, 356, 3442, 733, 6968, 269, 1134, 339, 914]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I've been in a lot of lately and have had some problems with my heart.
+I know that I've been feeling the same for many years but I've never felt any stress or pain from that.
+It's not an easy thing to deal with, especially if you're a bit stressed out. You may be experiencing some physical symptoms such as headaches, stomachaches, nausea, fatigue, etc.
+But it is important to realize that you are not alone in your situation.
+The stress of stress can be a very real problem.
+If you feel stressed out, it could be due to something you do not want to do, like being too busy or having a hard time concentrating.
+However, if you feel stressed because you are stressed out, then you will need to take steps to manage your stress.
+You might try to get rid of all your stress by taking some time off each day to keep things calm down. This will help you to relax and avoid stressing yourself.
+Try to find ways to cope with stress. If you think that you are suffering from depression, ask yourself "what would happen if I did this?"
+If you are feeling stressed out, you will probably feel better once you start to feel better.
+The
+
+================================================================================

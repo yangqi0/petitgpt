@@ -1,0 +1,311 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 791, 418, 1255, 3609, 288, 2857, 2, 1, 0]
+first_step_topk_probs=[0.34045061469078064, 0.2764243185520172, 0.2022363692522049, 0.07919690012931824, 0.03625898063182831, 0.03441883996129036, 0.03101395070552826, 0.0, 0.0, 0.0]
+first_step_topk_text=[' named', ' would', ' was', ' called', ' asked', ' of', ' went', '', '', '']
+
+[New tokens 1] count=130 first30=[1255, 5273, 718, 2857, 299, 269, 3843, 17, 776, 418, 649, 8763, 406, 8739, 847, 2900, 3934, 1378, 298, 3609, 610, 2553, 490, 581, 982, 631, 715, 1792, 17, 1530]
+[Full output 1]
+Once upon a time, a curious child called Jackie went to the park. He was so excited he couldn't stop looking around and asked his mom if they could go there too. She said no, but Jackie's eyes were getting bigger and she wanted to go home. So Jackie walked up to her mom and asked for her help in finding the perfect spot to stay. Her mom told her that it would be a long trip, but Jackies had to wait until after dinner before they could go back home. Jackie was sad when her mom said, "I will miss you and don't want to leave." But her mom agreed and they both headed home safely.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 263, 336, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.953924834728241, 0.03108333796262741, 0.01499183103442192, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' a', ' S', '', '#', '', '"', '!', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 7535, 281, 8191, 15, 298, 330, 3323, 289, 269, 5235, 645, 288, 269, 9556, 17, 698, 578, 263, 2073, 288, 1378, 1186, 2909, 15, 1086, 353, 9494]
+[Full output 2]
+Paris is the capital of the province of Catalonia, and is located in the southern part of the province. It has a population of around 780,000 (2006).
+The municipality contains the frazioni (subdivisions, mainly villages and hamlets) Sviatoslavac, Cava Maria, and Zavoláfice. The municipality also includes the towns of Ternova, Sviato, and Rovina.
+
+Demography
+In 2008 there were 4,623 people living in the municipality. Of these, 2,070 or about 40% are female, while 1,200 or 15.3% are between the age of 10 and 19. The average literacy rate was 75%, higher than the national average of 59.5%; with male literacy of 70% and female literacy of 45%. 11% of the population were born in the municipality; the rest of the population came from another municipality.
+
+Politics
+In the 2011 federal election the most popular party was the SVP which received 51.5% of the vote. The next three most popular parties were the CVP (19.7%), the FDP (17.4%) and the SP (15%). In the federal election, a total
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 536, 483, 342, 5454, 359, 263, 1701, 288, 795, 7527, 17, 535, 269, 1832, 288, 263, 4409, 1926, 744, 57, 2729, 269, 10294, 8537, 2714, 4820, 7, 330]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar which can be represented as a sum of two vectors. In the case of a vector space $V$, the eigenvector $\lambda$ is given by:
+
+$\lambda = \frac{1}{2} \int_0^1 V \, d\mu$
+
+where $\lambda$ denotes the eigenvalue. The vector space $W$ is called the linear subspace if it has the same dimension as the original vector space and its inverse is defined to be the zero vector in $V$. The matrix representation of this subspace is given by the following matrix equation:
+
+${A}_{i}\cdot {B}_{j}$
+
+where $A_{ij}$ represents the j-th row of $W$. For each i, we have:
+
+${\mathbf{v}}_{ij}=\begin{bmatrix} 1 & 0 \\ -1 & 0 \end{bmatrix}$.
+
+The eigenvalues are given by:
+
+ ${\mathbf{v}}\left( {\boldsymbol{\alpha }}^{2} \right)=1-\beta,\begin{bmatrix}-1&0\\1&0\end{bmatrix}.}$
+
+The eigenvectors are given by the eigenvectors of the matrix:
+
+To find the eigenvectors, we need to compute
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 1085, 491, 5546, 395, 1420, 14071, 1991, 9845]
+first_step_topk_probs=[0.25420576333999634, 0.15100471675395966, 0.08514826744794846, 0.08514826744794846, 0.0728311687707901, 0.07087869942188263, 0.043263569474220276, 0.025699641555547714, 0.02439538761973381, 0.02315732277929783]
+first_step_topk_text=[' use', ' can', ' model', ' have', ' describe', ' are', ' allow', ' incorporate', ' provide', ' rely']
+
+[New tokens 4] count=256 first30=[22968, 269, 14457, 2673, 415, 3392, 299, 1798, 17, 338, 1488, 1373, 330, 269, 14457, 2673, 15, 536, 22555, 444, 686, 2970, 870, 1191, 263, 14457, 2673, 1085, 17, 202]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the neural network's ability to learn. A common example is the neural network, which learns from its training data using a neural network model.
+
+## Network model: The brain
+
+The brain consists of neurons and connections between them. Each neuron has a set of neurons that communicate with other neurons in the same way as the rest of the brain. In this way, the brain can be thought of as a computer network that uses all the information it receives from the brain, including the neurons themselves.
+
+The network model allows us to study how the brain works. It shows how the brain behaves like a computer. By studying how the brain processes information, we can understand how it functions. This helps us to understand how the brain functions.
+
+In the following section, we will look at the evolution of the brain through the ages.
+
+### Evolution of the brain
+
+To understand how the human brain evolved, we must first know what it does. The brain was created by God to do many things for humans. When we learned about the brain, we were able to think about how our brains functioned. We also learned about how we came to live in the world around us. Our ancestors lived in different places throughout history.
+
+For instance
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=199 first30=[263, 647, 286, 17, 595, 551, 202, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 655, 3715, 555, 490, 1804, 11, 6022, 17, 8256, 12, 1396, 409, 29]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+if __name__ == '__main__':
+    import sys
+
+    if len(sys.argv) < 2:
+        print("Usage: python add_test.py [--file-path] [--output-dir]")
+        exit(-1)
+
+    file_paths = sys.argv[1:]
+    output_dir = os.getcwd()
+    for f in file_paths:
+        if not os.path.isdir(f):
+            continue
+
+        if not os._path.isfile(os.path.join(f, f)) or not os._stat(os.stat(os._path).st_mode & 0x10000000):
+            continue
+        
+        os.makedirs(os.getcwd())
+
+        with open(os.sep, 'w') as fout:
+            fout.write(' '.join([str(i) for i in sorted(os.listdir(f) \
+                                    .* fout])))
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 353, 20, 12829, 311, 12, 864, 353, 21, 2216, 311, 552, 354, 12, 711, 202, 6, 202, 6, 202, 6137, 28045, 11, 91, 6044, 15636, 94, 55, 2817, 913]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return (1 << n) * (2 ** n - 1)
+
+
+#
+#
+function factorial(x::Vector{T}) where T <: Real
+    #
+    # https://stackoverflow.com/questions/138324755/how-to-find-the-factorial-of-a-integer-in-multiplying-the-number-in-integer-that-is-not-equal to-0
+    #
+    if x[0] == 0
+        return 0
+
+    #
+    #
+    for i in range(len(x))
+        #
+        #
+        if x[i] == 0
+            return 0
+
+        #
+        #
+    #
+        # This is a bit weird, but I can't think of any other way to do it.
+        #
+        x = factorial(x)
+        #
+        while x > 0 && x <= 0
+            #
+            #
+            if x[1] == 0
+                return x[0], x[1]]
+
+            #
+            #
+        #
+
+        # If we get an integer between 0 and 1 then we will get the number
+        # we want. So we just add 1 to it and multiply by 1 to get the number.
+        # But this doesn't work
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 339, 1150, 1083, 3, 4, 2, 0, 1]
+first_step_topk_probs=[0.39334455132484436, 0.3193705379962921, 0.1998569667339325, 0.051595572382211685, 0.03583237901329994, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', ' for', ' while', ' print', '', '!', '', '', '']
+
+[New tokens 7] count=36 first30=[622, 354, 17, 19, 647, 353, 20, 552, 311, 12, 864, 8049, 11, 81, 12, 711, 202, 6, 1083, 11, 73, 554, 11, 24, 687, 202, 2318, 11, 73, 554]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1 - n) * fib(n)
+
+
+# print(fib(5))
+print(fib(-2, 5))
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 1541, 31412, 2590, 698, 356, 535, 1289, 3987]
+first_step_topk_probs=[0.3589925169944763, 0.2366623729467392, 0.10285307466983795, 0.09763319045305252, 0.061097290366888046, 0.03445146605372429, 0.027972379699349403, 0.026552783325314522, 0.025205228477716446, 0.015773029997944832]
+first_step_topk_text=[' The', ' Yes', ' There', ' Cats', ' No', ' It', ' I', ' In', ' We', ' Most']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 12052, 17, 202, 509, 3533, 330, 808, 17, 31412, 395, 453, 2645, 15, 614, 581, 620, 491, 263, 2645, 12153, 298, 3737, 269, 2886, 10978, 351, 553]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+The answer is no. Cats are not black, but they do have a black coat and lack the white fur on their bodies. Some cats are more white than others. It's possible that cats are black because of their coloration. But it's also possible that some cats may be darker in color than others. So what's the best way to understand why some cats are lighter than others?
+The answer lies in the fact that cats are able to live with their owners' pets in the same way as dogs. When a cat is born, his or her owner's pet has an equal chance of being left behind. This means that he or she will remain with the owner for life. A cat who is a black cat will have a white coat and white hair. And so if you consider your cat's home and family, then the number of cats will increase. However, if you consider the amount of time it takes for a cat to get into a litter box, then the total number of cats living with them will decrease. So if a cat lives with its owner, then there will be a greater percentage of cats that stay with their owners.
+In other words, if you look at the number of people that live with cats,
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[843, 798, 354, 2050, 744, 1012, 409, 637, 382, 0]
+first_step_topk_probs=[0.2568592131137848, 0.23144938051700592, 0.18792220950126648, 0.05975155159831047, 0.05975155159831047, 0.05384061485528946, 0.053355127573013306, 0.053355127573013306, 0.04371516779065132, 0.0]
+first_step_topk_text=[' 5', ' 4', ' 1', ' One', ' $', ' 6', ' 2', ' 3', ' The', '']
+
+[New tokens 9] count=41 first30=[843, 647, 637, 333, 1291, 202, 28, 598, 288, 1171, 874, 483, 847, 1098, 269, 3533, 299, 482, 2395, 17, 2575, 330, 269, 2056, 993, 288, 2722, 357, 581, 982]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 5 + 3 = 9
+9 out of 10 people can't find the answer to this question. What is the total number of ways that they could have bought a apple in exchange for 1 dollar?
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 1509, 15255, 3919, 382, 783, 22089, 1803, 1278]
+first_step_topk_probs=[0.722114086151123, 0.07501515001058578, 0.029376355931162834, 0.029376355931162834, 0.026470309123396873, 0.022641252726316452, 0.02149220183491707, 0.01656469702720642, 0.01656469702720642, 0.014168535359203815]
+first_step_topk_text=[' I', ' What', ' You', ' Thanks', ' My', ' The', ' This', ' Thank', ' When', ' If']
+
+[New tokens 10] count=256 first30=[2575, 330, 269, 851, 1384, 3467, 486, 483, 620, 299, 1005, 6082, 722, 486, 2068, 18029, 34, 202, 46, 541, 22318, 368, 17, 621, 17736, 15, 10219, 15, 423, 39]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is the most important thing you can do to help yourself when you're stressed?
+Kathleen M. Kahn, MS, RD, an assistant professor of medicine at Harvard Medical School and chief of the Division of Clinical Neurology at Massachusetts General Hospital, says that stress plays a role in how your body reacts to stress. "You have to be able to focus on things you're not going to do if you feel stressed," she says. "It's really important for you to keep track of what you're doing."
+In fact, stress is one of the most common reasons people with depression become depressed. Stress makes it harder for you to get along with others. It also increases your risk of heart disease, stroke, cancer, Alzheimer's disease, diabetes, high blood pressure, obesity, and other health problems.
+"There are many ways to deal with stress," says Dr. Kahn. "For example, you can't just sit down and relax or go to bed every night and relax while you're getting ready for work. You need to make sure you're healthy enough so you don't have to worry about your body getting tired all the time."
+But if you're having trouble coping with stress, you can try taking some simple
+
+================================================================================
