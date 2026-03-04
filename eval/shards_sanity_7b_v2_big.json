@@ -1,0 +1,151 @@
+{
+  "summary": {
+    "out_dir": "datasets/pretrain_mix_7b_v2",
+    "dtype": "<class 'numpy.uint16'>",
+    "vocab_size": 32000,
+    "meta_train_content_tokens": 7000001348,
+    "meta_val_content_tokens": 18651701,
+    "meta_train_shards": 701,
+    "meta_val_shards": 10,
+    "sources": [
+      {
+        "source": "datasets/pretrain_clean_v1/fineweb_edu.clean.v1.jsonl",
+        "weight": 0.56,
+        "train_tokens": 3919994219,
+        "val_tokens": 7844514,
+        "train_frac": 0.559999066303037,
+        "train_frac_minus_weight": -9.336969630791003e-07
+      },
+      {
+        "source": "datasets/pretrain_clean_v1/code_py.clean.v1.jsonl",
+        "weight": 0.2,
+        "train_tokens": 1400005922,
+        "val_tokens": 2800335,
+        "train_frac": 0.2000008074855588,
+        "train_frac_minus_weight": 8.074855587791863e-07
+      },
+      {
+        "source": "datasets/pretrain_clean_v2/openwebmath.clean.v1.jsonl",
+        "weight": 0.1,
+        "train_tokens": 700000416,
+        "val_tokens": 2000306,
+        "train_frac": 0.10000004017142083,
+        "train_frac_minus_weight": 4.017142082868297e-08
+      },
+      {
+        "source": "datasets/pretrain_clean_v1/wiki.clean.v1.jsonl",
+        "weight": 0.08,
+        "train_tokens": 560004080,
+        "val_tokens": 2004225,
+        "train_frac": 0.0800005674513193,
+        "train_frac_minus_weight": 5.674513192943653e-07
+      },
+      {
+        "source": "datasets/pretrain_clean_v2/proofpile2_algebraic.clean.v1.jsonl",
+        "weight": 0.05,
+        "train_tokens": 350000504,
+        "val_tokens": 2001895,
+        "train_frac": 0.05000006237141656,
+        "train_frac_minus_weight": 6.237141655929257e-08
+      },
+      {
+        "source": "datasets/pretrain_clean_v1/cosmo_math.clean.v1.jsonl",
+        "weight": 0.01,
+        "train_tokens": 69996207,
+        "val_tokens": 2000426,
+        "train_frac": 0.009999456217247574,
+        "train_frac_minus_weight": -5.437827524257949e-07
+      }
+    ]
+  },
+  "split_reports": [
+    {
+      "split": "train",
+      "n_shards": 701,
+      "sampled_shards": 20,
+      "blocks_sampled": 400,
+      "token_ids_oob": 0,
+      "token_ids_checked": 819200,
+      "ascii_ratio_quantiles": {
+        "q00": 0.9709196102314251,
+        "q50": 0.999672361150223,
+        "q90": 1.0,
+        "q95": 1.0,
+        "q99": 1.0,
+        "q100": 1.0
+      },
+      "len_chars_quantiles": {
+        "q00": 4449.0,
+        "q50": 8561.0,
+        "q90": 9639.4,
+        "q95": 9896.0,
+        "q99": 10294.079999999998,
+        "q100": 10885.0
+      },
+      "url_per_kchars_quantiles": {
+        "q00": 0.0,
+        "q50": 0.0,
+        "q90": 0.22814773054582266,
+        "q95": 0.4192761152427378,
+        "q99": 1.2888286417499246,
+        "q100": 3.2530904359141184
+      },
+      "html_signal_frac": 0.02,
+      "placeholder_frac": 0.065,
+      "has_dblnl_frac": 0.88,
+      "has_indent4_frac": 0.495,
+      "eos_frac_quantiles": {
+        "q00": 0.0,
+        "q50": 0.0009765625,
+        "q90": 0.001953125,
+        "q95": 0.00244140625,
+        "q99": 0.00341796875,
+        "q100": 0.00390625
+      }
+    },
+    {
+      "split": "val",
+      "n_shards": 10,
+      "sampled_shards": 10,
+      "blocks_sampled": 200,
+      "token_ids_oob": 0,
+      "token_ids_checked": 409600,
+      "ascii_ratio_quantiles": {
+        "q00": 0.9633054030626986,
+        "q50": 0.9994131993683453,
+        "q90": 1.0,
+        "q95": 1.0,
+        "q99": 1.0,
+        "q100": 1.0
+      },
+      "len_chars_quantiles": {
+        "q00": 2850.0,
+        "q50": 8462.5,
+        "q90": 9619.8,
+        "q95": 9813.35,
+        "q99": 10514.649999999998,
+        "q100": 11024.0
+      },
+      "url_per_kchars_quantiles": {
+        "q00": 0.0,
+        "q50": 0.0,
+        "q90": 0.22810291582260592,
+        "q95": 0.2755741699793711,
+        "q99": 0.5496217830036111,
+        "q100": 0.8323424494649228
+      },
+      "html_signal_frac": 0.015,
+      "placeholder_frac": 0.055,
+      "has_dblnl_frac": 0.94,
+      "has_indent4_frac": 0.415,
+      "eos_frac_quantiles": {
+        "q00": 0.0,
+        "q50": 0.0009765625,
+        "q90": 0.001953125,
+        "q95": 0.001953125,
+        "q99": 0.00244140625,
+        "q100": 0.00341796875
+      }
+    }
+  ]
+}

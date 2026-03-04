@@ -1,0 +1,281 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[2827, 418, 791, 1255, 3609, 2446, 288, 2857, 1628, 12562]
+first_step_topk_probs=[0.2887710630893707, 0.21126942336559296, 0.1392773538827896, 0.09181734919548035, 0.0671750083565712, 0.06052970513701439, 0.04914628341794014, 0.027712520211935043, 0.02497105300426483, 0.023703772574663162]
+first_step_topk_text=[' named', ' was', ' would', ' called', ' asked', ' came', ' of', ' went', ' might', ' walked']
+
+[New tokens 1] count=197 first30=[1255, 5273, 718, 2857, 299, 269, 3843, 374, 896, 2553, 17, 1530, 2977, 263, 2023, 3197, 298, 3766, 299, 15935, 383, 17, 1358, 722, 1024, 3500, 715, 15, 1024, 10227]
+[Full output 1]
+Once upon a time, a curious child called Jackie went to the park with her mom. She saw a big tree and wanted to climb it. But when she got there, she noticed that the tree was too high for her to reach. So, she decided to try climbing up the tree. As she climbed higher, she found a hidden path. It looked like a bridge over the river! She knew she had to climb it first. So, Jackie started to climb down the tree. When she reached the top of the tree, she felt something strange. The branch was very tall and she could see through it. Suddenly, she heard a voice coming from behind her. "Hey, you're so brave!" said the voice. Jackie was surprised by what the voice said. She realized she had been tricked into climbing the tree! She quickly climbed down the tree and climbed back down. Jackie smiled and thanked the voice before running off home. From then on, she never climbed trees again.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 17, 698, 418, 269, 4223, 288, 263, 11295, 357, 11577, 758, 269, 4328, 7762, 339, 611, 702, 1237, 6647, 15, 1761, 383, 418, 7334, 419, 269, 14473, 289]
+[Full output 2]
+Paris is the capital of the province. It was the capital of a kingdom that ruled over the Roman Empire for more than three centuries, until it was destroyed by the Romans in 70 AD.
+The Roman Republic was a monarchy with the following basic structure:
+- The Senate (the first one elected from each state) is composed of two senators and one vice president. This is an annual process known as the "Presidential Appointment" or the "Commission", which is a formal document passed on the day of the election. The Senate also has a number of special powers. These are:
+- the Senate may appoint to the President (as well as other members of the Senate), the President's deputy, and the Secretary of State (a member of the House of Representatives).
+- the President may issue special rules for the Senate (such as the "Treaty" or "Legislative Bill").
+- the Constitution (which gives the President full power over the Senate) provides for the Senate to be "elected" only if the President is a member of the Senate, but not a member of any other political party.
+- the executive branch of the government (which also includes the Senate's executive officers) can veto legislation or law.
+- The legislative
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 6058, 500, 2161, 269, 3823, 578, 263, 3636, 288, 2601, 17, 535, 482, 1832, 15, 269, 18956, 395, 1100, 269, 3802, 411, 2068, 3934, 339, 289]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that tells us whether the matrix has a zero of itself. In this case, the eigenvalues are just the ones we're looking for in our matrix A.
+
+Now let's talk about eigenvalues and eigenvectors. An eigenvector of a square matrix A is an element of the set of all possible linear combinations of its elements. For example, if we have two vectors (a1, b1) and (c1, d1), their corresponding eigenvectors will be equal to the first vector, which we'll call c2. So, if we take the dot product between them, we get a new vector c2, which is also a scalar.
+
+The question now becomes: Can you prove that these eigenvectors are linearly independent? That means they must be linearly independent since any pair of identical vectors can be written as a linear combination of the other two vectors in the original set. In other words, no matter how many times we multiply each vector by its own transpose, the result will always be a constant multiple of the number of times we multiply it by itself.
+
+To show this mathematically, consider the following examples:
+
+* Consider the vector v = <v, w> with components u and v > 0. We know that v =
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 5546, 491, 1420, 9845, 395, 1085, 1991, 2224]
+first_step_topk_probs=[0.3210996985435486, 0.17187228798866272, 0.11330526322126389, 0.09199660271406174, 0.06730615347623825, 0.060647934675216675, 0.04663744196295738, 0.027766648679971695, 0.025019826367497444, 0.02254473604261875]
+first_step_topk_text=[' use', ' can', ' describe', ' have', ' allow', ' rely', ' are', ' model', ' provide', ' general']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 17, 202, 509, 3355, 2877, 330, 357, 1010, 2790, 578, 686, 1231, 854, 288, 3267, 15, 298, 269, 1194, 581, 2068, 5454, 289]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data.
+The basic idea is that each task has its own set of features, and the way they're represented in the model is determined by how the model is trained. For example, if you have a task with two input parameters, say x and y, then you want to train the model on them so that it's easy for you to learn from them. This is done using a neural network. The neural network is then trained by training the model on the inputs of the model, and the training process is repeated until the model is able to understand the new input.
+If we look at the model as a series of training points, then we get an output of the model:
+A simple example of this is shown below.
+This is a test of the model (the model is trained) and shows how well the model understands the new input and the new output. In this case, the model is very good at recognizing the new input, but the model is not trained yet.
+There are many different ways to do this, but here are some common ones:
+- Simple training - you can use the same model to train multiple tasks simultaneously. This is called a sequential training.
+- Multiple training - you could use
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=34 first30=[263, 647, 286, 17, 595, 551, 711, 202, 856, 4698, 11, 68, 15, 263, 66, 1253, 464, 346, 622, 1180, 11, 930, 2067, 91, 339, 892, 289, 263, 490, 892]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+
+def remove(a, a_list):
+    return list(set([x for x in a if x != a]))
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=110 first30=[622, 353, 20, 12829, 311, 12, 647, 354, 711, 202, 6, 8714, 29, 356, 873, 1191, 269, 1134, 2944, 359, 2080, 614, 1191, 269, 1134, 1112, 202, 6137, 28045, 66]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return (1 << n) + 1
+
+
+# TODO: I am using the same functions as above but using the same name
+function factorial_fun(n, k::Int)
+    if k == 0
+        return n * k
+
+    return factorial(n - k) / (k-1)
+
+
+# We can use the same function with different names to define the same function.
+function __call__
+    if __name__ == '__main__':
+        print 'using __main__()'
+        return __module__.main()
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=142 first30=[622, 354, 17, 19, 647, 353, 20, 552, 311, 12, 864, 353, 21, 864, 353, 81, 16, 20, 687, 711, 202, 6, 202, 6, 9419, 269, 5043, 993, 288, 1885]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1 - n) * (2 * (n-1))
+
+
+#
+# Find the maximum number of times the sequence is repeated.
+#
+def fib_max(n, k):
+    #
+    # Calculate the max value of the sequence.
+    #
+    while True:
+        #
+        # Get the index of the next element in the sequence.
+        #
+        if k == 0 or k == n:
+            return n
+        #
+        return n
+
+    # Return the maximum value of the list of consecutive elements in the sequence
+    #
+    next = []
+    for i in range(len(k)):
+        next.append(i)
+    return next
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 1541, 2590, 31412, 698, 535, 356, 1289, 338]
+first_step_topk_probs=[0.37597063183784485, 0.18133462965488434, 0.1259343922138214, 0.09213557094335556, 0.049316614866256714, 0.030861549079418182, 0.02505762130022049, 0.02505762130022049, 0.02505762130022049, 0.01931266486644745]
+first_step_topk_text=[' The', ' Yes', ' There', ' No', ' Cats', ' It', ' In', ' I', ' We', ' A']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 12052, 17, 202, 509, 3533, 330, 808, 17, 31412, 395, 453, 289, 263, 2076, 1440, 15, 614, 581, 620, 491, 263, 16665, 339, 1939, 2584, 288, 1476]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+The answer is no. Cats are not in a social group, but they do have a preference for certain types of food. So when you see a cat who prefers to eat other cats, he or she will pick up the food and then go on eating it. If your cat likes to eat other people's food, it will choose a different kind of food. But if your cat likes any other food, he or her will choose a new one. In this case, the cat will choose a particular type of food.
+For example, if your cat has a dog, he or he may choose a particular color food. Your cat will choose the same food as your dog. This will make his or her choice more attractive. You might think that because of the choice, cats will choose which color food they like best. But the question is whether or not the cat likes a specific food. Some cats prefer a particular food. For example, some cats like red meat, while others like eggs. However, the difference between these two foods is not very significant.
+How does the cat learn to choose the right food?
+Answer : The cat learns to choose the correct food. It learned how to select the right food. Once he
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 798, 843, 2050, 409, 744, 637, 2, 1, 0]
+first_step_topk_probs=[0.37231555581092834, 0.22116471827030182, 0.1795717477798462, 0.07804157584905624, 0.0762941911816597, 0.041772644966840744, 0.030839575454592705, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' 4', ' 5', ' One', ' 2', ' $', ' 3', '', '', '']
+
+[New tokens 9] count=40 first30=[354, 13032, 333, 798, 202, 24771, 29, 843, 10941, 333, 1218, 202, 24771, 29, 1012, 10941, 333, 1291, 202, 24771, 29, 1171, 10941, 333, 1604, 202, 24771, 29, 409, 10941]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4
+Answer: 5 apples = 8
+Answer: 6 apples = 9
+Answer: 10 apples = 12
+Answer: 2 apples = 6
+Answer: 12 apples = 12
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 783, 1509, 338, 3919, 2766, 535, 368, 1153]
+first_step_topk_probs=[0.6380565762519836, 0.06896250694990158, 0.024976564571261406, 0.022505763918161392, 0.02136358805000782, 0.017803525552153587, 0.01604231260716915, 0.015629936009645462, 0.012364297173917294, 0.010854775086045265]
+first_step_topk_text=[' I', ' The', ' This', ' You', ' A', ' My', ' Dr', ' In', ' M', ' An']
+
+[New tokens 10] count=198 first30=[356, 3442, 733, 289, 263, 3313, 288, 314, 1460, 298, 491, 699, 751, 2061, 374, 1284, 2415, 17, 202, 27815, 1240, 29, 28824, 19253, 4235, 15, 3965, 637, 29, 2213]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I've been in a lot of lately and have had some problems with my heart.
+Joined: Fri Apr 23, 2013 3:14 am
+Posts: 19
+Location: United States of America
+Schools: St. Joseph's, USA
+More information: [Click to enlarge]
+My wife has recently taken a trip to the United States. She is going to spend more time at home than she would normally do on her own. Her health is improving and she's not getting any exercise. My husband and I are very interested in this area of our country.
+I know that it is important for me to get up early in the morning and be able to go to sleep later. It's also important for me because when we get out there, we have lots of energy and we can't stay awake all day long.
+I think that I'll never get back to work or school after a few days. But, I hope you will.
+
+================================================================================
