@@ -1,0 +1,333 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[418, 791, 2827, 1255, 288, 3609, 2446, 699, 0, 1]
+first_step_topk_probs=[0.41160473227500916, 0.30113643407821655, 0.09574893862009048, 0.06312163174152374, 0.041612327098846436, 0.030444232746958733, 0.028899185359477997, 0.027432529255747795, 0.0, 0.0]
+first_step_topk_text=[' was', ' would', ' named', ' called', ' of', ' asked', ' came', ' had', '', '']
+
+[New tokens 1] count=208 first30=[1255, 5273, 418, 289, 269, 3843, 17, 776, 2977, 263, 1593, 3197, 298, 3766, 299, 15935, 383, 17, 5273, 3609, 610, 2553, 490, 406, 982, 15935, 269, 3197, 17, 2528]
+[Full output 1]
+Once upon a time, a curious child called Jack was in the park. He saw a large tree and wanted to climb it. Jack asked his mom if he could climb the tree. His mom said yes but he had to be careful. Jack climbed the tree slowly and carefully until he reached the top. When he got there, he noticed that the tree was very tall. It was so big that he couldn't see anything up close. Jack's mom told him to get down on the ground and he should try again. But when he got to the top, he realized that he wasn't going to fall! He looked around and found a small tree with some branches and leaves. Jack started climbing the tree and soon he felt like he could reach the top of the tree. Suddenly, he heard a voice coming from inside the tree. "Jack, come here!" Jack shouted. The voice stopped and said "You're not allowed to climb the tree". Jack felt happy and he smiled at the voice. He climbed the tree and felt proud that he could reach it.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 7535, 281, 8191, 15, 298, 330, 269, 1408, 3796, 2317, 289, 269, 9556, 17, 698, 330, 3323, 351, 269, 5566, 288, 389, 3116, 68, 15, 263, 1204]
+[Full output 2]
+Paris is the capital of the province of Catalonia, and is the second largest city in the province. It is located on the island of Braga, a small island that lies at the southern end of the Bay of Bragas.
+The historical town of Catalunya was founded by the Romans as a port for trade between the Roman Empire and the West. The town was an important trading center during the Middle Ages. In 1272, the city was taken over by the Marquis of Pavia, who conquered it in 1270. In 1340, the city fell to the Turks under the command of the Duke of Pavia. The area was again occupied by the Marquess of Pavia until the 16th century when it became part of the Holy Roman Empire.
+In 1523, the town was renamed Catalunia and became a major port for the French Navy. During World War II, Cataluny was used as a base for the French Army. The town became a naval base after the war.
+During World War II in 1945, the town of Catalan was a target for the Japanese invasion of the Philippines. After the surrender of Japan, the town surrendered to the Allies in June 1944.
+After World War II
+It was
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 14274, 269, 3892, 288, 1643, 289, 269, 3823, 17, 1220, 1373, 15, 490, 486, 491, 795, 7527, 744, 91, 66, 20, 7, 298, 744, 91, 66, 21]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that determines the direction of change in the matrix. For example, if you have two vectors $x_1$ and $x_2$, then their eigenvalues are given by:
+
+$$ \begin{bmatrix} x_1 & 0 \\ x_2 & 0 \end{bmatrix}$$
+
+This means that when you multiply two matrices together, the result will always be the same. This means that no matter which way you choose to turn them into a new one, they all end up being identical. So, if you had two vectors $a_1 = (3,0)$, $b_1 = (-5,-7)$ and $c_1 = 5$, then your eigenvalues would be:
+
+$$\begin{array}{l}\text{and} \text{to turn } {(-5,-7)}\\-5\times 3+6\times 7=11 \end{array}$$
+
+And so on...
+
+##### Share on other sites
+We can also say that any vector $\mathbf{v}$ has its own unique eigenvector. The set of all possible eigenvectors of a square matrix $A$ is called the eigenvectors of $A$. We can define a matrix $M$ as follows:
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[5546, 817, 483, 491, 1420, 9845, 1085, 395, 1991, 3235]
+first_step_topk_probs=[0.23648765683174133, 0.17301806807518005, 0.12658272683620453, 0.09260989725589752, 0.04957050457596779, 0.04466673359274864, 0.042399901896715164, 0.040248069912195206, 0.031020428985357285, 0.021543260663747787]
+first_step_topk_text=[' describe', ' use', ' can', ' have', ' allow', ' rely', ' model', ' are', ' provide', ' predict']
+
+[New tokens 4] count=149 first30=[22968, 269, 14457, 2673, 415, 3392, 299, 3235, 298, 1798, 444, 2942, 17, 202, 5, 6905, 3563, 330, 299, 966, 719, 2269, 339, 6117, 13627, 357, 483, 342, 885, 289]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the neural network's ability to predict and learn from experience.
+"Our goal is to develop new models for neuroscience that can be used in the real world," said Michael Rosenberg, Ph.D., an assistant professor at the University of Texas Southwestern Medical Center (UTSC). "We believe our approach will help us understand how neurons in the brain function and how they work together."
+The research was supported by grants from the National Institutes of Health and the University of California-San Diego.
+Other social bookmarking and sharing tools:
+Note: Materials may be edited for content and length. For further information, please contact the source cited above.
+Note: If no author is given, the source is cited instead.
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 5427, 6649, 29, 8163, 16, 27, 5427, 202, 1568, 202, 18688, 351, 11654, 14651, 224, 409, 2508, 29, 6457, 29, 5613, 9281, 202, 202]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Sep  2 11:43:56 2018
+
+@author: <NAME>
+"""
+import numpy as np
+from scipy.stats import norm
+import matplotlib.pyplot as plt
+import os
+import pandas as pd
+from sklearn.metrics import accuracy_score, confusion_matrix, roc_auc_score, precision_recall_curve, recall_recall_score
+from sklearn import datasets
+from sklearn_predictive_model import MLPClassifier
+from sklearnEq import Eq
+from sklearnGenes import SGD
+from sklearnModels import get_classifier
+from sklearnTest import svm
+from sklearnClassification import TSNE
+from sklearnSVC import SVC
+from sklearnUtils import make_binary_label
+from sklearnLogitRegression import LogisticRegression
+from sklearnClassifier import SVM
+from sklearnConfusionMatrix import ConfusionMatrix
+from sklearnTextDetection import TextDetection
+from sklearnPrediction import GaussianLikelihood
+from sklearnTrainer import Trainer
+from sklearnTrainingEstimator import *
+from sklearnEvaluator import *
+
+from sklearnDataLoader import DataLoader
+
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 494, 11, 81, 12, 711, 202, 6, 11101, 299, 6519, 269, 28045, 288, 263, 1496, 993, 202, 856, 28045, 66, 4605, 11, 81, 464, 346, 622, 354, 17, 19]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return int(n)
+
+
+# Function to compute the factorial of a given number
+def factorial_sqrt(n):
+    return 1.0 / (1 + factorial(n))
+
+
+# A function to compute the binomial coefficient for a set of numbers
+def binomial_coefficients(x, y):
+    return x * y
+
+
+# The function to compute binomial coefficients
+def binomial(n):
+
+    # Generate random numbers from 0-9
+    if n < 9:
+        return 0
+
+    # Generate numbers from 0 to 9
+    if n == 9:
+        numbers = [0] * 6
+
+        # Randomly generate numbers from 0 and 1
+        while True:
+            try:
+                x = randint(0, 2)
+                y = randint(-1, 2)
+
+                # Get the first number in the list
+                i = 1
+                while i <= len(numbers)-2:
+                    if numbers[i] > numbers[-1]:
+                        numbers[i], numbers[-1] = numbers[i].pop()
+
+                    i += 1
+
+            except:
+                pass
+
+    # Calculate the binomial coefficient
+    f = 1 - binomial(n)
+
+    # The function to calculate the binomial coefficient of a set of integers
+    n = 0
+
+    # Return
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8191229701042175, 0.18087701499462128, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=54 first30=[622, 354, 17, 19, 647, 353, 20, 552, 311, 12, 864, 8049, 11, 81, 16, 20, 12, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 717]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1 - n) * fib(n-1)
+
+
+if __name__ == '__main__':
+    print('The following functions are called:')
+    for i in range(100):
+        print(i, fib(2))
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 1541, 2590, 356, 1289, 338, 698, 0, 1]
+first_step_topk_probs=[0.3891788423061371, 0.25656241178512573, 0.14466996490955353, 0.09537237882614136, 0.031945742666721344, 0.03032447025179863, 0.02732464112341404, 0.024621544405817986, 0.0, 0.0]
+first_step_topk_text=[' The', ' Yes', ' There', ' No', ' I', ' We', ' A', ' It', '', '']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 360, 13134, 5, 1091, 269, 3533, 299, 482, 2395, 330, 12052, 17, 202, 2664, 672, 263, 3191, 374, 263, 4304, 12153, 34, 2575, 490, 383, 415, 263]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is "yes" because the answer to this question is yes.
+What about a cat with a dark coat? What if it's a dog or cat? Or a cat who has a furry coat? Why not a cat with an unusual appearance?
+The answer is "no."
+There are many factors involved in a cat's coat. Some of them include:
+- Hair color
+- Dandruff (a condition in which the skin becomes redder than it should be)
+- Excessive hair growth
+- Fluid buildup
+- Hormonal changes
+- Anything else that causes a cat to have a change in its coat
+- Allergies/hives
+How do you know if your cat has a hair problem?
+Your veterinarian will ask you questions about your cat's health. She will then take a look at your cat's history and behavior. She will also ask about any other symptoms that might indicate a possible problem.
+As part of her diagnostic work, she will want to check for signs of disease. In addition, she may want to examine your cat's eyes, ears, and mouth for signs of a disease. If you suspect a disease, she'll be asked to remove your cat from
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 843, 798, 2050, 1012, 409, 2, 3, 1, 0]
+first_step_topk_probs=[0.3659897446632385, 0.29716020822525024, 0.17652089893817902, 0.06228821724653244, 0.050574082881212234, 0.047466885298490524, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' 5', ' 4', ' One', ' 6', ' 2', '', '', '', '']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 17, 202, 3016, 914, 10941, 1352, 406, 491, 34, 3, 711, 509, 1136, 7906, 1723, 6239, 357, 383, 791, 1420, 263, 719, 9713, 3184, 299]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples.
+How many apples did he have?
+
+The New Zealand government announced that it would allow a new mining company to build a coal mine in the mountains of New Zealand's north-eastern province, NZ. The mine will be located on the New Zealand–New Zealand border near Mount Hatteras, North Island.
+The mine will allow the company to develop a new industry. In addition, the company hopes to be able to expand its operations and commercialize the mining industry by introducing new technologies and practices.
+The mining company will also make use of new technology, such as remote sensing techniques, to better understand the geology of the area and improve their environmental impact.
+"We're looking at the geological conditions for the first time," said Dr Michael R. Graham, Director of the New Zealand Department of Mineral Resources. "This is an important milestone in our country's efforts to reduce carbon emissions."
+Dr Graham says that the new mining company will be able to create jobs in the mines and expand the mining industry in New Zealand.
+"There are a lot of people who want to become involved with mining," said Dr Graham. "It's very exciting to see this happen."
+In recent years, New Zealand has
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 783, 3919, 1171, 1509, 3395, 843, 27614, 1604]
+first_step_topk_probs=[0.5938133001327515, 0.050656188279390335, 0.02573825605213642, 0.018346460536122322, 0.01696770265698433, 0.015692560002207756, 0.014896160922944546, 0.014513244852423668, 0.01414017379283905, 0.012413837015628815]
+first_step_topk_text=[' I', ' The', ' This', ' My', ' 10', ' You', ' Feb', ' 5', ' Hi', ' 12']
+
+[New tokens 10] count=256 first30=[1171, 18, 3612, 18, 9503, 552, 1291, 29, 3837, 318, 202, 44, 4575, 263, 1809, 13657, 672, 269, 7162, 288, 16719, 17, 382, 3396, 18268, 330, 269, 360, 18521, 11365]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: 10/26/2008 - 9:38am
+I'm a little confused about the diagnosis of ADHD. The primary symptom is the "hyperactivity" in that child, but it's not really ADHD at all. It's probably not ADHD because there are lots of other problems with ADHD. What can be done to help me?
+Assistant (5/27/2008): I've been having trouble getting the diagnosis of attention deficit hyperactivity disorder. Is this ADHD? If so, what are some things that we do know for sure about the disorder?
+Assutor (6/24/2008): This is a very difficult diagnosis. I'm trying to understand how the ADHD may affect my child. I don't know if I have ADHD or not.
+Assutor: I'm not sure if you have ADHD, but you might have one.
+Asseter (7/25/2008): The most common symptoms of ADHD are forgetfulness and difficulty concentrating. These kids often have problems with attention span, memory, and concentration. They also have difficulties with impulse control, problem solving, and planning. There are many different kinds of ADHD. Some children with ADHD will show symptoms like hyperactivity, impulsivity, and lack of interest in activities that are fun
+
+================================================================================

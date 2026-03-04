@@ -1,0 +1,280 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[791, 418, 2827, 2446, 288, 3609, 1255, 2857, 1628, 699]
+first_step_topk_probs=[0.324203222990036, 0.21372787654399872, 0.1408981829881668, 0.09288578480482101, 0.04971817508339882, 0.04036800563335419, 0.03831929340958595, 0.03452858701348305, 0.02526165172457695, 0.02160743623971939]
+first_step_topk_text=[' would', ' was', ' named', ' came', ' of', ' asked', ' called', ' went', ' might', ' had']
+
+[New tokens 1] count=126 first30=[1255, 5273, 718, 2857, 299, 269, 3843, 17, 776, 418, 649, 8763, 357, 406, 24958, 545, 672, 610, 3215, 5273, 718, 298, 3109, 4227, 1378, 289, 10224, 17, 14918, 5273]
+[Full output 1]
+Once upon a time, a curious child called Jackie went to the park. He was so excited that he forgot all about his friend Jackie and started running around in circles. Suddenly Jackie noticed something strange - it was a big ball of yarn! Jackie thought it was funny but Jackie laughed and ran away with it. Jackie ran after him, asking if they could find out where the yarn came from. When Jackie found out that there were lots of yarns on the ground, she gave them a special name: Jackie's Name. Jackie was very happy and thanked her for helping her find out where everything was. The end.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 7535, 281, 8191, 15, 298, 330, 269, 1408, 3796, 2317, 289, 269, 9556, 17, 698, 330, 3323, 435, 269, 3300, 288, 269, 6668, 1256, 357, 6414, 888]
+[Full output 2]
+Paris is the capital of the province of Catalonia, and is the second largest city in the province. It is located at the foot of the mountain pass that runs through the centre of the province.
+The town was founded by the first inhabitants of the area in the 8th century BC and has been called Catalonia since it was conquered by the Romans. The name is derived from the word for "catalonia", which means "the sea". The city was named after the river Catala (a river that flows into the sea) which carried the town's name to the island of Álava, where it was known as "The River of the Sea".
+In the 7th century, the city became a possession of the Kingdom of Sicily, and its capital was the city of Lepanto. In 922, the city was annexed by the Lombards under the rule of the Lombard King Vittorio Emanuele II. In the 10th century, it was captured by the French, who occupied it in 1349-55.
+During the Second World War, it was part of the Italian front line during the Italian Campaign of World War I. After the war, it was reoccupied by the Germans and renamed Lepanto after their
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 14274, 269, 3892, 288, 263, 4409, 17, 382, 854, 288, 545, 18956, 3071, 263, 4054, 339, 269, 4409, 1926, 15, 536, 330, 269, 854, 288, 545]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that determines the direction of a vector. The set of all eigenvalues forms a basis for the vector space, which is the set of all vectors in the space.
+The following examples illustrate how to find the eigenvalues of a matrix:
+- The matrix A has two rows and three columns, so we can find the eigenvalues by using the formula:
+- If A = [a1, a2], then A = [[a1, ... , an]]
+- If B = [b1, b2], then B = [[b1, ... ... , bn]]
+The matrix A has only one column and only one row. We also have a list of the eigenvectors (the ones in the first row) and the eigenvectors of each eigenvector (the ones with the same number of the other vectors).
+The following example shows you how to find eigenvalues of a vector space.
+- An n x n matrix can be written as
+(A 1 1 0 )
+where A = [0, 1]
+and B = [0.5, 2.5].
+You can check this for yourself. For example, if you know the identity matrix, you can find out whether it's equal to zero or not.
+
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 817, 5546, 491, 395, 1420, 1085, 1991, 3235, 9845]
+first_step_topk_probs=[0.25882020592689514, 0.23321636021137238, 0.15374581515789032, 0.11248283088207245, 0.048225097358226776, 0.033949822187423706, 0.029038820415735245, 0.02756510302424431, 0.026166150346398354, 0.015543361194431782]
+first_step_topk_text=[' can', ' use', ' describe', ' have', ' are', ' allow', ' model', ' provide', ' predict', ' rely']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 17, 202, 509, 775, 1085, 15, 269, 368, 15356, 16, 53, 10695, 15, 418, 2657, 419, 6227, 609, 454, 1311, 298, 418, 2591]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data.
+The first model, the MLP-RNN, was developed by Richard Stallman and was published in 2001. It is based on the principles of neural network modeling. The main idea behind the model is that a set of neurons (or neurons) can be connected to each other via a network. These connections allow the model to predict how many neurons will be attached to each neuron. This prediction can then be compared with the predictions made by the network.
+In this paper, we study the model using a simple mathematical model. We use the model to model a population of cells. The cells are grouped into four groups:
+|Cell||Activation function||Motor function||Modeling|
+We also try to make the model more robust. In this way, it makes sense to make the network more robust for the model. This allows us to make better predictions about the network's behavior. However, it also means that we cannot always predict the network's properties at all. For example, the network might not have a "smooth" appearance because it has no smoothness. Therefore, the model may not be able to tell us what the network should look like when it is trained. This is known as the "
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=127 first30=[263, 647, 286, 17, 595, 551, 202, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 655, 3715, 555, 490, 1804, 11, 6022, 17, 8256, 12, 1396, 409, 29]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+if __name__ == '__main__':
+    import sys
+
+    if len(sys.argv) < 2:
+        print("Usage: python3 -m unittest")
+        sys.exit(-1)
+
+    print('Generating test results')
+    test_results = []
+    for i in range(len(test_results)):
+        print(i)
+
+        if test_results[0] != 'test':
+            print("Test results are not identical.")
+            sys.exit(1)
+
+        if i % 100 == 0:
+            print("Testing: " + str(i))
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=32 first30=[622, 494, 11, 81, 18, 21, 12, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 11, 73, 10, 7121, 836, 1813, 11, 2440, 4886, 5771, 28045]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return int(n/2)
+
+
+if __name__ == '__main__':
+    print(f'Hello {len(factorial)} factorial')
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.5518956780433655, 0.4481043219566345, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=143 first30=[622, 354, 17, 19, 647, 353, 20, 552, 311, 12, 864, 353, 21, 864, 311, 12, 711, 202, 856, 8049, 66, 2525, 11, 81, 15, 311, 66, 19405, 464, 346]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1 - n) * (2 * n)
+
+
+def fib_sum(n, n_prime):
+    if n == 0:
+        return 0
+
+    for i in range(n):
+        for j in range(i+1, n):
+            if n % j != 0:
+                fib(j-1) + fib(j - j-1)
+            else:
+                fib_sum((i-1)*n) + fib_sum([i-1]*n) + (j-1)*fib(i-j-j-1))
+
+
+if __name__ == '__main__':
+    print(fib(10))
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 1541, 31412, 2590, 338, 535, 1289, 783, 1278]
+first_step_topk_probs=[0.3821341395378113, 0.14205136895179749, 0.13484227657318115, 0.08889347314834595, 0.052804987877607346, 0.03667230159044266, 0.033044517040252686, 0.031367480754852295, 0.025468405336141586, 0.025468405336141586]
+first_step_topk_text=[' The', ' Yes', ' There', ' Cats', ' No', ' A', ' In', ' We', ' This', ' If']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 12052, 17, 202, 43, 1477, 4, 31412, 395, 2645, 1091, 581, 491, 263, 2886, 12153, 17, 1109, 620, 453, 491, 833, 10978, 388, 11783, 351, 553, 8899]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+Hats! Cats are black because they have a white coat. They do not have any fur or scales on their legs. Dogs and cats are different colors. Dogs and felines look alike. Cats have a brownish-yellow body and blue eyes. Dogs and cat's ears are black. Cats have no ear openings. Dogs and dogs are both black.
+The answer to the question "Is it possible for a cat to be black?" is yes. It is impossible. But if the answer is yes, then there must be something else besides black. Cats are black in fact. They are black in contrast with the other colorations of cats. Some cats, like those in the house, have black markings. These markings are called black hair.
+We know that cats are black because many cats have dark coats. We also know that cats can be black if they are colored black. In the United States, it is illegal to bring a cat into the home unless the owner has been properly trained. However, the rule is that cats are not black when they are out of the home. The rule is that a cat who is white should not be brought outside until the owner knows that he or she is black.
+There are several ways
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 798, 843, 2050, 409, 382, 637, 2, 1, 0]
+first_step_topk_probs=[0.41377440094947815, 0.16203637421131134, 0.16203637421131134, 0.14600689709186554, 0.051989663392305374, 0.033964671194553375, 0.030191695317626, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' 4', ' 5', ' One', ' 2', ' The', ' 3', '', '', '']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 202, 509, 3533, 330, 637, 10941, 333, 1012, 10941, 202, 509, 993, 288, 10941, 289, 269, 7240, 601, 342, 843, 15, 649, 269, 2056, 993]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+The answer is 3 apples = 6 apples
+The number of apples in the bag will be 5, so the total number of apples will be 5 + 6 = 15. So, if we multiply 5 by itself 7 times, we get 15. So there are 15 apples in the box.
+
+I got this problem on a math forum:
+
+1. I am trying to find out how many apples each person can buy for $10.
+2. What do you think is the best way to choose 10 items from this group?
+3. Which item should I take to buy all the fruits?
+4. What is the greatest number of items that can be taken away?
+5. I am not sure what to do with the numbers 1 through 9.
+6. The next question is what is the greatest possible number of items?
+7. My friend asks me why she takes 20 books instead of 30 books. She gives me the answer because she wants to know how many books she has. How many books did she put into her bag?
+8. In my book, I have a list of the five different ways of choosing 100 books. How many different ways are there?
+9. I'm not sure
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 783, 1509, 2575, 15255, 3919, 3189, 1278, 1803]
+first_step_topk_probs=[0.7676559090614319, 0.05420393869280815, 0.03481488674879074, 0.03056441992521286, 0.01815604418516159, 0.015939416363835335, 0.01513048354536295, 0.009468414820730686, 0.009225025773048401, 0.008756852708756924]
+first_step_topk_text=[' I', ' The', ' This', ' You', ' What', ' Thanks', ' My', ' Do', ' If', ' When']
+
+[New tokens 10] count=256 first30=[356, 3442, 733, 289, 263, 3313, 288, 4083, 339, 973, 298, 491, 699, 299, 4560, 374, 269, 4083, 17, 356, 1118, 357, 356, 1755, 847, 916, 383, 722, 356, 483]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I've been in a lot of stress for years and have had to deal with the stress. I know that I don't like it when I can't get through the day, but this is something I'm not going to do on my own. It's just a little bit different than what I would normally be doing.
+Ruth: How does your body feel? What are you feeling?
+Jane: I feel very relaxed and I'm calm. I feel my heart beat faster. I feel really good. I feel good. And I feel great. I feel great because I feel that I am having fun. I feel happy because I feel happy.
+I was able to work out at a couple of different times during the day and I felt more relaxed and I felt better. This is called "cognitive relaxation."
+The key thing about cognitive relaxation is that it helps us feel more deeply. That means we want to relax. The best way to do that is to try to relax. If you're feeling tense or anxious, it may help to take a deep breath. You might feel relaxed if you're lying down or standing up. Or you might feel relaxed when you're talking.
+If you're feeling anxious, it's probably helpful to use
+
+================================================================================
