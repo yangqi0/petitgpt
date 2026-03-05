@@ -1,0 +1,309 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[791, 418, 2827, 1628, 3609, 17, 2, 3, 1, 0]
+first_step_topk_probs=[0.717009961605072, 0.13542577624320984, 0.0453619547188282, 0.0453619547188282, 0.034961823374032974, 0.021878549829125404, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' would', ' was', ' named', ' might', ' asked', '.', '', '', '', '']
+
+[New tokens 1] count=256 first30=[3609, 29, 360, 10872, 1352, 269, 2903, 2142, 444, 3763, 202, 5, 10511, 961, 14618, 269, 5585, 17, 360, 1693, 418, 1114, 4123, 741, 202, 5, 4168, 961, 988, 269]
+[Full output 1]
+Once upon a time, a curious child asked: "Where did the sun come from?"
+"Yes," replied the boy. "It was very hot."
+"No," said the boy.
+"My dad says it's not hot," answered the boy. The boy looked at his father and saw that he had been studying the sky for some time now. He thought about what the sun would do to him if he could see it.
+"Yes, I can," said the girl. "I'm going to go look up in the sky. It will be beautiful!"
+The boy began to wonder how the sun came to be so bright. "Ah," he said, "it is only right for us to see it."
+"Oh, yes," replied the girl.
+"Ah," she continued. "But I don't know if it will ever get dark again. But we all need to think of something else."
+The boy smiled. "Ahh, it won't be dark anymore."
+"Yes! Now, let me tell you this story," said the lady. "Well, I want to try it out. We have a special sunrise on our doorstep. It will make you feel better."
+"Hmmm," said the man.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 263, 336, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.967698872089386, 0.01885857805609703, 0.01344256941229105, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' a', ' S', '', '#', '', '"', '!', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 9556, 17, 382, 2317, 330, 658, 1414, 359, 336, 293, 78, 1330, 15, 269, 4376, 1112, 339, 269, 2317, 288, 389, 557, 89, 659, 4772, 17]
+[Full output 2]
+Paris is the capital of the province of the province. The city is also known as Soukoun, the ancient name for the city of Batavian Republic.
+The earliest known mention of the city dates back to the 10th century BC. In the year 598 BC the town was in the hands of the Pannonian Kingdom. In the 7th century BC the city was destroyed by the Saracens and the Pannonians. The city was rebuilt on a hill overlooking the river Giglio. In the 11th century AD the city was again used by the Saronic people who were in turn conquered by the Sarons. During the reign of the Saronic dynasty, the city became the seat of the Pansa, a military post established in the city.
+In the Middle Ages the city was called "Pompei" (the capital) and "Berengaria" (the town). It is from this period that the city is named. The city has been in use since the 13th century. The most famous city in the region is Tirana, which is now the capital of Zakarpattu District.
+During the Ottoman rule the city was a center of the Mamluks. The city had
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 6058, 500, 806, 1264, 288, 619, 4409, 299, 3636, 289, 269, 953, 17, 535, 482, 1832, 15, 411, 491, 795, 7527, 374, 269, 1134, 8878, 614]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that tells us how much of one vector to zero in the system. In this case, we have two vectors with the same magnitude but different magnitudes. The first vector has the same magnitude as the second vector.
+
+The first is called the eigenvalue and the second is called the eigenvector.
+
+So we can say that a vector with the same length (length) is an eigenvalue. We call it an eigenvalue if its magnitude is equal to the square root of the sum of the squares of the eigenvalues of the original matrix.
+
+But for a vector with a certain length, you need to know which ones are eigenvalues. You do not have to calculate the lengths of all the vectors. That's why you cannot use the formula for the number of eigenvectors: the number of times you need to multiply the matrix by the number of vectors.
+
+I think that means that we can use the formula given above to find the eigenvalues of a vector. For example, let's say we have a vector with two vectors, A and B. If we multiply them together, we get A*B = A*A + B*B. And then we can write this as A^2 + B^2.
+
+We can also use the formula
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 5546, 483, 491, 1420, 1085, 395, 22968, 9845, 1991]
+first_step_topk_probs=[0.2813929319381714, 0.18550559878349304, 0.1506187915802002, 0.09425482898950577, 0.06895830482244492, 0.043153006583452225, 0.03333473578095436, 0.028448203578591347, 0.0219259075820446, 0.020813152194023132]
+first_step_topk_text=[' use', ' describe', ' can', ' have', ' allow', ' model', ' are', ' mimic', ' rely', ' provide']
+
+[New tokens 4] count=256 first30=[22968, 269, 14457, 2673, 415, 3392, 299, 1798, 17, 202, 509, 1085, 330, 1728, 351, 269, 2877, 357, 14457, 8119, 483, 342, 8511, 289, 263, 1194, 357, 12217, 3596, 553]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the neural network's ability to learn.
+The model is based on the idea that neural networks can be trained in a way that maximizes their training performance. This means that they can learn from experience and then train again when it comes time to learn something new. The model also allows for optimizations, which are possible because the model is able to improve upon the existing training programs.
+This article describes how to use the model to predict the next generation of an agent.
+How the Model Works
+In this article we will look at how to model the neural network. In this article we'll go over some basic concepts about the neural network and how to apply them to our example.
+- Training: How the model works
+- Learning: How the network learns
+- Predicting: How the prediction process works
+- Optimization: How the algorithm performs
+- Design: How the algorithms perform
+- Data: How the training process works
+We will begin by understanding what the neural network does.
+It is important to understand that the neural network is not a "model" as we can see from the examples above. It is an "algorithms" that run on the network. It is a set of rules that the neural system can follow to make
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=62 first30=[263, 647, 286, 17, 595, 551, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 655, 9130, 555, 3546, 333, 9130, 17, 15289, 11, 5659, 1094, 4518, 86]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+
+if __name__ == '__main__':
+    import argparse
+
+    parser = argparse.ArgumentParser(description='Adds a random number generator to the graph')
+    parser.add_argument('graph', help='The graph to generate')
+    parser._parse_args()
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 494, 11, 81, 12, 711, 202, 6, 11101, 299, 1083, 269, 28045, 288, 263, 993, 289, 287, 4067, 17, 202, 856, 28045, 66, 967, 66, 3250, 11, 4203, 464]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return int(n)
+
+
+# Function to print the factorial of a number in an array.
+def factorial_to_string(number):
+    if not isinstance(number, str):
+        raise TypeError('Expected string, got %s' % type(number))
+
+    # If we have a number and we want to print it, return it.
+    if len(number) == 0 or not any(i < len(number)):
+        return None
+
+    # We can use the same argument as in the function above, but this time we are going to write out the number itself.
+    if not any(number[i] != '0'):
+        return False
+
+    # The function will print out the number's first two digits and then it prints out the last three digits.
+    if number[-1] == '0':
+        return True
+
+    # We should try to print out the last digit.
+    if count(number) > 1:
+        return False
+    
+    # This is a bad idea since we don't need to do it all the time.
+    return True
+
+
+if __name__ == '__main__':
+    # The function is called once per day, but can be run in any order.
+    # If you want to make sure your program
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=45 first30=[622, 354, 17, 19, 647, 353, 20, 552, 311, 12, 864, 353, 20, 552, 353, 20, 16, 81, 687, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1 - n) * (1 - (1-n))
+
+
+if __name__ == '__main__':
+    import sys
+
+    print(fib(sys.argv[1]))
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 2590, 1541, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.4604852795600891, 0.33689820766448975, 0.13898470997810364, 0.06363184005022049, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' No', ' There', '', '', '!', '"', '', '']
+
+[New tokens 8] count=256 first30=[13676, 17, 1541, 330, 263, 3313, 288, 2833, 299, 2173, 357, 2645, 10676, 395, 453, 359, 4012, 359, 581, 885, 299, 342, 17, 1783, 15, 490, 486, 491, 833, 3048]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Yes. There is a lot of evidence to suggest that black cats are not as bad as they used to be. However, if you have any questions about the subject, please ask your veterinarian or a veterinarian.
+How do I tell if my cat is black?
+The following information on how to tell if a cat is black is available from the American Animal Hospital Association (AAHA).
+A black cat is one that has been in the same room for a long time. The black cat's color varies depending on the type of cat. Some cats may be dark brown with a white back and tail, while others may be light brown with a black belly. A black cat may be black with a black back and tail.
+When the black cat is in the same rooms, it is very likely that the cat will be black. It is also possible that the cat is a black cat. If a black cat is black, it is usually black with a white belly. In this case, the cat may be gray, but it may be dark gray. This is because black cats tend to be darker than other cats. The black coloration of a black cat may also vary based on the type and amount of hair on the head.
+What causes black cats to be
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 843, 2050, 798, 338, 409, 382, 637, 0, 1]
+first_step_topk_probs=[0.4040766954421997, 0.19489048421382904, 0.0990232601761818, 0.09399783611297607, 0.07244696468114853, 0.047868262976408005, 0.04775996133685112, 0.03993658348917961, 0.0, 0.0]
+first_step_topk_text=[' 1', ' 5', ' One', ' 4', ' A', ' 2', ' The', ' 3', '', '']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 202, 24771, 29, 843, 202, 202, 2774, 15, 1427, 415, 1721, 411, 1418, 299, 1098, 598, 806, 914, 1108, 2722, 411, 483, 4833, 354, 13032, 444]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4
+Answer: 5
+
+Now, let's say we want to find out how many different ways we can choose 1 apple from the box without having to count all the apples. To do this, we need to consider three things:
+
+1. The number of ways we can pick 1 apple from our box.
+2. The number that we will choose from our list.
+3. The number on which we cannot select any one apple from our list or vice versa.
+
+Let's break down these into smaller steps using the information given in the problem statement:
+
+Step 1: Choose 1 apple from your list.
+Step 2: Pick 1 apple from a list.
+
+We already know that there are two possible choices for the first apple: either it is already picked or it is not. But since we don't have to count every single apple, we must choose some of them. So, if we pick 1 apple, then there are 2 possibilities for picking it, and so forth. This means that choosing 1 apple from each of those 2 options gives us back our initial choice.
+
+Step 3: Now, imagine that you have chosen 1 apple from this list. You now have only one option left for picking 1
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 1509, 783, 2575, 1278, 1803, 2, 3, 1, 0]
+first_step_topk_probs=[0.8991432189941406, 0.024778027087450027, 0.02232685685157776, 0.02011817879974842, 0.01812799461185932, 0.015505692921578884, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' I', ' You', ' This', ' What', ' If', ' When', '', '', '', '']
+
+[New tokens 10] count=256 first30=[356, 4575, 3934, 339, 263, 1951, 1194, 299, 1005, 1284, 3694, 2505, 611, 25931, 15, 2665, 289, 269, 4271, 288, 269, 3664, 17, 202, 45, 1976, 10961, 29, 356, 483]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I'm looking for a better way to help my son feel more relaxed, especially in the middle of the night.
+Jennifer: I can't say that. It's not about being stressed out, it's about having an intense energy level. I'm feeling down and tired, so I don't have any energy.
+I think you're dealing with stress because your child is really stressed out, and she's also very stressed out.
+Jenny: What do you do?
+Jenny (or she) says, "I get angry when I see that there's something wrong with me."
+Jenny says, "It's not like I am feeling stressed out. It's like I'm not feeling good enough at all."
+Joe: When we talk about what's happening around us, we need to ask ourselves, "Is this going to be bad?"
+Jenny asks, "Why are you so upset?"
+Joe says, "Well, if you go to bed early or late tomorrow, then you might wake up feeling anxious."
+Jen says, "That's okay. If you sleep well, you will be less stressed."
+Jeep says, "You can't stay awake until you go to sleep.
+
+================================================================================

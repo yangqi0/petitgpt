@@ -1,0 +1,298 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[791, 418, 1628, 288, 3609, 2827, 15, 699, 0, 1]
+first_step_topk_probs=[0.5810956954956055, 0.20504909753799438, 0.058747548609972, 0.0429806262254715, 0.04079931974411011, 0.029849421232938766, 0.02374688722193241, 0.01773131638765335, 0.0, 0.0]
+first_step_topk_text=[' would', ' was', ' might', ' of', ' asked', ' named', ',', ' had', '', '']
+
+[New tokens 1] count=109 first30=[3609, 896, 3577, 299, 1432, 896, 1842, 17, 1530, 988, 357, 1024, 3766, 299, 631, 299, 269, 3843, 298, 1143, 374, 896, 3326, 17, 3230, 3577, 6005, 298, 581, 2857]
+[Full output 1]
+Once upon a time, a curious child asked her mother to take her home. She said that she wanted to go to the park and play with her friends. Her mother agreed and they went to the park together.
+When the day was over, she went back to the park. She had found a new friend who would be her friend. They stayed at the park for several days until the sun set. When it started to get dark, they decided to go back to the lake and have some fun. At the end of the day, they all left the park alone.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 263, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.9751195311546326, 0.024880453944206238, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' a', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 17, 382, 2868, 418, 5953, 1255, 368, 293, 4704, 93, 370, 2655, 1324, 328, 6474, 15788, 15, 298, 289, 269, 2234, 401, 2162, 383, 2037, 263, 1829, 2174]
+[Full output 2]
+Paris is the capital of the province. The town was originally called Mouchez de la Concepción, and in the 14th century it became a major port.
+The first European settlers arrived in the 16th century. In 1797, the town was officially named Moucheza de la Conceda.
+In 1802, the city was renamed Mouchezi, and in 1844, the municipality was created from the villages of Moucheze and Mouchezen. In 1943, the municipal elections were held there.
+Mouchezi is located on the north bank of the Sánchez River. It has an area of 1,100 square kilometers (1,800 sq mi). It is a popular tourist destination for its views over the mountains to the east and south.
+México's population is about 3 million people. The city is one of the most important cities in the region, with many different ethnic groups living here. The city has a population density of 4 persons per square kilometer (2/km2).
+The city is also known as "the best place to live" because of its proximity to the Mediterranean Sea. It is the third-largest city in the country after Madrid and Lima.
+N
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 11547, 374, 2685, 299, 1467, 4409, 17, 382, 28071, 288, 263, 3592, 3823, 338, 330, 9798, 419, 18062, 11, 36, 504, 913, 18062, 11, 36, 12]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that varies with respect to another vector. The eigenvalue of a square matrix A is denoted by λ(A), where λ(A) denotes the eigenvalue of A. If the eigenvalue is not zero, then the corresponding matrix is called singular.
+
+An important property of an eigenvalue is its absolute value (or magnitude). This can be derived from the definition of eigenvalues as:
+
+$\displaystyle \| \lambda_1 \| = \frac{1}{2} \sum_{i=1}^n |\lambda_i - \lambda_j|$
+
+where $\| \cdot \|$ denotes the Euclidean norm and $|| \cdot ||$ represents the standard Euclidean distance between two vectors.
+
+The first step in finding the absolute value of an eigenvalue involves computing the determinant of the matrix A. Since the determinant of a matrix A is nonzero, it does not change the sign of the eigenvector; hence, the determinant is zero. However, if the matrix A has a nonzero determinant, this implies that the eigenvalue must be zero because there exists no other eigenvalue besides the original one. Thus, the determinant of A is zero.
+
+Now let us consider the problem posed about finding the eigenvalues of a square matrices A
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 491, 817, 395, 5546, 1991, 1420, 1085, 9845, 9847]
+first_step_topk_probs=[0.18344515562057495, 0.18344515562057495, 0.13421133160591125, 0.07654055953025818, 0.07567885518074036, 0.06819237768650055, 0.061446432024240494, 0.03464830294251442, 0.02406276762485504, 0.01854589954018593]
+first_step_topk_text=[' can', ' have', ' use', ' are', ' describe', ' provide', ' allow', ' model', ' rely', ' combine']
+
+[New tokens 4] count=256 first30=[22968, 269, 14457, 2673, 415, 3392, 299, 3235, 298, 6856, 2281, 2061, 17, 535, 482, 2851, 15, 411, 2336, 351, 269, 3751, 2877, 288, 14457, 8119, 29, 581, 395, 1431]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the neural network's ability to predict and manage complex problems. In this paper, we focus on the central idea of neural networks: they are often used in artificial intelligence research, but also in applied research such as engineering and social sciences. We present a novel framework for modeling neural networks using a simple neural network model. Our main results show that the neural network can be used to simulate complex problems by changing the parameters of the network. Moreover, our results show that it is possible to predict complex problems by using a simple model.
+The article is devoted to the following topics:
+- How to model complex systems from a biological perspective
+- How neural networks can be used in real life
+- How the neural network may be used to predict complex systems
+- How a neural network can improve the accuracy of predictions
+- What a neural network model does to predict complex processes
+- How an artificial neural network model can be used with real world data
+- How new techniques can be developed for the application of neural networks
+- How we can use neural networks to predict complex phenomena
+- How accurate neural networks can help us to predict complex physical phenomena
+- What is a neural network?
+- How it works
+- What are the different types of neural networks?
+-
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=44 first30=[263, 647, 286, 17, 595, 551, 711, 202, 6, 11101, 299, 835, 269, 1392, 1112, 298, 854, 269, 15561, 5937, 202, 856, 835, 66, 22124, 1714, 346, 622, 360, 6137]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+
+# Function to get the function name and set the keyword arguments
+def get_keyword():
+    return "function"
+
+
+def get(funcName):
+    return funcName
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=71 first30=[622, 353, 20, 18, 81, 12, 864, 353, 20, 552, 311, 12, 711, 202, 6, 538, 28045, 66, 1192, 1714, 202, 6, 265, 1083, 801, 11822, 903, 202, 6, 265]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return (1/n) * (1 - n)
+
+
+# def factorial_test():
+#     print("TEST")
+#     for i in range(1000000000):
+#         print("INIT", i)
+#         if i < 1000000000:
+#             print("INIUN", i)
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=256 first30=[622, 354, 17, 19, 647, 353, 20, 17, 19, 552, 311, 12, 864, 353, 21, 864, 311, 12, 711, 202, 6, 783, 330, 269, 775, 1309, 288, 2859, 299, 3245]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1.0 - n) * (2 * n)
+
+
+# This is the first line of code to implement the recursion method
+# we need to use the same functions as for the previous one, but instead of
+# having to calculate the Fibonacci number for each iteration we will use
+# the recursion_method.py script to do this.
+function fib(n::Int)
+    if n == 0
+        return fib(n-1)
+    elseif n == 1
+        return fib(-1)
+    end
+
+    # We can use recursion_methods here, but it's not so easy to do with the other methods
+    return fib(fib(n))
+end
+
+# The first line of the function
+function fib_first!(x::AbstractVector{T}) where {T}
+    return fib_first(x)
+end
+function fibs(x::T) where {T<:Integer}
+    return x[1]
+end
+# Function that computes the Fibonacci number recursively: (a)
+#  (b)  (c)  (d)  (e)  (f)  (g)  (h)  (
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 2590, 1541, 356, 698, 1278, 783, 1289, 0]
+first_step_topk_probs=[0.3503205180168152, 0.2996450364589691, 0.15224872529506683, 0.09043954312801361, 0.024596359580755234, 0.024596359580755234, 0.022163160145282745, 0.017995083704590797, 0.017995083704590797, 0.0]
+first_step_topk_text=[' The', ' Yes', ' No', ' There', ' I', ' It', ' If', ' This', ' We', '']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 12052, 17, 202, 509, 3533, 299, 482, 2395, 418, 2428, 419, 2766, 17, 4385, 421, 17, 12042, 349, 590, 334, 15, 287, 6879, 289, 269, 1462, 288]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+The answer to this question was provided by Dr. William D. McCulloch, an expert in the field of veterinary medicine who has studied cats for over twenty years. He is a professor at the University of Michigan Medical School. His research focuses on the relationship between cat and human health.
+In a nutshell, it's not just cats that have been shown to be good pets. Cats are also great companions. They're a lot more than their cousins, they're also a source of stress and anxiety.
+"They have a strong sense of self-worth," McCulloy said. "It's very important to understand what your cat is going through."
+For example, if you have a cat, you've probably seen it play with food or water, but then you've got a cat. You've probably seen cats playing with toys, eating a meal, or even taking a bath. In fact, many people believe that cats are beneficial because they help keep their body healthy.
+Another thing that could go wrong with cats is the way they use their mouths to suck blood. It's like throwing a ball in the air, but then it goes into the mouth and nose and causes pain.
+There's another factor
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 843, 798, 409, 2050, 637, 1012, 2, 1, 0]
+first_step_topk_probs=[0.2945338785648346, 0.265397310256958, 0.1941688358783722, 0.07366472482681274, 0.06851557642221451, 0.05613643676042557, 0.04758312180638313, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 1', ' 5', ' 4', ' 2', ' One', ' 3', ' 6', '', '', '']
+
+[New tokens 9] count=218 first30=[354, 13032, 333, 798, 10941, 202, 509, 993, 288, 10941, 486, 483, 5964, 330, 269, 993, 288, 10941, 289, 263, 16892, 17, 382, 993, 288, 10941, 330, 269, 993, 357]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+The number of apples you can buy is the number of apples in a jar. The number of apples is the number that is bought, so it will be the number of fruits in the jar. So the number of fruit in the jar is the number which is sold.
+Now let's talk about adding and subtracting numbers. We write these as: 5 + 6 = 13. And we add up all those numbers to get the total number of apples we sell for each item.
+So our total number of apple sales is 15 apples.
+We call this the sum of all the apples we sell.
+Now we just need to figure out how many apples we sell at once.
+For example, if we say that we sell 3 apples for 3 pounds, then we're going to do 9 pounds.
+And we would also like to know what percentage of apples we sold.
+In this case, we want to find out how many pounds there are on average.
+Let's use the same method to calculate the number of pounds we sell.
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 783, 382, 3919, 1278, 15255, 1509, 2575, 1803, 338]
+first_step_topk_probs=[0.7110377550125122, 0.047712165862321854, 0.041887104511260986, 0.024242395535111427, 0.023619238287210464, 0.021844223141670227, 0.020735619589686394, 0.020735619589686394, 0.01968327909708023, 0.017280202358961105]
+first_step_topk_text=[' I', ' This', ' The', ' My', ' If', ' Thanks', ' You', ' What', ' When', ' A']
+
+[New tokens 10] count=256 first30=[356, 873, 6968, 20103, 1244, 17, 202, 45, 4302, 29, 1348, 483, 356, 835, 1284, 2053, 3202, 298, 2415, 2484, 1133, 299, 2821, 34, 202, 8074, 29, 382, 1811, 330]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I am feeling depressed now.
+Joe: How can I get my blood pressure and heart rate back to normal?
+John: The problem is that I have a lot of heart disease, high blood pressure, and other health problems.
+I am very concerned about this because I think it's not really important or it will just be a matter of time before I know if it's going to improve my life. But I think the only way to do this is to stop smoking and keep exercising. And then I think, what can I do for myself?
+Joe Keller: The first thing I would like to see is to stop using tobacco products.
+Keller: What kind of harm does it do to me?
+John Keller: It's actually quite debilitating.
+I think you could also say that it can cause heart failure, which is something that's been known to cause death in people who smoke.
+Jeannette: What about the treatment?
+John Winkler: There are many ways to treat heart failure. Some people are able to control their cholesterol levels by eating foods that contain high-fructose corn syrup. Others can take drugs such as statins.
+I don't know how much I need to
+
+================================================================================
