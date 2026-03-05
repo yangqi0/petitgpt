@@ -1,0 +1,294 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[418, 791, 289, 330, 699, 3609, 601, 1628, 728, 15]
+first_step_topk_probs=[0.26842835545539856, 0.14367935061454773, 0.0810176432132721, 0.06929806619882584, 0.056265637278556824, 0.05341010540723801, 0.05341010540723801, 0.0411648228764534, 0.030116824433207512, 0.029045138508081436]
+first_step_topk_text=[' was', ' would', ' in', ' is', ' had', ' asked', ' will', ' might', ' may', ',']
+
+[New tokens 1] count=143 first30=[578, 699, 287, 5369, 299, 342, 2621, 289, 17, 382, 839, 3467, 357, 483, 342, 988, 288, 269, 929, 330, 357, 406, 330, 649, 1204, 298, 649, 1204, 357, 383]
+[Full output 1]
+Once upon a time, a curious child has had an opportunity to be taken in. The only thing that can be said of the child is that he is so small and so small that it is not very noticeable.
+- How are you?
+The child is an extremely small child who is able to speak and understand a lot of different things. He does not have much interest in what is going on around him. His feelings are very different from that of his peers. There is no reason why this child should not be allowed to be placed in a group. If there was such a situation, it would be a great way for him to be treated as if he were being treated like everyone else.
+What are your thoughts about this child?
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=155 first30=[269, 9556, 15, 298, 269, 851, 1384, 2317, 289, 269, 9556, 17, 698, 418, 6214, 419, 609, 17, 18976, 269, 4153, 289, 269, 1408, 2162, 5986, 17, 382, 14568, 912]
+[Full output 2]
+Paris is the capital of the province, and the most important city in the province. It was founded by St. Gregory the Great in the second century AD. The bishopric of St. Peter is also named after him.
+The first church in the province was built by St. Ignatius in 432 AD. It was called St. Ignatinus. It was later changed to St. Michael in 846 AD.
+St. Michael is one of the oldest churches in the province and was built by Saint Francis in 1253 AD. He is a member of the Roman Catholic Church. His feast day is May 24th.
+Sts. Peter and Paul are the only two remaining bishops of the province. They were consecrated by St. Benedict in 1204 AD.
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 483, 342, 3020, 359, 269, 1701, 288, 795, 7527, 17, 1220, 1373, 15, 490, 411, 491, 263, 4409, 892, 333, 353, 91, 20, 15, 13621, 91, 81]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be written as the sum of two vectors. For example, if we have a vector x = (x1,...,xn) and a scalar λ = 1, then the corresponding eigenvector is (λ, x).
+
+The matrix A has a magnitude of 0. That means that if you take the dot product between two vectors, you get (A, λ), which gives you the unit vector. The matrix A has its eigenvalues 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 491, 395, 9845, 1420, 3069, 5546, 1085, 1798]
+first_step_topk_probs=[0.3753427565097809, 0.17184443771839142, 0.15484483540058136, 0.11614421010017395, 0.03997509554028511, 0.03602055087685585, 0.02924640104174614, 0.019280411303043365, 0.014860008843243122, 0.011453055776655674]
+first_step_topk_text=[' use', ' can', ' have', ' are', ' rely', ' allow', ' attempt', ' describe', ' model', ' learn']
+
+[New tokens 4] count=256 first30=[395, 885, 299, 3235, 269, 8020, 288, 1108, 6621, 288, 9654, 920, 8776, 17, 1109, 395, 1431, 885, 289, 269, 2815, 288, 1623, 16, 7128, 2061, 15, 857, 359, 5063]
+[Full output 4]
+Neural networks are a class of machine learning models that are used to predict the outcome of different kinds of interactions between agents. They are often used in the context of real-world problems, such as financial markets or medical imaging.
+
+## Data availability
+
+The data collected by the NVIDIA CUDA platform are available from the following sources:
+
+• The Open Source Project (http://www.opensource.org)
+• RISC-Net (https://github.com/rischen), which includes the Open Source Compiler (http://open-source.org).
+• Github.com/Rischen (https://gitlab.com/gist/cgg/)
+• GitHub (https://raw.githubusercontent.com/GitHub/LCDKM/master/data/data_structure/LCDKS).
+
+## References
+
+1. ^ "Using Data from the NVIDI FPGA". Retrieved 2012-11-23.
+2. ^ "Data and Simulation for Data Retrieval", (2007), CUDA Software Development Group.
+3. ^ "Automation and Data Processing in CUDA" (PDF). Retrieved 2013-04-15.
+4. ^
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 1348, 620, 486, 5951, 482, 3581, 34, 202, 202, 694, 6, 354, 29408, 202, 13570, 2508, 15, 9281, 202, 202, 7, 91, 65, 21]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# How do you solve this equation?
+
+##### 1 Answer
+Feb 11, 2018
+
+$x^2 - 3 = 0$
+
+#### Explanation:
+
+The first step is to write $3y=1$ and $y=\frac{1}{3}$. Then we can rewrite the second equation as $3y=-\frac{1}{\sqrt{9}}$. This means that the solution of $3y-3=0$ is $-3$, which means that the solutions are $\pm \sqrt{9}$ or $-3$.
+
+So we have $x=\pm \sqrt{\frac{9}{3}}$ or $-3$ so $x=-\frac{-3}{3}$, which means that we have $y=\pm \frac{3}{3}$.
+
+This means that the value of $y$ for the solution of the equation $3y+3=0$, where $y$ is a positive integer, is equal to $-\frac{3}{\sqrt{8}}$. So we have $2y=1$.
+
+Now we can write $3x+3=4$ and $3y=\frac{-3}{\sqrt{(8)}
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=173 first30=[622, 494, 11, 81, 12, 711, 202, 509, 775, 1993, 330, 299, 5998, 269, 1392, 17, 382, 1408, 1993, 330, 299, 835, 269, 28045, 288, 269, 993, 311, 17, 783]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return int(n)
+
+
+The first step is to define the function. The second step is to get the factorial of the number n. This is useful when you want to find the exact value of n, but we don't want to do it for the first time. We can do this by using the function:
+
+import math
+
+if __name__ == '__main__':
+    print('Starting')
+
+    # Make sure the input is in Python and python3
+    if len(sys.argv) > 1:
+        print('Usage: python factorial.py [input file] [output file]')
+
+        input_file = sys.argv[1]
+        output_file = open(input_file,'w')
+        input_file.write(str(int(input_text))+'\n')
+        input_.close()
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.5260182023048401, 0.4739817678928375, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=95 first30=[622, 354, 17, 19, 647, 353, 20, 17, 19, 552, 311, 12, 864, 353, 20, 17, 1341, 353, 21, 17, 19, 647, 311, 687, 711, 202, 2474, 486, 1418, 299]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1.0 - n) * (1. / (2.0 + n))
+
+
+If you want to see how many times the Fibonacci sequence is repeated, use the function fib() instead of the Python function fib().
+
+fib(100) = fib(100) + 1.0
+fib() = fib(1000) + 1
+print("Fibs", fib(1000), "m")
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 1541, 31412, 2590, 2660, 1289, 698, 535, 338]
+first_step_topk_probs=[0.4093676805496216, 0.24317486584186554, 0.11133356392383575, 0.06277856975793839, 0.05369735509157181, 0.04359884932637215, 0.02102818712592125, 0.019961006939411163, 0.01798636093735695, 0.017073554918169975]
+first_step_topk_text=[' The', ' Yes', ' There', ' Cats', ' No', ' Some', ' We', ' It', ' In', ' A']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 12052, 17, 202, 2573, 395, 914, 2584, 288, 10676, 353, 1558, 1100, 263, 1685, 12, 289, 269, 1165, 17, 2660, 10676, 491, 4304, 11067, 351, 553, 26227]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+There are many types of cats (not just a few) in the world. Some cats have dark spots on their backs or sides and others do not. Some cats may be white but most cats are black.
+Most cats are either black or brown with a darker spot on the back. A large number of cats are black, but some are even more so.
+Many cats are red, while some are blue. Some cats are yellow, but some cats are brown. Some cats who are blue are black, though they might not be black at all.
+A cat's eyes are usually yellow, although some cats may have a black eye. Some cats that are brown have a black spot on their nose.
+Some cats are black as well, but some do not. Many cats that are gray have no black spots. Some cats with a black spot will not have any black spots.
+Some colorless cats are a mix of black and white. Some cats can see color in certain colors. Some cats see in other colors. Some colors can change color when they move from one color to another. Some cats like to hide their faces because they are a part of the family. Some cats will only look at other cats for a short time
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 2050, 843, 637, 354, 409, 2, 3, 1, 0]
+first_step_topk_probs=[0.3411303460597992, 0.27697622776031494, 0.12037328630685806, 0.10603683441877365, 0.08806698024272919, 0.06741635501384735, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 4', ' One', ' 5', ' 3', ' 1', ' 2', '', '', '', '']
+
+[New tokens 9] count=218 first30=[2050, 13032, 333, 798, 10941, 17, 202, 3287, 483, 658, 1098, 598, 806, 914, 10941, 411, 395, 8093, 672, 419, 10888, 269, 993, 288, 10941, 411, 491, 419, 269, 993]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple = 4 apples.
+You can also find out how many apples we are talking about by multiplying the number of apples we have by the number of times we have to buy one apple. For example, if we bought 5 apples, we would multiply the number of ways that we could get 5 apples to buy 5 apples. So 5 apples = 6 apples.
+If you're not sure what your answer is, try this:
+- "5 apples" means to buy 5 or more apples.
+- "6 apples" means 5 or less apples.
+Or you can use the same idea for the other two:
+- If you're buying 5 apples, you'll always buy 5 apples from the same person.
+- You'll always buy 10 apples from the first person who owns a house.
+Or if you're selling 5 apples, then you'll always sell 10 apples from each person.
+The number of apples you buy in the first person's house is called the number of houses sold. The number of people who own a house is called its owner.
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 1509, 783, 1278, 382, 698, 3919, 1803, 1541]
+first_step_topk_probs=[0.6960129141807556, 0.05386555567383766, 0.04607365280389786, 0.04373541846871376, 0.025979941710829735, 0.02165060304105282, 0.02165060304105282, 0.01625783182680607, 0.015839919447898865, 0.012861003167927265]
+first_step_topk_text=[' I', ' What', ' You', ' This', ' If', ' The', ' It', ' My', ' When', ' There']
+
+[New tokens 10] count=256 first30=[2575, 330, 269, 851, 1384, 3467, 486, 483, 620, 299, 1005, 34, 202, 17324, 327, 29, 698, 415, 263, 1413, 2877, 17, 382, 4083, 1310, 986, 342, 1410, 669, 6258]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is the most important thing you can do to help?
+Steve: It's a good idea. The stress level should be within your limits and you need to work on it.
+I'm not sure if this is an easy one, but I'm hoping that we'll find a way to deal with it.
+Rick: How long have you been in this situation?
+Steven: I've had some problems with my family for many years now.
+Ric: That's right. We're dealing with a lot of stress.
+Steve (I think)
+Ric (it's not a problem): You're not in a position to handle it.
+That's a good question. But I'm going to try to get the answers to the questions, because we don't know what the answer is.
+Rico: If you have any suggestions, please let me know.
+Steven (I'm sorry, I didn't understand the question.)
+Ric : Thank you very much.
+Stevie: Yes, it's a good time to review all of your questions.
+Richo: I am concerned about it.
+Stevy: It's not a big deal.
+Ritcho: It
+
+================================================================================
