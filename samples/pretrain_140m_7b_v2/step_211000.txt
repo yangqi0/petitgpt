@@ -1,0 +1,305 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[601, 791, 330, 418, 728, 1628, 578, 3022, 483, 15]
+first_step_topk_probs=[0.32973426580429077, 0.15096335113048553, 0.12257256358861923, 0.06227874010801315, 0.05056639015674591, 0.04800010472536087, 0.03897303715348244, 0.02706623636186123, 0.02706623636186123, 0.01879711076617241]
+first_step_topk_text=[' will', ' would', ' is', ' was', ' may', ' might', ' has', ' comes', ' can', ',']
+
+[New tokens 1] count=88 first30=[578, 733, 998, 289, 269, 1471, 288, 263, 1844, 17, 382, 929, 330, 1000, 2621, 299, 263, 1802, 5988, 913, 406, 330, 4433, 351, 263, 1929, 4091, 298, 1496, 11778]
+[Full output 1]
+Once upon a time, a curious child has been found in the care of a family. The child is then taken to a local hospital where he is placed on a special diet and given antibiotics for the rest of his life.
+The doctor says that this is an unusual case but it does not mean that the child will be a good candidate for surgery. He also says that it will probably take some time before the child's doctors will know what treatment is right for him.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=172 first30=[269, 11718, 17, 698, 418, 6214, 289, 1691, 5984, 298, 2037, 263, 2317, 289, 925, 4216, 17, 202, 202, 509, 2073, 6620, 330, 409, 18, 14066, 21, 353, 20, 15]
+[Full output 2]
+Paris is the capital of the municipality. It was founded in 1784 and became a city in 1805.
+
+The population density is 2/km2 (1,016/sq mi). There are 143 housing units at an average density of 90 per km2. The racial makeup of the city is 97% White, 3% African American, 0% Native American, 1% Asian, 0% Pacific Islander, 0% from other races, and 0% from two or more races. 0% of the population are Hispanic or Latino of any race.
+
+In 2009 the census reported that 37% of the city's population were Hispanic. Of this group, 15% were of European descent, 9% were of American Indian ancestry, 7% were black, 4% were Hispanic, 5% were Asian, and 2% were of other races.
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 483, 342, 3020, 359, 269, 1701, 288, 795, 10689, 17, 535, 613, 2351, 15, 490, 411, 491, 795, 7527, 15, 1721, 400, 20, 298, 400, 21, 15]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be written as the sum of two squares. In other words, if we have two vectors, say v1 and v2, then their corresponding eigenvectors are given by:
+
+v1 = (a\_1 + a\_2) * (x - x\_1)^2
+v2 = (a\_{2} - a\_{1})^2
+
+Now let's examine some examples using these eigenvalues to understand what they mean. Suppose we have two arbitrary vectors A and B, where A and B are also linearly independent. We want to find out whether A is linearly dependent or not. To do so, we need to calculate the eigenvalues of both A and B simultaneously. This process involves finding the eigenvalues of each vector separately, then multiplying them together to get the desired result.
+
+For example, suppose we have two nonzero vectors V1 and V2, with their respective magnitudes equal 1. Then their corresponding eigenvectors would be represented as:
+
+V1 = (1, 0), (0, 1);
+V2 = (0, 2), (1, 3);
+
+We could write down the equation for the eigenvectors as follows:
+
+(1, 0) = (0,-1);
+(0
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 491, 395, 817, 5546, 1420, 3069, 330, 586, 1085]
+first_step_topk_probs=[0.3180704116821289, 0.1702508181333542, 0.15065445005893707, 0.13121743500232697, 0.08211377263069153, 0.03052429109811783, 0.02750466763973236, 0.022332046180963516, 0.019101612269878387, 0.017211981117725372]
+first_step_topk_text=[' can', ' have', ' are', ' use', ' describe', ' allow', ' attempt', ' is', ' were', ' model']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 298, 3235, 269, 2018, 4349, 17, 202, 509, 775, 2738, 288, 269, 1085, 418, 2657, 419, 2703, 435, 269, 1442, 288, 3409, 15]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data and predict the response variable.
+The first version of the model was developed by researchers at the University of California, Berkeley and published in 2006. The main difference between the two is that the neural network is trained on a set of training examples (the examples are then fed into a second network). In this way, the network learns how to train the model using the training data. The neural network uses a probability distribution to predict the responses of the network based on the probability distributions.
+The next version of the neural network was developed by scientists at the University at Buffalo. It is based on the same concept as the previous version of the learning model but instead uses a different probability distribution for the training data and the prediction function. This new version of the network is called the "Cox-Hooper" model.
+This model is named after the German mathematician Carl Wilhelm Cohort who studied it and published it in his book Theorems of Information Science. The Cohort has been working on the Cohort since its inception in 1976. Cohort 1 is the most widely used model in the world today. It is also one of the most widely adopted models in neuroscience.
+In order to create the Coh
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 1348, 299, 1062, 263, 377, 19192, 288, 2851, 34, 202, 202, 44, 873, 4532, 299, 1062, 263, 4873, 288, 2851, 1191, 795, 5386, 288]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# How to make a Piece of paper?
+
+I am trying to make a piece of paper using two pieces of paper. I have a piece of cardboard with one side and a piece of tape on it. The other side is a piece of black construction paper. The paper has a piece of Piece A that is cut in half. The other piece of paper has a Piece B that is cut into two pieces of Piece C. The paper is cut in such a way that the other piece of Pieces A is cut in two pieces of cardboard. The other Piece of Piece B is cut in the same way as the other piece. What is the smallest possible number of cuts?
+
+• The reason you are asking for the smallest possible value of $P$ is because the Piece A must be cut in half when it is cut. – Tito Jun 21 '14 at 9:34
+• @Tito Yes, you can use the word "piece" to mean the whole piece of paper. You need to know what the size of the piece of paper is so that you can determine the correct answer. – user4376 Jun 22 '14 at 14:39
+• @user4
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=64 first30=[622, 311, 13, 81, 711, 202, 1052, 16216, 29, 346, 538, 28045, 11, 492, 15, 311, 464, 331, 821, 331, 932, 1077, 311, 29, 494, 331, 932, 11806, 29, 494]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n*n
+
+
+class Solution:
+    def factorial(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+        if not n:
+            return 0
+
+        res = 0
+        for i in range(1, n+1):
+            res += 1
+        
+        return res
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.6150878667831421, 0.3849121630191803, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=160 first30=[622, 354, 17, 19, 647, 311, 864, 353, 20, 552, 643, 17, 24, 12, 711, 202, 1465, 330, 263, 1114, 2829, 298, 5128, 1194, 299, 1098, 269, 31393, 993, 288]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + n * (1 - 0.5)
+
+
+This is a very simple and efficient way to find the Fibonacci number of the given integer. You can do it in any order, with no extra steps or loops.
+
+• Can you please explain what the problem is? – daveyj Nov 3 '14 at 15:27
+• @daveyj Yes, I think you are right. The problem is that the function fib(10) returns the Fibonacci number for 10^2+9=99. But if you take 10 as the base, then you get the Fibonacci number, but not the sum of the two numbers, so this is not a valid solution. – user706293 Nov 4 '14 at 16:08
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 2590, 1541, 31412, 356, 1906, 783, 1289, 535]
+first_step_topk_probs=[0.36802852153778076, 0.23030637204647064, 0.10544194281101227, 0.10009076446294785, 0.08561217039823532, 0.025839656591415405, 0.025839656591415405, 0.020980164408683777, 0.019915422424674034, 0.01794528402388096]
+first_step_topk_text=[' The', ' Yes', ' No', ' There', ' Cats', ' I', ' All', ' This', ' We', ' In']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 12052, 17, 202, 2573, 395, 914, 1108, 2584, 288, 10676, 289, 269, 1165, 17, 2660, 288, 780, 395, 649, 4401, 357, 581, 395, 2798, 299, 342, 263]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+There are many different types of cats in the world. Some of them are so rare that they are considered to be a separate species. For example, some cats are called lynxes or lynxes; others are called kittens or kittens. There are also many other types of cats which are not listed here as being a separate species but rather a subspecies. Some of these cats are called raccoons or wolves. Many of these cats belong to the same family and subfamily. They are often referred to as "cats" because they have similar characteristics such as coloration, size, and behavior. In fact, there are several different breeds of cats that are actually considered distinct from each other. Some of the more common varieties include the American and white cats, the Golden cat, the American cat, the Chinese cat, the Russian cat, the Eastern cat, the Asian cat, the European cat, the African cat, the Indian cat, the Persian cat, the Sindic cat, the Arabian cat, the Spanish cat, the Mexican cat, the German cat, the Italian cat, the Norwegian cat, the Polish cat, the Japanese cat, the Mongolian cat, the Korean cat, the Australian cat, the New Zealand cat
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 354, 843, 409, 637, 1012, 2, 3, 1, 0]
+first_step_topk_probs=[0.4017981290817261, 0.23867811262607574, 0.11511709541082382, 0.10186677426099777, 0.07762789726257324, 0.06491202116012573, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 4', ' 1', ' 5', ' 2', ' 3', ' 6', '', '', '', '']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 202, 22, 934, 667, 333, 1218, 10941, 202, 20, 934, 667, 333, 798, 10941, 3, 711, 807, 5210, 655, 3071, 202, 807, 1411, 3322, 655]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+3 buys = 8 apples
+1 buys = 4 apples
+
+from django import forms
+from .models import (
+    Comment,
+    Category,
+    UserProfile,
+    UserCreationForm,
+    UserChangeForm,
+    ContactForm,
+    EmailMessageForm,
+    CustomerStatusForm,
+    RegistrationForm,
+    ResetPasswordForm,
+    PasswordResetForm,
+    InlineEmailForm,
+    SocialLoginForm,
+    ProfileUploadForm,
+    get_user_profile(),
+    get_profile_data()
+)
+import json
+import random
+from django.contrib.auth.forms import UserCreationForm
+from django import template
+from django_filters.base import FilterableFilterBase
+from django2.utils.translation import ugettext as _
+
+register = template.Library()
+
+class User(TemplateView):
+    template_name = 'users/user_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_ data(**kwargs)
+
+        user = self.request.user
+        if not user or not user.is_active:
+            return context
+
+        form = UserCreationForm(user=user)
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 783, 3919, 1509, 1278, 1289, 2575, 1541, 698]
+first_step_topk_probs=[0.7185863256454468, 0.04077928885817528, 0.023601241409778595, 0.02018721215426922, 0.02018721215426922, 0.01966829225420952, 0.01966829225420952, 0.01867011934518814, 0.01726703718304634, 0.015558899380266666]
+first_step_topk_text=[' I', ' The', ' This', ' My', ' You', ' If', ' We', ' What', ' There', ' It']
+
+[New tokens 10] count=256 first30=[356, 3442, 733, 289, 263, 2690, 339, 973, 298, 491, 733, 4532, 299, 835, 1133, 707, 269, 3184, 298, 835, 1133, 707, 383, 17, 1490, 715, 4453, 356, 483, 620]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I've been in a relationship for years and have been trying to get back into the company and get back into it. Is there anything I can do?
+Dr. Mirak: The thing that I've always felt was, "I know what I'm going to do." But I don't really think I'll ever get back into this business again.
+Assistance: It's very important to make sure you are getting back into the business. If you're not doing well, you may be using your money, and you may need to use your time or energy.
+Jessica: I'm not too happy with the way things are going.
+Assistants: How much do you know about the company?
+Joel: I'm just curious about how you feel about it.
+Assisted: I'm quite happy about what I did. I'm also very excited about the fact that I'm still working on my own business.
+Mirak: I'm really happy about the fact it's working.
+Assisting: I'm very happy about the idea of helping people.
+Joel is an assistant manager at the Bank of America. She is also a part-time employee. She has worked as a financial consultant since 2002
+
+================================================================================

@@ -1,0 +1,331 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[791, 601, 418, 330, 3609, 15, 2827, 1628, 348, 2446]
+first_step_topk_probs=[0.23789328336715698, 0.214359849691391, 0.09814108908176422, 0.06469857692718506, 0.04733448848128319, 0.04160257801413536, 0.03463065251708031, 0.026690885424613953, 0.02057148888707161, 0.01952746883034706]
+first_step_topk_text=[' would', ' will', ' was', ' is', ' asked', ',', ' named', ' might', ' st', ' came']
+
+[New tokens 1] count=256 first30=[3609, 896, 3577, 490, 1024, 982, 1005, 1169, 17, 382, 3804, 14618, 15, 360, 4168, 4, 356, 1755, 847, 1118, 806, 299, 1005, 486, 741, 202, 509, 1902, 1266, 269]
+[Full output 1]
+Once upon a time, a curious child asked her mother if she could help him. The father replied, "No! I don't know how to help you."
+The next day the father found the child's mother's toothbrush and told her that she had been given a treat by the mother for a long time. The father then gave the child a bathing suit and asked her if she wanted to help him with the bathing suit. She replied, "I can't do it. I'm going to try to do it myself."
+When the child was done he said, "It's great! You've got to go on." He looked at his mother and said, "You're so special!"
+Then the father said, "What are you doing? How do you want me to help you?"
+"Ah, I'm not going to help you," the child said. "It's just like that. I'll do something else. But first you have to do it yourself."
+After this, the father said to the child, "Oh, my good friend, you're so much better than I am. I'm very happy that you helped me. Now I can do it again."
+The child was still angry. "Why did you say that?" the father
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 4455, 336, 321, 7362, 343, 263, 377, 0, 1]
+first_step_topk_probs=[0.9122515320777893, 0.01957404986023903, 0.01763768307864666, 0.012572302483022213, 0.011037381365895271, 0.00944077130407095, 0.009198092855513096, 0.00828817393630743, 0.0, 0.0]
+first_step_topk_text=[' the', ' France', ' S', ' T', ' Spain', ' C', ' a', ' P', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 7630, 288, 588, 9042, 17, 698, 418, 6214, 289, 1012, 7134, 419, 437, 1729, 69, 2717, 15, 668, 418, 269, 775, 14568, 288, 588, 9042, 15]
+[Full output 2]
+Paris is the capital of the province of the department of Thrace. It was founded in 682 by Eusebius, who was the first bishop of Thrace, and was succeeded by his son, Theodosius I.
+The city is also famous for its fine churches, which are still in use as museums. The cathedral of Thracia is a Romanesque building with a basilica and an impressive bell tower. The monastery of St. Demetrius was founded in the 7th century.
+A market town of the province is situated at the foot of the mountain, on the right bank of the river Thracia. The town is situated on the left bank of the River Thracia, opposite the city of Thasinum.
+In the Roman period, Thrace was the capital of Thrace (596 BC). It was conquered by the Romans (465–618) and became the capital of their kingdom. In the 4th century AD, it was part of the province, which included Thrace and Thracia from the north-west.
+Thrace was the administrative centre of Thrace until the 7th cent. when it was incorporated into the Kingdom of Italy. Its territory was divided between the four main provinces:
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 357, 483, 342, 3020, 359, 269, 1701, 288, 795, 7527, 17, 535, 482, 1832, 15, 269, 4409, 601, 342, 263, 13742, 15, 298, 269, 993, 288, 28069, 601]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector that can be written as the sum of two vectors. In this case, the vector will be a scalar, and the number of eigenvectors will be a vector.
+
+## Examples
+
+### The determinant of a matrix
+
+A matrix A is called determinant if its transpose equals zero. That means A has only one column. If we have a square matrix A = (a b c) where a and b are real numbers, then we know that the determinant of A is equal to the product of the eigenvalues of A.
+
+Let's see how it works:
+
+1. Take the matrix A = [x^2 y^3] x^4 + 1.
+2. Take the square matrix A, which has just one row.
+3. Now, take the matrix B, which has a row.
+4. Take the diagonal matrix C, which has three rows.
+5. Add the diagonal matrix D to get the determinant.
+6. Multiply the determinant by the matrix M to get the matrix S.
+7. Find the matrix of all possible solutions to the equation Ax=b.
+8. If the matrix is not invertible, then there exists an invertible matrix.
+9. Find the inverse
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 817, 5546, 491, 395, 1420, 3069, 1991, 1085, 1062]
+first_step_topk_probs=[0.227601557970047, 0.20508623123168945, 0.1500443071126938, 0.09891526401042938, 0.09241863340139389, 0.042988408356904984, 0.0387357734143734, 0.036769937723875046, 0.029854826629161835, 0.013668536208570004]
+first_step_topk_text=[' can', ' use', ' describe', ' have', ' are', ' allow', ' attempt', ' provide', ' model', ' make']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 15, 857, 359, 269, 1549, 2613, 17, 202, 16, 1153, 1384, 645, 288, 269, 1549, 11092, 330, 269, 11092, 15, 536, 330, 269]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data, such as the human brain.
+- An important part of the human genome is the genome, which is the genetic code. It contains information about genes and proteins. The human genome has three billion bases (the letters A, B, C) in it. Each letter corresponds to one gene, and each gene has an associated function. For example, the human genome contains four different genes: one for the heart, one for the brain, and one for the liver.
+- In addition to the DNA sequence, a protein called the transcription factor, or TGF-beta, is involved in the regulation of gene expression. This process is also known as transcriptional regulation.
+- Another major component of the human body is the immune system. These systems have been developed to combat infections and disease by suppressing the production of antibodies against foreign bodies.
+- A second important component of the Human Genome Project is the sequencing of the human chromosomes. The chromosomes contain the genetic material that carries the information needed to build all of our cells. They are arranged in a special way so that they are evenly distributed across the entire human genome.
+- The human genome is estimated to contain more than 4 billion base pairs. This means that approximately 20%
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 5427, 6649, 29, 8163, 16, 27, 5427, 202, 1568, 202, 18688, 351, 11654, 14651, 224, 409, 2508, 29, 6457, 29, 5613, 10343, 202, 202]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Sep  2 11:43:56 2021
+
+@author: <NAME>
+"""
+import numpy as np
+from scipy.sparse import csr_matrix
+from sklearn.preprocessing import StandardScaler
+from sklearn import metrics
+from sklearn._base import BaseEstimator
+from sklearn_scikit_learn.core import SklearnClassifier
+from sklearn__sklearn__sklearn_utils import sklearn_to_skew
+from sklearn.__main__ import __version__
+from sklearn1d import *
+from sklearn2d.linear_model import LinearRegression
+from sklearn3d.tree import DecisionTreeClassifier
+from .models import *
+
+class LogisticRegression(BaseEstimator):
+
+    def fit(self, X, y=None, **kwargs):
+        """
+        Estimate and predict the logistic regression model using data from a training set
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            Training input data
+        y : array-style containing the labels for each training sample
+        """
+        self.X = X
+        self.y =
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=188 first30=[622, 494, 11, 81, 12, 711, 202, 6, 11101, 299, 5224, 269, 28045, 288, 263, 993, 15, 202, 6, 359, 263, 1361, 288, 311, 17, 202, 856, 28045, 66, 6538]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return int(n)
+
+
+# Function to calculate the factorial of a number,
+# as a power of n.
+def factorial_power(n):
+    if n == 0:
+        return 1
+
+    return factorial(int(n))
+
+
+# To calculate the factorial, you must first solve for n and then use the formula to find out how many times
+# it is divided by n.
+factorial = [1] * (n - 1)
+
+# To check if the factorial is divisible by 2 or 3, you can use the formula
+# to check if the number is divisible by 4 or 5.
+if factorial[0] % 2 != 0:
+    print("The factorial of a positive integer is not divisible by 2.")
+    print("It is {}.".format(factorial[-2]))
+else:
+    print('There are no divisors of {}'.format(factored))
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 339, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.4827965199947357, 0.4350357949733734, 0.08216769993305206, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', ' for', '', '#', '', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 354, 17, 19, 647, 353, 20, 17, 19, 552, 311, 12, 864, 353, 21, 17, 19, 1341, 353, 22, 17, 19, 864, 311, 687, 711, 202, 5288, 415, 287]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1.0 - n) * (2.0 / (3.0 * n))
+
+
+Here's an example to show how to do this:
+
+import math
+import random
+from collections import defaultdict
+
+# In[4]:
+
+
+fib = [random.randint(0, 2), random.randint(1, 5)]
+print(fib([5, 6]))
+
+
+# In [5]:
+
+
+def fib_iter():
+    return list()
+
+
+# # 4.2.1.2.3.2.4.1.5.3.1.7.8.1.6.4.3.3.9.9.10.15.17.12.20.19.23.18.14.16.4.4.5.4.6.5.5.11.9.5.6.7.6.6.8.7.7.9.8.9.7.3.8.3.5.9.4.9.1.8.5.7.1.9.2.7.4.2.5.2.6.3.4
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 2590, 382, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.6824786067008972, 0.15876072645187378, 0.15876072645187378, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' No', ' The', '', '#', '', '"', '!', '', '']
+
+[New tokens 8] count=256 first30=[13676, 17, 1541, 330, 808, 2395, 357, 2645, 10676, 395, 269, 851, 1488, 2419, 288, 10676, 289, 269, 1560, 1705, 17, 1109, 395, 658, 1414, 359, 360, 10733, 10676, 741]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Yes. There is no question that black cats are the most common color of cats in the United States. They are also known as "black cats." Black cats are generally not considered to be any more dangerous than other cats because they have a tendency to develop dark skin and facial hair. The black cat's coat is darker in color than its body. This is because the body is lighter on the face and neck, but the tail is longer and the head is shorter.
+How do you determine if your cat is black or white? First, it should be determined by your veterinarian. If your cat has been diagnosed with a condition called retinal atrophy (retinal atrophy), it may be necessary to test for retinal atresia. The retinal atrioventricular canal is the opening between the right ventricle and the left ventricle. The condition is usually present during pregnancy. However, a person who has had a history of retinal atremias may be more likely to have retinal ataxia. A retinal atrial atrophy is a condition in which the muscle of the upper chamber of the heart is abnormal. It is sometimes called "papillae" disease.
+There are several different types of retinal diseases. Some
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 798, 843, 409, 382, 2050, 637, 1541, 744, 1012]
+first_step_topk_probs=[0.3012242615222931, 0.1452837884426117, 0.11796111613512039, 0.09577695280313492, 0.08630219846963882, 0.07776480913162231, 0.05819695442914963, 0.03208126127719879, 0.030453138053417206, 0.028907617554068565]
+first_step_topk_text=[' 1', ' 4', ' 5', ' 2', ' The', ' One', ' 3', ' There', ' $', ' 6']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 17, 202, 3016, 914, 24847, 395, 715, 289, 263, 9849, 34, 202, 24771, 354, 29, 354, 11554, 333, 843, 24847, 17, 202, 2664, 330, 269]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples.
+How many oranges are there in a basket?
+Answer 1: 1 orange = 5 oranges.
+What is the average number of oranges in a basket (the total number of oranges)?
+Answer: 6 oranges = 12 oranges.
+How much do you think each apple will cost if it costs $1,000 to buy one orange?
+Answer 0: You should buy an orange with a price that is less than the total amount of money that the fruit costs.
+How can you find out how much you should pay for each apple?
+Answer - If you want to know how much you would need to purchase a box of apples, you could look at the table of prices.
+This problem asks you to find the total amount that you would need on a given day to buy the box of apples.
+Answer: 10 apples = 100 apples.
+You must be able to find the value of this problem by adding up all the values of the variables that you know.
+The answer is a little different. If you know the value of the variable, you can use it to find the sum of the values of other variables.
+There are two types of problems in solving this problem. The first type involves finding the value of
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 15255, 27614, 1289, 783, 22089, 1278, 1509, 1541]
+first_step_topk_probs=[0.6771698594093323, 0.037398725748062134, 0.028824321925640106, 0.02530524507164955, 0.021644720807671547, 0.021088331937789917, 0.017122384160757065, 0.01625341735780239, 0.01503195334225893, 0.013196739368140697]
+first_step_topk_text=[' I', ' The', ' Thanks', ' Hi', ' We', ' This', ' Thank', ' If', ' You', ' There']
+
+[New tokens 10] count=256 first30=[356, 4575, 3934, 339, 263, 1194, 299, 835, 269, 2920, 3109, 17, 202, 45, 403, 3922, 29, 2575, 415, 669, 3563, 34, 202, 27815, 297, 29, 698, 415, 263, 1543]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I'm looking for a way to get the activity started.
+Jessica: What's your goal?
+Joel: It's a great idea, but it's not as simple as just writing a program that works with a computer. The first thing you need is a keyboard and a mouse. You can't use the keyboard directly, but you could use the mouse to hold down keys and press the key. That way, you can move around and create different sounds without having to do anything else.
+The other thing is that the keyboard needs to be turned off, so if you have a keyboard, you can use it for all of the activities. If you don't have a keyboard and keyboard, then you have to turn it off. That's fine, but you're going to need some other input device, like a screen reader or a keyboard editor.
+I think the best way to start is to use a keyboard, which is a set of programs that help you find words in the dictionary. It's also important to use a mouse because you want to work on a system that can handle all of the things that are part of a word, such as numbers, letters, punctuation, and more.
+You can use a keyboard with any of these
+
+================================================================================

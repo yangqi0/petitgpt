@@ -1,0 +1,313 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[791, 418, 2827, 1628, 15, 3609, 699, 601, 289, 2446]
+first_step_topk_probs=[0.37246960401535034, 0.2100275158882141, 0.0912776067852974, 0.04637787118554115, 0.03765585646033287, 0.03220875933766365, 0.03220875933766365, 0.027549615129828453, 0.027549615129828453, 0.023564429953694344]
+first_step_topk_text=[' would', ' was', ' named', ' might', ',', ' asked', ' had', ' will', ' in', ' came']
+
+[New tokens 1] count=203 first30=[1255, 5273, 718, 418, 269, 775, 299, 5109, 357, 896, 3804, 699, 7210, 896, 1928, 17, 5273, 718, 4725, 299, 1499, 298, 835, 896, 299, 1432, 896, 299, 263, 4035]
+[Full output 1]
+Once upon a time, a curious child called Jackie was the first to notice that her father had broken her leg. Jackie decided to try and get her to take her to a doctor for a test. When she came back with the doctor's approval, Jackie started wearing her shoes and went to the doctor's office. She quickly learned that her father was ill and wanted to have an operation. The doctor told Jackie that if she took the doctor's hand, it would be better to stay in the hospital and not go home.
+The doctor did not know what to do when Jackie left the hospital. He asked her to go to the doctor to see if she could get the doctor's foot into her leg. When he found out, he put her on the bed so that she could sleep. He then gave her a bandage to keep her from falling off. In the morning, Jackie was taken to the doctor. She took her foot and toe with her to the hospital room where she stayed until the doctor arrived.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 4455, 7362, 7093, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.7058483958244324, 0.25247734785079956, 0.02299986593425274, 0.018674425780773163, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' France', ' Spain', ' Italy', '', '', '!', '"', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 17, 698, 418, 269, 7913, 288, 269, 4328, 7762, 1761, 383, 7213, 299, 269, 14473, 289, 5986, 637, 3740, 298, 418, 1000, 263, 1829, 3329, 339, 4371, 920]
+[Full output 2]
+Paris is the capital of the province. It was the centre of the Roman Empire until it fell to the Romans in AD 375 and was then a major center for trade between Rome and the Mediterranean.
+The city was the seat of the first Roman emperor, Bacchus (354-380). In 385 Bacchus built a new temple on the site of the old one. He was buried there with his wife, Pater, and sons, and a statue of him was erected in front of the temple. The temple was rebuilt after the death of the emperor, and was later restored by the architect, Sextus Julius Caesar. In the middle of the third century Bacchus was appointed governor of the city. He also had the honor of being a patron of the arts. In the early fourth century he was a prisoner at the court of Emperor Hadrian. He died in the year 302.
+It was during this period that the city became an important centre for the production of wine. This is why it was called "the wine city" or "the wine district". At the end of the fifth century Bacchios came to the city of Rome. He was succeeded by his son, the future emperor Diocletian. Diocletians believed
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 483, 342, 7499, 299, 619, 388, 611, 7527, 17, 1220, 1373, 15, 269, 18956, 288, 269, 1759, 3823, 395, 545, 3097, 1623, 1890, 29, 202, 202, 2302]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be assigned to one or more vectors. For example, the eigenvalues of the following matrix are all positive real numbers:
+
+$$|A| = \begin{bmatrix} 1 & 0 \\ 0 & -1 \end{bmatrix}$$
+
+The number of eigenvectors of this matrix is equal to the number of eigenvalues. The number of eigenvectors for a given vector is equal to its magnitude (or size).
+
+For example, if we have a vector $x$ with length $2$, then the eigenvalues of $Ax$ are 2 and 3. If we have a matrix $B$ with entries from the same range as $x$, then the corresponding eigenvectors will be 2 and 3, respectively.
+
+## How to calculate the eigenvectors?
+
+To calculate the eigenvectors of a matrix, you need to know the number of linearly independent eigenvectors and their respective sizes. Let's look at an example. Suppose we have a set of n x n matrices, each of which has a basis of size $m$. We can compute the eigenvectors of these matrices by first performing a multiplication on each row of the matrix, and then multiplying each column by the corresponding entry in the matrix. Then, we will get the following matrix:
+
+$$\begin{
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 5546, 491, 395, 3069, 1420, 9845, 1085, 2700]
+first_step_topk_probs=[0.40664491057395935, 0.1767270416021347, 0.10498037189245224, 0.08979447185993195, 0.05202791467308998, 0.03516401723027229, 0.03168541193008423, 0.024420924484729767, 0.020888324826955795, 0.01609926111996174]
+first_step_topk_text=[' use', ' can', ' describe', ' have', ' are', ' attempt', ' allow', ' rely', ' model', ' employ']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 298, 3235, 269, 8020, 17, 382, 3355, 2877, 330, 357, 14457, 8119, 483, 1798, 444, 553, 1815, 17, 202, 509, 1271, 1811, 374]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data and predict the outcome. The basic idea is that neural networks can learn from their environment.
+The main problem with this approach is that it doesn't really work for real-world problems, but it works well in many cases. For example, when you have a neural network, it might not be able to predict the outcome of an experiment at hand. It might be able to use information about the environment to make predictions. However, if you want to know what happens in a real-life situation, the brain will try to guess the outcome based on the environment. This makes it difficult to do experiments without knowing exactly how the environment affects the response of the neurons.
+To understand the problem, we need to look at the network of neurons. Neurons are very important in the development of many types of cells. They are involved in all sorts of functions like growth, differentiation, communication, and even movement. If you want to learn more about the brain, you may find it useful to study the structure of the human brain. You may also discover that neurons are part of the brain's system that plays a role in everything else. In addition, some neurons are involved in other parts of the nervous system. These neurons are called neurons
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 1348, 299, 1062, 263, 377, 2586, 1438, 374, 263, 5949, 993, 288, 4487, 34, 202, 202, 44, 491, 263, 1173, 2827, 360, 51, 2586]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# How to make a PDE object with a fixed number of variables?
+
+I have a class named "PDE" which has a set of variables and a set of functions. The class defines a new variable called "pde", which is used to represent the PDE in the given problem.
+
+The code for the PDE problem is as follows:
+
+```python
+import numpy as np
+from scipy import optimize
+
+x = np.array([0., 0., 1., 0.])
+y = np.zeros((10, 10))
+for i in range(1, 10):
+ for j in range(i+1, 10, -1):
+ y[j] += x*np.cos(2*np.pi*(i-j) / (2*np._sqrt(j)))
+
+return y
+
+I am not sure how to do this in C++ but I know that you can use the following code from the C++ tutorial:
+
+import cmath
+
+A = np.random.rand(10, 10)
+B = np.ones((10, 2))
+C = np.eye(3)
+D = np.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 494, 11, 81, 12, 711, 202, 509, 28045, 1392, 3448, 795, 5937, 15, 619, 339, 1010, 993, 289, 269, 1968, 4067, 17, 382, 775, 5147, 330, 269, 993, 299]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return int(n)
+
+
+The factorial function takes two arguments, one for each number in the input array. The first argument is the number to be multiplied by, and the second argument is the value of the factorial.
+
+In the above example, the first argument is 1, the second is 1, and the third is 1. We can see that this is an odd number, so we can write it as 2*1 = 7. This is the result of the factorial function.
+
+# Example 1:
+
+# Input:
+#  [1,2,3]
+#  Output: 5
+# 
+# Explanation:
+# 1 + 3 = 5
+# 2 + 4 = 6
+# 3 + 5 = 9
+# 4 + 10 = 15
+# 5 + 15 = 16
+# 6 + 16 = 24
+# 8 + 16 = 32
+#
+#
+## Example 2:
+
+• What happens if you want to multiply 5 with the factorial of 10?
+
+### Example 3:
+
+A) Multiply 5 by 10 (which is 1/10).
+B) Multiply 10 by 20 (which is 0/20).
+C) Multiply 20 by 25
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.5518956780433655, 0.4481043219566345, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 354, 17, 19, 647, 311, 864, 353, 20, 552, 1216, 17, 3791, 4097, 2240, 17, 1302, 11, 21, 12, 1341, 409, 687, 711, 202, 5288, 15, 411, 601, 817]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + n * (1 - np.exp(-np.log(2) / 2))
+
+
+Here, we will use the built-in function fib to compute the Fibonacci number recursively. The function takes two arguments:
+
+fib(n) = fib(n)
+
+
+The function returns an array of integers where each integer is a non-negative integer. This means that there are no more than n elements in the array. You can see how this works by using the `is_prime` function:
+
+print("Fibonacci number recursively")
+print(fib(3))
+
+
+In the example above, we have three elements: 3, 5 and 7. The first element is the largest positive integer, which is a prime number. The second element is the smallest positive integer, and so on.
+
+### How to calculate Fibonacci numbers recursically?
+
+To calculate the Fibonacci number for any given input value, you need to know its base and exponent. For example, if you want to find the number of integers between 0 and 9 inclusive, you would simply divide the number by 9.
+
+For example, let's say you want to calculate the Fibonacci numbers for 4, 6,
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 1541, 31412, 2590, 1906, 783, 2660, 535, 0]
+first_step_topk_probs=[0.5168339014053345, 0.140560582280159, 0.12665559351444244, 0.07925904542207718, 0.04242430999875069, 0.03444584831595421, 0.02654845453798771, 0.017501814290881157, 0.015770459547638893, 0.0]
+first_step_topk_text=[' The', ' Yes', ' There', ' Cats', ' No', ' All', ' This', ' Some', ' In', '']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 12052, 17, 202, 2573, 395, 914, 2584, 288, 2645, 10676, 289, 269, 1165, 17, 2660, 288, 780, 395, 649, 4401, 357, 581, 395, 9569, 2595, 419, 4383]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+There are many types of black cats in the world. Some of them are so rare that they are rarely seen by humans. They live in small groups called colonies or "jaws." Black cats live in a variety of habitats including urban areas, forests, deserts, mountains, and even bordering towns. There are also black cats living in cities such as New York City, Los Angeles, Chicago, and Philadelphia. Many people think that black cats are not dangerous because they are not attracted to humans. However, there are some people who believe that black cats may be dangerous because they can be found in certain parts of their home country. For example, it is common for black cats to come from the South American countries where black cats are most prevalent. This is because black cats have been known to be attracted to people and other animals.
+The question that arises is what does this mean? If black cats are dangerous, why do some people think that they are dangerous? It seems that black cats tend to be very shy and are easily hurt when they are around people. However, if black cats are really dangerous, then they will become more aggressive toward people.
+Another interesting fact about black cats is that black cats can grow up to be over 10
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 843, 409, 354, 637, 1012, 1218, 2, 1, 0]
+first_step_topk_probs=[0.36079010367393494, 0.18331634998321533, 0.11164110898971558, 0.10889458656311035, 0.09314239025115967, 0.08392834663391113, 0.05828707665205002, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 4', ' 5', ' 2', ' 1', ' 3', ' 6', ' 8', '', '', '']
+
+[New tokens 9] count=256 first30=[843, 17, 27, 3, 711, 509, 1165, 415, 3796, 16628, 15, 2807, 15404, 2213, 15, 330, 263, 1809, 3529, 702, 269, 1986, 288, 263, 14605, 4960, 15, 614, 383, 601]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 5.8
+
+The world's largest asteroid, 2012 DA14, is a little smaller than the size of a basketball court, but it will be a bit bigger in 2013. The asteroid will be much larger than the Moon, but its orbit will be much closer to Earth than the moon. It will be traveling at an average speed of 1,000 kilometers per hour (1,440 miles per hour). If you took a close-up look at the asteroid, you would see that it was traveling at an angle of about 10 degrees. That means that it will hit the ground at an angle, not just right.
+This is the first time that an object like this has been seen from space before.
+The asteroid will be coming very close to Earth as it passes by on Feb. 12, 2012. This is the closest approach ever made for an object such as this.
+It will be passing near the Sun on March 9, 2012.
+NASA said Friday that the asteroid could cause some problems with spacecraft navigation, but there are several things that can be done to make sure they don't happen again.
+"We're going to have to have some sort of guidance system in place," NASA Administrator Charles Bolden said in a statement.
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 783, 382, 1289, 1509, 1278, 3919, 698, 15255, 338]
+first_step_topk_probs=[0.7603922486305237, 0.055045221000909805, 0.032698243856430054, 0.031038811430335045, 0.027249358594417572, 0.019936054944992065, 0.017502110451459885, 0.012475665658712387, 0.012154973112046719, 0.011241513304412365]
+first_step_topk_text=[' I', ' This', ' The', ' We', ' You', ' If', ' My', ' It', ' Thanks', ' A']
+
+[New tokens 10] count=256 first30=[356, 4575, 3934, 4252, 299, 263, 8926, 1266, 289, 269, 2519, 17, 202, 17324, 327, 29, 6512, 15, 298, 356, 1118, 383, 415, 2397, 299, 342, 263, 1809, 3851, 288]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I'm looking forward to a nice day in the future.
+Steve: Oh, and I know it's going to be a little bit of a surprise for you, but we're still talking about the same thing at the moment.
+David: OK, so you have a feeling that you're really enjoying your vacation.
+I've been working on this for two years now, and I've got a lot of questions coming up. What is the best way to keep your heart healthy? And what does this mean for your health? Are there any ways to reduce stress or anxiety?
+David: Yes, you can.
+David, thanks very much.
+Steven: You should get checked out by a doctor right away.
+Stevie: Okay. So you can go home with some good habits, like keeping your blood pressure under control. It will help to keep your blood pressure from dropping too low. That means you need to take steps to prevent high blood pressure.
+And if you're feeling depressed, don't worry, you won't be able to do anything else. But if you're having trouble sleeping, you might want to see a sleep specialist. They'll probably tell you when you need to go to the hospital.
+The
+
+================================================================================

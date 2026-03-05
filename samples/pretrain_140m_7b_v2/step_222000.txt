@@ -1,0 +1,316 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[418, 791, 3609, 2827, 288, 2446, 15, 289, 330, 601]
+first_step_topk_probs=[0.29444679617881775, 0.12796609103679657, 0.12147171050310135, 0.06171940267086029, 0.058587148785591125, 0.05279140546917915, 0.04778493195772171, 0.0451548807322979, 0.031359441578388214, 0.022943055257201195]
+first_step_topk_text=[' was', ' would', ' asked', ' named', ' of', ' came', ',', ' in', ' is', ' will']
+
+[New tokens 1] count=256 first30=[3609, 627, 922, 269, 2475, 360, 262, 5, 6331, 17, 356, 699, 808, 2877, 17, 202, 44, 3109, 299, 1645, 672, 383, 298, 4725, 357, 269, 2475, 360, 967, 5]
+[Full output 1]
+Once upon a time, a curious child asked me what the word "in" meant. I had no idea.
+I started to think about it and decided that the word "to" was the same as the word "do." And so I changed the word to "do," and it became "in" in my mind.
+And so, I decided to find out how many words there were in the English language!
+There are three main types of words:
+- Words with an asterisk (*) at the end (
+*): This is called a "letter." It can be any letter or word you like, but it's not necessarily the same as a "word."
+- Words without an asteriks (*): These words have an asterike ending, which means they are in the form of a "letters."
+- Some words with an a- in the middle of them: "katty," "titty," "duck," "cow," and "bird."
+The words with an an asteric ending are:
+- The words with an "o" in the middle: "cat," "bear," "bull," "dog," "cat," and "lizard."
+- The "a" in the
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 7093, 336, 4455, 263, 343, 2, 3, 1, 0]
+first_step_topk_probs=[0.9109945297241211, 0.03558000922203064, 0.017160622403025627, 0.017160622403025627, 0.009676504880189896, 0.00942776259034872, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' Italy', ' S', ' France', ' a', ' C', '', '', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 17, 698, 578, 263, 2073, 288, 409, 15, 26, 2118, 353, 14144, 12703, 573, 202, 202, 6880, 202, 509, 2868, 418, 6214, 289, 1769, 3560, 419, 263, 1440]
+[Full output 2]
+Paris is the capital of the province. It has a population of 2,732 (2020 Census).
+
+History
+The town was founded in 1670 by a group of merchants who had settled there. The town was named after the city's patron saint, Saint Peter, and was the first church built in the area. In 1712, it was renamed Saint Peter's Church. It was destroyed by fire in 1821, but was rebuilt in its present form.
+
+In 1685, the parish church was added to the parish church.
+
+Demographics
+As of the 2011 census, there were 5,827 people living in the municipality. Of these, 662 (49.4%) lived in the urban area and 352 (46.3%) in the rural area. There were 881 (52.0%) individuals, 463 (14.1%) individuals, and 146 (5.9%) individuals. The population density was . There were 7,054 housing units at an average density of . The racial makeup of the municipality was 97.79% White, 0.53% African American, 0.15% Native American, 0% Asian, 0.00% Pacific Islander, 0.29% from other races, and 1.60
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 20745, 14274, 269, 3892, 288, 263, 3823, 17, 1220, 1373, 15, 490, 411, 491, 795, 7527, 289, 263, 409, 39, 1926, 15, 553, 28069, 395, 545]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that uniquely determines the direction of a matrix. For example, if we have two vectors in a 2D space, their eigenvectors are all linearly independent. If you have two vectors that have the same length and no common components, then you can write them as a 2-dimensional vector:
+
+${\bf{v}} = \begin{bmatrix}
+a & b \\
+c & d
+\end{bmatrix}$
+
+For example, consider this situation:
+
+1. A 3x3 matrix has one column with a zero-based sum (i.e., a row).
+2. The column is unique because it's diagonal and its sum is 0.
+3. The column has a zero-like vector, meaning it's a zero-length vector.
+4. In this case, the column has a nonzero 1-vector, which means it's a 1-vector.
+5. Finally, the column contains an eigenvector corresponding to the eigenvalue 1.
+
+Now let's apply these concepts to your problem! We know that there exists a 4-by-4 matrix, so we need to find the determinant of this matrix. To do this, follow these steps:
+
+Step 1: Find the determinant
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 395, 491, 5546, 1991, 1085, 1420, 586, 3069]
+first_step_topk_probs=[0.33104121685028076, 0.2687842547893524, 0.12445957213640213, 0.08112514019012451, 0.05076681450009346, 0.037141792476177216, 0.025794439017772675, 0.017913881689310074, 0.013806767761707306, 0.013106076046824455]
+first_step_topk_text=[' use', ' can', ' are', ' have', ' describe', ' provide', ' model', ' allow', ' were', ' attempt']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2175, 6621, 288, 870, 17, 382, 1271, 3563, 288, 482, 2851, 330, 299, 9598, 269, 2877, 288, 263, 719, 1375, 288, 14457, 2673, 1255, 263]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model various kinds of data. The main goal of this paper is to introduce the idea of a new type of neural network called a neural network.
+The basic idea behind neural networks is to understand how different parts of the brain work together, and how these parts interact with each other. This can help us understand how different people work in different ways, and how they use their brains to achieve certain goals.
+A neural network is a computer program that has been designed to learn patterns from the input data. It can also predict what the output will look like. In this way, it can learn about a particular part of the brain and then apply it to other parts of the world.
+In the past, neural networks have been used for many purposes: to predict where people are going, to find out how much money they make, to identify if they are working or not, etc. Now, there are many applications for which neural networks are useful. For example, it helps to know whether a person is happy or sad when he or she is depressed. But as we have seen, neural networks are also used in some situations where we may need to do more than just give up an activity, such as driving a car.
+One of the most important
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 5427, 6649, 29, 8163, 16, 27, 5427, 202, 1568, 202, 18688, 351, 321, 462, 6284, 224, 1012, 2234, 29, 6457, 29, 2984, 9697, 202]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Dec  6 14:43:23 2019
+
+@author: <NAME>
+"""
+import numpy as np
+from scipy.ndimage import gaussian_filter
+from matplotlib import pyplot as plt
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from matplotlib._text import Text
+from sklearn.datasets import load_digits
+from sklearn import svm
+from sklearn_preprocessing import LabelEncoder
+from sklearn_.utils import check_random_state
+from sklearn1d import make_grid
+from sklearn2d import scatter_matrix
+from sklearn3d import KFold
+from sklearn4d import SVM
+from sklearn5d import GaussianNB
+from sklearn6d import StratifiedKFold
+
+class MyData():
+    def __init__(self, data, labels, model=None, xlabel='X', ylabel='Y'):
+        self.data = data
+        self.labels = labels
+        self.model = model
+        self.xlabel = xlabel
+        self.ylabel = ylabel
+
+    def predict(self, X):
+        if self.model is
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=182 first30=[622, 311, 864, 353, 20, 1341, 353, 21, 2216, 353, 81, 552, 354, 3943, 711, 202, 1465, 330, 263, 1114, 2829, 1373, 17, 3490, 415, 1721, 411, 1418, 299, 5224]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n * (1 / (2 ** (n - 1)))
+
+
+This is a very simple example. Let's say we want to calculate the factorial of a number n, and we want to do this for n = 2^7. We can use the following command:
+
+function factorial(n)
+if n == 0
+return n
+else:
+return factorial(n-1)
+end
+
+## Examples
+
+The following example shows how to use the factorial function in Python. The function is called by the function name as follows:
+
+__func__ = factorial(2^6)
+
+Here we see how to use this function to find the factorial of 2^3:
+
+• To get the factorial of 3, use the function name: factorial()
+• To find the factorial with n=3, use the argument n: factorial()
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.5774953961372375, 0.42250463366508484, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 354, 17, 19, 647, 311, 864, 353, 20, 552, 1216, 17, 4238, 11, 81, 687, 711, 202, 1465, 1392, 330, 263, 1809, 611, 7144, 702, 269, 619, 2080, 15]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + n * (1 - np.sin(n))
+
+
+This function is a little more complicated than the one above, but it's easier to understand how it works and how it can be used in a simple way.
+
+The first thing we need to do is create a function that takes an integer n as input and returns a value of n. We can use this function to do something like
+
+fib(n) = fib(n)
+
+Now we'll start with the last element of our list. We'll use this to build up the list for each element of the list. We will then call the next element on each element of our lists, and so on.
+
+fiber_list = [fib(i) for i in range(n)]
+
+Next, we'll take the first element of our sorted list and add it to the end of the list, where fiber_list[i] is the list we're going to look at. Next, we'll add the elements of the list to the end, and so forth. We'll call the last element from the previous element to the last element in the list, and so we'll add all the elements of our list to
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 1541, 2590, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.6158109903335571, 0.24115504324436188, 0.08077681809663773, 0.062257129698991776, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' There', ' No', '', '', '!', '"', '', '']
+
+[New tokens 8] count=256 first30=[13676, 17, 31412, 395, 2645, 1091, 581, 491, 269, 1134, 993, 288, 2645, 5750, 359, 4383, 17, 783, 330, 2699, 339, 914, 5283, 17, 1220, 1373, 15, 10676, 395, 453]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Yes. Cats are black because they have the same number of black genes as humans. This is true for many reasons. For example, cats are not born with a black gene; they are born with an extra copy of a gene from their mother (or vice versa). It's also true that cats are bred to be black. So cats have more black genes than dogs.
+In fact, cats are bred in this way to produce different colors and shapes. For example:
+- Cat coloration: The cat coloration is a combination of black and white. There are two types of cat coloration: black and white, and the other kind is called "white."
+- Cat coloring: The cat coloring is white. There is no black or white color on the cat's body.
+- Cat coat color: The cat coat color is black. The cat coat is a mixture of black and whites.
+- Feline coloration: In cats, there are black and white colored pigments.
+The reason why cats are black is because cats have more blue blood cells than dogs. That means that a cat is more likely to be a blue blood cell than a red blood cell. Because the blood cells of a cat are usually yellow, they will not have enough
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 843, 637, 1012, 409, 1218, 2, 3, 1, 0]
+first_step_topk_probs=[0.45110341906547546, 0.2175721526145935, 0.11282370984554291, 0.1049373596906662, 0.0655195564031601, 0.04804382473230362, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 4', ' 5', ' 3', ' 6', ' 2', ' 8', '', '', '', '']
+
+[New tokens 9] count=54 first30=[843, 17, 24, 13032, 333, 744, 22, 17, 1517, 202, 2774, 15, 411, 1118, 357, 269, 2056, 993, 288, 10941, 330, 744, 22, 17, 1980, 7, 202, 3681, 1244, 411]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 5.5 apple = $3.50
+Now, we know that the total number of apples is $3.25$
+And now we know that our total amount of apples is: $4.25 + 3.25 = $2.25$
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 783, 382, 338, 1509, 3919, 27614, 15255, 1278, 2575]
+first_step_topk_probs=[0.8029708862304688, 0.034981757402420044, 0.02398005686700344, 0.014908957295119762, 0.014716085977852345, 0.014337805099785328, 0.01378853153437376, 0.013346911408007145, 0.012424505315721035, 0.01028687134385109]
+first_step_topk_text=[' I', ' This', ' The', ' A', ' You', ' My', ' Hi', ' Thanks', ' If', ' What']
+
+[New tokens 10] count=217 first30=[356, 3442, 733, 289, 263, 3313, 288, 6863, 913, 1284, 3694, 330, 2397, 299, 342, 9529, 374, 263, 5425, 1267, 3083, 17, 776, 415, 733, 649, 12273, 487, 357, 406]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I've been in a lot of situations where my son is going to be diagnosed with a mental health condition. He's been so irritated that he has trouble sleeping and can't concentrate.
+I know that his parents are concerned about his mental health, but I don't think they're worried at all. It could be because he has a mental illness, or it could be something else. I think he might have some of the same problems as his family.
+It's not easy to understand why someone with a mental illness should be treated by a doctor who knows how to treat them. The best way to do this is to treat yourself first before you get into treatment. That means taking your medications, eating well, exercising regularly, getting regular exercise, and talking to your family about your symptoms.
+If you have a mental health problem, then you need to be aware of it and be prepared for it. You also need to take care of yourself when you feel like it. And if you feel depressed, you may need to seek help from a mental health professional.
+
+================================================================================

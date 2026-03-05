@@ -1,0 +1,302 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[791, 418, 601, 1628, 3609, 330, 699, 15, 2446, 728]
+first_step_topk_probs=[0.3447082042694092, 0.1943734586238861, 0.0685877725481987, 0.045215874910354614, 0.04292113333940506, 0.04074288532137871, 0.03484923765063286, 0.028682420030236244, 0.028295373544096947, 0.021808095276355743]
+first_step_topk_text=[' would', ' was', ' will', ' might', ' asked', ' is', ' had', ',', ' came', ' may']
+
+[New tokens 1] count=256 first30=[3609, 896, 3804, 299, 1432, 896, 1133, 17, 202, 5, 44, 4575, 453, 2849, 490, 356, 3114, 2757, 622, 961, 1024, 988, 17, 360, 2731, 356, 620, 916, 383, 741]
+[Full output 1]
+Once upon a time, a curious child asked her father to take her back.
+"I'm not sure if I'll ever return," she said. "But I do like it."
+She said that he was a very good boy and he would be very happy with his new life. He had a lot of friends in the family. They were always interested in him. They were the only ones who knew him. When he came home from school, he had a big heart and he loved playing games with his friends.
+He played with his friends and they were very happy. They became friends too. They played with their friends and they went on adventures. Sometimes they played with his brother and sometimes they played with him. Sometimes they play with his sister. Sometimes they go to school together. Sometimes they are just doing things together.
+A few years ago, we began to see the children in our homes. We saw them as adults. The parents had a big family. They lived in a small house where there was a kitchen. There was a little pond. There was an old car. They had a big yard. They had many dogs. One day, they were walking by the pond when they saw a huge dog. It was very big. It had a long tail. It had no teeth
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 4455, 336, 263, 7362, 321, 7093, 408, 6967, 426]
+first_step_topk_probs=[0.8170456886291504, 0.04851497337222099, 0.014266498386859894, 0.010995626449584961, 0.01071297936141491, 0.009405056945979595, 0.008044571615755558, 0.007248763460665941, 0.006880886387079954, 0.006200196221470833]
+first_step_topk_text=[' the', ' France', ' S', ' a', ' Spain', ' T', ' Italy', ' N', ' Gal', ' F']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 7535, 281, 8191, 17, 698, 330, 658, 269, 8492, 288, 269, 11718, 288, 7535, 23049, 15, 263, 7630, 288, 7535, 281, 405, 5597, 17, 202, 202, 6880]
+[Full output 2]
+Paris is the capital of the province of Catalonia. It is also the seat of the municipality of Catalan, a department of Catalunya.
+
+History
+The municipality was established in the Middle Ages as part of the city of Catalès. In 1526 it was renamed Catalonia and became part of the Kingdom of Portugal in 1792. The present name is derived from the Spanish for "Saint" or "Bishop". In 1684, the town of Catalona was founded by the Jesuits as their mission to the Christians of Catalina. The first bishop was Father Sánchez de Sáros. He was succeeded by his son, Father Luis González de Saguia.
+
+In 1774, the bishop of Català was consecrated and named the bishopric of Catalana.
+
+Geography
+
+Catalan has an area, , of . Of this area, 54% is used for agricultural purposes, while 32.8% is forested. Of the rest of the land, 4.5% is settled (buildings or roads) and the remainder (3%) is non-productive (rivers, glaciers or mountains).
+
+Of the built up area, housing and buildings made
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 483, 342, 3020, 359, 269, 1701, 288, 795, 10689, 17, 535, 482, 1832, 15, 269, 28071, 330, 1255, 269, 360, 8537, 5, 288, 269, 10294, 8537, 17]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be written as the sum of two squares. In this case, the eigenvalue is called the "vector" of the eigenvector.
+
+## Linear Algebra: An Introduction to Linear Algebra
+
+### A brief introduction to linear algebra
+
+Linear algebra is a branch of mathematics dealing with matrices and vectors. It deals with the study of systems of linear equations (in particular, in terms of vector spaces), which are mathematical structures used for describing and manipulating systems of linear transformations. The study of linear algebra has become an important topic in modern mathematics since it provides a new approach to understanding and solving problems.
+
+The study of linear equations is one of the most basic aspects of algebra. In fact, many examples of linear equations have been solved using the techniques of elementary row operations. These methods allow us to solve systems of linear equation in various ways.
+
+One of the main topics of linear algebra is the concept of a matrix. Matrices are rectangular arrays of numbers arranged in rows and columns. They are often used to represent different kinds of data in a system of linear equations. For example, in the case of the number of people in a city, the matrix would be represented by the following table:
+
+• Number of people in City
+•
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 491, 395, 5546, 9845, 1420, 3069, 2700, 1085]
+first_step_topk_probs=[0.28304147720336914, 0.18659238517284393, 0.10521548241376877, 0.09459252655506134, 0.06936229765415192, 0.06936229765415192, 0.05631779134273529, 0.03175637125968933, 0.024475594982504845, 0.02093508653342724]
+first_step_topk_text=[' use', ' can', ' have', ' are', ' describe', ' rely', ' allow', ' attempt', ' employ', ' model']
+
+[New tokens 4] count=184 first30=[22968, 269, 2613, 415, 3392, 299, 1798, 298, 4283, 17, 382, 1085, 330, 1728, 351, 269, 2877, 357, 14457, 8119, 483, 342, 8511, 289, 263, 1194, 357, 14415, 813, 269]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the brain's ability to learn and remember. The model is based on the idea that neural networks can be trained in a way that mimics the brain's natural behavior, but they also have certain limitations:
+- They cannot predict how long it will take for an individual to learn or remember. This means that they cannot predict the future.
+- They can only predict what happens to them.
+- Their predictions may not be accurate enough to make them use this knowledge.
+- The network is not very flexible (unlike many other models).
+- They are too slow to handle all cases.
+- All the models have some problems with learning, such as memory and memory loss.
+- And they are not well suited for human training.
+These are just some of the reasons why we want to build a neural network that learns and remembers. We hope that you find these things interesting.
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=104 first30=[263, 647, 286, 3, 711, 6, 1348, 620, 486, 1098, 269, 9548, 288, 263, 1309, 374, 263, 9548, 288, 643, 34, 202, 202, 28333, 5653, 15, 9211, 202, 202, 7]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# How do you find the slope of a line with a slope of 0?
+
+Jul 31, 2016
+
+$y - y_1 = 0$
+
+#### Explanation:
+
+$\textcolor{w h i t e}{\frac{\left(x - \dfrac{y}{2}\right)}{\left(y - \dfrac{\cancel{y}}{2}\right)} = 0}$
+
+$\Rightarrow y - y_0 = 0$
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=176 first30=[622, 311, 13, 81, 202, 202, 856, 1271, 1714, 346, 1083, 360, 7121, 2176, 4085, 555, 892, 333, 651, 20, 15, 21, 15, 22, 64, 346, 371, 333, 651, 19]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n*n
+
+def main():
+    print "Hello World!"
+
+    x = [1,2,3]
+    y = [0,1,4]
+    z = [1]*len(x)
+    for i in range(len(y)):
+        print y[i], x[i], y[i]
+        if y[i][0] == 1 and y[i-1][0] != 0:
+            print "x" + str(x[i])
+            x.append(y[i])
+        elif y[i - 1][0] > x[i]:
+            print "y" + str(-y[i -1])
+            x = [x[i]]
+            y = [y[i]]
+    print "Done!"
+
+
+if __name__ == '__main__':
+    main()
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.5647385716438293, 0.43526142835617065, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 311, 13, 21, 647, 354, 711, 202, 1465, 330, 6604, 1264, 269, 1134, 359, 269, 2579, 619, 15, 1722, 383, 3350, 269, 31393, 993, 2761, 288, 269, 31393, 993]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return n*2 + 1
+
+
+This is pretty much the same as the previous one, except it uses the Fibonacci number instead of the Fibonacci number.
+
+We can then use this to find the first five Fibonacci numbers, starting with 0 and 1. We do this by using the Fibonacci sequence, which starts from 0 and 1:
+
+0,1,0,1
+0,0,0,-1
+0,-1,-1
+-1,0,-0
+
+The next Fibonacci number is 1, and we can calculate the last Fibonacci number using the Fibonacci series.
+
+For example, if we start with 0, we would compute 1+0=5, and then -1+0=3. This means that there are 5 Fibonacci numbers in total, so we would have to calculate -1+1=4.
+
+So, for each positive integer n, we need to calculate the sum of all the Fibonacci numbers:
+
+Fib(n) = (n-1)*2 + 1
+
+Now, since we only have two Fibonacci numbers, we just need to add them together. The result will be:
+
+S = (n+1)*(2+1)+1
+
+In our case,
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 1541, 31412, 2590, 1906, 1289, 535, 356, 0]
+first_step_topk_probs=[0.33692294359207153, 0.3035928010940552, 0.10712756216526031, 0.07062289118766785, 0.06363650411367416, 0.030692562460899353, 0.02913491614162922, 0.02913491614162922, 0.02913491614162922, 0.0]
+first_step_topk_text=[' The', ' Yes', ' There', ' Cats', ' No', ' All', ' We', ' In', ' I', '']
+
+[New tokens 8] count=231 first30=[382, 3533, 330, 12052, 17, 31412, 395, 453, 359, 4012, 359, 486, 1645, 4, 31412, 395, 2076, 2918, 357, 491, 263, 2136, 19776, 299, 10273, 374, 613, 10676, 298, 7568]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes. Cats are not as bad as you think! Cats are social animals that have a natural instinct to communicate with other cats and dogs. They will often interact with people who are either friendly or fearful of them. This behavior helps them to learn how to cooperate and make friends. In fact, many people believe that the cats have a innate fear of humans. When they get into fights they'll fight back. If they don't get out of their way they may be forced to run away from the danger. They will also fight for dominance if they are aggressive enough to help themselves. For example, if a cat is attacked by a dog it's not unusual for the animal to attack its owner in order to prevent her from getting hurt. Sometimes cats just do what they want - they just want to be nice to each other. If the cat is aggressive then she should stay away from the situation where she was attacked. If the dog is a wild cat then the cat will stay away from your home and will not harm anyone else. It's a good idea to check with your veterinarian before making any changes to your pet's diet.
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 843, 354, 637, 409, 2050, 1012, 382, 0, 1]
+first_step_topk_probs=[0.3578610122203827, 0.1726001650094986, 0.1401403844356537, 0.0957949310541153, 0.0874992087483406, 0.05209461972117424, 0.04945077747106552, 0.04455888643860817, 0.0, 0.0]
+first_step_topk_text=[' 4', ' 5', ' 1', ' 3', ' 2', ' One', ' 6', ' The', '', '']
+
+[New tokens 9] count=35 first30=[843, 10941, 15, 934, 667, 409, 15, 1000, 354, 13032, 15, 298, 409, 934, 667, 409, 17, 1348, 914, 24847, 395, 715, 34, 202, 3287, 728, 1418, 299, 2064, 598]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 5 apples, buys 2, then 1 apple, and 2 buys 2. How many oranges are there?
+You may want to check out the above link.
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 1289, 382, 783, 3919, 15255, 1509, 338, 698, 0]
+first_step_topk_probs=[0.8598800301551819, 0.03614851459860802, 0.022039668634533882, 0.022039668634533882, 0.013092124834656715, 0.012755580246448517, 0.012755580246448517, 0.011198287829756737, 0.010090495459735394, 0.0]
+first_step_topk_text=[' I', ' We', ' The', ' This', ' My', ' Thanks', ' You', ' A', ' It', '']
+
+[New tokens 10] count=256 first30=[356, 3442, 733, 289, 263, 3313, 288, 9327, 374, 1284, 3694, 415, 2465, 299, 1219, 15, 298, 406, 415, 453, 3573, 1047, 435, 1258, 17, 776, 330, 1507, 2465, 299]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I've been in a lot of trouble with my son's learning to read, and he's not doing well at school. He is still learning to read as well. I'm trying to figure out how to help him learn better.
+Dr. Gleeson: What do you think?
+Jones: There are so many things that can be done for your child, but it may take some time. Some of the things we have learned over the years are:
+- Reading comprehension skills.
+- Listening and understanding the meaning of words.
+- Writing and reading fluently.
+- Using and using technology.
+- Being able to see the world through the eyes of others.
+Dr Gleesons: In general, there are three main ways to improve your child's reading ability. First, parents should try to teach their children about the alphabet and the letters. Second, they should use strategies such as asking questions, talking to people who are different from themselves, and listening to what they hear. Third, they should talk about the letters and make sure they understand the meaning of each letter. Finally, they should read books that relate to the alphabet.
+There are many types of reading programs available for children with special needs. For example
+
+================================================================================

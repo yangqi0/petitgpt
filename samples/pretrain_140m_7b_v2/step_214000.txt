@@ -1,0 +1,345 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[791, 418, 601, 1628, 728, 2827, 330, 15, 289, 699]
+first_step_topk_probs=[0.3759284019470215, 0.14721567928791046, 0.10223915427923203, 0.05472468212246895, 0.046808499842882156, 0.046808499842882156, 0.03424583002924919, 0.03302724286913872, 0.02929200977087021, 0.027805443853139877]
+first_step_topk_text=[' would', ' was', ' will', ' might', ' may', ' named', ' is', ',', ' in', ' had']
+
+[New tokens 1] count=122 first30=[578, 733, 998, 289, 269, 1471, 288, 263, 1844, 17, 382, 929, 330, 1000, 2460, 299, 263, 1802, 5988, 913, 406, 601, 342, 5611, 339, 17893, 298, 613, 3899, 14095]
+[Full output 1]
+Once upon a time, a curious child has been found in the care of a family. The child is then sent to a local hospital where he will be treated for pneumonia and other serious illnesses.
+A visit to the doctor's office is necessary to make sure that the child is not dying from the disease. It may also be necessary to obtain a physical examination by a health professional.
+If the child is found to have pneumonia, it is important to get medical help immediately. If the child is a young adult, or if there are signs of illness, such as fever, headache, vomiting, or weakness, a parent should be consulted.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 17, 382, 4223, 288, 269, 4079, 330, 269, 2317, 288, 336, 636, 327, 15, 536, 418, 6214, 289, 269, 11317, 288, 2960, 5590, 1690, 3121, 353, 1913, 1941]
+[Full output 2]
+Paris is the capital of the province. The capital of the district is the city of Sauve, which was founded in the reign of King Louis XIV (1630-1715).
+The province is divided into ten provinces: Corsica, Borgo, Sardinia, Lecce, Sardinian, and Tuscany. The capital is located on the north side of the river Corsica.
+Sicily is a small country that has been largely under the rule of France since the 16th century. It is a part of the Roman Empire. Its territory is bounded by the rivers Tiber, Crocus, Giglio, and Piazza di Siviglia. The territory of the province is divided between two main parts: the eastern part (the northern part) is called the northern province, while the western part (the southern part) is known as the eastern province. The eastern part is known for its strategic location at the foot of the mountains and its proximity to the sea. The western part of the province contains the highest point of the Black Sea coast.
+The region is rich with natural resources including timber, oil, and mineral resources. The country also produces some of the world's most important industrial products.
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 483, 342, 3020, 359, 269, 1701, 288, 795, 10689, 17, 535, 482, 1832, 15, 269, 28071, 330, 643, 298, 269, 4409, 330, 658, 3636, 17, 202, 202]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be written as the sum of two squares. In this case, the eigenvalue is 0 and the vector is also zero.
+
+An eigenvector is a vector with the same magnitude (or size) as the original vector. For example, if we have a matrix A = [1 2 3] then the eigenvector of A is [0 1]. The eigenvalue is the number that makes the vector equal to zero.
+The number 0 means that the vector is zero. So the eigenvalue of A is 0.
+
+## Linear Algebra
+
+Linear algebra has many applications in various fields such as physics, engineering, economics, computer science, and more. It is particularly useful when working with matrices or vectors.
+
+Let us consider a linear equation Ax=b where x represents any real number. We know that the determinant of a matrix is equal to the product of its eigenvalues:
+
+A=a×b
+
+This is the set of all solutions to the system Ax=b.
+
+We can solve this system by finding the values of x that make the corresponding matrix equal to zero:
+
+x1 = b1
+x2 = b2
+
+Therefore, the solution set for the system Ax = b is {(
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 491, 483, 5546, 395, 1420, 1991, 1085, 330, 2269]
+first_step_topk_probs=[0.262734591960907, 0.15607106685638428, 0.15607106685638428, 0.09766677021980286, 0.0812992975115776, 0.05507216230034828, 0.031054021790623665, 0.026561912149190903, 0.025213874876499176, 0.023934271186590195]
+first_step_topk_text=[' use', ' have', ' can', ' describe', ' are', ' allow', ' provide', ' model', ' is', ' models']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 15, 857, 359, 269, 1549, 2613, 17, 202, 202, 509, 3207, 288, 269, 14457, 2673, 418, 775, 4990, 419, 10287, 336, 9787, 289]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data, such as the human brain.
+
+The theory of the neural network was first introduced by Carl Sagan in the early 1960s. The theory is based on the observation that neurons in the cortex and other parts of the brain are interconnected with each other through their connections. The neuron network is the basis for many other areas of science and technology including artificial intelligence, neuroscience, and medicine. It has been shown that the network can be modified or changed in several ways:
+
+• The network can be trained using a training set of examples from the real world.
+• The neural network can be programmed to learn new information about the network and its relationship with other neural networks.
+• A neural network can then predict how the network will behave under different conditions.
+• An important aspect of neural networks is that they are not only random but also nonlinear.
+
+In addition, it has been shown in recent years that neural networks have a significant role in the development of computers. For example, the network is used to predict the behavior of computers when they are working together. In this way, the neural network helps computer scientists understand the behavior of the human brain, which can help them develop new techniques for solving problems.
+
+##
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 5427, 6649, 29, 8163, 16, 27, 5427, 202, 807, 1401, 8644, 626, 655, 15551, 66, 22513, 202, 1018, 306, 202, 807, 5210, 17, 2541]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+import re
+from django.db import models
+from django import forms
+from django_countries.fields import CountryField
+from django._utils import timezone
+from django2.utils.translation import gettext_lazy as _
+
+class TicketForm(models.Model):
+    title = models.CharField(_('Title'), max_length=100)
+    description = models.TextField(_('Description'), blank=True, null=True)
+    date_added = models.DateTimeField(_('Date added'), default=timezone.now)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name_plural = _('Tickets')
+
+        # create field
+        fields = ['title', 'description']
+        widgets = {
+            'title': forms.TextInput(attrs={'rows': 2}, required=False),
+            'description': forms.StringInput(attrs={
+                'rows': 2,
+                'max_length': 20,
+                'min_value': 1,
+                'required': True,
+            }),
+            'date_added': DateTimeField(default=timezone.today),
+           
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 311, 864, 353, 20, 552, 311, 12, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 717, 7121, 15, 2176, 18379, 3, 711, 1018, 4160, 359]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n * (1 - n)
+
+
+if __name__ == '__main__':
+    print('Hello, World!')
+
+import numpy as np
+from scipy.stats import norm
+from sklearn.ensemble import RandomForestRegressor
+from sklearn import preprocessing
+# from sklearn.metrics import roc_curve, auc
+from sklearn._base import BaseEstimator, TransformerMixin
+from sklearn_preprocessing import StandardScaler
+from sklearn.__version__.test__ import scikit-learn
+from sklearnClassificationClassifier import LabelEncoder
+from sklearnModels import MLPClassifier
+from sklearnDecisionTreeClassifier import DecisionTreeClassifier
+from keras.models import Model
+from keras import backend as K
+from keras_vgg16 import VGG16
+from keras2transform import Compose
+from keras3d import Model
+import matplotlib.pyplot as plt
+import pickle
+import pandas as pd
+import seaborn as sns
+import matplotlib as mpl
+mpl.use("Agg")
+import seaborns as sns
+from sklearngui import get_ipython
+from sklearnlib.model_selection import train_test_split
+from sklearn  import metrics
+from sklearn      import preprocessing, model_selection
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.7290055751800537, 0.2709944546222687, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=102 first30=[490, 311, 1319, 409, 861, 643, 29, 341, 622, 354, 8789, 1107, 29, 341, 622, 8049, 11, 81, 552, 354, 12, 647, 8049, 11, 81, 16, 21, 12, 711, 202]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     if n % 2 == 0:
+         return 1
+       else:
+         return fib(n - 1) + fib(n-2)
+
+
+The result is a list of Fibonacci numbers.
+
+Example 1:
+
+Input: n = [1,2]
+Output: [3,4]
+Explanation: The first number in the list is 3 and the second number is 4.
+Intern: 0
+Constraints:
+1 <= n <= 100
+
+"""
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 1541, 2590, 4619, 1906, 338, 698, 0, 1]
+first_step_topk_probs=[0.35078486800193787, 0.316083699464798, 0.13039784133434296, 0.10587477684020996, 0.0354636088013649, 0.023379042744636536, 0.019997157156467438, 0.0180189348757267, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' There', ' No', ' Black', ' All', ' A', ' It', '', '']
+
+[New tokens 8] count=182 first30=[382, 3533, 330, 12052, 17, 202, 2573, 395, 914, 2584, 288, 10676, 289, 269, 1165, 15, 614, 453, 545, 288, 780, 395, 2645, 17, 4619, 10676, 395, 1114, 1108, 444]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+There are many types of cats in the world, but not all of them are black. Black cats are very different from other cats because they have a white coat and a black coat. A cat's coat has an intense color pattern. Some cats have yellow or brown coats. These cats have dark spots on their backs and legs. Some cats are tan or brown. They may have light red hair and black eyes. Many cats have brown or black fur. Most cats have dark, scaly skin. They may be gray, brown, or black. They may also have blond, blue, or brown coats with a black or brown coat. Cats have dark, curly fur.
+The average litter of cats is 4 to 6 years old. If you want to know more about your pet, please visit our web site at www.petfinder.com/cats.
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 409, 843, 354, 637, 1012, 1218, 2, 1, 0]
+first_step_topk_probs=[0.2409454882144928, 0.19125215709209442, 0.1762794852256775, 0.15884101390838623, 0.1014467254281044, 0.06903204321861267, 0.06220303475856781, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 4', ' 2', ' 5', ' 1', ' 3', ' 6', ' 8', '', '', '']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 202, 24771, 29, 843, 10941, 333, 1218, 202, 43, 587, 15, 269, 993, 288, 10941, 357, 406, 483, 5964, 330, 3007, 299, 269, 993, 288, 1885]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4
+Answer: 5 apples = 8
+Hence, the number of apples that he can buy is equal to the number of times he can buy 2 apples.
+So, if you were asked to find the number of fruits that he could buy, he would be able to do it in two ways: either by adding them up or multiplying their numbers together.
+Let's try an example using the number 6.
+You are given that 6 is the number 6 because 6 + 6 = 12. What is the value of 6?
+Answer : 6 = 12
+The answer is 0. So, the value of the number 6 is 0.
+So the number 6 will be the number 6 which is 7.
+Now, let's see how we can solve this problem using a little algebra.
+1. Write down the equation for the number 6:
+6 = (2)(3)
+2. Find the value of x:
+x = 6/2
+3. Find the number of steps:
+x=6/2
+4. Find the solution:
+x=-3/2
+5. Solve for x:
+5+x=3
+6-5=3
+7-6=3
+8
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 3919, 27614, 15255, 1289, 1509, 22089, 382, 0, 1]
+first_step_topk_probs=[0.8516426086425781, 0.028611963614821434, 0.02646174095571041, 0.023231100291013718, 0.022052112966775894, 0.01790490932762623, 0.016996236518025398, 0.01309951115399599, 0.0, 0.0]
+first_step_topk_text=[' I', ' My', ' Hi', ' Thanks', ' We', ' You', ' Thank', ' The', '', '']
+
+[New tokens 10] count=256 first30=[356, 3442, 733, 289, 269, 5988, 339, 263, 7543, 288, 4437, 1244, 298, 491, 733, 9529, 374, 263, 4401, 876, 288, 2404, 1255, 3396, 608, 31989, 281, 29791, 353, 15159]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I've been in the hospital for a couple of weeks now and have been diagnosed with a rare form of cancer called primary peritoneal carcinoma (PPCC). PPCC is one of the most common cancers in the United States, but it's not always easy to diagnose because there are many different types of PPCCs that can be detected by other tests. This is why we're talking about PPCC.
+Dr. Adrian O'Brien: What is PPCC?
+O'Brien: The term "peritoneal" refers to the lower part of the abdomen that contains the stomach and intestine. As a result, you may feel bloated or have abdominal pain. Or you may feel diarrhea, which can cause you to vomit.
+In addition to being painful, PPCC can also lead to other health problems, such as kidney failure, liver disease, and even heart attack. In fact, PPCT is one of several forms of cancer that can be found in the abdomen.
+The most common type of cancer that affects the abdomen is metastatic colon cancer. Other types of cancer that are found in the abdominal region include sarcomas, lymphomas, and pancreatic tumors. In these cases, the cancer cells are spread
+
+================================================================================

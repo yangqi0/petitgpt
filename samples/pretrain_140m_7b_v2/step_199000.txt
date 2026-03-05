@@ -1,0 +1,337 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[791, 601, 418, 1628, 728, 330, 3609, 15, 289, 2446]
+first_step_topk_probs=[0.3581372797489166, 0.1331309676170349, 0.10260805487632751, 0.092457614839077, 0.04697738587856293, 0.04233018308877945, 0.04233018308877945, 0.0234405267983675, 0.019380168989300728, 0.019380168989300728]
+first_step_topk_text=[' would', ' will', ' was', ' might', ' may', ' is', ' asked', ',', ' in', ' came']
+
+[New tokens 1] count=256 first30=[3609, 627, 922, 406, 2747, 288, 269, 1165, 1378, 1169, 17, 202, 5, 44, 1118, 357, 356, 873, 263, 4332, 961, 988, 269, 4332, 17, 360, 3681, 486, 395, 1284]
+[Full output 1]
+Once upon a time, a curious child asked me what he thought of the world around him.
+"I know that I am a king," said the king. "And you are my son."
+The king was very kind to me and he did not hesitate to answer his questions. He had a lot of friends in his household. They were all of different races. Some were from the Caucasian, some from the Indian, some from Greek-speaking people. There were no children of any race. One day, when he was old enough to go out with his family, he found himself at a place called Bardorpe where he lived for many years. He went there, his wife and his three sons. When they came back home, they discovered that the land was really rich. They were very poor. They were unable to afford to live on the land.
+"What is your name?" asked the king.
+"My father," said the prince. "He has a lot of money, but I will pay him some money if he can get it."
+"No," said the princess. "I don't want to pay him. But I must give him some money as well."
+"You can't be rich too," said the boy. "If you don't
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 336, 263, 7093, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.9388357400894165, 0.02923707105219364, 0.017825786024332047, 0.014101357199251652, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' S', ' a', ' Italy', '', '', '!', '"', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 1134, 1112, 17, 698, 330, 3323, 289, 269, 9556, 288, 321, 19095, 1156, 15, 298, 6151, 435, 287, 13718, 288, 1411, 202, 202, 509, 2868, 330]
+[Full output 2]
+Paris is the capital of the province of the same name. It is located in the province of Tuscany, and lies at an elevation of .
+
+The town is located on a peninsula that was first inhabited by the Vandals, who settled there in the early 1st century BC. The city's name comes from the Latin word "Vulcator" which means "a place of great beauty".
+
+History
+
+In AD 390, the Lombards invaded the area and captured it. In AD 393, the Lombard rulers were defeated and the city was conquered by the Lombards. They conquered the city and burned it down. After the death of the Lombards, the city was divided into two parts: the first, the city of Cologne, was called Aquitaine (meaning "the city of the East"). The second, the city named Rhegium, was called Rhegianum (meaning "Mother of the West"), and was known as Rhegia (meaning "Cities of the West").
+
+During the Middle Ages, the city became part of the kingdom of the Franks. In 1227, the Franks came to the city of Bamberg, where they established their own court. The
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1623, 993, 357, 483, 342, 3020, 359, 269, 1701, 288, 795, 613, 1890, 17, 382, 18956, 395, 269, 1992, 288, 269, 3823, 15, 536, 1818, 357, 490, 411, 491]
+[Full output 3]
+In linear algebra, an eigenvalue is a real number that can be written as the sum of two other numbers. The eigenvalues are the values of the matrix, which means that if we have a square matrix with entries in the same row and column, then the number of columns will also be the same.
+
+## Linear Algebra: A Proof
+
+Let's consider a simple example where we want to find the eigenvalues of a given matrix. We will use the matrix A = [1 1 2 3 4 5 6 7 8 9 10 11 12] and our goal is to find the eigenvectors of this matrix. To do so, let's first recall some basic definitions:
+
+* A matrix is said to be *linearly independent* when its only unit vector is zero (i.e., it has no zeroes).
+* If all the entries of a matrix are 0, then there exist vectors u and v such that the product of their respective vectors equals zero:
+
+u = [0 0 0 0 1 0 0 0]
+v = [0 1 0 0 1 1 0]
+
+This implies that any vector v must have exactly one zero vector—that is, it must have at least one zero. Therefore, A = [0;1], which simplifies to A =
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 817, 491, 395, 1085, 5546, 1420, 1991, 586, 22968]
+first_step_topk_probs=[0.1781870722770691, 0.14467647671699524, 0.14467647671699524, 0.10975295305252075, 0.0905362144112587, 0.08157998323440552, 0.04600117728114128, 0.04145050048828125, 0.028786800801753998, 0.019992033019661903]
+first_step_topk_text=[' can', ' use', ' have', ' are', ' model', ' describe', ' allow', ' provide', ' were', ' mimic']
+
+[New tokens 4] count=256 first30=[22968, 269, 3286, 288, 12473, 289, 269, 2613, 17, 382, 1085, 330, 1728, 351, 263, 2829, 14457, 2673, 1085, 15, 913, 1010, 25284, 289, 269, 2673, 3936, 263, 1968, 4333]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the behavior of neurons in the brain. The model is based on a simple neural network model, where each neuron in the network represents a input layer and an output layer. The input layer has to be trained on a training set of samples (samples per neuron), which is an example of a neural network model.
+
+In the last few years, researchers have been able to develop models for many different types of neural networks. One such model is the Neural Network Model (NNM). This model was developed by Paul Magee and Shuang-Yong Chen at the University of Wisconsin–Madison, and consists of two layers: one with the input layer and another with the output layer. Each layer can either represent a single neuron or a network of multiple neurons. In the NNM model, the inputs are labeled with numbers from 0 to n, while the outputs are labeled with values from 1 to n. The output layer contains the weights of all the neurons in the network.
+
+The Neural Network model is widely used in the field of artificial intelligence research. It is particularly useful when studying human language processing and attention. For example, it can help to identify the neural patterns of a person's speech, as well as determine the meaning of
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 17, 595, 551, 711, 202, 6, 11101, 299, 835, 269, 993, 288, 3098, 289, 263, 1180, 202, 856, 835, 66, 454, 66, 13906, 1714, 346, 537, 5062]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+
+# Function to get the number of elements in a list
+def get_all_elements():
+    # Get all elements from a list
+    all_elements = []
+
+    # Iterate over the elements and get their corresponding values
+    for i in range(len(a)):
+        # Get the first element
+        first_element = a[i]
+
+        # Get the last element
+        last_element = first_element
+
+        # Get all the elements from the list
+        for j in range(1, len(last_element)):
+            # Get the next element
+            next_element = last_element[j]
+
+            # Get the current element
+            current_element = next_element
+
+            # Get all new elements
+            new_element = current_element
+
+            if current_element != last_element:
+                # Add to the current element
+                add(current_element)
+
+                # Get the previous element
+                prev_element = new_element
+
+                # Get all other elements
+                for j in reversed(range(0, len(next_element))):
+                    # Get the new element
+                    new_element += next_element
+
+                    # Get the rest of the elements
+                    next_element_list = next_elements - prev_
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 311, 13, 81, 202, 202, 6, 7509, 2849, 411, 491, 263, 1180, 288, 545, 9044, 289, 1663, 299, 713, 374, 780, 17, 202, 6137, 835, 66, 1253, 11, 68]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n*n
+
+# Make sure we have a list of all integers in order to work with them.
+function get_list(a, b)
+    if a == b
+        return a
+    elseif a != b
+        return b
+    elseif b != a
+        return a + b
+    else # Return the first element in the list
+    return a
+end
+
+# We can use the function to get the factorial of a number.
+def factorial_of_number(n):
+    return n * n
+
+# A function that takes two numbers and returns the factorial.
+def factorize(n):
+
+    if n == 1
+        return n/2
+    elif n==2 or n==3 :
+        return n
+    elseif n == 3 :
+        return 2*n**2
+    elseif (n>1 || n<0)
+        return n*(n-1)/2
+    else    # Return the next number in the list.
+    return n
+end
+# The function is an iterable. It takes a list of elements and returns the result.
+function factorize(iterable::Iterable)
+    for i in range(len(iterable))
+        yield iterator[i]
+    end
+end
+print
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.6513549089431763, 0.3486451506614685, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 354, 17, 19, 647, 311, 864, 353, 20, 552, 643, 17, 24, 12, 711, 202, 2774, 15, 411, 910, 299, 6519, 269, 31393, 993, 288, 269, 1496, 993, 311]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + n * (1 - 0.5)
+
+
+Now, we need to compute the Fibonacci number of the given number n. We can do this by finding the Fibonacci number in the formula below:
+
+fib(n) = (1 - 2*3*4)/6
+
+This is just an example of how to solve this problem using a simple algorithm. To begin with, let's assume that there are n terms of the form f(x), where x is a variable. Then, we can calculate the first few terms of the sequence f(x) and then compute the next term from those values. In other words, we will say that f(x)=x^2+1 for some integer x.
+
+The last step is to find the value of f(x). Since both f(x and x^2) are integers, their sum must be equal to the sum of all the even numbers multiplied by themselves. Therefore, we have:
+
+sum(f(x))
+=> f(x)^2 + (1-x)^2 <= f(x)*x^2 + (2-x)^3 <= f(1-x)+(2-x^2)
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 1541, 2590, 356, 1906, 698, 2660, 535, 2340]
+first_step_topk_probs=[0.4159775376319885, 0.2742291986942291, 0.09676624834537506, 0.0785679817199707, 0.03597104549407959, 0.021367717534303665, 0.020283306017518044, 0.020283306017518044, 0.018276777118444443, 0.018276777118444443]
+first_step_topk_text=[' Yes', ' The', ' There', ' No', ' I', ' All', ' It', ' Some', ' In', ' That']
+
+[New tokens 8] count=248 first30=[13676, 17, 1541, 330, 263, 3313, 288, 2833, 299, 2173, 357, 2645, 10676, 395, 453, 359, 4012, 359, 581, 1628, 342, 435, 775, 17806, 17, 31412, 395, 1114, 2076, 2918]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Yes. There is a lot of evidence to suggest that black cats are not as bad as they might be at first glance. Cats are very social animals, so there is no reason to think that they do not have social bonds. The fact that they have such strong social bonds means that the relationship between them and their owners may not be as good as it would seem.
+However, if you look at the relationship between cats and dogs, you will see that they both share a common bond with each other. In fact, cats often share many different behaviors. For example, they may be able to communicate in an animal-like manner, but they cannot control what they say or how they talk. They also tend to be more likely to be friendly and to be protective of their territory than dogs. This is another reason why they are less likely to be aggressive than dogs.
+In summary, it is important to understand that although cats are not aggressive, they do not exhibit any kind of social behavior. They are not aggressive because they are not just acting out their own problems, but rather are trying to solve other problems by working together for the benefit of their owners.
+This article was written by Sean O'Keefe.
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 798, 843, 409, 2050, 744, 637, 1012, 382, 338]
+first_step_topk_probs=[0.3381795287132263, 0.15482987463474274, 0.14697226881980896, 0.08651795238256454, 0.06728880852460861, 0.06063225120306015, 0.043860092759132385, 0.037942688912153244, 0.036017101258039474, 0.02775946632027626]
+first_step_topk_text=[' 1', ' 4', ' 5', ' 2', ' One', ' $', ' 3', ' 6', ' The', ' A']
+
+[New tokens 9] count=150 first30=[354, 13032, 333, 798, 10941, 17, 202, 3016, 914, 24847, 395, 715, 289, 263, 7240, 288, 7914, 34, 202, 24771, 537, 20, 29, 843, 24847, 333, 1218, 10941, 17, 202]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples.
+How many oranges are there in a bag of fruits?
+Answer #1: 5 oranges = 8 apples.
+What is the smallest number of apples you can make with these two pieces of fruit?
+Answer#2: 6 apples = 8 apples, but we can't do it by hand.
+What's the smallest number that can be made with these two shapes?
+Answer4: 2 apples = 10 apples.
+Can you find all the ways to get from A to B?
+Answer5: 5 apples = 5 apples.
+Which of the following is not a perfect square?
+Answer6: 3 squares = 12 squares.
+Is this a good exercise for dividing up your time?
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 3919, 15255, 783, 382, 27614, 1509, 360, 1278, 338]
+first_step_topk_probs=[0.738235354423523, 0.04227553680539131, 0.04013006016612053, 0.026455357670783997, 0.02262846566736698, 0.02204679138958454, 0.018372880294919014, 0.015715155750513077, 0.015715155750513077, 0.013441885821521282]
+first_step_topk_text=[' I', ' My', ' Thanks', ' This', ' The', ' Hi', ' You', ' "', ' If', ' A']
+
+[New tokens 10] count=256 first30=[356, 4575, 3934, 4252, 299, 263, 3565, 444, 269, 7496, 288, 269, 2519, 17, 202, 45, 267, 10960, 29, 2575, 330, 669, 2942, 374, 4083, 34, 202, 27815, 297, 29]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I'm looking forward to a visit from the university of the future.
+Jonathan: What is your experience with stress?
+Joel: It's hard to tell when you're feeling stressed, but it can be quite stressful. You know that you feel anxious about something, and this can make you feel anxious. But if you're not worried about something, you may have an anxiety disorder called Post-Traumatic Stress Disorder (PTSD).
+I think it's important for us to understand what PTSD is, because we can deal with it in many different ways. There are things that can help us deal with it. For example, there's a lot of things that can happen at home, like eating or sleeping, so it's important to get out of bed and into the house. And if you have a family member who has been stressed, it could mean that you need to go to the bathroom, eat dinner, go to sleep, or just relax.
+And if you have had a major trauma, you might want to talk to a doctor about how you can cope with it. And he or she can also give you information on other people who may be suffering from PTSD. If you have a close friend or relative who has been diagnosed with PTSD,
+
+================================================================================

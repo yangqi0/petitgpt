@@ -1,0 +1,292 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[791, 418, 2446, 3609, 2827, 601, 1628, 15, 288, 330]
+first_step_topk_probs=[0.21388164162635803, 0.17365817725658417, 0.12060319632291794, 0.07950650900602341, 0.055216167122125626, 0.02955508604645729, 0.028055164963006973, 0.026511000469326973, 0.020525598898530006, 0.018495099619030952]
+first_step_topk_text=[' would', ' was', ' came', ' asked', ' named', ' will', ' might', ',', ' of', ' is']
+
+[New tokens 1] count=256 first30=[3609, 896, 3577, 922, 1024, 2747, 288, 269, 2475, 360, 73, 558, 741, 382, 929, 14618, 357, 383, 418, 263, 1114, 1608, 2475, 17, 1530, 1000, 3609, 896, 3577, 490]
+[Full output 1]
+Once upon a time, a curious child asked her mother what she thought of the word "fork." The child replied that it was a very old word. She then asked her mother if she could take out the "fork" and let it run down the street.
+The child responded with a smile and said, "It's a little old word!" The child answered, "It is a little old term." When the child returned to the child, he added his name and the word "sticks," and started playing with the toy. He continued to play with the toy until he found that it was really old. At this point, the child began to play with other toys, but it wasn't long before they were playing with all kinds of new toys.
+When the child finally realized how old he was, he started playing with his own toys. One day, while the child was playing with his toy, he noticed something strange in the toy. It was a toy that had been twisted into a looped shape by the child. He saw that the toy was not really old enough for him to play with, but it was still quite young. As soon as he saw it, he turned around and played with it again. Soon after, he discovered that the toy had been twisted so much
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 336, 263, 4455, 343, 321, 426, 7362, 0, 1]
+first_step_topk_probs=[0.8866922855377197, 0.026093414053320885, 0.025422675535082817, 0.021745163947343826, 0.011340155266225338, 0.01076463796198368, 0.008970800787210464, 0.008970800787210464, 0.0, 0.0]
+first_step_topk_text=[' the', ' S', ' a', ' France', ' C', ' T', ' F', ' Spain', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 1134, 1112, 17, 698, 330, 12092, 351, 269, 3232, 5358, 288, 269, 4549, 3626, 6576, 15, 435, 287, 13718, 288, 1411, 202, 202, 509, 2868, 330]
+[Full output 2]
+Paris is the capital of the province of the same name. It is situated on the west bank of the river Elba, at an elevation of .
+
+The town is located in the municipality of Alcantara, which is a part of the municipality of Oviedo. The town has a population of 2,675 inhabitants (2022). The town is also a commercial centre and a major railway station.
+
+Transportation
+The town lies within the municipal territory of Ovio de Fiorentino, a city of the Province of Siena.
+
+Frazioni
+
+Fraça Nacional
+
+Infrastructure
+
+Villa Nacional
+The largest and most important town in the area, it is located in a wooded valley that rises to over 7,000 m above sea level. The main street runs through the village. Its most notable feature is the Vila del Lago (the road leading from the Vila de Fiores) which is one of the best preserved in the area. This road passes through the municipality of Giribal, a village near the border with the Municipality of Ovrovalle.
+
+Puerto Rican National Park
+The Puerto Rican National park
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 483, 342, 3258, 299, 1467, 4409, 289, 269, 1134, 3892, 17, 535, 613, 2351, 15, 383, 415, 269, 1134, 3467, 359, 287, 10294, 8537, 288, 263, 4759]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be added to another vector in the same direction. In other words, it's the same thing as an eigenvector of a linear operator A = V(u) where u is a vector and v is a scalar.
+
+The "inverse" of an eigenvalue is just a function of its eigenvalues. The eigenvalues are the values of the vectors (or vectors) in the original space. If we use the definition of an eigenvalue, then this means that the eigenvalues of an eigenvector must be linearly independent. But since there are infinitely many eigenvectors in the space, we can't do any other vector-based approximation to the space. Instead, we have to use a different method for calculating the eigenvalues of the eigenvector.
+
+So what does this mean? Well, if you take the eigenvector of an eigenvalue and multiply it by itself, you get an eigenvector with magnitude equal to the eigenvalue of the eigenstate. This means that the eigenvector will always be a single value, regardless of how much we change the eigenstate by adding or subtracting one.
+
+Now, let's think about a special case of an eigenvalue. An eigenvalue of a matrix A is an eigenvalue of a linear transformation T: R^n → R such that T
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 491, 395, 1420, 3069, 5546, 1085, 9845, 1991]
+first_step_topk_probs=[0.2675943374633789, 0.217269629240036, 0.15895786881446838, 0.06483853608369827, 0.06224879249930382, 0.0479770228266716, 0.038954298943281174, 0.03510073572397232, 0.023139825090765953, 0.018788069486618042]
+first_step_topk_text=[' use', ' can', ' have', ' are', ' allow', ' attempt', ' describe', ' model', ' rely', ' provide']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 15, 857, 359, 269, 1549, 2613, 17, 202, 202, 509, 3207, 3722, 269, 10447, 288, 14457, 8119, 330, 1728, 351, 269, 2877, 357]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data, such as the human brain.
+
+The theory behind the classification of neural networks is based on the idea that they are a type of artificial neural network (ANN). The ANN consists of a set of neurons called neurons and a set of neural nets called neural nets. These networks are trained using a variety of different techniques, including numerical methods, neural nets, and neural networks for various tasks.
+
+### Classification of Neurons
+
+Neurons are composed of two basic types:
+
+• Pre-neuron: A neuron has an input (or output) and a corresponding output (or input).
+• Post-neuron (or post-net): A neuron has inputs and outputs.
+
+## Conclusion
+
+In this article we will present a detailed description of how to classify neural networks in terms of their classification and classification accuracy. We will also discuss some of the advantages of classification, and how it can be applied to other kinds of neural networks.
+
+For our purposes, we will consider a neural network as a class of artificial neural networks. There are several classes of neural networks, and we will describe them in detail below. For example, the number of neurons in each class is defined
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 1348, 299, 1098, 269, 3581, 288, 269, 1309, 7885, 888, 269, 2348, 353, 20, 15, 21, 12, 298, 353, 22, 15, 23, 15987, 202]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# How to find the equation of the line passing through the points (1,2) and (3,4)?
+
+How can I find the equation in the form $y = x^2 + 4x - 2$ ?
+
+-
+What does this mean? It's just the definition of a function. –  Tanya Borenstein Nov 21 '12 at 17:21
+@TanyaBorenstein You're right, I'm not sure how to define it. I've tried to use the parametric equations to get the equation of a line passing through two given points but I couldn't figure out what that means. –  user6197 Nov 21 '13 at 18:22
+I don't think you could use the parametrization to find the point of intersection. The equation of the tangent line to the curve is $y=x^2+4x-2$. The equation of a tangent line to a curve is $x-y=0$, so you need to find the coordinates of the point where the tangent line intersects the curve. The slope of the tangent will be $-\frac{dy}{dx}$. What is the slope of the curve at the point
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=33 first30=[490, 311, 1396, 643, 29, 341, 622, 354, 1246, 1107, 29, 341, 622, 643, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 11, 2440, 4886, 11]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     if n < 0:
+         return 1
+     else:
+         return 0
+
+
+if __name__ == '__main__':
+    print(factorial(10))
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.729005753993988, 0.27099427580833435, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[490, 311, 861, 643, 29, 341, 622, 354, 1246, 1107, 29, 341, 622, 8049, 11, 81, 16, 20, 12, 647, 8049, 11, 81, 14, 20, 12, 711, 202, 6, 535]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     if n == 0:
+         return 1
+     else:
+         return fib(n-1) + fib(n+1)
+
+
+# In[6]:
+
+
+fib(1000000000) # 10000000000
+print(fib(1000)) # 10000000001
+
+# In[]
+fib2(10000) # 100000000000
+fib3(10000)  # 100000000001
+print(sum(fib2([0, 0, 0])) ) # 1000000000100
+
+
+# ## 4.2.4.3.3. Exponential Function
+
+# The exponential function is defined as the sum of the natural logarithm of an integer k, and its exponent is given by
+# f(k) = ln(k) / (ln(k))
+
+# To calculate the exponential function, we first need to find the value of the constant k. This can be done using the formula
+# f = k * exp(-ln(k)), where k is a positive integer. Here, k is the base number in our example.
+
+# Note:
+# The base number is the number we want to compute the exponential function. We do this by setting k equal to zero.
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 1541, 2590, 356, 1906, 698, 1289, 2660, 0]
+first_step_topk_probs=[0.39171716570854187, 0.2720421254634857, 0.138223797082901, 0.07398585975170135, 0.039601776748895645, 0.026107091456651688, 0.02012152411043644, 0.019100356847047806, 0.019100356847047806, 0.0]
+first_step_topk_text=[' The', ' Yes', ' There', ' No', ' I', ' All', ' It', ' We', ' Some', '']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 808, 17, 202, 2573, 395, 914, 1108, 2584, 288, 10676, 289, 269, 1165, 17, 2660, 288, 780, 395, 649, 4401, 581, 491, 2245, 733, 2595, 1234, 17]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is no.
+There are many different types of cats in the world. Some of them are so rare they have never been seen before. Others are found only in a few countries or even in very small numbers.
+Animals with large eyes (including kittens) are often called "catfishes" because they have a long, narrow, curved nose. They also have a strong sense of smell, which helps them avoid human contact. Many cats live in Africa and Asia but most do not. There are several species of catfishes in North America, including the Florida panther, the California catfish, the northern skate, the gray catfish, and the black catfish.
+Catfishes live in the oceans and rivers of Australia, New Zealand, Hawaii, Alaska, Canada, Russia, China, India, Indonesia, Japan, the Philippines, the United States, and Canada. Catfishes live primarily in tropical waters off the Indian Ocean islands and South Pacific Islands.
+The catfish is a carnivore, a fish-eating reptile, and its prey include sharks, sea turtles, manta rays, seagulls, and even snails. Most catfish eat other fish such as salmon, tuna, swordfish
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[843, 798, 354, 637, 744, 382, 409, 1012, 2050, 0]
+first_step_topk_probs=[0.2632609009742737, 0.22517898678779602, 0.1735522300004959, 0.06451486051082611, 0.06124073639512062, 0.06124073639512062, 0.05382486805319786, 0.0523819774389267, 0.04480467736721039, 0.0]
+first_step_topk_text=[' 5', ' 4', ' 1', ' 3', ' $', ' The', ' 2', ' 6', ' One', '']
+
+[New tokens 9] count=256 first30=[843, 10941, 15, 934, 667, 409, 15, 934, 667, 354, 15, 934, 667, 798, 15, 934, 667, 637, 15, 934, 667, 643, 15, 934, 667, 1012, 15, 934, 667, 1186]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 5 apples, buys 2, buys 1, buys 4, buys 3, buys 0, buys 6, buys 7, buys 8, buys 9, buys 10, buys 11, buys 12, buys 13, buys 14, buys 15, buys 16, buys 17, buys 18, buys 19, buys 20, buys 21, buys 22, buys 23, buys 24, buys 25, buys 26, buys 27, buys 28, buys 29, buys 30, buys 31, buys 32, buys 33, buys 34, buys 35, buys 36, buys 37, buys 38, buys 39, buys 40, buys 41, buys 42, buys 43, buys 44, buys 45, buys 46, buys 47, buys 48, buys 49, buys 50, buys 51, buys 52, buys 53, buys 54, buys 55, buys 56, buys 57, buys 58, buys 59, buys 60, buys 61, buys 62, buys 63, bu
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 3919, 783, 382, 15255, 338, 1509, 1278, 0, 1]
+first_step_topk_probs=[0.8963858485221863, 0.019518805667757988, 0.019017068669199944, 0.01669531874358654, 0.01626615971326828, 0.012536820024251938, 0.009917440824210644, 0.009662509895861149, 0.0, 0.0]
+first_step_topk_text=[' I', ' My', ' This', ' The', ' Thanks', ' A', ' You', ' If', '', '']
+
+[New tokens 10] count=251 first30=[356, 4575, 3934, 4252, 299, 263, 3565, 444, 269, 7496, 4, 202, 5, 44, 3442, 733, 289, 263, 14106, 1584, 339, 973, 15, 298, 715, 415, 2126, 2009, 719, 598]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I'm looking forward to a visit from the university!
+"I've been in a busy place for years, and there's always something new out there," she said. "There are so many things that we're trying to do. We're working on a project where we can find a way to use the internet to improve our lives."
+But she didn't know what the idea was until she started researching the internet. She had to get her hands dirty because she'd used a lot of information on the internet before she could start using it.
+She decided to research the internet and see if it would be useful. She started by searching for websites and blogs. Her goal was to find a site that would allow people to interact with their computers. In other words, she wanted to find a website that would make people feel comfortable talking about the internet.
+The results were published in the journal Human Factors.
+"It's a very good idea to use a site like this," she said, adding that she hopes to eventually incorporate the internet into her life.
+For more information on how to participate in a group or study online, contact the University of Michigan at Ann Arbor Web Center at firstname.lastname@example.org.
+
+================================================================================
