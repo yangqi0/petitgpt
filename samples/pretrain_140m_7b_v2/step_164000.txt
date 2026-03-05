@@ -1,0 +1,343 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[791, 418, 1628, 3609, 2446, 2827, 289, 728, 2857, 1255]
+first_step_topk_probs=[0.3803673982620239, 0.2507535517215729, 0.0932130441069603, 0.07184209674596786, 0.05256080627441406, 0.03845430538058281, 0.02168356627225876, 0.0185469351708889, 0.01760566234588623, 0.012880577705800533]
+first_step_topk_text=[' would', ' was', ' might', ' asked', ' came', ' named', ' in', ' may', ' went', ' called']
+
+[New tokens 1] count=124 first30=[3609, 896, 3577, 299, 1432, 896, 1133, 299, 269, 5786, 17, 382, 1809, 3510, 418, 649, 8763, 357, 1024, 4725, 299, 1499, 383, 598, 17, 1530, 5842, 849, 298, 3559]
+[Full output 1]
+Once upon a time, a curious child asked her mother to take her back to the garden. The little girl was so excited that she decided to try it out. She ran off and soon found herself in a beautiful garden full of flowers. Her mother came up with an idea: she would let her daughter go on a walk around the garden. They went for a walk together. When they were done, the little girl's mother brought her back home. She took her back to school and taught her a lot about gardening. She told her friends about all kinds of things she had learned during her early years at home. They were very proud of her!
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 7362, 4455, 263, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.9256063103675842, 0.041694074869155884, 0.017200568690896034, 0.015499006025493145, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' Spain', ' France', ' a', '', '', '!', '"', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 17, 382, 2868, 418, 5953, 1255, 321, 1441, 428, 15, 614, 383, 2037, 263, 4511, 2317, 289, 1691, 7480, 722, 383, 418, 14086, 321, 1441, 428, 17, 202]
+[Full output 2]
+Paris is the capital of the province. The town was originally called Tekke, but it became a separate city in 1792 when it was renamed Tekke.
+The first post office opened in the town on February 1, 1824. It was located at the intersection of Old Street and North Street, between East and West streets. The postal service was discontinued after 1869. The post office was discontinued in 1883.
+A post office was established in 1886 and a bank was established in 1894. In 1896, the town was made a district. The population increased to 200 in 1900. The population remained steady until 1929. A post office was also established in 1924.
+Today, the town has a large number of businesses. The main business area is the Tekke Business Center (formerly known as the Tekkes Bank), which is a modern building that houses a large library and a hotel. The main shopping area is the New Market Square (the second largest shopping mall in the United States). The Tekke is also home to the Tekkosel International Airport, which is the world's busiest airport.
+The town is served by several public transport routes:
+- Tekke Bus Service - buses from Tekke Station to Tekke Airport
+-
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 11547, 374, 689, 17, 382, 28071, 288, 263, 3823, 338, 330, 269, 1701, 288, 545, 686, 18956, 29, 202, 202, 36, 333, 18062, 91, 647, 18062]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that varies with time. The eigenvalue of a matrix A is the sum of all its eigenvalues:
+
+A = λx + λy
+
+where λ and y are real numbers. The determinant of this matrix is zero because it does not depend on the number of rows in the matrix.
+
+The eigenvalues of a vector x are the entries of the matrix multiplied by the corresponding eigenvector x. For example, if we have a vector x = (1, 0), then the eigenvalues of this matrix are (0, 1).
+
+It is possible to find the eigenvalues of a matrix using a matrix calculator or other methods. For example:
+
+• Find the eigenvalues of the matrix x by multiplying the first row of the matrix by the second row of the second row.
+• Calculate the eigenvalues of each row of the matrices.
+• The eigenvectors of the matrix will be the ones that appear in the matrix after applying the matrix multiplication.
+
+## Matrix Calculator
+
+Matrix calculator converts a matrix into a format for calculation. It can also convert one of the following types of matrices into another type:
+
+- Matrix Calculator: This calculator converts the matrix of the given columns from the original matrix into a new matrix.
+-
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 5546, 491, 817, 1420, 395, 1991, 1085, 3235, 1005]
+first_step_topk_probs=[0.2911435067653656, 0.15583789348602295, 0.1140134334564209, 0.1140134334564209, 0.0925716832280159, 0.062424659729003906, 0.05219915881752968, 0.04238240793347359, 0.02517620660364628, 0.023898513987660408]
+first_step_topk_text=[' can', ' describe', ' have', ' use', ' allow', ' are', ' provide', ' model', ' predict', ' help']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 3235, 269, 10922, 288, 263, 1496, 1968, 17, 1658, 2269, 1420, 500, 299, 3235, 806, 2433, 383, 330, 339, 287, 1780, 299, 491, 263, 1817, 8020]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to predict the likelihood of a given input. These models allow us to predict how likely it is for an individual to have a particular outcome, and they can also provide insights into how well these models are able to handle real-world situations.
+
+In this article, we will focus on two important aspects: (1) how the model fits into the context of the problem, and (2) how to apply them to other problems in the context of regression analysis. We begin by discussing the importance of model fitting and its implications for the model selection process.
+
+### Model Selection Processes
+
+The first step in modeling a model is identifying the best fit line(s). To do so, we need to know the best fit values for the data points and the parameters of the model. For example, if we want to find the best fit value for the parameter 1, we could use the following formula:
+
+$y_i = \frac{X_{i+1}}{X_{i}}$
+
+where X represents the data point at which we want to make the best fit, and Y denotes the prediction variable. The best fit value is often denoted as $Y_i$, while the best fit parameter is usually denoted as $p
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=144 first30=[263, 647, 286, 17, 595, 551, 711, 202, 6, 11101, 299, 835, 269, 993, 288, 1885, 269, 1960, 483, 5625, 351, 269, 8272, 202, 856, 1207, 66, 1911, 1714, 346]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+
+# Function to get the number of times the user can click on the button
+def show_count():
+    print("Entering")
+    print("Number of times the users can clicked...")
+
+    # Create a list of all the numbers from 1 to 100
+    # It will contain the number of users that can clicked
+    # on the button
+    count = 0
+    for i in range(100):
+        if i == 100:
+            count += 1
+        else:
+            count -= 1
+
+        if count >= 100:
+            print('The user is not allowed to click')
+            break
+
+    print(f"The total number of times {count} has been found.")
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=94 first30=[622, 353, 20, 18, 81, 12, 864, 353, 20, 552, 311, 12, 711, 202, 6, 12602, 354, 29, 202, 202, 6137, 28045, 11, 91, 12, 346, 892, 333, 643, 346]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return (1/n) * (1 - n)
+
+
+# Example 1:
+
+function factorial(x)
+    x = 0
+    for i in 1:n
+        if i == 0
+            return x
+        elseif i == 1
+            return x
+    end
+
+    return factorial(x + 1)
+end
+
+# Example 2:
+
+f(x) = (x+1)/2
+
+println("f(x)")
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=92 first30=[622, 354, 17, 19, 647, 353, 20, 552, 311, 12, 864, 353, 21, 864, 353, 81, 16, 20, 687, 711, 202, 6, 12602, 202, 202, 1018, 3715, 15, 1656, 15]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1 - n) * (2 * (n-1))
+
+
+# Example
+
+import sys, os, time
+sys.path.append('../')
+from subprocess import Popen, PIPE
+
+try:
+    print("Started")
+except KeyboardInterrupt:
+    pass
+else:
+    print("\t\t\t", file=sys.stderr)
+
+print("Finished")
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 2590, 1541, 31412, 535, 356, 698, 338, 783]
+first_step_topk_probs=[0.39770475029945374, 0.32291075587272644, 0.07511670142412186, 0.052167508751153946, 0.04700682684779167, 0.02388402633368969, 0.0226718932390213, 0.021521294489502907, 0.020429091528058052, 0.016587110236287117]
+first_step_topk_text=[' Yes', ' The', ' No', ' There', ' Cats', ' In', ' I', ' It', ' A', ' This']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 12052, 17, 202, 509, 3533, 330, 12052, 1091, 269, 2645, 3191, 578, 263, 1204, 2645, 5534, 351, 686, 1512, 15, 298, 482, 330, 913, 383, 415, 851]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+The answer is yes because the black cat has a small black spot on its head, and this is where it's most likely to be found.
+This is an interesting question. It seems to me that many people would have thought that black cats were black in the first place, but I'm not sure how they came up with that idea. Is there any evidence for this?
+I don't think so.
+Feline coloration is a normal part of the coat, but if you look closely at the white spots on your dog's tail, you'll see that they're actually black. If you look carefully, you'll notice that they are very dark brown or even black.
+This may be true for certain breeds of cats, but it's also true for other cats, too. For example, the black cat is known as a "white" cat. However, if you look carefully at the white spot on your dog, you will see that it's not black. This is a normal condition, and it could be due to a genetic defect, or something else.
+There are a few different reasons why cats are more likely to have this problem. First, it might help to know what's causing the black spot. For
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 843, 798, 2050, 338, 382, 409, 637, 1012, 744]
+first_step_topk_probs=[0.39569371938705444, 0.13254079222679138, 0.11336815357208252, 0.07473686337471008, 0.07094398140907288, 0.07094398140907288, 0.04252595081925392, 0.040642913430929184, 0.036046382039785385, 0.022557251155376434]
+first_step_topk_text=[' 1', ' 5', ' 4', ' One', ' A', ' The', ' 2', ' 3', ' 6', ' $']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 202, 20, 13032, 333, 843, 10941, 202, 21, 10941, 333, 409, 10941, 202, 22, 10941, 333, 637, 10941, 202, 23, 10941, 333, 354, 13032, 202]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+1 apple = 5 apples
+2 apples = 2 apples
+3 apples = 3 apples
+4 apples = 1 apple
+5 apples = 1 fruit
+6 apples = 2 fruits
+7 apples = 1 vegetable
+8 apples = 1 mango
+9 apples = 1 cherry
+10 apples = 1 pears
+11 apples = 1 lemonade
+12 apples = 1 lime
+13 apples = 1 pear
+14 apples = 1 egg
+15 apples = 1 fish
+16 apples = 1 potato
+17 apples = 1 banana
+18 apples = 1 papaya
+19 apples = 1 pineapple
+20 apples = 1 grapefruit
+21 apples = 1 avocado
+22 apples = 1 tomato
+23 apples = 1 pumpkin
+24 apples = 1 raisin
+25 apples = 1 orange
+26 apples = 1 tangerine
+27 apples = 1 vase
+28 apples = 1 garlic
+29 apples = 1 red pepper
+30 apples = 1 cucumber
+31 apples = 1 clove
+32 apples = 1 tea
+33 apples = 1 leaf
+34 apples = 1 flower
+35 apples = 1 poppy
+36 apples = 1 floral
+37 apples = 1 scallion
+38 apples = 1 mint
+39
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 1278, 2575, 3919, 382, 783, 1348, 1509, 3189, 360]
+first_step_topk_probs=[0.6810076236724854, 0.04727593809366226, 0.04372309148311615, 0.03369870409369469, 0.03198849782347679, 0.026657870039343834, 0.02054603584110737, 0.018513524904847145, 0.015031799674034119, 0.012526876293122768]
+first_step_topk_text=[' I', ' If', ' What', ' My', ' The', ' This', ' How', ' You', ' Do', ' "']
+
+[New tokens 10] count=256 first30=[2575, 330, 269, 2197, 288, 1284, 3252, 34, 202, 42, 285, 14299, 29, 698, 415, 453, 263, 619, 16, 1388, 1957, 15, 614, 383, 483, 342, 17964, 419, 833, 2331]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is the cause of my symptoms?
+Garrett: It's not a one-time event, but it can be triggered by any kind of stressor. The key to this is that you have a family history of chronic disease and your family may have had a stressful experience before. It could be something as simple as having a cold or an infection.
+Assigned: You've been diagnosed with chronic pain. What are the symptoms?
+Jonathan: There are a lot of things that we don't know about the condition. Some people think that the pain is caused by a physical problem, like a heart attack. But the pain itself isn't a health issue. And yet it seems to be related to some sort of stress. So there might be something about it that we don ́t really understand. We don ́t know what it is, but we do know that it could be something that we don`t think is causing the problem.
+Assired: Is it really a trigger for the pain?
+Joe: It has to do with our bodies. If we were to look at the blood flow in the brain, we would see that it is getting harder to pump the blood. So we need to find out if there is something
+
+================================================================================
