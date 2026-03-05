@@ -1,0 +1,310 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[418, 791, 2827, 2446, 15, 3609, 2857, 1255, 289, 288]
+first_step_topk_probs=[0.24386979639530182, 0.17841894924640656, 0.16936419904232025, 0.06986986845731735, 0.06830544024705887, 0.06295803934335709, 0.0437234491109848, 0.04150448366999626, 0.022215750068426132, 0.01900213584303856]
+first_step_topk_text=[' was', ' would', ' named', ' came', ',', ' asked', ' went', ' called', ' in', ' of']
+
+[New tokens 1] count=244 first30=[1255, 5273, 718, 2857, 299, 1258, 17, 1530, 418, 1114, 8763, 298, 3766, 299, 1798, 611, 672, 269, 1165, 1378, 896, 17, 1530, 3609, 5273, 718, 490, 1024, 982, 631]
+[Full output 1]
+Once upon a time, a curious child called Jackie went to school. She was very excited and wanted to learn more about the world around her. She asked Jackie if she could go to school and he said yes. After all of the fun she had, Jackie started to explore the world around him. At first she thought it would be boring, but after some time she realized that there were many other kids who didn't know what they were doing. They decided to play with the blocks and make a tower out of them. Jackie then told her mother about how she felt when she was playing with the blocks. When she was done, Jackie played with the blocks until she was tired. Then she got up and ran back home. The next day, Jackie went back to school and she saw that everyone had made a tower! It was very tall and strong. Jackie knew that the blocks were not just for the kids, but also for herself as well. Jackie's tower was very tall, so she could feel the sun on her face. She was happy to see everyone. And she even had a little girl named Alice who was very brave. Jackie loved learning new things and she always kept going to school.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 1134, 1112, 17, 202, 509, 2317, 418, 6214, 289, 2234, 2543, 419, 269, 3388, 15, 668, 2827, 383, 994, 269, 4549, 357, 9480, 888, 269, 1505]
+[Full output 2]
+Paris is the capital of the province of the same name.
+The city was founded in 1499 by the French, who named it after the river that flows through the area. The first inhabitants were the Romani and the Germanic tribes, who settled there in the early 13th century. After the fall of Rome, the city was taken over by the Romans and became part of the Roman Empire.
+In 1546, the city fell to the Turks in a battle near the city of Nice. In 1621, the city suffered a great earthquake and then returned to its original site. The city remained under the control of the Turks until the 18th century when it was abandoned as a Roman city.
+After the Second World War, the city underwent a period of renovation and re-opening. In the 1960s, the city's modern appearance began to be changed again with the construction of new buildings, new streets and other improvements.
+Today, the city is home to more than 1 million residents.
+The following cities are located on the southern border of the city:
+- Besançon - An island off the coast of France
+- Bastille - A town north of Paris
+- Borghese - A town south of Paris
+It is
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 483, 342, 6031, 359, 263, 1677, 288, 795, 7527, 17, 1220, 1373, 15, 269, 28071, 409, 91, 647, 843, 601, 342, 3020, 359, 353, 21, 91, 552]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be expressed as a product of two vectors. For example, the eigenvalue 2x + 5 will be written as (2x - 5) = 3x^2 - 5x + 5.
+
+The matrix A has dimensions (n x n), and its eigenvalues are real numbers.
+
+Matrix representation of a vector v is given by (v = 0).
+
+## Matrix representation of a linear transformation
+
+A linear transformation T : V → W between two vector spaces V and W is called a basis if it satisfies the following three conditions:
+
+1. There exists a nonzero vector c in V such that v(c) = 0 for all c in V.
+2. If v is not in V, then v(c)=0.
+3. If v has the same magnitude as c, then v is also a vector.
+4. If v(c)>0, then v must be equal to zero.
+5. If v[i]<0, then i=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 491, 5546, 395, 1420, 411, 1991, 9845, 1085]
+first_step_topk_probs=[0.3112674057483673, 0.2527294158935547, 0.10426152497529984, 0.10426152497529984, 0.09247001260519028, 0.03492323309183121, 0.023022830486297607, 0.021854400634765625, 0.019692469388246536, 0.014407319016754627]
+first_step_topk_text=[' use', ' can', ' have', ' describe', ' are', ' allow', ' we', ' provide', ' rely', ' model']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 4410, 17, 382, 3355, 2877, 330, 357, 1010, 2790, 578, 795, 6579, 15, 298, 1010, 2790, 578, 263, 3248, 1999, 15, 536, 483]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data sets. The basic idea is that each task has two inputs, and each task has a unique output, which can then be used to predict the next task based on these inputs.
+
+In this example, we will use a set of tasks to train a neural network for the following task:
+
+• A training set of training examples
+• A validation set of validation examples
+• Each task has its own training set of examples.
+
+To train the neural network in a way that best suits your needs, you will need to use a trained model. We will start by creating a neural network with two inputs: a prediction from the training set and a validation set of predictions from the validation set.
+
+The first step is to create a new neural network, which will contain two training samples: one for training and one for testing. To do this, we will first assign each task a label to a training sample, and then assign each task to a validation sample. This will give us the labels corresponding to the training and test samples.
+
+After the training and validation samples have been created, we will perform a number of steps before building the neural network. First, we will add a layer of layers to the neural network
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=59 first30=[263, 647, 286, 17, 595, 551, 711, 202, 6, 11101, 299, 835, 269, 1759, 1890, 29, 202, 856, 835, 66, 17668, 1714, 346, 622, 1701, 2067, 1813, 11, 91, 12]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+
+# Function to get the following numbers:
+def get_numbers():
+    return sum([len(x) for x in range(1, 10)])
+
+
+if __name__ == '__main__':
+    print("This is my python script")
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 353, 20, 12829, 311, 12, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 11, 73, 10, 7121, 836, 19085, 11444, 3, 711, 6, 1348, 620]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return (1 << n)
+
+
+if __name__ == '__main__':
+    print(f'Hello {hello}')
+
+# How do you solve a system of linear equations?
+
+Jun 13, 2017
+
+$y = \frac{x}{2}$
+
+#### Explanation:
+
+The first step is to find $a$, so we can write the second equation as $y = x + b$. Then we can use the first two steps to solve for $b$:
+
+$\begin{array}{rcl} y &= & a \\ -b &= & a\\\end{array}\Rightarrow y = \frac{-x}{2} = \frac{\sqrt{2}}{2}$
+$= & \sqrt{2} = 2 \cdot \frac{\pi}{4}$
+
+So we have $y = \sqrt{4}$ and we know that $a = \frac{(x+b)}{2}$. We can also substitute this into our system of equations:
+
+$\left(\frac{x+b}{2}\right)^2 = \frac{{3}^{2}}^{2} = 1$
+
+To solve this system, we need to find the values of $a
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8340466618537903, 0.16595329344272614, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 354, 17, 19, 647, 353, 20, 17, 19, 552, 311, 12, 864, 353, 21, 17, 19, 552, 353, 81, 552, 354, 687, 711, 202, 6, 8258, 263, 1180, 288]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1.0 - n) * (2.0 - (n - 1))
+
+
+# Given a list of integers, we can compute the Fibonacci number by
+# computing the sum of all the elements in the list.
+def fib_sum(n):
+    return 0.0 if n == 0 else 1.0
+
+
+# Find the largest integer that is divisible by 2^n.
+def largest_prime(n):
+
+    # The first number is prime to both n and its remainder.
+    # We only need this value for the second number.
+    # Therefore, we just take the last one to be the smallest possible
+    # value.
+    return n ** 2
+
+
+# Now we know what the greatest common divisor of two numbers is.
+# We will find the least common multiple of these numbers.
+
+# The highest common multiple of two numbers.
+L = [10**5]
+
+# Given an integer n, find the smallest positive integer that is not divisible by n.
+# The largest positive integer that divides n evenly into both n and itself.
+# In other words, we have n = 3.
+
+print("The smallest positive integer is 3.")
+
+#
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 2590, 1541, 31412, 1289, 2, 3, 1, 0]
+first_step_topk_probs=[0.48906955122947693, 0.2358834445476532, 0.17257599532604218, 0.0469345822930336, 0.036173898726701736, 0.019362492486834526, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' No', ' There', ' Cats', ' We', '', '', '', '']
+
+[New tokens 8] count=189 first30=[13676, 17, 31412, 395, 2645, 1091, 581, 491, 263, 2886, 12153, 298, 2645, 4887, 17, 1109, 658, 491, 263, 6078, 12153, 298, 2645, 13784, 17, 31412, 395, 453, 2886, 17]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Yes. Cats are black because they have a white coat and black eyes. They also have a yellow coat and black ears. Cats are not white.
+The reason why cats are black is because they do not have the same color as their other pets. Some cats are black because of the way they look. Some cats may be white but they are black because it is a result of their colors. Some cats have red hair and some have blue eyes. Many cats have black teeth and some have brown or green eyes. Some cats will show no signs of being black. Some cats might be black because they are black. Some people have black eyes, but they don't show any signs of being white. Some cats and dogs will have black eyes and some will have white eyes.
+You can read more about this in the article "What Does the State Of The World Know About Animal Behavior?" by Peter Kurtzman (2007).
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[843, 798, 354, 409, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.3862193822860718, 0.34801289439201355, 0.16785047948360443, 0.09791732579469681, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 5', ' 4', ' 1', ' 2', '', '', '!', '"', '', '']
+
+[New tokens 9] count=256 first30=[843, 17, 24, 10941, 202, 509, 993, 288, 10941, 289, 263, 7240, 330, 269, 993, 288, 10941, 357, 395, 1879, 758, 994, 486, 3466, 598, 619, 13032, 444, 1010, 288]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 5.5 apples
+The number of apples in a bag is the number of apples that are left over after you pick out one apple from each of the 4 groups. The number of apples left is the number 5, which means they are 1/4th apple. So if you had 6 apples in a pack, you would have got 7 apples.
+
+Now let's think about this situation with 3 friends, 3 friends, and 1 friend who want to share their candy equally between them. Each person gets one apple, so the total amount of candies for both people is equal to 8/6 = 9 apples. This gives us an idea of how much we need to distribute the candies among our friends.
+
+To find out how many candies each person needs to distribute, we first calculate the number of candies each person gets by taking the average of the number of times they were given out (1/2). Then, we multiply these numbers together because it makes sense when dealing with very large or small amounts like candies. But don't worry about understanding the exact formula yet; just remember that calculating the sum of numbers tells us the total amount needed to distribute all those candies evenly across all the three groups.
+
+So now you know what a "weight" is
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 783, 338, 15255, 1278, 3919, 2766, 421, 27614]
+first_step_topk_probs=[0.6537044644355774, 0.04220842197537422, 0.035174742341041565, 0.019324425607919693, 0.018827682361006737, 0.014893922954797745, 0.013774627819657326, 0.012739447876811028, 0.012092916294932365, 0.009818676859140396]
+first_step_topk_text=[' I', ' The', ' This', ' A', ' Thanks', ' If', ' My', ' Dr', ' D', ' Hi']
+
+[New tokens 10] count=224 first30=[356, 4575, 3934, 339, 263, 1951, 1194, 299, 1005, 1284, 3694, 2505, 611, 8139, 289, 269, 1165, 17, 202, 44, 1118, 357, 356, 1755, 847, 491, 269, 689, 299, 620]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I'm looking for a better way to help my son feel more secure in the world.
+I know that I don't have the time to do it, but I've been trying to teach him about the importance of being safe in the world and how to be safe in the real world. It's really important because it gives him the ability to work out what he needs from his life so that he can make the right choices when he is young.
+For example, I think if you're not sure what your child should look like, you might want to ask him about safety, or maybe you'd like to see some photos of a toy car on display.
+But if you are concerned about whether he will be able to play with other kids or if he will have any problems, I would suggest you visit your local library or call us at (718) 785-4242.
+If you're interested in learning more about the importance and importance of being protected by your child's parents, you can visit our website www.austin.gov/apr/apr/.
+
+================================================================================

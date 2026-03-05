@@ -1,0 +1,300 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[791, 418, 601, 1628, 3609, 728, 2446, 15, 289, 2827]
+first_step_topk_probs=[0.2982563078403473, 0.2982563078403473, 0.053474415093660355, 0.04818444699048996, 0.04573908820748329, 0.041214343160390854, 0.041214343160390854, 0.034698110073804855, 0.030153054744005203, 0.02717018499970436]
+first_step_topk_text=[' would', ' was', ' will', ' might', ' asked', ' may', ' came', ',', ' in', ' named']
+
+[New tokens 1] count=256 first30=[3609, 896, 3577, 299, 1432, 896, 1133, 299, 1258, 17, 382, 4769, 3968, 269, 929, 357, 1024, 418, 453, 2397, 299, 835, 1842, 444, 1258, 17, 202, 5, 2664, 330]
+[Full output 1]
+Once upon a time, a curious child asked her mother to take her back to school. The teacher told the child that she was not going to get home from school.
+"What is it?" said the little girl. "I don't know."
+"It's a child," said the little boy. "My name is Piggy and I'm not going to stay here until I can get home."
+The little boy laughed and said, "But I can't go home. I'll be back in school soon!"
+The little girl started to wonder if he could go home. She was afraid to go home because of the way she looked at the other children in the class.
+"Do you think I should go home?" she asked.
+"No," said the girl. "That's just like saying 'you are not going to come home'."
+"Oh no," said the boy. "You're not going to go home now."
+The girl got home and ran away into the woods. When she came out of the woods, she saw a large oak tree with its branches on the ground.
+"Why do you think that tree is so big? You've never seen it before!" said the little one.
+"Because this tree is so tall," said
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=84 first30=[269, 9556, 288, 269, 9556, 17, 202, 509, 9556, 578, 263, 2073, 288, 798, 15, 24, 2503, 353, 17759, 573, 382, 2868, 288, 338, 3116, 6763, 560, 330, 3323, 289]
+[Full output 2]
+Paris is the capital of the province of the province.
+The province has a population of 4,522 (2021). The town of Araguaia is located in the centre of the province and is home to the Araguanu River, which flows through the province's southern border with the Hausa people. It also serves as a tourist destination for the island of Mauritius, and the eastern coast of Madagascar.
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 357, 483, 342, 3020, 359, 269, 1701, 288, 795, 7527, 17, 535, 482, 1832, 15, 411, 1418, 299, 1098, 598, 922, 269, 18956, 395, 289, 2559, 288, 1010]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector that can be written as the sum of two vectors. In this case, we want to find out what the eigenvalues are in terms of each other.
+
+The first step in solving this problem is to compute the determinant and then take the square root of the result. If the determinant is negative, then the matrix will have zero entries. Otherwise, it will have one or two zeroes. The determinant is the product of the eigenvalues of the matrix and the eigenvalues of its transpose. So if we take the square roots of the determinant, we get the identity matrix.
+
+So now we just need to find the eigenvalues of our matrix. We know that the determinant is positive because there are only two ways to do this:
+
+1. Find the matrix whose determinant is negative.
+2. Find the determinant of the matrix whose inverse is positive.
+3. Find the eigenvalues of a matrix whose determinant equals zero.
+
+We can think of these matrices as vectors with three components, and they have one component which is zero. So we write the matrix as follows:
+
+${\begin{bmatrix}a&b\\c&d\end{bmatrix}}=\left\{ {\begin{bmatrix}-a&b \\c&d \end
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 817, 491, 395, 9845, 1420, 3069, 5546, 1991, 0]
+first_step_topk_probs=[0.26214835047721863, 0.21284784376621246, 0.21284784376621246, 0.09208523482084274, 0.07510676234960556, 0.060981933027505875, 0.029412228614091873, 0.029412228614091873, 0.025157615542411804, 0.0]
+first_step_topk_text=[' can', ' use', ' have', ' are', ' rely', ' allow', ' attempt', ' describe', ' provide', '']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 298, 3235, 269, 8020, 17, 1658, 2269, 395, 1431, 885, 289, 4855, 2465, 15, 913, 581, 395, 885, 299, 24007, 2281, 870, 707]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data and predict the outcome. These models are often used in machine learning, where they are used to classify complex data into classes and predict the outcomes based on these classes.
+
+## The concepts of the model
+
+The first step in understanding the model is to understand how it works. In this section we will discuss some of the key terms in the model:
+
+• The model has a set of inputs (the input values) and outputs (the output values).
+• The input data (the input value) is called a model.
+• The output data (the output value) is known as a model. This model may or may not contain information about the input data.
+• A model is a collection of data that represents a particular feature of the input data, such as a column vector or a row vector.
+• Models can also be classified by their features, which can be either linear or nonlinear. Linear models have features that are the same for all input data. For example, if you have a set of features with features 1 and 2, then the model would say that the feature vector is linear. If you have features 3 and 4, then the feature vector would be nonlinear.
+
+The second important term
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 17, 595, 551, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 655, 620, 307, 369, 555, 620, 307, 369, 17, 1192, 2369, 551, 3]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+
+if __name__ == '__main__':
+    import doctest
+
+    doctest.testmod()
+
+The Jemez Mountains of northern Guatemala are home to the largest and most diverse group of mammals in Central America, including the smallest mammal ever recorded. The Jemez mountains cover an area of more than 2 million square miles (6.5 million km2) and have been designated as one of the world's highest biodiversity hotspots.
+These mountains are located on two distinct tectonic plates that form the Caribbean Sea. The Caribbean Plate is the main body of the Earth's crust. This plate is also known as the Atlantic Plate. The Pacific Plate lies below the Caribbean Sea and is the second largest land mass on earth.
+The Jemancic River, which flows through Guatemala, has been designated a World Heritage Site since 1992. It is one of the oldest rivers in the world and the only river that drains into the Jemancico River basin. The Jembake River, which was discovered by Europeans in 1719, is the largest tributary of the Jemadacas River in Guatemala. The Jeminit River is part of the Jemaah Community, which includes the J
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=54 first30=[622, 311, 13, 81, 711, 202, 1052, 16216, 29, 346, 538, 1016, 11, 492, 15, 19575, 29, 3907, 62, 499, 1122, 2249, 494, 29, 331, 490, 453, 19575, 29, 416]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n*n
+
+
+class Solution:
+    def count(self, nums: List[int]) -> int:
+        if not nums:
+            return 0
+
+        res = 0
+        
+        for i in range(len(nums)):
+            res += 1
+            
+        return res
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=198 first30=[622, 311, 17, 73, 554, 11, 81, 12, 711, 202, 6, 426, 554, 26310, 1890, 395, 885, 299, 16005, 269, 31393, 993, 419, 1191, 263, 3756, 288, 4084, 17, 202]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return n.fib(n)
+
+
+# Fibonacci numbers are used to approximate the Fibonacci number by using a sequence of steps.
+def fib_sequence(n, n):
+    # Find the first n digits in the sequence
+    # Note: we have to find the first n-1 digits in the previous sequence.
+    n = len(n)
+
+    # Compute the sum of the last n digits of the sequence.
+    sum_of_n = 0
+
+    while n > 1:
+        n -= 1
+
+        # Find the next n-1 digit in the sequence.
+        for i in range(0, n - 1):
+            if n % i == 0:
+                sum_of_(i + 1) += n
+
+            n -= 1
+            break
+
+    return sum_of_.fib(1)
+
+
+if __name__ == '__main__':
+    print('Fibonacci numbers: ')
+    print(fib_sequence(5))
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 31412, 13676, 2590, 1541, 1906, 2, 3, 1, 0]
+first_step_topk_probs=[0.5699186325073242, 0.15499773621559143, 0.11946143209934235, 0.06069798767566681, 0.06069798767566681, 0.034226272255182266, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' The', ' Cats', ' Yes', ' No', ' There', ' All', '', '', '', '']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 12052, 17, 202, 509, 3533, 299, 482, 2395, 418, 2428, 419, 2766, 17, 4385, 421, 17, 1492, 2927, 301, 289, 610, 1563, 31412, 288, 269, 2176, 353]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+The answer to this question was provided by Dr. William D. Shapiro in his book Cats of the World (2000). He stated that there are no black cats in our country today because of their coloration.
+In addition, he noted that the number of cats found in the United States has increased significantly since 1980. This means that even though many people have been surprised to find an animal that is black or brown in color, they still do not know how many cats are in America.
+There are also no black cats found in any other country.
+A number of cities around the world have a black cat population, but only a few cities in China and India have black cats.
+However, a few cities have black cats and others have white cats. In these cities, the number of black cats is very small.
+In most cases, the black cats are black. In some places, the black cat population is much larger than in other areas. For example, in China, black cats are found in only one city, Hangzhou, which is a large city with a population of about 100,000.
+An important factor in determining the black cat numbers is the size of the city. It is more common
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 843, 798, 382, 1012, 409, 637, 2050, 338, 1218]
+first_step_topk_probs=[0.21562312543392181, 0.1942925751209259, 0.1844322383403778, 0.1215851828455925, 0.061777058988809586, 0.0568118616938591, 0.051892030984163284, 0.04519706219434738, 0.042903270572423935, 0.025485636666417122]
+first_step_topk_text=[' 1', ' 5', ' 4', ' The', ' 6', ' 2', ' 3', ' One', ' A', ' 8']
+
+[New tokens 9] count=107 first30=[354, 13032, 333, 798, 10941, 17, 202, 3016, 914, 24847, 395, 715, 289, 269, 4658, 34, 202, 24771, 354, 11554, 333, 1218, 24847, 17, 202, 2664, 330, 269, 4618, 288]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples.
+How many oranges are there in the store?
+Answer 1 orange = 8 oranges.
+What is the price of the fruit if there are 12 apples and 10 oranges?
+Answer : A 5% fruit cost $4.50.
+What will be the price of a bag of candies if you buy 100 bags?
+Answer (1) There will be a total of 30 bags. The total cost of the bags will be 50. What will be the total cost of all the bags?
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' I', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 10] count=77 first30=[356, 3442, 733, 289, 269, 5988, 339, 263, 7543, 288, 4437, 1244, 298, 491, 733, 2222, 299, 835, 1842, 17, 202, 44, 873, 4253, 289, 269, 5988, 374, 1284, 4035]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I've been in the hospital for a couple of weeks now and have been able to get home.
+I am currently in the hospital with my doctor, but I need help getting back to work.
+You can read more about how to stay healthy on the Internet at www.nlm.nih.gov/medlineplus/druginfo/newsletter.html.
+
+================================================================================

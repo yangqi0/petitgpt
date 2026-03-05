@@ -1,0 +1,289 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[418, 791, 2446, 3609, 15, 17280, 699, 348, 2827, 11304]
+first_step_topk_probs=[0.2677987813949585, 0.2064007818698883, 0.09449716657400131, 0.08970135450363159, 0.03528700768947601, 0.02569986879825592, 0.021982261911034584, 0.02086666226387024, 0.019807681441307068, 0.019807681441307068]
+first_step_topk_text=[' was', ' would', ' came', ' asked', ',', ' approached', ' had', ' st', ' named', ' suddenly']
+
+[New tokens 1] count=256 first30=[3609, 896, 3577, 922, 1024, 2747, 288, 269, 1563, 17, 360, 44, 1755, 847, 1118, 961, 988, 269, 3804, 17, 360, 1693, 415, 263, 3313, 288, 958, 741, 202, 509]
+[Full output 1]
+Once upon a time, a curious child asked her mother what she thought of the book. "I don't know," said the father. "It's a lot of fun."
+The boy laughed and then answered, "You should have read it before you had any idea about it."
+"What are your thoughts?" asked the mother. "My thoughts are not so much about what you read as about how you read."
+"Is there anything else I can do to help?" asked the father.
+"Are you ready for that?" asked the girl.
+"Yes, I am ready!" replied the mother.
+"How can I tell if I'm reading something right now? You should have done this for me," said the mother. The boy agreed with his answer. He asked if he could tell her if she would like to read more books.
+"Do you want to read some books? I think you'll need to read them in a way that is appropriate for children, but you also need to be aware of their age. They will never be able to read them all at once. It's okay to say 'yes' when you're looking at a book. You may find yourself reading it many times over. But you have to be prepared for your own curiosity."
+The
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 263, 7093, 336, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.9548863768577576, 0.018192233517766, 0.016392573714256287, 0.01052885688841343, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' a', ' Italy', ' S', '', '', '!', '"', '', '']
+
+[New tokens 2] count=153 first30=[269, 9556, 17, 382, 4223, 288, 269, 4079, 330, 269, 2317, 288, 336, 554, 25854, 15, 536, 418, 6214, 289, 2234, 7134, 17, 202, 509, 775, 10894, 586, 269, 15247]
+[Full output 2]
+Paris is the capital of the province. The capital of the district is the city of Sibiu, which was founded in 1482.
+The first inhabitants were the Celts who arrived in the region around the 12th century and settled in the area. The town was ruled by a bishop and a bishop's son. During the Middle Ages, the population increased rapidly with the spread of Christianity and during the 18th century, the population was reduced to a few hundred people. In the 19th century, many people moved to the area as the population grew and the town became more prosperous.
+In the 20th century, Sibiu has become one of the most beautiful towns in Italy. It is located on the A4 road between Sibiu and Siena.
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1623, 993, 357, 14274, 269, 1986, 288, 269, 3823, 17, 382, 8639, 288, 287, 10294, 8537, 330, 269, 993, 288, 22542, 4672, 28069, 353, 76, 17, 72, 1155, 545]
+[Full output 3]
+In linear algebra, an eigenvalue is a real number that determines the size of the matrix. The dimension of an eigenvector is the number of linearly independent eigenvectors (i.e., all linearly independent vectors).
+The term "linear" refers to the set of all linear transformations from one vector space to another. In other words, it represents the number of variables in the original vector space and the number of linear transformations from its basis to itself. This means that every linear transformation can be written as a linear combination of those two sets:
+Linear transformation from one vector to another is also called a linear transformation.
+An eigenvalue is a single-valued vector or scalar value that can be used to determine whether a given matrix is invertible or not. For example, if we have a matrix A = [a b] then we know that the sum of the eigenvalues is a multiple of the product of the eigenvalues:
+A = [1 b], where b is the numberof columns in the matrix.
+If we want to find out how many distinct eigenvalues are possible for a matrix A, we need to calculate the total number of eigenvalues. Since there are only three matrices, this is enough to find the number of unique eigenvalues. However, since there are many ways to express this problem, we will assume that
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 5546, 491, 395, 483, 1085, 9845, 3069, 1420, 1991]
+first_step_topk_probs=[0.17600984871387482, 0.14290884137153625, 0.14290884137153625, 0.11708860099315643, 0.08058318495750427, 0.07261154055595398, 0.05312373861670494, 0.040944069623947144, 0.03155682608485222, 0.03155682608485222]
+first_step_topk_text=[' use', ' describe', ' have', ' are', ' can', ' model', ' rely', ' attempt', ' allow', ' provide']
+
+[New tokens 4] count=256 first30=[395, 885, 299, 3235, 269, 5267, 288, 263, 1817, 8020, 1728, 351, 263, 854, 288, 870, 17, 535, 482, 2930, 15, 411, 601, 1798, 806, 299, 817, 760, 2269, 289]
+[Full output 4]
+Neural networks are a class of machine learning models that are used to predict the probability of a particular outcome based on a set of data. In this article, we will learn how to use these models in practice and how to model them using neural networks.
+
+## The Neural Network Model¶
+
+The Neural Network model is a generalization of the concept of an approximate representation of the observed data. It uses a multivariate Gaussian distribution as the basis for its prediction. It is defined by the following equation:
+
+$\displaystyle \begin{aligned} f(x) = \frac{\text{Probability}}{\text{Mean}]\sum_{i=1}^{n} \left(\frac{\text {Probability}}{\sum_{i}\left(\text {Predicted }\right)}^{2}\cdot \left(\text{Probabilities}\right)\end{aligned} \quad \text{where $\text{Probable}$ denotes the set of possible outcomes of the data $X$ from the previous observation $y$.
+
+In the neural network model, the input features are represented by a vector of real numbers, called the weights. These vectors can be obtained through linear algebra by setting the variables to be real numbers. A positive number (positive number) means that the system
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=105 first30=[263, 647, 286, 3, 711, 6, 19688, 419, 18122, 637, 17, 19, 17, 26, 351, 7701, 16, 5154, 16, 2725, 1720, 29, 6974, 202, 202, 807, 5210, 17, 2541, 655]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# Generated by Django 3.0.7 on 2020-03-24 15:52
+
+from django.db import migrations, models
+
+
+class Migration(migrations.Migration):
+
+    dependencies = [
+        ('home', '0004_auto_20200303_1631'),
+    ]
+
+    operations = [
+        migrations.AlterField(
+            model_name='event',
+            name='location',
+            field=models.CharField(max_length=255),
+        ),
+    ]
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=170 first30=[622, 354, 490, 311, 1319, 409, 861, 643, 1107, 552, 20, 711, 202, 6, 535, 62, 20, 3558, 711, 202, 1018, 4160, 359, 1216, 202, 807, 13913, 17, 7856, 655]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return 1 if n % 2 == 0 else -1
+
+
+# In[1]:
+
+
+import numpy as np
+from scipy.stats import pearsonr, spearmanr
+
+class Solution:
+    def __init__(self) -> None:
+        self.nums = [0] * 10  # random number
+        self.max_num = 10  # max number of items in the array
+
+        # initialise the array with the first element and the second element
+        self.values = np.zeros((10, 10))
+        self.setValue(np.random.randint(0, 10), np.random.rand(10, 10), values=self.nums)
+
+    def setValue(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.7185943722724915, 0.28140559792518616, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=78 first30=[622, 354, 17, 19, 647, 353, 20, 17, 19, 552, 311, 12, 864, 353, 20, 17, 24, 552, 353, 20, 17, 1980, 864, 353, 20, 552, 353, 20, 552, 311]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1.0 - n) * (1.5 - (1.25 * (1 - (1 - n)) ** 2))
+
+
+If you are facing any programming issue, such as compilation errors or not able to find the code you are looking for.
+Ask your questions, our development team will try to give answers to your questions.
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 2590, 1541, 1906, 783, 2, 3, 1, 0]
+first_step_topk_probs=[0.5897102952003479, 0.20808888971805573, 0.10036347061395645, 0.06280586123466492, 0.021037325263023376, 0.01799417845904827, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' No', ' There', ' All', ' This', '', '', '', '']
+
+[New tokens 8] count=256 first30=[13676, 17, 1541, 330, 263, 3313, 288, 1170, 1882, 351, 269, 2442, 614, 839, 672, 619, 3467, 29, 922, 330, 269, 2419, 288, 263, 3191, 415, 1629, 17, 31412, 491]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Yes. There is a lot of information available on the subject but only about one thing: what is the color of a cat's body. Cats have a color based on their body color. So if you look at a cat's skin color it is likely to be black or brown. And if you look down in the eye you will see a dark stripe which is a result of a dark spot on the retina. If you look down into your eyes they are probably black. This is because most cats are very sensitive to light. The longer a person has an eye, the more light they receive.
+What does this mean for the human race? The answer is that humans are not really all alike. They differ in many ways. Some people may be as white as snow, while others may be as black as ice cream. But when the two groups merge, the differences can't be seen. People who are "white" often have darker skin than those who are "black." That means there are people who are more likely to be white than are people who aren't.
+Now, let us take a closer look at these different characteristics. We do know that cats are not "white" and that some people have a "color" based on their own skin color
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 843, 354, 1012, 409, 3, 4, 2, 0, 1]
+first_step_topk_probs=[0.4618011713027954, 0.2471843659877777, 0.1629539132118225, 0.07081950455904007, 0.057241059839725494, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 4', ' 5', ' 1', ' 6', ' 2', '', '!', '', '', '']
+
+[New tokens 9] count=112 first30=[843, 10941, 7670, 798, 934, 667, 17, 202, 30736, 29, 354, 13032, 647, 798, 934, 667, 333, 744, 21, 7, 10941, 647, 744, 23, 934, 667, 333, 7, 24, 7]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 5 apples plus 4 buys.
+Solution: 1 apple + 4 buys = $2$ apples + $4 buys =$5$ apples +$4 buys
+Add the two apples together to get a total of $3+4+3=9$.
+$$1+3+4-3=7$$
+$$0+3+2-3=8$$
+$$-3+6-3=10$$
+$$11+4+6=13$$
+$$21+4+12=14$$
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 3919, 382, 1289, 27614, 783, 2575, 15255, 1509, 1803]
+first_step_topk_probs=[0.6533544063568115, 0.04525366425514221, 0.03870750963687897, 0.031428031623363495, 0.028319021686911583, 0.02688181959092617, 0.020718635991215706, 0.01682221330702305, 0.015968477353453636, 0.014388800598680973]
+first_step_topk_text=[' I', ' My', ' The', ' We', ' Hi', ' This', ' What', ' Thanks', ' You', ' When']
+
+[New tokens 10] count=256 first30=[3189, 486, 491, 833, 3048, 34, 202, 45, 1976, 10961, 29, 5531, 15, 356, 791, 916, 299, 1118, 490, 486, 2068, 6968, 18029, 289, 269, 2519, 17, 202, 8104, 8413]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: Do you have any questions?
+Jennifer: Well, I would like to know if you're feeling stressed in the future.
+Assisted: I've been trying to get a sense of what's going on at work, but I don't think it's something that's been happening in my life for a long time.
+Joel: So I'm going to look at this in more detail and I'll try to answer some of your questions.
+Jenn: Are you worried about how much stress is in your body?
+Joel (and I am not sure).
+Assistant Joel: Yes, but I feel stressed because of the stress.
+Joen: That's a good question, but I'm still wondering why.
+Joe: I have a problem with my heart. I need to get out of bed, and I feel I can't get out of the house.
+Assigned: How do you feel about the situation?
+Joe (and I'm just thinking about it).
+Assigned Joee: What are you doing right now?
+Joee: Well, let me tell you, I'm going back to school and I'm going home.
+Assered Joee: Okay, so I
+
+================================================================================

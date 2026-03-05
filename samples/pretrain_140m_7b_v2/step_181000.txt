@@ -1,0 +1,305 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[791, 418, 2446, 2827, 3609, 601, 1628, 15, 289, 728]
+first_step_topk_probs=[0.376785010099411, 0.11980216205120087, 0.09233514219522476, 0.09233514219522476, 0.0876491367816925, 0.0469151996076107, 0.036158960312604904, 0.02837829850614071, 0.0226276982575655, 0.016554778441786766]
+first_step_topk_text=[' would', ' was', ' came', ' named', ' asked', ' will', ' might', ',', ' in', ' may']
+
+[New tokens 1] count=233 first30=[3609, 896, 3577, 299, 1432, 896, 1133, 299, 269, 1844, 17, 202, 5, 44, 1418, 1284, 9292, 299, 2142, 1842, 961, 1024, 988, 374, 263, 16428, 17, 360, 2731, 356]
+[Full output 1]
+Once upon a time, a curious child asked her mother to take her back to the family.
+"I want my sister to come home," she said with a smile. "But I can't afford it."
+She tried again and again until she was so tired that she could not go back to sleep.
+Then she saw a big box of gold coins in the window. She looked up at the box and saw a small piece of silver on it.
+"This is silver!" she said as she pulled the coin out of the box.
+The child then opened the box and found another gold coin. He looked at her and saw that it had the same weight as the silver coin.
+He took the coin out and went to his room. He thought he could find out what the coin was worth.
+"It's silver!" he said.
+"You have a coin in your pocket!"
+The child stopped and looked at him. Then he thought about the coin.
+"That's silver!"
+"What are you thinking?" he asked.
+"Yes, it's silver!" The child laughed.
+"No, it's not. It's silver!"
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 263, 4455, 336, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.93336421251297, 0.03507699817419052, 0.017822513356804848, 0.01373634859919548, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' a', ' France', ' S', '', '', '!', '"', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 9556, 15, 298, 269, 9556, 330, 658, 1414, 359, 360, 1044, 3281, 288, 269, 5003, 5, 353, 807, 686, 3388, 1112, 504, 536, 1818, 360, 14192]
+[Full output 2]
+Paris is the capital of the province of the province, and the province is also known as "the City of the Island" (from its French name), which means "city of the island".
+The province was a member of the French Empire until 1798. It was ruled by the French monarchy from 1803 to 1813 and again from 1814 to 1818. The French Republic was formed in 1789 when Napoleon Bonaparte, then Prime Minister of France, and King Louis XVII of France were elected as French-speaking citizens. In 1821, the French Revolution had ended and the French people had no choice but to accept independence for their country. The French Revolution was an attempt to overthrow the monarchy, and many of the people who had been living under the monarchy were executed or exiled.
+French Revolution: The Revolution of 1830
+In 1832, the French revolutionaries began a series of political reforms that took place throughout the country. They abolished the monarchy, abolished the monarchy and abolished the monarchy itself. This reform was a result of the revolution and the rise of the French revolution.
+The revolutionaries founded the United States of America and established the republican government of the United States. They changed the name of the country from the French colony of Acadia to the United States
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 3777, 269, 1134, 3892, 359, 263, 4409, 17, 1278, 486, 491, 795, 7527, 15, 1721, 400, 298, 280, 15, 1000, 760, 7527, 395, 988, 299, 342]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that gives the same direction as a vector. If you have two vectors, say v and w, then these vectors are said to be linearly independent if their sum equals zero:
+
+v + w = 0
+
+where v is the null space of all vectors in V. The matrix A can also be written as follows:
+
+A = |v| * |w|
+
+Now let's see how this works with some examples! Suppose we have two vectors v1 and v2, where v1 and u1 are scalars (a, b) and (c, d). We want to find the corresponding eigenvectors for v1 and w. To do so, first compute the dot product between them:
+
+u1 * v2 = (u1 - v2)/2 * u1 = v1/2 * (u1 * u2)
+v1 * v3 = (v1 * u3)/(v1*v2)
+
+Next, we need to find the eigenvalues of v1 and its transpose. Recall that the transpose of a matrix is just a square matrix whose columns are scalars. Since both vectors are linearly independent, they must satisfy the equation Ax = b. That means our new
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 491, 5546, 395, 1085, 1420, 2, 1, 0]
+first_step_topk_probs=[0.3646855354309082, 0.24041567742824554, 0.14281289279460907, 0.10448415577411652, 0.055673617869615555, 0.05308808013796806, 0.03884006664156914, 0.0, 0.0, 0.0]
+first_step_topk_text=[' use', ' can', ' have', ' describe', ' are', ' model', ' allow', '', '', '']
+
+[New tokens 4] count=60 first30=[483, 342, 885, 299, 1085, 2281, 870, 298, 3235, 269, 2519, 17, 535, 482, 2861, 15, 411, 601, 2267, 751, 288, 269, 3355, 4740, 3722, 760, 2269, 15, 359, 1047]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data and predict the future. In this talk, we will discuss some of the basic concepts behind these models, as well as how they can be applied in real-world applications.
+Papers: 10/24/2010; 5(1): 1-2
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=155 first30=[263, 647, 286, 17, 595, 551, 711, 202, 6, 11101, 299, 835, 269, 1759, 1890, 202, 856, 835, 66, 17668, 1714, 346, 622, 1701, 2067, 20, 339, 1249, 289, 1457]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+
+# Function to get the following numbers
+def get_numbers():
+    return sum([1 for i in range(len(a))])
+
+
+# Return the number of strings that have the same length as the input string
+def getstring(number):
+    return int(number)
+
+
+# Get the length of the string
+def parse_length(s):
+    if s == 0:
+        return None
+
+    return s[0]
+
+
+# Parse the input string and return the result
+def parse(input_str):
+    # Print the input string
+    print("Input:", input_str)
+    print("Output:", output_str)
+
+
+if __name__ == "__main__":
+    main()
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=72 first30=[622, 311, 13, 81, 202, 202, 6, 7509, 2849, 411, 491, 263, 1180, 288, 545, 1812, 9201, 202, 1555, 1249, 289, 1457, 11, 1813, 11, 1253, 5301, 346, 490, 1804]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n*n
+
+# Make sure we have a list of all possible combinations
+for i in range(len(list)):
+    if len(list) == 1:
+        return list[i]
+
+if __name__ == '__main__':
+    # Run the code
+    print(f"The code is {print_code()}")
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=256 first30=[622, 311, 17, 73, 554, 11, 81, 12, 711, 202, 6, 16454, 269, 31393, 993, 288, 1010, 6222, 202, 856, 8049, 66, 2525, 11, 81, 15, 1249, 32, 19, 464]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return n.fib(n)
+
+
+# Calculate the Fibonacci number of each integer
+def fib_sum(n, i=0):
+    # Loop through all integers and check if they are equal to 1 or 0
+    while n > 1:
+        n -= 1
+
+    # Check if they are all equal to 1
+    for i in range(1, len(n)):
+        if n[i] == 1:
+            return n[i - 1] + 1
+
+
+if __name__ == '__main__':
+    # Find the Fibonacci number for every integer.
+    # We use this as an example, but it's not necessary because we're using the same base
+    # and type of the base.
+    # The base is the number we want to compute.
+    # Note: If you have a base other than 1, it will work.
+    # So we need to find the base from 1, 2, 3, ... and then add them together.
+    # In this case, we'll just add 1 to the base, which we'll call the Fibonacci number.
+    # To make sure that our base is the same, we'll simply add 1 to it.
+    # (The base is 1, so we'll do this by adding
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 2590, 1541, 31412, 4619, 356, 2, 1, 0]
+first_step_topk_probs=[0.42616379261016846, 0.31178808212280273, 0.11590150743722916, 0.07640696316957474, 0.03685188293457031, 0.016872024163603783, 0.01601576991379261, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' No', ' There', ' Cats', ' Black', ' I', '', '', '']
+
+[New tokens 8] count=256 first30=[13676, 17, 1541, 330, 263, 3313, 288, 1170, 1882, 351, 269, 2442, 672, 2645, 10676, 15, 614, 486, 986, 2126, 1313, 435, 269, 5826, 775, 1234, 2179, 833, 11928, 17]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Yes. There is a lot of information available on the subject about black cats, but you should always look at the topic first before making any conclusions.
+The truth is that there are no black cats in North America. The fact that most people think of black cats as something else does not mean they are either black or black. If you have ever seen a black cat in your backyard, it would be an odd sight to see one. You probably don't even know what they are. But if you were to observe a black cat, you might not find it.
+One way to understand this is to think of a black cat as a group of white, black, or red cats with their eyes closed. In other words, these cats are black, so you could say that they are black. This is because they are all black, and black cats are just like each other.
+Another way to understand black cats is to think about how many black cats are in the house. One black cat in a house has more than 1,000 black cats. Another black cat in the house has less than 200 black cats. So you could say, "There are more black cats in the house." That's a good idea. But there are other ways to explain black cats
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 354, 843, 798, 2050, 1012, 338, 409, 637, 1541]
+first_step_topk_probs=[0.2314343899488449, 0.19795633852481842, 0.1448279470205307, 0.09547652304172516, 0.0860314890742302, 0.03938808664679527, 0.03938808664679527, 0.034228697419166565, 0.032713063061237335, 0.02735448256134987]
+first_step_topk_text=[' The', ' 1', ' 5', ' 4', ' One', ' 6', ' A', ' 2', ' 3', ' There']
+
+[New tokens 9] count=218 first30=[2050, 13032, 15, 795, 10941, 15, 1237, 24847, 15, 1679, 23462, 15, 2436, 15182, 17574, 15, 298, 649, 351, 17, 2575, 330, 269, 2056, 993, 288, 10941, 357, 406, 699]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple, two apples, three oranges, four grapes, five strawberries, and so on. What is the total number of apples that he had in his basket?
+Answer by Liza
+To find out how many apples are in a basket, we need to follow these steps:
+1. Write down the number of apples in each basket.
+2. Divide the number of baskets into equal parts.
+3. Write down each part of the basket.
+4. Use the numbers from 1 to 10 as your bases for the numbers.
+5. Now you can see which base is the most common and which is the least.
+6. To find the number of items that make up a basket, subtract the number of elements from the number of objects. For example, if you were to take 5 apples and 3 apples, you would get 4 apples. If you took 5 apples and 1 apple, you would have 6 apples. If not, you will have 7 apples.
+7. Find the number of different ways to distribute the apples among the baskets.
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 1278, 3919, 15255, 783, 2575, 1509, 382, 1803, 3189]
+first_step_topk_probs=[0.8258352279663086, 0.03440425544977188, 0.023279083892703056, 0.02209766022861004, 0.020976196974515915, 0.020436996594071388, 0.01890113204717636, 0.013828362338244915, 0.010383970104157925, 0.00985698401927948]
+first_step_topk_text=[' I', ' If', ' My', ' Thanks', ' This', ' What', ' You', ' The', ' When', ' Do']
+
+[New tokens 10] count=72 first30=[356, 3442, 733, 289, 269, 5988, 339, 263, 7543, 288, 2233, 1244, 298, 491, 733, 1133, 299, 713, 263, 3851, 611, 17, 356, 1755, 847, 1118, 922, 356, 3114, 342]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I've been in the hospital for a couple of days now and have been back to work a bit more. I don't know what I'll be doing, but I can still get my blood pressure checked. If you're not on your own, I'd like to talk with you about this.
+Jun 18, 2012 at 7:52 AM
+
+================================================================================

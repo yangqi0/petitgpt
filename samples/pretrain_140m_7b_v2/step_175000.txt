@@ -1,0 +1,271 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[418, 3609, 2827, 791, 289, 15, 288, 2446, 699, 2977]
+first_step_topk_probs=[0.3672221004962921, 0.13650809228420258, 0.1230039969086647, 0.08999165147542953, 0.04120117425918579, 0.040553245693445206, 0.0391102209687233, 0.03345274552702904, 0.020934194326400757, 0.018863273784518242]
+first_step_topk_text=[' was', ' asked', ' named', ' would', ' in', ',', ' of', ' came', ' had', ' saw']
+
+[New tokens 1] count=256 first30=[3609, 896, 3577, 922, 1024, 2747, 288, 269, 2475, 360, 397, 262, 292, 741, 382, 929, 14618, 357, 383, 418, 269, 2475, 360, 526, 31014, 961, 298, 988, 357, 383]
+[Full output 1]
+Once upon a time, a curious child asked her mother what she thought of the word "opinion." The child replied that it was the word "conversation," and said that it was a very important word in the world. She then asked her mother if she could tell her parents where the word was coming from?
+The child replied that she should know what was going on with the word "animism" because she knew that it was an old woman who had been drinking tea. The child responded that she would like to learn more about this new word. The child answered that she would love to know how much she loved the word "nirvana" but she also asked her mother why she wanted to learn about this word. The parent replied that she was interested in learning about the word "sin" because she knows that sin is a powerful force. The child replied "I want to learn about the word sin!"
+When the child asked the parent whether she would like the word "yoga" or "sports" for the first time, the parent replied that it would be "no matter what the word is, there will always be a good reason for it." The child answered "No, I don't think there are any good reasons why you can't do it." The
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=135 first30=[269, 9556, 17, 382, 4223, 288, 269, 4079, 330, 269, 2317, 288, 336, 636, 89, 475, 15, 536, 330, 3323, 289, 269, 3246, 16, 72, 5240, 645, 288, 269, 9556]
+[Full output 2]
+Paris is the capital of the province. The capital of the district is the city of Sauvage, which is located in the north-eastern part of the province and was the capital of a province from the 11th century until the end of the 19th century.
+The town is situated on the banks of the River Languedoc, which flows into the Mediterranean Sea at the mouth of the Languedo-Cordillera. The town has a population of 331 inhabitants (2005).
+This article is licensed under the GNU Free Documentation License. It uses material from the Wikipedia article "Sauvage". A list of authors is available in Wikipedia.|
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=135 first30=[263, 13742, 1239, 357, 6584, 269, 3892, 288, 263, 4409, 17, 382, 28071, 483, 342, 3020, 359, 29, 202, 202, 2302, 40, 333, 990, 2392, 94, 20, 2031, 21, 96]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that describes the direction of a vector. The eigenvalue can be written as:
+
+$$E = \frac{1}{2}mv^T.$$
+
+The following example illustrates how to find the eigenvalues of a matrix using the formula for the dot product:
+
+$$\begin{bmatrix}
+a & b \\
+c & d
+\end{bmatrix}$$
+
+Here, $a$ and $b$ are vectors with their respective magnitudes equal to 1, respectively. Solving this equation yields two unknowns: the magnitude of the vector and its direction. This result demonstrates the importance of carefully selecting the appropriate values based on available information.
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 5546, 483, 491, 395, 1420, 1085, 1991, 9845, 586]
+first_step_topk_probs=[0.2801191508769989, 0.15795321762561798, 0.12173932045698166, 0.10412915796041489, 0.06880180537700653, 0.0686461478471756, 0.031428493559360504, 0.028319453820586205, 0.02422291226685047, 0.019667448475956917]
+first_step_topk_text=[' use', ' describe', ' can', ' have', ' are', ' allow', ' model', ' provide', ' rely', ' were']
+
+[New tokens 4] count=256 first30=[22968, 269, 1194, 4383, 1798, 298, 269, 2722, 581, 1798, 17, 382, 1085, 330, 1728, 351, 269, 3207, 357, 269, 2613, 4621, 1968, 289, 1663, 299, 1798, 15, 2592, 702]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the way humans learn and the ways they learn. The model is based on the theory that the brain processes input in order to learn, rather than the whole process. It was developed by researchers at MIT's Center for Neural Information Processing Systems (CNS).
+The model was originally designed to mimic the way people learn in the real world. However, it was not implemented as part of the core training of the computer science department at MIT. Instead, it has been used to train new computer scientists who want to build better models of how human brains learn.
+In this study, the model was used to predict which people will be able to learn in a given year. The results showed that the model predicted that most people will be trained in a particular year.
+"This is an important step forward because we know that we can use our model to improve education," said Alan Stiglitz, who led the research team. "We believe that this could help us to develop better models of human learning."
+In addition to the work described above, the researchers also studied how people learned in different parts of the world. They found that people who learned in different regions of the world were more likely to do well in the course of the study.
+The model predicted
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=125 first30=[263, 647, 286, 17, 595, 551, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 655, 3715, 555, 490, 1804, 11, 6022, 17, 8256, 12, 1396, 409, 29]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+
+if __name__ == '__main__':
+    import sys
+
+    if len(sys.argv) < 2:
+        print("Usage: python add_test.py [options]")
+        exit(-1)
+
+    input = sys.stdin.readline().strip()
+    output = sys.stdout.readline().split()
+
+    if len (input) > 0 and len (output) > 0:
+        print(f"Input:\n{input}")
+        print(output)
+
+        for i in range(0, len(input)):
+            print(i, input[i])
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=56 first30=[622, 354, 490, 311, 861, 643, 1107, 354, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 11, 2440, 4886, 11, 1161, 687, 3, 711, 807, 5210]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return 1 if n == 0 else 1
+
+
+if __name__ == '__main__':
+    print(factorial(10))
+
+from django.apps import AppConfig
+
+
+class SitemapAppConfig(AppConfig):
+
+    name = 'sitemap'
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.6394357681274414, 0.3605642020702362, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=44 first30=[622, 354, 17, 19, 647, 353, 20, 17, 19, 1341, 311, 12, 864, 353, 21, 17, 19, 552, 311, 12, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1.0 / n) * (2.0 - n)
+
+
+if __name__ == '__main__':
+    print("Fibonacci number is:", fib(100))
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 2590, 31412, 1541, 356, 1289, 2, 1, 0]
+first_step_topk_probs=[0.5030996799468994, 0.21864628791809082, 0.1054554209113121, 0.0732373371720314, 0.04350484162569046, 0.030213482677936554, 0.02584296278655529, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' No', ' Cats', ' There', ' I', ' We', '', '', '']
+
+[New tokens 8] count=256 first30=[13676, 17, 31412, 395, 2645, 1091, 581, 491, 269, 3392, 299, 1062, 2645, 6133, 298, 4304, 4887, 17, 202, 4168, 15, 715, 330, 808, 2645, 3630, 289, 10676, 17, 1541]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Yes. Cats are black because they have the ability to make black hair and dark eyes.
+No, there is no black skin in cats. There are two types of black skin, white and black. White skin is a product of the process of pigmentation. The black skin color is caused by melanin.
+The fact that cats have black skin indicates that they are not as black as they should be. In addition, black skin is a sign of their being black. This is because they are not the same as human beings. They do not look like humans or any other animals.
+The color of your cat's skin is a reflection of its natural color. It reflects how much light it receives from the sun. If you were to take a picture of your cat, you would see that it has a brownish gray or white stripe on its body. This is why they are black.
+You may notice that your cat looks very brightly colored. However, this does not mean that he is black. It just means that his fur is black.
+Skin color is a sign that your cat is black. You can tell if your cat is white by looking at his fur and looking at his eyes. He has black eyes and a black coat.
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[843, 354, 798, 637, 1012, 409, 2, 3, 1, 0]
+first_step_topk_probs=[0.33384448289871216, 0.2200837880373001, 0.1983119547367096, 0.10144849866628647, 0.08181211352348328, 0.06449916958808899, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 5', ' 1', ' 4', ' 3', ' 6', ' 2', '', '', '', '']
+
+[New tokens 9] count=126 first30=[843, 10941, 15, 1012, 934, 667, 15, 637, 10941, 15, 354, 934, 667, 17, 202, 509, 2818, 993, 288, 10941, 263, 1419, 601, 491, 330, 354, 13032, 17, 2069, 15]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 5 apples, 6 buys, 3 apples, 1 buys.
+The average number of apples a person will have is 1 apple. So, if we have 4 apples, the average number of fruits a person will eat is 1 apple = 4 apples.
+So, if you are buying all the fruit in a basket, you can get a total of 4 apples. But, if you want to buy all the fruit at once, you need to know how many apples each person will have.
+Example: If you bought 100 apples, you would have been able to find out that 100 apples are a good amount.
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 14506, 6389, 368, 1966, 4341, 13776, 338, 495]
+first_step_topk_probs=[0.5084398984909058, 0.032203108072280884, 0.02683672495186329, 0.022657716646790504, 0.022657716646790504, 0.021507827565073967, 0.020416302606463432, 0.018396621569991112, 0.01615062542259693, 0.015330977737903595]
+first_step_topk_text=[' I', ' The', ' Chris', ' Michael', ' M', ' John', ' David', ' Steve', ' A', ' J']
+
+[New tokens 10] count=256 first30=[4593, 18557, 368, 2026, 15, 23540, 7193, 288, 4424, 298, 5519, 5642, 202, 48, 2536, 17, 389, 653, 10, 20153, 289, 269, 2439, 29, 338, 1136, 25089, 299, 2439, 12858]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: Mary Beth Mott, Associate Professor of Education and Human Development
+Mrs. Bates' Role in the School: A New Approach to School Reform and School Improvement
+The new school year is not about "school reform," but rather a change in the way schools are run. The new school year has been created by the Department of Education with a goal of improving the quality of teaching and learning for all students. This year's theme is to help schools create more effective schools. It is important that schools have an appropriate role in their school programs because they can be used as models for other schools. As the school year progresses, the focus shifts from helping teachers improve student performance and how to improve the quality of instruction.
+Schools must implement a variety of strategies to help them achieve the goals of school improvement. One strategy is to use a wide range of approaches, including:
+- Complementary and Alternative Schools
+- Designing and implementing a comprehensive curriculum
+- Developing the right instructional practices
+- Implementing the right content knowledge
+- Ensuring that the school curriculum meets all academic standards
+- Providing resources and support for the school
+- Supporting teachers who work together to develop the best pedagogy and methods for teaching
+A school's ability to meet
+
+================================================================================

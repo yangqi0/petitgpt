@@ -1,0 +1,367 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[418, 791, 2446, 3609, 2827, 15, 288, 289, 1255, 668]
+first_step_topk_probs=[0.2900121510028839, 0.13277724385261536, 0.09714190661907196, 0.07487019151449203, 0.07107053697109222, 0.06024169921875, 0.03804131597280502, 0.032538458704948425, 0.0238056480884552, 0.017416583374142647]
+first_step_topk_text=[' was', ' would', ' came', ' asked', ' named', ',', ' of', ' in', ' called', ' who']
+
+[New tokens 1] count=60 first30=[3609, 627, 2526, 406, 418, 649, 8763, 299, 1137, 269, 2903, 20455, 17, 356, 14618, 357, 383, 418, 2021, 299, 269, 1152, 357, 269, 7195, 330, 4207, 298, 578, 287]
+[Full output 1]
+Once upon a time, a curious child asked me why he was so excited to see the sunrise. I replied that it was due to the fact that the moon is round and has an angle of approximately 45 degrees with respect to the earth's surface. It is an amazing sight!
+I am very glad to hear from you!
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 4455, 7362, 336, 7093, 17665, 16523, 263, 426, 2260]
+first_step_topk_probs=[0.816768229007721, 0.05214333534240723, 0.03263048082590103, 0.020419634878635406, 0.014181146398186684, 0.012449809350073338, 0.012449809350073338, 0.009595443494617939, 0.008423962630331516, 0.008423962630331516]
+first_step_topk_text=[' the', ' France', ' Spain', ' S', ' Italy', ' Belgium', ' Portugal', ' a', ' F', ' West']
+
+[New tokens 2] count=256 first30=[269, 9556, 15, 298, 269, 851, 1384, 2317, 289, 269, 9556, 17, 698, 418, 6214, 419, 269, 14473, 15, 668, 3199, 383, 359, 263, 4328, 11386, 17, 382, 2868, 330]
+[Full output 2]
+Paris is the capital of the province, and the most important city in the province. It was founded by the Romans, who established it as a Roman colony. The town is located on the banks of the Via Cassiana, which runs along the banks of this river. The town has a population of about 2,000 inhabitants.
+The town's name comes from the Latin word "Vincenzo", meaning "village". In the Roman Empire, the town was called "Vinci", and was a major trading center for the region. It is believed that its population was the same as those of other cities in the Roman Empire. In the Middle Ages, the town became known as the "Wine City" because of its wine-producing regions.
+At the time of the Roman conquest, the town had a population of over 4,000 people. In the early years of the Republic, the town suffered severe damage during the wars with Rome. During the Republic's reign, the town experienced a period of prosperity due to the rise of the city's wealth, and the economy. At the end of the Republic's rule, the town's population grew to over 400,000 people and the town's economy was affected by the influx of foreign immigrants.
+In the Middle
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=132 first30=[263, 13742, 1239, 357, 14274, 269, 3892, 288, 263, 4409, 17, 382, 3687, 4409, 483, 342, 2747, 288, 359, 263, 4409, 374, 2685, 299, 686, 3892, 353, 91, 15, 371]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that determines the direction of a vector. The unit vector can be thought of as a vector with respect to its direction (x, y). For example, if we have two vectors u and v in R2, then they are linearly dependent because they satisfy the equation:
+
+u = x + v
+v = y + v
+
+The determinant of this matrix equals zero, meaning it has no nonzero entries on the diagonal, which means that there exists a unique solution to the system of equations (a) and (b). This result demonstrates how different types of matrices can behave differently depending upon their respective values of the variables involved.
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[5546, 817, 491, 483, 395, 1085, 1420, 2269, 9845, 1991]
+first_step_topk_probs=[0.21283581852912903, 0.19178099930286407, 0.108141228556633, 0.10265297442674637, 0.07787352800369263, 0.07129107415676117, 0.049510665237903595, 0.03446240723133087, 0.032639432698488235, 0.025156190618872643]
+first_step_topk_text=[' describe', ' use', ' have', ' can', ' are', ' model', ' allow', ' models', ' rely', ' provide']
+
+[New tokens 4] count=256 first30=[395, 885, 299, 3235, 269, 2519, 3286, 288, 263, 5023, 17, 382, 1085, 330, 1728, 351, 269, 3207, 288, 269, 10447, 1811, 15, 536, 330, 263, 4644, 1811, 289, 536]
+[Full output 4]
+Neural networks are a class of machine learning models that are used to predict the future behavior of a dataset. The model is based on the theory of the classification problem, which is a mathematical problem in which the data are classified according to certain criteria (such as the number of classes or the order of the class).
+
+The main difference between the two types of neural networks is that they have different outputs and outputs, such as an input layer, a output layer, or a hidden layer. In the two types, there are different algorithms for the network to use.
+
+In the first type, the model can be trained using a single training set, called a training set. In the second type, the network can be trained with multiple training sets, called a classification problem. For example, if we have a dataset of 10,000 people, we will want to train it to predict the next person's age, gender, and occupation. We can then use this model to predict the outcome of the next day. This model can also be trained to predict the number of people who are likely to die during the next day, but not necessarily the last day.
+
+For the second type of neural networks, we will use the same neural network as before, called a neural network. A neural network is similar to a neural
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 5427, 6649, 29, 8163, 16, 27, 5427, 202, 807, 1401, 8644, 626, 655, 15551, 66, 22513, 202, 1018, 306, 202, 807, 5210, 17, 2541]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+import re
+from django.db import models
+from django import forms
+from django._contrib.auth.models import User
+from django.__main__ import get_model
+from django_filters import rest_framework as filters
+from django['forms.widgets import Textarea
+from django["forms.utils import ChoiceField
+from django2.utils.translation import ugettext_lazy as _
+
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['name', 'email']
+
+    def clean_username(self):
+        user = super().clean_username()
+        if self.cleaned_data and user is not None:
+            user.set_password(self.cleaned_Data[0])
+            user.save()
+
+        return user
+
+class CustomUserForm(forms._BaseInputForm):
+    email = forms.EmailField(required=True)
+    password = forms.CharField(widget=forms.PasswordInput())
+    remember = forms.BooleanField(required=False)
+    submit = forms.DateField(required='submit')
+    submit_date = forms.DateTimeField
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=106 first30=[622, 494, 11, 81, 12, 711, 202, 6, 11101, 299, 1083, 269, 28045, 288, 263, 993, 15, 359, 263, 3292, 17, 202, 856, 1083, 66, 4203, 11, 1421, 464, 346]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return int(n)
+
+
+# Function to print the factorial of a number, as a string.
+def print_number(num):
+    if num == 0:
+        return '0'
+
+    # Print the number
+    print(' '.join([str(i) for i in range(1, 10 + 1)]))
+
+
+def main():
+    print_number("This is my function to print the binomial coefficient")
+    print_numbers()
+
+
+if __name__ == '__main__':
+    main()
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.6746224164962769, 0.32537755370140076, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=236 first30=[622, 354, 17, 19, 647, 353, 20, 17, 19, 552, 311, 12, 864, 353, 20, 17, 24, 552, 353, 20, 17, 1980, 552, 311, 687, 711, 202, 5288, 415, 287]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1.0 - n) * (1.5 - (1.25 - n))
+
+
+Here's an example of how to do this:
+
+import numpy as np
+from scipy import ndimage, linalg as la
+import matplotlib.pyplot as plt
+from scipy.stats import pearsonr
+from scipy._sparse import coo_matrix
+from scipy_sparse.linalg import svd
+
+# This is the first part of the code for the function f(x) = x^2 + 1/4
+def f(x):
+    return x**(-3)/((x+1)**2+(1-x)**2)
+
+# The function returns the Fibonacci number
+def fib_f(n):
+    return fib(n)
+
+def naira(n):
+    
+    # Check if naira is equal to 1
+    if n == 0:
+        return 1
+
+    # If naira exists, return it
+    if n > 1:
+        return n 
+    else:
+        return fib(1)
+
+f(x)
+print(f(x))
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 1541, 2590, 31412, 356, 535, 698, 1289, 1278]
+first_step_topk_probs=[0.38778436183929443, 0.2426692694425583, 0.1170419454574585, 0.06264804303646088, 0.043508198112249374, 0.03021581657230854, 0.027226734906435013, 0.02453332394361496, 0.02453332394361496, 0.01991950534284115]
+first_step_topk_text=[' The', ' Yes', ' There', ' No', ' Cats', ' I', ' In', ' It', ' We', ' If']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 808, 17, 202, 43, 1477, 298, 269, 3191, 202, 41, 4106, 296, 624, 353, 83, 10769, 410, 397, 264, 347, 12, 330, 263, 16235, 288, 10676, 17]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is no.
+Hats and the cat
+Feline mite (pseudocophera) is a pest of cats. It is found in most parts of North America. It has been recorded as far back as 1750 B.C., but it was not discovered until 1935.
+Pseudocophers are attracted to cats because they are aggressive and will bite if they get into their territory. They are also attracted to dogs because they are sensitive to their owners' dog's scent. They are often seen around pets when they are young or when they are playing with their pet. Pseudocophes are very social creatures. They live together in groups called colonies. Each colony has its own home, and each colony has a different home for itself.
+The first colonies were established by a group of cats. These colonies were named after a specific animal, such as a lion, fox, or tiger. In order to find out more about these colonies, scientists have had to look at how many cats there are in a given area. Scientists call this number "number of cats."
+In a study published in the journal Science, scientists observed that the number of cats in a given colony increased from 1,000 to 3,000,
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 798, 843, 382, 1012, 744, 338, 409, 2050, 0]
+first_step_topk_probs=[0.33549997210502625, 0.17046651244163513, 0.161815345287323, 0.08661351352930069, 0.0633677989244461, 0.05420135706663132, 0.04636087268590927, 0.04594278708100319, 0.0357317216694355, 0.0]
+first_step_topk_text=[' 1', ' 4', ' 5', ' The', ' 6', ' $', ' A', ' 2', ' One', '']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 202, 24771, 29, 843, 202, 24771, 29, 409, 202, 24771, 29, 637, 202, 24771, 29, 643, 202, 24771, 29, 552, 20, 202, 24771, 29, 1186, 202]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4
+Answer: 5
+Answer: 2
+Answer: 3
+Answer: 0
+Answer: -1
+Answer: 7
+Answer: 9
+Answer: 4
+Answer : 1
+Answer: 6
+Answer: 8
+Answer: 10
+Answer: 15
+Answer: 11
+Answer: 13
+Answer: 14
+Answer: 16
+Answer: 17
+Answer: 18
+Answer: 19
+Answer: 20
+Answer: 21
+Answer: 22
+Answer: 23
+Answer: 24
+Answer: 25
+Answer: 26
+Answer: 27
+Answer: 28
+Answer: 29
+Answer: 30
+Answer: 31
+Answer: 32
+Answer: 33
+Answer: 34
+Answer: 35
+Answer: 36
+Answer: 37
+Answer: 38
+Answer: 39
+Answer: 40
+Answer: 41
+Answer: 42
+Answer: 43
+Answer: 44
+Answer: 45
+Answer: 46
+Answer: 47
+Answer: 48
+Answer: 49
+Answer: 50
+Answer: 51
+Answer: 52
+Answer: 53
+Answer: 54
+Answer: 55
+Answer: 56
+Answer: 57
+Answer: 58
+Answer: 59
+Answer: 60
+Answer: 61
+Answer:
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 783, 338, 27614, 15255, 1278, 1289, 1238, 1509]
+first_step_topk_probs=[0.6596943736076355, 0.044017013162374496, 0.03668194264173508, 0.021229881793260574, 0.020152457058429718, 0.01815887913107872, 0.016794217750430107, 0.015532111749053001, 0.012943809852004051, 0.012286911718547344]
+first_step_topk_text=[' I', ' The', ' This', ' A', ' Hi', ' Thanks', ' If', ' We', ' As', ' You']
+
+[New tokens 10] count=256 first30=[356, 3442, 733, 289, 269, 5988, 339, 263, 7543, 288, 4437, 1244, 298, 491, 733, 9529, 374, 263, 4401, 1375, 288, 2404, 15, 1255, 25003, 74, 6169, 415, 1937, 17]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I've been in the hospital for a couple of weeks now and have been diagnosed with a rare type of cancer, called Hodgkin's disease. It is usually found at an early stage when it can be treated successfully. But, if you're diagnosed, it may not require treatment, or you don't want to go into remission. And, if you have a family history of this kind of cancer, you might want to talk to your doctor about it.
+I think that there are some things that we do know. We do know that people who have had a tumor in the past are more likely to develop it again. That means that if they are alive today, then they should be able to live longer than they were 50 years ago. In fact, it could be possible to live long enough to have children, or even adulthood. So, if you are concerned about your risk of developing cancer, talk to your physician about it. He or she will tell you what tests you need to see if you are at high risk.
+The best way to prevent Hodgkin disease is to get regular exercise. If you're going to live longer, you'll need to take steps to stay fit. It's important to get enough sleep. You need to eat
+
+================================================================================

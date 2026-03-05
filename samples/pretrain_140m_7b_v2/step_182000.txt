@@ -1,0 +1,313 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[791, 418, 1628, 728, 601, 3609, 2446, 289, 330, 15]
+first_step_topk_probs=[0.30841848254203796, 0.1739104688167572, 0.09308755397796631, 0.07962200790643692, 0.07962200790643692, 0.06464802473783493, 0.03840253874659538, 0.028095897287130356, 0.026670033112168312, 0.022050242871046066]
+first_step_topk_text=[' would', ' was', ' might', ' may', ' will', ' asked', ' came', ' in', ' is', ',']
+
+[New tokens 1] count=160 first30=[3609, 896, 3577, 299, 1432, 896, 1133, 299, 269, 1844, 17, 202, 5, 44, 1418, 1284, 9292, 961, 1024, 988, 17, 360, 7860, 578, 733, 9584, 339, 627, 741, 202]
+[Full output 1]
+Once upon a time, a curious child asked her mother to take her back to the family.
+"I want my sister," she said. "She has been waiting for me."
+When the boy returned home, he was shocked by the sight of his brother and the family's attention-seeking grandchildren. He asked them to read their books, but they refused. They were too busy trying to keep up with the new arrivals. The children had no interest in reading books at all.
+The next day, when the boys were done, the family left the house and headed for New York City. They arrived there on May 2, 1816.
+Today, the family is living in a house built in the 1920s. The old house still stands as a memorial to those who died in World War I.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 7362, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.9745641946792603, 0.02543579414486885, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' Spain', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 17, 382, 2868, 418, 5953, 1255, 368, 293, 266, 15, 614, 383, 418, 4374, 299, 368, 293, 266, 289, 269, 1691, 401, 2162, 17, 202, 509, 1548, 16]
+[Full output 2]
+Paris is the capital of the province. The town was originally called Moure, but it was changed to Moure in the 17th century.
+The present-day town of Moure is located at the confluence of the rivers and streams which are the source of the river Moure. The town is situated on a rocky promontory and is surrounded by hills covered with thick forests. The ancient city of Mourey has been built upon a hilltop overlooking the river mouth. The town contains a magnificent temple dedicated to the goddess Moina.
+Mourey is a commune of the Province of Leuven (France). It consists of four municipalities: the town of Moulins, the town of Père Lachaise, the town, and the village of Périgord.
+The town of Moultrie is situated in the centre of the province, near the border with France. Its name comes from the fact that it is the most important place for the preservation of the old Romanesque architecture. The town also possesses a small castle, built around 1620, which is one of the oldest structures in France.
+The village of Moultrieth lies about 3 km south of the town of L'Épite
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 11547, 374, 689, 17, 382, 28071, 288, 263, 3823, 338, 330, 269, 1701, 288, 545, 686, 18956, 29, 202, 202, 36, 333, 18062, 20, 647, 18062]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that varies with time. The eigenvalue of a matrix A is the sum of all its eigenvalues:
+
+A = λ1 + λ2 + ... + λn + 1
+
+where λi and i are real numbers. For example, if we have a matrix A = [1 2 3] then it can be written as follows:
+
+[1 2 3 | 1 4 | 1 | ] = [1 4 | 1] = [1 0] = 1
+
+The eigenvalue λ1 is called the eigenvalue of A, denoted by λ1 = λ1 (λ0). This means that the following expression can be written in terms of the eigenvector v:
+
+v = λ1 - λ0
+
+This equation shows how the eigenvectors of A are related to each other through the concept of a "conjugate" operator. When dealing with matrices, the conjugate operator acts on vectors via the conjugate transpose operation. When working with matrices, this operation involves multiplying corresponding entries of the original matrix by a scalar.
+
+Now let's discuss how these operations work together to find the eigenvalues of a matrix. Consider the matrix A = [[1 2 3], [3 3 4]] where n represents the number of rows in the matrix
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 491, 5546, 817, 1420, 395, 1991, 1085, 1005, 3235]
+first_step_topk_probs=[0.3223268687725067, 0.1725291609764099, 0.12622500956058502, 0.10248671472072601, 0.083212710916996, 0.07363469153642654, 0.0380975566804409, 0.036164071410894394, 0.02384084276854992, 0.021482381969690323]
+first_step_topk_text=[' can', ' have', ' describe', ' use', ' allow', ' are', ' provide', ' model', ' help', ' predict']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 4410, 17, 382, 3355, 2877, 3722, 269, 1085, 330, 357, 383, 3448, 287, 1968, 298, 7799, 263, 1999, 15, 536, 411, 940, 263]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data sets. The basic idea behind the model is that it takes an input and produces a output, which we call a function. A function is called if its inputs are real numbers or it is not. We can think of these functions as functions with the same name but different names.
+In this article, we will focus on the function called "sigmoid". It is defined by the following definition:
+"The most common way of calculating the shape of a complex graph is through the use of a Gaussian process. However, it can also be used for computing the shape of an unnormalized random variable. In this article, I will show how to compute the shape of the graph using the Gaussian process."
+We will start by defining a new type of function named "sigmoid":
+"Sigmoid", in which we say that a function is a "function" that is defined over a finite set of real numbers. For example, in the context of a linear regression model, the function is a function that describes the relationship between two variables. If you want to predict your own variable, you need to know the values of the parameters that will be used in the model. This is where the function comes into play!
+So let's take a
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=249 first30=[263, 647, 286, 17, 595, 551, 711, 202, 6, 11101, 299, 835, 269, 993, 288, 1885, 263, 1496, 6222, 330, 289, 269, 1457, 288, 643, 16, 20, 202, 856, 835]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+
+# Function to get the number of times a given integer is in the range of 0-1
+def get_number(a, n=0):
+    return (n - 1) * a / n
+
+
+# Functions for getting the number of different values in a list
+def get(i, j):
+    if i >= j:
+        return None
+
+    if i < j:
+        i = j - 1
+
+    if i == j:
+        raise ValueError("Can't find a value greater than or equal to the given number")
+
+    return i
+
+
+# Methods to get the correct number of times each value is in the list
+def can_be_set(i, n=None):
+    if not n:
+        return False
+
+    if len(i) > 0 and i[0] != '0':
+        return True
+
+    if len([i]) <= n:
+        raise RuntimeError('Can't find an integer greater than or equals to the given value')
+
+    if len(['0']) == 0:
+        return True
+    else:
+        return int(i)
+
+
+# Return the sum of all numbers from 0 to n that are in the range 0-1
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=54 first30=[622, 353, 20, 18, 81, 12, 864, 353, 20, 552, 311, 12, 711, 202, 6, 12602, 354, 202, 202, 856, 835, 66, 4203, 1714, 346, 622, 637, 711, 202, 6]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return (1/n) * (1 - n)
+
+
+# Example 1
+
+def get_number():
+    return 3
+
+
+# Examples 2 and 3
+
+get_numbers = [2,3]
+
+print(get_numbers)
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=256 first30=[622, 354, 17, 19, 647, 353, 20, 552, 311, 12, 864, 353, 21, 864, 353, 81, 16, 20, 687, 711, 202, 1465, 330, 269, 775, 1373, 288, 263, 1392, 357]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1 - n) * (2 * (n-1))
+
+
+This is the first example of a function that can be applied to any number, and it works on integers as well. The second example shows how to use a function with an integer argument to return a sequence of integers.
+
+#include <iostream>
+#include "fib/fib_helpers.h"
+using namespace std;
+int main() {
+int n = 10;
+for (int i = 0; i < n; i++) {
+int x = 0;
+int y = 1;
+int z = 2;
+int x,y,z;
+int a,b,c,d;
+int n,m,k,l;
+int q,r,s;
+int k,v,w;
+int c,r,e;
+int g,h,i;
+int m,n,n+1;
+int r,l,j,k;
+int s,t,a,b,a+p,b+q,b+r,s+l,u+b,u+c,x+y,
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 2590, 31412, 1541, 1906, 698, 2, 1, 0]
+first_step_topk_probs=[0.5331568121910095, 0.2571471929550171, 0.0776127427816391, 0.06638569384813309, 0.03201855346560478, 0.019019821658730507, 0.014659162610769272, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' No', ' Cats', ' There', ' All', ' It', '', '', '']
+
+[New tokens 8] count=256 first30=[13676, 17, 31412, 395, 2645, 1091, 581, 491, 269, 3392, 299, 1062, 2645, 6133, 298, 263, 2886, 12153, 17, 3987, 288, 500, 1645, 357, 2645, 330, 263, 2419, 411, 1755]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Yes. Cats are black because they have the ability to make black hair and a white coat. Most of us think that black is a color we don't know about. But there are other things you can do to help your cat or dog see in the dark. Some of these are:
+- Have your pet's owner show you how to look for a black cat. This is a very important step when it comes to finding black cats. Many owners have their cats seen by their veterinarian if they look closely enough. If you find one, then your veterinarian will be able to tell you what type of cat it is.
+- Keep a cat diary to record its behavior. You may want to keep track of how many times each day you see a cat or two, and then you can record any time you notice something different.
+- Make sure your cat is eating well.
+- Consider having a companion cat or dog. A companion cat can live up to 100 years on average.
+- Look at your cat's litter box every week. They should have a litter box with lots of food. It's also good to feed them healthy foods.
+- Do not try to replace a cat with a pet that has been in a bad situation. It might end up
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 798, 382, 843, 338, 2050, 637, 409, 1012, 744]
+first_step_topk_probs=[0.26063281297683716, 0.1469651758670807, 0.13242660462856293, 0.13242660462856293, 0.07866477966308594, 0.06387082487344742, 0.05450800806283951, 0.04547617584466934, 0.04435735568404198, 0.021394044160842896]
+first_step_topk_text=[' 1', ' 4', ' The', ' 5', ' A', ' One', ' 3', ' 2', ' 6', ' $']
+
+[New tokens 9] count=38 first30=[354, 13032, 333, 798, 10941, 17, 202, 3016, 914, 10941, 1223, 263, 14166, 910, 299, 3931, 289, 619, 1266, 34, 202, 24771, 419, 1966, 321, 1101, 2763, 351, 3315, 4070]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples.
+How many apples does a farmer need to eat in one day?
+Answer by John Tierney on September 28, 2012 at 7:53 am
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 1278, 382, 3919, 783, 2575, 1509, 360, 338, 3189]
+first_step_topk_probs=[0.6626181602478027, 0.041448839008808136, 0.03545306995511055, 0.033653829246759415, 0.0227713193744421, 0.021615667268633842, 0.02051866427063942, 0.01623160019516945, 0.015407847240567207, 0.014249928295612335]
+first_step_topk_text=[' I', ' If', ' The', ' My', ' This', ' What', ' You', ' "', ' A', ' Do']
+
+[New tokens 10] count=151 first30=[3189, 486, 1118, 922, 415, 10471, 34, 202, 55, 3422, 29, 5531, 15, 356, 1755, 847, 1645, 357, 415, 263, 1413, 2395, 17, 1358, 383, 3926, 299, 342, 263, 9416]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: Do you know what's happening?
+Tony: Well, I don't think that's a good question. But it seems to be a fairly simple one and it's not too difficult to figure out. And the questions are quite simple.
+A: What is your best way of getting the information about your child's stress levels?
+Tonight we will talk about how parents can help their children deal with stress in ways that they can understand. If you have any suggestions for helping your child deal with stress, please share them in the comments section below.
+- If you would like to learn more about how to make an appointment to talk to your child about his or her stress, please contact us at email@example.com.
+
+================================================================================
