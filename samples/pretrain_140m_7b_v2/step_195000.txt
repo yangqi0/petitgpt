@@ -1,0 +1,312 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[791, 418, 3609, 2827, 2446, 601, 15, 1628, 1255, 699]
+first_step_topk_probs=[0.27631044387817383, 0.16413529217243195, 0.13326746225357056, 0.08785528689622879, 0.04702554643154144, 0.036244042217731476, 0.029898015782237053, 0.027934374287724495, 0.023893536999821663, 0.020437227562069893]
+first_step_topk_text=[' would', ' was', ' asked', ' named', ' came', ' will', ',', ' might', ' called', ' had']
+
+[New tokens 1] count=76 first30=[3609, 896, 3577, 490, 1024, 982, 1005, 1169, 299, 835, 269, 613, 795, 17, 382, 3577, 14618, 357, 1024, 418, 1792, 14106, 374, 896, 1293, 415, 3822, 298, 357, 1024]
+[Full output 1]
+Once upon a time, a curious child asked her mother if she could help him to get the other two. The mother replied that she was too busy with her children's lives and that she would rather have them than give them their own money.
+In the end, the three boys were both happy when they got the money. They loved each other very much, and had been doing it for over a year!
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 336, 263, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.9618573188781738, 0.023695582523941994, 0.014447149820625782, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' S', ' a', '', '#', '', '"', '!', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 17, 698, 418, 269, 8492, 288, 269, 1534, 11031, 288, 269, 9556, 15, 668, 3698, 289, 1012, 3990, 15, 298, 418, 11024, 419, 610, 3694, 15, 269, 7076]
+[Full output 2]
+Paris is the capital of the province. It was the seat of the last governor of the province, who died in 639, and was succeeded by his son, the fourth king of the kingdom.
+The city of Argyll was first mentioned as Argyll in a charter of the castle of Hildesheim (see also Kynaston). The city was granted to the King of Denmark in 979.
+Argyll became a centre of the Duchy of Denmark and was one of the first medieval castles in Europe. The Norman kings of England, Scotland, Wales, and Northern Ireland were crowned in Argyll. In 1214, the city became part of the Danish crown, which took possession of it from the English.
+In 1350, the city was made part of the duchy of Pomerania. The duchy was divided into two parts: the north-western part was divided between the city of Kincardine and the south-eastern part. In 1353, the northern part was divided into the southern part and the southern part. The northern part was separated from the duchies of Hildebrand and Grunwald. The northern half of the ducal realm was split off to form the D
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 14274, 269, 3286, 288, 263, 3823, 17, 382, 28071, 288, 263, 3592, 3823, 330, 269, 1701, 288, 545, 686, 18956, 353, 76, 17, 72, 1155, 269]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that determines the behavior of a matrix. The eigenvalue of a square matrix is the sum of all its eigenvalues (i.e., the sum of the squares of all its eigenvectors).
+
+Let's take a look at a simple example:
+
+Consider the following matrix A = [1 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 128 129 130 131 132 133 134 135 136 137 138 139 140 141 142 143 144 146 147 148 149 150 151 152 153 154 155 156 157 158 159 160 161 162 163 164 166 167 168
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 491, 483, 395, 1085, 9845, 1420, 3069, 3235, 5546]
+first_step_topk_probs=[0.23580624163150787, 0.21247906982898712, 0.1914595514535904, 0.09618480503559113, 0.04942767322063446, 0.04691917449235916, 0.032584723085165024, 0.029361270368099213, 0.025114024057984352, 0.025114024057984352]
+first_step_topk_text=[' use', ' have', ' can', ' are', ' model', ' rely', ' allow', ' attempt', ' predict', ' describe']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 4410, 17, 338, 14457, 2673, 330, 263, 4644, 1085, 357, 3448, 289, 269, 1968, 298, 8863, 288, 263, 14457, 2673, 15, 298, 1000]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data sets. A neural network is a mathematical model that takes in the input and outputs of a neural network, and then combines them into a single output.
+
+The term "bi-linear" refers to the fact that the inputs and outputs of the neural network are not linear, but rather they are nonlinear functions of the input. The authors state that this is because these two types of equations are connected by a relation called a bi-linearity, which means that if the input and output of the neural system are both linear, then the output of the network will also be linear.
+
+## References
+
+1. ^ a b c d e f g h i j k l m n o p q r s t u v w x y z a b e f g i j k k l m o p q q r s a b e a e f g j k l q r s p q rs t e e f g k l m e f g q r s e f g p q r t e f g e f g l m e g h e f g g h ef g h e i j kl j kl kl m e f h e f l m e p q r
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=190 first30=[263, 647, 286, 17, 595, 551, 711, 202, 6, 11101, 299, 835, 269, 1759, 1890, 202, 856, 835, 66, 17668, 1714, 346, 622, 1701, 2067, 20, 339, 1249, 289, 1457]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+
+# Function to get the following numbers
+def get_numbers():
+    return sum([1 for i in range(len(a) - 1)])
+
+
+# This function is a little more complicated than the one you are looking for but can be used to find out what numbers are needed.
+def get(n):
+    if n < 0 or n > len(a):
+        return 0
+
+    for i in xrange(0, len(a)):
+        if (i % 10 == 0 and i >= n):
+            return i
+
+    return None
+
+
+# The function we are going to use is called "add".
+def add_number(a, n):
+    if a != n:
+        return a + n
+
+    for i, n_val in enumerate(a):
+
+        if (i * n_val <= n_val):
+            return a[i]
+
+    return None
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=237 first30=[622, 494, 11, 81, 12, 711, 202, 6, 11101, 299, 5224, 269, 28045, 288, 263, 993, 17, 202, 856, 28045, 66, 4203, 11, 81, 464, 346, 490, 311, 861, 643]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return int(n)
+
+
+# Function to calculate the factorial of a number.
+def factorial_number(n):
+    if n == 0:
+        return 1
+
+    # We need to check if the number is odd, even or both even.
+    if n % 2 != 0:
+        raise ValueError("The number should be odd.")
+
+    # Check if the number has exactly one digit in it.
+    if len(n) > 1 and n[0] == n[1]:
+        return True
+
+    # Check for odd number.
+    if not (n - 1 <= 2 ** 7 or n + 1 >= 5 ** 6):
+        raise ValueError('Number should be odd.')
+
+    # Check the number's digits.
+    if isinstance(n, int):
+        digits = [int(i) for i in range(n)]
+        if digits[-1] == digits[-2]:
+            return False
+
+        # If the number is even, then we can divide by 2.
+        if n % 4 == 0:
+            return False
+
+    # The number should be divisible by 3.
+    if math.is_integer(n):
+        return False
+
+    return True
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=101 first30=[622, 651, 73, 554, 11, 76, 12, 339, 1249, 289, 1457, 11, 19, 15, 311, 3830, 711, 202, 1465, 1392, 330, 263, 1809, 611, 7144, 702, 269, 619, 2080, 614]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return [fib(i) for i in range(0, n)]
+
+
+This function is a little more complicated than the one above but can be simplified to
+
+function fib(n)
+return fib(n - 1) + fib(n-2)
+
+# Find the next number in the list.
+for i in range (1, n):
+    fib(i)
+end
+
+# Print the Fibonacci number.
+print(fib(9))
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 1541, 2590, 1906, 1289, 356, 1278, 0, 1]
+first_step_topk_probs=[0.38608410954475403, 0.3134758472442627, 0.11652877926826477, 0.05920791998505592, 0.043317437171936035, 0.03338605538010597, 0.0271073579788208, 0.020892459899187088, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' There', ' No', ' All', ' We', ' I', ' If', '', '']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 12052, 17, 202, 509, 3533, 299, 269, 2395, 360, 277, 2645, 3763, 330, 360, 13134, 1385, 783, 330, 263, 1114, 2537, 2395, 299, 3533, 1091, 383, 330]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+The answer to the question "is black?" is "yes". This is a very difficult question to answer because it is difficult to know what is a black cat or a white cat in the sense of knowing that there are many black cats in the world. For example, if you were to ask a person about the color of their skin, they would say that black cats are black, but they do not have any black features like their eyes or their ears. In fact, there are several different colors of cats in the human body, so this question has been answered by people who believe that black cats may be a kind of animal, but only in the sense that they are black.
+But the question is not about black cats; it is about the same thing as saying that black cats must be a type of animal. We can say that black cat cats are black because they are black in the sense described above.
+So if black cats are a type of cat, then there should be more than one type of cat. If black cats are types of cats, then there could be more than two types of cats. So if black cats were a type of cats, the question would be: Is black cats black?
+There are many other
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 354, 843, 1012, 637, 409, 382, 2, 1, 0]
+first_step_topk_probs=[0.2846621572971344, 0.2565018832683563, 0.23112761974334717, 0.07741805166006088, 0.05092164874076843, 0.05092164874076843, 0.048446979373693466, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 4', ' 1', ' 5', ' 6', ' 3', ' 2', ' The', '', '', '']
+
+[New tokens 9] count=187 first30=[354, 13032, 333, 798, 10941, 17, 202, 3016, 914, 10941, 620, 486, 491, 34, 202, 509, 3533, 330, 1012, 17, 202, 3544, 15, 269, 993, 288, 10941, 411, 491, 330]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples.
+How many apples do you have?
+The answer is 6.
+So, the number of apples we have is 3x6.
+So we can divide it by 3 to get 3x6 = 18 apples.
+We could also take the total of all the apples that are in a basket and multiply them together.
+Now, if we take the total from the first basket and multiply it by 3 we will get 9.
+Now we can put all the numbers on one side so that the sum is equal to the number of oranges we have.
+To find out how many oranges we have, we just need to add up the numbers and divide by 3.
+For example, if we have 7 oranges, we would get 9 oranges.
+So 7 oranges = 10 oranges.
+And the total is 11 oranges.
+Therefore, 11 oranges = 10 x 11 = 100.
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 15255, 1289, 3919, 27614, 783, 382, 1509, 2575, 698]
+first_step_topk_probs=[0.7845960855484009, 0.0281167384237051, 0.0266898013651371, 0.0266898013651371, 0.02404952049255371, 0.022828998044133186, 0.019526677206158638, 0.018535690382122993, 0.01670205220580101, 0.012872780673205853]
+first_step_topk_text=[' I', ' Thanks', ' We', ' My', ' Hi', ' This', ' The', ' You', ' What', ' It']
+
+[New tokens 10] count=256 first30=[356, 3442, 733, 289, 263, 3313, 288, 2106, 339, 269, 2338, 1685, 3033, 298, 356, 491, 299, 1721, 357, 356, 491, 7070, 263, 3313, 288, 4083, 15, 614, 356, 483]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I've been in a lot of pain for the past few months and I have to say that I have experienced a lot of stress, but I can't tell you how much it's worth.
+I'm also having a hard time sleeping at night because I'm not sure if I should sleep more or if I should go to bed earlier than usual. So I'm going to try to get some sleep in order to feel better before the next day.
+Assistants: Well, there are some things that we do, but they're all very helpful.
+For one thing, we use a lot of different types of medications. Some of them work well for us as well as others. We take a couple of different medicines when we're pregnant or breastfeeding. And some of these drugs can be used with certain people, too.
+One is called nonsteroidal anti-inflammatory drugs (NSAIDs). These are often used to treat arthritis, heart disease, and some cancers. They don't work just like the aspirin, they work like other medicines.
+Some of these drugs are called anti-inflammatory medicines. But they're not really any different from those that are called antihistamines. They work in similar ways to the way NSAIDs work.
+
+================================================================================

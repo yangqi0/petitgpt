@@ -1,0 +1,292 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[791, 418, 2446, 3609, 15, 601, 699, 2827, 289, 330]
+first_step_topk_probs=[0.43605464696884155, 0.1460600048303604, 0.05719791725277901, 0.0542951263487339, 0.043785713613033295, 0.033977020531892776, 0.02906208671629429, 0.02239902690052986, 0.021262276917696, 0.01638747937977314]
+first_step_topk_text=[' would', ' was', ' came', ' asked', ',', ' will', ' had', ' named', ' in', ' is']
+
+[New tokens 1] count=89 first30=[3609, 896, 3577, 299, 1432, 896, 1133, 299, 269, 21958, 17, 202, 5, 44, 1418, 299, 342, 916, 1284, 3577, 961, 1024, 988, 17, 360, 2731, 356, 4575, 453, 2397]
+[Full output 1]
+Once upon a time, a curious child asked her mother to take her back to the zoo.
+"I want to be like my mother," she said. "But I'm not going to give up."
+She's now on her own. She's just an infant and is looking forward to the day when she can return home from the zoo. But her mother has been waiting for her daughter to return.
+This story was first published in The New York Times Magazine.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 4455, 336, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.9545304179191589, 0.02391784079372883, 0.02155178226530552, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' France', ' S', '', '#', '', '"', '!', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 7630, 288, 269, 1144, 288, 321, 19095, 1156, 17, 698, 330, 263, 2317, 289, 269, 3446, 16, 10674, 288, 269, 2027, 15, 298, 330, 12092, 351]
+[Full output 2]
+Paris is the capital of the province of the department of the state of Tuscany. It is a city in the south-east of the country, and is situated on the right bank of the river Via Cassinina.
+The oldest traces of the town are those of the Roman town of Sulla, which was founded by Palladio around 675. The town was an important centre of trade with the Mediterranean world until its decline in the Middle Ages. In the 7th century it became a possession of the Holy Roman Empire. Its population is estimated at 2,000,000 inhabitants.
+In 940, the city was captured by the Normans. A new settlement was established there, but the city remained abandoned for a time. During the period of the Norman Conquest, the city took part in the Conquest of Sicily, and in 1066 it was taken by the Duke of Orléans. After the Conquest, it was again occupied by the Visigoths.
+During the French Revolution, the city fell into disrepair, and in 1793 it was again seized by the Allies. In 1805, it was transferred to the newly created Kingdom of Italy, and then again in 1830. In 1837, it was returned to the Kingdom
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 357, 578, 269, 1134, 8878, 359, 686, 5606, 10294, 8537, 17, 535, 482, 1832, 15, 269, 28071, 330, 3636, 1091, 383, 330, 453, 263, 13742, 353, 76, 17]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector that has the same magnitude as its corresponding eigenvector. In this case, the eigenvalue is zero because it is not a scalar (i.e., it does not have any unit).
+
+Let's first consider the equation $$-1\lambda + 2 \lambda = 0$$ where $$\lambda$$ is some real number. Then, we can write $$-\lambda=\frac{1}{2}\lambda+\frac{\lambda^2}{4}$$. Now, since both sides of the equation are equal to zero, we have:
+
+$$\begin{array}{rcl} \lambda &= -\frac{1}{\sqrt{2}}\cdot \frac{0}{\sqrt{4}} \\ \lambda &= -1 \end{array}$$
+
+Now, let's focus on the second equality. We want to find the eigenvalues of the following system:
+
+$$x=(\lambda x+2)$$
+
+We know that the general solution of the system will be:
+
+$\lambda =\lambda x+(-1)\lambda=-\lambda$
+
+Therefore, we have two equations in one variable, and we can solve them separately for the other variable. However, solving systems involving multiple variables requires more advanced techniques than those discussed here.
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 5546, 491, 483, 395, 1085, 1420, 9845, 1991, 2269]
+first_step_topk_probs=[0.18599951267242432, 0.16759948432445526, 0.11048846691846848, 0.08970954269170761, 0.07450663298368454, 0.06914190948009491, 0.05914021283388138, 0.0505853034555912, 0.03165547177195549, 0.03011706843972206]
+first_step_topk_text=[' use', ' describe', ' have', ' can', ' are', ' model', ' allow', ' rely', ' provide', ' models']
+
+[New tokens 4] count=256 first30=[395, 885, 299, 1085, 269, 3286, 288, 1593, 16, 4705, 14457, 8119, 17, 535, 1817, 15, 581, 395, 885, 289, 269, 2815, 288, 14457, 2673, 12438, 298, 10447, 17, 202]
+[Full output 4]
+Neural networks are a class of machine learning models that are used to model the behavior of large-scale neural networks. In particular, they are used in the context of neural network modeling and classification.
+
+## References
+
+1. ^ A. Valli, M. H. Krüger, S. E. Woese, and C. Löwe (2005). "On the use of an ensemble of neural networks for classification". Proceedings of the National Academy of Sciences of the United States of America, 108 (15): 5329–5336. doi:10.1073/pnas.080643109. PMC 2377362. PMID 15875430.
+2. ^
+3. ^ Averill, J. G., and D. P. Zimmerman (2001). "A new approach to classification based on multi-class training data". Journal of Machine Learning Research, 11 (1): 1–19. doi: 10.1016/S0022-7824(01)00061-5.
+4. ^ a b c d e f g h i j k l m n o p q r s t u v w x y z e f g (2008).
+5. ^ a
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 1348, 299, 1098, 269, 3581, 288, 263, 1309, 7885, 888, 795, 2348, 34, 202, 202, 44, 491, 263, 2395, 357, 330, 1114, 2537, 339]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# How to find the equation of a line passing through two points?
+
+I have a question that is very difficult for me. I'm trying to solve this problem by using the given information about the position and velocity of a point on a surface of a sphere.
+
+Let's say I have a vector field $\vec{A} = \vec{r}\times\vec{v}$ with two components $x$ and $y$. Then the direction of the vector field is $u=0$, so we can write the equation as follows:
+
+$$D_1(\vec{A})=\frac{\partial u}{\partial x}+\frac{\partial v}{\partial y}$$
+
+The only thing I know is that the direction of $\vec{B}$ is perpendicular to the normal to the surface of the sphere, so $D_2(\vec{B})$ is parallel to the normal. The other way around is that the normal to $\vec{R}$ is perpendicular (which means it will be perpendicular to $\vec{\Omega}$) but not perpendicular to $\hat{\mathbf{r}}$.
+
+My question is how do I find the equation for the line passing through these two points? Can someone help me
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=136 first30=[490, 311, 861, 643, 29, 341, 622, 354, 1246, 1107, 29, 341, 622, 28045, 11, 81, 552, 354, 12, 202, 202, 856, 1098, 66, 19405, 11, 81, 15, 6537, 32]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     if n == 0:
+         return 1
+     else:
+         return factorial(n - 1)
+
+def find_prime(n, prime=None):
+    if n is None or n % 2 != 0:
+        raise ValueError("N must be an integer")
+    
+    for i in range(1, len(prime)):
+        if prime[i] > prime[i + 1]:
+            break
+        if prime.count(prime[i]) < prime[i+1]:
+            return prime[i], prime[i-1]
+        else:
+            return prime, prime
+
+
+if __name__ == "__main__":
+    print(find_prime())
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.7681540846824646, 0.23184598982334137, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=61 first30=[490, 311, 1319, 409, 861, 643, 29, 341, 622, 354, 1246, 1107, 29, 341, 622, 409, 711, 202, 856, 8049, 66, 3134, 268, 3676, 1714, 346, 339, 1249, 289, 1457]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     if n % 2 == 0:
+         return 1
+     else:
+         return 2
+
+
+def fib_checkerboard():
+    for i in range(1, len(fibers)):
+        print(fib(i))
+
+
+if __name__ == "__main__":
+    main()
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 1541, 31412, 2590, 1906, 356, 535, 698, 3987]
+first_step_topk_probs=[0.467302143573761, 0.14858274161815643, 0.10318867117166519, 0.0754944458603859, 0.058185841888189316, 0.04040926322340965, 0.03456387668848038, 0.02663942240178585, 0.0240041334182024, 0.021629519760608673]
+first_step_topk_text=[' The', ' Yes', ' There', ' Cats', ' No', ' All', ' I', ' In', ' It', ' Most']
+
+[New tokens 8] count=141 first30=[382, 3533, 330, 808, 17, 202, 2573, 395, 914, 1108, 2584, 288, 10676, 289, 269, 1165, 17, 2660, 288, 780, 395, 649, 4401, 581, 491, 839, 733, 4506, 419, 263]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is no.
+There are many different types of cats in the world. Some of them are so rare they have only been discovered by a few people who didn't know what they were. Others are very common but can be found anywhere in the world - from Africa to Asia. Some of these cats are still in the wild, but others are in captivity or are kept as pets.
+Many of the cats that are believed to be the most endangered are not listed on the IUCN Red List. In fact, the IUCN has released an index that lists all cats that are considered threatened with extinction.
+What do you think about this? Are there any cats that are more endangered than others?
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 798, 843, 2050, 382, 338, 744, 1012, 409, 637]
+first_step_topk_probs=[0.23311594128608704, 0.17055125534534454, 0.1384766846895218, 0.12477797269821167, 0.08665650337934494, 0.06339924037456512, 0.054228249937295914, 0.04886375367641449, 0.04886370897293091, 0.031066713854670525]
+first_step_topk_text=[' 1', ' 4', ' 5', ' One', ' The', ' A', ' $', ' 6', ' 2', ' 3']
+
+[New tokens 9] count=256 first30=[2050, 13032, 7670, 619, 934, 92, 16, 506, 934, 92, 17, 202, 43, 499, 29, 382, 775, 13032, 330, 269, 1134, 359, 269, 1408, 17, 202, 202, 1974, 1098, 269]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple plus one buy-one buy.
+Hint: The first apple is the same as the second.
+
+To find the sum of the first four numbers, add up their exponents.
+$= \frac{1}{2} + \frac{3}{4}$
+$= 1 + \frac{-1}{4} + \dots = -1$
+$\implies \left( \frac{x}{2} \right) = \frac{5}{8} + \left(-\frac{x+1}{2}\right)$
+
+Now, we can use the formula for the product of two expressions:
+$P(a) = \prod_{k=0}^{\infty} a_k \cdot \frac{p_k}{q_k},$
+$P'(x) = \sum_{k=1}^n \frac{P(x)}{P(x-1)} \cdot \sum_{i=0}^{n-1} P(x-i),$
+$= P(x) \cdot \prod_{j=0}^{m-1} \frac{(\frac{x-1}{2})^j}{(\frac{1-
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 27614, 22089, 382, 1289, 15255, 783, 3919, 1278, 1509]
+first_step_topk_probs=[0.5889586210250854, 0.05186042562127113, 0.04796304926276207, 0.038942936807870865, 0.033309660851955414, 0.033309660851955414, 0.030806398019194603, 0.0263501089066267, 0.02567276917397976, 0.016489475965499878]
+first_step_topk_text=[' I', ' Hi', ' Thank', ' The', ' We', ' Thanks', ' This', ' My', ' If', ' You']
+
+[New tokens 10] count=256 first30=[3189, 486, 491, 833, 3048, 34, 202, 45, 1976, 10961, 29, 5531, 15, 356, 791, 916, 299, 1118, 490, 486, 2068, 6968, 18029, 289, 269, 2519, 17, 202, 44, 5499]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: Do you have any questions?
+Jennifer: Well, I would like to know if you're feeling stressed in the future.
+I'd like to know how much stress has been experienced by you and your family over time.
+Dr. Gershwin: What's the most important thing about your life today that you can do for yourself?
+Jenna: It's really very hard to make a good decision. You've got to be able to get it right. You have to be able, in some way, to see the world from your perspective. If you're not comfortable with it, you may be going through the same mistakes. You might have to change things. But I think it's one of the most important things you can do.
+Dr Gershwil: I'm very excited about this.
+DrGershwin is a psychologist who specializes in emotional health issues. She works as a consultant for many people. Her research focuses on the relationship between emotions and moods. She also studies the effects of stress on the brain.
+DrLee: I think that's an interesting question because I'm trying to understand what makes us feel stressed and how we deal with stress.
+DrRebecca: This
+
+================================================================================

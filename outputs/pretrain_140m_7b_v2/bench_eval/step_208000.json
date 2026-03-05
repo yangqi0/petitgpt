@@ -1,0 +1,106 @@
+{
+  "ckpt": "outputs/pretrain_140m_7b_v2/step_208000.pt",
+  "bench": "pretrain/bench_v1.eval.jsonl",
+  "time_s": 124.368,
+  "acc_arithmetic": 0.0,
+  "acc_syllogism": 0.6666666666666666,
+  "acc_code": 0.3333333333333333,
+  "counts": {
+    "total": 9,
+    "arithmetic": {
+      "n": 3,
+      "correct": 0
+    },
+    "syllogism": {
+      "n": 3,
+      "correct": 2
+    },
+    "code": {
+      "n": 3,
+      "correct": 1
+    }
+  },
+  "results": [
+    {
+      "id": "arith_0001",
+      "task": "arithmetic",
+      "ok": false,
+      "prompt": "You are a precise assistant.\nRules for arithmetic questions:\n- Output ONLY the final numeric answer.\n- No explanation, no extra words, no punctuation.\n\nJohn has 3 apples and buys 2 more. How many apples does he have?\nAnswer:\n\n",
+      "gold": "5",
+      "gen": " 1 2 3 4",
+      "detail": "pred=1.0 gold=5"
+    },
+    {
+      "id": "arith_0002",
+      "task": "arithmetic",
+      "ok": false,
+      "prompt": "You are a precise assistant.\nRules for arithmetic questions:\n- Output ONLY the final numeric answer.\n- No explanation, no extra words, no punctuation.\n\nCompute 17 + 25.\nAnswer:\n\n",
+      "gold": "42",
+      "gen": " 1 2 3 4",
+      "detail": "pred=1.0 gold=42"
+    },
+    {
+      "id": "arith_0003",
+      "task": "arithmetic",
+      "ok": false,
+      "prompt": "You are a precise assistant.\nRules for arithmetic questions:\n- Output ONLY the final numeric answer.\n- No explanation, no extra words, no punctuation.\n\nWhat is 9 * 8?\nAnswer:\n\n",
+      "gold": "72",
+      "gen": " 9 9 8 8",
+      "detail": "pred=9.0 gold=72"
+    },
+    {
+      "id": "syll_0001",
+      "task": "syllogism",
+      "ok": false,
+      "prompt": "You are a logic assistant.\nRules:\n- Output ONLY one token: yes / no / unknown.\n- Do not explain.\n\nIf all cats are animals and some animals are black, can we conclude that some cats are black?\nAnswer:\n\n",
+      "gold": "unknown",
+      "gen": " yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes",
+      "detail": "pred=yes gold=unknown"
+    },
+    {
+      "id": "syll_0002",
+      "task": "syllogism",
+      "ok": true,
+      "prompt": "You are a logic assistant.\nRules:\n- Output ONLY one token: yes / no / unknown.\n- Do not explain.\n\nAll A are B. All B are C. Can we conclude all A are C?\nAnswer:\n\n",
+      "gold": "yes",
+      "gen": " yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes",
+      "detail": "pred=yes gold=yes"
+    },
+    {
+      "id": "syll_0003",
+      "task": "syllogism",
+      "ok": true,
+      "prompt": "You are a logic assistant.\nRules:\n- Output ONLY one token: yes / no / unknown.\n- Do not explain.\n\nSome A are B. All B are C. Can we conclude some A are C?\nAnswer:\n\n",
+      "gold": "yes",
+      "gen": " yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes",
+      "detail": "pred=yes gold=yes"
+    },
+    {
+      "id": "code_add_0001",
+      "task": "code",
+      "ok": true,
+      "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n- Output ONLY the function body (no def line).\n- Do NOT use 'yield'.\n- Do NOT use semicolons ';'.\n- Write exactly ONE statement per line (no two statements on one line).\n- End your output with exactly: ###EOC###\n\nComplete the following Python function:\n\ndef add(a, b):\n    ",
+      "gold": null,
+      "gen": " return a + b\n\ndef main():\n    print(add(1, 2))\n    print(add(3, 4))\n    print(add(5, 6))\n    print(add(7, 8))\n    print(add(9, 10))\n    print(add(10, 11))\n    print(add(12, 13))\n    print(add(13, 14))\n    print(add(14, 15))\n    print(add(15, 16))\n    print(add(16, 17))\n    print(add(17, 18))\n    print(add(18, 19))\n    print(add(19, 20))\n    print(add(20, 21))\n    print(add(21, 22))\n    print(add(22, 23))\n    print(add(23, 24))\n    print(add(24, 25))\n    print(add(25, 26))\n    print(",
+      "detail": ""
+    },
+    {
+      "id": "code_fact_0001",
+      "task": "code",
+      "ok": false,
+      "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n- Output ONLY the function body (no def line).\n- Do NOT use 'yield'.\n- Do NOT use semicolons ';'.\n- Write exactly ONE statement per line (no two statements on one line).\n- End your output with exactly: ###EOC###\n\nComplete the following Python function:\n\ndef factorial(n):\n    ",
+      "gold": null,
+      "gen": " return n * (n - 1) / (n - 1)\n\ndef factorial_of(n):\n     return factorial(n) / factorial(n)\n\ndef factorial_of(n):\n     return factorial(n) / factorial(n)\n\ndef factorial_of(n):\n     return factorial(n) / factorial(n)\n\ndef factorial_of(n):\n     return factorial_of(n) / factorial(n)\n\ndef factorial_of(n):\n     return factorial_of(n) / factorial(n)\n\ndef factorial_of(n):\n     return factorial_of(n) / factorial(n)\n\ndef factorial_of(n):\n     return factorial_of(n) / factorial(n)\n\ndef factorial_of(n):\n     return factorial_of(n) / factorial(n)\n\ndef factorial_of(n",
+      "detail": "Traceback (most recent call last):\n  File \"/tmp/tmpig_xscs8/tmp_eval.py\", line 4, in <module>\n    assert factorial(0)==1\nAssertionError\n\n[CODE_SNIPPET]\ndef factorial(n):\n    return n * (n - 1) / (n - 1)\n\nassert factorial(0)==1\nassert factorial(1)==1\nassert factorial(5)==120\nassert factorial(8)==40320\n"
+    },
+    {
+      "id": "code_fib_0001",
+      "task": "code",
+      "ok": false,
+      "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n- Output ONLY the function body (no def line).\n- Do NOT use 'yield'.\n- Do NOT use semicolons ';'.\n- Write exactly ONE statement per line (no two statements on one line).\n- End your output with exactly: ###EOC###\n\nComplete the following Python function:\n\ndef fib(n):\n    ",
+      "gold": null,
+      "gen": " return n.value\n\ndef fib(n):\n     return n.value\n\ndef fib(n):\n     return n.value\n\ndef fib(n):\n     return n.value\n\ndef fib(n):\n     return n.value\n\ndef fib(n):\n     return n.value\n\ndef fib(n):\n     return n.value\n\ndef fib(n):\n     return n.value\n\ndef fib(n):\n     return n.value\n\ndef fib(n):\n     return n.value\n\ndef fib(n):\n     return n.value\n\ndef fib(n):\n     return n.value\n\ndef fib(n):\n     return n.value\n\ndef fib(n):\n     return n.value\n\ndef fib(n):\n     return n.value\n\ndef fib(n):\n     return n.value\n\ndef fib(n):\n    ",
+      "detail": "Traceback (most recent call last):\n  File \"/tmp/tmphykvlph6/tmp_eval.py\", line 4, in <module>\n    assert fib(0)==0\n  File \"/tmp/tmphykvlph6/tmp_eval.py\", line 2, in fib\n    return n.value\nAttributeError: 'int' object has no attribute 'value'\n\n[CODE_SNIPPET]\ndef fib(n):\n    return n.value\n\nassert fib(0)==0\nassert fib(1)==1\nassert fib(2)==1\nassert fib(7)==13\n"
+    }
+  ]
+}

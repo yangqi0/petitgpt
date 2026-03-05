@@ -1,0 +1,313 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[791, 418, 601, 330, 15, 288, 1628, 289, 2827, 728]
+first_step_topk_probs=[0.2216334044933319, 0.17995227873325348, 0.10689614713191986, 0.07047032564878464, 0.06292645633220673, 0.04186112806200981, 0.04186112806200981, 0.039736680686473846, 0.03772004321217537, 0.03062625788152218]
+first_step_topk_text=[' would', ' was', ' will', ' is', ',', ' of', ' might', ' in', ' named', ' may']
+
+[New tokens 1] count=256 first30=[578, 733, 998, 289, 269, 4323, 11756, 17, 202, 5, 44, 699, 287, 1608, 3215, 668, 418, 263, 1114, 1413, 2032, 623, 961, 988, 269, 5585, 17, 360, 3146, 330]
+[Full output 1]
+Once upon a time, a curious child has been found in the churchyard.
+"I had an old friend who was a very good young man," said the boy. "He is very good and he loves me."
+The boy went to his father's house, where he learned that the priest had been with him since he was a boy. He also learned that the priests were not the same as the children of the church. The priest was a poor man, but he could have become a rich man if he knew how to earn money.
+The priest was a little bit more than a rich man. He knew that he would be proud when he came to see the Lord. He asked him what he wanted for the day.
+"What can I do?" the priest asked.
+"You are going to go out and buy some wine for yourself. You will have a nice dinner with your family and you will be happy!"
+The priest then walked into the house and looked at the boy.
+"Do you want to be married?" the priest replied.
+"Yes, yes. What about you?" the priest answered.
+"Well, what kind of marriage do you want?" the priest responded.
+"No, no. How can I marry?" the priest said.
+"
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 17, 382, 2868, 418, 5953, 1255, 368, 293, 266, 15, 614, 383, 4374, 299, 368, 293, 266, 289, 269, 1691, 401, 2162, 298, 1770, 2037, 1414, 359, 368]
+[Full output 2]
+Paris is the capital of the province. The town was originally called Moure, but it changed to Moure in the 17th century and later became known as Moure.
+The town has a long history of being a major centre for the manufacture of the fine linen yarns that were used in the production of woollen cloth. In addition to this, there are many other industries such as textile mills, workshops, and mining.
+The first European settlers arrived on the shores of Lake Ontario at the end of the 19th century. They established the first permanent settlement in the area, and began the construction of the first railway line. In 1867, the town was incorporated into the city of Toronto.
+In the early 20th century, the town experienced a significant population growth, with many people moving from the suburbs of Detroit, Chicago, St. Louis, Chicago, and New York City. During World War II, the town suffered a severe shortage of workers and the population dropped dramatically. The community of Moure remained a small industrial town until the 1980s when the construction of a new rail line to the town was completed.
+Today, the town is home to a number of historic buildings, including the University of Michigan's Art Gallery, the James G. McP
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 20745, 14274, 269, 3892, 288, 263, 4409, 17, 1220, 1373, 15, 289, 637, 39, 1926, 15, 269, 4409, 483, 342, 3020, 359, 353, 91, 15, 92]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that uniquely determines the direction of a vector. For example, in 3D space, the vector can be written as (x,y) = (x^2 + y^2). The determinant of a matrix is a number that tells us how much the vector changes when we move from one side to the other.
+
+### Linear Algebra and Its Applications
+
+Linear algebra is a branch of mathematics that deals with vectors and their properties. It involves finding the values of the variables that make up a given mathematical object. Let's look at some examples using the example above:
+
+Example 1: Find the zero vector for the following equation: x = 2 - 4i.
+
+Solution: We start by writing the equation as follows:
+
+x = 2 -4i
+
+Now, let's apply this concept to our problem:
+
+(x,y)=(-1)^3+(2-4i), (x,0))
+
+We want to find the zero vector because it has a magnitude of zero. To do so, we need to find the values of both x and y, which are the components of the vector:
+
+((x,0),(y,0))=(2-4j)(2-
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 395, 491, 5546, 1991, 1420, 1085, 9845, 3069]
+first_step_topk_probs=[0.413973331451416, 0.1249464824795723, 0.0781894326210022, 0.07422132790088654, 0.03579776734113693, 0.03579776734113693, 0.029065487906336784, 0.026190204545855522, 0.02240166999399662, 0.02126476727426052]
+first_step_topk_text=[' use', ' can', ' are', ' have', ' describe', ' provide', ' allow', ' model', ' rely', ' attempt']
+
+[New tokens 4] count=256 first30=[22968, 269, 14457, 2673, 1085, 17, 1109, 483, 342, 885, 299, 1798, 611, 672, 269, 2673, 298, 686, 4941, 15, 359, 1047, 359, 553, 2970, 298, 865, 854, 17, 202]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the neural network model. They can be used to learn more about the network and its parameters, as well as their training and test set.
+
+## Network Training¶
+
+The network is trained on a dataset with 10 samples (samples from each distribution). The dataset contains 10 classes: 1 for the train and 2 for the test. Each class has a different number of features, and the number of classes in each class varies over time. The network has an accuracy of around 0.5%.
+
+The training process starts by creating a model object. This object will be used to train the network on the training data. Afterwards, the model is loaded into memory and run through the training process.
+
+Training the network using the following code snippet:
+
+import numpy as np
+from sklearn import datasets
+from sklearn.model_selection import train_test_split
+from sklearn_regression import KFold
+from sklearn3dtree import KDTreeClassifier
+from sklearn4dtree import DecisionTreeClassifier
+
+def create_random_forest(X):
+    # create random forest model
+    y = np.random.randn(100)
+
+    # train the network
+    X_train, X_test, y_train, y
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=78 first30=[263, 647, 286, 17, 595, 551, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 655, 3715, 555, 1499, 29, 331, 444, 22217, 655, 7737, 726, 538, 1208]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+
+if __name__ == '__main__':
+    import sys
+
+    try:
+        from functools import partial
+
+        def _func_fn():
+            return partial(_add, *args)
+
+        def func(*args):
+            raise NotImplementedError("Method not implemented")
+
+        try:
+            return func(*args)
+        except TypeError as e:
+            print(e)
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 311, 864, 353, 20, 1341, 353, 21, 2216, 353, 81, 552, 354, 3943, 711, 202, 1465, 330, 263, 1114, 2829, 1373, 17, 3490, 415, 1189, 374, 269, 1392, 284]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n * (1 / (2 ** (n - 1)))
+
+
+This is a very simple example. Let's start with the function f(x) = x^x. The input values are 0, 1, 2, ..., n, and we want to find out how many times this number will be multiplied by itself. We do this by using the fact that:
+
+f(0) = 1
+f(1) = 2
+f(2) = 3
+f(3) = 4
+f(4) = 5
+
+Now let's see what happens when we try our first few numbers:
+
+[2] 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.6273424625396729, 0.3726574778556824, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=147 first30=[622, 354, 647, 353, 20, 1341, 311, 12, 864, 409, 1190, 11, 81, 552, 354, 12, 711, 202, 1465, 330, 269, 775, 689, 356, 3442, 2595, 482, 1375, 288, 2859]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1 + (1 / n) * 2**(n - 1)
+
+
+This is the first time I've seen this type of code, but it's not very interesting. It seems to be pretty easy for me to write, and it doesn't work with any of the other functions in Python. So I thought I'd just write something like this:
+
+function fib(n)
+if n == 0
+return 1
+else if n == 1
+return fib(n-1)
+else if (n % 2 != 0)
+# TODO: maybe the result should be more efficient?
+end
+end
+
+function main()
+if __name__ == "__main__":
+    main()
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 2590, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.7535455226898193, 0.14232631027698517, 0.1041281670331955, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' No', '', '#', '', '"', '!', '', '']
+
+[New tokens 8] count=185 first30=[13676, 17, 1541, 330, 263, 3313, 288, 2833, 299, 1447, 482, 2810, 17, 1783, 15, 383, 415, 453, 2401, 922, 269, 4099, 2833, 330, 17, 1278, 715, 586, 833, 4631]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Yes. There is a lot of evidence to support this claim. However, it's not clear what the actual evidence is. If there were any differences between cats and dogs, there would be no difference in their behavior or body shape. The evidence is quite strong. Some researchers have suggested that cats are more likely to bite than dogs (but they're not sure). This is just an attempt at proving something, but I don't think anyone has been able to prove it either.
+One thing that I've found so far is that cats are also more likely to get bites from people than dogs. In fact, dogs are more likely than cats to get bites by people (and it seems like that is a pretty good indicator of being bitten) and in general, cats are more aggressive than dogs. So if you want to make a point about these things, then it makes sense for cats to be more aggressive.
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 843, 354, 409, 1012, 637, 2, 3, 1, 0]
+first_step_topk_probs=[0.4348415732383728, 0.18898142874240875, 0.10115447640419006, 0.10024235397577286, 0.09114774316549301, 0.08363237977027893, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 4', ' 5', ' 1', ' 2', ' 6', ' 3', '', '', '', '']
+
+[New tokens 9] count=256 first30=[843, 17, 27, 3, 711, 509, 1165, 415, 3796, 16628, 15, 2807, 15404, 2213, 15, 330, 351, 686, 1194, 299, 2719, 415, 12759, 3176, 288, 269, 716, 15, 2179, 383]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 5.8
+
+The world's largest asteroid, 2012 DA14, is on its way to Earth's closest approach of the year, making it the second-most dangerous object in the history of the universe.
+The asteroid was discovered by the European Space Agency (ESA) in late February. It is expected to pass within 17,000 miles (27,000 kilometers) of Earth this week.
+Scientists believe that the asteroid will hit a few days later than previously thought, and could last for several weeks before hitting the planet again.
+"This is the first time we've seen an asteroid impact with such a large size," said Dr. Scott Masekela, from the University of California at Los Angeles, who led the study. "It is the largest asteroid impact ever detected."
+The asteroid is named DA14, after the Greek god of war, who in his day was the father of Apollo 11. The asteroid is only about 1.5 times as massive as the moon.
+Earth is currently moving toward the sun at an average speed of about 27,000 mph (37,000 km/h).
+An estimated 1.4 million tons of rock is believed to be left over from the impact.
+Earth may not be the only
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 783, 382, 1289, 1509, 1278, 15255, 2575, 27614, 22089]
+first_step_topk_probs=[0.6606898307800293, 0.08015076816082001, 0.04290161654353142, 0.03221561759710312, 0.02979457750916481, 0.025484653189778328, 0.020160019397735596, 0.017698731273412704, 0.014370240271091461, 0.01294866856187582]
+first_step_topk_text=[' I', ' This', ' The', ' We', ' You', ' If', ' Thanks', ' What', ' Hi', ' Thank']
+
+[New tokens 10] count=70 first30=[783, 330, 263, 1114, 1384, 3467, 299, 620, 15, 298, 411, 483, 847, 620, 383, 1567, 269, 1005, 288, 263, 3215, 17, 1289, 1755, 847, 1418, 299, 342, 4653, 15]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: This is a very important thing to do, and we can't do it without the help of a friend. We don't want to be alone, but we need someone who knows how to be together with us. If you are in a hurry, I would appreciate your advice.
+Liz: Thank you for your time and support.
+
+================================================================================

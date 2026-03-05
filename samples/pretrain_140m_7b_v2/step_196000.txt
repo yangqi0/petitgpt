@@ -1,0 +1,322 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[791, 418, 601, 1628, 388, 330, 728, 2827, 15, 3609]
+first_step_topk_probs=[0.42694005370140076, 0.12886013090610504, 0.08063860982656479, 0.050462353974580765, 0.03889285773038864, 0.03889285773038864, 0.03691904619336128, 0.03504537418484688, 0.031721848994493484, 0.023103348910808563]
+first_step_topk_text=[' would', ' was', ' will', ' might', ' or', ' is', ' may', ' named', ',', ' asked']
+
+[New tokens 1] count=256 first30=[3609, 29, 360, 10872, 330, 269, 2903, 3763, 202, 5, 509, 2903, 961, 988, 269, 929, 17, 360, 1693, 415, 269, 2903, 741, 382, 929, 418, 16732, 283, 298, 4053]
+[Full output 1]
+Once upon a time, a curious child asked: "Where is the sun?"
+"The sun," said the child. "It's the sun." The child was delighted and gave him the answer: "it's the sun!"
+When he had finished his work, the child asked: What do you think?
+"It's the moon," said the little boy. "It looks like it's all over the place! It's just a tiny bit of sand."
+The child said to himself: "I don't know what I'm thinking about. You're right."
+"I'm afraid," said the small boy. "That's not true. It's just that it's so small."
+Then the child said to the little boy: "You're right. The moon is big enough for me."
+"Yes," said the young man. "But the moon is also very small too."
+"No," said the old man. "If you were going to make a big moon, you would have to go on a long journey in order to get there."
+"And then you'll see the moon with your eyes," said the girl. "There are lots of different kinds of moons around the world."
+"So you can't tell the difference between the moon
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 336, 343, 7093, 7362, 321, 263, 4455, 6967, 389]
+first_step_topk_probs=[0.806100070476532, 0.04421784728765488, 0.023668106645345688, 0.02246694080531597, 0.020244404673576355, 0.018241731449961662, 0.017315955832600594, 0.014059452340006828, 0.013698048889636993, 0.011415383778512478]
+first_step_topk_text=[' the', ' S', ' C', ' Italy', ' Spain', ' T', ' a', ' France', ' Gal', ' B']
+
+[New tokens 2] count=203 first30=[269, 9556, 17, 382, 4223, 288, 269, 4079, 330, 269, 2317, 288, 336, 554, 297, 2717, 15, 536, 330, 3323, 289, 269, 3246, 16, 3955, 8032, 288, 269, 9556, 15]
+[Full output 2]
+Paris is the capital of the province. The capital of the district is the city of Sibelius, which is located in the north-west corner of the province, and was the capital of Roman province from the year 3rd BC.
+The region has a rich history, including the first archaeological excavations by archaeologists in the region, which have uncovered evidence of human occupation dating back to at least 4000 years ago. In addition, the culture of the region's ancient inhabitants has been preserved with great value for archaeology.
+This area has been inhabited since prehistoric times as far back as 3000 BC. Ancient peoples lived here until the arrival of the Romans. They conquered it during the Roman Empire, and the area became part of the Roman Empire. It was then known as the Principality of Rome. Today, the area is a popular tourist destination.
+It is also home to the largest population of the Northern Black Sea coast, which includes the cities of Kiev, Minsk, and Bela Vakil.
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 20745, 14274, 269, 3892, 288, 263, 3823, 17, 535, 613, 2351, 15, 490, 486, 491, 263, 953, 288, 5662, 15, 486, 483, 3408, 780, 359, 4759]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that uniquely determines the direction of a matrix. In other words, if you have a system of equations, you can write them as linear equations in standard form (see the image below).
+Let's take a look at a more complicated example:
+An eigenvalue of a system of linear equations is a scalar multiple of the original system. Let's say we have the system:
+We can see that the system has no solution except for one variable. So we could rewrite it like this:
+Now let's try to find out what happens when we apply this equation to our system. First, we'll get rid of the variables and add them together. Then we'll solve for x. This will give us back the system: x = 1. Now we can substitute the values into the original system to get the new system:
+The system has no solutions except for one or two variables. So we've got our system:
+But how do we know whether we're talking about the system with zero eigenvalues? Well, since we can't have zero eigenvalues without having any real numbers, we need to check whether there are any real numbers which satisfy the system. Since there are infinitely many complex numbers, there must be some real number that does not satisfy the system
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[491, 817, 483, 395, 5546, 1085, 1420, 1991, 9845, 330]
+first_step_topk_probs=[0.27892521023750305, 0.20406603813171387, 0.12122043967247009, 0.08630924671888351, 0.05549876391887665, 0.05268220230937004, 0.03296767920255661, 0.03296767920255661, 0.02676764316856861, 0.022895576432347298]
+first_step_topk_text=[' have', ' use', ' can', ' are', ' describe', ' model', ' allow', ' provide', ' rely', ' is']
+
+[New tokens 4] count=183 first30=[395, 885, 299, 3235, 269, 2519, 3286, 288, 1623, 16, 7128, 2061, 17, 535, 482, 2851, 15, 411, 9598, 269, 2877, 288, 263, 719, 1375, 288, 14457, 2673, 1255, 263]
+[Full output 4]
+Neural networks are a class of machine learning models that are used to predict the future behavior of real-world problems. In this paper, we introduce the idea of a new type of neural network called a neural network. We will describe how these neural networks work and how they can be used in various applications such as image recognition, machine learning, and robotics.
+
+## Theoretical Modeling of Neural Networks
+
+### I: Stochastic Processes and Systems
+
+• ### Modeling Neural Networks in Real World Applications
+
+We consider a set of stochastic processes in which each process is defined by a random variable X. The model is based on a stochastic process model with a fixed number of states, where the parameters of the process are randomly chosen from the probability distribution of the random variables.
+
+##### MSC:
+ 33C20 Numerical analysis of complex systems 34A05 Probability theory and statistics
+Full Text:
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=97 first30=[263, 647, 286, 17, 595, 551, 711, 202, 350, 1401, 678, 626, 861, 8922, 3142, 9533, 346, 655, 3715, 555, 490, 1804, 11, 6022, 17, 8256, 12, 1396, 409, 29]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+
+if __name__ == "__main__":
+    import sys
+
+    if len(sys.argv) < 2:
+        print("Usage: python add_test.py")
+        print("python add_test_src.py")
+
+        sys.exit(1)
+
+    if len([x for x in sys.stdin.readline().strip().split("\n") if x != ".")]):
+        print("The following is not correct.")
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 311, 864, 353, 20, 552, 311, 12, 711, 202, 350, 1401, 678, 626, 861, 8922, 3142, 9533, 346, 1083, 801, 7121, 2176, 14364, 3, 711, 509, 1811, 4610, 4963]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n * (1 - n)
+
+
+if __name__ == "__main__":
+    print("Hello World!")
+
+The problem presented involves finding the area under the curve y = x^2, where x is the number and x is the variable. To solve this problem, let's first understand what we mean by "area." Area refers to the total space occupied by all the points on a graph. For our given function, the area would be calculated as follows:
+
+Area = (x^2 + 2*x + 1)/(3*x^2)
+
+Now, let's apply these concepts to find the value of x when x=0. We can rewrite this equation as follows: x^2 + 4x + 3 = 0. Therefore, we have:
+
+x^2 = 0
+
+Next, we need to determine the area between the two curves. Since they are both continuous functions, their areas must equal zero because the left side equals zero while the right side equals one. Thus, we can express the area as follows: A = x^4 + 4x^3 + 3x^2
+
+Let's apply this concept to the provided function:
+
+f(x) = x^6
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=256 first30=[622, 354, 17, 19, 647, 353, 20, 552, 311, 12, 864, 353, 21, 864, 311, 12, 711, 202, 1465, 330, 269, 775, 1373, 288, 263, 1392, 357, 483, 342, 3020]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1 - n) * (2 * n)
+
+
+This is the first example of a function that can be written as a simple program, with no extra memory and no overhead. The implementation uses a binary search tree, where each node has an integer value. A very common way to solve this problem is to use the Fibonacci sequence. This is called a recursive solution.
+
+In other words, you want to find a value for n such that the value of n is a positive integer. You can do this by using the Fibonacci sequence, which is the sum of the two Fibonacci numbers, 1, 2, 3, 5, 7, 11, ... . The recursive solution is given by the formula:
+
+f(n) = {1 if i=1 else 0 if i<n}
+f(1) = {2 if i=i+1 else 0}
+f(-1) = (-1)^n
+f(0) = 1
+
+For example, consider the following recursive solution:
+
+x = 1/5
+y = x^3
+
+Here, f(n) is the number of nodes in the tree, and y is the number in the recursive tree.
+
+
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 1541, 2590, 356, 698, 1906, 2340, 1289, 338]
+first_step_topk_probs=[0.4782940447330475, 0.15207771956920624, 0.15207771956920624, 0.06273852288722992, 0.03926076740026474, 0.030259452760219574, 0.027266034856438637, 0.021014774218201637, 0.019948257133364677, 0.017062649130821228]
+first_step_topk_text=[' The', ' Yes', ' There', ' No', ' I', ' It', ' All', ' That', ' We', ' A']
+
+[New tokens 8] count=192 first30=[382, 3533, 330, 808, 17, 202, 2573, 395, 914, 1108, 2722, 288, 1173, 5037, 10676, 15, 614, 715, 395, 1237, 1488, 7590, 29, 202, 16, 31412, 374, 2645, 28381, 353]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is no.
+There are many different ways of classifying cats, but there are three common categories:
+- Cats with black markings (also known as "black cats") have black fur and white hair.
+- Cats that have white or grayish fur (also known by the common name "white cat").
+The cats' coat is a combination of two elements: a dark brown coat with white spots on the back and a light brown coat with a white spot on the front. A cat's tail is a yellowish patch on its body, while a cat's legs are a pale blue. All cats have a coat that has the same color.
+A cat's coat may be either black or white, depending on the breed. Some breeds have more than one color. Some breeds are so closely related to each other that they cannot be classified in any way.
+What do you think about this question? Leave your comments below!
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[843, 798, 354, 2050, 1012, 382, 338, 409, 637, 0]
+first_step_topk_probs=[0.21663157641887665, 0.21663157641887665, 0.19520144164562225, 0.10448379814624786, 0.06887994706630707, 0.06206598877906799, 0.05039364844560623, 0.044795650988817215, 0.040916405618190765, 0.0]
+first_step_topk_text=[' 5', ' 4', ' 1', ' One', ' 6', ' The', ' A', ' 2', ' 3', '']
+
+[New tokens 9] count=256 first30=[2050, 13032, 7670, 619, 934, 667, 17, 202, 30736, 29, 354, 15, 409, 15, 798, 15, 1218, 15, 1769, 15, 5850, 15, 8103, 15, 2784, 202, 202, 1921, 9519, 325]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple plus one buys.
+Solution: 1, 2, 4, 8, 16, 32, 64, ...
+
+Explanation:
+The total number of apples is 2^4 + 3^2 = 24.
+If we add the numbers together, we get 6*24=36.
+
+We know that a) 2^3 + 3^1 + 3^0 = 36
+b) 2^6 + 3^5 + 3^7 = 36
+c) 2^8 + 3^9 + 3^10 + 3^11 = 36
+d) 2^12 + 3^13 + 3^14 + 3^15 = 36
+
+So, there are 36 possible apples for each of the following problems:
+
+Problem 1:
+
+Find the number of ways to choose 5 from 25!
+
+Example:
+
+Let's say we want to pick 5 cards from a deck of 52 cards. We need to find out how many different ways it can be made by selecting 5 cards.
+
+First, let's calculate the number of combinations of choosing 5 cards:
+C(52) = 12 (since there are 12 choices)
+D(52) * C(52)
+
+
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 15255, 382, 783, 1278, 3919, 1509, 27614, 22089, 1289]
+first_step_topk_probs=[0.5796420574188232, 0.061315570026636124, 0.05524994805455208, 0.04725778102874756, 0.04258281737565994, 0.03938266634941101, 0.03938266634941101, 0.01850641518831253, 0.0171156357973814, 0.01582937501370907]
+first_step_topk_text=[' I', ' Thanks', ' The', ' This', ' If', ' My', ' You', ' Hi', ' Thank', ' We']
+
+[New tokens 10] count=256 first30=[3189, 486, 1118, 833, 613, 9525, 357, 483, 1005, 34, 202, 14852, 17, 440, 19545, 29, 698, 415, 263, 1413, 2877, 299, 835, 669, 2053, 3202, 13885, 435, 2241, 2539]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: Do you know any other medication that can help?
+Mr. Larson: It's a good idea to get your blood pressure checked at least once a year, especially if you're pregnant or have breast-feeding. If you are taking any medications, tell your doctor right away so the pills don't interfere with your blood pressure control. You should also take all of your medicines as directed by your doctor and make sure they're not the same thing as your blood pressure.
+For more information about high blood pressure, see the topic High Blood Pressure.
+Follow these steps to manage your high blood pressure:
+Avoid high blood pressure in the early stages. This is called chronic hypertension. Your doctor will monitor your blood pressure during this time.
+Take your medicine exactly as prescribed. This helps prevent complications.
+If you need to take your medicine, talk to your doctor before you start taking it.
+Be careful when taking your medicine. The dose of your medicine may change over time. Also, certain medicines can affect how well your heart works. Be sure to check with your doctor before taking any medicine.
+Always call your doctor if you feel ill. He or she can give you medicine to help treat your condition.
+When to Call a Professional
+Call
+
+================================================================================
