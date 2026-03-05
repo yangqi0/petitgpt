@@ -1,0 +1,308 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[791, 3609, 418, 2827, 2446, 1255, 289, 2977, 2857, 1628]
+first_step_topk_probs=[0.2930118441581726, 0.2379070520401001, 0.11474508792161942, 0.08843757957220078, 0.07564467191696167, 0.024051876738667488, 0.020572658628225327, 0.01759672909975052, 0.01759672909975052, 0.01670369692146778]
+first_step_topk_text=[' would', ' asked', ' was', ' named', ' came', ' called', ' in', ' saw', ' went', ' might']
+
+[New tokens 1] count=126 first30=[3609, 269, 2395, 29, 360, 2664, 330, 383, 357, 2668, 486, 649, 4191, 3763, 382, 3533, 418, 808, 17, 202, 509, 929, 14618, 29, 360, 44, 873, 649, 4191, 741]
+[Full output 1]
+Once upon a time, a curious child asked the question: "What is it that makes you so happy?" The answer was no.
+The child replied: "I am so happy."
+"It's so good to be happy," said the child.
+"You can always have fun with me!"
+"Oh yes, I just like being so happy!"
+"But what about my parents?"
+"They're all happy too!"
+"Yes, they are! They have so much more happiness than we do!"
+"If I want to get married, I'll have to marry them."
+"Well, they are not so happy."
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 4455, 263, 336, 7362, 7093, 343, 2, 1, 0]
+first_step_topk_probs=[0.801034152507782, 0.07722185552120209, 0.06269925087690353, 0.01796363666653633, 0.017051976174116135, 0.015365113504230976, 0.008664052002131939, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' France', ' a', ' S', ' Spain', ' Italy', ' C', '', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 7535, 281, 8191, 17, 698, 330, 658, 269, 8492, 288, 269, 1723, 288, 269, 9556, 15, 298, 269, 8492, 288, 263, 11718, 17, 202, 509, 1548, 16]
+[Full output 2]
+Paris is the capital of the province of Catalonia. It is also the seat of the government of the province, and the seat of a municipality.
+The present-day city of Catalunya is located in the province of Cnica, in the region of Sardinia. The city was founded by the Lombards as a Roman colony in the 1st century AD, during the reign of Pope Urban II.
+Ciencias de Catalunía (Ciudad Catalan: ) is the oldest city in Cataluny, the capital of Catalina Province. It is the seat of an administrative unit called the "Catalunya". In the 10th century, it was the capital of a kingdom of the Lombards, who were the first to rule the area around Catalina.
+Ascii Catalina (Ciucacolu) is a town on the river Borgo, which is the main point of contact between the two regions. The town was the centre of the Kingdom of Castile until the 15th century.
+In 1638, the new state of Catalans took control of Catalinay from the Kingdom of Naples. During the 18th century, Catalins ruled the
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 14274, 269, 10632, 288, 263, 4409, 289, 1926, 17, 535, 482, 1832, 15, 269, 4409, 601, 342, 263, 13742, 15, 298, 383, 415, 1812, 299, 1098]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that determines the orientation of a vector in space. In this case, the vector will be a scalar, and it's possible to find the direction (in this case, in the direction of the vector) by finding the angle between the two vectors.
+The vector can also be described as a vector whose magnitude is the same as its length. For example, if we have a vector $v$ with length $a$, then the magnitude of the vector is given by:
+$v = \frac{1}{2}a + \frac{3}{4}b.$
+This is just a generalization of the definition of a vector. If you want to know how far apart a point is from another point, you could use the following formula:
+$\sqrt[]{a^2+b^2}=\sqrt[]{c^2}$
+This formula tells us how far away a point is relative to other points on the plane.
+If you're not familiar with this formula, you may recall that a vector $\vec{u}$ is said to be a function of its magnitude, or simply, its direction. The direction of a vector is determined by its magnitude. A vector that is perpendicular to a line segment is called perpendicular to
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 491, 5546, 817, 395, 1420, 9845, 1085, 1991, 5663]
+first_step_topk_probs=[0.22833256423473358, 0.22833256423473358, 0.16705167293548584, 0.12221762537956238, 0.07912424206733704, 0.06541837751865387, 0.028430690988898277, 0.023083919659256935, 0.021912412717938423, 0.016031460836529732]
+first_step_topk_text=[' can', ' have', ' describe', ' use', ' are', ' allow', ' rely', ' model', ' provide', ' involve']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 17, 202, 202, 2303, 1373, 15, 269, 10447, 2790, 330, 5454, 419, 263, 10447, 1811, 374, 1237, 4941, 29, 263, 10447, 2225, 15]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data.
+
+For example, the classification task is represented by a classification problem with three parameters: a classification target, a classification task, and a classification task. The classification task is defined as the set of all possible classes in a classification problem. In this case, the classification problem is represented by the classification task.
+
+In the above example, the input dataset is represented by an image and the output dataset is represented as a sequence of images.
+
+## Data-driven inference
+
+The decision tree of the model is a training process where the decision tree is trained on the input data. The decision tree is also called a regression tree or regression tree.
+
+If we have a model with two predictors (X1 and X2), then the decision tree has a feature vector X1 = [x1_0, x1_1], which is the same as the input data, and the feature vector X2 = [x2_0, y2_0]. This means that the feature vector Y1 = [y1_0] is the same for both X1 and X1.
+
+The feature vector X3 is the feature vector y3 = [y3_0,y3_
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 5427, 6649, 29, 8163, 16, 27, 5427, 202, 807, 1401, 8644, 626, 655, 15551, 66, 22513, 202, 1018, 1656, 202, 1018, 306, 202, 1018]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+import os
+import re
+import time
+from urllib.parse import urlencode
+
+from django.conf import settings
+from django import template
+from django_extensions.db.fields import fields
+from django._base import BaseModelMixin
+from django.__version__ import __version__ as version
+from djangoclient.contrib.auth.models import User
+from django2.utils.translation import ugettext_lazy as _
+from django3.utils.timezone import get_current_timezone
+from django4.utils.encoding import python_2_unicode_compatible
+from django5.utils.html import escape
+from django6.utils.dateutil import timezone
+from django7.views.generic import TemplateView
+from django10.views.decorators.csrf import csrf_exempt
+from django15.forms import ModelForm
+from django14.urls import reverse
+from django13.forms import Form
+from django18.urls import resolve_url
+from django1911.view.rest_framework import View
+from django20.views.api import NotFoundError
+from django21.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 353, 20, 12829, 311, 12, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 801, 7121, 15, 1165, 14364, 3, 711, 509, 775, 288, 263, 2378]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return (1 << n)
+
+
+if __name__ == '__main__':
+    print("Hello, world!")
+
+The first of a series on the concept of "quantum mechanics" and how it relates to quantum mechanics. The term is used in physics, chemistry, and engineering to describe the theory of particles and their interactions with other particles. In the context of quantum mechanics, the term quanta refers to the quantized state of matter at any given time.
+Quantum mechanics is the study of the behavior of particles in the presence of external forces such as gravity or electromagnetic radiation. It has been studied for centuries by scientists who have studied the properties of particles in their natural states. This article focuses on the concept, its applications, and applications.
+The concept of quanta was originally proposed by Charles Chambers in his book Quantum Mechanics. Chambers's work led to the development of quantum field theories. Chambers defined the quanta as the set of all possible solutions to a problem, which can be formulated as a solution to a particular problem. He then developed the theory of quantum fields to explain the dynamics of particles in space-time.
+In quantum mechanics, quantas are not measured directly; they are either measured using quantum operators or measurements made
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.8191229701042175, 0.18087701499462128, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 354, 17, 19, 647, 353, 20, 17, 19, 552, 311, 12, 864, 353, 21, 864, 353, 81, 552, 354, 687, 711, 202, 2474, 486, 1755, 847, 1118, 806, 299]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1.0 - n) * (2 * (n - 1))
+
+
+If you don't know how to do this, try one of the following methods:
+
+• Print a list of all the Fibonacci numbers in a list. If it is not obvious, print the list of all its Fibonacci numbers and then use it to find the next number.
+• Print an array of the Fibonacci numbers. The first element is the index of the first value in the array. The second element is the value of the last element in the array; the third element is the next element in the sequence.
+
+You can also add an additional argument to the function to get the value of each Fibonacci number in a list by adding the first element of the list to the previous element.
+
+The function fib() will be called once for each Fibonacci number, and the function will output the value of that Fibonacci number if it is even or odd. If there are no Fibonacci numbers, the function will return None.
+
+Note that there may be some error messages when the function returns zero. For example, if the function returns 0, then the value returned is 0.
+
+## Examples
+
+### Example 1:
+
+Find the
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 1541, 2590, 31412, 1289, 3987, 356, 4619, 698]
+first_step_topk_probs=[0.43692710995674133, 0.1389247328042984, 0.08693687617778778, 0.08693687617778778, 0.05440371483564377, 0.03231719508767128, 0.03067709505558014, 0.03067709505558014, 0.02912021055817604, 0.02764235809445381]
+first_step_topk_text=[' The', ' Yes', ' There', ' No', ' Cats', ' We', ' Most', ' I', ' Black', ' It']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 12052, 17, 202, 509, 3533, 299, 482, 2395, 330, 808, 17, 1278, 263, 3191, 330, 2645, 15, 383, 1298, 342, 263, 2645, 3191, 17, 1358, 490, 263]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+The answer to this question is no. If a cat is black, it must be a black cat. But if a black cat is white, then the answer is no.
+You need to find out why black cats are black. Why do they have black stripes on their heads?
+What's the difference between black and white? How does one get rid of these two?
+Why do black cats have stripes on their legs?
+Which animal is black? Which animal is not?
+Which one of these colors is a black?
+So, what is the answer to this problem?
+If you want to know how many black cats there are in the world, you need to look at the number of black cats in the world.
+There are 3 black cats in existence. One black cat has 4 black cats. The other black cat has 6 black cats. So, the total number of black Cats in the world is 6x6x3x2x1x7x8x9x4x7x5x7x3x3x1x1x0x0x3x6x5x6x6x7x2x3x5x1x4x6x8x6
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[843, 798, 354, 637, 1012, 744, 409, 2, 1, 0]
+first_step_topk_probs=[0.3357570767402649, 0.19944828748703003, 0.19944828748703003, 0.07953283190727234, 0.07810506969690323, 0.05714288353919983, 0.05056557059288025, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 5', ' 4', ' 1', ' 3', ' 6', ' $', ' 2', '', '', '']
+
+[New tokens 9] count=256 first30=[843, 17, 24, 10941, 202, 509, 993, 288, 10941, 289, 263, 7240, 330, 269, 2056, 993, 288, 7914, 289, 269, 7240, 5660, 419, 269, 993, 288, 4282, 289, 269, 7240]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 5.5 apples
+The number of apples in a bag is the total number of fruits in the bag divided by the number of items in the bag. So, there are 5 apples in the bag and 1 apple in the bag (which is the total amount).
+
+Now let's think about this problem with numbers instead of apples. Suppose we want to find out how many apples each of us should buy if we wanted to buy only one box of apples. We could do that by multiplying all the numbers together and then dividing by the number on the left side of the equation. But what if we had two boxes of apples instead? What would happen if we added up all the apples from both boxes?
+
+This situation can be described as follows:
+
+* If you add up all the numbers on the left hand side of the expression, you get the total number on the right hand side of your equation.
+* If we subtract the number on top of the equation from the number on bottom of the equation, you get a new number on the bottom of the expression.
+
+In our example, the number on left hand side was 0 because the number on either side was 0. So, the answer for 0 is 0. This means that no matter which
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 783, 360, 338, 368, 3919, 15255, 1509, 353]
+first_step_topk_probs=[0.7726304531097412, 0.0327390618622303, 0.021582921966910362, 0.018460851162672043, 0.0162070132791996, 0.013862590305507183, 0.013159064576029778, 0.012491237372159958, 0.012491237372159958, 0.010409677401185036]
+first_step_topk_text=[' I', ' The', ' This', ' "', ' A', ' M', ' My', ' Thanks', ' You', ' (']
+
+[New tokens 10] count=180 first30=[356, 3442, 733, 289, 263, 3313, 288, 9327, 374, 1284, 3694, 339, 751, 689, 1244, 15, 298, 406, 415, 453, 2397, 299, 835, 1133, 299, 627, 994, 357, 17, 202]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I've been in a lot of trouble with my son for some time now, and he's not going to get back to me after that.
+We have two children, one from each of the three classes. We're trying to find out what they are doing and where they are doing it. We've got them talking about how we're working together, so we're asking them to tell us what they are feeling like. And we've got them to talk about how they feel and how they are feeling.
+They're both in the class. They're all upset, but they're not getting along.
+I was kind of surprised when I saw the kids who were having problems. It just seems like something that's really hard to handle. But there is something else I want to know.
+If you have any questions or comments, please contact me at email@example.com
+
+================================================================================

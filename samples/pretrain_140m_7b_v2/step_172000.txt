@@ -1,0 +1,297 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[791, 418, 2827, 3609, 288, 1255, 15, 699, 1628, 2857]
+first_step_topk_probs=[0.3974688649177551, 0.2620278000831604, 0.14775176346302032, 0.04233158752322197, 0.040183261036872864, 0.03437056392431259, 0.02520303800702095, 0.01746356301009655, 0.01746356301009655, 0.015735993161797523]
+first_step_topk_text=[' would', ' was', ' named', ' asked', ' of', ' called', ',', ' had', ' might', ' went']
+
+[New tokens 1] count=256 first30=[1255, 5273, 718, 2857, 299, 1258, 17, 1530, 418, 1114, 10074, 288, 896, 719, 5772, 3392, 298, 1024, 4725, 299, 1432, 383, 545, 289, 17, 202, 22458, 718, 699, 287]
+[Full output 1]
+Once upon a time, a curious child called Jackie went to school. She was very proud of her newfound ability and she decided to take it all in.
+Jackie had an idea that made her feel good about herself. She asked her parents to give her the name Jackie and the word "Joe" to him. She said, "You're going to be a great person." Her parents were so impressed with her that they gave her the name "Joe". The next day, Jackie went home and told her parents that he would never forget his old age. He gave her the names of her favorite things, such as a toy, and told her she could always remember them if she wanted to.
+She also learned that she loved to play games with her friends. One day, Jackies played a game with her father. They started to run around the house. Jackie remembered how Jackie ran around the house in her older brother's car when he was playing with his sister. When she saw Jackie running around the house, she knew she was not being careful. So she took Jackie to the park where she played for a while. At the park, Jackie found her mom who was working on her sister's birthday cake. The family enjoyed their cake but Jack
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 263, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.9716014862060547, 0.028398524969816208, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' a', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 7535, 281, 8191, 15, 298, 330, 3323, 289, 269, 5235, 645, 288, 269, 9556, 17, 698, 578, 263, 2073, 288, 1378, 1186, 2909, 15, 1086, 353, 9494]
+[Full output 2]
+Paris is the capital of the province of Catalonia, and is located in the southern part of the province. It has a population of around 780,000 (2006 census).
+The province was first settled by the Vandal tribes, who settled there in the second half of the 8th century BC. The first written mention of the town comes from the 9th century BC, when it was mentioned as a place for trading with the natives. In the 11th century, the city was founded by the Ptolemy Philadelphus, who also ruled the region.
+In 1228, the area that now forms the city of Catalunya was conquered by the Corsicans, who built an fortress here. After the fall of the Roman Empire, the area became known as Cataluny. In 1384, the city came under the control of the Marquis de Rothschild, who was appointed to command the newly formed Kingdom of Catalans. The city was subsequently divided into two parts: Catalun, which included the whole area between the rivers Narcissus and Tiberias, and Catalunna, which included most of Catalina.
+During the Middle Ages, Catalun was the center of the trade of the region,
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 1223, 453, 1643, 269, 3892, 288, 269, 4409, 17, 535, 482, 1832, 15, 269, 4409, 601, 342, 3636, 15, 298, 686, 8878, 601, 342, 4000, 17]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that does not change the direction of the vector. In this case, the vector will be zero, and its magnitude will be negative.
+
+An eigenvector of a matrix A is defined as the sum of all eigenvalues in A. If A has no eigenvalues, then the eigenvalue equation is a generalization of the eigen-vector equation:
+
+${\displaystyle \lambda = 0.}$
+
+The eigenvectors of a matrix are represented by the following matrices:
+
+• 2x2 Matrix: $\begin{bmatrix} 0 & 1 \\ 1 & -1 \end{bmatrix}, \begin{bmatrix}-1 & 0 \\ 1 & 1 \end{weets} .$
+• 2y2 Matrix: $0 & 1 , 1 , 1 .$
+
+The first row of the matrix represents the eigenvalue equation for the vector v:
+
+$\begin{bmatrix}\lambda = 0\\ 0 & 1 \cdot \lambda = 1\\ 0 & 0 \cdot \alpha = 0\\ \lambda = -\lambda + 1 \end {bmatrix}$
+
+Each column of the second row contains two vectors (i.e., the columns of the first row) that are not linearly independent. The columns of the third row are linearly
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 491, 5546, 395, 1085, 1420, 1991, 14071, 22968]
+first_step_topk_probs=[0.18720175325870514, 0.1686827838420868, 0.11714787036180496, 0.10555899888277054, 0.10249673575162888, 0.10020188242197037, 0.05952247232198715, 0.024555524811148643, 0.019937530159950256, 0.016187995672225952]
+first_step_topk_text=[' use', ' can', ' have', ' describe', ' are', ' model', ' allow', ' provide', ' incorporate', ' mimic']
+
+[New tokens 4] count=256 first30=[22968, 269, 14457, 2673, 415, 3392, 299, 1798, 298, 1557, 719, 1170, 17, 535, 482, 2851, 15, 411, 2336, 351, 269, 1237, 3355, 2584, 288, 14457, 8119, 29, 263, 14457]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the neural network's ability to learn and understand new information. In this paper, we focus on the three basic types of neural networks: a neural network with a fixed number of input features (such as the name of a neuron), a neural network where each feature is represented by a single output variable (called a neuron), and a neural network whose inputs correspond to a set of input features. We will present an overview of these two classes of neural networks in the context of a simple example.
+
+## Syntax
+
+The syntax of the following model can be seen from the following example:
+
+• The neural network consists of a sequence of input features, which are encoded as a list of strings (the name of the neuron).
+• The output features are represented as a list or array of integers (the name) and a list of single values (the value).
+• A single neuron contains one of the input features and a single output feature.
+• The outputs are represented as arrays of integers (a list of strings).
+• Each input feature has a single output value and a single value.
+• Each output feature has a pair of inputs and a pair of outputs.
+• A function returns a tuple containing the input features, the output values
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=139 first30=[263, 647, 286, 17, 595, 551, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 655, 3715, 555, 490, 1804, 11, 6022, 17, 8256, 12, 1396, 409, 29]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+
+if __name__ == '__main__':
+    import sys
+
+    if len(sys.argv) < 2:
+        print("Usage: python add_log.py [--log-file]")
+        exit(-1)
+
+    if len (sys.argv[1]) > 1:
+        print("\n" * 50)
+
+        if sys.argv[2] == '--log':
+            print("Adding log file")
+            add(sys.stdout)
+            add(None)
+            add('LogFile', 'new')
+        else:
+            print("Error: Could not find log file in %s" % sys.argv[-1])
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.6150878667831421, 0.3849121630191803, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 6] count=237 first30=[622, 353, 20, 12829, 311, 12, 864, 353, 21, 2216, 311, 552, 354, 12, 711, 202, 1465, 330, 263, 1114, 2829, 1373, 17, 3490, 415, 1721, 411, 1418, 299, 5224]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return (1 << n) * (2 ** n - 1)
+
+
+This is a very simple example. Let's say we want to calculate the factorial of a number n, and we want to find out how many times it takes for n to be divided by 2. In this case, n = 4.
+
+The code below uses the fact that n is even:
+
+class Solution {
+public class Factorial :
+{
+public int i = 0;
+int j = 0; // The first number in the sequence is the i-th
+public int n = Factorial[i][j]; // The second number in the list is the n-th
+}
+};
+
+public int factorial(int n) {
+if (n <= 2) {
+return 0;
+} else {
+return 1;
+}
+}
+
+public void printFraction() {
+for (int i = 0 ; i < n; ++i) {
+factorial(i); // The factorial of i is given by factorial(i)
+factorial(); // The factorial is given by factorization(i)
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 339, 537, 1083, 1150, 2, 3, 1, 0]
+first_step_topk_probs=[0.3722684681415558, 0.3533758819103241, 0.17043691873550415, 0.03763552010059357, 0.03572551906108856, 0.030557654798030853, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', ' for', ' #', ' print', ' while', '', '', '', '']
+
+[New tokens 7] count=211 first30=[622, 354, 17, 19, 647, 353, 20, 17, 19, 552, 311, 12, 864, 353, 21, 864, 311, 12, 711, 202, 1465, 330, 269, 2859, 486, 910, 299, 3245, 669, 1231]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1.0 - n) * (2 * n)
+
+
+This is the code you need to implement your own Fibonacci number recursion. I'm going to use it in the future, but this one will be much easier to understand and work with.
+
+• I think you are using a simple function called fib() which takes two arguments as arguments and returns a new function called fib(). The function fib() returns a value of type fib(int). You can use it in any way you like – jedi Sep 11 '14 at 17:55
+• I don't know how to use fib(), but I've seen it used to compute Fibonacci numbers recursion before. – jedii Sep 11 '15 at 19:01
+• @jedii "Fib()" does not have a recursive definition. It's just a function, so if you want to call it on itself, you should use fib() instead. – jerry Sep 11 '16 at 20:13
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 31412, 13676, 1541, 2590, 698, 1289, 535, 356, 0]
+first_step_topk_probs=[0.3435637354850769, 0.22649109363555908, 0.20408542454242706, 0.07201486825942993, 0.058471452444791794, 0.03297081217169762, 0.024121958762407303, 0.020632605999708176, 0.01764800399541855, 0.0]
+first_step_topk_text=[' The', ' Cats', ' Yes', ' There', ' No', ' It', ' We', ' In', ' I', '']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 12052, 17, 31412, 395, 453, 2645, 1091, 581, 491, 808, 2886, 12153, 17, 202, 509, 3533, 330, 12052, 339, 269, 851, 645, 15, 614, 383, 415, 263]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes. Cats are not black because they have no white coat.
+The answer is yes for the most part, but it's a little more complicated than that. Cats do have two different types of coat (black or brown). Black cats have white coats and browns on their heads. Brown cats have black hair on their backs. White cats have black hairs on their backs and tails. The white coat of any cat is called the "tail" and the black tail is called the tail. Some cats are black when they're not in the tiniest parts of their bodies.
+What about the color of the fur? Is it grayish-brown? Does it look like a fine white fur? If so, why does it look white at first?
+Answer : A white cat has brown fur with a dark stripe down its back. This is the same as the white fur of a black cat. In this case, it looks like a black cat's skin. The white spots on the fur are actually just the fur around the body. They're actually a dark shade of brown. That's because the white spot on the head is really a black patch on the top of the head.
+How did you get to the conclusion that the
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[843, 798, 1012, 354, 637, 1218, 409, 744, 0, 1]
+first_step_topk_probs=[0.34410330653190613, 0.31006282567977905, 0.09858724474906921, 0.0888344869017601, 0.05882911756634712, 0.038607317954301834, 0.03416350483894348, 0.026812225580215454, 0.0, 0.0]
+first_step_topk_text=[' 5', ' 4', ' 6', ' 1', ' 3', ' 8', ' 2', ' $', '', '']
+
+[New tokens 9] count=40 first30=[843, 17, 24, 10941, 202, 24771, 29, 354, 13032, 202, 20, 9105, 288, 5781, 202, 21, 17362, 288, 10437, 202, 22, 17362, 288, 5781, 202, 23, 17362, 288, 1069, 202]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 5.5 apples
+Answer: 1 apple
+1 cup of sugar
+2 cups of flour
+3 cups of sugar
+4 cups of water
+6 cups of salt
+7 cups of sugar
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 15255, 2575, 783, 1509, 3919, 382, 1278, 22089, 0]
+first_step_topk_probs=[0.8231990337371826, 0.03178905323147774, 0.0251472108066082, 0.02387099154293537, 0.023257369175553322, 0.021509550511837006, 0.02095663733780384, 0.015332203358411789, 0.014938084408640862, 0.0]
+first_step_topk_text=[' I', ' Thanks', ' What', ' This', ' You', ' My', ' The', ' If', ' Thank', '']
+
+[New tokens 10] count=256 first30=[356, 3442, 733, 289, 263, 3313, 288, 2106, 339, 973, 15, 298, 356, 491, 733, 9529, 374, 263, 3812, 288, 2242, 17, 382, 851, 1488, 330, 2106, 357, 330, 3436]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I've been in a lot of pain for years, and I have been diagnosed with a variety of conditions. The most common is pain that is caused by stress. It's not something you can do to stop the pain or keep it from happening again. I'm feeling down because I've had the worst experience with my pain. And, there are many other causes of stress, such as illness, injury, medication, medications, lack of sleep, lack of exercise, and so on.
+The most common cause of stress is a physical condition called a heart attack. You may feel like your heart beats faster than normal, but it doesn't go away when you're at rest. Your heart beat has a very high rate of blood flow through it. That means your heart isn't able to pump enough blood throughout your body. This is called a heart failure.
+The heart is the muscle that pumps blood through your body. It's a huge organ, but it can also be damaged by stress. A heart failure occurs when the body doesn't make enough of certain hormones. These hormones are called hormones. They help the body use energy to build muscles. When they don't work properly, these hormones are released into the bloodstream. In a heart failure, this happens when the
+
+================================================================================

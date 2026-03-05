@@ -1,0 +1,312 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[791, 418, 1628, 601, 3609, 699, 728, 15, 330, 2827]
+first_step_topk_probs=[0.3789781928062439, 0.3077062666416168, 0.06122543662786484, 0.036369435489177704, 0.029529672116041183, 0.02803104557096958, 0.02660844288766384, 0.025030313059687614, 0.023976223543286324, 0.023976223543286324]
+first_step_topk_text=[' would', ' was', ' might', ' will', ' asked', ' had', ' may', ',', ' is', ' named']
+
+[New tokens 1] count=160 first30=[3609, 896, 3577, 299, 1432, 896, 1133, 299, 1258, 17, 3230, 3577, 14618, 357, 1024, 791, 342, 1951, 849, 6158, 269, 1258, 994, 269, 1266, 415, 713, 298, 1163, 4098]
+[Full output 1]
+Once upon a time, a curious child asked her mother to take her back to school. Her mother replied that she would be better off leaving the school after the day's work and being allowed to continue on his own.
+The day was called "In the Land of the Children." The children were very excited when they heard the news from their parents. They wanted to know what was going on in the world around them so they decided to go to school together. The next day, the children went to school with their parents. In the morning, they were given a lesson about how to behave and how to behave. After the lesson, the children found out that the teacher had been there for many years! They were all amazed at how quickly they learned. The next morning, the children returned home to find their parents and friends.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 263, 336, 4455, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.9533380270004272, 0.019929809495806694, 0.014580960385501385, 0.012151164002716541, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' a', ' S', ' France', '', '', '!', '"', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 7535, 281, 8191, 17, 698, 330, 3323, 289, 269, 5235, 645, 288, 269, 9556, 15, 1661, 269, 6794, 374, 4455, 298, 7362, 17, 202, 509, 1505, 330]
+[Full output 2]
+Paris is the capital of the province of Catalonia. It is located in the southern part of the province, near the border with France and Spain.
+The area is part of the municipality of Almeria. The municipality is composed of two municipalities: the town of Almería (population 3,760) and the municipal district of Almeriana (population 2,761).
+
+History
+
+Almerian settlement
+
+In 1477, a royal charter was issued by King Ferdinand II to establish a settlement on the island of Almera. In 1511, the king granted the island of Sainte-Marie to the French Crown. The colony was named Almeria after the island's chief town, Saint-Rémy-de-la-Bois. In 1665, the French government passed a law giving the island a freehold.
+
+During the Napoleonic Wars, the British troops occupied the island from 1798 until 1805, when they were driven out by Napoleon Bonaparte. The island remained under French control for several years before being ceded to France. In 1806, the French returned to Almeria and annexed it to France in 1815.
+
+Later history
+
+After the French defeat at Water
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 357, 483, 342, 3020, 359, 269, 1701, 288, 795, 613, 7527, 17, 535, 1152, 15, 490, 486, 491, 1237, 22542, 4672, 7527, 15, 581, 601, 2126, 342, 22542]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector that can be written as the sum of two other vectors. In fact, if you have three linearly independent vectors, they will always be linearly dependent in some sense, but their order does not matter.
+
+Let's consider a simple example: suppose we have a vector v = (x1, x2, ... , xn) where n > 1 and its eigenvalue is 0. We want to find the eigenvalues of this vector, which are (0, 0), (1, 1), (2, 2), (3, 3). To do so, let's first write down the equation for the matrix A:
+
+A = [[1, 0], [0, 1]]
+
+Now, our goal is to determine the eigenvalues of the following matrix:
+
+|v | = |0 1 |
+|0 0 |
+|1 0 |
+
+To solve this problem, we need to perform several steps:
+
+Step 1: Determine the eigenvalues of A
+The eigenvalues of A are given by the formula:
+
+λ = sqrt(2π)
+
+where λ represents the length of the diagonal line connecting the origin to the point (-1, 0). Using the fact that the determinant of a square matrix is zero
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 491, 5546, 1420, 395, 1991, 1085, 1005, 3069]
+first_step_topk_probs=[0.28956449031829834, 0.1720087081193924, 0.12584425508975983, 0.1133950799703598, 0.087397001683712, 0.059068869799375534, 0.04215254262089729, 0.02033061720430851, 0.017389699816703796, 0.01650717295706272]
+first_step_topk_text=[' use', ' can', ' have', ' describe', ' allow', ' are', ' provide', ' model', ' help', ' attempt']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 298, 3235, 806, 269, 2673, 601, 14667, 17, 202, 202, 509, 1085, 330, 2827, 994, 269, 5380, 20696, 13149, 16407, 15, 668, 775]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data and predict how the network will behave.
+
+The model is named after the famous mathematician Albert Einstein, who first described it in his work on the theory of relativity. The name is derived from the Greek word for "space", which means space-time. It was originally coined by the German physicist Ernst Mises in the early 20th century.
+
+Models
+
+There are several different models of the neural network. These include:
+
+• Modeling the data: The network learns from its observations. This is known as the model of the neural system.
+• Modeled using algorithms: The model of the network uses a set of algorithms to describe the network's behavior.
+• Models based on neural network: A neural network is a computer program that models the data in a way that it can understand.
+
+There have been many different approaches to model the neural network including:
+
+1. Linear Regression: The linear regression model is one of the most popular methods for modeling the data. It takes into account the strength of the relationship between the data and the prediction of the model.
+2. Logistic Regression: Logistic regression models are an approach to modeling the data in terms of the likelihood
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=117 first30=[263, 647, 286, 17, 595, 551, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 655, 3715, 555, 490, 1804, 11, 6022, 17, 8256, 12, 1396, 409, 29]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+
+if __name__ == '__main__':
+    import sys
+
+    if len(sys.argv) < 2:
+        print("Usage: python3 -m add_str" )
+        sys.exit(-1)
+
+    if len (sys.argv[1]) > 1:
+        print('usage: add_str')
+        sys.stderr = open(sys.stderr, 'w')
+
+        for i in range(len(sys.stdin)):
+            add(i, sys.stdin[i], sys.stdout[i])
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 494, 11, 81, 12, 711, 202, 6, 11101, 299, 5224, 269, 28045, 288, 263, 993, 311, 17, 202, 856, 28045, 66, 4203, 11, 81, 464, 346, 490, 311, 861]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return int(n)
+
+
+# Function to calculate the factorial of a number n.
+def factorial_number(n):
+    if n == 0:
+        return 1
+
+    # Return the number of cases where n is even, i.e. n = 2^n
+    # We only care about case 2 because it's easier to find out
+    # when n is odd and we don't want to know the exact value of n
+    # We'll use this as an example in case of a 3-digit number
+    # We will use this for n = 3, so the value of n is 6 (since
+    # 3 is odd), but we'll also need to know the value of 5 - which is
+    # 6 * 2 * 1 = 16
+    # We can always determine the value of 16 by finding the difference
+    # between two consecutive numbers in the product. For example,
+    # [3, 4] would be the answer to the question "What is
+    # the factorial of [3,4]" but it's not clear what that means.
+    # We have to use the formula in the last line to get the value of
+    # the quotient. So we use the formula from the previous section.
+    # The quotient can be
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.6026853919029236, 0.39731457829475403, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=36 first30=[622, 354, 17, 19, 647, 353, 20, 552, 311, 12, 864, 8049, 11, 81, 552, 354, 12, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 11]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1 - n) * fib(n - 1)
+
+
+if __name__ == '__main__':
+    print(fib(2))
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 31412, 13676, 1541, 2590, 4619, 1289, 356, 698, 338]
+first_step_topk_probs=[0.35558488965034485, 0.15453660488128662, 0.1466938704252243, 0.06375285983085632, 0.06051740050315857, 0.05176328122615814, 0.02770688384771347, 0.026300763711333275, 0.023698953911662102, 0.02027079090476036]
+first_step_topk_text=[' The', ' Cats', ' Yes', ' There', ' No', ' Black', ' We', ' I', ' It', ' A']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 12052, 17, 202, 2573, 395, 914, 1108, 2584, 288, 10676, 289, 269, 1165, 17, 2660, 288, 780, 395, 649, 4401, 581, 491, 733, 1414, 299, 12445, 351]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+There are many different types of cats in the world. Some of them are so rare they have been known to breed on a regular basis. They are also called "flesh-eating" cats because their fur is covered with feathers and they usually have a thin coat. These cats are not feline like most other cats but they do have a thick coat. Cats may have white or yellow spots and patches on their skin. Their coats are often white. In fact, there are several different colors of cats in different parts of the world.
+The number of white cats in the United States has grown steadily over the past few decades. From 1900 until about 1980, there were approximately 12,000. Today there are about 2 million. Of these, about 3% are black, 1% white, and 10% white. Most of the cats in the U.S. are black. There are about 300,000 of them in the UAE.
+What Is the Sword?
+The word "sword" means a long piece of hair which is wrapped around a long, thin strip of hair. Swords are used for coverings, cloaks, and even masks.
+The Sword is an ancient art form that was
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 843, 354, 409, 1012, 637, 2, 3, 1, 0]
+first_step_topk_probs=[0.416349321603775, 0.2744745910167694, 0.163044735789299, 0.05351134389638901, 0.051841530948877335, 0.04077848419547081, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 4', ' 5', ' 1', ' 2', ' 6', ' 3', '', '', '', '']
+
+[New tokens 9] count=256 first30=[843, 17, 24, 10941, 202, 509, 993, 288, 10941, 289, 263, 7240, 330, 269, 2056, 993, 288, 4282, 289, 269, 7240, 17, 2069, 15, 490, 486, 1990, 354, 13032, 289]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 5.5 apples
+The number of apples in a bag is the total number of items in the bag. So, if you put 1 apple in the bag, there are 5 apples in total.
+
+Now let's think about what happens when we add up all the numbers from 1 to 10. What do we get? Well, since 1 + 2 = 3, it means that every time we add up the first few numbers, we will add them together. This means that for each new number, we need to add up the previous two numbers.
+
+For example, if we add up 9 + 4 = 11, we get 8 + 3 = 13. We don't know which number was added yet because we already know how many numbers were added together. But now we know that 7 + 4 = 15.
+
+But wait! There's another way to figure out the answer without having to count all those numbers directly. You can just take the sum of the first three numbers, then multiply it by 2 (which is 6), and finally divide the result by 2 (that is 2 * 6). That gives us the answer of 6/2.
+
+So, even though the answer may seem complicated at first glance, understanding the concept behind it makes
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 783, 3919, 15255, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.9446473121643066, 0.020756877958774567, 0.017297916114330292, 0.017297916114330292, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' I', ' This', ' My', ' Thanks', '', '', '!', '"', '', '']
+
+[New tokens 10] count=256 first30=[356, 4575, 2221, 263, 2194, 689, 27420, 299, 3279, 1284, 3984, 994, 486, 3442, 733, 289, 269, 25452, 339, 263, 1150, 17, 202, 44, 1755, 847, 491, 833, 2877, 922]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I'm having a hard time remembering to clean my room after you've been in the bathroom for a while.
+I don't have any idea what's going on. It seems like it might be something that's going to happen, but I know I'm not feeling well enough.
+Lets say you're feeling irritable and sad.
+You need to be able to recognize when you feel that way and you'll find it helpful to get help from your doctor or therapist.
+When you are feeling irritable, you can also try to get some exercise (or a combination of both) by walking around. You may want to do this at home because it will help you relax and you won't feel like you're doing anything wrong.
+Sometimes there is no such thing as an "invisible hand" and you need to get help right away if you feel that you aren't getting enough physical activity. If you think you may be experiencing an irritable bowel syndrome, see your doctor.
+If you notice signs of discomfort in your rectal area, ask your doctor about these:
+- Pain or burning in your rectum
+- Abdominal pain
+- Irritation of the rectum or lower colon
+- Abnormal bowel movements or constipation
+The
+
+================================================================================

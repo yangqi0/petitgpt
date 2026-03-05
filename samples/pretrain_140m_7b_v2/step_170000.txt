@@ -1,0 +1,267 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[791, 418, 2446, 2827, 3609, 288, 15, 699, 601, 1255]
+first_step_topk_probs=[0.3148045241832733, 0.17751142382621765, 0.09501500427722931, 0.07714616507291794, 0.04350104555487633, 0.04129336401820183, 0.04055199399590492, 0.024529291316866875, 0.0232844315469265, 0.02210274524986744]
+first_step_topk_text=[' would', ' was', ' came', ' named', ' asked', ' of', ',', ' had', ' will', ' called']
+
+[New tokens 1] count=256 first30=[1255, 5273, 718, 2857, 299, 269, 3843, 17, 776, 418, 649, 8763, 406, 3766, 299, 631, 298, 1143, 289, 269, 3843, 357, 406, 4537, 847, 1418, 299, 4707, 1842, 17]
+[Full output 1]
+Once upon a time, a curious child called Jackie went to the park. He was so excited he wanted to go and play in the park that he didn't want to leave home. Jackie said: "It's not safe! I'm going to stay here for a while!" Jackie replied: "I don't want to go to the park anymore." The next day Jackie ran back to the park with her. She had been playing on the swings and the slide but she got a little upset because she knew it was time to leave. Jackie tried to run after the swing but Jackie thought it was a silly mistake and decided to go back to the playground. Jackie went back to the swings and they both ran away. Jackie then ran into the middle of the playground and started running around the edge of the playground. It was very cold outside and Jackie couldn't see anything. Jackie ran over to the top of the slide and stopped at the bottom of the slide. The boy looked down and saw the other kids playing on the slide. Jackie laughed and ran off to the end of the slide to find Jackie. Jackie rushed out of the end of his path and ran across the playground again. Jackie grabbed onto the slide and ran off. She ran into
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 263, 4455, 16769, 24821, 3, 4, 2, 0, 1]
+first_step_topk_probs=[0.945344090461731, 0.017330273985862732, 0.016450757160782814, 0.010845009237527847, 0.010029993019998074, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' a', ' France', ' Peru', ' Ecuador', '', '!', '', '', '']
+
+[New tokens 2] count=146 first30=[269, 9556, 17, 698, 418, 269, 3796, 2317, 289, 269, 9556, 1761, 383, 418, 7334, 419, 3025, 289, 13760, 17, 202, 509, 2317, 418, 263, 7913, 339, 4371, 298, 17836]
+[Full output 2]
+Paris is the capital of the province. It was the largest city in the province until it was destroyed by fire in 1918.
+The city was a centre for trade and commerce, but the war years also brought a boom in its economy. The city's population grew from 1,000 to 2,500 in the 1950s. In the 1960s, the city was home to a large number of ethnic minorities, including some Albanians, Roma and Roma.
+At the beginning of the 20th century, the city had a population of over 3 million people, mostly women. There were a total of 4,500 people living in the city as of the 1940 census. During World War II, the city suffered major damage during the Korean War.
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 14274, 269, 3892, 288, 263, 4409, 17, 382, 3687, 4409, 578, 8878, 3007, 299, 354, 298, 330, 1255, 269, 28071, 17, 202, 509, 8639, 288, 287]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that determines the direction of a vector. The unit vector has magnitude equal to 1 and is called the eigenvalue.
+The dimension of an eigenvector can be specified in terms of its length or its magnitude. If there are two vectors that have the same length, then they will have the same eigenvalue. For example, if we have a vector v = (2, 2) with length 3, then the unit vector has the same length as the unit vector (1, 0).
+The unit vector has units of length 2. In this case, it would be 1. This means that the unit vector is 1.
+A complex number is a number that has both real and imaginary parts. A complex number is written as a + bi, where a and b are real numbers. Complex numbers are represented by the letters a, b, c, and d. Complex numbers have three dimensions: length, width, and height.
+Complex numbers can also be written in the form of a + bi. A complex numbers are written as a - bi, where i represents the real part and j denotes the imaginary part. Complex numbers can also take on any value between -1 and 1.
+When you write an equation for a complex number, you can use
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 817, 491, 5546, 395, 1085, 1420, 1991, 3235, 3069]
+first_step_topk_probs=[0.32875028252601624, 0.216725692152977, 0.12874045968055725, 0.10452909767627716, 0.06526464223861694, 0.03688475862145424, 0.03323595970869064, 0.02191048674285412, 0.02079853229224682, 0.0177899282425642]
+first_step_topk_text=[' can', ' use', ' have', ' describe', ' are', ' model', ' allow', ' provide', ' predict', ' attempt']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 4410, 17, 382, 3355, 2877, 330, 357, 1010, 1780, 4349, 289, 269, 5023, 578, 686, 1231, 3248, 3267, 15, 298, 760, 3267, 491]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data sets. The basic idea is that each individual variable in the dataset has its own unique features, and these features have their own domain, which we call the "domain". Each feature is represented by a set of pairs of values, where each pair represents a feature.
+
+Now let's consider the problem of predicting whether an individual's label on a certain item will be more or less similar than another. To do this, we need to determine how different the labels might be. In other words, we want to know if the labels are identical. This means that if our labels are identical, then we should expect them to be the same. However, since our labels are not identical, it seems impossible for us to predict any particular label based on our observations alone. So instead, we will rely on the fact that there exists some kind of "prediction" that determines whether the labels are equally similar.
+
+To answer this question, we first need to understand what makes up the difference between two sets of labels: the set of all possible labels (the sets of all labels) and the set of labels that are distinct from one another. When considering two sets of identical labels, say A and B, we can write down the following expression
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=175 first30=[263, 647, 286, 17, 595, 551, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 655, 3715, 555, 490, 1804, 11, 6022, 17, 8256, 12, 1396, 409, 29]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+
+if __name__ == '__main__':
+    import sys
+
+    if len(sys.argv) < 2:
+        print("Usage: python3 -m unittest2.py python-python-tests/test_suite.py")
+        exit(-1)
+
+    # if the python version is 2.7
+    # then we need to change the path to test suite.py
+    if len(os.listdir(sys.path[0])) != 3:
+        print('Test suite not found')
+        exit(-5)
+
+    if len([f for f in os.listdir(os.path.join(sys.prefix, f))]) > 0:
+        print(f'Testing suite {len(os.walk(os.getcwd())[-1].split('/')[-1])}')
+        exit(-4)
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=37 first30=[622, 494, 11, 81, 18, 21, 12, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 11, 73, 10, 509, 28045, 288, 836, 1813, 11, 2440, 4886]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return int(n/2)
+
+
+if __name__ == '__main__':
+    print(f'The factorial of {len(factorial)} is {factorial}')
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.5647388100624084, 0.43526121973991394, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 354, 17, 19, 647, 353, 20, 17, 19, 552, 311, 12, 864, 353, 21, 864, 311, 12, 711, 202, 1465, 330, 269, 1134, 359, 31393, 993, 29, 202, 202]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1.0 - n) * (2 * n)
+
+
+This is the same as Fibonacci number:
+
+fib(n) = 2.0 + 2.0
+
+Here, the nth term of the Fibonacci sequence is 2^n, and the first term is 1. The first term is simply 1. So, it's a very simple function, but there are many more interesting patterns to work with.
+
+## Exercises
+
+1. Find all positive integers $a$ such that for every integer $k$, $a+k=4$.
+2. Find all real numbers $r$ such that $a+r\neq 0$ for all $r \in \mathbb{R}$.
+3. Find all prime numbers $p_1, p_2, ..., p_n$ such that
+$\sum_{i=1}^n p_i \equiv 0 \mod n.$
+4. Find all rational numbers $q_1, q_2, ... , q_n$ satisfying
+$\frac{p_1}{p_2} < q_1 < q_2$.
+5. Find all complex numbers $c_1, c
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 31412, 1541, 13676, 2590, 1289, 1278, 1906, 338, 535]
+first_step_topk_probs=[0.35014408826828003, 0.28429481387138367, 0.09522683173418045, 0.09522683173418045, 0.04359801858663559, 0.0392850786447525, 0.024583972990512848, 0.023336337879300117, 0.022152021527290344, 0.022152021527290344]
+first_step_topk_text=[' The', ' Cats', ' There', ' Yes', ' No', ' We', ' If', ' All', ' A', ' In']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 12052, 17, 202, 43, 1477, 298, 269, 2645, 3191, 202, 509, 2645, 3191, 330, 263, 1204, 15, 1114, 4304, 3864, 357, 3822, 289, 914, 2721, 288, 269]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is yes.
+Hats and the black cat
+The black cat is a small, very dark animal that lives in many parts of the world. It has no fur or markings. It has been described as a "black cat" because it does not have any fur on its back. The black cat is also called a "cage cat," which means a "cat" in Latin. The cat's coat is white, but the cat's skin is black. Cats are sometimes called "dogs."
+In the United States, there are about 100,000 black cats living in homes, parks, and public spaces. These cats are often referred to as "cat-proof dogs." They are used for many different purposes, including cleaning, grooming, and caring for children. A black cat can be kept as pets by the owner and can be used for other purposes such as keeping a pet from getting too close to another person.
+How do you know if your cat is black?
+You may not know what your cat is doing when it is being handled. Your veterinarian will use a physical exam to find out how your cat looks at you. If your cat looks like you are sick, you should take her to the hospital for a visit.
+
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 843, 354, 2050, 409, 637, 382, 2, 1, 0]
+first_step_topk_probs=[0.29018184542655945, 0.2356092631816864, 0.2356092631816864, 0.08313848823308945, 0.05919480323791504, 0.04938633367419243, 0.04687998443841934, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 4', ' 5', ' 1', ' One', ' 2', ' 3', ' The', '', '', '']
+
+[New tokens 9] count=116 first30=[354, 13032, 333, 798, 10941, 202, 12960, 29, 354, 13032, 647, 843, 934, 667, 333, 1604, 10941, 202, 30736, 29, 354, 13032, 7670, 843, 934, 667, 647, 1012, 934, 667]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples
+Example: 1 apple + 5 buys = 12 apples
+Solution: 1 apple plus 5 buys + 6 buys = 6 apples
+1 apple + 6 bux = 12 apples + 7 bux = 18 apples
+Now, we know that there are 6 apples in total. So, how many apples do we need to buy?
+Answer by PJK
+- 2 apples + 6 apples = 18 apples + 8 apples = 18
+What is the number of apples you need to buy each day?
+Answer from Omni
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 783, 15255, 1509, 3919, 1803, 1278, 0, 1]
+first_step_topk_probs=[0.8648451566696167, 0.03594790771603584, 0.027706153690814972, 0.01874691992998123, 0.01826501451432705, 0.013715539127588272, 0.011731522157788277, 0.009041838347911835, 0.0, 0.0]
+first_step_topk_text=[' I', ' The', ' This', ' Thanks', ' You', ' My', ' When', ' If', '', '']
+
+[New tokens 10] count=256 first30=[356, 873, 6968, 20103, 298, 14887, 17, 202, 55, 12405, 15, 3873, 4235, 5339, 15, 3965, 202, 44, 491, 263, 3215, 668, 330, 8554, 444, 30652, 17, 1530, 578, 733]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I am feeling depressed and tired.
+Tuesday, February 23rd, 2013
+I have a friend who is suffering from insomnia. She has been sleeping for two weeks. Her symptoms are worsened by the use of a sleeping pill. She feels sleepy when she wakes up. She does not get enough sleep. The problem occurs because her brain has been shut down. The medication is very expensive and may cause side effects such as drowsiness. If you are taking this medication, it will be prescribed by your doctor.
+The best way to avoid getting a cold or flu is to take care of yourself and keep a good night's sleep. This is especially important if you are in a high-risk group like children, people with cancer, those with HIV/AIDS, pregnant women, older adults, people with diabetes, or anyone who is not taking any medications.
+In addition to these measures, you should also try to stay out of the sun during the day. Sunburn can make you feel ill. If you do become sunburned, it is very important that you stay out of direct sunlight. If you're in the sun, wear protective clothing. A hat, sunglasses, and sunglasses that block UV rays can help protect you
+
+================================================================================

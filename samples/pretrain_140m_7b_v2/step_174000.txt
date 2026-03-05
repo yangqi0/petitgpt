@@ -1,0 +1,305 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[418, 3609, 2827, 791, 288, 2446, 2977, 289, 15, 1255]
+first_step_topk_probs=[0.32374921441078186, 0.19231531023979187, 0.12678201496601105, 0.11424019932746887, 0.055099256336688995, 0.0424666553735733, 0.023946046829223633, 0.021577177569270134, 0.017920535057783127, 0.015786200761795044]
+first_step_topk_text=[' was', ' asked', ' named', ' would', ' of', ' came', ' saw', ' in', ',', ' called']
+
+[New tokens 1] count=119 first30=[3609, 896, 3577, 922, 1024, 2747, 672, 269, 2475, 360, 73, 4866, 1385, 3230, 3577, 14618, 357, 383, 418, 263, 1114, 4012, 2475, 298, 649, 1024, 4725, 299, 1499, 299]
+[Full output 1]
+Once upon a time, a curious child asked her mother what she thought about the word "foul". Her mother replied that it was a very bad word and so she decided to try to help.
+The next day, the child found out that she had just been given a treat by her mother. She began to cry because she knew that she could not understand what was going on in the world. The child's mother explained that she had been given a special treat and that she had never heard of this special treat before.
+In the end, the child was able to understand why she couldn't understand what was happening.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 4455, 7362, 263, 15913, 336, 24057, 2425, 0, 1]
+first_step_topk_probs=[0.8022670149803162, 0.07177179306745529, 0.04731491208076477, 0.031191900372505188, 0.013207481242716312, 0.012537202797830105, 0.012537202797830105, 0.009172414429485798, 0.0, 0.0]
+first_step_topk_text=[' the', ' France', ' Spain', ' a', ' Argentina', ' S', ' Venezuela', ' Par', '', '']
+
+[New tokens 2] count=81 first30=[269, 9556, 288, 7535, 281, 8191, 15, 298, 330, 3323, 289, 269, 5235, 645, 288, 269, 9556, 17, 698, 578, 263, 2073, 288, 409, 15, 28, 3560, 353, 17759, 573]
+[Full output 2]
+Paris is the capital of the province of Catalonia, and is located in the southern part of the province. It has a population of 2,970 (2021).
+
+The municipality contains the frazioni (subdivisions, mainly villages and hamlets) Sviatovar, Armenia, and Lidice. The municipal seat is in the regional centre of Cetinova.
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=132 first30=[263, 13742, 1239, 357, 20745, 14274, 269, 3892, 288, 263, 1496, 6466, 17, 1220, 1373, 15, 490, 411, 491, 795, 7527, 289, 1237, 16, 9359, 1926, 298, 553, 5606, 18956]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that uniquely determines the direction of a given curve. For example, if we have two vectors in three-dimensional space and their corresponding eigenvalues are (0, 0), then the vector v = (0, 1) is called a linearly independent linear transformation from the space of vectors to itself.
+
+In this section, we will discuss some basic concepts related to linear transformations, specifically those involving the concept of the basis of a matrix. We'll also cover more advanced topics like the notion of "linearly independent" matrices, which allow us to build upon these ideas to construct new mathematical objects and develop our understanding of matrices and linear transformations.
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 5546, 817, 491, 1420, 395, 1085, 1991, 9845, 14071]
+first_step_topk_probs=[0.20877192914485931, 0.1881193071603775, 0.15274080634117126, 0.15274080634117126, 0.08612728863954544, 0.07743155211210251, 0.025995133444666862, 0.025995133444666862, 0.019018447026610374, 0.018053261563181877]
+first_step_topk_text=[' can', ' describe', ' use', ' have', ' allow', ' are', ' model', ' provide', ' rely', ' incorporate']
+
+[New tokens 4] count=256 first30=[22968, 269, 14457, 2673, 415, 3392, 299, 1798, 17, 382, 3355, 2877, 3722, 760, 2269, 330, 357, 1010, 25284, 289, 269, 2673, 578, 686, 1231, 3248, 8466, 15, 298, 482]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the neural network's ability to learn. The basic idea behind these models is that each neuron in the network has its own unique architecture, and this architecture can be modeled by an algorithm called "network-based" (NLP). NLP is a powerful tool for modeling neural networks, and it allows us to simulate them in real time without any loss or complexity.
+
+To illustrate how NLP works, let's consider an example of a simple neural network model:
+
+[Input] Input:
+
+The input contains all possible combinations of inputs from a set of different classes. We will call this input a "field." This field consists of all possible values that we could get at any given point in time. For instance, if our training data were training with two different classes, we would expect the following output:
+
+(1)
+(2)
+(3)
+
+We can generate new fields based on the input values:
+
+input = [0 0 1 0]
+output = [0 1 0]
+
+
+Here, we create a new field containing the value "0". Then, we create another field consisting of the values "1", "2", "3", and "4". Finally, we create the output of
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 5427, 6649, 29, 8163, 16, 27, 5427, 202, 1568, 202, 18688, 351, 321, 462, 2839, 224, 843, 2234, 29, 6457, 29, 5557, 9281, 202]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Aug  5 14:43:07 2018
+
+@author: <NAME>
+"""
+import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+from sklearn import preprocessing
+from sklearn_preprocessing import MinMaxScaler
+from sklearn2.feature_extraction import fft
+from sklearn3d import DF
+import numpy as np
+import pandas_datareader as pds
+import pickle
+import matplotlib.pyplot as plt
+from sklearn1stor.utils import shuffle
+from sklearn5thor.utils.validation import check_is_fitted
+from sklearn6thor.modeling.custom_regression import CustomRegression
+from sklearn7thor.models import Model
+from sklearn4thor.preprocessing.text import CountVectorizer
+from sklearn44sekner import RandomForestRegressor
+from sklearn45sekner.loss import LassoLoss
+from sklearn47sekner._testing import get_random_forest
+from sklearn48sekner__testing import getFeatures
+from sklearn58sekner__.trainers import Trainer
+from sklearn46sekner_.train
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 353, 20, 12829, 311, 12, 711, 202, 6, 12602, 354, 29, 202, 6, 11922, 29, 311, 333, 409, 202, 6, 14422, 29, 637, 202, 6, 7791, 278, 325, 29]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return (1 << n)
+
+
+# Example 1:
+# Input: n = 2
+# Output: 3
+# Explanation: The factorial of 2 is 3 because we have 2^2 = 4.
+# Solution: The factorial is 6 since we have 2 * 2 = 12.
+# Example 2:
+# Output : 2*3*5*7*9=36
+# Explainer: Fractions are in the form of fractions, and they are always written as the number 7.
+# Examples: Fraction = 3 / 5, Fraction = 7 / 5, ...
+# Example 3:
+# Solution 1: Fractions can be written as fractions with an exponent of 2 or 3.
+#
+# Example 4:
+# Exponentiation can be written like this: F(x) = x^4 - 3x^6 + 4x^8 - 3x^(2-2).
+# Example 5:
+# Fraction 1: Fraction 1 = 2/3
+# Fractions 2: Fraction 2 = 2/4
+# Exponential Function: F(n) = n!
+# Example 6:
+#  f(n)=(n+1)^n
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=256 first30=[622, 354, 17, 19, 647, 311, 864, 353, 20, 17, 19, 552, 311, 12, 711, 202, 1465, 1392, 483, 342, 885, 299, 6519, 269, 31393, 993, 339, 833, 6222, 311]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + n * (1.0 - n)
+
+
+This function can be used to compute the Fibonacci number for any integer n, or it can be used as a single parameter in the function. For example, if we want to compute the first four Fibonacci numbers, we would use fib(4).
+
+A simple example of this function is to compute the following Fibonacci number:
+
+fib(2) = 3 + 2 + 4 + 5 + 6 + ... + 11
+
+If we want to calculate the next Fibonacci number, we would take the sum of the first two Fibonacci numbers and add them together. This will give us the Fibonacci number: f(3) = 3+2+4+5+6+...+11.
+
+## How to find the Fibonacci Number?
+
+There are many methods you can use to find the values of the Fibonacci number. You may want to try one of these methods yourself. If you have an interest in finding the Fibonacci number, then you should check out the tutorial on how to do this.
+
+For example, let's say you want to find the value of the Fibonacci Number 3. You might think about the following pattern:
+
+1. The sequence goes from
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 2590, 1541, 31412, 356, 1906, 535, 0, 1]
+first_step_topk_probs=[0.31824761629104614, 0.27221161127090454, 0.20980168879032135, 0.08215952664613724, 0.04880485311150551, 0.026123354211449623, 0.023539097979664803, 0.019112255424261093, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' No', ' There', ' Cats', ' I', ' All', ' In', '', '']
+
+[New tokens 8] count=256 first30=[2590, 17, 31412, 395, 453, 2645, 289, 553, 31675, 1091, 581, 491, 808, 6133, 351, 269, 3456, 17, 202, 4168, 17, 31412, 395, 658, 2645, 490, 581, 2915, 289, 263]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: No. Cats are not black in their skins because they have no hair on the face.
+No. Cats are also black if they live in a dark area such as an apartment building or shed.
+I was surprised to see that many people in the United States are not black at all. In fact, I am sure most of us would think that it is because our bodies are so thin. We have the right balance between body fat and body energy. However, we are not so much different from other animals in terms of our body composition. It is only when we are black that we are able to go beyond what we were before. The body is not made up of cells but rather, organs.
+We do not have any reason to believe that our bodies are black. We simply cannot be sure about how these organs work. We cannot know whether our bodies are white, black, brown, gray, etc. But if we are black, then there must be something else about them.
+The color of the cat's skin is determined by its size and the shape of its body. If we look closely at the color of the color of a cat's fur, it will tell us that the fur is a mixture of pigments. The pigments in the fur
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[843, 798, 354, 1012, 409, 637, 1218, 2, 1, 0]
+first_step_topk_probs=[0.2804681062698364, 0.22772212326526642, 0.18489591777324677, 0.09896764904260635, 0.0933089479804039, 0.07784783095121384, 0.03678940609097481, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 5', ' 4', ' 1', ' 6', ' 2', ' 3', ' 8', '', '', '']
+
+[New tokens 9] count=68 first30=[843, 17, 27, 10941, 202, 24771, 29, 354, 17, 24, 10941, 202, 24771, 20, 29, 409, 17, 25, 10941, 202, 24771, 21, 29, 637, 17, 23, 10941, 202, 24771, 22]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 5.8 apples
+Answer: 1.5 apples
+Answer1: 2.6 apples
+Answer2: 3.4 apples
+Answer3: 4.9 apples
+Answer4: 8.0 apples
+Answer5: 6.7 apples
+Answer6: 7.2 apples
+Answer7: 10.7 apples
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 783, 3919, 15255, 1509, 338, 360, 27614, 1278]
+first_step_topk_probs=[0.7621439099311829, 0.03678581863641739, 0.031464580446481705, 0.028351953253149986, 0.015987055376172066, 0.015576094388961792, 0.01440553367137909, 0.009747271426022053, 0.009014752693474293, 0.008783025667071342]
+first_step_topk_text=[' I', ' The', ' This', ' My', ' Thanks', ' You', ' A', ' "', ' Hi', ' If']
+
+[New tokens 10] count=256 first30=[356, 3442, 733, 289, 263, 3313, 288, 6863, 357, 491, 733, 2397, 351, 339, 3954, 751, 689, 1244, 15, 298, 356, 483, 847, 3024, 299, 1098, 4453, 357, 330, 598]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I've been in a lot of situations that have been going on for quite some time now, and I can't seem to find anything that is out there that I know how to do.
+I've been working with a few people who are currently working on a project where they have been looking at the use of the PIPELINE system to test whether it works. The system uses a very simple, inexpensive, and easy-to-use method to evaluate the effectiveness of the PIFs. This system has two parts. The first part is an electronic file format, which is a file format that allows you to write text files into the PIF. The second part is a file management system, which is similar to the one used by the W3C.
+The main goal of the system is to get the most out of the PIC files (and therefore the file types) so that the user can see what's going on in the PIF and understand what the application does best. In this case, the PIF would be a document that shows the user what the application is doing, then it would be formatted as a document.
+For more information about the PIF, please see the article "Using the PIF" in the Nexus
+
+================================================================================

@@ -1,0 +1,330 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[791, 418, 2827, 3609, 1628, 2446, 1255, 288, 2857, 2977]
+first_step_topk_probs=[0.38892027735710144, 0.18758037686347961, 0.12366067618131638, 0.11142752319574356, 0.04142113775014877, 0.033631306141614914, 0.030304349958896637, 0.030304349958896637, 0.021045934408903122, 0.017087964341044426]
+first_step_topk_text=[' would', ' was', ' named', ' asked', ' might', ' came', ' called', ' of', ' went', ' saw']
+
+[New tokens 1] count=256 first30=[3609, 896, 3577, 15, 360, 8021, 620, 486, 491, 299, 631, 299, 1258, 3763, 382, 4769, 14618, 15, 360, 9601, 356, 483, 847, 741, 202, 5, 3287, 2068, 2397, 299]
+[Full output 1]
+Once upon a time, a curious child asked her mother, "Why do you have to go to school?" The teacher replied, "Because I can't."
+"You're going to be very happy," said the child. "I'm going to be pretty good at math and science."
+"Yes!" said the teacher. "But how do you get to that?"
+The teacher said, "Well, you're going to learn about geometry."
+"What is geometry?" the teacher asked.
+"It's like trying to figure out what a square is," she said.
+"A square is just a shape with four sides," she said, "and it has six equal sides."
+The teacher then told the class, "So, what do you think you need to know to do this?"
+"Do you want to learn about shapes?" the teacher said.
+The teacher asked, "How many different ways can you fit all of these pieces together? How long would it take you to put them together?"
+"That's right! You can just cut one piece into two pieces and put them in order," she said with a smile.
+Afterwards, the teacher was so excited to see if the students could relate to each other. She went on to show them the steps
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 4455, 7362, 7093, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.9411361217498779, 0.02564324624836445, 0.01876099966466427, 0.014459675177931786, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' France', ' Spain', ' Italy', '', '', '!', '"', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 7535, 281, 8191, 15, 298, 330, 269, 1408, 3796, 2317, 289, 269, 2027, 17, 698, 330, 3323, 351, 269, 5566, 288, 31772, 17, 202, 202, 509, 2317]
+[Full output 2]
+Paris is the capital of the province of Catalonia, and is the second largest city in the country. It is located on the island of Malta.
+
+The city has a population of 6,546 (2011 census).
+
+History
+
+It was founded by the Kingdom of Aragon in 1215, with the present-day town as its capital. The city was founded during the reign of King John II, who was deposed in 1477 and died in 1521. The city's name was changed to Istria in 1638. During the Middle Ages it was the seat of the Archdiocese of Istria. In 1714, the city became part of the Diocese of Saint Paul and became the first bishopric in the new diocese. In 1817, the city was ceded to the Kingdom of Naples.
+
+In the 19th century, the city suffered from plague, which caused thousands of deaths. At that time, the city had an estimated population of 8,000 inhabitants. The city remained under the rule of the Holy Roman Empire until 1819 when it was made a suffragan of Venice. In 1825, the city again became a suffragistate of the Kingdom of Italy. In the early 20th century, it was
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 483, 342, 6031, 359, 263, 1677, 288, 795, 613, 18956, 17, 535, 482, 1832, 15, 269, 28069, 395, 545, 1623, 1890, 353, 76, 17, 72, 1155, 545]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be expressed as a product of two other eigenvalues. In this case, the eigenvectors are all real numbers (i.e., all positive or negative values).
+
+If we have a matrix A and a scalar λ, then the corresponding eigenvector v1,v2,...,vn must also be equal to zero. We call these vectors "independent" if they are independent, but not necessarily linearly dependent.
+
+For example, consider the following matrix:
+
+$A = \begin{bmatrix} 1 & -3 \\ 2 & 3\end{bmatrix}$
+
+The vector A has two components: one component from each of the original matrices, and another from each of its components from the new matrices. The vector A' contains both the columns of the first matrix (the first column) and the second matrix (the second column), which are linearly independent.
+
+So, in our case, the entries of A' would be 0, 1, and 2; hence, we have:
+
+$\begin{bmatrix}\begin{bmatrix}-2&-1\\0&-1\end{′′}\end{bmatrix}=\begin{bmatrix}-\frac{1}{2}&-\frac{1}{\sqrt{2}}
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 491, 483, 1420, 5546, 395, 1991, 9845, 1085, 1005]
+first_step_topk_probs=[0.22239144146442413, 0.16270504891872406, 0.13916902244091034, 0.11299630254507065, 0.09174583852291107, 0.07637061923742294, 0.04910800978541374, 0.021342260763049126, 0.019230972975492477, 0.01482188981026411]
+first_step_topk_text=[' use', ' have', ' can', ' allow', ' describe', ' are', ' provide', ' rely', ' model', ' help']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 298, 3235, 806, 1047, 287, 7924, 601, 1776, 17, 202, 509, 1085, 330, 2827, 994, 269, 5380, 20696, 298, 20969, 668, 4928, 289]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data and predict how well an algorithm will perform.
+The model is named after the famous mathematician and physicist who lived in the 17th century, Charles Fourier. He was also the first person to show that the distribution of the input parameters can be predicted using a single random variable. The mathematical theory of the statistical distribution of the parameters is called the Fourier transform.
+This article is about the study of statistics. For other uses see Statistics (disambiguation).
+A computer program is a type of machine learning system which allows a computer to classify data based on its features. It can be a statistical or machine learning tool such as image classification, probability or regression.
+An example of a statistical model is the value function for a statistical statistic. A value function is a function that describes the relationship between two variables. A value curve is a graph of a function where the values at any point are plotted against the corresponding values at other points.
+The term "statistics" is used to describe the results of a research project or research project. A statistical model is a set of mathematical models that are used to predict the future behavior of a population. In statistics, the term "distribution" refers to the way the data are collected from different sources.
+
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 1348, 299, 1098, 269, 3581, 288, 263, 1309, 34, 202, 202, 44, 873, 4532, 299, 5951, 482, 1811, 339, 744, 92, 333, 892, 65]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# How to find the equation of a line?
+
+I am trying to solve this problem for $y = x^2$, where $x$ is a point on the graph and $y$ is a line. I have tried different ways but all I get is that I want to find the slope of the tangent line at any given point on the curve. Is there any method which can help me?
+
+• You are correct in your question. The slope is not always constant. – user16774 Feb 14 '17 at 18:51
+• If you were to plot the graph of $y=x^2$, then you would find the slope $\frac{1}{x}$ as $y=\frac{1}{\sqrt{x}}$. – user16786 Feb 14 '18 at 19:21
+• It's easier to find the derivative of $y = \frac{1-x^2}{x+b}$. I guess you can use the chain rule, so it will be a little more complicated than what you had used before. – user14197 Feb 14 '19 at 20:30
+• Yes, it is easier to find derivatives. – user17075 Feb 14 '20
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=108 first30=[622, 353, 20, 18, 21, 12, 864, 353, 20, 552, 311, 12, 711, 202, 6, 12602, 354, 29, 202, 202, 1018, 4160, 359, 1216, 202, 807, 13913, 17, 15793, 655]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return (1/2) * (1 - n)
+
+
+# Example 1:
+
+import numpy as np
+from scipy.special import gcd
+
+# Example 2:
+
+if __name__ == '__main__':
+    # Input
+    n = int(input())
+
+    # Output
+    n = np.arange(0, n + 1)
+
+    # Example 3:
+    #  [1,3]
+    #  [-5,7]
+    # """
+    print("The factorial function is called.")
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=256 first30=[622, 354, 9383, 21, 13, 81, 12, 711, 202, 6, 382, 31393, 993, 330, 269, 1701, 288, 269, 795, 31393, 1890, 29, 202, 202, 73, 554, 11, 81, 12, 333]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1/(2*n)
+
+
+# The Fibonacci number is the sum of the two Fibonacci numbers:
+
+fib(n) = (1+1/2)*(1-1/2)+1/4*(1+1)/8
+
+# The fib(n) is the sum between n and m:
+
+# fib(n)=1/(m+n)^3
+
+# There are several different ways to compute the Fibonacci numbers.
+
+Fib(n, m) = fib(n - m) / fib(n + m)
+
+# We can compute the Fibonacci number as follows:
+
+print(fib(0))
+
+# This is the same as the previous example but uses the same function
+
+# Note that this function is not available in Python 2.
+
+import numpy as np
+from scipy import linalg
+import matplotlib.pyplot as plt
+import os
+import sys
+import pandas as pd
+import random
+import math
+import itertools
+import operator
+import itertools
+
+
+# This function computes the Fibonacci numbers using the given arguments:
+
+F_max = 0.5
+
+# Fixed value for the last iteration
+cmp = lambda x :
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 2590, 1541, 356, 1289, 698, 2, 1, 0]
+first_step_topk_probs=[0.5067524313926697, 0.2202337682247162, 0.16112647950649261, 0.04863155633211136, 0.028888385742902756, 0.01807788759469986, 0.01628953032195568, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' No', ' There', ' I', ' We', ' It', '', '', '']
+
+[New tokens 8] count=256 first30=[13676, 17, 1541, 330, 263, 3313, 288, 1170, 351, 269, 2442, 614, 356, 1645, 383, 330, 269, 775, 1993, 289, 2902, 922, 383, 1818, 299, 342, 2645, 17, 31412, 491]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Yes. There is a lot of information on the subject but I think it is the first step in understanding what it means to be black. Cats have been known to display a variety of behaviors including barking, roaring, wailing, biting, etc. Some of these behaviors include "hiding" (to hide from predators), "kicking," "biteing," "swimming," "scolding," and so forth.
+One way to approach this topic is to look at the behavioral characteristics of the cat. The behavior includes not only being silent, but also being active and aggressive. The behavior may be expressed by a combination of the following behaviors:
+- Vocalization - The cat does not respond to its environment or to other people.
+- Rejection - The cat responds to its owner's commands with "I'm sorry!"
+- Aggression - The cat takes turns responding to its owner.
+- Tied-up - The cat shows aggression toward another person and responds with "I am sorry!"
+In addition to these behavioral characteristics, there are other behavioral traits which are often overlooked as part of the social behavior. These behavioral traits include:
+- Self-control - The cat will act out her needs for food, water,
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[843, 798, 354, 409, 637, 3, 4, 2, 0, 1]
+first_step_topk_probs=[0.33564990758895874, 0.3024456799030304, 0.2455667108297348, 0.058168891817331314, 0.058168891817331314, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 5', ' 4', ' 1', ' 2', ' 3', '', '!', '', '', '']
+
+[New tokens 9] count=252 first30=[843, 17, 24, 1885, 202, 1465, 330, 263, 2829, 2395, 357, 483, 342, 14531, 419, 9187, 263, 1685, 3048, 672, 269, 1266, 15, 388, 269, 1266, 1234, 269, 12466, 2950]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 5.5 times
+This is a simple question that can be answered by asking a few questions about the day, or the day before the holiday season. The first question is usually an easy one to answer, so don't worry if you haven't tried it yet. Let's get started!
+Answer: 1 apple
+Question #1: What are the five fruits of the grape fruit?
+Answer- You've got seven grapes in your basket. How many grapes do you need?
+Answer (1) Answer: 10
+Answer: 10
+Answers: 9
+A fruit is a plant that grows on trees. A fruit is any plant that produces fruit when it is fertilized with nitrogen.
+For example, the fruit of the tomato is tomatoes. The fruit of the potato is potatoes.
+The fruit of the peach is bananas. The fruit is rice.
+Answer: 9
+Answer: 11
+A fruit can be eaten raw or cooked. It is also called cooked.
+If you eat raw vegetables, you're not eating them. If you eat raw meat, you're eating it. Raw meat is not necessarily a food that is good for us.
+For more information on fruit, see our Fruit Glossary.
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 15255, 382, 783, 3919, 22089, 1278, 1772, 27614, 368]
+first_step_topk_probs=[0.6882547736167908, 0.032919906079769135, 0.0260417889803648, 0.020600751042366028, 0.01856282353401184, 0.015469481237232685, 0.01507183164358139, 0.01507183164358139, 0.01207906287163496, 0.010884137824177742]
+first_step_topk_text=[' I', ' Thanks', ' The', ' This', ' My', ' Thank', ' If', ' @', ' Hi', ' M']
+
+[New tokens 10] count=48 first30=[356, 873, 6968, 20103, 298, 356, 2505, 383, 330, 1284, 10182, 17, 202, 8104, 3696, 299, 29, 338, 5704, 15, 343, 4984, 15, 343, 8857, 15, 343, 2542, 38, 15]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I am feeling depressed and I feel it is my fault.
+Assigned to: AOL, CMS, CNS, CISC, CNES, CNIC, CINA, CNA, CNA
+
+================================================================================

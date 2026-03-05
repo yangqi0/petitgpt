@@ -1,0 +1,281 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[791, 418, 601, 330, 15, 2827, 3609, 1628, 289, 388]
+first_step_topk_probs=[0.5672783851623535, 0.13901755213737488, 0.06364686787128448, 0.04420183226466179, 0.03696129471063614, 0.03069756180047989, 0.027660798281431198, 0.023659536615014076, 0.022458817809820175, 0.014805758371949196]
+first_step_topk_text=[' would', ' was', ' will', ' is', ',', ' named', ' asked', ' might', ' in', ' or']
+
+[New tokens 1] count=44 first30=[3609, 29, 360, 10872, 1352, 486, 835, 669, 14512, 3763, 202, 5, 44, 4575, 453, 4006, 1284, 14512, 961, 14618, 269, 5585, 17, 382, 5585, 418, 16732, 283, 374, 610]
+[Full output 1]
+Once upon a time, a curious child asked: "Where did you get your lunch?"
+"I'm not getting my lunch," replied the boy. The boy was delighted with his answer and said: "It's very early in the morning."
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 7630, 288, 10346, 273, 17, 698, 418, 6214, 289, 1604, 6893, 419, 2960, 1966, 2676, 288, 4455, 15, 668, 2793, 263, 12999, 351, 269, 2310, 17]
+[Full output 2]
+Paris is the capital of the province of the department of Caen. It was founded in 1274 by King John II of France, who built a castle on the site. The first recorded use of the name is in the 16th century, when it was mentioned as the "City of the King".
+The town is known for its many boulevards and avenues and for its excellent public squares. Its most famous landmarks are the Cathedral of St. Bartholomew's Church (1620), the cathedral of the Holy Roman Empire (1799) and the Romanesque church of St. Peter's (1831).
+The town has been the scene of numerous conflicts since its creation, including the 1795 Battle of the Batavian Mountains, the 1804 War of Independence, the 1806 Treaty of Paris, the 1812 War of 1812, and the 1812 Treaty of Paris. In the 19th century, the town was one of the most important centers of French culture and economy in Europe. In the 20th century, it became the seat of the French Academy of Sciences, where it is a center of education.
+In the 1960s, the city was considered to be the country's second-largest city after Paris. However, in the 1980s,
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 13742, 1239, 357, 6058, 500, 806, 1264, 288, 619, 4349, 269, 3748, 4409, 578, 4374, 17, 535, 482, 1832, 15, 411, 491, 795, 1108, 7527, 353, 91, 20, 298]
+[Full output 3]
+In linear algebra, an eigenvalue is a scalar value that tells us how much of one variable the solution vector has changed. In this case, we have two different vectors (x1 and x2) with different eigenvalues. The first vector (x1) has been removed from the original equation so that it remains unchanged. This means that the second vector (x2) is still a scalar quantity.
+
+Now let's consider the problem:
+
+(i) What is the number of solutions to (i)?
+
+We know that the original equation can be written as (x2 + y2). To find out what the number of possible solutions for (i), we need to determine all the possible values of (i). This is where the concept of a solution comes into play! Let's think about the problem in terms of real numbers. We want to find the number of unique solutions to (x3 - x4) = (y2 - y1). To do this, we need to solve for both x1 and x4. However, since we are dealing with complex numbers, there will always be more than one solution for (x1, x4). Therefore, we must choose another positive real number, say x5, which gives us either x5 or x4.
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 5546, 491, 483, 395, 1085, 1420, 1991, 22968, 2269]
+first_step_topk_probs=[0.2725026607513428, 0.22125469148159027, 0.13143092393875122, 0.13143092393875122, 0.06310407817363739, 0.05711966007947922, 0.04637749865651131, 0.01816168986260891, 0.013287374749779701, 0.01181134395301342]
+first_step_topk_text=[' use', ' describe', ' have', ' can', ' are', ' model', ' allow', ' provide', ' mimic', ' models']
+
+[New tokens 4] count=256 first30=[22968, 269, 3286, 288, 12473, 289, 269, 2613, 17, 382, 3355, 2877, 330, 299, 1085, 269, 14457, 2673, 374, 751, 3445, 298, 1000, 4116, 780, 299, 263, 719, 1968, 15]
+[Full output 4]
+Neural networks are a class of machine learning models that mimic the behavior of neurons in the brain. The basic idea is to model the neural network with some properties and then apply them to a new input, and it will learn how to interpret these new features as they arise.
+
+## What is a neural network?
+
+A neural network is a mathematical model of the brain which uses an electrical circuit (or neural network) to simulate the activity of the brain. It has many applications such as:
+
+• predicting the future state of the system based on past experiences
+• predicting how much of the future information will be available for future events
+• predicting what will happen when certain types of events occur
+
+### How do I make my neural network work?
+
+The neural network consists of a set of nodes called nodes and an output layer called the neural network. These nodes are connected by connections called connections. Each node has a name and a value. For example, if you have a computer that runs on your hard disk, it can take many different commands from the computer. This means that there are many different kinds of computers running on your hard disks. You can use any number of commands to perform various tasks at once. However, each command needs to be performed on the same machine. A good example of this
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 17, 595, 551, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1271, 551, 3, 711, 509, 440, 4316, 2339, 4265, 288, 2574, 353, 47]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b.get()
+
+
+if __name__ == '__main__':
+    main()
+
+The Linguistic Society of America (LSEA) is an American cultural society founded in 1961 by the Linguists and their supporters. The LSEA has been accredited to the American Philosophical Society for more than twenty years. It was originally named the National Philosophical Society of the United States in 1972.
+
+History
+In 1966, the American Philosophic Society (ASP), the American Philosophy of Science, and the American Philosophological Association merged to form the American Philosophia of Science. In 1978, the American Academy of Arts and Sciences (AAAS) was created, becoming the American Philosophi-Cultural Society. The ASP also became the American Philosophisches Institut in 1991.
+
+Membership
+
+Languages
+American Philosophical Society
+Philosophy of Language
+Phonology
+Linguistics
+Etymology
+Language
+Alphabets
+Proto-Indo-European
+Punctuation
+Phrases
+Plurality
+Poetic Plurality
+Pronunciation
+Tone
+Polymorphism
+Tone variation
+Transposition
+Suffixes
+
+
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.6746224164962769, 0.32537755370140076, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 6] count=81 first30=[622, 353, 20, 18, 21, 12, 864, 353, 20, 552, 311, 12, 711, 202, 6, 783, 330, 287, 1373, 288, 263, 1392, 357, 5922, 354, 490, 311, 330, 7426, 15]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return (1/2) * (1 - n)
+
+
+# This is an example of a function that returns 1 if n is odd, 0 otherwise.
+function factorial(n)
+    # Return the number of even numbers in the sequence.
+    return 1 / (n ** 2 + 1)
+
+
+if __name__ == '__main__':
+    print(factorial(10))
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 339, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.44901904463768005, 0.3840663731098175, 0.16691459715366364, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', ' for', '', '#', '', '"', '!', '', '']
+
+[New tokens 7] count=126 first30=[622, 354, 17, 19, 647, 353, 20, 17, 19, 552, 311, 12, 864, 353, 21, 864, 353, 81, 552, 354, 687, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + (1.0 - n) * (2 * (n - 1))
+
+
+if __name__ == '__main__':
+    # Build the function
+    print("Here is the code of the function:")
+
+    # Calculate the number of times it takes to divide each number by its preceding number
+    print("The first number is: " + str(len(fib(5))) + " seconds")
+    # Print the number of days it took to divide each value in the list
+    print("There are {0} days for this function.".format(len(Fib(10))))
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 2590, 1541, 31412, 1278, 356, 1289, 2340, 0]
+first_step_topk_probs=[0.43750596046447754, 0.23418007791042328, 0.1253475546836853, 0.09170623123645782, 0.02627427503466606, 0.024940835312008858, 0.02247357927262783, 0.02025037631392479, 0.017321065068244934, 0.0]
+first_step_topk_text=[' Yes', ' The', ' No', ' There', ' Cats', ' If', ' I', ' We', ' That', '']
+
+[New tokens 8] count=134 first30=[13676, 17, 31412, 395, 2645, 1091, 581, 491, 269, 3392, 299, 1062, 2645, 6133, 598, 288, 263, 2645, 12153, 17, 2660, 10676, 395, 658, 2645, 490, 486, 1499, 299, 16667]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Yes. Cats are black because they have the ability to make black hair out of a black coat. Some cats are also black if you try to hunt them in the dark or if you find them in packs.
+So, what is the color of your cat's fur? If it is black, it is white. If it is brown, it is black. If it has any other colors, it is gray. If it does not have any other colors or colors, it isn't black.
+What do you think about the color of a cat's fur when you look at its skin? What color is it? What color do you think it is?
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 843, 798, 382, 637, 2050, 409, 1012, 744, 776]
+first_step_topk_probs=[0.250715434551239, 0.22591356933116913, 0.15689371526241302, 0.08846902847290039, 0.07380987703800201, 0.06818574666976929, 0.04286319762468338, 0.04050407186150551, 0.024060430005192757, 0.014292508363723755]
+first_step_topk_text=[' 1', ' 5', ' 4', ' The', ' 3', ' One', ' 2', ' 6', ' $', ' He']
+
+[New tokens 9] count=97 first30=[354, 13032, 333, 798, 10941, 17, 202, 24771, 29, 637, 10941, 333, 1012, 10941, 17, 202, 1921, 9519, 325, 29, 338, 7240, 288, 10941, 4530, 744, 2992, 15, 614, 263]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples.
+Answer: 3 apples = 6 apples.
+Explanation: A bag of apples costs $100, but a bag of apples cost$4. The total cost of the bag is $50. The cost of buying an apple is $5. If you buy one apple for every $1,000 in your bag, how much would you pay for it?
+Answer by Nate Silver on February 18, 2012 at 7:15 pm
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 3919, 1966, 368, 338, 1396, 495, 6389, 13798]
+first_step_topk_probs=[0.5820193886756897, 0.032034747302532196, 0.026010174304246902, 0.023437121883034706, 0.020046832039952278, 0.019531523808836937, 0.01670619659125805, 0.015053533017635345, 0.012544987723231316, 0.011908324435353279]
+first_step_topk_text=[' I', ' The', ' My', ' John', ' M', ' A', ' <', ' J', ' Michael', ' Mike']
+
+[New tokens 10] count=109 first30=[356, 4575, 3934, 339, 263, 1951, 1194, 299, 1005, 1284, 3694, 2505, 611, 11775, 289, 269, 1165, 17, 202, 2474, 486, 2068, 916, 627, 15, 486, 2068, 3555, 2421, 351]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I'm looking for a better way to help my son feel more comfortable in the world.
+If you're like me, you're probably already on your way to a new job. If you're not, then you may want to find out what's going on with his life. You can learn about the new things that he will be doing when he gets older and the changes that are happening in the world around him. There is also a lot of information online about how he'll get along with others.
+What do you think?
+
+================================================================================
