@@ -1,0 +1,297 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[791, 418, 2827, 3609, 601, 15, 330, 289, 1628, 288]
+first_step_topk_probs=[0.19562780857086182, 0.15883737802505493, 0.06552711129188538, 0.0622016116976738, 0.05904482305049896, 0.05785367637872696, 0.056048307567834854, 0.047940656542778015, 0.0431981198489666, 0.025660783052444458]
+first_step_topk_text=[' would', ' was', ' named', ' asked', ' will', ',', ' is', ' in', ' might', ' of']
+
+[New tokens 1] count=256 first30=[3609, 896, 3577, 299, 1432, 896, 1133, 299, 1258, 17, 1530, 699, 808, 2877, 357, 1024, 418, 2397, 299, 342, 269, 1839, 3510, 289, 269, 1173, 435, 269, 689, 17]
+[Full output 1]
+Once upon a time, a curious child asked her mother to take her back to school. She had no idea that she was going to be the best girl in the class at the time. She didn't know what to expect and decided to spend her days with her mother.
+As the day went on, the girls were all doing their homework. They were having fun learning new things! They were trying to get to know each other better than they could have imagined. The children were becoming very good at this, but they also became very nervous when they saw a group of girls who were working on math problems. The teacher told them that there would be a lot of work to do before they started to be able to do these problems. So, they began to feel that they needed to learn something new so that they could be successful in school.
+The next day, the girls got out of bed and started to study math. They were getting ready for school and they had some fun studying the different topics that were happening around them. As the morning progressed, the girls started to learn more about math. They started to see how many questions the students had answered correctly. In addition, they were learning about fractions and decimals. This helped them realize that there are many ways to represent numbers. For example, the number
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 1134, 1112, 17, 698, 330, 12092, 289, 269, 7913, 288, 269, 9556, 15, 351, 269, 1179, 5358, 288, 269, 4549, 338, 473, 20846, 15, 298, 330]
+[Full output 2]
+Paris is the capital of the province of the same name. It is situated in the centre of the province, on the right bank of the river Aurelia, and is surrounded by the provinces of Alba and Aquitania.
+The territory of the province is a mixture of land, forests, and rivers, which is found from the Atlantic to the Pacific Ocean. The main roads are:
+- The Jura Highway, which runs from Antwerp to Rijeka;
+- The Camerata Highway, which connects Antwerp with the town of Mers-el-Kebir, and
+- The Ile de la Légion d'honneur (the area surrounding the village of Arles) which was named after the French royal family who had the honour of being the first king of France.
+The province is divided into two provinces:
+- Antwerp Province, which is located in the south of Belgium and is divided into three regions:
+- Villefranche-sur-Mer, which is also known as the southern region of the province.
+- Marseilles Province, which lies between the rivers Aurelius and Orléans.
+A number of important cities in the province include:
+- Saint Martin
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 483, 342, 998, 419, 4007, 269, 18956, 288, 263, 3823, 17, 535, 482, 7349, 411, 601, 1798, 806, 299, 1098, 269, 18956, 288, 287, 3581, 298, 1000]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be found by finding the eigenvalues of a matrix. In this lesson we will learn how to find the eigenvalues of an equation and then use these values to solve it.
+For example, if you have two vectors in 3D space, you can take the first vector as a point (x1, y1) and the second vector as a line through the origin (0, 0). The third vector is called the "line" and the fourth is called the axis. A vector in 3D has two components: one is a unit vector (a vector perpendicular to the plane), and the other is a scalar (the magnitude or direction of the vector).
+The following example shows how to find a linear transformation from a 2D vector to a 3D vector using the given linear algebra equations.
+We know that a linear transformation is a function that takes two inputs and returns a result. If we were to apply the transformation to both sides of our equation, we would get the following output:
+We could also say that the original equation was the same as the transformed version, but instead of having a single x-coordinate, we had a pair of numbers. We could also say the transformed version had two y-values, but now we have two
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 491, 483, 395, 1420, 5546, 9845, 1798, 1991, 3069]
+first_step_topk_probs=[0.3708982765674591, 0.17888833582401276, 0.16119179129600525, 0.11581312865018845, 0.03378763422369957, 0.03044518455862999, 0.02743341587483883, 0.02227417379617691, 0.018085215240716934, 0.014684050343930721]
+first_step_topk_text=[' use', ' have', ' can', ' are', ' allow', ' describe', ' rely', ' learn', ' provide', ' attempt']
+
+[New tokens 4] count=256 first30=[395, 885, 299, 5951, 1623, 16, 7128, 2061, 17, 382, 3355, 2877, 3722, 269, 1085, 330, 357, 1010, 25284, 289, 269, 2673, 578, 263, 854, 288, 6579, 15, 298, 1000]
+[Full output 4]
+Neural networks are a class of machine learning models that are used to solve real-world problems. The basic idea behind the model is that each neuron in the network has a set of inputs, and then outputs from this set of neurons are fed into the network to produce an output. This process is called learning.
+
+## What is a neural network?
+
+A neural network is a mathematical tool for creating complex models based on input data. A neural network can be thought of as a system where all possible inputs are represented by a single feature vector (a list of numbers). Each element of the input is called a node, and the number of nodes it represents is called its weight. In our example, we will use the weights of the neural network to create a network with four features:
+
+• Inputs: A list of numbers representing the inputs.
+• Outputs: A string representing the output values of the network.
+• Features: A list containing the name of the feature that was computed, and a number indicating how many new features were added to the network. For example, if you have the following network, then you would have three features:
+• A network with 3 features
+• A feature with 2 nodes
+• A number of nodes
+• The number of nodes is called the weight of
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=239 first30=[263, 647, 286, 3, 711, 6, 1348, 620, 486, 5951, 637, 91, 65, 21, 552, 798, 92, 333, 843, 34, 202, 202, 7714, 3041, 15, 9281, 202, 202, 7, 22]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# How do you solve 3x^2 - 4y = 5?
+
+May 24, 2018
+
+$3 x + y = 5$
+
+#### Explanation:
+
+First, let's get rid of the "s" in the expression. The term $y$ is called the variable and it represents the variable. In this case, the variable is the number that is being multiplied by itself.
+
+Next, we have to find the value of $x$. This can be done using the quadratic formula or the quadratic formula. We will use the quadratic formula to find the values of $x$, so let's go through each step separately for our example.
+
+Step 1: Write down the equation of the quadratic.
+
+$\left(\frac{1}{3} \right) \left(-\frac{4}{5}\right)$
+
+Step 2: Substitute the given values into the equation of your quadratic:
+
+$- \left(\frac{-4}{5} \right)\left(\frac{\sqrt{3}}{2}\right) \cdot \left(\sqrt{3}\right)$
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=109 first30=[622, 311, 864, 353, 20, 1341, 353, 21, 2216, 353, 81, 552, 354, 3943, 711, 202, 1465, 330, 263, 1114, 2829, 1373, 17, 382, 28045, 1392, 330, 3821, 359, 4446]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n * (1 / (2 ** (n - 1)))
+
+
+This is a very simple example. The factorial function is defined as follows:
+
+if __name__ == '__main__':
+    print 'n = %d' % n
+    print 'p = %g' % factorial(n)
+    print 'f = %g/h' % factorial('f')
+    print 'l = %g*h' % f()
+    print 'z = %g^h' % z()
+    print ''
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 339, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.5552507042884827, 0.3856135606765747, 0.05913575366139412, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', ' for', '', '#', '', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 354, 17, 19, 1341, 353, 20, 647, 311, 1190, 21, 12, 711, 202, 509, 775, 1993, 330, 299, 3296, 269, 1986, 288, 269, 31393, 3756, 15, 536, 330, 263]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 / (1 + n**2)
+
+
+The first step is to determine the size of the Fibonacci sequence, which is a sequence with one element. We need to find the length of this sequence and then add it up. Since we want to find the Fibonacci number for n=3, we can use the formula for the sum of the first two terms of a Fibonacci sequence:
+
+Fib(n) = n * (1 - 2*n)
+
+Now we know how many terms there are in the Fibonacci sequence. Let's take a look at the last term:
+
+fib(n+1) = fib(n-1)/2
+
+This means that we have a value of n for every positive integer n. Now let's apply our previous formula to calculate the sum of all the Fibonacci numbers:
+
+sum(fib(6)) = sum(fib(-6))/2
+
+So, the sum of these two Fibonacci numbers is 6.
+
+We now have a solution to our problem! Remember, we want to minimize the sum of each Fibonacci number from 0 to n, so we'll divide them by 2, which gives us the final answer. To do this, we need
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 31412, 2590, 1541, 4619, 2, 3, 1, 0]
+first_step_topk_probs=[0.40476980805397034, 0.24044360220432281, 0.1759122908115387, 0.0941590666770935, 0.047841932624578476, 0.0368732213973999, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' The', ' Yes', ' Cats', ' No', ' There', ' Black', '', '', '', '']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 808, 17, 202, 2573, 395, 914, 2584, 288, 10676, 15, 614, 581, 620, 453, 491, 263, 1817, 2419, 325, 388, 28381, 17, 31412, 395, 10951, 707, 1237]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is no.
+There are many types of cats, but they do not have a particular coloration or markings. Cats are classified into three groups based on their coloration:
+- Blue cats (black)
+- Purple cats (red)
+- White cats (white)
+What is the difference between a cat's coloration and its body shape?
+A cat's body shape is the most important factor in determining how well it looks. Some cats may be more visible than others, which makes them easier to spot. However, a cat's body structure does not determine how well it will look.
+The following table shows the four different body forms of cats. It gives a brief overview of each of these cats' major characteristics.
+|Body Form||Skin Shape||Feline Body Shape|
+|Black, white, yellow, brown, blue||Red, black, white, red, orange, green, blue||Ringed, striped, white, bluish, pink, black, brown, black, blue||Blue, brown, cream, cream, red, pink, blue||Green, blue, brown, red, red, blue||Yellow, yellow, black, yellow, purple, black, pink||
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 843, 1012, 409, 637, 354, 1218, 2, 1, 0]
+first_step_topk_probs=[0.4777524173259735, 0.1368783563375473, 0.10014234483242035, 0.09064535051584244, 0.06907656788825989, 0.06601788848638535, 0.059487104415893555, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 4', ' 5', ' 6', ' 2', ' 3', ' 1', ' 8', '', '', '']
+
+[New tokens 9] count=256 first30=[843, 17, 27, 3, 711, 509, 1165, 415, 2073, 330, 2779, 299, 1409, 419, 1186, 4649, 289, 269, 1902, 1365, 973, 15, 2512, 299, 263, 719, 1399, 444, 269, 2176]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 5.8
+
+The world's population is expected to grow by 7 billion in the next 20 years, according to a new report from the World Bank.
+"It's not just about people who are going hungry," said Katherine Keefer, director of the World Bank's Economic Policy Institute. "There's a lot of talk about how much money we can save for food and fuel."
+A recent study by the World Bank found that in the developing world, food production is responsible for almost half of all food production. In Asia, however, food prices are rising faster than they are at any time during the year.
+In the United States, where food prices are higher than ever before, it's estimated that food-related deaths will rise by 17 percent between now and 2030.
+Food prices also are high because the cost of imported food is so high — as much as $1.50 per pound of food produced in the U.S. — and the cost of exporting food to countries with low economies means that the price of imported food would be lower if the price were higher.
+In Africa, the average price of a barrel of oil is only one-third of what it was in 1970, when the price of oil was nearly three
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 1278, 382, 1509, 1289, 783, 15255, 698, 3919]
+first_step_topk_probs=[0.7877768874168396, 0.032229553908109665, 0.032229553908109665, 0.026168357580900192, 0.021807607263326645, 0.02070087194442749, 0.017251236364245415, 0.015145082026720047, 0.014755764976143837, 0.01295427419245243]
+first_step_topk_text=[' I', ' What', ' If', ' The', ' You', ' We', ' This', ' Thanks', ' It', ' My']
+
+[New tokens 10] count=131 first30=[2575, 330, 669, 2942, 374, 269, 1759, 7042, 34, 202, 16, 2575, 330, 669, 1466, 1909, 288, 269, 2690, 920, 3222, 298, 1293, 34, 202, 16, 3189, 486, 2505, 357]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience with the following topics?
+- What is your current view of the relationship between parents and children?
+- Do you feel that your relationship with your child is not as strong as it was in the past?
+- How does this situation affect your parenting skills?
+- Are there any new or changed situations in which you are facing these issues?
+The "How to" section of this Web site will provide you with a list of additional resources on how to improve your parenting skills, including tips for dealing with situations in which parents are concerned about their children's development.
+This page was last updated on September 23, 2008
+
+================================================================================
