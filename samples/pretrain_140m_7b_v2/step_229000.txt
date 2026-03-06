@@ -1,0 +1,294 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[3609, 418, 791, 289, 2827, 288, 2446, 330, 601, 15]
+first_step_topk_probs=[0.25127363204956055, 0.12767136096954346, 0.10920310765504837, 0.07199110090732574, 0.06833755970001221, 0.06486936658620834, 0.03853406012058258, 0.03472207486629486, 0.028192119672894478, 0.027127433568239212]
+first_step_topk_text=[' asked', ' was', ' would', ' in', ' named', ' of', ' came', ' is', ' will', ',']
+
+[New tokens 1] count=256 first30=[3609, 896, 3577, 490, 1024, 5499, 916, 299, 1137, 896, 3804, 17, 382, 3577, 14618, 357, 1024, 5499, 3948, 299, 1137, 1169, 298, 649, 269, 795, 288, 780, 6005, 299]
+[Full output 1]
+Once upon a time, a curious child asked her mother if she'd like to see her father. The mother replied that she'd love to see him and so the two of them agreed to go to the same school where he was taught.
+The mother's response was very encouraging: "I'll be back soon." She went home and gave her daughter a hug. The mother then told her daughter that she would never have any more children. This was a great surprise for her son and it meant that he had been taught by his father about the importance of being a good teacher.
+When the first year was over, the family decided to move on from their new home in the town of Long Island. They lived in a small house called the "Middletown" (Old Town) on the island. In the late 1800s, this house was very important to the family because of its location on the island and its history.
+In 1910, the family moved to the town of New York City, but it wasn't until 1921 that they finally settled in the village of Long Island, NY. They began teaching English at an early age. They also started teaching English in a private classroom on the island, which became known as the "Little Village".
+After the family moved into the Village, they
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=88 first30=[269, 9556, 288, 7535, 281, 8191, 15, 289, 269, 3446, 16, 3955, 17, 698, 330, 263, 3153, 2868, 374, 263, 2073, 288, 672, 409, 15, 1086, 10894, 353, 9494, 573]
+[Full output 2]
+Paris is the capital of the province of Catalonia, in the south-west. It is a market town with a population of about 2,000 inhabitants (2006).
+The municipality is divided into two subdivisions:
+|1||Bolivia: 1,052 sq mi (4,048 sq km)|
+|2||Cameroon: 1,596 sq mi (3,158 sq km)|
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 483, 342, 998, 419, 4007, 269, 8039, 288, 269, 3823, 374, 2685, 299, 892, 17, 382, 775, 1685, 2559, 395, 269, 18956, 288, 269, 3823, 298, 269]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be found by finding the derivative of the matrix with respect to x. The first few terms are the eigenvalues of the matrix and the second one is the derivative of y = x2 + 2x − 1 with respect to y. If we have the following system of equations:
+(1) x2 − 2x − 3 = 0
+(2) y2 − 2y − 4 = 0
+This system of equations has two solutions. One solution is given by (1), which means that the second equation is also given by (2). The other solution is given as (3). Solving this system for x gives us x = 0 or x = 1.
+If we find the value of the first term, then we get x = 0. So we can write it as (4), which is equal to 0. Now we have x = 0 because we want to find the value when we plug in x = 0 into the system of equations. This tells us that the second term is zero, so we can solve for x by solving for y. We can do this by finding the inverse of both sides of the equation.
+To find the inverse of a matrix, we simply take the transpose of the matrix. That is, we
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[483, 817, 491, 395, 5546, 1420, 3235, 9845, 1991, 14071]
+first_step_topk_probs=[0.27136969566345215, 0.27136969566345215, 0.13088448345661163, 0.13029304146766663, 0.035595957189798355, 0.032074619084596634, 0.024720901623368263, 0.022275380790233612, 0.020071785897016525, 0.017168305814266205]
+first_step_topk_text=[' can', ' use', ' have', ' are', ' describe', ' allow', ' predict', ' rely', ' provide', ' incorporate']
+
+[New tokens 4] count=180 first30=[483, 342, 885, 299, 1085, 2281, 870, 298, 3235, 806, 269, 1134, 4941, 601, 1643, 758, 689, 17, 1109, 483, 658, 342, 885, 289, 4465, 857, 359, 4855, 2465, 15]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data and predict how the same parameters will change over time. They can also be used in applications such as machine learning, where it is useful for predicting how different features will affect the accuracy of a dataset.
+
+In this article we’ll look at the basic properties of the neural network in the context of the following questions:
+
+1. What are the possible values of the parameters?
+2. How do you use these parameters?
+3. How does the network work?
+4. Can you explain why the values of the parameter depend on the value of the parameter?
+5. What are some of the problems with the neural network?
+6. Is there an algorithm that can solve all these problems?
+7. What is the difference between the two types of neural networks?
+8. Why would you need a neural network?
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=97 first30=[263, 647, 286, 3, 711, 6, 1348, 620, 486, 5951, 637, 91, 65, 21, 552, 798, 92, 333, 643, 34, 202, 202, 45, 405, 1171, 15, 9281, 202, 202, 7]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# How do you solve 3x^2 - 4y = 0?
+
+Jun 10, 2018
+
+$3 x = 6$
+
+#### Explanation:
+
+The first step is to factor out $6$. We can factor out $4$ and $9$, which gives us $5$.
+
+$\frac{1}{2} \times 3 = 2$
+
+$2 \times 1 = 2$
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 311, 864, 353, 20, 1341, 353, 21, 2216, 353, 81, 552, 354, 3943, 711, 202, 1465, 1392, 330, 885, 299, 1098, 269, 28045, 288, 263, 1496, 6222, 311, 17]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n * (1 / (2 ** (n - 1)))
+
+
+This function is used to find the factorial of a given integer n. The input is a list of integers, and each element in the list is the product of all the elements in the list. It can be thought of as an example of a factorial function. The output is a function that takes a list of numbers and returns the sum of those numbers.
+
+# Code examples
+
+from math import factorial
+
+import numpy as np
+
+# Function to calculate the factorial of two integers:
+def factorial_two(n):
+    return (1 + (factorial(n) * factorial(n)) * (factorial((n-1)/2))).astype('int')
+
+def factorize(n):
+return (factorial_two(factorial(0)) * factorial_two(-factorial(1)),
+factorial_one(factorial_three(factorial(-1))))
+
+# To calculate the factorial for a number n:
+#
+def factorial_(n):
+if n == 0: return 0
+else: return factorial(n - 1) * factorial_one(n - 2)
+
+def main():
+   
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 7] count=256 first30=[622, 311, 13, 21, 647, 354, 711, 202, 509, 1968, 330, 287, 6222, 15, 298, 269, 1999, 330, 263, 1180, 288, 9044, 17, 382, 775, 3190, 289, 269, 1180, 330]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return n*2 + 1
+
+
+The input is an integer, and the output is a list of integers. The first element in the list is the index of the first number in the array, which is 0 if there are no elements in the array. The second element is the index for the next element in the array (the first element in each index), which is 1 if there are elements in the next index in the array and 0 otherwise.
+
+In Python 2, you can use the function fib() to compute the number of Fibonacci numbers in a given array. You can also use the function fib() to compute a value for the last element in the sequence, which is the next element after the last element. This will produce a value for every element in the last element, so it returns a value for all the elements in the sequence. Note that this function does not return anything for the last array, but it returns something for the next array.
+
+Here's an example:
+
+import numpy as np
+from scipy import stats
+from scipy.stats import pearsonr
+
+fib = np.array([1, 3, 5])
+print(fib)
+print(np.max(fib))
+
+#
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 2590, 1541, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.6087020635604858, 0.2147904485464096, 0.11496903747320175, 0.061538491398096085, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' No', ' There', '', '', '!', '"', '', '']
+
+[New tokens 8] count=256 first30=[13676, 17, 1541, 330, 263, 3313, 288, 2833, 299, 1447, 482, 2810, 17, 1783, 15, 383, 415, 453, 2401, 2161, 269, 2645, 3191, 330, 287, 3864, 388, 453, 17, 535]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Yes. There is a lot of evidence to support this claim. However, it's not clear whether the black cat is an animal or not. In fact, there is no evidence that the black cat has any relationship with cats in the wild. If you consider cats as an animal, then they are not cats.
+But what about cats who are black? How do cats look at cats? Cats look at the eyes of cats and see how much they have changed from their original coloration. A cat looks at the shape of its eye, which is a bit different than the shape of a human. Cats look at their eyes, which are quite different than what they look like. This may be because cats are used to looking at things in a very different way than humans.
+The same thing happens with dogs and cats. The difference between them is that dogs look at the shapes of their bodies. Cats look on the surface of their eyes, so if they look at the shape that they are looking at, they will look at the dog's face. So, cats look at the nose, but they look at their ears. So, they look at one side of their body, but they don't look at the other side.
+So, why does this matter?
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 843, 1218, 1012, 637, 409, 2, 3, 1, 0]
+first_step_topk_probs=[0.44484812021255493, 0.15697193145751953, 0.11484310775995255, 0.10348223894834518, 0.08992733061313629, 0.08992733061313629, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 4', ' 5', ' 8', ' 6', ' 3', ' 2', '', '', '', '']
+
+[New tokens 9] count=256 first30=[843, 17, 27, 3, 711, 509, 1165, 415, 2073, 330, 2779, 299, 1409, 419, 672, 2759, 1715, 289, 269, 1902, 2236, 973, 15, 2512, 299, 263, 719, 1399, 444, 269]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 5.8
+
+The world's population is expected to grow by about 50 percent in the next 30 years, according to a new report from the United Nations Population Division.
+The report, "Globalization and Human Development," was released Thursday at the World Bank's headquarters in Washington, D.C., and includes data on births, deaths, marriages, and divorces, as well as trends for the countries of the world that are most affected by globalization.
+"These trends are likely to continue for the foreseeable future," said the report's lead author, Iain MacLean, a professor of economics at the University of California, Berkeley. "But we need to do more work to understand how these trends will affect the world."
+The report found that the number of people living in extreme poverty increased by an average of 10 percent per year between 1990 and 2010, compared with 4 percent per year in 1980 and 1 percent per year during the same period. In contrast, the number of women living in extreme wealth (over $200,000) rose by an average rate of 0.2 percent per year, compared with 1.5 percent per year for men.
+In fact, the number who were married or living in extreme incomes grew by an
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 783, 1289, 15255, 1509, 2575, 382, 22089, 3919, 27614]
+first_step_topk_probs=[0.7080040574073792, 0.04586995765566826, 0.04133228212594986, 0.03535337746143341, 0.03444458916783333, 0.02212357707321644, 0.021000796929001808, 0.018436860293149948, 0.017501190304756165, 0.016185954213142395]
+first_step_topk_text=[' I', ' This', ' We', ' Thanks', ' You', ' What', ' The', ' Thank', ' My', ' Hi']
+
+[New tokens 10] count=256 first30=[356, 3442, 733, 289, 263, 3313, 288, 9327, 374, 1284, 3694, 415, 1258, 17, 356, 491, 299, 1721, 357, 406, 330, 1114, 7099, 672, 610, 3286, 298, 269, 1258, 415]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I've been in a lot of trouble with my son's school. I have to say that he is very concerned about his behavior and the school's rules are not always clear-cut.
+Wayne: You're saying, "Oh, I think it's important for me to keep the rules as they are."
+Ruth: He's really interested in the way things are going on at home and the school. And so we just have to talk to him about it and make sure he understands what he wants to do.
+I don't know if this is a good or bad thing for you, but it is good enough to be there when I get home from school. It is a great opportunity to help children learn how to behave.
+Wright: I want to know why we don't have a job or what we can do to help our kids.
+Ruth (notice the words "wanting" and "waiting") are good enough to make you feel happy. But I also want to hear your opinions. If you think it's helpful to you, I'd love to hear from you.
+Walt: I think we need to make sure our kids get out of bed and get up at night and get ready to
+
+================================================================================

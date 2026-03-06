@@ -1,0 +1,96 @@
+version: sft_mix_v1
+token_budget:
+  target_train_tokens: 200000000   # 2e8 "effective SFT tokens" baseline for 137M
+  val_ratio: 0.002
+  min_val_tokens_per_source: 200000
+
+mixture_by_token:
+  A_general: 0.49
+  B_code: 0.30
+  C_math: 0.20
+  D_safety: 0.01
+
+buckets:
+  A_general:
+    sources:
+      - name: smol_smoltalk
+        weight_in_bucket: 0.40
+        max_rounds: 4
+        max_assistant_tokens: 512
+      - name: ultrachat_200k
+        weight_in_bucket: 0.35
+        max_rounds: 4
+        max_assistant_tokens: 512
+      - name: oasst1
+        weight_in_bucket: 0.20
+        max_rounds: 4
+        max_assistant_tokens: 512
+      - name: dolly_15k
+        weight_in_bucket: 0.05
+        max_rounds: 3
+        max_assistant_tokens: 384
+
+  B_code:
+    sources:
+      - name: magicoder_evol_110k
+        weight_in_bucket: 0.40
+        require_ast_parse: true
+        max_assistant_tokens: 768
+      - name: viscode_200k
+        weight_in_bucket: 0.30
+        require_ast_parse: true
+        max_assistant_tokens: 768
+      - name: codealpaca_20k
+        weight_in_bucket: 0.15
+        require_ast_parse: true
+        max_assistant_tokens: 640
+
+      # OCR2 先不启用：公开 HF 版 question 字段为空，需要你先按 question_id 补题面后再做成 jsonl
+      # - name: open_code_reasoning_2
+      #   type: jsonl
+      #   path: dataset/sft_canon/ocr2_python.canon.jsonl
+      #   weight_in_bucket: 0.15
+      #   require_ast_parse: true
+      #   max_assistant_tokens: 768
+
+  C_math:
+    sources:
+      - name: gsm8k_train
+        weight_in_bucket: 0.25
+        max_assistant_tokens: 512
+      - name: hendrycks_math_train
+        weight_in_bucket: 0.15
+        max_assistant_tokens: 768
+      - name: metamathqa
+        weight_in_bucket: 0.35
+        max_assistant_tokens: 640
+      - name: numinamath_cot
+        weight_in_bucket: 0.20
+        cot_max_tokens: 512     # 过长 CoT 直接丢（小模型更稳）
+        max_assistant_tokens: 768
+      - name: math_glot_cleaned_10k
+        weight_in_bucket: 0.05
+        upsample: 3
+        max_assistant_tokens: 640
+
+  D_safety:
+    sources:
+      # 如果你已经把 UnsafeChain 转成 canonical jsonl，可以打开它：
+      # - name: unsafechain
+      #   type: jsonl
+      #   path: dataset/sft_canon/unsafechain.canon.jsonl
+      #   weight_in_bucket: 0.80
+
+      # 先用脚本自动生成的一小套 refusal 模板（会自动写到下面这个 path）
+      - name: local_refusal_templates
+        type: jsonl
+        path: dataset/sft_canon/local_refusal_templates.canon.jsonl
+        n: 2000
+        weight_in_bucket: 1.00
+
+global_filters:
+  drop_if_empty: true
+  drop_if_too_short_chars: 16
+  ban_tokens_in_assistant:
+    - "###EOC###"
+  max_total_tokens_per_example: 2048
