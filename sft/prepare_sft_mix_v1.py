@@ -458,6 +458,8 @@ def main() -> None:
             out.append({"role": role, "content": content})
 
         out = trunc_rounds(out, spec.get("max_rounds", None))
+        while out and out[-1]["role"] == "user":
+            out.pop()
         if not out or out[0]["role"] != "system":
             out = [{"role": "system", "content": DEFAULT_SYSTEM}] + out
         if not any(m["role"] == "user" for m in out):
@@ -468,9 +470,10 @@ def main() -> None:
         if n > max_total:
             return None
 
-        last_u = next((m["content"] for m in reversed(out) if m["role"] == "user"), "")
-        last_a = next((m["content"] for m in reversed(out) if m["role"] == "assistant"), "")
-        h = sha1_hex(norm_for_hash(last_u) + "\n" + norm_for_hash(last_a))
+        # more robust dedup: hash rendered full conversation (tail only)
+        text = render_plain(out)
+        tail = text[-3000:] if len(text) > 3000 else text
+        h = sha1_hex(norm_for_hash(tail))
         if h in seen:
             return None
         seen.add(h)

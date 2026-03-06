@@ -400,7 +400,7 @@ def extract_last_user_and_ref(messages: List[Dict[str, str]]) -> Tuple[str, str]
             break
     for m in reversed(messages):
         if (m.get("role") or "").strip().lower() == "assistant":
-            ref = clean_text(m.get("content", ""))
+            ref = clean_text_assistant(m.get("content", ""))
             break
     return last_user, ref
 
@@ -448,7 +448,7 @@ def build_prompt_from_messages_plain(messages: List[Dict[str, str]], default_sys
 
     for m in trimmed[start:]:
         role = (m.get("role") or "").strip().lower()
-        txt = clean_text(m.get("content", ""))
+        txt = clean_text_assistant(m.get("content", "")) if role == "assistant" else clean_text(m.get("content", ""))
         if not txt:
             continue
         if role == "user":
