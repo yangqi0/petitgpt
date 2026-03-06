@@ -1,0 +1,329 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[791, 601, 1628, 330, 728, 3609, 418, 2827, 15, 289]
+first_step_topk_probs=[0.31929096579551697, 0.1126670315861702, 0.0782456248998642, 0.07050522416830063, 0.05434050038456917, 0.05434050038456917, 0.044121041893959045, 0.03975635766983032, 0.033546507358551025, 0.030641427263617516]
+first_step_topk_text=[' would', ' will', ' might', ' is', ' may', ' asked', ' was', ' named', ',', ' in']
+
+[New tokens 1] count=256 first30=[3609, 896, 3577, 299, 1432, 896, 299, 269, 4035, 17, 1530, 3609, 339, 896, 3804, 415, 7596, 298, 418, 3968, 357, 1024, 699, 733, 9529, 374, 5494, 17, 202, 509]
+[Full output 1]
+Once upon a time, a curious child asked her mother to take her to the doctor. She asked for her father's permission and was told that she had been diagnosed with diabetes.
+The doctor explained that the diagnosis of diabetes is made by the body's ability to make insulin. The pancreas produces the hormone insulin, which is produced in response to food. Insulin helps regulate blood sugar levels. This can be done through injections or by eating foods high in carbohydrates. Insulin also plays an important role in the body's response to stress, which can cause inflammation. Diabetes can also lead to obesity.
+Diabetes can affect anyone at any age, but it's most common in people over 40 years old. It's not always easy to get started on your own. You may need to try different activities each day. Some people find it helpful to spend some time outdoors. For example, you might like to exercise, eat a healthy diet, or take part in sports or physical activity. If you have diabetes, you'll want to start with good nutrition.
+Some people with diabetes will need to see their health care provider more often than others. Your doctor will check your blood glucose level, look for signs of diabetes, and give you specific instructions about how to control your blood glucose levels. He or she may recommend
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 1134, 1112, 15, 298, 330, 12092, 289, 269, 5235, 645, 288, 269, 9556, 17, 698, 578, 263, 1106, 1861, 359, 287, 1384, 3329, 339, 4371, 374]
+[Full output 2]
+Paris is the capital of the province of the same name, and is situated in the southern part of the province. It has a long history as an important center for trade with Europe, and the province was founded by the Romans during the first century B.C., when it became a centre of industry. The city's first bishop was called Saint Peter, who was consecrated on October 1, 312. It had a population of about 30,000 in 146 A.D. and was the seat of the See of Marseilles until 154 A.D.; the city was granted a charter in 1502, and in 1646 it became the capital of a diocese.
+The Romanesque style is characteristic of the Romanesque architecture. The main building, which is still standing, is the most famous of its kind; the façade of the church is similar to that of the Romano-Spanish Church. The stained glass windows are from the Baroque period (1460–1540), but they have been replaced by the 18th-century mosaics. In the 17th century the church was built entirely from marble, and it received its present appearance under the direction of the architect Giacomo Ponte. This church was rebuilt in the early
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 483, 342, 3020, 359, 269, 1701, 288, 795, 7527, 17, 1220, 1373, 15, 490, 411, 491, 269, 1759, 3823, 29, 202, 202, 36, 333, 651, 20, 409]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be written as the sum of two vectors. For example, if we have the following matrix:
+
+A = [1 2 3]
+B = [3 4 5]
+C = [2 6 7]
+D = [1 3 8]
+E = [1 1 9]
+F = [2 0 10]
+G = [4 0 0]
+
+Now let's look at the following matrix and see what happens when we multiply it by A:
+
+Matrix multiplication is simply multiplying one vector by another vector in a linear transformation. This means that you can do this with any number of vectors. For instance, if we want to multiply a vector by a scalar (say, a scalar) then we would write:
+
+a = [1 0 0] * [0 1 0]
+b = [0 1 1] * [1 0 1]
+c = [0 0 0] / [1 0]
+d = [0 -1 0] / [-1 0]
+
+
+We can multiply these matrices together using the following rule:
+
+$$\begin{bmatrix} a & b \\ c & d \end{bmatrix}$$
+
+This gives us:
+
+$$a \cdot b
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 491, 483, 395, 5546, 1420, 1798, 9845, 1085, 3069]
+first_step_topk_probs=[0.2711924612522125, 0.220191091299057, 0.19840864837169647, 0.13319014012813568, 0.05396014824509621, 0.03205370530486107, 0.028882786631584167, 0.02005869708955288, 0.016286373138427734, 0.013223502784967422]
+first_step_topk_text=[' use', ' have', ' can', ' are', ' describe', ' allow', ' learn', ' rely', ' model', ' attempt']
+
+[New tokens 4] count=256 first30=[395, 885, 299, 5951, 1623, 16, 7128, 2061, 17, 382, 3355, 2877, 330, 357, 1010, 25284, 578, 263, 3248, 1968, 15, 298, 1010, 25284, 12535, 263, 4905, 444, 1467, 25284]
+[Full output 4]
+Neural networks are a class of machine learning models that are used to solve real-world problems. The basic idea is that each neuron has a unique input, and each neuron receives a signal from another neuron and sends it through a network.
+
+In this article, we will explore the concept of a neural network, which is an example of a network. A neural network is a mathematical model for how different parts of a system interact with one another. It is often referred to as a "network" because it consists of many interconnected components called neurons or nodes.
+
+### Example 1: Network of Neurons
+
+Let's say you have two nerve cells in your body. You can think of them as three boxes. Each box represents one neuron. Now imagine that you want to connect these two boxes using a single connection. To do so, you would need to add some extra connections between the two boxes. This additional connection would be like making sure that both boxes receive the same amount of input. In other words, if you added more connections between the boxes, you would also need to add more connections between both boxes to make up the total number of connections.
+
+Now let's see what happens when we try to connect two connected neurons together. Let's say we start by connecting the first one to the second
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 1348, 620, 486, 5951, 637, 91, 65, 21, 552, 798, 92, 333, 843, 34, 202, 202, 7714, 2234, 15, 9211, 202, 202, 7, 22]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# How do you solve 3x^2 - 4y = 5?
+
+May 14, 2016
+
+$3 x {- \frac{4}{5} y } = {- \sqrt{5}}$
+
+#### Explanation:
+
+You can use the distributive property to multiply both sides of the equation by $x$.
+
+$= {x}^{2} - 4 \left(\frac{1}{5}\right) \times 2 \left(\sqrt{5}\right)$
+
+The equation is $x = \frac{1}{\sqrt{5}}$.
+
+We know that $x = 1$, so we must have $x = 0$.
+
+Therefore, we can write the equation as:
+
+$\textcolor{w h i t e}{\text{the value of }} x = \frac{\sqrt{5}}{2}$
+
+To solve this, we need to isolate the variable on one side of the equal sign. For example, $x = 2$ means we have $x=-\frac{2}{5}$.
+
+Let's take a look at the equation in the form:
+
+${x}^{2}-4\left(\frac
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.6150878667831421, 0.3849121630191803, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 6] count=256 first30=[622, 353, 81, 13, 21, 1190, 11, 81, 16, 20, 687, 9383, 21, 1190, 11, 21, 16, 20, 12, 864, 353, 21, 1190, 11, 22, 16, 20, 3943, 711, 202]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return (n*2**(n-1))/(2**(2-1) * (2**(3-1)))
+
+
+Here we are using the function to calculate the factorial of an integer n. In this case, we want to find out how many times it will take to divide n by itself. So we can use the function to do this:
+
+factorial(n) = factorial(n/2)
+
+So, if you have n=6 and n=5, you would need to multiply them together:
+
+Factorial(6) = 6*6 = 4666667
+
+The factorial function is the product of all positive integers up to that number. The factorial function is calculated as follows:
+
+Fraction(n) ^ Fraction(5) ^ Fractions(4) ^ Fracings(8) ^ Frowns(9)
+
+To get the factorial of 5, you can use the following formula:
+
+Number of ways to choose 3 items from 1 set:
+
+N = Number of ways to select 3 items from 2 sets:
+
+5Cases = 5! / {[n - 1]! for n in range(0, 10)]
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 537, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.640288233757019, 0.2507404685020447, 0.10897128283977509, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', ' #', '', '#', '', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[537, 382, 775, 3190, 288, 269, 1180, 330, 269, 993, 354, 17, 346, 490, 311, 861, 643, 29, 331, 622, 354, 555, 537, 382, 1408, 3190, 330, 269, 993, 409]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     # The first element of the list is the number 1.
+    if n == 0:
+        return 1
+
+    # The second element is the number 2.
+    elif n % 2 == 0:  # If n is even, then the number is odd.
+        return 2
+
+    # The third element is the sum of the two numbers.
+    else:
+        # The fourth element is the difference between the two numbers, and
+        # add them together.
+        return n - (2 * n)
+
+
+# Compute the Fibonacci sequence from the given number.
+def fib_seq(n):
+    # The first digit in the list is 1.
+    # The second digit is 2.
+    # For example, [1, 2] = [3, 4].
+    # The last digit is 3.
+    # If the number is even, it will be an even number.
+    # Otherwise, it will have an odd number.
+    if (n % 2 != 0 or n % 3 != 0):
+        return 1 + 2*n // 3
+
+    # The next digit is the number of the previous one.
+    # Return the previous one's value.
+    return n // 2
+
+
+# Construct a list of integers from 0 to n-1.
+
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 31412, 13676, 2590, 1541, 698, 1906, 2660, 0, 1]
+first_step_topk_probs=[0.32075878977775574, 0.23467212915420532, 0.21145714819431305, 0.09189893305301666, 0.0872349813580513, 0.01926306076347828, 0.017357459291815758, 0.017357459291815758, 0.0, 0.0]
+first_step_topk_text=[' The', ' Cats', ' Yes', ' No', ' There', ' It', ' All', ' Some', '', '']
+
+[New tokens 8] count=174 first30=[382, 3533, 330, 808, 17, 31412, 395, 453, 545, 2645, 1091, 581, 395, 839, 289, 269, 3494, 17, 1109, 491, 263, 16665, 339, 1939, 2584, 288, 1476, 17, 31412, 728]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is no. Cats are not all black because they are only in the wild. They have a preference for certain types of food. Cats may be seen eating other cats if they like to eat different kinds of foods such as mice or rats.
+The reason why cats are black is because they are very small. A cat's body size is not related to his or her weight. He or she is smaller than an adult cat.
+Why do cats have a preference? Because their bodies are much larger than most people think. Their eyes are not large enough to see the sun and they don't look at the sun well. This means that cats cannot see the sun. When they get too close to the sun, they can see it and they can't see it. If you want to know how cats can see the sun, read about it here.
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 2050, 382, 843, 637, 1012, 1541, 354, 409, 1218]
+first_step_topk_probs=[0.31802254915237427, 0.13821208477020264, 0.13821208477020264, 0.0959862768650055, 0.07102467119693756, 0.06327810138463974, 0.05137775465846062, 0.04877033829689026, 0.04124584048986435, 0.03387032449245453]
+first_step_topk_text=[' 4', ' One', ' The', ' 5', ' 3', ' 6', ' There', ' 1', ' 2', ' 8']
+
+[New tokens 9] count=142 first30=[2050, 13032, 330, 5405, 744, 21, 17, 5517, 934, 667, 395, 744, 20, 298, 619, 934, 667, 330, 7, 21, 17, 202, 509, 993, 288, 10941, 289, 269, 9849, 330]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple is worth $2. Two buys are $1 and one buys is$2.
+The number of apples in the basket is $3$. The total number of apples is $10.
+To find the total number of fruits, subtract the number of apples from the total number. For example, if you subtract the number 1 apple from the total 7 apples, then the total number is $7.
+If you divide both sides by 7, you get $9.
+Now, you can subtract the number 5 from the total 9 apples to get $5.
+You can also subtract the number 4 from the total 8 apples to get the total number for the whole group.
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 1278, 2575, 1289, 382, 1509, 783, 3919, 698, 1541]
+first_step_topk_probs=[0.72153639793396, 0.039579201489686966, 0.037570539861917496, 0.033853884786367416, 0.03050488419830799, 0.03050488419830799, 0.02290668524801731, 0.01859876699745655, 0.01632808707654476, 0.01360714714974165]
+first_step_topk_text=[' I', ' If', ' What', ' We', ' The', ' You', ' This', ' My', ' It', ' There']
+
+[New tokens 10] count=97 first30=[2575, 330, 669, 2942, 374, 269, 1759, 7042, 34, 202, 16, 2575, 330, 669, 1258, 415, 7803, 288, 2418, 34, 202, 16, 1348, 620, 486, 817, 269, 1258, 359, 263]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience with the following topics?
+- What is your school's philosophy of education?
+- How do you use the school as a model for other schools?
+- Why does your school have a different style of teaching than yours?
+- Is there a difference between the two?
+- Do you think that your school has an advantage in terms of the quality of teaching?
+- In what ways can you tell if your school has a better teaching approach?
+
+================================================================================
