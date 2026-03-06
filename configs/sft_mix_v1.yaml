@@ -5,9 +5,9 @@ token_budget:
   min_val_tokens_per_source: 200000
 
 mixture_by_token:
-  A_general: 0.49
+  A_general: 0.45
   B_code: 0.30
-  C_math: 0.20
+  C_math: 0.24
   D_safety: 0.01
 
 buckets:
@@ -16,11 +16,11 @@ buckets:
       - name: smol_smoltalk
         weight_in_bucket: 0.40
         max_rounds: 4
-        max_assistant_tokens: 512
+        max_assistant_tokens: 384
       - name: ultrachat_200k
         weight_in_bucket: 0.35
         max_rounds: 4
-        max_assistant_tokens: 512
+        max_assistant_tokens: 384
       - name: oasst1
         weight_in_bucket: 0.20
         max_rounds: 4
