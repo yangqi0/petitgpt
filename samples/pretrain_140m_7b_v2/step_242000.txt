@@ -1,0 +1,284 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[791, 601, 330, 1628, 728, 418, 15, 289, 483, 388]
+first_step_topk_probs=[0.37184810638427734, 0.17934629321098328, 0.0779436007142067, 0.06007348373532295, 0.05138357728719711, 0.04630044475197792, 0.033190760761499405, 0.02478284202516079, 0.02478284202516079, 0.02233121544122696]
+first_step_topk_text=[' would', ' will', ' is', ' might', ' may', ' was', ',', ' in', ' can', ' or']
+
+[New tokens 1] count=60 first30=[578, 733, 998, 289, 269, 1167, 1676, 288, 287, 2052, 288, 269, 5162, 4593, 17, 202, 509, 7850, 418, 7194, 5124, 419, 269, 5162, 4593, 415, 329, 1253, 3120, 2886]
+[Full output 1]
+Once upon a time, a curious child has been found in the carving of an image of the Virgin Mary.
+The artist was fascinated by the Virgin Mary's glistening white skin and the intricate lines that run through her. Her work is one of the most iconic pieces of art in the history of the human race.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 1134, 1112, 17, 698, 330, 12092, 289, 269, 5235, 645, 288, 269, 9556, 15, 298, 6151, 435, 269, 3300, 288, 269, 321, 3537, 3345, 17, 202]
+[Full output 2]
+Paris is the capital of the province of the same name. It is situated in the southern part of the province, and lies at the foot of the Tiber River.
+The town of Borgo is located on the western edge of the province and was founded by the Romans, who conquered the area in the 5th century BC. The city was later renamed Borgo after its founder, who was buried there. In the Roman period, Borgo became a small market town, with a population of around 250,000 inhabitants. During the Roman era, the town had a population of about 200,000 people.
+Borgo was the birthplace of the first Roman emperor, Pius II (757-761). He was born in the city, but died in the village. At the time of his death, the town was an important commercial centre for the area.
+During the Middle Ages, the town suffered from the plague that plagued the region during the reigns of Emperor Charlemagne and Charlemagne's successor, King Henry VII. This plague killed the majority of the population of the town. A new mayor was appointed in 1603, and the town was declared a town in 1702.
+After the death of Charlemagne, the town
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 483, 342, 885, 299, 1098, 269, 18956, 288, 263, 3823, 17, 535, 482, 2930, 15, 411, 601, 817, 269, 1498, 288, 2241, 10689, 353, 47, 3143, 12]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be used to find the eigenvalues of a matrix. In this article, we will use the method of least squares (LSE) to find the eigenvectors and eigenvalues of a given matrix. The most common way to find the eigenvalue of a matrix is by using the least squares method. The most important thing to remember about eigenvalues is that they are not equal to zero. If the number of rows in a matrix is equal to the number of columns in the matrix, then the solution set for the system of equations is (A - B). The eigenvalues of a square matrix A are positive. When you solve a system of equations with two unknowns, you have found the values of A and B. The most commonly used methods for finding the eigenvalues of matrices are the standard basis vectors, the diagonal matrix, and the transpose of a matrix A. Let's see how to find the roots of a system of equation systems. The eigenvalues of the matrix A are given as: λ = 1/2 A - 2x + C. If the answer is 0, then there are no solutions. For example, if A= [1,3] and B= [4,5], then the eigenvalues of A are [1,1]. We also know that the
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 491, 483, 395, 5546, 1420, 9845, 1798, 1085, 3069]
+first_step_topk_probs=[0.3915172517299652, 0.188833087682724, 0.13815325498580933, 0.10720463842153549, 0.0462755411863327, 0.035665955394506454, 0.01909060962498188, 0.017202068120241165, 0.015500365756452084, 0.014713709242641926]
+first_step_topk_text=[' use', ' have', ' can', ' are', ' describe', ' allow', ' rely', ' learn', ' model', ' attempt']
+
+[New tokens 4] count=256 first30=[395, 885, 299, 5951, 1623, 16, 7128, 2061, 17, 382, 3355, 2877, 330, 299, 817, 269, 1085, 359, 263, 4679, 1099, 15, 298, 1000, 1659, 383, 351, 263, 5023, 17]
+[Full output 4]
+Neural networks are a class of machine learning models that are used to solve real-world problems. The basic idea is to use the model as a starting point, and then train it on a dataset.
+
+The model is trained using a neural network, which is an image recognition system. In this case, we will be using a neural net (which has been trained for example in the past). We will also use a classifier to classify the images.
+
+### Classification
+
+There are several different types of classification algorithms. One way to learn these algorithms is by training them. This is done through a classifier. A classifier is one which uses a specific algorithm (the method of classification) to classify the data. For example, if we have a set of images and we want to predict the outcome of each person in the city, we can use the classifier to classify them. The model learns how to identify the features of each image. It then performs a prediction based on the information given to the classifier. The result is a classification problem.
+
+In this section, we will learn how to do classification with the given image.
+
+## Image Classification
+
+Image classification is a common task in computer vision. When we create an image, we try to extract all the elements from the image and apply the same operation
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=215 first30=[263, 647, 286, 3, 711, 6, 1348, 620, 486, 5951, 482, 34, 202, 202, 489, 10020, 14015, 21846, 202, 202, 7, 21, 91, 65, 22, 16, 25, 91, 65, 21]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# How do you solve this?
+
+## Homework Statement
+
+$2x^3-6x^2+4x=0$
+
+## The Attempt at a Solution
+
+I think I can do it with $y = \frac{1}{2}x^{2}$ and $z = \frac{-1}{2}$.
+
+What do you get when you divide both sides by 2?
+
+Thanks!
+
+Last edited: May 3, 2017
+
+### Staff: Mentor
+
+There is no way to figure out what $x$ or $y$ are. It's just that the equation has two different solutions for $x$, one of which is the one in the equation.
+
+$\frac{d}{dx}(2x^2) = 2x - 6x$
+
+You should be able to find the solution of the equation. Then plug that into the original equation to get $x$.
+
+Any help is appreciated. Thanks again.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 339, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.4903741478919983, 0.4418638050556183, 0.06776200979948044, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', ' for', '', '#', '', '"', '!', '', '']
+
+[New tokens 6] count=116 first30=[622, 353, 81, 13, 21, 1190, 11, 20, 18, 22, 687, 9383, 21, 1190, 22, 12, 711, 202, 1465, 330, 1100, 263, 1114, 2829, 1373, 15, 614, 356, 483, 847]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return (n*2**(1/3))/(2**3)
+
+
+This is just a very simple example, but I can't find any of it.
+
+In [4]:
+# create a list with all the numbers in the range
+range = [-1, 1]
+for i in range:
+if i > 0 and i < len(range):
+print("There are {} integers in the range".format(i))
+else:
+print("The number of integers in the list is {}".format(range[i]))
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 339, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.6258108615875244, 0.22082757949829102, 0.15336155891418457, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', ' for', '', '#', '', '"', '!', '', '']
+
+[New tokens 7] count=114 first30=[490, 311, 861, 643, 29, 341, 622, 354, 1246, 1107, 29, 341, 622, 8049, 11, 81, 552, 354, 12, 647, 8049, 11, 81, 16, 21, 12, 647, 8049, 2619, 20]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     if n == 0:
+         return 1
+     else:
+         return fib(n - 1) + fib(n-2) + fib((1 - n))
+
+
+Here we have two functions, fib and fib_recursive. The first one is called with the following arguments:
+
+fib = fib.__func__
+print("Fib", fib.__name__)
+print("fib_recursive", fib.__doc__)
+
+while True:
+    try:
+        fib()
+    except:
+        print('Error! Fib')
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 31412, 2590, 1541, 2660, 1906, 1278, 0, 1]
+first_step_topk_probs=[0.37312111258506775, 0.2729812264442444, 0.1186370700597763, 0.10690099000930786, 0.07821043580770493, 0.01819358393549919, 0.01639379747211933, 0.015561798587441444, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' Cats', ' No', ' There', ' Some', ' All', ' If', '', '']
+
+[New tokens 8] count=256 first30=[13676, 17, 31412, 395, 2645, 1091, 581, 491, 263, 3313, 288, 2053, 289, 553, 1629, 17, 783, 330, 2526, 383, 415, 649, 1384, 299, 1118, 490, 486, 2068, 2886, 388]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Yes. Cats are black because they have a lot of blood in their body. This is why it's so important to know if you're white or black. Some cats are more likely than others to be black. If you find one of your cats black, do not worry about the other. There may be a few black cats in your household. The fact that many people do not know how to tell if they are black or black is very important. It could mean they are having trouble finding their place in the world. They might not even know where they are. So there will be a chance of getting an infection from one cat to another.
+Question: What does this mean for the general population?
+Answer (and answer): Well, if you think about it, you should know that there are three things that a person with diabetes needs to know:
+1) How many cats are in your house?
+2) How often do they eat?
+3) How much does it cost to keep them in a home?
+4) How much food can I buy at the store?
+5) How much money can I get to spend on food?
+6) Is it possible for me to be diagnosed with diabetes?
+7) Can I have a
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 382, 2050, 843, 354, 637, 1012, 1541, 409, 5517]
+first_step_topk_probs=[0.21815676987171173, 0.18659938871860504, 0.13651902973651886, 0.11084479093551636, 0.0730733647942543, 0.07143720984458923, 0.05346161872148514, 0.0391133576631546, 0.03461132571101189, 0.027163682505488396]
+first_step_topk_text=[' 4', ' The', ' One', ' 5', ' 1', ' 3', ' 6', ' There', ' 2', ' Two']
+
+[New tokens 9] count=45 first30=[2050, 13032, 330, 5405, 744, 21, 17, 382, 613, 330, 744, 22, 17, 382, 2056, 993, 288, 10941, 330, 744, 23, 17, 4946, 15, 269, 2056, 993, 288, 7914, 330]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple is worth $2. The other is $3. The total number of apples is $4. Therefore, the total number of fruits is $4+4=5$
+
+Hope it helps!
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 1278, 1509, 382, 1289, 15255, 3919, 783, 2575, 1348]
+first_step_topk_probs=[0.753165066242218, 0.03606545180082321, 0.030055444687604904, 0.030055444687604904, 0.02779674530029297, 0.023775815963745117, 0.023164650425314903, 0.016087522730231285, 0.016087522730231285, 0.012726277112960815]
+first_step_topk_text=[' I', ' If', ' You', ' The', ' We', ' Thanks', ' My', ' This', ' What', ' How']
+
+[New tokens 10] count=122 first30=[356, 4575, 3934, 339, 263, 1951, 1194, 299, 1005, 1284, 3694, 374, 610, 3541, 17287, 17, 202, 44, 491, 287, 2877, 288, 806, 299, 835, 3109, 15, 614, 356, 483]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I'm looking for a better way to help my son with his math homework.
+I have an idea of how to get started, but I can't seem to find it.
+The best thing is to have him work through the material in a small group and then talk about it over the whole class. It's a great way to get your child involved as well as learning.
+This is one of those things that will be very helpful to me. If you are interested in helping your son learn more about math, this is another place where he'll want to take a look at the resources.
+
+================================================================================
