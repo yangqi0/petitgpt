@@ -39,10 +39,18 @@ USER_PREFIX = "User: "
 ASSIST_PREFIX = "Assistant: "
 SEP = "\n\n"
 
+def norm_newlines(s: str) -> str:
+    return (s or "").replace("\r\n", "\n").replace("\r", "\n")
+
 
 def clean_text(s: str) -> str:
-    s = s.replace("\r\n", "\n").replace("\r", "\n")
-    return s.strip()
+    # for system/user text: strip leading/trailing whitespace
+    return norm_newlines(s).strip()
+
+
+def clean_text_assistant(s: str) -> str:
+    # IMPORTANT: do not strip assistant text (keeps code indentation / markdown formatting)
+    return norm_newlines(s)
 
 
 # -------------------------
@@ -141,8 +149,10 @@ def render_segments_plain(messages: List[Dict[str, str]], default_system: str) -
 
     for m in msgs[start:]:
         role = (m.get("role") or "").strip().lower()
-        txt = clean_text(m.get("content", ""))
-        if not txt:
+        raw = m.get("content", "")
+        # strip user/system; keep assistant formatting
+        txt = clean_text_assistant(raw) if role == "assistant" else clean_text(raw)
+        if not txt or (role != "assistant" and not txt.strip()):
             continue
 
         if role == "user":
@@ -208,9 +218,16 @@ def build_example(
     if not segs:
         raise ValueError("empty rendered segments")
 
+    meta = ex.get("meta") or {}
+    bucket = str(meta.get("bucket", "")).strip()
+    # Do NOT downweight refusals inside the safety bucket (otherwise safety examples get muted).
+    refusal_dw_eff = 1.0 if bucket in ("D_safety", "D") else refusal_downweight
     ex_weight = compute_example_weight_from_messages(
-        messages, refusal_downweight, refusal_patterns, refusal_mode
+        messages, refusal_dw_eff, refusal_patterns, refusal_mode
     )
+    w0 = meta.get("weight", None) if isinstance(meta, dict) else None
+    if isinstance(w0, (int, float)):
+        ex_weight *= float(w0)
 
     has_bos, has_eos = tokenizer_auto_bos_eos(tok, bos_id, eos_id)
 
@@ -304,12 +321,20 @@ def collate_fn_builder(
     return collate
 
 
-def masked_ce_loss(logits: torch.Tensor, labels: torch.Tensor, weights: Optional[torch.Tensor] = None) -> torch.Tensor:
+def masked_ce_loss(
+    logits: torch.Tensor,
+    labels: torch.Tensor,
+    weights: Optional[torch.Tensor] = None,
+    reduction: str = "example_mean",
+) -> torch.Tensor:
     """
     Next-token CE, ignoring -100 labels.
-    If weights provided (shape [B]), apply per-example scalar weight to all supervised tokens in that example.
 
-    Returns: scalar loss (normalized by total supervised tokens, but weighted).
+    reduction:
+      - token_mean: average over all supervised tokens in batch (standard)
+      - example_mean: mean CE per-example (over supervised tokens), then average across batch
+
+    If weights provided (shape [B]), they act as per-example scalars (e.g. refusal downweight).
     """
     B, T, V = logits.size()
     # next-token
@@ -330,12 +355,19 @@ def masked_ce_loss(logits: torch.Tensor, labels: torch.Tensor, weights: Optional
     else:
         weights = weights.to(device=logits.device, dtype=torch.float32)
 
-    # apply weight per-example
-    w = weights.view(B, 1)                            # [B,1]
-    loss_tok = loss_tok * mask * w
+    if reduction == "token_mean":
+        w = weights.view(B, 1)                            # [B,1]
+        loss_tok = loss_tok * mask * w
+        denom = (mask * w).sum().clamp_min(1.0)
+        return loss_tok.sum() / denom
 
-    denom = (mask * w).sum().clamp_min(1.0)
-    return loss_tok.sum() / denom
+    if reduction == "example_mean":
+        tok_cnt = mask.sum(dim=1).clamp_min(1.0)                 # [B]
+        loss_ex = (loss_tok * mask).sum(dim=1) / tok_cnt         # [B]
+        denom = weights.sum().clamp_min(1.0)
+        return (loss_ex * weights).sum() / denom
+
+    raise ValueError(f"unknown reduction: {reduction}")
 
 
 def save_checkpoint_atomic(path: str, obj: Dict[str, Any]):
@@ -463,6 +495,8 @@ def main():
     ap.add_argument("--num_workers", type=int, default=2)
     ap.add_argument("--seed", type=int, default=1234)
     ap.add_argument("--debug_first_batch", action="store_true")
+
+    ap.add_argument("--loss_reduction", choices=["token_mean","example_mean"], default="example_mean")
 
     # ---- refusal downweight (TRAINING, not sampling) ----
     ap.add_argument(
@@ -791,7 +825,7 @@ def main():
 
             with torch.autocast(device_type="cuda", dtype=autocast_dtype, enabled=(autocast_dtype is not None)):
                 logits = model(input_ids)
-                loss = masked_ce_loss(logits, labels, weights=weights) / args.grad_accum
+                loss = masked_ce_loss(logits, labels, weights=weights, reduction=args.loss_reduction) / args.grad_accum
 
             if use_fp16:
                 scaler.scale(loss).backward()
@@ -829,7 +863,7 @@ def main():
                     vw = vb["weights"].to(device)
                     with torch.autocast(device_type="cuda", dtype=autocast_dtype, enabled=(autocast_dtype is not None)):
                         v_logits = model(vi)
-                        v_loss = masked_ce_loss(v_logits, vl, weights=vw)
+                        v_loss = masked_ce_loss(v_logits, vl, weights=vw, reduction=args.loss_reduction)
                     losses.append(float(v_loss.item()))
             print(f"[eval] step={step} val_loss={sum(losses)/max(1,len(losses)):.4f}")
             model.train()

@@ -1,0 +1,372 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[601, 791, 330, 728, 418, 1628, 15, 578, 483, 289]
+first_step_topk_probs=[0.20385441184043884, 0.1491430699825287, 0.13438907265663147, 0.10357770323753357, 0.10357770323753357, 0.09832114726305008, 0.03704902529716492, 0.028169481083750725, 0.025382807478308678, 0.022871829569339752]
+first_step_topk_text=[' will', ' would', ' is', ' may', ' was', ' might', ',', ' has', ' can', ' in']
+
+[New tokens 1] count=152 first30=[578, 733, 998, 289, 269, 1471, 288, 263, 1844, 17, 382, 3577, 330, 263, 929, 668, 418, 3673, 299, 896, 3804, 298, 330, 1244, 2997, 374, 896, 3577, 17, 1530]
+[Full output 1]
+Once upon a time, a curious child has been found in the care of a family. The mother is a child who was born to her father and is now living with her mother. She is very happy to have a baby girl with him but she has not yet been able to feed it properly.
+The mother's health deteriorates when she becomes pregnant and her baby is born prematurely. This can be life threatening for both the mother and the baby. If the mother has been diagnosed with an infection or other medical condition that could affect the baby, it is important to consult your doctor as soon as possible so that any complications are corrected promptly.
+If you would like more information about the care of your baby, please contact our office at (714) 767-9000.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 7535, 281, 8191, 17, 698, 330, 3323, 289, 269, 5235, 645, 288, 269, 9556, 15, 1661, 269, 6794, 374, 4455, 298, 7362, 17, 202, 509, 1505, 330]
+[Full output 2]
+Paris is the capital of the province of Catalonia. It is located in the southern part of the province, near the border with France and Spain.
+The area is part of the municipality of Alençon-sur-Loire.
+
+History
+The region was first mentioned in 1250 as Aleno. The name of the region is derived from the Latin Alena, meaning "the land". In 1398, it was given to the municipality of Déchouille de Montauban.
+
+Geography
+
+Climate
+Alençon has a humid subtropical climate (Köppen: Cfa) with warm to hot summers and cold winters, and cool to cold winters. The average annual temperature is . The climate is characterized by a Mediterranean climate, with mild winters and hot summers, and wetter winters. The highest temperature ever recorded was on 26 February 1938 at the Hautes-Antiégasque Jura; the lowest temperature ever recorded in Alençons was on 28 November 1943 at the Hôpital Nacional de Bèze-Nord.
+
+Population
+
+Economy
+Agriculture is the main economic activity in the region. Agriculture in the region is mainly concerned with agriculture production, but
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 483, 342, 998, 419, 4007, 269, 18956, 288, 263, 3823, 17, 202, 202, 6116, 12602, 409, 29, 9419, 269, 18956, 298, 28069, 288, 269, 1759, 3823, 29]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be found by finding the eigenvalues of a matrix.
+
+### Example 2: Find the eigenvalues and eigenvectors of the following matrix:
+
+Matrix A = [1,2,3]
+
+Solution:
+The first step in solving this problem is to find the eigenvalues and their corresponding eigenvectors.
+
+Let's start with the first row of the matrix:
+a = 1
+b = 3
+c = 4
+d = 5
+e = 6
+f = 7
+g = 8
+h = 9
+i = 10
+j = 11
+k = 12
+l = 13
+m = 14
+n = 15
+o = 16
+p = 17
+q = 18
+r = 19
+s = 20
+t = 21
+u = 22
+v = 23
+w = 24
+x = 25
+y = 26
+z = 27
+
+We know that the determinant of the matrix is equal to zero since it has zeroes in its diagonal. Therefore, the eigenvector corresponding to the eigenvalue 0 is 1.
+
+Now let's apply our knowledge about eigenvalues and eigenvectors to solve the given equation:
+
+(a) f(x) = (5/4)(x^2+3x
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 491, 395, 5546, 1420, 1798, 1991, 1085, 3069]
+first_step_topk_probs=[0.30983829498291016, 0.16584450006484985, 0.14943842589855194, 0.08757219463586807, 0.07592914253473282, 0.04064193740487099, 0.024142347276210785, 0.0229171272367239, 0.020650045946240425, 0.015915613621473312]
+first_step_topk_text=[' use', ' can', ' have', ' are', ' describe', ' allow', ' learn', ' provide', ' model', ' attempt']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 298, 3235, 269, 2018, 288, 263, 2673, 17, 382, 5281, 2097, 330, 357, 383, 330, 1812, 299, 1798, 263, 2079, 4333, 288, 14457]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data and predict the response of a network. The core concept is that it is possible to learn a single layer of neural networks (NNs) by adding new layers to them, and then using those layers to update the weights of the neural network.
+The first problem with neural networks is that they do not have any inbuilt parameters, which means that you cannot use them directly. You need to implement a neural network that can be trained on a large number of input vectors.
+In this paper we will take a look at the main features of neural networks. We will also look at some other models of neural networks such as dynamic network or gradient descent.
+We will start with a basic understanding of the architecture of neural networks and how they work. Then we will build our model using the code provided in the previous section.
+The final part of the paper is devoted to building an accurate model of neural networks, including the design of neural networks for training. This is done by combining the results from several different experiments and comparing them to the original model.
+This paper is written in two parts:
+- A first section discusses the design of the neural networks and the neural network implementation.
+- The second part describes the algorithms used to train
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 5427, 6649, 29, 8163, 16, 27, 5427, 202, 807, 1401, 8644, 626, 655, 15551, 66, 22513, 202, 1018, 1656, 202, 1018, 13960, 202, 1018]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+import os
+import shutil
+import time
+import unittest
+
+from .base import BaseTestCase
+from .. import utils as u
+from ..utils.config import get_yaml_path, get_type_name
+from ..core.filesystem import FileSystemLoader
+from ..plugins.common import BasePluginBase
+from ..plugin_types import FileType
+from ..constants import *
+from ..exceptions import UnsupportedFilePathError
+from ..applications.tests.test_case import TestCase
+
+
+class PluginTest(BasePluginBase):
+
+    def setUp(self):
+        super().setUp()
+
+        self._default_version = get_yaml("version")
+        self._default = get_json("default", "1.0")
+        self.client = self._get_client()
+        self.logger = self._log_file_handler(
+            self.client,
+            self.default_version,
+            self._default,
+            self.__update_cache(),
+            self.save_to_db(),
+            self._load_all_packages())
+
+    @classmethod
+    def _get_client(cls
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=70 first30=[490, 311, 861, 643, 29, 341, 622, 354, 1246, 1107, 29, 341, 622, 28045, 11, 81, 16, 20, 12, 202, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     if n == 0:
+         return 1
+     else:
+         return factorial(n-1)
+
+if __name__ == '__main__':
+    f = open('input.txt')
+    n = int(input())
+    f.write(f'{n}\t{factorial(n)}\n')
+    f.close()
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 339, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.528133749961853, 0.3667815625667572, 0.10508468747138977, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', ' for', '', '#', '', '"', '!', '', '']
+
+[New tokens 7] count=210 first30=[622, 354, 17, 19, 9383, 21, 13, 81, 12, 1246, 202, 856, 8049, 66, 1982, 1714, 346, 1083, 801, 41, 554, 26310, 993, 903, 346, 1083, 801, 5288, 330, 269]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0/(2*n)
+    
+def fib_back():
+    print("Fibonacci number")
+    print("Here is the first fib")
+    print('1')
+
+
+# # Fibonacci number
+# #
+# # Fibonacci number
+# Fibonacci = 0
+# for i in range(1000000000, 1000000000 + 1, 1000000):
+#     if fib(i) == fib_back() and fib_back().next():
+#         Fibonacci += 1
+#     else:
+#         break
+#
+# # for i in reversed(range(1000000)):
+# #     if fib_back()[i] == fib_first():
+# #             print(f"Fibonacci {i} is a fib")
+# #         print(f"{i}")
+# #   print(f'{b{i}}')
+# # end
+# # fib_back();
+# # return fib_back(), fib_back())
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 4619, 2590, 31412, 1541, 2660, 338, 698, 1906]
+first_step_topk_probs=[0.29904261231422424, 0.19714097678661346, 0.16006597876548767, 0.07720151543617249, 0.06603395938873291, 0.06603395938873291, 0.05089440569281578, 0.0245469119399786, 0.020996084436774254, 0.020996084436774254]
+first_step_topk_text=[' The', ' Yes', ' Black', ' No', ' Cats', ' There', ' Some', ' A', ' It', ' All']
+
+[New tokens 8] count=256 first30=[382, 2645, 3191, 330, 263, 1114, 1488, 3191, 17, 698, 330, 619, 288, 269, 851, 5181, 2595, 1875, 289, 269, 1560, 1705, 17, 1783, 15, 383, 578, 733, 998, 299]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The black cat is a very common cat. It is one of the most commonly seen species in the United States. However, it has been found to be rarer than any other cat.
+The black cat is an excellent food source for birds because it does not have any predators. It also has good immune systems. A large number of people think it is a pet but there is no evidence of it being a bird or even a cat.
+Feline allergy is caused by the same protein found in the body as the human immune system. This protein is present in every cell in the body and causes symptoms such as sneezing, runny nose, nasal congestion, coughing, itching, and hives.
+There are several types of allergies including:
+- Allergic rhinitis (allergy to pollen)
+- Allergies to dust mites
+- Allergen-induced asthma
+- Allergy to some kinds of medications
+Allergic rhinitiitis (allergy of the respiratory tract)
+Allergic Rhinitis (rhinitis with allergic rhinitis)
+Allergies to hay fever
+Allergic skin reactions
+Allergic reactions to a wide variety of foods
+In the case of allergies to certain foods, the following list
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 843, 1012, 409, 1218, 637, 2050, 354, 0, 1]
+first_step_topk_probs=[0.5385689735412598, 0.11289018392562866, 0.07064487040042877, 0.06438113003969193, 0.060425758361816406, 0.05880586430430412, 0.05444813147187233, 0.03983510658144951, 0.0, 0.0]
+first_step_topk_text=[' 4', ' 5', ' 6', ' 2', ' 8', ' 3', ' One', ' 1', '', '']
+
+[New tokens 9] count=256 first30=[2050, 13032, 7670, 619, 934, 92, 15, 934, 667, 795, 10941, 298, 1237, 934, 667, 795, 24847, 17, 202, 2573, 395, 1218, 1108, 2722, 299, 4833, 263, 5583, 444, 798]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple plus one buy, buys two apples and three buys two oranges.
+There are 8 different ways to choose a fruit from 4 options. Which of these choices is best for you?
+What do you notice about the pattern of fruits that you get when you eat the fruit of the same tree?
+Which fruit is better than the others?
+Why do you think the fruit of a tree is so good? Why or why not?
+How can I make a perfect tree with four bushes in it?
+Can you make a perfect fruit tree with four trees?
+What is the smallest number of plants needed to produce the correct amount of food?
+Choose five apples from each of the following:
+A) A banana. B) A orange. C) A lemon. D) A pear.
+Find the smallest number (in this case, 4) that is both equal to the number of apples in the tree.
+Choose three apples from each group and add them up. What is the largest number of apples you could get if you added three apples together?
+The number of apples must be between 1 and 10 inclusive. If we add the numbers 1-10, then the total is 1 + 10 = 9. Find the number
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 3919, 1509, 1289, 382, 360, 783, 2575, 0, 1]
+first_step_topk_probs=[0.8458545804023743, 0.028937023133039474, 0.024114912375807762, 0.022891072556376457, 0.022302648052573204, 0.022302648052573204, 0.01810832880437374, 0.015488873235881329, 0.0, 0.0]
+first_step_topk_text=[' I', ' My', ' You', ' We', ' The', ' "', ' This', ' What', '', '']
+
+[New tokens 10] count=256 first30=[356, 4575, 3934, 4252, 299, 263, 1413, 1266, 289, 269, 4345, 17, 202, 45, 358, 29, 698, 415, 263, 3851, 3103, 17, 202, 46, 273, 29, 698, 415, 733, 287]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I'm looking forward to a good day in the summer.
+Jay: It's a bit late.
+Ken: It's been an average of two weeks, so we're still having some pretty cool days. We've had a lot of cool ones this week and I think it'll be back in the fall as well.
+Joe: So it looks like we're going to have another week off.
+Kenneth: And we've had a couple of cool ones that are coming up this week, and I think they'll come up this week.
+Jon: They'll be coming up on Wednesday.
+Kenny: The coolest thing is you can't get up to the end of the week.
+Gary: You know, I'm really excited about this.
+Larry: I was just wondering if there's any way to get the rest of the week off to a good start.
+Kevin: There's a couple of things we did for our weekend.
+GARRY: It's cool.
+Kim: Hey, yeah, I'm glad he's working on it.
+Keeve: I'm going to see how it goes.
+Kris: It's going to go
+
+================================================================================
