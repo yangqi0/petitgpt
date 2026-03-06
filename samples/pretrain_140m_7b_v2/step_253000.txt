@@ -1,0 +1,313 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[791, 601, 330, 1628, 418, 728, 15, 289, 578, 3609]
+first_step_topk_probs=[0.1476452499628067, 0.14015227556228638, 0.12628768384456635, 0.11987859010696411, 0.11379464715719223, 0.09239404648542404, 0.046627264469861984, 0.025127915665507317, 0.023852653801441193, 0.02040225826203823]
+first_step_topk_text=[' would', ' will', ' is', ' might', ' was', ' may', ',', ' in', ' has', ' asked']
+
+[New tokens 1] count=125 first30=[578, 733, 998, 289, 269, 1471, 288, 263, 3577, 668, 418, 8066, 299, 1098, 896, 17, 382, 3577, 699, 733, 2621, 444, 269, 2422, 298, 2460, 299, 269, 5988, 339]
+[Full output 1]
+Once upon a time, a curious child has been found in the care of a mother who was unable to find her. The mother had been taken from the house and sent to the hospital for treatment.
+The nurse then came to the hospital and discovered that the mother had died. She took the infant to the local hospital where she died. She was taken to the hospital where she was treated by the hospital nurses.
+This case is an example of how children are treated when they are young. It illustrates the importance of making children feel loved and valued. Children can be cared for at home, but it also needs to be cared for in a caring family.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 7535, 281, 8191, 17, 698, 330, 658, 269, 8492, 288, 269, 412, 405, 295, 487, 11718, 288, 440, 723, 398, 15, 263, 1204, 7043, 1505, 289, 269]
+[Full output 2]
+Paris is the capital of the province of Catalonia. It is also the seat of the comunicated municipality of Lobos, a small rural area in the province of Córdoba.
+
+The municipality of Lomé is located in the south-west of the province. It includes the municipalities of Pistina, Castelnuovo, Mogliano and Cervantes.
+
+History
+
+In historical records, the municipality was first mentioned in 1137 as Lobo. In 1296 it was known as Lepas.
+
+Geography
+Lobo has an area, , of . Of this area, or 40.3% is used for agricultural purposes, while or 38.5% is forested. Of the rest of the land, or 5.6% is settled (buildings or roads), or 0.2% is either rivers or lakes and or 1.4% is unproductive land.
+
+Of the built up area, housing and buildings made up 2.1% and transportation infrastructure made up 3.0%. Out of the forested land, all of the forested territory's town area, and hispanic quarters (includes Nemanja de Lobo) were included in its entire population. Of
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 483, 342, 998, 419, 4007, 269, 18956, 288, 263, 3823, 17, 535, 613, 2351, 15, 269, 18956, 395, 269, 1992, 288, 269, 3823, 357, 1062, 656, 269]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be found by finding the eigenvalues of a matrix. In other words, the eigenvalues are the values of the matrix that make up the vector space of the system. The following is a list of all possible eigenvalues and eigenvectors for a given matrix:
+|Matrix||Vector Space||Array of Pairs (in the form of a scalar)||Number of Pairs|
+|0||0||0|
+|1||1||1|
+|2||2||2|
+|3||3||3|
+|4||4||4|
+The above list contains all the possible eigenvalues of a given matrix. The list is then sorted in ascending order. For example, if we have the matrix 0 = [0, 1], then the list would be [0, 2].
+We can also use the set of all possible eigenvectors to find the eigenvalues of any vector, as follows:
+|A||Vector Space[a,b]||Vector Space of A|
+|B||Vector Space[]||Vector Space [a, b]|
+|C||Vector Space([a, b])||Vector Space ([a, b]), [c, d]|
+For example, if you have the matrix 1 = [
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 491, 395, 5546, 1798, 1420, 1085, 411, 9845]
+first_step_topk_probs=[0.31336793303489685, 0.18614856898784637, 0.15114068984985352, 0.08388469368219376, 0.08089977502822876, 0.037038613110780716, 0.0351589061319828, 0.02088528871536255, 0.019825341179966927, 0.016957513988018036]
+first_step_topk_text=[' use', ' can', ' have', ' are', ' describe', ' learn', ' allow', ' model', ' we', ' rely']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 298, 3235, 269, 8020, 17, 1658, 2269, 1420, 500, 299, 1557, 806, 269, 870, 330, 5256, 289, 1623, 16, 7128, 6863, 15, 857]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data and predict the outcome. These models allow us to understand how the data is distributed in real-world situations, such as weather forecasting or population growth.
+
+In this article, we will explore how to use a neural network to learn new information from existing data using an example from the popular video game. We will also examine some methods for training neural networks based on these concepts. Finally, we will discuss how to apply them to various real-world scenarios.
+
+### Learning Network: The Basics
+
+The first step towards understanding how neural networks work is to understand their architecture. Understanding the architecture of a neural network requires knowledge about its structure and behavior. It's essential to understand the underlying principles governing its operation, including the structure of the network itself, its structure, and its behavior at each stage. This discussion will focus primarily on the structure of a neural net; however, it can be extended to other types of networks.
+
+A neural network consists of a number of interconnected components called neurons (also known as nodes), which act as input and output nodes. In our case, we have two separate layers—the input layer and the output layer—and we want to learn how to manipulate these components into different patterns.
+
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 1348, 299, 1098, 269, 3581, 288, 263, 1309, 7885, 888, 795, 2348, 34, 202, 202, 44, 873, 4532, 299, 5951, 482, 1811, 419, 1191]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# How to find the equation of a line passing through two points?
+
+I am trying to solve this problem by using the slope-intercept form. I have the following equations:
+
+$$y = mx + c$$
+
+Where $$m$$ is the slope and $$c$$ is the y-intercept.
+
+My first attempt was to write out the equation as a linear equation in one variable (i.e., $$x=mx+c$$). But then I get a quadratic equation with a coefficient of $$x^2$$ which is not the solution. My second attempt was to make the equation a linear equation with a constant coefficient. My first attempt was correct but it did not work because the coefficient of $$c$$ was not present.
+
+What is the best way to solve this system of equations?
+
+• You can use the standard form of the equation, which you will find here. – user7656 Feb 4 '17 at 12:18
+• You could use the standard formula for the slope of a straight line and the slope of the line perpendicular to it. The slope of the straight line is the same as the slope of your graph. If you plot the line on a graph,
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 311, 864, 353, 20, 1341, 353, 21, 2216, 353, 81, 552, 354, 3943, 711, 202, 1465, 330, 263, 1114, 2829, 1373, 17, 3490, 415, 1721, 411, 1418, 299, 5224]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n * (1 / (2 ** (n - 1)))
+
+
+This is a very simple example. Let's say we want to calculate the factorial of a number n, and we want to do this for n = 0..n-1. We can do this by using the formula:
+
+factorial(n) = n! / {n!(n - 1)}
+
+Here, n is the natural logarithm of the factorial of the number n. In other words, it tells us how many times to multiply n by itself. So if we had a number n such that n^n=2^n, then the factorial would be 2^(n/2).
+
+So let's try to find out what happens when we multiply n by the factorial of 2. We'll use the formula: F(n)=(n*F(n))/(2^n). This means that the factorial of N is equal to the product of all positive integers less than or equal to N. That is, F(n)=N!/(2^N).
+
+We can now apply the formula to our problem:
+
+Factorial of n = F(n)!
+
+In our case, since n is an integer,
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.6273424625396729, 0.3726574778556824, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 354, 17, 19, 1341, 353, 20, 647, 311, 12, 711, 202, 1465, 330, 263, 1809, 611, 7144, 702, 269, 2579, 619, 15, 614, 383, 3777, 486, 263, 3851, 288]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 / (1 + n)
+
+
+This is a little more complicated than the previous one, but it gives you a bit of a way to find the Fibonacci number in the first place!
+
+Here's how it works:
+
+int main() {
+int n = 10;
+for (int i=0; i<n; i++) {
+printf("Fibonacci number \t\t\t", i);
+}
+return 0;
+}
+
+• Welcome to Python! I have been using this for a couple of years now and am trying to learn something new. I will try my best to understand what I mean by "recursive". – user99752 Feb 27 '15 at 17:59
+• @user99752 If you want to know more about this, please see my post on "How to find Fibonacci numbers" – JP May 31 '17 at 8:01
+• I'm not sure if I'm really interested in finding the Fibonacci number. It may be that I don't know much about maths or even how to do arithmetic operations, so I'll just say that it's not too difficult to learn. – user99252 Feb 28 '
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 31412, 13676, 2590, 4619, 1541, 2660, 1906, 698, 0]
+first_step_topk_probs=[0.3448927402496338, 0.18460778892040253, 0.14988981187343597, 0.08903829008340836, 0.08903829008340836, 0.06514180451631546, 0.03141861408948898, 0.02298634685575962, 0.02298634685575962, 0.0]
+first_step_topk_text=[' The', ' Cats', ' Yes', ' No', ' Black', ' There', ' Some', ' All', ' It', '']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 808, 17, 31412, 395, 453, 545, 2645, 1091, 581, 395, 839, 289, 269, 3494, 17, 202, 509, 2597, 339, 482, 330, 357, 715, 395, 795, 2584, 288]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is no. Cats are not all black because they are only in the wild.
+The reason for this is that there are two types of cats – those that live in the wild and those that have been bred to be pure white. If you look at the coat of a cat, it's very white. A pure white cat will have black fur but when you look at a pure white cat, you can see the black fur on the head. This is called the "black color" or "white tail". It's also known as the "brown tail" or "pink tail".
+What about the color of the coat? Is it white? Is it black or dark brown?
+Answer 1: White coat
+Answer 2: Black coat
+Hopefully these answers help you understand what a pure white is and why it is so important.
+In general, a pure white coat is a color that has a darker hairline than other colors. However, in order to have a pure white skin, a person must have a certain amount of hair, which may be around 30% to 50%.
+In addition, many people believe that pure white is just another color. In fact, it is the most common color among all colors.
+Many people
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 843, 1012, 637, 409, 1218, 354, 2, 1, 0]
+first_step_topk_probs=[0.5990842580795288, 0.11315247416496277, 0.0785827487707138, 0.06969539821147919, 0.05311159789562225, 0.044311147183179855, 0.042062316089868546, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 4', ' 5', ' 6', ' 3', ' 2', ' 8', ' 1', '', '', '']
+
+[New tokens 9] count=256 first30=[798, 17, 24, 10941, 202, 509, 993, 288, 10941, 289, 263, 7240, 330, 269, 2056, 993, 288, 10941, 486, 835, 722, 486, 1432, 598, 619, 13032, 15, 298, 269, 993]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 4.5 apples
+The number of apples in a bag is the total number of apples you get when you take out one apple, and the number of times you take out an apple.
+Hint: The number of apples is the total amount of apples you got. So the total number is 2^4 = 24
+We can also use this information to solve a problem.
+Let's say we want to find out how many apples are in the bag. We know that there are 12 different types of apples (one apple, two apples, three apples), so we need to multiply the number of apples by 12 to get the number of fruits in the bag:
+12 x 12 = 240
+So, 240 is the number of fruit in the bag, which is 12 apples.
+But wait! There is only one type of apple in the bag! What do we do with that? Well, we need to figure out what kind of apple we will get if we choose the correct type of apple first.
+In order to find out the correct type for each type of apple, we need two numbers, one from our bag and another from the apple itself. In other words, we need both the number of apple in each bag and the number in the apple
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 1289, 1509, 698, 382, 2575, 783, 3919, 0, 1]
+first_step_topk_probs=[0.8439023494720459, 0.02628067135810852, 0.02494692988693714, 0.02368086390197277, 0.022479049861431122, 0.02025531604886055, 0.019227351993322372, 0.019227351993322372, 0.0, 0.0]
+first_step_topk_text=[' I', ' We', ' You', ' It', ' The', ' What', ' This', ' My', '', '']
+
+[New tokens 10] count=256 first30=[356, 4575, 4006, 263, 1809, 11007, 1244, 15, 614, 356, 483, 847, 835, 299, 269, 4608, 339, 263, 1685, 4350, 17, 202, 49, 10319, 718, 29, 698, 415, 733, 287]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I'm getting a little nervous now, but I can't get to the office for a few minutes.
+Natalie: It's been an hour and a half since I got this appointment.
+Mrs. Tomaszewski: I think it was a very hot day.
+Wasn't it too bad?
+Jessica: I'm not sure how to handle that.
+Mike: We're going to have to go back to work.
+Tomaszewicz: The first thing we've been doing is checking my blood pressure.
+Jessic: I know you are in the hospital.
+Matt: Yes, I am.
+Lisa: I don't know if I have hypertension or diabetes.
+Jenny: I know.
+Mick: That's right. I have high blood pressure. It's been a long time since I had it.
+Brian: Right.
+Maggie: And I have diabetes.
+Kathy: I have it.
+Dave: You know, I was driving down the road with my friends at the mall.
+Marilyn: I think I need to take medicine.
+Daisy: I need to stay on my feet longer.
+
+================================================================================

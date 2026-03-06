@@ -45,7 +45,7 @@ buckets:
         require_ast_parse: true
         max_assistant_tokens: 640
 
-      # OCR2 先不启用：公开 HF 版 question 字段为空，需要你先按 question_id 补题面后再做成 jsonl
+      # OCR2 先不启用：公开 HF 版 question 字段为空，需要先按 question_id 补题面后再做成 jsonl
       # - name: open_code_reasoning_2
       #   type: jsonl
       #   path: dataset/sft_canon/ocr2_python.canon.jsonl
@@ -75,7 +75,7 @@ buckets:
 
   D_safety:
     sources:
-      # 如果你已经把 UnsafeChain 转成 canonical jsonl，可以打开它：
+      # 如果已经把 UnsafeChain 转成 canonical jsonl，可以打开它：
       # - name: unsafechain
       #   type: jsonl
       #   path: dataset/sft_canon/unsafechain.canon.jsonl
