@@ -460,6 +460,10 @@ def main() -> None:
         out = trunc_rounds(out, spec.get("max_rounds", None))
         if not out or out[0]["role"] != "system":
             out = [{"role": "system", "content": DEFAULT_SYSTEM}] + out
+        if not any(m["role"] == "user" for m in out):
+            return None
+        if not any(m["role"] == "assistant" for m in out):
+            return None
         n = count_tokens(tok, out)
         if n > max_total:
             return None
