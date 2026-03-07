@@ -1,0 +1,312 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[791, 418, 330, 2827, 601, 289, 3609, 15, 1628, 728]
+first_step_topk_probs=[0.14760135114192963, 0.12625013291835785, 0.1025070920586586, 0.07900531589984894, 0.07499579340219498, 0.057801518589258194, 0.052083492279052734, 0.051848139613866806, 0.04944026097655296, 0.034335579723119736]
+first_step_topk_text=[' would', ' was', ' is', ' named', ' will', ' in', ' asked', ',', ' might', ' may']
+
+[New tokens 1] count=221 first30=[3609, 896, 3577, 299, 1432, 896, 1133, 299, 269, 21958, 17, 202, 5, 44, 1418, 486, 299, 2142, 298, 1137, 269, 21958, 961, 1024, 988, 17, 360, 3287, 483, 847]
+[Full output 1]
+Once upon a time, a curious child asked her mother to take her back to the zoo.
+"I want you to come and see the zoo," she said. "You can't go there."
+The next day, the children began to talk about the zoo's history. They also learned that the zoo was a place where animals were kept.
+"It was really fun for me to be able to see all of these animals," said the children.
+They watched as the children went on their trip to the zoo and discovered that they had been introduced to a new animal species.
+"We are going to have a lot more fun with this animal," said the girls.
+The children loved the animals, and they wanted to know why they were so special.
+"How did they get here?" one girl asked.
+"That's what I always do when I get sick," said the other girl.
+The kids made plans to visit the zoo in order to learn more about the animals.
+When the children returned home, they told them they were very proud of the animals and their unique way of life.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 1134, 1112, 17, 698, 330, 3323, 289, 269, 5235, 645, 288, 269, 9556, 15, 298, 330, 286, 15688, 419, 269, 11718, 288, 343, 76, 451, 335]
+[Full output 2]
+Paris is the capital of the province of the same name. It is located in the southern part of the province, and is bordered by the municipality of Ciudad Juárez to the north, and El Paso to the west.
+The city of Ciucarrón is the seat of the province. The municipality is divided into 6 municipalities:
+- Alcalde: Ciucar de la Frontera
+- Arecibo: Ciúnacos de los Huesos
+- Maracaibo: Concepción de los Ángeles
+- Montes: Ciunas de la Baja California
+- Nuevo Laredo: Conceso de las Cienegas
+- San Juan: Concesos de las Ciucurros
+- Santa Cruz: Concesios de las Círculas
+- Tijuana: Concesia de los Estados Unidos
+- Tamaulipas: Concesía de los Estado de Tamaulicos
+- Tehuantepec: Concesinas de las Cihuatas
+- Tehuelche: Concesina de las Ciscos del Tamaulico
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 357, 483, 342, 3020, 359, 269, 1701, 288, 795, 7527, 17, 535, 482, 1832, 15, 269, 28071, 330, 269, 4409, 357, 578, 269, 1134, 8878, 359, 269, 2189]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector that can be written as the sum of two vectors. In this case, the eigenvalue is the vector that has the same magnitude as the original vector. The eigenvectors are usually denoted by "v", and the eigenvalues are often denoted by "λ".
+The eigenvalue of a matrix A is its transpose, which is equal to the determinant of A times the product of the eigenvalues:
+- det(A) = det(A).
+For example, if we have the following matrix,
+- det((2x1 + 2x2 + 3x3 + ...)) = det(2x1 x2 + 2x3 + 3x4 + ...) = det((2 x1 x2 - 2 x1 x3) / (2 x1^2 + 2 x1^3 + 3 x2^2 + 3 x3^2 + ...)).
+If we have the matrix A, we get:
+- A = det(det(A)) = det((det(2x2 + 2)) * det(det((2 x2 + 1)))).
+Note that when you multiply these matrices together, you must always keep track of the number of rows and columns in each row. This makes it easier for us to
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 491, 483, 395, 9845, 5546, 1420, 1798, 3069, 1085]
+first_step_topk_probs=[0.3582228124141693, 0.2127932906150818, 0.17277465760707855, 0.10885656625032425, 0.030976789072155952, 0.027912404388189316, 0.025151187554001808, 0.022663099691271782, 0.015739211812615395, 0.012779230251908302]
+first_step_topk_text=[' use', ' have', ' can', ' are', ' rely', ' describe', ' allow', ' learn', ' attempt', ' model']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 298, 3235, 269, 8020, 17, 1658, 2269, 395, 1431, 885, 289, 4855, 2465, 15, 913, 581, 395, 885, 299, 24007, 870, 707, 7590]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data and predict the outcome. These models are often used in machine learning, where they are used to classify data into categories based on their properties. The main goal is to improve the accuracy of our models by increasing the number of training examples and training sets, while still ensuring that the model performs well in practice.
+
+### Data mining
+
+Data mining involves using data to create new information or objects that are useful for further analysis. It allows us to focus on the most important parts of our dataset (data features) rather than relying solely on individual observations. This approach helps us maintain a high level of precision while also improving the overall performance of our models.
+
+##### Data mining
+Data mining is an advanced technique that involves examining a large set of data points. By analyzing the data, we can gain insights about the underlying structure of the data itself. One common approach is to use machine learning techniques, which rely heavily on the principles of data mining. However, these methods do not necessarily have the same complexity as traditional approaches like machine learning, but instead rely on a combination of data mining techniques.
+
+In this article, we will discuss how to analyze and analyze data from a variety of datasets including machine learning, data mining, and
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=180 first30=[263, 647, 286, 3, 711, 6, 1348, 620, 486, 5951, 637, 91, 65, 21, 552, 798, 92, 333, 843, 34, 202, 202, 7714, 2234, 15, 9211, 202, 202, 7, 22]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# How do you solve 3x^2 - 4y = 5?
+
+May 14, 2016
+
+$3 x {h}^{2} - 4 y = 5$
+
+#### Explanation:
+
+$5 {h}^{4} - 4 {h}^{6} = 5$ and $4 {h}^{8} - 6 {h}^{9} = 0$
+
+To find the value of $h$, divide both sides by $4$.
+
+$\frac{1}{2} \left({h}^{2}\right) = \frac{1}{\sqrt{2}}$
+
+$\Rightarrow h = \frac{\sqrt{2}}{2}$
+
+$\therefore \frac{h}{2} = \frac{{h}^{2}}{4}$
+
+Hence option (B) is correct.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=128 first30=[622, 311, 13, 81, 711, 202, 1052, 16216, 29, 346, 538, 28045, 11, 492, 15, 311, 464, 331, 490, 453, 311, 29, 416, 622, 643, 726, 311, 333, 311, 864]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n*n
+
+
+class Solution:
+    def factorial(self, n):
+        if not n:
+            return 0
+
+        n = n * (n + 1)
+
+        for i in range(1, n+1):
+            for j in range(i+1, n-1, -1):
+                if n % j == 0:
+                    break
+
+                n -= 1
+
+            if n > 0:
+                return n / n
+
+    def factorial_from_string(self, string):
+        """
+        :type string: str
+        :rtype: int
+        """
+        return self.factorial(int(string))
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 537, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.5067164301872253, 0.41142159700393677, 0.0818619653582573, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', ' #', '', '#', '', '"', '!', '', '']
+
+[New tokens 7] count=117 first30=[622, 354, 647, 353, 20, 1341, 311, 12, 864, 353, 21, 2216, 311, 552, 354, 12, 711, 202, 1465, 330, 269, 1134, 359, 269, 775, 1373, 2080, 15, 1722, 411]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1 + (1 / n) * (2 ** n - 1)
+
+
+This is the same as the first example above, except we can see that it works with any number of integers.
+
+# Fibonacci Number:
+
+fib = [0] * 5
+for i in range(5):
+    for j in range(i+1, 5):
+        if fib(j) == 0:
+            continue
+        if fiber(j) != 0:
+            break
+
+    fib(3)
+print(fib(10))
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 31412, 4619, 2590, 1541, 2, 3, 1, 0]
+first_step_topk_probs=[0.34196987748146057, 0.25019049644470215, 0.16493570804595947, 0.08380332589149475, 0.07955031096935272, 0.07955031096935272, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' The', ' Yes', ' Cats', ' Black', ' No', ' There', '', '', '', '']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 808, 17, 202, 14405, 10676, 395, 269, 851, 1488, 1875, 289, 269, 1560, 1705, 17, 1109, 491, 263, 4304, 7633, 12153, 374, 2886, 11067, 351, 553, 4717]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is no.
+Black cats are the most common species in the United States. They have a dark brown coat with white spots on their sides and a short tail.
+The best way to tell black cats apart is by their appearance. Black cats are usually larger than other cats and have darker fur. They also have a small head and long black ears.
+Although there is a lot of variation among the different breeds of cats, they all look alike. Some people think that black cats are just another color or breed, while others think that they are simply a combination of two different colors.
+All cats have a unique set of eyes, which makes them very sensitive to light. A cat's eyes are so tiny that they can see only through small lenses. When a cat has a problem with a particular eye, it may be difficult for the cat to find the correct one.
+There are many variations of color in cats. Many people use a variety of colors including red, yellow, orange, green, blue, purple, white, and black.
+Color is determined by the color of the eye itself. There are various shades of color, depending on how much of each color is present. For example, red and tan are the same as black, but the
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 843, 1012, 2050, 409, 637, 354, 382, 1218, 0]
+first_step_topk_probs=[0.3587833046913147, 0.1266024261713028, 0.10828878730535507, 0.08792363852262497, 0.0722011998295784, 0.0659487321972847, 0.06432630866765976, 0.0579628124833107, 0.0579628124833107, 0.0]
+first_step_topk_text=[' 4', ' 5', ' 6', ' One', ' 2', ' 3', ' 1', ' The', ' 8', '']
+
+[New tokens 9] count=185 first30=[2050, 13032, 330, 263, 744, 21, 17, 429, 11948, 339, 1010, 288, 269, 1759, 874, 29, 263, 744, 20, 15, 1086, 2064, 3465, 15, 263, 744, 24, 15, 1086, 2064]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple is a $2.00 gift for each of the following people: a $1,000 checkbook, a $5,000 check book, a $10,000 check sheet, a $15,000 check notebook, and a $20,000 check card. How many of these are in a book?
+The number of apples that can be bought is $7. The total amount of apples sold at the store is $4. The total cost of all the apples sold at that store is $8. What is the price of each of the apples?
+Answer by Marking the Road
+Here's another way to find out how much money you'll make if you make an investment of 1% of your initial investment.
+What is the total amount of money you will get when you make an 8% investment of your initial investor's investment?
+Answerby Marking the Way
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 1278, 783, 1289, 1509, 2575, 698, 338, 1541]
+first_step_topk_probs=[0.7083206176757812, 0.04823463410139084, 0.04578670486807823, 0.035289209336042404, 0.03349826857447624, 0.02515447326004505, 0.020962681621313095, 0.01793033257126808, 0.014184059575200081, 0.014184059575200081]
+first_step_topk_text=[' I', ' The', ' If', ' This', ' We', ' You', ' What', ' It', ' A', ' There']
+
+[New tokens 10] count=256 first30=[356, 3442, 733, 289, 269, 5988, 339, 263, 7543, 288, 2233, 1244, 298, 491, 733, 9529, 374, 263, 4401, 1375, 288, 2404, 17, 3919, 4035, 3968, 627, 357, 356, 418]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I've been in the hospital for a couple of days now and have been diagnosed with a rare type of cancer. My doctor told me that I was on a bone marrow transplant, but he said it wasn't necessary to do so because there are so many other types of cancers that could be treated with bone marrow transplants. He also told me that his doctors didn't know what kind of blood cell that he had. And I think he's just going to die as a result of that.
+The truth is, most people who receive bone marrow transplantations don't get the disease or cure. In fact, about one-third of all patients who receive bone-marrow transplantation experience some sort of side effect from the procedure. So if you're looking for a bone marrow donor, consider getting a bone marrow replacement transplant.
+Grafting is a good way to treat bone marrow problems. If you're not able to get a transplant, your doctor may recommend you try the following:
+If you're having trouble growing your own bone marrow, you can ask your doctor about a bone marrow stem cell transplant. This treatment helps replace the cells that your body produces. The bone marrow is made up of two different kinds of cells called bone marrow stem cells. Bone marrow
+
+================================================================================

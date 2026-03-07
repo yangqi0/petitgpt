@@ -1,0 +1,327 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[791, 330, 418, 601, 2827, 1628, 728, 289, 15, 3609]
+first_step_topk_probs=[0.13427595794200897, 0.12746146321296692, 0.1090235710144043, 0.09823838621377945, 0.06147601455450058, 0.058356110006570816, 0.05258321762084961, 0.04738141596317291, 0.04507875815033913, 0.04052747040987015]
+first_step_topk_text=[' would', ' is', ' was', ' will', ' named', ' might', ' may', ' in', ',', ' asked']
+
+[New tokens 1] count=256 first30=[578, 733, 998, 289, 269, 1471, 288, 263, 1844, 17, 382, 929, 330, 263, 929, 668, 418, 3673, 299, 1169, 298, 610, 3222, 15, 614, 3338, 3222, 395, 453, 1548]
+[Full output 1]
+Once upon a time, a curious child has been found in the care of a family. The child is a child who was born to him and his parents, but whose parents are not present at birth. This child is named Hannah.
+- (1) A child whose parents are present at birth is called a child of the father's name.
+(2) The child is named after his father.
+(3) A child named Hannah is called a boy or girl because it is the name of a boy or a girl.
+- This child is called a girl if she is born with a male name.
+- The child is called an apple if he is born with an apple.
+- A child named Mabel is called a woman if she is conceived by a man.
+- Children named after their parents are called children of the same mother.
+- Parents named after their mothers are called parents of their children.
+- In the case of children named after their fathers, the children are called children from their mothers.
+- All children named after the parents are called all children of the father.
+- When a child named Hanna is born, he will be called Hanna.
+- Hanna is called a cat.
+- As a child named Mama is
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 1134, 1112, 17, 202, 509, 9556, 288, 368, 564, 871, 82, 418, 4047, 289, 1720, 1161, 15, 444, 269, 9556, 288, 1078, 4051, 327, 17, 698]
+[Full output 2]
+Paris is the capital of the province of the same name.
+The province of Marengo was formed in 1510, from the province of Algarve. It had been ruled by the Alcuin family since the time of the Conquest. The town was named after the Roman town of Marenda. In 1689, the town was annexed to the province of Toulouse.
+In 1798, the province of Montpellier was created as a part of the new province of Northumberland. It became a separate province in 1803.
+The Province of Strasbourg was formed on 1 January 1830 and became a part of France in 1828. In 1840, the province was split into two provinces: Strasbourg and Saint-Germain-en-Laye. In 1848, the province became a part (Nord) of the French Republic.
+From 1871 until 1980, the province contained all of the territory of the former province of Northamptonshire.
+The following table shows the population of the province in 1990.
+|Population||Year in which the population was calculated|
+|Year of establishment||year of establishment|
+|1||1905||3,346||14,942||11,8
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 357, 483, 342, 3020, 359, 269, 1701, 288, 795, 7527, 17, 1220, 1373, 15, 1936, 269, 1759, 3823, 29, 202, 202, 63, 7018, 94, 5404, 13424, 990, 4820]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector that can be written as the sum of two vectors. For example, consider the following matrix:
+
+\begin{align*} \lambda = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix} \begin{pmatrix} 2 & -1 \\ 0 & -2 \end{pmatrix} \begin {pmatrix} 3 & -1 \end{poles} \begin={0, -1, 0}, {0, 0, 1}} \begin{align*}\lambda &= 1 \end{-1},\end{align*}
+
+where λ represents the eigenvalue and b represents the vector corresponding to the eigenvalue. Note that the dot product between these matrices is zero since they are both real numbers. This means that if we have a scalar value (a) for which the eigenvalues are equal, then we can always find another scalar value such that their sum equals zero. Therefore, we can write the equations above as follows:
+
+$$-x_{ij} + x_{ji} = 0,$$ $$y_{ij} = 0.$$
+
+By finding the eigenvectors associated with these equations, we can compute the eigenvectors associated to the given matrix. Specifically, we can use the eigenvector decomposition method to solve this
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 491, 395, 9845, 1798, 5546, 1420, 3069, 14071]
+first_step_topk_probs=[0.2866821587085724, 0.20974113047122955, 0.18899264931678772, 0.13395503163337708, 0.04396413266658783, 0.02898295968770981, 0.027512051165103912, 0.023532303050160408, 0.020128244534134865, 0.01259593479335308]
+first_step_topk_text=[' use', ' can', ' have', ' are', ' rely', ' learn', ' describe', ' allow', ' attempt', ' incorporate']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 298, 3235, 269, 8020, 17, 1658, 2269, 395, 1431, 885, 289, 4855, 2465, 15, 913, 581, 395, 885, 299, 24007, 2281, 13384, 707]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data and predict the outcome. These models are often used in machine learning, where they are used to classify complex datasets into categories such as words or numbers.
+
+In statistics, the term "prediction" is also used to refer to the process by which an estimator gets its predictions. The process involves calculating the expected value (or probability) of an estimator, using the sample space of all possible values of the parameter (the parameter being estimated). This method allows for more accurate prediction than other methods based on the sample space.
+
+A common use of prediction techniques is in modeling real-world problems. For example, in the context of machine learning, it may be useful to consider the following problem: given a dataset containing 20 observations, how many times do we expect to see the same data for 30 different observations? In this case, the expected number of observations per observation is 20, but we can estimate the mean of the observed data by taking the average over all observations from the dataset. This is called the prediction error.
+
+Prediction errors can also be used to help with decision making. A simple example would be predicting whether a student will attend a class at school next week. If the predicted number of students is 20, then the
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 5427, 6649, 29, 8163, 16, 27, 5427, 202, 807, 1401, 8644, 626, 655, 15551, 66, 22513, 202, 1018, 1656, 202, 1018, 306, 202, 1018]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+import os
+import re
+import time
+from datetime import date
+from django.db import models
+from django import forms
+from django._utils import timezone
+from django_extensions.db.fields import CharField
+from django.__name__ import lookup
+from django2.db.models import Count
+from django3.http import Http404
+from django4.urls import reverse
+from django5.contrib.auth.models import User
+from django6.contrib.postgres.fields import JSONField
+from .base import BaseModelMixin
+from django1.db.backends.sqlalchemy import SQLAlchemyBase
+from django0.utils import timezone as timezone_timezone
+from django7.utils import dateutil.parser
+from django10.utils.translation import ugettext as _
+from django1521 import models
+
+class UserProfile(User):
+    """
+    User profile class that will be used to create and update user profiles.
+    """
+
+    # Default User model.
+    username = models.CharField(max_length=50)
+    email = models.EmailField()
+    password = models.TextField
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=100 first30=[622, 311, 13, 81, 711, 202, 1052, 16216, 29, 346, 538, 28045, 11, 492, 15, 311, 464, 331, 490, 453, 311, 29, 416, 622, 643, 726, 311, 333, 1804, 11]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n*n
+
+
+class Solution:
+    def factorial(self, n):
+        if not n:
+            return 0
+
+        n = len(n)
+        if n % 2 == 1:
+            return n
+        else:
+            for i in range(2, n - 1):
+                for j in range(i + 1, n):
+                    if n % j == 0 and n != i:
+                        return j
+
+    def __init__(self):
+        self.factorial = []
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 537, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.4756004810333252, 0.45146381855010986, 0.07293570041656494, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', ' #', '', '#', '', '"', '!', '', '']
+
+[New tokens 7] count=207 first30=[622, 354, 647, 353, 20, 1341, 311, 12, 864, 409, 1190, 11, 81, 552, 354, 12, 711, 202, 1465, 330, 269, 1134, 359, 269, 775, 1373, 15, 1722, 2761, 288]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1 + (1 / n) * 2**(n - 1)
+
+
+This is the same as the first example, except instead of the result being a list of integers, it was an array. The function uses a binary search algorithm to find the next element in the array. It will return the next element after the current element.
+
+• You can see how this works with the example from the previous post. – J. M. is back Feb 22 '15 at 19:42
+• @J.M. I am not sure what you mean by "next" and "previous". There are many ways to solve this problem, but I just want to say that this is a very simple one. – user977 Feb 23 '15 at 0:04
+• @user977 If you want to know more about this, please do read my answer on the page, or perhaps write me a comment explaining your question. – user8017 Feb 24 '15 at 10:16
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 31412, 13676, 2590, 1541, 4619, 2, 3, 1, 0]
+first_step_topk_probs=[0.3951428234577179, 0.32083064317703247, 0.12563906610012054, 0.06383682787418365, 0.05460253730416298, 0.03994806855916977, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' The', ' Cats', ' Yes', ' No', ' There', ' Black', '', '', '', '']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 808, 17, 202, 2573, 395, 914, 2584, 288, 10676, 289, 269, 1165, 15, 614, 453, 545, 288, 780, 395, 2645, 17, 31412, 395, 3479, 10951, 359, 2163]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is no.
+There are many types of cats in the world, but not all of them are black. Cats are generally classified as either black or brown (or both) depending on their coloration. Black cats are usually more easily identified by their black fur than brown ones because they have a darker coat. Brown cats have a lighter coat than black cats because they have less hair.
+The most common difference between black and brown cats is that they have a white undercoat with a red band across the front of the neck. They also have a dark spot above their eyes.
+Brown cats are more likely to be spotted by their black-and-brown coats than brown cats, which have a white overcoat. This is because brown cats have a darker undercoat than brown cats do.
+What's the Difference Between "Black" and "Brown" Cat Habits?
+In general, if you see a cat with white undercoats, it's probably black. In fact, if you're seeing a cat with a black undercoat, it's likely to be brown. But if you're actually seeing a cat that has a white undercarriage, you should definitely be aware of this fact.
+If you see a black
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 843, 1012, 2050, 382, 637, 354, 409, 1218, 5517]
+first_step_topk_probs=[0.33857986330986023, 0.11947330832481384, 0.09700475633144379, 0.09208168089389801, 0.07476449012756348, 0.0739227756857872, 0.06736839562654495, 0.0563330315053463, 0.04441201314330101, 0.036059699952602386]
+first_step_topk_text=[' 4', ' 5', ' 6', ' One', ' The', ' 3', ' 1', ' 2', ' 8', ' Two']
+
+[New tokens 9] count=256 first30=[2050, 13032, 330, 263, 5034, 288, 7914, 17, 5517, 395, 10941, 298, 795, 395, 24847, 17, 338, 5034, 288, 5583, 330, 263, 5034, 17, 202, 11920, 269, 6757, 1890, 722]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple is a pair of fruits. Two are apples and two are oranges. A pair of fruit is a pair.
+Find the missing numbers when the sum of the first n natural numbers is 26, if n = 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 1278, 2575, 1509, 1289, 783, 698, 360, 3919]
+first_step_topk_probs=[0.7019243836402893, 0.040241699665784836, 0.03920727223157883, 0.0353287011384964, 0.033535756170749664, 0.026528965681791306, 0.02584702894091606, 0.019921084865927696, 0.019921084865927696, 0.016601402312517166]
+first_step_topk_text=[' I', ' The', ' If', ' What', ' You', ' We', ' This', ' It', ' "', ' My']
+
+[New tokens 10] count=256 first30=[2575, 330, 669, 2942, 374, 269, 4083, 34, 3, 711, 807, 5210, 655, 3071, 202, 807, 1411, 3322, 655, 6762, 15, 5970, 15, 11786, 15, 17404, 15, 16828, 202, 1052]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience with the stress?
+
+from django import forms
+from .models import User, Post, Article, Tag, Comment
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ('title', 'body')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **{
+            'fields': ('id', 'name'),
+            'description' : kwargs['slug'],
+            'icon_url' : kwargs.get('icon_url'),
+            'icon' : kwargs["icon"],
+            'tags' : kwargs[
+                "tags"
+            ],
+            'category' : kwargs[:5],
+            'date_created' : kwargs[-1]
+        })
+
+class CommentForm(forms._Form):
+    title = forms.CharField(label='Title', required=True)
+    body = forms.TextField()
+    description = forms.Textarea()
+    icon_url = forms.URLField()
+    icon = forms.ImageField(required=False)
+    tags = forms.MultipleChoiceField(choices=[(r'^([a-zA-Z0-9\s]+)$', r'[\w\-\s\w
+
+================================================================================

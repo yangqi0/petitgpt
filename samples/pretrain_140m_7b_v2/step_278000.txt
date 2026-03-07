@@ -1,0 +1,304 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[791, 330, 418, 601, 1628, 2827, 728, 15, 289, 3609]
+first_step_topk_probs=[0.1623287796974182, 0.1251116842031479, 0.11876226961612701, 0.09153366833925247, 0.07829289883375168, 0.06356886029243469, 0.06034274771809578, 0.04257672652602196, 0.041907165199518204, 0.0397803820669651]
+first_step_topk_text=[' would', ' is', ' was', ' will', ' might', ' named', ' may', ',', ' in', ' asked']
+
+[New tokens 1] count=163 first30=[330, 1163, 16852, 419, 269, 4769, 299, 263, 1563, 17, 382, 4769, 330, 1000, 1496, 8596, 339, 806, 299, 3408, 269, 2351, 351, 269, 4477, 298, 269, 1293, 395, 3609]
+[Full output 1]
+Once upon a time, a curious child is being guided by the teacher to a book. The teacher is then given instructions for how to write the words on the board and the children are asked to make their own writing cards using the words they have already learned.
+The teacher can also use the cards to help the children to write their own stories or poems. They can also give them advice about what to do next in the story. For example, if the teacher says, "I like to play this game with my friends," the children may be asked to write down their ideas and then ask each other to tell the story.
+The children can also take turns reading and writing their own stories as well. This helps them learn to make connections between written and spoken language. They can even try out different types of books and different kinds of music.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 7535, 281, 8191, 15, 298, 330, 269, 1408, 3796, 2317, 289, 269, 9556, 17, 698, 330, 3323, 351, 269, 1179, 5358, 288, 269, 3345, 336, 1101, 6420]
+[Full output 2]
+Paris is the capital of the province of Catalonia, and is the second largest city in the province. It is located on the right bank of the River Sierras (Mesa delle Chiaie), which forms a border with the province of Oviedo.
+The province has an area of 469,536 km2, and its population is about 8.7% of the total. The main economic activities are agriculture, forestry, tourism, and fishing. The province's economy is based on the production of oil, natural gas, and timber products. There are two main industries: the production of sugar and olive oil, and the manufacture of wine and other beverages.
+It is situated in the center of the province, with a surface area of 704,818 km2. It is part of the province's territory of Guadiana.
+From the north, the province borders on the island of Granada, the north-west, and the province of Asturias, and the south-east. The southern portion of the province is called the Province of Ovilos, while the northern portion is called the Region of Algarve.
+The northern part of the Province of Asturia is the most important region for the development
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 288, 1623, 1890, 374, 1623, 645, 3007, 299, 269, 1623, 993, 17, 698, 483, 342, 5454, 359, 263, 1701, 288, 795, 7527, 353, 15146, 374, 3636, 3098, 573]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector of real numbers with real part equal to the real number. It can be represented as a sum of two vectors (vectors with zero elements). The eigenvalues are the values of the vector that have the same magnitude and direction as the vector with the same magnitude.
+The eigenvalues of a matrix are usually denoted by a single letter, e.g., $A = \begin{bmatrix} 1 & 0 \\ 0 & 1\end{bmatrix}$. The eigenvectors of a matrix may also be called eigenvectors.
+If a matrix has only one column or row, then it is called a basis for the space of all possible matrices. For example, if we have a matrix $A$ such that $a_1 + a_2 + ... + a_n = 0$, then we can write it as follows:
+- $A = A_0 + A_1 - A_2 - ... + A_{n-1}$
+- $B = B_0 + B_1 - B_2 -... + B_{n-2}$
+- $\lambda_i = \lambda_j - \lambda_k$
+- $C = C_0 + C_1 - C_2 - .... + C_{n-k
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 491, 483, 395, 1798, 1420, 5546, 9845, 3069, 1991]
+first_step_topk_probs=[0.27684709429740906, 0.2247823029756546, 0.2247823029756546, 0.12935951352119446, 0.03631443530321121, 0.025219876319169998, 0.022724993526935577, 0.020476941019296646, 0.015782196074724197, 0.012163813225924969]
+first_step_topk_text=[' use', ' have', ' can', ' are', ' learn', ' allow', ' describe', ' rely', ' attempt', ' provide']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 298, 3235, 269, 8020, 17, 1658, 2269, 395, 1431, 885, 289, 4855, 2465, 15, 913, 581, 395, 885, 299, 24007, 870, 707, 7590]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data and predict the outcome. These models are often used in machine learning, where they are used to classify data into categories based on their properties. The main goal of this paper is to provide an introduction to the concepts behind these models.
+
+### 1.1 Modeling and Prediction
+
+In this section we will discuss the basic concept of model building, and how it can be applied to any model. We will also briefly describe some common algorithms for the prediction of the model, including the Gaussian Processes (GP) algorithm, and the Bayesian Inference (BIP). In the next sections we will review some of the methods used to build models from scratch.
+
+## 2 Acknowledgements
+
+The authors would like to thank the following people:
+• R. D. Smith, R. P. Tucker, S. G. Jones, B. K. Watt, N. J. Tucker and M. S. Taylor for their contributions to the paper;
+• E. C. Davis, D. L. Bastian, B. P. Chua and P. S. Smith for helpful comments and suggestions;
+• D. W. Eckert, J. M
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 1348, 620, 486, 5951, 637, 91, 65, 21, 552, 798, 92, 333, 843, 34, 202, 202, 7714, 2234, 15, 9281, 202, 202, 7, 22]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# How do you solve 3x^2 - 4y = 5?
+
+May 14, 2018
+
+$3 x + y = 5$
+
+#### Explanation:
+
+First, let's start by finding the roots of the equation. We know that $a - 2 = 0$, so we can plug in the values of $x$ and $y$:
+
+$4 x + 4 y = 5 \text{ or } y = - 2$
+
+Now, we can substitute these values into the equation to get:
+
+$5 x + 3 y = 5 \\ 6 x - 8 y = - 8 \\ 8 x - 12 y = - 7$
+
+We now have two equations with the same variables:
+
+$- 2 x + 2 y = 5 ;$
+
+$- 3 x + y + 3 = 5 ;\quad x = 1 , y = - 1$
+
+Substituting these values into our system gives us:
+
+$\left(\frac{- 3}{- 2}\right) x + \left(- 1\right) y = 5 + \left(\frac{1}{2}\right) \cdot (- 1)$
+
+Solving this system yields:
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=209 first30=[622, 311, 13, 81, 711, 202, 2774, 15, 1427, 415, 1137, 806, 299, 817, 482, 1392, 289, 8695, 17, 1289, 3114, 1189, 419, 4531, 829, 1231, 1392, 298, 1191, 269]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n*n
+
+
+Now, let's see how to use this function in Python. We'll start by creating our own function and using the built-in functions. First, we need to create our own function. To do this, we will use the built-ins provided by the library:
+
+import math
+
+def f():
+    return int(input("Enter number: "))
+
+# The result is the factorial of the number.
+
+print(f())
+
+# Now, we need some other function to calculate the factorial of a number.
+# In this example, we have an integer n, which we can call as n = 3, and we want to find out how many times it takes to divide 3.
+
+for i in range(1, 3):
+if i % 2 == 0:
+print(i)
+else:
+print("The factorial of ", i, " is", str(int(math.ceil(i / 2))) + " times")
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 537, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.5585305094718933, 0.3682062327861786, 0.0732632577419281, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', ' #', '', '#', '', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 354, 647, 353, 20, 1341, 311, 12, 864, 353, 20, 552, 311, 12, 711, 202, 1465, 1392, 483, 342, 885, 299, 1098, 269, 775, 993, 289, 263, 1180, 15]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1 + (1 / n) * (1 - n)
+
+
+This function can be used to find the first number in a list, or it can be used as an input for a recursive function. The function can also be used to calculate the Fibonacci numbers recursion limit, which is defined as the maximum of the following values:
+     1   2   3   4   5  6   7   8   9   10   11   12   13   14   15   16   17   18   19   20   21   22   23   24   25   26   27   28   29   30   31   32   33   34   35   36   37   38   39   40   41   42   43   44   45   46   47   48   49   50   51   52   53   54   55   56   57   58   59   60   61   62   63   64   65   66   67   68   69   70   71   72   73   74   75   76   77   78   79   80   81   82   83   84   85   86   87   88   89   90   91   92   93  
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 31412, 2590, 4619, 3, 4, 2, 0, 1]
+first_step_topk_probs=[0.3388741612434387, 0.3053509593009949, 0.22339953482151031, 0.08304468542337418, 0.049330614507198334, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' Cats', ' No', ' Black', '', '!', '', '', '']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 808, 17, 202, 14405, 10676, 395, 269, 851, 1488, 1875, 288, 3191, 289, 269, 1560, 1705, 17, 1109, 395, 269, 851, 5307, 298, 395, 998, 289, 545]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is no.
+Black cats are the most common species of cat in the United States. They are the most numerous and are found in all parts of the world except for Antarctica.
+The reason why cats are so rare is because they are a very small animal with a few hundred hairs on their heads.
+They do not have a coat of fur which makes them look like a cat.
+In fact, they are much more common than people realize. Cats are the only cats that are found in the wild. They are found in captivity by both humans and cats.
+There are several other ways to identify a cat. The best way is to take your cat to the vet right away if you suspect it might be a cat. If you don't find it, you should get a veterinarian who will take you to the vet to confirm the diagnosis.
+A cat's coat is different from a human's. In the human's coat, there is a lot of hair covering the body and there is also a lot of waterproofing material. This helps keep the cat's body cool and provides a constant source of heat.
+Animals that live in the wild are often called 'wild' or 'cold'. These cats are usually found in caves or underground
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 843, 2050, 382, 354, 1012, 409, 637, 1218, 744]
+first_step_topk_probs=[0.32652193307876587, 0.11521846801042557, 0.08880243450403214, 0.08429563790559769, 0.07595674693584442, 0.07595674693584442, 0.07527177035808563, 0.06279943883419037, 0.0585421584546566, 0.036634743213653564]
+first_step_topk_text=[' 4', ' 5', ' One', ' The', ' 1', ' 6', ' 2', ' 3', ' 8', ' $']
+
+[New tokens 9] count=256 first30=[2050, 13032, 330, 5405, 744, 21, 17, 5517, 10941, 395, 5405, 7, 20, 17, 2050, 13032, 330, 744, 22, 17, 8704, 10941, 395, 5405, 744, 23, 17, 11826, 10941, 395]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple is worth $2. Two apples are worth$1. One apple is $3. Three apples are worth $4. Six apples are worth 6. Four apples are worth 1.
+
+Let's start with the first question. "A man bought a lot of apples at a rate of Rs. 10 per annum." What will be his total price after that?
+
+"A man bought two lots at a rate, one of which was a small amount of money."
+
+So, the total price after the first question is Rs. 5. The first question asks for the sum of all the amounts.
+
+In this case, we have:
+
+Total Price = Total Price + (Total Price - 1)
+= Rs. 5
+
+Now, we can see that the total price is Rs. 7. The second question asks for "a man who sold some apples at a price of Rs. 20 per annum". In this case, the total cost of selling apples is Rs. 15. So, the total costs of selling apples are Rs. 15 + Rs. 10 = Rs. 18.
+
+Finally, let's add up all the costs. This time, we have to find out how much each person owns.
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 1278, 382, 1289, 2575, 1509, 783, 360, 338, 698]
+first_step_topk_probs=[0.6667423844337463, 0.0529017373919487, 0.05154188349843025, 0.03397849202156067, 0.029830152168869972, 0.028316261246800423, 0.0242201816290617, 0.022400006651878357, 0.019159741699695587, 0.014017567038536072]
+first_step_topk_text=[' I', ' If', ' The', ' We', ' What', ' You', ' This', ' "', ' A', ' It']
+
+[New tokens 10] count=111 first30=[2575, 330, 669, 2942, 374, 269, 1759, 7042, 34, 202, 16, 2575, 330, 669, 1466, 1481, 351, 4083, 298, 9792, 34, 202, 16, 1348, 483, 486, 1005, 627, 4560, 374]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience with the following topics?
+- What is your current research on stress and anxiety?
+- How can you help me deal with stress in my life?
+- Why do people feel that they are stressed out, or not at all?
+- Do you have any other questions to ask?
+- Is there anything that you would like to learn more about?
+- I've been working on this for a couple of years now. I know it's not easy but I hope it helps.
+Happy New Year!
+
+================================================================================

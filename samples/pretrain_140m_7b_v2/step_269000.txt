@@ -1,0 +1,330 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[418, 791, 330, 2827, 601, 15, 1628, 289, 3609, 728]
+first_step_topk_probs=[0.13150149583816528, 0.11247920244932175, 0.09620855003595352, 0.09132596850395203, 0.07811525464057922, 0.06458409875631332, 0.04888327047228813, 0.03969011828303337, 0.03576376661658287, 0.0322258286178112]
+first_step_topk_text=[' was', ' would', ' is', ' named', ' will', ',', ' might', ' in', ' asked', ' may']
+
+[New tokens 1] count=256 first30=[578, 733, 998, 289, 269, 1471, 288, 263, 1844, 17, 382, 929, 330, 263, 929, 668, 418, 3673, 299, 3222, 668, 586, 8066, 299, 2748, 339, 3035, 1471, 17, 382]
+[Full output 1]
+Once upon a time, a curious child has been found in the care of a family. The child is a child who was born to parents who were unable to pay for medical care. The child was taken from his mother and brought to a hospital.
+The child had a face that was different than the other children in the family. He had no clothes, shoes or clothing. The child's mother said that she would have to take him home. The child had no shoes. The doctor said that he had to take him to the hospital because he did not want to go back home. The doctor told the child to stay with the child until the doctor ordered it. The child went home without any shoes.
+The doctor also told the child that he had been taken off of bed with a bandage on his wrist. The child took out a bandage and put it over his head. The doctor explained that the bandage had been removed when the child was too old to take care of himself. The doctor gave the child a medicine bottle and told the child how to take care. The doctor then told the child about the child's condition. The child felt better but still needed to be taken off of the bed. The doctor asked the child to wear a shirt and tie as well as a shirt. The child
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=239 first30=[269, 9556, 288, 269, 1134, 1112, 17, 698, 330, 3323, 289, 269, 5235, 645, 288, 269, 9556, 15, 1661, 269, 2868, 288, 2463, 324, 3088, 17, 202, 202, 509, 2317]
+[Full output 2]
+Paris is the capital of the province of the same name. It is located in the southern part of the province, near the town of Marseille.
+
+The city of Marseilles has a population of approximately 790 inhabitants (2010). The main street in the city is called the "Valli" and is one of the most important streets in Marseille and also one of the major roads that connect the city with other cities. It is a very popular destination for tourists to visit the city and it is the main shopping center of Marseillaise.
+
+Main sights
+
+Apart from the city centre there are many other buildings on the site of the ancient city. One of them is the castle of Saint-Michel.
+
+Notable people
+
+ Pierre de la Verendrye (1588–1644), French poet and writer
+ Jean-Jacques Dordain (1776–1855), French politician
+ Jean-François-Louis d'Arc (1787–1860), French architect
+ Jules Bouton (born 1982), French footballer
+ Jacques Dupin (1903–1979), French footballer
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 483, 342, 3020, 359, 269, 1701, 288, 795, 10689, 17, 1220, 1373, 15, 490, 411, 491, 263, 4409, 892, 333, 353, 68, 15, 286, 12, 298, 1418]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be written as the sum of two squares. For example, if we have a vector x = (a, b) and want to find the eigenvalues of this vector, we can write it as:
+
+x = (1/2)(a + b)
+
+where a and b are real numbers. We can also define the eigenvector of the eigenvalue, denoted by a_v, which is a scalar multiple of the original vector v. The eigenvector of a_v is defined as the summed product of the original vectors:
+
+a_v = a*b
+
+The standard matrix representation for a_v looks like this:
+
+A = \begin{bmatrix} 1 & 0 \\ 0 & 1\end{bmatrix}.
+
+Here, the matrix A has been defined earlier in terms of the eigenvectors of the vector v. This matrix is called the eigenvalue decomposition or the eigen decomposition of the vector x.
+
+Now let's consider the case where you have a matrix with only one row and one column. In this case, the eigenvector is a_v. Here, the matrix is a square matrix, so its determinant is 1. If you were to take the determinant of the matrix, you would
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 491, 483, 395, 5546, 1420, 9845, 14071, 1085, 1991]
+first_step_topk_probs=[0.35349664092063904, 0.13843126595020294, 0.12473692744970322, 0.10359799116849899, 0.0740969181060791, 0.03764841705560684, 0.024819357320666313, 0.02015174739062786, 0.02015174739062786, 0.019129028543829918]
+first_step_topk_text=[' use', ' have', ' can', ' are', ' describe', ' allow', ' rely', ' incorporate', ' model', ' provide']
+
+[New tokens 4] count=256 first30=[395, 885, 299, 5951, 1623, 16, 7128, 2061, 17, 382, 3355, 2877, 330, 299, 817, 269, 1085, 299, 3235, 269, 1902, 1993, 289, 287, 7924, 15, 298, 1000, 817, 482]
+[Full output 4]
+Neural networks are a class of machine learning models that are used to solve real-world problems. The basic idea is to use the model to predict the next step in an algorithm, and then use this prediction to improve it. This process is called "optimization."
+
+In this tutorial, we will learn how to build a neural network with a neural network, and then train our model using the training data. We will also learn how to find the best way to train the network.
+
+## Training Neural Network¶
+
+To train a neural network on a dataset, you first need to train a neural net. A neural net is a set of interconnected neurons or neurons. Each neuron has a set of inputs and outputs.
+
+The input and output of a neural network are connected by a network called a neural network. The input and output are connected by an edge graph called a network. The network consists of a single neuron (the neuron for example) and two or more other neurons (neurons). The neural network learns to learn from the input and output.
+
+A neural network can be trained with a number of different types of input and output:
+
+• Inputs: Inputs that we want to train the neural network. These are the inputs that we want the network to learn from
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 1348, 299, 1098, 269, 3581, 288, 263, 1309, 7885, 888, 795, 1496, 2348, 34, 202, 202, 44, 491, 287, 3581, 289, 795, 4487, 15]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# How to find the equation of a line passing through two given points?
+
+I have an equation in two variables, $x$ and $y$, but I am not able to find the slope of the line. So I am trying to find the point where the line passes through the given points.
+
+The equation is:
+
+$$y = x^2 + 4xy - 2$$
+
+And the slope is $$m= \frac{1}{2}x^2+4x-2$$
+
+But I don't know how to solve this for $x$. I can't even find the equation with the given coordinates. My problem is that there are no solutions for $x$ so I don't have the equation.
+
+• Your equation is wrong – user83968 Dec 22 '16 at 15:12
+• I have tried using the y-intercept and y-intercept, but my solution is incorrect. I have done the same thing but with the slope as the other one. The point on the curve is at $x=0$ and the point on the line is at $y=0$. But it's not the y-coordinate of the point. What do you think
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.6394359469413757, 0.3605640232563019, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 6] count=256 first30=[622, 311, 13, 81, 711, 202, 509, 28045, 1392, 330, 3821, 359, 4446, 29, 202, 202, 20, 17, 382, 28045, 1392, 29, 202, 202, 2569, 353, 20, 18, 21, 12]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n*n
+
+
+The factorial function is defined as follows:
+
+1. The factorial function:
+
+return (1/2) * (n - 1)
+
+
+Note that this function will return the value of the factorial, not the number itself.
+
+### Example 2:
+
+#include <iostream>
+using namespace std;
+int main() {
+int n = 5;
+int n_ = 5; // 1
+int n;
+
+// Generate a random integer from 0 to n_
+int n[0] = 1;
+int m[0]  = 1; // 1 for n_
+m[0]   = 1; # m[0]=1; // 1 if n == 0
+printf("n=%d\n", n);
+}
+
+// Randomly generate a random integer between 0 and n_
+for (int i=0; i<n_; i++)
+{
+int n1 = n_-1;
+int i1 = n1 - 1;
+while (i1 <= n1)
+{   
+if (i1 >= n1) break;
+else break;
+}
+}
+return
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 821, 537, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.5080788731575012, 0.3018118143081665, 0.11219290643930435, 0.07791642099618912, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', ' """', ' #', '', '', '!', '"', '', '']
+
+[New tokens 7] count=256 first30=[622, 354, 647, 353, 20, 1341, 311, 12, 864, 353, 21, 2216, 353, 81, 552, 354, 687, 711, 202, 2141, 483, 620, 482, 1191, 269, 1152, 357, 1148, 31393, 993]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1 + (1 / n) * (2 ** (n - 1))
+
+
+We can do this using the fact that every Fibonacci number is either even or odd. We know that every Fibonacci integer is even, so we have:
+
+fib(n) = 2^n * (n - 2)
+
+However, there are several cases where it's possible to find an exact sequence of Fibonacci numbers that satisfy our conditions. For example, if we have an even number, then for each number in the sequence, we have:
+ 
+# Find all such Fibonacci numbers with odd and even values
+for i in range(0, int(math.sqrt(3)))
+if fib(i) == 0:
+return 0
+else:
+print("There is no such integer as the value of the Fibonacci number " + str(fib(i)))
+}
+
+The first time you see a Fibonacci number, you will probably want to check your function to see if it returns any other Fibonacci numbers. If you do, you'll notice that the list of numbers that are the sum of the previous two Fibonacci numbers is always the same. In other words, the list of Fibonacci numbers is never the same as the list of
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 2590, 31412, 1541, 698, 2, 3, 1, 0]
+first_step_topk_probs=[0.3791760206222534, 0.2774110734462738, 0.16478927433490753, 0.09788893908262253, 0.06125733256340027, 0.019477317109704018, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' No', ' Cats', ' There', ' It', '', '', '', '']
+
+[New tokens 8] count=146 first30=[13676, 17, 31412, 395, 2645, 1091, 581, 491, 263, 3313, 288, 2886, 10978, 351, 553, 3456, 17, 783, 330, 922, 2668, 780, 2645, 17, 1109, 658, 491, 10978, 536, 330]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Yes. Cats are black because they have a lot of white fur on their face. This is what makes them black. They also have fur which is like a fur coat. The fur on your cat's face is very important to him as he is his friend. He will not get a black coat if you don't give him the right amount of attention. Some cats are even black at times. Some cats do not like being black. You should be able to tell that by having your cat look like a black cat. If you don't know how to tell that, then you may want to take your cat to a veterinarian for testing.
+Do you think there are any other reasons why cats should be considered black?
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 843, 2050, 1012, 637, 382, 1218, 409, 354, 1541]
+first_step_topk_probs=[0.386942595243454, 0.13653886318206787, 0.09001202881336212, 0.08544384688138962, 0.06921803206205368, 0.06251204758882523, 0.04817996546626091, 0.04817992076277733, 0.04121050983667374, 0.03176218271255493]
+first_step_topk_text=[' 4', ' 5', ' One', ' 6', ' 3', ' The', ' 8', ' 2', ' 1', ' There']
+
+[New tokens 9] count=256 first30=[2050, 13032, 330, 798, 10941, 15, 795, 395, 843, 10941, 15, 298, 619, 330, 1012, 10941, 17, 202, 43, 499, 29, 382, 993, 288, 10941, 330, 269, 1134, 359, 269]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple is 4 apples, two are 5 apples, and one is 6 apples.
+Hint: The number of apples is the same as the number of apples.
+Solution: There are two apples in a row, so there are 4 apples in total.
+We know that the number of times each apple is eaten is equal to the number of ways of eating the fruit. So, we can write this as:
+(4 apples) + (5 apples) = (6 apples) + 1 = (6 fruits) + 1
+So, there are 6 apples in the row.
+Now, the answer to part A is 0. So, there are 0 apples in the first row.
+Let's try another example. Suppose you want to buy some candy. You will get a bag of chips from your friend. You will also pay $10 for each chip. How much money do you have for the next round?
+The answer is 1/2 or 0.5. This means that there are 10 candies in the bag. If you were to give out one candy, how many candies would you need to give out to buy the next round of candy?
+For example, if you give out 10 candies, you could get 9 candies. That
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 1289, 382, 1509, 1278, 360, 783, 3919, 2575, 0]
+first_step_topk_probs=[0.8448861837387085, 0.027499200776219368, 0.027499200776219368, 0.0223276074975729, 0.018128592520952225, 0.017208559438586235, 0.015915315598249435, 0.013613090850412846, 0.012922229245305061, 0.0]
+first_step_topk_text=[' I', ' We', ' The', ' You', ' If', ' "', ' This', ' My', ' What', '']
+
+[New tokens 10] count=256 first30=[356, 3442, 733, 289, 269, 5988, 339, 263, 7543, 288, 4437, 1244, 298, 356, 483, 847, 4283, 4453, 1107, 17, 202, 44, 491, 733, 715, 339, 672, 1237, 3033, 15]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I've been in the hospital for a couple of weeks now and I can't remember anything else.
+I have been there for about three months, but I haven't seen any heartburn symptoms or other symptoms.
+It's been an average week, and I can only tell from my own experience that I feel like I'm having heartburn symptoms. But it's not something I just have to deal with.
+"What is the cause?" I ask. "What causes it? Why do I have it?"
+"How can I treat it?"
+The answer is simple: You can't get rid of it. It's a condition called gastroesophageal reflux disease (GERD). The acid that comes out of your stomach isn't enough to clear up the reflux, so it's passed down through the esophagus and into the stomach.
+The problem is that the acid doesn't go directly to the stomach, which means that it can't be expelled as quickly by your stomach. So when you pass it back up the esophagus, it's just too hard to flush out the acid again. And that's why GERD is so dangerous.
+There are two main reasons why GERDs don't work:
+- They can't be removed
+
+================================================================================
