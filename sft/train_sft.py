@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 from __future__ import annotations
 
@@ -8,25 +7,24 @@ import json
 import math
 import os
 import random
-import time
-from dataclasses import asdict
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
-
-import torch
-import torch.nn.functional as F
-from torch.utils.data import DataLoader, Dataset
-from tokenizers import Tokenizer
 
 # Make imports work no matter where you run from
 import sys
+import time
+from dataclasses import asdict
+from pathlib import Path
+from typing import Any, List
+
+import torch
+import torch.nn.functional as F
+from tokenizers import Tokenizer
+from torch.utils.data import DataLoader, Dataset
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
 
 from src.model import GPT, GPTConfig  # noqa: E402
-
 
 # -------------------------
 # Plain chat template (NO bracket tags; robust to tokenizer)
@@ -38,6 +36,7 @@ SYS_PREFIX = "System: "
 USER_PREFIX = "User: "
 ASSIST_PREFIX = "Assistant: "
 SEP = "\n\n"
+
 
 def norm_newlines(s: str) -> str:
     return (s or "").replace("\r\n", "\n").replace("\r", "\n")
@@ -59,7 +58,7 @@ def clean_text_assistant(s: str) -> str:
 class JsonlOffsetsDataset(Dataset):
     def __init__(self, path: str):
         self.path = path
-        self.offsets: List[int] = []
+        self.offsets: list[int] = []
         with open(path, "rb") as f:
             off = 0
             for line in f:
@@ -69,7 +68,7 @@ class JsonlOffsetsDataset(Dataset):
     def __len__(self) -> int:
         return len(self.offsets)
 
-    def __getitem__(self, idx: int) -> Dict[str, Any]:
+    def __getitem__(self, idx: int) -> dict[str, Any]:
         off = self.offsets[idx]
         with open(self.path, "rb") as f:
             f.seek(off)
@@ -78,9 +77,43 @@ class JsonlOffsetsDataset(Dataset):
 
 
 # -------------------------
+# Read train/val jsonl
+# -------------------------
+def read_jsonl(path: str) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    with open(path, encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if line:
+                rows.append(json.loads(line))
+    return rows
+
+
+# -------------------------
+# Fixed prompts
+# -------------------------
+FIXED_PROMPTS_V1 = [
+    "[Code] Write a Python function fib(n) that returns the n-th Fibonacci number iteratively. Raise ValueError if n < 0.",
+    "[Code] Fix this Python function so it returns the reversed string correctly:\n\ndef reverse_string(s):\n    out = ''\n    for ch in s:\n        out = out + ch\n    return out\n",
+    "[Code] Write a Python function dedup_preserve_order(items) that removes duplicates while keeping the first occurrence order.",
+    "[Code] Write a Python function count_words(text) that returns a dictionary of lowercase word frequencies. Ignore punctuation like commas and periods.",
+    "[Code] Explain in 3 sentences why binary search requires a sorted list, then write a Python function binary_search(nums, target).",
+    "[Math] Solve: A notebook costs 8 euros. You buy 3 notebooks and get a 25% discount on the total. What is the final price?",
+    "[Math] Solve for x: 3x + 5 = 23. Show the steps briefly.",
+    "[Math] A ladder is 12 meters long. Tom climbs it 5 times. How many meters does he climb in total?",
+    "[Math] Given the list [2, 4, 4, 4, 5, 5, 7, 9], compute the mean and variance, and explain the steps briefly.",
+    "[General] Write a short polite email asking for an update on a job application after an interview.",
+    "[General] Summarize this in 3 bullet points: 'Python is widely used in data analysis, automation, and machine learning because it has a rich ecosystem of libraries and a readable syntax.'",
+    "[General] Explain the difference between a Python list and a tuple in simple terms, using at most 5 sentences.",
+]
+
+
+# -------------------------
 # Encoding helpers (robust to tokenizer auto BOS/EOS)
 # -------------------------
-def encode_strip_special(tok: Tokenizer, text: str, bos_id: int, eos_id: int) -> List[int]:
+def encode_strip_special(
+    tok: Tokenizer, text: str, bos_id: int, eos_id: int
+) -> list[int]:
     """Encode text and strip a leading BOS and trailing EOS if present."""
     ids = tok.encode(text).ids
     if ids and ids[0] == bos_id:
@@ -90,7 +123,9 @@ def encode_strip_special(tok: Tokenizer, text: str, bos_id: int, eos_id: int) ->
     return ids
 
 
-def tokenizer_auto_bos_eos(tok: Tokenizer, bos_id: int, eos_id: int) -> Tuple[bool, bool]:
+def tokenizer_auto_bos_eos(
+    tok: Tokenizer, bos_id: int, eos_id: int
+) -> tuple[bool, bool]:
     """Detect whether tokenizer auto-adds BOS/EOS (using a tiny probe)."""
     probe = tok.encode("x").ids
     has_bos = bool(probe) and probe[0] == bos_id
@@ -101,7 +136,7 @@ def tokenizer_auto_bos_eos(tok: Tokenizer, bos_id: int, eos_id: int) -> Tuple[bo
 # -------------------------
 # Refusal detection (downweight)
 # -------------------------
-def is_refusal_text(text: str, patterns: List[str]) -> bool:
+def is_refusal_text(text: str, patterns: list[str]) -> bool:
     """
     Very simple heuristic:
     If assistant content contains any refusal-ish patterns, treat as refusal.
@@ -122,13 +157,15 @@ def is_refusal_text(text: str, patterns: List[str]) -> bool:
 # Build example: input_ids + labels (assistant-only, exact spans)
 # plus ex_weight for refusal downweight
 # -------------------------
-def render_segments_plain(messages: List[Dict[str, str]], default_system: str) -> List[Tuple[str, bool]]:
+def render_segments_plain(
+    messages: list[dict[str, str]], default_system: str
+) -> list[tuple[str, bool]]:
     """
     Return list of (text_segment, supervise).
     supervise=True only for assistant *content* (not the 'Assistant: ' prefix).
     """
     msgs = messages or []
-    segs: List[Tuple[str, bool]] = []
+    segs: list[tuple[str, bool]] = []
 
     if not msgs:
         return segs
@@ -170,9 +207,9 @@ def render_segments_plain(messages: List[Dict[str, str]], default_system: str) -
 
 
 def compute_example_weight_from_messages(
-    messages: List[Dict[str, str]],
+    messages: list[dict[str, str]],
     refusal_downweight: float,
-    refusal_patterns: List[str],
+    refusal_patterns: list[str],
     refusal_mode: str,
 ) -> float:
     """
@@ -191,7 +228,7 @@ def compute_example_weight_from_messages(
     if refusal_mode != "contains_any":
         raise ValueError(f"unknown refusal_mode: {refusal_mode}")
 
-    for m in (messages or []):
+    for m in messages or []:
         if (m.get("role") or "").strip().lower() == "assistant":
             if is_refusal_text(m.get("content", ""), refusal_patterns):
                 return refusal_downweight
@@ -199,7 +236,7 @@ def compute_example_weight_from_messages(
 
 
 def build_example(
-    ex: Dict[str, Any],
+    ex: dict[str, Any],
     tok: Tokenizer,
     seq_len: int,
     pad_id: int,
@@ -207,9 +244,9 @@ def build_example(
     bos_id: int,
     eos_id: int,
     refusal_downweight: float,
-    refusal_patterns: List[str],
+    refusal_patterns: list[str],
     refusal_mode: str,
-) -> Tuple[torch.Tensor, torch.Tensor, float]:
+) -> tuple[torch.Tensor, torch.Tensor, float]:
     messages = ex.get("messages") or []
     if not messages:
         raise ValueError("missing messages")
@@ -231,8 +268,8 @@ def build_example(
 
     has_bos, has_eos = tokenizer_auto_bos_eos(tok, bos_id, eos_id)
 
-    ids_all: List[int] = []
-    labels_all: List[int] = []
+    ids_all: list[int] = []
+    labels_all: list[int] = []
 
     if has_bos:
         ids_all.append(bos_id)
@@ -273,12 +310,12 @@ def collate_fn_builder(
     default_system: str,
     debug_first_batch: bool,
     refusal_downweight: float,
-    refusal_patterns: List[str],
+    refusal_patterns: list[str],
     refusal_mode: str,
 ):
     printed = {"done": False}
 
-    def collate(batch: List[Dict[str, Any]]):
+    def collate(batch: list[dict[str, Any]]):
         xs, ys, ws = [], [], []
         for ex in batch:
             x, y, w = build_example(
@@ -305,7 +342,7 @@ def collate_fn_builder(
             printed["done"] = True
             sup = int((labels[0] != -100).sum().item())
             tot = labels[0].numel()
-            print(f"[dbg] supervised tokens(sample0): {sup}/{tot} ({sup/tot:.3f})")
+            print(f"[dbg] supervised tokens(sample0): {sup}/{tot} ({sup / tot:.3f})")
             print(f"[dbg] example_weight(sample0): {float(weights[0].item()):.3f}")
 
             idx = (labels[0] != -100).nonzero(as_tuple=False).squeeze(-1)
@@ -324,7 +361,7 @@ def collate_fn_builder(
 def masked_ce_loss(
     logits: torch.Tensor,
     labels: torch.Tensor,
-    weights: Optional[torch.Tensor] = None,
+    weights: torch.Tensor | None = None,
     reduction: str = "example_mean",
 ) -> torch.Tensor:
     """
@@ -338,8 +375,8 @@ def masked_ce_loss(
     """
     B, T, V = logits.size()
     # next-token
-    logits2 = logits[:, :-1, :].contiguous()          # [B, T-1, V]
-    labels2 = labels[:, 1:].contiguous()              # [B, T-1]
+    logits2 = logits[:, :-1, :].contiguous()  # [B, T-1, V]
+    labels2 = labels[:, 1:].contiguous()  # [B, T-1]
 
     # per-token loss
     loss_tok = F.cross_entropy(
@@ -347,50 +384,50 @@ def masked_ce_loss(
         labels2.view(-1),
         ignore_index=-100,
         reduction="none",
-    ).view(B, T - 1)                                  # [B, T-1]
+    ).view(B, T - 1)  # [B, T-1]
 
-    mask = (labels2 != -100).float()                  # [B, T-1]
+    mask = (labels2 != -100).float()  # [B, T-1]
     if weights is None:
         weights = torch.ones((B,), device=logits.device, dtype=torch.float32)
     else:
         weights = weights.to(device=logits.device, dtype=torch.float32)
 
     if reduction == "token_mean":
-        w = weights.view(B, 1)                            # [B,1]
+        w = weights.view(B, 1)  # [B,1]
         loss_tok = loss_tok * mask * w
         denom = (mask * w).sum().clamp_min(1.0)
         return loss_tok.sum() / denom
 
     if reduction == "example_mean":
-        tok_cnt = mask.sum(dim=1).clamp_min(1.0)                 # [B]
-        loss_ex = (loss_tok * mask).sum(dim=1) / tok_cnt         # [B]
+        tok_cnt = mask.sum(dim=1).clamp_min(1.0)  # [B]
+        loss_ex = (loss_tok * mask).sum(dim=1) / tok_cnt  # [B]
         denom = weights.sum().clamp_min(1.0)
         return (loss_ex * weights).sum() / denom
 
     raise ValueError(f"unknown reduction: {reduction}")
 
 
-def save_checkpoint_atomic(path: str, obj: Dict[str, Any]):
+def save_checkpoint_atomic(path: str, obj: dict[str, Any]):
     tmp = path + ".tmp"
     torch.save(obj, tmp)
     os.replace(tmp, path)
 
 
-def load_ckpt(path: str) -> Dict[str, Any]:
+def load_ckpt(path: str) -> dict[str, Any]:
     return torch.load(path, map_location="cpu")
 
 
 # -------------------------
 # In-domain prompt building (plain template)
 # -------------------------
-def find_last_user_idx(messages: List[Dict[str, str]]) -> int:
+def find_last_user_idx(messages: list[dict[str, str]]) -> int:
     for i in range(len(messages) - 1, -1, -1):
         if (messages[i].get("role") or "").strip().lower() == "user":
             return i
     return -1
 
 
-def extract_last_user_and_ref(messages: List[Dict[str, str]]) -> Tuple[str, str]:
+def extract_last_user_and_ref(messages: list[dict[str, str]]) -> tuple[str, str]:
     """Return (last_user_text, last_assistant_text_if_any)."""
     last_user = ""
     ref = ""
@@ -405,7 +442,9 @@ def extract_last_user_and_ref(messages: List[Dict[str, str]]) -> Tuple[str, str]
     return last_user, ref
 
 
-def build_prompt_from_messages_plain(messages: List[Dict[str, str]], default_system: str, mode: str) -> str:
+def build_prompt_from_messages_plain(
+    messages: list[dict[str, str]], default_system: str, mode: str
+) -> str:
     """
     mode:
       - 'last_user': System + last user + 'Assistant:'
@@ -413,14 +452,16 @@ def build_prompt_from_messages_plain(messages: List[Dict[str, str]], default_sys
     """
     msgs = messages or []
     if not msgs:
-        return (SYS_PREFIX + default_system + SEP + USER_PREFIX + "" + SEP + ASSIST_PREFIX)
+        return (
+            SYS_PREFIX + default_system + SEP + USER_PREFIX + "" + SEP + ASSIST_PREFIX
+        )
 
     if (msgs[0].get("role") or "").strip().lower() != "system" and default_system:
         msgs = [{"role": "system", "content": default_system}] + msgs
 
     if mode == "last_user":
         user_q, _ = extract_last_user_and_ref(msgs)
-        parts: List[str] = []
+        parts: list[str] = []
         if msgs and (msgs[0].get("role") or "").strip().lower() == "system":
             sys_txt = clean_text(msgs[0].get("content", ""))
             if sys_txt:
@@ -437,7 +478,7 @@ def build_prompt_from_messages_plain(messages: List[Dict[str, str]], default_sys
 
     trimmed = msgs[: lu + 1]
 
-    parts: List[str] = []
+    parts: list[str] = []
     if trimmed and (trimmed[0].get("role") or "").strip().lower() == "system":
         sys_txt = clean_text(trimmed[0].get("content", ""))
         if sys_txt:
@@ -448,7 +489,11 @@ def build_prompt_from_messages_plain(messages: List[Dict[str, str]], default_sys
 
     for m in trimmed[start:]:
         role = (m.get("role") or "").strip().lower()
-        txt = clean_text_assistant(m.get("content", "")) if role == "assistant" else clean_text(m.get("content", ""))
+        txt = (
+            clean_text_assistant(m.get("content", ""))
+            if role == "assistant"
+            else clean_text(m.get("content", ""))
+        )
         if not txt:
             continue
         if role == "user":
@@ -496,7 +541,11 @@ def main():
     ap.add_argument("--seed", type=int, default=1234)
     ap.add_argument("--debug_first_batch", action="store_true")
 
-    ap.add_argument("--loss_reduction", choices=["token_mean","example_mean"], default="example_mean")
+    ap.add_argument(
+        "--loss_reduction",
+        choices=["token_mean", "example_mean"],
+        default="example_mean",
+    )
 
     # ---- refusal downweight (TRAINING, not sampling) ----
     ap.add_argument(
@@ -526,12 +575,24 @@ def main():
     ap.add_argument("--sample_top_p", type=float, default=0.9)
     ap.add_argument("--sample_top_k", type=int, default=50)
     ap.add_argument("--sample_seed", type=int, default=1234)
-    ap.add_argument("--sample_repetition_penalty", type=float, default=1.12,
-                    help=">1.0 discourages repeating tokens during sampling (e.g. 1.05~1.25)")
-    ap.add_argument("--sample_repetition_window", type=int, default=256,
-                    help="how many recent tokens to apply repetition penalty over")
-    ap.add_argument("--sample_no_repeat_ngram", type=int, default=3,
-                    help="disallow repeating n-grams of this size during sampling (0=off). e.g. 3")
+    ap.add_argument(
+        "--sample_repetition_penalty",
+        type=float,
+        default=1.12,
+        help=">1.0 discourages repeating tokens during sampling (e.g. 1.05~1.25)",
+    )
+    ap.add_argument(
+        "--sample_repetition_window",
+        type=int,
+        default=256,
+        help="how many recent tokens to apply repetition penalty over",
+    )
+    ap.add_argument(
+        "--sample_no_repeat_ngram",
+        type=int,
+        default=3,
+        help="disallow repeating n-grams of this size during sampling (0=off). e.g. 3",
+    )
 
     # in-domain sampling (val_jsonl)
     ap.add_argument("--sample_in_domain_n", type=int, default=10)
@@ -546,6 +607,16 @@ def main():
         "--sample_in_domain_dump_prompt",
         action="store_true",
         help="also dump the rendered prompt text (for debugging inputs)",
+    )
+    ap.add_argument(
+        "--sample_eval_jsonl",
+        default="",
+        help="Optional curated eval jsonl for sampling. If set, this is used instead of random val_jsonl in-domain sampling.",
+    )
+    ap.add_argument(
+        "--sample_only_ckpt",
+        default="",
+        help="Optional ckpt path. If set, load this checkpoint, write samples once, then exit without training.",
     )
 
     args = ap.parse_args()
@@ -562,22 +633,13 @@ def main():
     vocab_size = tok.get_vocab_size()
     pad_id = 0  # if no [PAD], use 0
 
-    refusal_patterns = [p.strip() for p in args.refusal_patterns.split(",") if p.strip()]
-
-    FIXED_PROMPTS = [
-        "Explain Bayes' theorem in simple terms with a tiny example.",
-        "Write a polite email to ask for an update on a job application.",
-        "Summarize the following text in 3 bullet points: 'Deep learning has transformed many fields...'",
-        "Give me a step-by-step plan to learn Python for data analysis in 4 weeks.",
-        "What is gradient descent? Explain it like I'm 12.",
-        "Solve: If P(A)=0.3, P(B)=0.5, and A and B are independent, what is P(A∩B)?",
-        "Convert this to French: 'Thank you for your time and consideration.'",
-        "Draft a short LinkedIn post announcing I built a small GPT model from scratch.",
-        "What are 3 weekend trip ideas near Lille? Provide pros/cons.",
-        "Given a list of numbers, explain how to compute mean and variance.",
+    refusal_patterns = [
+        p.strip() for p in args.refusal_patterns.split(",") if p.strip()
     ]
 
-    cfg: Optional[GPTConfig] = None
+    FIXED_PROMPTS = FIXED_PROMPTS_V1
+
+    cfg: GPTConfig | None = None
 
     if args.init_from_pretrain:
         ck = load_ckpt(args.init_from_pretrain)
@@ -612,11 +674,15 @@ def main():
         )
         model = GPT(cfg).to(device)
 
-    optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+    optimizer = torch.optim.AdamW(
+        model.parameters(), lr=args.lr, weight_decay=args.weight_decay
+    )
 
     use_fp16 = args.precision == "fp16" and device == "cuda"
     use_bf16 = args.precision == "bf16" and device == "cuda"
-    autocast_dtype = torch.float16 if use_fp16 else (torch.bfloat16 if use_bf16 else None)
+    autocast_dtype = (
+        torch.float16 if use_fp16 else (torch.bfloat16 if use_bf16 else None)
+    )
     scaler = torch.amp.GradScaler("cuda", enabled=use_fp16)
 
     start_step = 0
@@ -644,11 +710,17 @@ def main():
 
     train_ds = JsonlOffsetsDataset(args.train_jsonl)
     val_ds = JsonlOffsetsDataset(args.val_jsonl)
+    sample_eval_ds: list[dict[str, Any]] = []
+    if args.sample_eval_jsonl:
+        sample_eval_ds = read_jsonl(args.sample_eval_jsonl)
+        print(
+            f"[*] sample_eval_jsonl: {args.sample_eval_jsonl} lines={len(sample_eval_ds)}"
+        )
 
     print(f"[*] dataset: train_lines={len(train_ds)} val_lines={len(val_ds)}")
     print(
         f"[*] effective_tokens/step = micro_bsz({args.micro_bsz}) * grad_accum({args.grad_accum}) * seq_len({args.seq_len})"
-        f" = {args.micro_bsz*args.grad_accum*args.seq_len}"
+        f" = {args.micro_bsz * args.grad_accum * args.seq_len}"
     )
     print(
         f"[*] refusal downweight: mode={args.refusal_mode} downweight={args.refusal_downweight} patterns={len(refusal_patterns)}"
@@ -715,12 +787,18 @@ def main():
         g = torch.Generator(device=device)
         g.manual_seed(args.sample_seed)
 
-        def top_k_top_p(logits_1d: torch.Tensor, top_k: int, top_p: float) -> torch.Tensor:
+        def top_k_top_p(
+            logits_1d: torch.Tensor, top_k: int, top_p: float
+        ) -> torch.Tensor:
             if top_k and top_k > 0:
                 k = min(top_k, logits_1d.size(-1))
                 v, _ = torch.topk(logits_1d, k)
                 thresh = v[-1]
-                logits_1d = torch.where(logits_1d < thresh, torch.full_like(logits_1d, -float("inf")), logits_1d)
+                logits_1d = torch.where(
+                    logits_1d < thresh,
+                    torch.full_like(logits_1d, -float("inf")),
+                    logits_1d,
+                )
             if top_p and top_p < 1.0:
                 sorted_logits, sorted_idx = torch.sort(logits_1d, descending=True)
                 probs = torch.softmax(sorted_logits, dim=-1)
@@ -729,10 +807,14 @@ def main():
                 mask_sorted[0] = False
                 mask = torch.zeros_like(mask_sorted)
                 mask.scatter_(0, sorted_idx, mask_sorted)
-                logits_1d = torch.where(mask, torch.full_like(logits_1d, -float("inf")), logits_1d)
+                logits_1d = torch.where(
+                    mask, torch.full_like(logits_1d, -float("inf")), logits_1d
+                )
             return logits_1d
 
-        def apply_repetition_penalty(logits_1d: torch.Tensor, prev_ids: List[int], penalty: float) -> torch.Tensor:
+        def apply_repetition_penalty(
+            logits_1d: torch.Tensor, prev_ids: list[int], penalty: float
+        ) -> torch.Tensor:
             if penalty is None or penalty <= 1.0:
                 return logits_1d
             if not prev_ids:
@@ -745,15 +827,17 @@ def main():
                 logits_1d[tid] = v / penalty if v > 0 else v * penalty
             return logits_1d
 
-        def ban_repeat_ngrams(logits_1d: torch.Tensor, generated: List[int], n: int) -> torch.Tensor:
+        def ban_repeat_ngrams(
+            logits_1d: torch.Tensor, generated: list[int], n: int
+        ) -> torch.Tensor:
             if n is None or n <= 0:
                 return logits_1d
             if len(generated) < n - 1:
                 return logits_1d
-            prefix = tuple(generated[-(n - 1):])
+            prefix = tuple(generated[-(n - 1) :])
             banned = set()
             for i in range(len(generated) - n + 1):
-                if tuple(generated[i:i + n - 1]) == prefix:
+                if tuple(generated[i : i + n - 1]) == prefix:
                     banned.add(generated[i + n - 1])
             if banned:
                 for t in banned:
@@ -763,7 +847,7 @@ def main():
 
         for _ in range(args.sample_max_new_tokens):
             if ids.size(1) > args.seq_len:
-                ids = ids[:, -args.seq_len:]
+                ids = ids[:, -args.seq_len :]
             logits = model(ids)
             next_logits = logits[0, -1, :].float()
 
@@ -771,18 +855,28 @@ def main():
                 nxt = int(torch.argmax(next_logits).item())
             else:
                 next_logits = next_logits / args.sample_temperature
-                recent = ids[0, -args.sample_repetition_window:].tolist()
-                next_logits = apply_repetition_penalty(next_logits, recent, args.sample_repetition_penalty)
+                recent = ids[0, -args.sample_repetition_window :].tolist()
+                next_logits = apply_repetition_penalty(
+                    next_logits, recent, args.sample_repetition_penalty
+                )
                 gen_so_far = ids[0].tolist()
-                next_logits = ban_repeat_ngrams(next_logits, gen_so_far, args.sample_no_repeat_ngram)
-                next_logits = top_k_top_p(next_logits, top_k=args.sample_top_k, top_p=args.sample_top_p)
+                next_logits = ban_repeat_ngrams(
+                    next_logits, gen_so_far, args.sample_no_repeat_ngram
+                )
+                next_logits = top_k_top_p(
+                    next_logits, top_k=args.sample_top_k, top_p=args.sample_top_p
+                )
                 probs = torch.softmax(next_logits, dim=-1)
                 if torch.isnan(probs).any() or float(probs.sum().item()) == 0.0:
                     nxt = int(torch.argmax(next_logits).item())
                 else:
-                    nxt = int(torch.multinomial(probs, num_samples=1, generator=g).item())
+                    nxt = int(
+                        torch.multinomial(probs, num_samples=1, generator=g).item()
+                    )
 
-            ids = torch.cat([ids, torch.tensor([[nxt]], device=device, dtype=torch.long)], dim=1)
+            ids = torch.cat(
+                [ids, torch.tensor([[nxt]], device=device, dtype=torch.long)], dim=1
+            )
             if nxt == EOS_ID:
                 break
 
@@ -794,7 +888,39 @@ def main():
         return text.strip()
 
     def build_fixed_prompt(user_q: str) -> str:
-        return SYS_PREFIX + args.default_system.strip() + SEP + USER_PREFIX + user_q.strip() + SEP + ASSIST_PREFIX
+        return (
+            SYS_PREFIX
+            + args.default_system.strip()
+            + SEP
+            + USER_PREFIX
+            + user_q.strip()
+            + SEP
+            + ASSIST_PREFIX
+        )
+
+    def build_sampling_examples() -> tuple[str, list[tuple[str, dict[str, Any]]]]:
+        """
+        Returns:
+          eval_name: str
+          rows: List[(tag, example_dict)]
+        """
+        rows: list[tuple[str, dict[str, Any]]] = []
+        if sample_eval_ds:
+            for i, ex in enumerate(sample_eval_ds, start=1):
+                meta = ex.get("meta") or {}
+                tag = str(meta.get("name", f"eval_{i:02d}"))
+                rows.append((tag, ex))
+            return "sample_eval_jsonl", rows
+
+        if args.sample_in_domain_n > 0 and len(val_ds) > 0:
+            n = min(args.sample_in_domain_n, len(val_ds))
+            idxs = [in_rng.randrange(len(val_ds)) for _ in range(n)]
+            for idx in idxs:
+                ex = val_ds[idx]
+                rows.append((f"idx={idx}", ex))
+            return "val_jsonl", rows
+
+        return "", rows
 
     model.train()
     t0 = time.time()
@@ -803,6 +929,94 @@ def main():
     train_iter = iter(train_loader)
 
     in_rng = random.Random(args.sample_in_domain_seed)
+
+    @torch.no_grad()
+    def emit_samples(step_tag: str) -> None:
+        sdir = args.samples_dir or os.path.join(args.out_dir, "samples")
+        Path(sdir).mkdir(parents=True, exist_ok=True)
+        out_path = os.path.join(sdir, f"{step_tag}.txt")
+
+        lines: List[str] = []
+        lines.append(f"step={step_tag}\n")
+        lines.append(
+            f"sampling: temp={args.sample_temperature} top_p={args.sample_top_p} top_k={args.sample_top_k} max_new={args.sample_max_new_tokens}\n"
+        )
+        lines.append(
+            f"in_domain: n={args.sample_in_domain_n} mode={args.sample_in_domain_mode} "
+            f"show_ref={bool(args.sample_in_domain_show_ref)} dump_prompt={bool(args.sample_in_domain_dump_prompt)} "
+            f"sample_eval_jsonl={bool(args.sample_eval_jsonl)}\n"
+        )
+        lines.append("=" * 80 + "\n")
+
+        # A) fixed prompts
+        lines.append("[Fixed prompts]\n")
+        lines.append("-" * 80 + "\n")
+        for i, q in enumerate(FIXED_PROMPTS):
+            prompt = build_fixed_prompt(q)
+            ans = sample_from_prompt(prompt)
+            lines.append(f"[Q{i + 1}] {q}\n")
+            lines.append(f"[A{i + 1}] {ans}\n")
+            lines.append("-" * 80 + "\n")
+
+        # B) curated eval prompts or fallback val_jsonl
+        eval_name, eval_rows = build_sampling_examples()
+        if eval_rows:
+            lines.append(f"\n[In-domain prompts from {eval_name}]\n")
+            lines.append("-" * 80 + "\n")
+            tags = [tag for tag, _ in eval_rows]
+            lines.append(f"[eval tags] {tags}\n")
+            lines.append("-" * 80 + "\n")
+
+            for k, (tag, ex) in enumerate(eval_rows, start=1):
+                msgs = ex.get("messages") or []
+                user_q, ref_a = extract_last_user_and_ref(msgs)
+                if not user_q:
+                    continue
+
+                prompt = build_prompt_from_messages_plain(
+                    msgs, args.default_system, args.sample_in_domain_mode
+                )
+                ans = sample_from_prompt(prompt)
+
+                meta = ex.get("meta") or {}
+                bucket = str(meta.get("bucket", ""))
+                lines.append(f"[V{k}] {tag} bucket={bucket}\n")
+                lines.append("[User]\n")
+                lines.append(f"{user_q}\n")
+
+                if args.sample_in_domain_dump_prompt:
+                    lines.append("[Prompt]\n")
+                    p = prompt
+                    if len(p) > 4000:
+                        p = p[:4000] + "\n...[truncated]\n"
+                    lines.append(p + "\n")
+
+                if args.sample_in_domain_show_ref and ref_a:
+                    lines.append("[Ref assistant]\n")
+                    lines.append(ref_a + "\n")
+
+                lines.append("[Model]\n")
+                lines.append(ans + "\n")
+                lines.append("-" * 80 + "\n")
+
+        with open(out_path, "w", encoding="utf-8") as f:
+            f.writelines(lines)
+        print(f"[sample] wrote {out_path}")
+
+    if args.sample_only_ckpt:
+        ck = load_ckpt(args.sample_only_ckpt)
+        sd = ck.get("model")
+        if sd is None:
+            raise RuntimeError("sample_only_ckpt missing 'model'")
+        if any(k.startswith("_orig_mod.") for k in sd.keys()):
+            sd = {k[len("_orig_mod.") :]: v for k, v in sd.items()}
+        missing, unexpected = model.load_state_dict(sd, strict=False)
+        print(f"[*] sample-only loaded: {args.sample_only_ckpt}")
+        print(f"    missing keys: {len(missing)}, unexpected keys: {len(unexpected)}")
+        model.eval()
+        emit_samples(Path(args.sample_only_ckpt).stem)
+        print("[done]")
+        return
 
     while step < args.max_steps:
         optimizer.zero_grad(set_to_none=True)
@@ -823,9 +1037,18 @@ def main():
             labels = batch["labels"].to(device, non_blocking=True)
             weights = batch["weights"].to(device, non_blocking=True)
 
-            with torch.autocast(device_type="cuda", dtype=autocast_dtype, enabled=(autocast_dtype is not None)):
+            with torch.autocast(
+                device_type="cuda",
+                dtype=autocast_dtype,
+                enabled=(autocast_dtype is not None),
+            ):
                 logits = model(input_ids)
-                loss = masked_ce_loss(logits, labels, weights=weights, reduction=args.loss_reduction) / args.grad_accum
+                loss = (
+                    masked_ce_loss(
+                        logits, labels, weights=weights, reduction=args.loss_reduction
+                    )
+                    / args.grad_accum
+                )
 
             if use_fp16:
                 scaler.scale(loss).backward()
@@ -847,7 +1070,9 @@ def main():
             dt = time.time() - t0
             tokens_per_step = args.micro_bsz * args.grad_accum * args.seq_len
             tok_s = tokens_per_step * 50.0 / max(dt, 1e-9)
-            print(f"[train] step={step} loss={running_loss/50:.4f} lr={get_lr(step):.2e} tok/s≈{tok_s:.0f} dt={dt:.1f}s")
+            print(
+                f"[train] step={step} loss={running_loss / 50:.4f} lr={get_lr(step):.2e} tok/s≈{tok_s:.0f} dt={dt:.1f}s"
+            )
             running_loss = 0.0
             t0 = time.time()
 
@@ -861,11 +1086,19 @@ def main():
                     vi = vb["input_ids"].to(device)
                     vl = vb["labels"].to(device)
                     vw = vb["weights"].to(device)
-                    with torch.autocast(device_type="cuda", dtype=autocast_dtype, enabled=(autocast_dtype is not None)):
+                    with torch.autocast(
+                        device_type="cuda",
+                        dtype=autocast_dtype,
+                        enabled=(autocast_dtype is not None),
+                    ):
                         v_logits = model(vi)
-                        v_loss = masked_ce_loss(v_logits, vl, weights=vw, reduction=args.loss_reduction)
+                        v_loss = masked_ce_loss(
+                            v_logits, vl, weights=vw, reduction=args.loss_reduction
+                        )
                     losses.append(float(v_loss.item()))
-            print(f"[eval] step={step} val_loss={sum(losses)/max(1,len(losses)):.4f}")
+            print(
+                f"[eval] step={step} val_loss={sum(losses) / max(1, len(losses)):.4f}"
+            )
             model.train()
 
         if args.save_every > 0 and step % args.save_every == 0:
@@ -883,73 +1116,12 @@ def main():
             print(f"[ckpt] saved {ckpt_path}")
 
         # ---- Sampling (fixed + in-domain) ----
-        if args.sample_every and args.sample_every > 0 and step % args.sample_every == 0:
-            sdir = args.samples_dir or os.path.join(args.out_dir, "samples")
-            Path(sdir).mkdir(parents=True, exist_ok=True)
-            out_path = os.path.join(sdir, f"step_{step:06d}.txt")
-
-            lines: List[str] = []
-            lines.append(f"step={step}\n")
-            lines.append(
-                f"sampling: temp={args.sample_temperature} top_p={args.sample_top_p} top_k={args.sample_top_k} max_new={args.sample_max_new_tokens}\n"
-            )
-            lines.append(
-                f"in_domain: n={args.sample_in_domain_n} mode={args.sample_in_domain_mode} "
-                f"show_ref={bool(args.sample_in_domain_show_ref)} dump_prompt={bool(args.sample_in_domain_dump_prompt)}\n"
-            )
-            lines.append("=" * 80 + "\n")
-
-            # A) fixed prompts
-            lines.append("[Fixed prompts]\n")
-            lines.append("-" * 80 + "\n")
-            for i, q in enumerate(FIXED_PROMPTS):
-                prompt = build_fixed_prompt(q)
-                ans = sample_from_prompt(prompt)
-                lines.append(f"[Q{i+1}] {q}\n")
-                lines.append(f"[A{i+1}] {ans}\n")
-                lines.append("-" * 80 + "\n")
-
-            # B) in-domain prompts from val_jsonl
-            if args.sample_in_domain_n > 0 and len(val_ds) > 0:
-                lines.append("\n[In-domain prompts from val_jsonl]\n")
-                lines.append("-" * 80 + "\n")
-                n = min(args.sample_in_domain_n, len(val_ds))
-                idxs = [in_rng.randrange(len(val_ds)) for _ in range(n)]
-                lines.append(f"[val idxs] {idxs}\n")
-                lines.append("-" * 80 + "\n")
-
-                for k, idx in enumerate(idxs, start=1):
-                    ex = val_ds[idx]
-                    msgs = ex.get("messages") or []
-                    user_q, ref_a = extract_last_user_and_ref(msgs)
-                    if not user_q:
-                        continue
-
-                    prompt = build_prompt_from_messages_plain(msgs, args.default_system, args.sample_in_domain_mode)
-                    ans = sample_from_prompt(prompt)
-
-                    lines.append(f"[V{k}] idx={idx}\n")
-                    lines.append("[User]\n")
-                    lines.append(f"{user_q}\n")
-
-                    if args.sample_in_domain_dump_prompt:
-                        lines.append("[Prompt]\n")
-                        p = prompt
-                        if len(p) > 4000:
-                            p = p[:4000] + "\n...[truncated]\n"
-                        lines.append(p + "\n")
-
-                    if args.sample_in_domain_show_ref and ref_a:
-                        lines.append("[Ref assistant]\n")
-                        lines.append(ref_a + "\n")
-
-                    lines.append("[Model]\n")
-                    lines.append(ans + "\n")
-                    lines.append("-" * 80 + "\n")
-
-            with open(out_path, "w", encoding="utf-8") as f:
-                f.writelines(lines)
-            print(f"[sample] wrote {out_path}")
+        if (
+            args.sample_every
+            and args.sample_every > 0
+            and step % args.sample_every == 0
+        ):
+            emit_samples(f"step_{step:06d}")
 
     print("[done]")
 
