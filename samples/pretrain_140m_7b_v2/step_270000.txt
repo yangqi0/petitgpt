@@ -1,0 +1,305 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[418, 2827, 791, 3609, 289, 15, 330, 601, 1628, 288]
+first_step_topk_probs=[0.15434786677360535, 0.14651472866535187, 0.09658843278884888, 0.09168657660484314, 0.06367500126361847, 0.06085548922419548, 0.05737599357962608, 0.034082770347595215, 0.026268642395734787, 0.0236700139939785]
+first_step_topk_text=[' was', ' named', ' would', ' asked', ' in', ',', ' is', ' will', ' might', ' of']
+
+[New tokens 1] count=69 first30=[3609, 896, 3577, 299, 1432, 896, 299, 269, 4035, 17, 382, 4035, 14618, 357, 1024, 791, 342, 6251, 490, 1024, 699, 263, 2415, 2707, 17, 202, 3030, 269, 4035, 4214]
+[Full output 1]
+Once upon a time, a curious child asked her mother to take her to the doctor. The doctor replied that she would be fine if she had a heart attack.
+When the doctor returned, the girl was so tired of being on the front lines that she had to go home and spend the next few days with friends. She never knew what to expect when her mother died.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 7535, 281, 8191, 15, 298, 330, 658, 269, 8492, 288, 269, 412, 405, 295, 4830, 288, 7535, 281, 405, 5597, 17, 698, 330, 3323, 351, 269, 1179]
+[Full output 2]
+Paris is the capital of the province of Catalonia, and is also the seat of the comunicado of Catalunya. It is located on the right bank of the River Parc de Catalunas, at the foot of the mountain of the same name.
+The main city of Cataluña is the largest city in Catalonia with a population of around 3,000 people. The city has an estimated population of 2,500 inhabitants. The city's main industry is tourism, which is the most important sector of Catalonian economy.
+The town of Català is located on a hill overlooking the river Parc de Ponte. This hill is about 6 km from the city centre. The highest point is in the Parc de Montes, at 428 meters above sea level. The town is known for its natural beauty and its unique flora and fauna.
+The city of Catalan is situated on the west coast of Spain. The town has a population of 1,930 inhabitants. The town contains two large seaside towns: Bastadilla and Montañez. The town's main economic activity is agriculture. Catalan is the country's second-largest city after Barcelona.
+There are many hotels in Cat
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=217 first30=[263, 1239, 357, 483, 342, 3020, 359, 269, 1701, 288, 795, 7527, 17, 1220, 1373, 15, 490, 411, 491, 263, 4409, 400, 333, 353, 68, 15, 286, 12, 298, 1418]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be written as the sum of two vectors. For example, if we have a vector v = (a, b) and want to find its eigenvalues, we can write:
+
+v = a + b
+
+where a and b are scalars and are positive numbers. The determinant of this matrix is the product of the eigenvalues of the original vector v. Since the determinant of a matrix is zero, it means that there is no real number that will divide by zero in the equation. So, the eigenvalues of a matrix A are given by:
+
+A = (1/2)*sqrt(1-v^2)
+
+Now, let's apply these values to our problem. We know that A has two components, v and w, so we need to calculate their individual components:
+
+* v = [w]
+* w = [0]
+
+So, the eigenvalues are:
+
+Ei = sqrt((1 - v^2)^2)
+Ej = sqrt((0 - 0)^2)
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 491, 483, 395, 5546, 1420, 9845, 14071, 1991, 3069]
+first_step_topk_probs=[0.3237036466598511, 0.15612570941448212, 0.15612570941448212, 0.11370785534381866, 0.04246067628264427, 0.03826024755835533, 0.027991795912384987, 0.023942653089761734, 0.018453340977430344, 0.017516817897558212]
+first_step_topk_text=[' use', ' have', ' can', ' are', ' describe', ' allow', ' rely', ' incorporate', ' provide', ' attempt']
+
+[New tokens 4] count=256 first30=[395, 885, 299, 5951, 1623, 16, 7128, 2061, 17, 382, 3355, 2877, 330, 299, 817, 269, 1085, 359, 263, 4679, 1099, 15, 298, 1000, 1659, 383, 351, 263, 719, 854]
+[Full output 4]
+Neural networks are a class of machine learning models that are used to solve real-world problems. The basic idea is to use the model as a starting point, and then train it on a new set of data. This way, the model can be used to predict future actions based on past outcomes, and also learn from previous experiences.
+
+In this tutorial, we will cover the basic concepts of neural network modeling, and how they can be applied in practice. We will also introduce some new tools that can help us make predictions about the future behavior of the model.
+
+## How do you model your own neural network?
+
+We will use the example of a neural network model to understand what happens when we try to fit a neural network to our data.
+
+#### Example 1:
+
+Input:
+data = [1,2,3]
+output = tf.keras.models.Sequential([tf.keras.layers.Flatten(), tf.keras import keras])
+model = keras.Model(inputs=input, outputs=output)
+model.summary()
+
+
+The model has been trained using the model with training data as input.
+
+• In the first example, we have trained the model with the data as input, and the second example uses the model with trained data
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 1348, 620, 486, 5951, 637, 91, 65, 21, 16, 28, 32, 19, 34, 202, 202, 11608, 5653, 15, 9211, 202, 202, 7, 22, 892]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# How do you solve 3x^2-9=0?
+
+Aug 31, 2016
+
+$3 x - 9 = 0$
+
+#### Explanation:
+
+The first step is to write $3 x - 1 = 0$. We can write this as $3 x \left(- 9\right) = 0$ or $3 x = - 9$
+
+We know that we have to find the value of $x$, so we use the property that $\frac{d}{dx} x = \frac{d(x+h)}{dx}$
+
+$x = \frac{- 9 h}{h} = \frac{\sqrt{3}}{4}$
+
+Now, we will see that the equation has two solutions. The first one is $3 x + 9 = 0$, and the second one is $6 x - 9$. So, we must factor the right side of the equation by the same number we got in the first equation.
+
+$\begin{array}{rcl} (3 x + 6) & = & (6 x - 6)\\ & = & \left(\frac{6 x - 3}{3}\right)\left(\frac{-6 x +
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=94 first30=[622, 311, 13, 81, 711, 202, 2774, 15, 1427, 415, 1889, 263, 1392, 357, 3448, 263, 1180, 288, 9044, 298, 5922, 263, 993, 17, 1289, 3114, 817, 269, 1392, 299]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n*n
+
+
+Now, let's create a function that takes a list of integers and returns a number. We'll use the function to find out what the first integer is. The input is an integer, so we need to add it to the list.
+
+print("Number =", factorial(100))
+print("The first integer is 100")
+
+# print "The first integer was: " + str(factorial(100))
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 537, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.5790783762931824, 0.36237800121307373, 0.058543600142002106, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', ' #', '', '#', '', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 354, 647, 353, 20, 1341, 311, 12, 864, 353, 21, 2216, 311, 552, 354, 12, 711, 202, 1465, 330, 269, 1134, 359, 269, 775, 1373, 2080, 15, 1722, 411]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1 + (1 / n) * (2 ** n - 1)
+
+
+This is the same as the first example above, except we can use the recursion to compute the next Fibonacci number. The second example uses recursion to find the next Fibonacci value. In this case, the recursive call will take one argument and return the value of the next Fibonacci. We'll look at the recursive call later in this tutorial.
+
+Here's an example of a function that takes two arguments and returns the result:
+
+#include <boost/function.hpp>
+using namespace std;
+class Fib : public boost::function<void()> {
+public:
+int f = 0;
+public:
+    // we're just using a simple function with a loop so it doesn't have any loops.
+    void __init__(this);
+
+    // we've already got a loop so we can define our own function
+    Fib(int i, int j, int k, int l, int r, int c, int d, int e, int f, int g, int h, int i, int k)
+        : f(i), f(j), f(k), c(l), d(r), e
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 2590, 31412, 1541, 1906, 2, 3, 1, 0]
+first_step_topk_probs=[0.3044416606426239, 0.2743247151374817, 0.1808459460735321, 0.14683544635772705, 0.06722616404294968, 0.026326144114136696, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' No', ' Cats', ' There', ' All', '', '', '', '']
+
+[New tokens 8] count=256 first30=[2590, 17, 31412, 395, 453, 2645, 289, 269, 3335, 357, 581, 491, 2886, 28381, 351, 553, 3456, 388, 1629, 17, 382, 2419, 288, 263, 3191, 415, 3456, 330, 5397, 419]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: No. Cats are not black in the sense that they have white markings on their face or body. The color of a cat's face is determined by its coloration. If a cat has black spots on his face or body, he may be black but if he does not have any dark spots on his skin, he may not be black. So black cats are not black.
+As for the question of whether cats are black, there are two ways to answer it. First, we must look at the behavior of cats, which is often a difficult task. There are many different kinds of cats. Some of them are very social, others are solitary. A cat may live alone or in groups of several hundred. The average cat lives in a group of about 100 cats. If you want to know how cats are doing, look at the following table.
+|A||Cats (1-2)
+|B||Cats that live alone or together||Cats living alone or together|
+|D||Cats who live alone or with other cats||Cats born without a litter box|
+|E||Cats with no cats||Cars with no cats|
+|F||Cats without cats||Cogs with no cats.|
+
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 843, 1012, 637, 2050, 354, 409, 2, 1, 0]
+first_step_topk_probs=[0.4722970724105835, 0.15017108619213104, 0.10986751317977905, 0.07476203143596649, 0.06526404619216919, 0.06526404619216919, 0.062374163419008255, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 4', ' 5', ' 6', ' 3', ' One', ' 1', ' 2', '', '', '']
+
+[New tokens 9] count=256 first30=[2050, 13032, 330, 5405, 744, 21, 17, 5517, 10941, 395, 5405, 7, 20, 17, 8704, 10941, 395, 5405, 744, 22, 17, 7947, 10941, 395, 5405, 354, 17, 11826, 10941, 395]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple is worth $2. Two apples are worth$1. Three apples are worth $3. Four apples are worth 1. Six apples are worth 0. Four apples is worth$4. Five apples is worth 0. Five apples are worth \$5.
+If the sum of all the apples in a row is $n$, what is the value of n?
+Answer by Abhijit
+Nearby Math Worksheets
+This worksheet contains over 400 math questions for each of the following topics: number, subtraction, multiplication, division, fractions, decimals, geometry, measurement, money, health care, health care products, safety, health insurance, health care costs, health care plans, health care budgeting, health care statistics, health care budgets, health care policies, health care planning, health care costing, health policy, health care spending, health care reform, health care financing, health care finance, health care savings, health care expenditures, health care health, health care inflation, health care economics, health care payrolls, health care tax, health care reimbursement, health care expenditure, health care research, health care utility, health care travel, health care prices, health care rates, health care quality, health care
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 2575, 783, 1289, 3919, 1509, 698, 1278, 360]
+first_step_topk_probs=[0.7578438520431519, 0.036702703684568405, 0.027560744434595108, 0.02685227058827877, 0.024195918813347816, 0.02237756736576557, 0.02237756736576557, 0.019140545278787613, 0.019140545278787613, 0.014752201735973358]
+first_step_topk_text=[' I', ' The', ' What', ' This', ' We', ' My', ' You', ' It', ' If', ' "']
+
+[New tokens 10] count=256 first30=[2575, 330, 669, 2942, 374, 269, 1759, 7042, 34, 202, 16, 2575, 330, 669, 1466, 1909, 288, 269, 2690, 920, 3222, 298, 1293, 34, 202, 16, 1348, 1223, 669, 1466]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience with the following topics?
+- What is your current view of the relationship between parents and children?
+- How does your current perspective differ from the perspective of parents?
+- Does your current perspective change over time, or do you see it as a consequence of the parenting situation?
+- Do you see it in terms of what you've done to your child, family, and school?
+- Is there a difference between parent and child in terms of the way you're acting on them?
+- If you think that you are not getting along well with your child, what would you say to him or her? Why?
+- Are you feeling depressed about your child's behavior?
+- Has your child experienced any difficulties at home or school?
+Assistant, Carolyn: Parenting in the Family: A Parent's Guide to Parenting in Your Child's School (Chapters 2 & 3).
+Pearson, R. and Riley, B., eds.: Parenting in School: A Handbook for Parents and Teachers (Chapman and Hall, 1997)
+Gillard, S. and Fenton, J. (Eds.) Children and Schools: An Inquiry into the Nature of Education (N
+
+================================================================================
