@@ -1,0 +1,287 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[418, 330, 791, 601, 2827, 15, 1628, 728, 289, 3609]
+first_step_topk_probs=[0.1220686286687851, 0.1158735454082489, 0.10441083461046219, 0.09408197551965714, 0.07638859748840332, 0.06653308868408203, 0.065338633954525, 0.04088786989450455, 0.03684302791953087, 0.02695493772625923]
+first_step_topk_text=[' was', ' is', ' would', ' will', ' named', ',', ' might', ' may', ' in', ' asked']
+
+[New tokens 1] count=168 first30=[578, 733, 998, 289, 269, 1471, 288, 263, 1844, 17, 382, 929, 330, 263, 929, 668, 418, 3673, 299, 3222, 668, 586, 8066, 299, 2748, 339, 3035, 1471, 17, 382]
+[Full output 1]
+Once upon a time, a curious child has been found in the care of a family. The child is a child who was born to parents who were unable to pay for medical care. The child was taken from the home and placed on a nursing home or hospital.
+The child is placed in a special room with the following name:
+- The name of the mother of the child.
+- The father's name.
+- A name that is not known.
+- What the child did when he was born.
+- When the child was six months old.
+- How the child was raised.
+- Where the child was living at the time of birth.
+- To whom the child was given the name.
+The name of the child is:
+- Who the child was named after.
+- Who was the person who gave the name.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 1134, 1112, 17, 698, 330, 3323, 289, 269, 5235, 645, 288, 269, 9556, 15, 1661, 269, 2868, 288, 2463, 324, 3088, 17, 202, 509, 2475, 360]
+[Full output 2]
+Paris is the capital of the province of the same name. It is located in the southern part of the province, near the town of Marseille.
+The word "ville" means "to be or to be". The word "Ville" comes from the French word "vilaine", which means "a place where people live."
+In 1792, a group of men who were opposed to the French Revolution, led by Napoleon Bonaparte, marched into Marseilles and captured the city. They took the city with them and all the inhabitants were executed. This was the first time that the French had been defeated.
+The French had been fighting for many years against the new government of Napoleon I. After the fall of Napoleon, France began to re-establish itself as a powerful military power. The French Army was finally reorganized under the leadership of General Charles de Gaulle in 1823.
+During the French Revolution (1820–1832), the French people were divided between two camps: the French Nationalists and the British. In the former, the French were able to gain control over the provinces while the British controlled the country. However, the British controlled most of the provinces, while the French controlled most of France's cities.
+After the French Revolution
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 483, 342, 998, 419, 4007, 269, 18956, 288, 263, 3823, 338, 17, 382, 18956, 395, 269, 1992, 288, 269, 5606, 28069, 288, 338, 17, 382, 28069, 288]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be found by finding the eigenvalues of a matrix A. The eigenvalues are the values of the corresponding eigenvectors of A. The eigenvectors of a matrix are the numbers of the columns and rows of the matrix. If there are only two linearly independent vectors in the matrix, then the eigenvalues are zero.
+
+###### Example 2.
+
+Find the eigenvalues of the following matrix:
+
+$\begin{array}{c|cccc} \frac{\partial}{\partial x_1} & \frac{\dot\vec{x}}{\partial x_2} & \ddot\vec{y}\\ \frac{\mathrm{d}\cdot\mathbf{v}}{\mathrm{d}t} & \sqrt{\frac{\partial^2u}{\partial t^2}} \\ \end{array}$
+
+The eigenvalues are given as follows:
+
+$\\\begin{array}[t] \frac{\mathbf{v}}{|\mathbf{x}|} & \begin{bmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\phi\end{bmatrix} \\ \end{-}\phantom{}t=0$
+
+We will now find the eigenvalues for the given matrix.
+
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 491, 483, 395, 5546, 1420, 9845, 1798, 14071, 1085]
+first_step_topk_probs=[0.34949737787246704, 0.13686513900756836, 0.12332572788000107, 0.1024259403347969, 0.06266143172979355, 0.0372224859893322, 0.027232550084590912, 0.023293236270546913, 0.02098894864320755, 0.01992376148700714]
+first_step_topk_text=[' use', ' have', ' can', ' are', ' describe', ' allow', ' rely', ' learn', ' incorporate', ' model']
+
+[New tokens 4] count=256 first30=[395, 885, 299, 5951, 1623, 16, 7128, 2061, 17, 382, 3355, 2877, 330, 299, 817, 269, 1085, 299, 1798, 806, 299, 3235, 922, 601, 5891, 1902, 15, 298, 1000, 4116]
+[Full output 4]
+Neural networks are a class of machine learning models that are used to solve real-world problems. The basic idea is to use the model to learn how to predict what will happen next, and then apply this knowledge to other situations in the future.
+
+### Modeling
+
+In order to train a neural network, we need to specify some parameters. For example, we might want to predict the next time it is called, but this may not be possible for all cases. To do so, we can use a neural network. A neural network is an algorithm that uses information from many different sources (e.g., data) to create a model. In our case, we have two types of input: the input data and the output data. The input data contains the inputs, and the output is the output of the network. We have three parameters, which we call the inputs, the outputs, and the weights.
+
+The weights are stored as a list with the name of each input feature. The weights are defined by the weight matrix of the input features. The weights have the same shape as the input features, but they are stored as arrays instead of lists. The weights and biases are stored as an array, where the first element represents the weights, the second element the biases, and the third element the
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 1348, 299, 1098, 269, 3581, 288, 263, 1309, 7885, 888, 795, 1496, 2348, 34, 202, 202, 44, 491, 287, 3581, 289, 795, 4487, 15]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# How to find the equation of a line passing through two given points?
+
+I have an equation in two variables, $x$ and $y$, and I want to find the slope of this line. Is there some method that can be used to find the value of $y$ for which this is true?
+
+• The question asks you to find the slopes of lines with the same slope. – John C. Smith Sep 2 '15 at 20:31
+• @JohnC.Smith: You could also use the equation $\frac{dy}{dx} = \frac{1}{2} x^2$. – user66621 Sep 3 '15 at 0:33
+• That's the general form of the equation, so it will work for any point on the line. – John A. Smith Sep 4 '15 at 9:35
+
+The easiest way to solve this problem is to start by finding the slope of the tangent line. To do this, take the derivative of both sides of the equation. Then take the derivative and set it equal to zero. Now take the derivative again, and you'll get a quadratic equation. If you have the quadratic equation, then you can substitute into the original
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.6513549089431763, 0.3486451506614685, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 6] count=59 first30=[622, 311, 13, 81, 202, 202, 856, 1271, 1714, 346, 1083, 801, 44, 4575, 2449, 351, 269, 2859, 339, 269, 28045, 1392, 17, 356, 3114, 817, 269, 1498, 444, 269]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n*n
+
+def main():
+    print("I'm working on the code for the factorial function. I'll use the method from the previous part.")
+
+    n = int(input())
+    factorial(n)
+
+
+if __name__ == "__main__":
+    main()
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 821, 537, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.47299179434776306, 0.3284859359264374, 0.12210863083600998, 0.07641363143920898, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', ' """', ' #', '', '', '!', '"', '', '']
+
+[New tokens 7] count=256 first30=[622, 354, 647, 353, 20, 1341, 311, 12, 864, 353, 21, 2216, 353, 81, 552, 354, 687, 711, 202, 2141, 483, 620, 482, 1191, 269, 1152, 357, 1148, 31393, 993]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1 + (1 / n) * (2 ** (n - 1))
+
+
+We can do this using the fact that every Fibonacci number is either even or odd. We know that every Fibonacci integer is even, so we have:
+
+fib(n) = 2^n * (n - 2)^(n-1)
+
+This means that there are two distinct values of n for which fib(n)=2^n and fib(0)=2^0 for all n. In other words, we need to find out whether each value of n is even or odd for any given positive integer n.
+
+Let's consider an example to see how this works:
+
+Example 1: Find the first few Fibonacci numbers in the range [1, 5].
+
+First, let's compute the first few ones:
+
+* The first few Fibonacci integers are 1, 3, 6, 11, 13, 17, 19, 23, 28, 31, 33, 55, 89, 144, ...
+* The next few Fibonacci integers have no factors other than 1 and themselves. So, the first few prime numbers are 1, 2, 3, 4, 5, 7, 8, 9, 10, 11
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 2590, 31412, 1541, 4619, 698, 2, 1, 0]
+first_step_topk_probs=[0.3288387358188629, 0.296308308839798, 0.12877510488033295, 0.12877510488033295, 0.06543023884296417, 0.029956147074699402, 0.021916383877396584, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' No', ' Cats', ' There', ' Black', ' It', '', '', '']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 808, 17, 202, 2573, 395, 914, 2584, 288, 10676, 15, 614, 581, 545, 491, 263, 14159, 12153, 2605, 298, 269, 851, 1488, 1375, 330, 269, 2886, 3191]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is no.
+There are many types of cats, but they all have a distinctive coat pattern and the most common type is the white cat. White cats are called "white cats" because they have a coat pattern of black and white stripes. Some cats are actually black with a "murderous" pattern of white stripes on their back. Other cats are simply black with a more pronounced pattern of white.
+The coloration of the coat pattern varies from one cat to another. A cat's coat pattern may be as simple as a brown or dark brown coat, while a white cat's coat may be as complex as a red, blue, or even yellow. Some cats, such as the white cat, have very distinct patterns of stripes in their coats. These stripes are often referred to as "balds."
+A black cat's coat has a striped pattern of white and a darker stripe than a white cat. There are also other types of black cats which have a similar pattern of stripes.
+Some cats are born black, and some are born white. However, a cat born white cannot be considered a black cat unless it is given a special "cure" for its condition.
+Animals with an unusual coat pattern will not
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 843, 382, 2050, 1012, 637, 409, 1218, 354, 1541]
+first_step_topk_probs=[0.3526895046234131, 0.11813618987798691, 0.09591909497976303, 0.09591909497976303, 0.07788015902042389, 0.06571545451879501, 0.05482657998800278, 0.04873615875840187, 0.046262796968221664, 0.04391495883464813]
+first_step_topk_text=[' 4', ' 5', ' The', ' One', ' 6', ' 3', ' 2', ' 8', ' 1', ' There']
+
+[New tokens 9] count=50 first30=[2050, 4081, 13693, 16, 16545, 17, 202, 3016, 914, 10941, 395, 715, 289, 269, 2716, 34, 202, 24771, 353, 36, 12, 19787, 1885, 3808, 17, 202, 3016, 1264, 3161, 1352]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One hundred fifty-six.
+How many apples are there in the box?
+Answer (A) Eight times ten.
+How much money did he have when he bought $1,000?
+Answer(B) Five times ten.
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 1289, 360, 1509, 1278, 783, 698, 2575, 3919]
+first_step_topk_probs=[0.7754952907562256, 0.03618017956614494, 0.03434402123093605, 0.027168355882167816, 0.0251266211271286, 0.022640977054834366, 0.020939482375979424, 0.017001522704958916, 0.014168360270559788, 0.014168360270559788]
+first_step_topk_text=[' I', ' The', ' We', ' "', ' You', ' If', ' This', ' It', ' What', ' My']
+
+[New tokens 10] count=256 first30=[356, 3442, 733, 289, 269, 5988, 339, 263, 7543, 288, 4437, 1244, 298, 356, 483, 847, 4283, 4453, 1107, 17, 202, 44, 491, 733, 715, 339, 672, 263, 2107, 15]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I've been in the hospital for a couple of weeks now and I can't remember anything else.
+I have been there for about a week, but I haven't seen any heartburn symptoms or other symptoms.
+It's been an average month, and I can only tell you that I've had heartburn from time to time. It's been a long time since I've had it.
+"Heartburn is often called the 'back-to-basics' of heartburn," says Dr. Mark Widener, chief of the division of gastroenterology at Harvard Medical School. "It's not a symptom, it's a symptom."
+The most common symptom of heartburn is a burning sensation in the chest, which may be accompanied by nausea, vomiting, cramping, and/or pain in the upper right part of your throat.
+However, the cause of heartburn isn't known. In fact, many people who suffer from heartburn don't even know they have it.
+But it's not uncommon for people with heartburn to have their chest discomfort worsened by exertion. The reason is that the stomach lining, or gastric mucosa, produces acid and when it's not working properly, it becomes acidic.
+The
+
+================================================================================
