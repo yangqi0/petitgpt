@@ -1,0 +1,319 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[601, 330, 791, 1628, 418, 728, 2827, 15, 289, 483]
+first_step_topk_probs=[0.21934200823307037, 0.15232984721660614, 0.1236821860074997, 0.08589556068181992, 0.06620229780673981, 0.05965322628617287, 0.04364322870969772, 0.030241047963500023, 0.028771409764885902, 0.028771409764885902]
+first_step_topk_text=[' will', ' is', ' would', ' might', ' was', ' may', ' named', ',', ' in', ' can']
+
+[New tokens 1] count=256 first30=[578, 733, 998, 289, 269, 1471, 288, 263, 1844, 17, 382, 929, 330, 263, 929, 668, 418, 3673, 299, 263, 3804, 298, 3577, 668, 395, 1507, 10419, 17, 202, 509]
+[Full output 1]
+Once upon a time, a curious child has been found in the care of a family. The child is a child who was born to a father and mother who are still alive.
+The child is said to be "born" on the day of birth, but it is not always the case. In some cases, a child may be born prematurely, but it does not mean that the child will die. A child born prematurely is known as a "mortal."
+The child's life begins at birth. It starts with the child's body and continues until death. At this point, the child is said by his or her parents to have died. The child's parents are usually the same person, but sometimes there are different reasons for their death. They may be elderly people, sick, or even children.
+A dying child is considered to be one whose death has occurred. There are many reasons why a dying child can't be saved. These reasons include:
+- Death of a loved one (for example, a parent dying from a disease).
+- Unhealthy lifestyle choices.
+- Lack of support.
+- Other problems.
+- Many other things.
+Most deaths occur because of a lack of support. Most deaths happen when someone else dies. However, it is very
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 4455, 426, 336, 263, 343, 2, 3, 1, 0]
+first_step_topk_probs=[0.8722186088562012, 0.06451347470283508, 0.019985342398285866, 0.01709436997771263, 0.014621587470173836, 0.011566628701984882, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' France', ' F', ' S', ' a', ' C', '', '', '', '']
+
+[New tokens 2] count=66 first30=[269, 9556, 288, 1057, 1087, 266, 15, 4455, 17, 698, 418, 6214, 289, 2234, 2543, 419, 2960, 5693, 657, 298, 610, 5506, 15, 2658, 403, 3855, 1735, 6438, 370, 440]
+[Full output 2]
+Paris is the capital of the province of Argyre, France. It was founded in 1499 by King Charles V and his wife, Countess Antoinette de L'Espagne.
+
+The city has a population of about 3,000 inhabitants (2009). The centre of the city is called L'Abbaye.
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 357, 483, 342, 3020, 359, 263, 1701, 288, 795, 7527, 17, 535, 269, 1832, 288, 263, 4409, 15, 269, 28071, 330, 269, 4409, 374, 269, 4874, 8878, 298]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector that can be written as a sum of two vectors. In the case of a vector, the eigenvalue is the vector with the highest magnitude and is called the eigenvector. The following is a list of eigenvalues of a square matrix:
+
+• $$\lambda$$ = 1 for all $$x \in \mathbb{R}^n$$
+• $$\mu$$ = $$\lambda_1$$ for all $$0 \leq x \leq 1$$
+• $$M$$ = $$\mu$$ for all $$\lambda \geq 0$$
+• M = $$\mu^2$$ for all 2 × 2 matrices
+
+The eigenvalues are then written in order by adding up the corresponding eigenvectors. For example, if we have $$A=\begin{bmatrix}0 & -1 \\ 0 & 1\end{bmatrix}$$, then $$B=0$$.
+
+## Complex numbers
+
+The complex number $$z$$ has several properties:
+
+1. It is a real number.
+2. It has no imaginary parts.
+3. It has the form z + iy = 0.
+4. It has both positive and negative real parts.
+5. It has a unique real number (also known as a complex conjugate).
+6. It
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 491, 483, 395, 1798, 9845, 1420, 5546, 14071, 1991]
+first_step_topk_probs=[0.30910494923591614, 0.1836160570383072, 0.13433636724948883, 0.10711434483528137, 0.0405457429587841, 0.03848801553249359, 0.03468061238527298, 0.03468061238527298, 0.02170257270336151, 0.01955563947558403]
+first_step_topk_text=[' use', ' have', ' can', ' are', ' learn', ' rely', ' allow', ' describe', ' incorporate', ' provide']
+
+[New tokens 4] count=256 first30=[395, 885, 299, 5951, 1623, 16, 7128, 2061, 17, 382, 3355, 2877, 330, 357, 581, 395, 8511, 351, 870, 15, 298, 1000, 269, 1085, 330, 6998, 1674, 760, 870, 17]
+[Full output 4]
+Neural networks are a class of machine learning models that are used to solve real-world problems. The basic idea is that they are trained on data, and then the model is tested against these data.
+The first problem in this class is that you have to train a neural network with a specific feature. This is very hard for the neural network to learn because it's not always well-suited for certain types of data. In fact, the training is very difficult for the neural networks to learn because of the many parameters that can be changed during the training process. So we have to use some optimization algorithms to try to find the best one.
+In order to do this, we will use a new algorithm called "learning rate descent" which has been proposed by Kronig (1994). It is based on the idea that an algorithm that takes into account the effects of past observations is better than an algorithm that only takes into account future observations. We will use this idea as a basis for our learning algorithm.
+The next step is to apply a different type of learning algorithm called "random forest", which is based on a very simple but highly efficient way of doing this. There are two main advantages of this approach:
+1) The algorithm is quite easy to implement, and you can use it easily even when you
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 1348, 299, 1098, 269, 3581, 288, 263, 1309, 34, 202, 202, 44, 873, 4532, 299, 5951, 482, 2395, 29, 202, 202, 509, 9548, 288]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# How to find the equation of a line?
+
+I am trying to solve this question:
+
+The slope of a line is given by the formula:
+
+$\frac{y-y_0}{x-x_0} = \frac{1}{2}$
+
+My attempt was to use the slope of a straight line. I got the slope of the line as 2 and then using the slope of an angle in radians, I get:
+
+$y= \frac{2\pi}{3}$
+
+This means that the slope of my line is $\frac{y+2}{x-2}$. The slope of the angle $\theta$ is $-\frac{y}{2}$, so that's the equation of the line.
+
+But then, I don't know how to find the slope of this line. My problem is that the slope doesn't give me the slope of any other line.
+• What do you mean by "the slope of the tangent line"? – user12177 Mar 13 '16 at 15:03
+• The slope of a tangent line is the reciprocal of the slope of another line. The slope of any tangent line is zero if it passes through the
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=54 first30=[490, 311, 861, 643, 29, 341, 622, 354, 1246, 1107, 29, 341, 622, 494, 11, 81, 12, 202, 202, 856, 1271, 1714, 346, 1083, 360, 509, 28045, 288, 311, 330]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     if n == 0:
+         return 1
+     else:
+         return int(n)
+
+def main():
+    print "The factorial of n is %d" % factorial(int(input()))
+
+
+if __name__ == "__main__":
+    main()
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 537, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.6908965110778809, 0.20852814614772797, 0.10057533532381058, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', ' #', '', '#', '', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[490, 311, 861, 643, 29, 1246, 622, 354, 1246, 490, 311, 1319, 409, 861, 643, 29, 341, 622, 8049, 11, 81, 552, 354, 12, 1246, 1107, 29, 1246, 622, 8049]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     if n == 0:
+     return 1
+     if n % 2 == 0:
+         return fib(n - 1)
+     else:
+     return fib(1 + (n / 2))
+
+
+This function will run for n iterations, and it will print the Fibonacci number in the form of a function. This is useful when you want to find the exact value of a Fibonacci number. The function will return the Fibonacci number if the input is not equal to n. If the input is less than or equal to n, then the function returns zero.
+
+In this example, we'll use the same idea as before, but with an additional parameter called n. To do this, we can specify the number of iterations.
+
+fib(10)
+fib({5,6})
+
+The first few Fibonacci numbers are shown below:
+
+Fib({4,2})
+Fib({'a', 'b'})
+
+The second few Fibonacci numbers will be shown:
+
+fiber(100)
+fiber({3,4})
+
+To compute the Fibonacci number, we need to add up all the Fibonacci numbers from 100 to 200. So, we'll add 1 to each Fibonacci number.
+
+Fiber({4,
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 2590, 1541, 4619, 1906, 31412, 698, 0, 1]
+first_step_topk_probs=[0.3530693054199219, 0.3019962012767792, 0.13826392590999603, 0.08213222026824951, 0.039613276720047, 0.03388303518295288, 0.02751084789633751, 0.023531274870038033, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' No', ' There', ' Black', ' All', ' Cats', ' It', '', '']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 808, 17, 202, 2573, 395, 914, 2584, 288, 10676, 15, 614, 581, 545, 491, 263, 12153, 536, 330, 1108, 444, 269, 1979, 288, 553, 1629, 17, 535]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is no.
+There are many types of cats, but they all have a coat which is different from the rest of their body. In general, there are four main types of cats. They are all black, although some of them may be brown or gray.
+The most common type of cat is the black cat. This cat has black fur on its tail and is white in color. The cat's coat is usually short and smooth. It also has a white underbelly and a long tail. This cat is often called a "nipple" because it looks like a nipple.
+These cats are known as the white cat. They are found throughout Europe and Asia. They are not the same as the black cat, except that they do not have white coats.
+This cat has a wide range of colors including red, yellow, orange, green, blue, purple, and white. These cats are called the black cat because they look like black.
+Some cats are born with black fur. These cats tend to be black-tipped. They are dark colored with a black back and a white back. The cats are more likely to be black than other cats.
+In the United States, black cats are classified as either "
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 843, 354, 744, 1012, 382, 1218, 409, 637, 2050]
+first_step_topk_probs=[0.25281620025634766, 0.1284550130367279, 0.11574769020080566, 0.07630555331707001, 0.07630555331707001, 0.07243305444717407, 0.06875701248645782, 0.06601082533597946, 0.06029437109827995, 0.05299315229058266]
+first_step_topk_text=[' 4', ' 5', ' 1', ' $', ' 6', ' The', ' 8', ' 2', ' 3', ' One']
+
+[New tokens 9] count=256 first30=[2050, 4081, 7639, 10941, 330, 3007, 299, 354, 18, 9005, 288, 263, 18038, 17, 202, 509, 3533, 330, 354, 18, 2992, 15, 1086, 333, 643, 17, 11201, 8961, 17, 202]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One hundred thousand apples is equal to 1/1000 of a pound.
+The answer is 1/100,000 = 0.001 pounds.
+In this problem, we are given the number of apples in one quart jar. The number of apples is 1/10th of a pound, so the number of pounds of apples is 0.1 pounds. What is the number of oranges?
+Answer by jim_thompson59
+Jim's Number: 2
+This problem is about counting the number of ways you can choose two items from a set without leaving any remainder.
+Answer by bjp526
+Joe has 3 apples, Bob has 4 apples, and John has 5 apples. How many different ways can Joe choose 2 apples for the first apple, then 3 apples for the second apple, and so on?
+Answer these questions:
+1. What is 4/6?
+2. What is 2/3?
+3. What is 3/4?
+4. What is 5/8?
+5. What is 6/9?
+6. What is 7/12?
+7. What is 8/13?
+8. What is 9/18?
+9. What is 10/25
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 1289, 698, 1509, 2575, 382, 783, 3919, 1278, 1541]
+first_step_topk_probs=[0.7476404309272766, 0.033753905445337296, 0.03204089775681496, 0.03041481226682663, 0.028871245682239532, 0.028871245682239532, 0.026015164330601692, 0.017602741718292236, 0.012224854901432991, 0.01191061083227396]
+first_step_topk_text=[' I', ' We', ' It', ' You', ' What', ' The', ' This', ' My', ' If', ' There']
+
+[New tokens 10] count=256 first30=[2575, 330, 669, 2942, 374, 269, 4083, 34, 202, 42, 285, 401, 29, 356, 3442, 733, 289, 263, 2690, 339, 672, 2236, 973, 298, 383, 415, 733, 263, 2023, 4560]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience with the stress?
+Garth: I've been in a relationship for about 30 years and it's been a big deal. I've had some bad days, but I've never felt so stressed that I've had to be very restless. It's been a tough day, but I have been really, really happy. And it's been really hard for me to get out of bed.
+And so I just started working on my own stress management program.
+Assistance: We're going to start a couple weeks ago and we'll talk about how you can help yourself.
+Garths: That's right. You know, it's really important to get enough sleep. It's also important to take care of yourself as well.
+Assponder: Well, I think you should go over what you do to get enough rest.
+GARths: If you're not getting enough rest, then you need to find a way to get more sleep.
+Asskeeper: So, if you're going to sleep for the first time, you want to go to bed at least four hours before you go to bed.
+Garry: I would say, you can't go to bed without sleeping.
+Assitary: This
+
+================================================================================
