@@ -1,0 +1,329 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[791, 330, 418, 601, 1628, 15, 728, 2827, 289, 3609]
+first_step_topk_probs=[0.14834491908550262, 0.12688614428043365, 0.11433389782905579, 0.08812058717012405, 0.08364847302436829, 0.048357248306274414, 0.042501531541347504, 0.03829706087708473, 0.03635348752140999, 0.03635348752140999]
+first_step_topk_text=[' would', ' is', ' was', ' will', ' might', ',', ' may', ' named', ' in', ' asked']
+
+[New tokens 1] count=174 first30=[578, 733, 998, 289, 269, 1471, 288, 263, 1844, 17, 382, 3577, 330, 263, 929, 288, 263, 1114, 2032, 2133, 298, 330, 1414, 299, 342, 1114, 8387, 672, 896, 1293]
+[Full output 1]
+Once upon a time, a curious child has been found in the care of a family. The mother is a child of a very young age and is known to be very sensitive about her children's behavior. This child was a very fragile one that was not able to bear any contact with anyone else. She had no contact with anyone until she was four years old. Her parents were the only ones who knew her.
+This child was an extremely vulnerable child because she did not have enough time for herself to learn to read or write. There are many reasons why this child might have been neglected by the mother. It is often difficult for a mother to understand how much time she spends on her own, so it is important to find out what can be done to help her. If you would like to learn more about this child please visit our website at www.huffingtonpost.com/stories
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 7535, 281, 8191, 15, 298, 330, 658, 269, 8492, 288, 269, 412, 405, 295, 4830, 288, 7535, 281, 405, 5597, 17, 698, 330, 658, 269, 851, 1384]
+[Full output 2]
+Paris is the capital of the province of Catalonia, and is also the seat of the comunicado of Catalunya. It is also the most important city in the province.
+The municipality of Cataluña has a population of 1,925 (2011). The mayor is José María Alba, elected by the municipal council.
+
+Composition
+There are 29 neighbourhoods in Cataluño District:
+
+ Aviña
+ Ciudad de Catalunas
+ Cárdenas
+ Dios
+ Ejército
+ Fray Alejandro
+ Frontera
+ Águilas
+ Areca
+ Arcos
+ Alegre
+ Avenir
+ Caracas
+ Carvajal
+ Carrega
+ Carondo
+ Caranco
+ Carantina
+ Caruso
+ Caruay
+ Carras
+ Caraballo
+ Carobel
+ Carbajal
+ Úbeda
+ Caronica
+ Carone
+ Carzio
+ Caraz
+ Carustarias
+ Carraca
+ Caruno
+ Carugnada
+ Carúdares
+ Carusara
+ Carutelló
+ Carutello
+ Carut
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=211 first30=[263, 4409, 357, 483, 342, 3020, 359, 263, 1701, 288, 795, 7527, 17, 1220, 1373, 15, 269, 18956, 288, 263, 3592, 3823, 395, 269, 1677, 288, 686, 13622, 3098, 298]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector that can be written as a sum of two vectors. For example, the eigenvalues of a square matrix are the product of its diagonal elements and the scalar multiples of each other. The number of linearly independent eigenvectors for a given matrix is called the number of linearly dependent eigenvectors. If the number of eigenvectors is equal to 1, then the matrix is invertible. This means that if we have the matrix A = (1 2 3) , we can find the corresponding eigenvectors by multiplying them together:
+A = (1/2) * A = (3/4) * A
+Now let's look at some examples:
+Example 1: Find the number of orthogonal eigenvectors with respect to the basis .
+Solution: We first multiply each row of the matrix by the scalar multiple of the basis.
+Therefore, the number of orthonormal eigenvectors is
+The number of orthogonal eigenstates is equal to
+This is just a generalization of the example above where we have the same row of the matrices but now we have different eigenvectors.
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 491, 395, 1798, 1420, 5546, 9845, 1085, 330]
+first_step_topk_probs=[0.3124186098575592, 0.20595896244049072, 0.15068280696868896, 0.12014831602573395, 0.038900647312402725, 0.03158482909202576, 0.028460323810577393, 0.019765280187129974, 0.018762195482850075, 0.016906142234802246]
+first_step_topk_text=[' use', ' can', ' have', ' are', ' learn', ' allow', ' describe', ' rely', ' model', ' is']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 298, 3235, 269, 8020, 17, 1658, 2269, 1420, 500, 299, 1557, 806, 269, 870, 330, 5256, 15, 298, 806, 383, 728, 1643, 758]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data and predict the outcome. These models allow us to understand how the data is distributed, and how it may change over time.
+
+The problem with these models is that they cannot account for the fact that some things might happen during training. To address this issue, we need to use a different approach than the one described in the previous section. This method involves using a neural network to learn the output of a neural network. The proposed approach is called neural networks (NNS).
+
+In the NNS framework, a neural network is trained by applying a pre-trained neural network to the input data. For example, if we have two training sets X and Y, we can train the neural network to predict the values of the first set X. Then, we will update our model based on the new values of X. However, because the neural network does not know which values to increase or decrease, it cannot predict the new values. Instead, it must adapt its output to the new values based on the changes in the input data as a result of training. In other words, the neural network is able to adjust its output so that it can predict the new value of X given the new values, even though it has not changed the
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=157 first30=[263, 647, 286, 3, 711, 6, 1348, 299, 5951, 482, 3581, 34, 202, 202, 4109, 3182, 1186, 401, 2807, 15, 23199, 29, 6974, 8374, 202, 86, 475, 202, 3016, 299]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# How to solve this equation?
+
+• April 7th 2012, 03:52 PM
+sage
+How to solve this Equation?
+$2x^3-8=0$
+
+$\left(-\frac{1}{4}\right)^2+9=-8$
+
+$8=\frac{-5}{2}$
+
+$-\frac{7}{6}=\frac{15}{6}$
+
+$\Rightarrow \frac{1}{\sqrt{2}}=\frac{15}{\sqrt{6}}$
+
+$x=\frac{\sqrt{2}}{2}$
+$y=\frac{\frac{1 }{2}}{\sqrt{2}}$
+
+$-10=-\frac{11}{2}$
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 311, 864, 353, 20, 1341, 353, 21, 2216, 353, 81, 552, 354, 3943, 711, 202, 1465, 330, 263, 1114, 2829, 1373, 17, 3490, 415, 1721, 411, 1418, 299, 1098]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n * (1 / (2 ** (n - 1)))
+
+
+This is a very simple example. Let's say we want to find the factorial of a number n, and we want to use it to get the value n for which we have a remainder of 1 when divided by n. We would do this using the same method as above, but with a different input and output.
+
+Here are some examples of how to use the factorial function in Python:
+
+>>> factorial(10)
+'0'
+>>> factorial('9')
+'7'
+>>> n = 10**3
+>>> factorial([1, 2, 3])
+[5, 7]
+>>> factorial([[1, 2], [3, 4]])
+[1, 5]
+>>> n == 6
+True
+>>> factorial((6))
+{1, 2}
+>>> factorial([(6, 3)])
+[4, 3]
+>>> # Use factorial instead of factorial for calculations
+>>> factorial({1, 2})
+[5]
+>>> print(factorial(5))
+[5]*5
+>>> factorial(['a', 'b'])
+[['a', 'c']*[1, 'd']]
+>>> factorial([])
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 339, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.5456520318984985, 0.3789474368095398, 0.07540055364370346, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', ' for', '', '#', '', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 354, 647, 353, 20, 1341, 311, 12, 864, 353, 21, 2216, 353, 81, 552, 354, 687, 711, 202, 2141, 483, 620, 482, 289, 263, 2014, 1194, 15, 614, 374]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1 + (1 / n) * (2 ** (n - 1))
+
+
+We can do this in a similar way, but with a slightly different approach. We first make the recursion into a single function, and then we add it to our list of functions. The result is a new function that takes a list of functions as input and returns a new one that can be used to find out if there are any numbers in the list. For example, the first few Fibonacci numbers are 2, 3, 5, 7, 11, 13, 17, 19, 21, 23, 25, 27, 31, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[31412, 382, 13676, 4619, 1541, 2590, 2, 3, 1, 0]
+first_step_topk_probs=[0.4401206076145172, 0.29014527797698975, 0.1260966658592224, 0.052020180970430374, 0.04938016086816788, 0.04223709553480148, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Cats', ' The', ' Yes', ' Black', ' There', ' No', '', '', '', '']
+
+[New tokens 8] count=111 first30=[31412, 491, 263, 1114, 1204, 1457, 288, 2419, 17, 1109, 2068, 2410, 998, 289, 269, 3494, 614, 581, 2068, 658, 1488, 289, 25438, 17, 31412, 395, 2222, 299, 4591, 299]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Cats have a very small range of color. They're usually found in the wild but they're also common in captivity. Cats are able to adapt to their environment and thrive in a variety of environments. It's important for you to understand that there is no one perfect cat or dog. There are many different breeds and colors of cats, so it's best to be aware of what your veterinarian will look like when he or she looks at your cat. If you think your cat may be suffering from a disease, you should contact your veterinarian right away.
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 843, 1012, 1218, 637, 409, 354, 2, 1, 0]
+first_step_topk_probs=[0.5406123399734497, 0.12575925886631012, 0.09200743585824966, 0.07470420747995377, 0.06346524506807327, 0.06346524506807327, 0.03998628258705139, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 4', ' 5', ' 6', ' 8', ' 3', ' 2', ' 1', '', '', '']
+
+[New tokens 9] count=256 first30=[843, 17, 27, 3, 711, 509, 1165, 415, 2073, 330, 2779, 299, 1409, 419, 1186, 4649, 289, 269, 1902, 1365, 973, 15, 2512, 299, 263, 719, 1399, 444, 269, 2176]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 5.8
+
+The world's population is expected to grow by 7 billion in the next 20 years, according to a new report from the World Bank.
+"Global economic growth is likely to be much higher than that of any other developed country," said the World Bank's Executive Director, Mikhail Gorbachev. "This will have huge implications for the global economy."
+According to the report, if we continue on our current path, we will double the number of people living in absolute poverty over the next century.
+We are already seeing this trend rise, with the number of poor people increasing by about 8 percent per year.
+In the next 25 years, the number of hungry people will increase by almost half.
+The report says that the number of children who die every day from hunger is expected to reach six million within two decades.
+It also says that the rate of obesity-related diseases among adults will increase by nearly one-third between now and 2050.
+Despite the increased availability of food, malnutrition rates are projected to rise even faster. The report found that almost 50 percent of the world's poor live in countries where the prevalence of malnutrition is lower than the general population.
+But it also notes that there is a growing awareness of
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 360, 1509, 1278, 2575, 1289, 783, 698, 3919]
+first_step_topk_probs=[0.6976357698440552, 0.03839833661913872, 0.0364496223628521, 0.030375583097338676, 0.030375583097338676, 0.029594765976071358, 0.02883402444422245, 0.026667112484574318, 0.0246630497276783, 0.01712813787162304]
+first_step_topk_text=[' I', ' The', ' "', ' You', ' If', ' What', ' We', ' This', ' It', ' My']
+
+[New tokens 10] count=256 first30=[2575, 330, 669, 2942, 374, 269, 1759, 7042, 34, 202, 16, 2575, 330, 669, 1466, 1481, 351, 269, 2690, 920, 4083, 298, 6952, 34, 202, 16, 3189, 486, 2505, 357]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience with the following topics?
+- What is your current research on the relationship between stress and depression?
+- Do you feel that stress can affect mood, or does it cause depression?
+The following questions are intended to help you better understand your current symptoms of depression. For more information about your treatment options, see the topic Depression Treatment Options.
+- What are some other ways you can help yourself feel better during the day?
+- How do you feel about having a friend or family member who has a mental health problem?
+- If you have a mental health condition, what would you do differently if you were in the hospital?
+- Would you be able to work as part of a team for yourself or others?
+- Are there any medications that you might take at home?
+- Have you been diagnosed with an anxiety disorder?
+- When did you first start experiencing symptoms of depression?
+For additional information about depression, contact the National Institute of Mental Health (NIMH) at 1-800-4-A-MUSC.
+Other Works Consulted
+- American Academy of Child and Adolescent Psychiatry (2010). The Diagnostic and Statistical Manual of Mental Disorders (DSM-IV). 4th ed. Ar
+
+================================================================================

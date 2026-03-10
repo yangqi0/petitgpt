@@ -1,0 +1,327 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[418, 2827, 791, 3609, 330, 15, 289, 601, 1628, 288]
+first_step_topk_probs=[0.15252766013145447, 0.1304638385772705, 0.09544938057661057, 0.07749876379966736, 0.07356571406126022, 0.06465736776590347, 0.0629240870475769, 0.041482098400592804, 0.031971536576747894, 0.024641426280140877]
+first_step_topk_text=[' was', ' named', ' would', ' asked', ' is', ',', ' in', ' will', ' might', ' of']
+
+[New tokens 1] count=118 first30=[3609, 896, 3577, 299, 1432, 896, 299, 269, 4035, 17, 382, 4035, 3968, 896, 357, 1024, 418, 2397, 299, 491, 263, 2415, 2707, 298, 791, 910, 299, 342, 5988, 1125]
+[Full output 1]
+Once upon a time, a curious child asked her mother to take her to the doctor. The doctor told her that she was going to have a heart attack and would need to be hospitalized for another three days before she could return home.
+The doctor explained that the heart attack happened because of the fact that the patient had a heart condition called congestive heart failure. The heart is a muscular pump that pumps blood through the body. It is very important that the heart does not get too tired or too weak from the lack of oxygen in the blood. Heart disease can cause heart problems if it is not treated right away.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=249 first30=[269, 9556, 288, 7535, 281, 8191, 15, 298, 330, 658, 269, 8492, 288, 269, 412, 405, 295, 4830, 288, 7535, 281, 405, 5597, 17, 698, 330, 3323, 289, 269, 3446]
+[Full output 2]
+Paris is the capital of the province of Catalonia, and is also the seat of the comunicado of Catalunya. It is located in the south-east of the province, about from the city of Santa María de la Muerte.
+
+History
+The first recorded mention of the town was in 1287, when it was mentioned as a settlement by the Cistercians. The first written reference to the town dates back to 1384, when the castle was built on the site of the former city of Santa Maria del Carmine. In 1656, the town was the site of a battle between the Cistercii and the Cisternas (Colegio) of the Cisterca.
+
+In 1750, the town's name was changed to Catalunia de Nuestra Señora de los Reyes.
+
+Geography
+Catalunya is located at . It has an average elevation of .
+
+Administration
+The municipality is divided into five civil parishes (freguesias):
+ Alcalá-Alcalá
+ Castellón de Canova
+ Castelnuovo de Valle de Cerda
+ Castilla de Canova
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=154 first30=[263, 4409, 357, 483, 342, 3020, 359, 269, 1701, 288, 795, 7527, 17, 1220, 1373, 15, 490, 411, 491, 263, 4409, 400, 333, 353, 68, 15, 286, 12, 298, 1418]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector that can be written as the sum of two vectors. For example, if we have a vector v = (a, b) and want to find its eigenvalues, we can write:
+
+v = a + b
+
+where a and b are scalars and are positive numbers. The determinant of this matrix is the product of the eigenvalues of the original vector v. Since the determinant of a matrix is zero, it means that there is no solution. If you are given the equation v = a + bi, you will get the following system of equations:
+
+x2 + y2 - z2 = 0
+y2 - x2 + z2 = 1
+z2 + x2 - y2 - 2z2 = 0
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 491, 483, 395, 5546, 1420, 9845, 1798, 14071, 1991]
+first_step_topk_probs=[0.3424665331840515, 0.16517524421215057, 0.14883524179458618, 0.10839813947677612, 0.03462260961532593, 0.03462260961532593, 0.02811136469244957, 0.022824624553322792, 0.0216662734746933, 0.016698850318789482]
+first_step_topk_text=[' use', ' have', ' can', ' are', ' describe', ' allow', ' rely', ' learn', ' incorporate', ' provide']
+
+[New tokens 4] count=256 first30=[395, 885, 299, 5951, 1623, 16, 7128, 2061, 17, 382, 3355, 2877, 330, 299, 817, 269, 1085, 359, 263, 4679, 1099, 15, 298, 1000, 1659, 383, 351, 263, 719, 854]
+[Full output 4]
+Neural networks are a class of machine learning models that are used to solve real-world problems. The basic idea is to use the model as a starting point, and then train it on a new set of data. This way, the model can be used to predict future actions based on past outcomes.
+The most common example of a neural network is the CNN, which is an artificial neural network. A CNN is a powerful computer program that takes in images from various sources (such as pictures) and generates them into a 3D image space.
+A neural network is basically a collection of neurons connected by connections called "neurons". Each neuron has its own "output" and a certain number of connections between neurons. For example, if you have a three-dimensional image with four different colors, then each neuron will send out two different color channels. So, if you had a simple graph, you could say that there would be six possible connections for every color channel.
+Another important concept in neural networks is the "memory", which is the amount of information stored in the long term memory of the network. In this case, the network can be thought of as a large collection of neurons that can store up to twenty billion information units (the number of words). As we'll see later, this is not really the same
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=160 first30=[263, 647, 286, 3, 711, 6, 1348, 620, 486, 5951, 637, 91, 65, 21, 16, 28, 32, 19, 34, 202, 202, 11608, 5653, 15, 9211, 202, 202, 7, 22, 892]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# How do you solve 3x^2-9=0?
+
+Aug 31, 2016
+
+$3 x - 9 = 0$
+
+#### Explanation:
+
+The first step is to write the equation in standard form.
+
+$\left(3 x - \frac{9}{5} \right) \left(x - 1\right)$
+
+This is a quadratic equation because it has two solutions and one of them is zero. The second solution is a real number so we have
+
+$y = - 4 x + 5$
+
+So we can write this as
+
+$6 y = - 4 \left(3 {x}^{2}\right) \cdot \left(- 5\right)$
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 311, 13, 81, 711, 202, 2774, 15, 411, 483, 817, 482, 1392, 299, 1098, 545, 1812, 1992, 339, 311, 17, 202, 202, 6, 12602, 354, 29, 202, 202, 6]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n*n
+
+
+Now, we can use this function to find all possible values for n.
+
+# Example 1:
+
+# Input: n = 3
+# Output: 2
+# Explanation: The factorial of 3 is 2 because 3 * 3 = 6
+# Explainer: The factorial is 6 since 6 * 6 = 8
+# Explark: The factorial value is 8 because 8 * 8 = 24
+
+# Note:
+# We cannot directly calculate the factorial of any number except the first one.
+# Therefore, we need to subtract the factorial from each element in the list and multiply by the factorial of the number.
+#
+# Example 2:
+
+import math
+
+# Base Case:
+# (1) 5 is divisible by 4, so 5^4 is divisible by 2, so 5*2=8
+# (2) 5 is not divisible by 2 or 4, so 2*5 is divisible by 3, so 5*(3*2)=12
+# (3) 5 is NOT divisible by 3 or 4, hence 5*2 is divisible by 7
+
+class Solution:
+    def factorial(self, n: int) -> int:
+        if n == 0:
+           
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 537, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.5423545241355896, 0.39679500460624695, 0.060850486159324646, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', ' #', '', '#', '', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 354, 647, 353, 20, 1341, 311, 12, 864, 353, 21, 2216, 311, 552, 354, 12, 711, 202, 1465, 330, 269, 1134, 359, 269, 775, 1373, 2080, 15, 1722, 411]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1 + (1 / n) * (2 ** n - 1)
+
+
+This is the same as the first example above, except we can also use recursion to do this.
+
+The function fib() returns a number, which you can call with any of the following arguments:
+
+• n – the number to be recursed
+• f – the function to be executed
+• m – the number of times to run the function
+• n_* – the number for each iteration
+• f_* – a function to be called at the end of the loop
+• g – the function that will take the value of the previous value and return it
+
+## Examples
+
+### Example 1:
+
+# Define the function in a single line
+f = "Fibonacci"
+g = "Gap"
+print("Fibonacci", f, g)
+
+### Solution 2:
+
+### Output:
+
+For the second example, we will use a function that takes two parameters:
+
+f = g(1)
+g = g(2)
+print("Gap", f, "Fib")
+
+In this example, we would have f = g(3), g =
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 31412, 2590, 1541, 4619, 1906, 2, 1, 0]
+first_step_topk_probs=[0.279636412858963, 0.279636412858963, 0.16611100733280182, 0.14967858791351318, 0.06505000591278076, 0.03305170685052872, 0.026835892349481583, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' Cats', ' No', ' There', ' Black', ' All', '', '', '']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 808, 17, 31412, 395, 453, 545, 2645, 1091, 581, 395, 839, 289, 269, 1134, 1875, 288, 3191, 17, 1109, 395, 658, 545, 2419, 16, 25292, 1722, 339]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is no. Cats are not all black because they are only in the same species of cat. They are also all color-blind except for a few small differences. For example, black cats are mostly brown or white, but most other colors are grayish or yellow. Some cats have darker eyes, while others lack them. It may be that these differences are due to genetic differences between the two groups, but this is probably not true. Cats have their own internal organs and their own behavior. In fact, cats are often thought of as being both "black" and "white" in appearance. The difference between cats and dogs is usually much smaller than the difference between humans and dogs.
+The distinction between the two categories of cats is important to understand when it comes to understanding how cats differ from dogs. Cat owners generally have one cat with a black coat and another with a brown coat. Even though a cat's coat color varies by individual species, it does not necessarily mean that a cat has been born with a black or brown coat. A cat's coat colors vary widely among different species. When a cat is born with a white coat, it is typically called a black-coated cat.
+In the past, there was an attempt to separate the differences
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 843, 1012, 2050, 354, 409, 637, 1218, 0, 1]
+first_step_topk_probs=[0.4348115921020508, 0.13825224339962006, 0.10114750266075134, 0.07400108873844147, 0.06668052077293396, 0.06548334658145905, 0.06548334658145905, 0.054140351712703705, 0.0, 0.0]
+first_step_topk_text=[' 4', ' 5', ' 6', ' One', ' 1', ' 2', ' 3', ' 8', '', '']
+
+[New tokens 9] count=204 first30=[2050, 13032, 330, 5405, 744, 21, 17, 5517, 10941, 395, 5405, 7, 20, 17, 8704, 10941, 395, 5405, 744, 22, 17, 7947, 10941, 395, 5405, 354, 17, 11826, 10941, 395]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple is worth $2. Two apples are worth$1. Three apples are worth $3. Four apples are worth 1. Six apples are worth 0. Four apples is worth$4. Six apples is worth 0. Five apples is worth \$5.
+If the sum of all the apples in a basket is $n$, what is the number of apples in the basket?
+Answer : The number of apples is $n+1$.
+The sum of all numbers of apples in a bag is $n(n+1) + n(n-1)$.
+What is the value of n?
+Answer – n = 3
+Let n be the total number of apples.
+Let n = 4
+So the number of fruits in the bag is 4.
+Now let's take n=6.
+n= 6 + 4 = 12
+Therefore, the number of fruit in the bag of 12 is 12.
+Hence, the number 8 is the correct answer.
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 783, 2575, 1289, 1509, 698, 3919, 360, 1278]
+first_step_topk_probs=[0.7192642688751221, 0.04077155888080597, 0.033103909343481064, 0.02831527218222618, 0.026187345385551453, 0.024219335988163948, 0.02359676919877529, 0.02239922434091568, 0.01726376637816429, 0.01726376637816429]
+first_step_topk_text=[' I', ' The', ' This', ' What', ' We', ' You', ' It', ' My', ' "', ' If']
+
+[New tokens 10] count=96 first30=[2575, 330, 669, 2942, 374, 269, 1759, 7042, 34, 202, 16, 2575, 330, 669, 1466, 1909, 288, 269, 2690, 920, 3222, 298, 1293, 34, 202, 16, 1348, 1223, 669, 1466]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience with the following topics?
+- What is your current view of the relationship between parents and children?
+- How does your current perspective differ from the perspective of parents?
+- Does your current perspective change over time, or do you think it will change in the future?
+- Do you think it's important to talk about parenting issues as a family?
+- If you're thinking about this topic, what would you like to see more of?
+
+================================================================================

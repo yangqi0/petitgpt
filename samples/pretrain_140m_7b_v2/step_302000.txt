@@ -1,0 +1,351 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[791, 330, 601, 1628, 418, 728, 2827, 15, 289, 3609]
+first_step_topk_probs=[0.15707406401634216, 0.14153549075126648, 0.10354957729578018, 0.09330591559410095, 0.09330591559410095, 0.07191375643014908, 0.05261322483420372, 0.04541191831231117, 0.038492657244205475, 0.03125356510281563]
+first_step_topk_text=[' would', ' is', ' will', ' might', ' was', ' may', ' named', ',', ' in', ' asked']
+
+[New tokens 1] count=137 first30=[330, 1163, 16852, 419, 269, 4769, 299, 263, 1563, 17, 382, 4769, 330, 1000, 1496, 8596, 339, 806, 299, 3408, 269, 2351, 351, 269, 4477, 298, 269, 1293, 395, 3609]
+[Full output 1]
+Once upon a time, a curious child is being guided by the teacher to a book. The teacher is then given instructions for how to write the words on the board and the children are asked to make their own lists of the words.
+The children are told that they will be given the task of writing the words on a piece of paper. They are then given a sheet of paper which has been laid out with all the different letters in it. The children are then given an opportunity to practice writing the words with the teacher.
+In the end, the children are rewarded with a great amount of fun and learning. It is a very rewarding experience for them as they continue to learn and grow at their own pace.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 1057, 1087, 766, 298, 389, 1054, 15, 9370, 17, 698, 418, 6214, 289, 1604, 5686, 419, 5287, 370, 389, 1054, 353, 2008, 2909, 732, 1913, 6457, 504]
+[Full output 2]
+Paris is the capital of the province of Argyll and Bute, Scotland. It was founded in 1296 by Robert de Bute (1580–1643), a Scottish nobleman who was the founder of the Scottish Church of England.
+The town of Bute, also known as Bute Abbey, was founded in 1412 by William Bute, 1st Earl of Bute. He built a chapel for the holy Trinity at Bute Castle, and a new church was built for the newly-created cathedral in 1553. The town's population increased from 200 to 4,000 in 1650, but it fell to the English in 1701 when the settlement was taken over by the Crown. In 1804, the town was occupied by the British during the War of 1812, but was again captured by the French in 1815.
+Bute is now a major tourist destination with many attractions including:
+- The Bute Chapel, a medieval chapel dedicated to St Mary and St George.
+- The Royal Crescent, a 13th century chapel dedicated to Saint James and St John the Baptist.
+- Bute Hall, an 18th century building designed by Sir David Lewis.
+- A monument commemorating the Battle of Bute in 1755.
+- An 11
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 288, 1623, 1890, 374, 269, 1134, 8878, 359, 269, 1623, 993, 17, 698, 483, 342, 5454, 419, 263, 3823, 338, 357, 578, 269, 1134, 993, 288, 7234, 298]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector of real numbers with the same magnitude as the real number. It can be represented by a matrix A that has the same number of rows and columns as the original matrix A. The eigenvalues are defined as the values of the matrix at each row and column.
+
+## Linear Algebra (Algebra)
+
+A matrix is a rectangular array of numbers arranged in rows and columns. Matrices can be used to represent many different mathematical objects, such as functions or vectors.
+
+• A matrix is a square matrix with one row and two columns.
+• Matrices can have many interesting properties: they can be transformed into new matrices when they are added together.
+• There are two types of matrices:
+• Matrix-vector multiplication
+• Matrix multiplication by a scalar
+
+### Multiplicative Identity Matrix
+
+The multiplicative identity matrix of a matrix A is defined as the sum of the entries of A, divided by the product of its elements. This property makes it useful for finding the inverse of a matrix. For example, if we have the following matrix A = [[1,2],[3,4]], then the determinant of A is 2*[1 + 3*2] = 3. If we have the matrix A = [1,0
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 491, 483, 395, 1798, 1420, 9845, 5546, 3069, 1991]
+first_step_topk_probs=[0.2744837999343872, 0.22286345064640045, 0.22286345064640045, 0.128255233168602, 0.04671471565961838, 0.025004586204886436, 0.021387552842497826, 0.019271785393357277, 0.015647470951080322, 0.01205997634679079]
+first_step_topk_text=[' use', ' have', ' can', ' are', ' learn', ' allow', ' rely', ' describe', ' attempt', ' provide']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 298, 3235, 269, 8020, 17, 1658, 2269, 395, 1431, 885, 289, 4855, 2465, 15, 913, 581, 395, 885, 299, 24007, 870, 707, 7590]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data and predict the outcome. These models are often used in machine learning, where they are used to classify data into categories based on their similarity with other classes or features.
+
+In this post, we will discuss how to use a neural network (NN) to learn an image from a set of images.
+
+## Introduction
+
+The original poster, by James Riordan, discussed the concept of neural networks in his book The Art of Computer Vision. He showed an example of a neural network in which each layer is called a "layer" and its output is called "output". In this article, we will explore how to use neural networks to learn an object's properties and make predictions about the future state of the object.
+
+### Neural Network
+
+Let us begin by defining some terms. A neural network (Nnet) is a mathematical model for neural networks, where the output of the Nnet is learned from the input of the NNet.
+
+A network consists of a collection of nodes (nodes), which are connected through edges (edges). The network has a number of nodes and edges, but it cannot have more than one edge. Each node in the network has a unique position in the network, and
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 1348, 620, 486, 5951, 637, 91, 65, 21, 552, 798, 92, 333, 843, 34, 202, 202, 7714, 5653, 15, 9281, 202, 202, 7, 22]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# How do you solve 3x^2 - 4y = 5?
+
+May 31, 2018
+
+$3 x y = \frac{5}{4}$
+
+#### Explanation:
+
+The equation of the line is $y = 2 x - 4$.
+
+To find the slope of this line, we need to find the derivative of $y$ with respect to $x$, and then use the chain rule.
+
+We can use the chain rules for differentiation, which are as follows:
+
+$y' = 2 x + 4$
+
+$2 x - 4 = 0$
+
+$- 4 x = - 1$
+
+So, our slope is $- 1$.
+
+Since the slope is negative, we have that the line passes through the point (0, -1).
+
+Therefore, we get that the slope is $- 4$.
+This means that we must find the slope for the given points on the line.
+
+$m = - \frac{1}{4} = - 4$
+$m \left(\frac{1}{\sqrt{2}} \right) = \frac{- 1}{4} \cdot \frac{(- 4)}{2
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 311, 864, 353, 20, 1341, 353, 21, 2216, 311, 687, 711, 202, 1465, 330, 263, 1809, 3851, 7144, 15, 614, 383, 415, 453, 1792, 4012, 17, 382, 1392, 483]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n * (1 / (2 ** n))
+
+
+This is a little bit complicated, but it's not too bad. The function can be rewritten as:
+
+function factorial(n)
+return n * (factorial(n - 1) / factorial(n - 2))
+
+
+The reason why we need to do this is because we want to find the factors of n, which are the factors of the factorial of a number n. For example, if we wanted to find the factor of 2, we would multiply both sides by 2 and then divide by 2:
+
+factorial(2) = 2 * (factorship(2) / 2)
+
+
+So for our factorial function, we would get:
+
+Factorial(2 * factored_number) = factored_numbers / factored_length
+
+
+We could write this as:
+factored_numbers = factored(factored_number);
+
+
+But what about the factorial of 2? Well, there are two ways to find the factorial of an integer, depending on whether it's prime or not. We can use the product rule to find the first term, and the next term, and so on. So, for example, if you
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 537, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.5456518530845642, 0.3789476454257965, 0.07540052384138107, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', ' #', '', '#', '', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 354, 647, 353, 20, 1341, 311, 12, 864, 353, 20, 552, 311, 12, 711, 202, 1465, 1392, 483, 342, 885, 299, 1098, 269, 775, 993, 289, 287, 4067, 15]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1 + (1 / n) * (1 - n)
+
+
+This function can be used to find the first number in an array, or it can be used as a function to find the next element in an array. The function will take two arguments: the current position of the array and its length. If the current position is not known, it will return None.
+
+The main difference between the function and the function-based algorithm is that it takes a single argument, which is the length of the array. The only difference is that the function will take one argument.
+
+### A Function with a Number Function
+
+Let's say we have a list of integers, and we want to find the sum of all the integers in the list. We could use a function like this:
+
+print("Sum = ", sum)
+
+The result would be:
+
+sum = 0
+
+But there are more than one possible values for the sum, so we need to take the first one and then the second one. For example, if we wanted to find the value of the sum of the numbers 5 and 7, we would write:
+
+for i in range(5):
+print(i)
+
+In this case,
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 31412, 2590, 4619, 3, 4, 2, 0, 1]
+first_step_topk_probs=[0.33343544602394104, 0.30045056343078613, 0.24394656717777252, 0.07362857460975647, 0.0485389344394207, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' Cats', ' No', ' Black', '', '!', '', '', '']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 808, 17, 202, 14405, 10676, 395, 269, 851, 1488, 1875, 288, 3191, 289, 269, 1560, 1705, 17, 1109, 395, 269, 851, 5307, 298, 395, 998, 289, 545]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is no.
+Black cats are the most common species of cat in the United States. They are the most numerous and are found in all parts of the world except for Antarctica.
+The reason why cats are so rare is because they are domesticated. Domestic cats have been domesticated for thousands of years. There are approximately 100 different breeds of cats in the United State. Some of these breeds include the red fox, black-capped chickadee, white-tailed deer, American cottontail rabbit, mountain bighorn sheep, Rocky Mountain dog, wild boar, and many others. All of them live in a variety of habitats including grasslands, prairies, forests, woodlands, and deserts.
+There are two types of cats: black and white. Both are in the same family; however, the black cats are more closely related to the white cats than the white cats. Both cats are also known as "red cats" or "white cats."
+White cats are the least common of all cats. White cats are not as common as the black cats but they do not belong in any part of the world.
+In addition to the black cats, there are other small animals such as squirrels, rabbits, mice, rats,
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 843, 382, 2050, 409, 1012, 354, 637, 1218, 744]
+first_step_topk_probs=[0.3021719753742218, 0.1012149378657341, 0.09120222926139832, 0.08657372742891312, 0.07836343348026276, 0.07029230892658234, 0.07029230892658234, 0.057072896510362625, 0.057072896510362625, 0.04398780316114426]
+first_step_topk_text=[' 4', ' 5', ' The', ' One', ' 2', ' 6', ' 1', ' 3', ' 8', ' $']
+
+[New tokens 9] count=256 first30=[2050, 13032, 330, 5405, 744, 21, 17, 5517, 10941, 395, 5405, 7, 20, 17, 2050, 13032, 330, 744, 22, 17, 8704, 10941, 395, 5405, 744, 23, 17, 11826, 10941, 395]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple is worth $2. Two apples are worth$1. One apple is $3. Three apples are worth $4. Six apples are worth 6. Four apples are worth 1.
+
+Let's start with the first question. "A man bought a lot of apples at a rate of Rs 5 per annum." Let's find out how much money he would make if he paid his tax on the first few apples.
+
+First, let's calculate the amount of money he would get for each apple. Since he has two apples, we can write this as A = (R/5) * B + C. This means that the sum of all the items in the set is equal to the sum of the items in both sets plus one. So, A = R + B + C
+
+Now, we know that the total amount of money in the set will be calculated by adding up the amounts of all the things in the set together. That gives us the total amount left over after taking out the last item from the list.
+
+Next, let's see how much money it would take to buy all the apples at a given price. We know that the cost of buying the apples is Rs 100, so the cost of selling them
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 1278, 382, 1289, 2575, 360, 1509, 783, 338, 698]
+first_step_topk_probs=[0.6094315052032471, 0.0632377564907074, 0.0632377564907074, 0.03756484016776085, 0.032978639006614685, 0.030500253662467003, 0.029716232791543007, 0.02820812352001667, 0.022314462810754776, 0.01811792142689228]
+first_step_topk_text=[' I', ' If', ' The', ' We', ' What', ' "', ' You', ' This', ' A', ' It']
+
+[New tokens 10] count=256 first30=[1278, 486, 491, 263, 2395, 15, 5601, 2505, 2274, 299, 2033, 383, 289, 269, 7369, 3474, 288, 829, 4617, 17, 3, 711, 1018, 1656, 202, 807, 4894, 655, 4894, 202]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: If you have a question, please feel free to ask it in the comments section of our website.
+
+import os
+from datetime import datetime
+from typing import List, Optional
+
+import pandas as pd
+from pandas_datareader import data as pdDataReader
+from pandas.tseries.offsets import (
+    BINARY_CATEGORIES,
+    BINARIAN_XLS,
+    BUNDLES,
+    BULK_SETTINGS,
+    BUILDER_DATA,
+    BUSY_DATA,
+)
+from pandas import DataFrame
+from pandas._testing import assert_frame_equal
+from pandas.__main__ import main
+
+
+def test_load(tmp_path):
+    df = pd.read_csv(tmp_Path / "test_data/genomes_test.csv")
+
+    df.columns = ["name", "id"]
+    df["sex"] = df[df['sex'] == 0].astype("int32").apply(lambda x: x.lower())
+    df["gender"] = df["gender"].astype("str")
+    df["age"] = df[(df['age'] >= 20)]
+
+    df2 = df.drop(["age"],
+
+================================================================================

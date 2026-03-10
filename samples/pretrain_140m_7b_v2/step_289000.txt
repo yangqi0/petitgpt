@@ -1,0 +1,326 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[330, 791, 601, 1628, 728, 418, 15, 289, 2827, 483]
+first_step_topk_probs=[0.16019068658351898, 0.1370183527469635, 0.11125020682811737, 0.11125020682811737, 0.08574389666318893, 0.08139239251613617, 0.05128123611211777, 0.037264157086610794, 0.03187372162938118, 0.024566037580370903]
+first_step_topk_text=[' is', ' would', ' will', ' might', ' may', ' was', ',', ' in', ' named', ' can']
+
+[New tokens 1] count=256 first30=[578, 733, 998, 289, 269, 1471, 288, 263, 1844, 17, 382, 3577, 330, 263, 929, 288, 263, 1114, 1108, 2331, 444, 896, 1231, 17, 3230, 3804, 418, 263, 9615, 298]
+[Full output 1]
+Once upon a time, a curious child has been found in the care of a family. The mother is a child of a very different kind from her own. Her father was a slave and her mother was a slave. She had been raised by her mother's side as a slave and she had been taken away to live with her father. She lived on the plantation of her father.
+The slave woman is a small boy who lives in the house of a family of her own. The father of the child is a slave and he is a slave. He is a slave because he is an adult. The mother of the child was a slave but she was not a slave because she was a slave; she was a child of the family of her father, so she was not an adult. In this way, the mother of the children is a slave, but it is not true that the children are slaves. They are not slaves because they were not slaves. It is not true when one of them is a slave but it is true when one is a slave only if the child is an adult or if it is a slave for the child to be born.
+There are two kinds of slavery: the slave-owning and the slave-slave-free. There are two types of slavery: (1
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=146 first30=[269, 9556, 288, 269, 1134, 1112, 15, 298, 330, 658, 269, 8492, 288, 269, 1723, 288, 269, 9556, 17, 698, 330, 3323, 289, 269, 3246, 16, 10674, 8032, 288, 269]
+[Full output 2]
+Paris is the capital of the province of the same name, and is also the seat of the government of the province. It is located in the north-east corner of the province, on the banks of the River Oca.
+The city of Ani has a population of 2,464 (2011 census). The population density was 3.6 people per square kilometre (2/km2) in 2011.
+Ani's main industries are tourism, and its main industries include the manufacture of glass and ceramics, cement production, food processing, construction materials, and textiles. There are also a number of other industries that make up the local economy. The town's main industries include agriculture, forestry, fishing, and wine making.
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 288, 269, 876, 353, 68, 20, 15, 286, 20, 15, 15240, 30781, 12, 913, 263, 20, 298, 286, 20, 395, 16000, 785, 17, 202, 202, 509, 8639, 288]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector of the form (a1, b1, ..., bn) where a1 and b1 are scalars.
+
+The dimension of a matrix is the number of linearly independent rows or columns in the matrix. The dimension of a scalar value is the number.
+
+## References
+
+[1] A. S. Fischer, Linear Algebra: An Introduction, Springer-Verlag, New York, 1994.
+
+[2] C. G. Willem de Kempis, Linear Algebra for Scientists and Engineers, Academic Press, New York and London, 1997.
+
+### References
+
+• [1] H. E. Keller, Linear Algebra, Springer, New York. 1976.
+• [2] D. P. Chowdhury, Linear Algebra in Science and Engineering, Princeton University Press, Princeton, N.J., 1982.
+• ] A. L. J. Dinan, Linear Algebra and Its Applications, Wiley, New York & London, 1983.
+•  [3] B. M. Geddes, Linear Algebra II, Springer Verlag, New Leipzig, 1986.
+• J. H. Lin, Linear Algebra I, Springer/
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 491, 483, 395, 1798, 9845, 5546, 1420, 3069, 1085]
+first_step_topk_probs=[0.36316633224487305, 0.15783149003982544, 0.1422179788351059, 0.12415006756782532, 0.05286692827939987, 0.03867826983332634, 0.03867826983332634, 0.019652310758829117, 0.014377938583493233, 0.01364824641495943]
+first_step_topk_text=[' use', ' have', ' can', ' are', ' learn', ' rely', ' describe', ' allow', ' attempt', ' model']
+
+[New tokens 4] count=256 first30=[395, 885, 299, 5951, 1623, 16, 7128, 2061, 17, 382, 3355, 2877, 3722, 269, 1085, 330, 357, 1010, 25284, 289, 269, 2673, 578, 263, 854, 288, 6579, 298, 8863, 15]
+[Full output 4]
+Neural networks are a class of machine learning models that are used to solve real-world problems. The basic idea behind the model is that each neuron in the network has a set of inputs and outputs, and it is trained with respect to these inputs. It then learns how to change the weights of the neurons in the network.
+The neural network architecture consists of three parts:
+- A neural network (or neural network) is a simple, yet powerful, computer program that can be used to solve complex problems.
+- A linear regression is a mathematical model for predicting future values based on past observations.
+- Linear regression is a statistical model that combines multiple measurements into one.
+- Sequential regression is a non-linear regression that uses information from the previous measurement to predict future values.
+All these different types of models are often used together to describe the behavior of a system. For example, if you have a multi-layer perceptron network, you could think of it as a multilayer perceptron, where each layer of the network is connected by a single layer of layers. This type of network model is useful when we want to learn new things about our environment or the world around us.
+In this article, we will look at some common examples of linear regression. We will see how linear
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=181 first30=[263, 647, 286, 3, 711, 6, 1348, 620, 486, 5951, 637, 91, 65, 21, 16, 28, 32, 19, 34, 202, 202, 11608, 5653, 15, 9211, 202, 202, 7, 22, 892]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# How do you solve 3x^2-9=0?
+
+Aug 31, 2016
+
+$3 x = - 9 , \text{or } 3 x = 9 .$
+
+#### Explanation:
+
+The answer is $3 x = 0$.
+
+To solve this equation, we need to find all possible values of $x$, and then use the fact that any number in the set is also in the set. This means that if we plug in $x = - 1$ into the equation, we get $-1$ as our answer.
+
+We can write $3 x - 9 = 0$ by taking the square root of both sides, which gives us $3 x \sqrt{3} = 0$. We have $3 x$ in the equation, so we know that $3 x > 0$.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 494, 11, 81, 12, 711, 202, 509, 28045, 1392, 3448, 795, 5937, 15, 263, 993, 298, 287, 6222, 17, 382, 775, 5147, 330, 269, 993, 299, 342, 885, 359]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return int(n)
+
+
+The factorial function takes two arguments, a number and an integer. The first argument is the number to be used as the base case. The second argument is the factorial of the integer value.
+
+In the above example, we have the following code:
+
+int i = 1;
+while (i <= 10) {
+printf("1\n");
+}
+
+
+This code has a few differences:
+
+• You can use the same argument for both cases. For example, if you want to calculate the factorial of 100, you would use the same function as in the previous example.
+• You could also use the same arguments for both cases but you would need to know which one was used.
+• If you want to use the same method for both cases, you would need the same argument.
+
+## Input
+
+You may assume that you are using the same input arguments.
+
+### Output
+
+If you want to output the factorial of a number, you will use the same input argument.
+Input:
+Number
+Output:
+Int
+Note:
+Number must be greater than or equal to 100.
+Example:
+Input: 5
+Output: 5
+Note: Use
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.5901494026184082, 0.4098505973815918, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 354, 490, 311, 861, 643, 1107, 552, 20, 711, 202, 1465, 330, 269, 1134, 359, 269, 775, 1373, 2080, 15, 1722, 411, 817, 263, 1108, 993, 288, 5937, 17]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1 if n == 0 else -1
+
+
+This is the same as the first example above, except we use a different number of arguments. We can even use a different range for the argument to be passed into the function.
+
+import numpy as np
+from scipy import stats
+
+def fib_func(fib):
+    # Use the first argument to be a numpy array.
+    return np.array([0]) * (np.arange(len(fib)) + 1)
+
+
+# In[9]:
+
+
+fib = np.zeros((3, 3), dtype=int)
+for i in range(3):
+    fib[i] = fib(2 ** i)
+print(fib)
+
+
+The first two are all the same, but the third is different from the first one. The last two are just different enough that it's hard to tell which one is the other. The difference is that the first and second ones are identical.
+
+# In [10]:
+def fib_func(x):
+    return x * (1 / (1 + np.exp(-x)))
+
+fib_func = np.array([[1], [2]])
+
+if
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 31412, 13676, 4619, 1541, 2590, 1906, 2660, 0, 1]
+first_step_topk_probs=[0.42768406867980957, 0.18587079644203186, 0.13598597049713135, 0.06909406185150146, 0.06909406185150146, 0.05909927561879158, 0.03002813272178173, 0.02314360998570919, 0.0, 0.0]
+first_step_topk_text=[' The', ' Cats', ' Yes', ' Black', ' There', ' No', ' All', ' Some', '', '']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 808, 17, 202, 14405, 10676, 395, 269, 851, 1488, 1875, 288, 3191, 289, 269, 1560, 1705, 15, 374, 611, 702, 2759, 2153, 874, 2997, 374, 780, 17]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is no.
+Black cats are the most common species of cat in the United States, with more than 50 million people living with them. Black cats are also one of the few animals that are endangered because of habitat loss and climate change.
+The majority of black cats live in the Southwestern United States, where they have been eliminated from many areas by humans. Many other animals, such as dogs, cats, and rabbits, are also found in the Southwest.
+Although black cats are not a threat to humans, their presence in a region makes it difficult for people to get involved in conservation efforts. If you think your home or business is being threatened, please consider the following facts about cats:
+- Cats are not native to North America, but have been introduced into new locations since the 1800s.
+- Cats have been introduced to many countries around the world, including Australia, Canada, Brazil, Chile, India, Mexico, New Zealand, Russia, and the United States.
+- Although cats are not native, they still pose a serious threat to human health.
+- In North America, cats are listed as "threatened" under the Endangered Species Act.
+- Because of their small size, cats are often mistaken for rodents.
+Many people
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 843, 1012, 409, 1218, 354, 637, 2, 1, 0]
+first_step_topk_probs=[0.441243439912796, 0.1402973085641861, 0.11391250789165497, 0.08839423209428787, 0.08334017544984818, 0.07128463685512543, 0.06152771785855293, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 4', ' 5', ' 6', ' 2', ' 8', ' 1', ' 3', '', '', '']
+
+[New tokens 9] count=256 first30=[843, 17, 27, 3, 711, 509, 1165, 415, 775, 5199, 13120, 4983, 1361, 2316, 15, 269, 31181, 723, 3620, 4983, 1361, 3785, 289, 20516, 418, 5153, 289, 8572, 17, 698]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 5.8
+
+The world's first fully operational nuclear power plant, the Chernobyl nuclear power station in Ukraine was completed in 1986. It is a symbol of nuclear energy. The reactor is the largest single source of radioactive waste ever to be generated on earth.
+In the last few years, the world has seen an explosion at the Fukushima Daiichi nuclear power plant. The explosion killed about 200 people, injured thousands and left millions homeless.
+A total of 234 tons of spent fuel were used to build the reactors. They are stored at the site for a year, then they are moved into the reactor to be used again as part of the fuel cycle. This process takes about 1.5 years.
+This nuclear power plant was built by the International Atomic Energy Agency (IAEA) and is located in the Ukraine. The IAEA says that it will produce enough plutonium to replace all the human-made sources of energy in the world.
+The plant also uses the same amount of water as the Fukushima Daini nuclear power plant which was damaged by the earthquake and tsunami.
+In addition, the plant produces about 4,000 tonnes of spent fuel each year.
+According to the IAEA, the reactor contains a mixture of plutonium and
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 1278, 382, 2575, 1289, 1509, 783, 698, 15255, 360]
+first_step_topk_probs=[0.7562358975410461, 0.03617153316736221, 0.030939146876335144, 0.02861403487622738, 0.02263556607067585, 0.02263556607067585, 0.018378643319010735, 0.01656053215265274, 0.015315988101065159, 0.0124356122687459]
+first_step_topk_text=[' I', ' If', ' The', ' What', ' We', ' You', ' This', ' It', ' Thanks', ' "']
+
+[New tokens 10] count=77 first30=[2575, 330, 669, 2942, 374, 269, 1759, 7042, 34, 202, 16, 2575, 330, 669, 1258, 415, 13297, 339, 1163, 287, 360, 262, 4443, 868, 5, 4769, 34, 202, 16, 1348]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience with the following topics?
+- What is your school's reputation for being an "innovative" teacher?
+- How are you using technology in your classroom?
+- Do you have any questions about how to best use technology in your teaching?
+- Have you ever had a problem with technology? If so, what can you do to help?
+
+================================================================================

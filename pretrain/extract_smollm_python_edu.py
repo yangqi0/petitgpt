@@ -5,6 +5,8 @@ import json
 import os
 
 import boto3
+import botocore
+from smart_open import open
 from botocore.exceptions import ClientError
 
 from datasets import load_dataset
@@ -32,8 +34,13 @@ def main():
     if args.max_samples is not None:
         ds = ds.select(range(min(args.max_samples, len(ds))))
 
-    s3 = boto3.client("s3")
-    bucket_name = "softwareheritage"
+    # s3 = boto3.client("s3")
+    # bucket_name = "softwareheritage"
+    s3 = boto3.client(
+        "s3",
+        region_name="us-west-2",
+        config=botocore.config.Config(signature_version=botocore.UNSIGNED),
+    )
 
     n_total = 0
     n_keep = 0
@@ -47,17 +54,27 @@ def main():
                 continue
 
             blob_id = ex["blob_id"]
-            key = f"content/{blob_id}"
+            # key = f"content/{blob_id}"
 
             try:
-                obj = s3.get_object(Bucket=bucket_name, Key=key)
-                with gzip.GzipFile(fileobj=obj["Body"]) as fin:
+                # obj = s3.get_object(Bucket=bucket_name, Key=key)
+                # with gzip.GzipFile(fileobj=obj["Body"]) as fin:
+                #     text = fin.read().decode("utf-8", errors="ignore")
+                s3_url = f"s3://softwareheritage/content/{blob_id}"
+                with open(
+                    s3_url,
+                    "rb",
+                    compression=".gz",
+                    transport_params={"client": s3},
+                ) as fin:
                     text = fin.read().decode("utf-8", errors="ignore")
             except ClientError:
                 n_fail += 1
                 continue
-            except Exception:
+            except Exception as e:
                 n_fail += 1
+                if n_fail <= 5:
+                    print(f"[download fail] blob_id={blob_id} err={repr(e)}")
                 continue
 
             text = text.strip()
