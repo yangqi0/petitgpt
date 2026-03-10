@@ -1,0 +1,312 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[791, 601, 1628, 330, 728, 418, 2827, 15, 289, 483]
+first_step_topk_probs=[0.20742247998714447, 0.19689561426639557, 0.10539062321186066, 0.09014537930488586, 0.06595176458358765, 0.06260471791028976, 0.03917703405022621, 0.030677353963255882, 0.030194921419024467, 0.024516358971595764]
+first_step_topk_text=[' would', ' will', ' might', ' is', ' may', ' was', ' named', ',', ' in', ' can']
+
+[New tokens 1] count=256 first30=[578, 699, 269, 5220, 299, 342, 2621, 289, 419, 263, 27775, 17, 382, 929, 330, 1114, 10507, 298, 601, 2245, 2861, 1133, 299, 486, 17, 202, 509, 775, 3467, 357]
+[Full output 1]
+Once upon a time, a curious child has had the chance to be taken in by a stranger. The child is very friendly and will never talk back to you.
+The first thing that you need to do when you get into a new situation is to make sure that you are not talking too much about yourself or your friends. If you don't know how to talk to someone, ask them to tell you what they would like to say. This way, you can get your attention and help them feel more comfortable with you.
+Another important thing to remember is that if you are going to talk to people, it's best to stay calm and let them know that you care about them. They may be uncomfortable with you for the first few minutes of the conversation, but they'll be able to tell you that you are okay.
+If you are going out on a date, make sure you are taking the time to read to them. If you're going out on holiday, make sure that they have a good time, so that they can talk to you before they leave. It's also important to get them to go to the bathroom at least once every two weeks.
+You might also want to take a look at the phone numbers of family members who have been living with a friend who is having problems with
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 4455, 11605, 426, 321, 263, 1057, 336, 0, 1]
+first_step_topk_probs=[0.8769590854644775, 0.038881491869688034, 0.021924437955021858, 0.013719961978495121, 0.013719961978495121, 0.013367285020649433, 0.010853382758796215, 0.010574392974376678, 0.0, 0.0]
+first_step_topk_text=[' the', ' France', ' Lat', ' F', ' T', ' a', ' Ar', ' S', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 7535, 281, 8191, 15, 298, 330, 269, 1408, 3796, 2317, 289, 269, 9556, 17, 698, 330, 3323, 351, 269, 3246, 16, 10674, 4069, 288, 7362, 17, 202]
+[Full output 2]
+Paris is the capital of the province of Catalonia, and is the second largest city in the province. It is located on the north-east coast of Spain.
+The main rivers are the Río de la Plata, Río Braga, Ría de la Plateau, Ríar del Río, Ríuñaga, Ríon de la Platina, Ríona, Ríón de la Platus, Ríós de San Martín, Ríún de la Plati, Ríeja de la Plato, Ríána de la Platonica, Ríano de la Platini, Ríaro de la Platum, Ríìnio de la Platal, Ríão de la Plates, Ríã de la Plats, Ríéno de la Platio, Ríaz de la Platteria, Ríy de la Platerita, Ríao de la Plattida, Ríino de la Platanista, Ríos de la Platoría, Ríovito de la Platlina, Ririn de la Platelya, Ririni de la Placidad
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 357, 483, 342, 3020, 359, 269, 1701, 288, 795, 22542, 4672, 7527, 17, 382, 18956, 395, 269, 993, 288, 22542, 4672, 7527, 289, 269, 4409, 1926, 298, 269]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector that can be written as the sum of two linearly independent vectors. The eigenvalues are the number of linearly independent vectors in the vector space and the corresponding eigenvectors. For example, the eigenvalues of a square matrix A are equal to 1, which means that if you take the dot product between A and its transpose, then you get the identity matrix (i.e., A = 0).
+
+Now let's move on to the concept of a linear transformation. Given a vector v in R3, we say that v is a linear transformation from R3 into R2. That means that if we have a vector v = v1 + v2, then v1 + ... + vn is also a linear transformation of v.
+
+Let's consider the following examples:
+
+Example 1: Let's define a new linear transformation called the "linear transformation" that maps each element of a vector to itself. We call this function 't' since it takes an element of a matrix and returns a scalar value. When we apply this function to our vector v, we get back the original vector v. This is because any vector in R3 can be represented by the formula (v) = r * s.
+
+Example 2: Suppose we want to create
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 491, 483, 395, 5546, 1420, 9845, 1798, 3069, 2700]
+first_step_topk_probs=[0.3848615288734436, 0.1507139354944229, 0.1507139354944229, 0.09157832711935043, 0.03693404048681259, 0.03693404048681259, 0.03328036516904831, 0.02998809702694416, 0.025650179013609886, 0.016909634694457054]
+first_step_topk_text=[' use', ' have', ' can', ' are', ' describe', ' allow', ' rely', ' learn', ' attempt', ' employ']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 298, 3235, 269, 8020, 17, 535, 482, 3474, 15, 411, 601, 2336, 351, 269, 1237, 1271, 2584, 288, 14457, 2673, 29, 202, 202]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data and predict the outcome. In this section, we will focus on the three main types of neural network:
+
+1. Network: A simple example of a neural network is a neural network that takes in an input and produces output. The output of a neural system is known as its activation function (or its "activation").
+2. Learning rate: The number of training steps needed to achieve a given accuracy level. This is usually expressed as the number of epochs between the last one and the next.
+3. Time-series: A time series is a representation of a long sequence of observations. Each observation has a unique history, which is used for predicting future values.
+4. Sequential learning: A set of methods for learning from an ensemble of independent samples. These methods are often called "sequential learning."
+5. Regression: A classification problem that consists of solving a linear equation or regression problem with two unknowns. The objective is to find the coefficients of the linear equation and the corresponding residuals.
+6. Linear Regression: An alternative term to linear regression is linear regression.
+7. SVM: A machine learning algorithm that uses the same training examples but different labels to train it.
+8
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=210 first30=[263, 647, 286, 3, 711, 6, 1348, 620, 486, 5951, 637, 91, 65, 21, 552, 798, 92, 333, 843, 34, 202, 202, 7714, 2234, 15, 9211, 202, 202, 7, 22]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# How do you solve 3x^2 - 4y = 5?
+
+May 14, 2016
+
+$3 x {- 4 y}$
+
+#### Explanation:
+
+First, let's start by finding the square root of both sides.
+
+$4 x {- 2 y} = 5$
+
+Now, we can substitute this value into our equation to get $5$.
+
+$5 x {- 3 y} = 3$
+
+$x {- 3 \times 2 y} + x {- 1 \times 2} = 3 \times {- 2 \times 2 x}$
+
+$= 3 x {- 9 y}$
+$= 6 x {- 12 y}$
+$\Rightarrow x = \frac{6}{3}$
+
+Hence, the solution is $x = \frac{\cancel{6}}{\cancel{3}}$.
+
+The solution is $y = \frac{- \sqrt{3}}{2}$.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 311, 13, 81, 711, 202, 509, 28045, 1392, 330, 3821, 359, 4446, 29, 202, 202, 350, 311, 861, 643, 29, 202, 2569, 354, 202, 8743, 29, 202, 2569, 28045]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n*n
+
+
+The factorial function is defined as follows:
+
+if n == 0:
+return 1
+else:
+return factorial(n-1)
+
+
+In this example, we will create a function that takes two integers and returns the product of them. We will use this function to calculate the factorial of a number n. In our case, we are looking for the product of the first n digits of the number n. This is known as the factorial function. The factorial function is a little more complicated than the factorial function because it has two parts:
+
+• First part: The factorial function takes two integers (the first and second digit) and returns the sum of those two numbers.
+• Second part: The product of the two numbers is the product of their individual factors.
+
+The factorial of a positive integer n is a special number in mathematics called the natural logarithm. It is equal to the negative reciprocal of the base e raised to the power of the argument of the exponent. For example, 10^7 = 7.
+
+Now let's look at how to find the factorial of 2. The factorial of 2 is simply the product of all the natural logarithms of the base 2 natural logarithm of the base 3 natural logarithm of
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.6630875468254089, 0.33691245317459106, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 354, 647, 353, 20, 1341, 311, 12, 864, 409, 1190, 4097, 81, 552, 354, 12, 711, 202, 1465, 330, 269, 1134, 359, 269, 775, 1373, 15, 1722, 411, 491]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1 + (1 / n) * 2**(-n - 1)
+
+
+This is the same as the first example, except we have a helper function called fib_function. It takes two arguments:
+
+• n – The number of elements in the array.
+• f – A function to find the next element in the array after n times.
+
+The first argument is the nth element in the list. The second argument is the number of elements.
+
+In this case, we want to compute the Fibonacci number by doing the following:
+
+fib = fib(2^n - 1)...
+print(fib(2))
+
+Here's how it works:
+
+First, we print the first few Fibonacci numbers from 0 to n-1. Then, we do the following:
+
+ 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 2590, 1541, 4619, 31412, 2, 3, 1, 0]
+first_step_topk_probs=[0.3924615681171417, 0.31865394115448, 0.17056316137313843, 0.060185935348272324, 0.03058028593659401, 0.027555126696825027, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' No', ' There', ' Black', ' Cats', '', '', '', '']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 808, 17, 202, 2573, 395, 914, 2584, 288, 10676, 15, 614, 581, 545, 491, 2645, 10978, 17, 2660, 288, 780, 728, 342, 2645, 289, 2419, 15, 614]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is no.
+There are many types of cats, but they all have black fur. Some of them may be black in color, but most cats do not have any white markings on their fur.
+The most common type of cat is the gray cat. It has a dark brown coat with white spots on its tail. It is also known as the "Tiger" cat because it does not have any stripes or black tails. A gray cat is a very rare cat and is found only in the United States.
+There is a large variety of different colored cats, including the following:
+- Blue, yellow, brown, or black cats (or even more than one)
+- Red, white, or blue cats (usually two)
+- Green, red, or black (sometimes three)
+- White, black, or white cats (often four)
+- Yellow, brown, black, gray, or red cats (usually five)
+- Black, brown, yellow, or black or white cats
+- Red and black cats (sometimes three), depending on the species
+Cats are the most popular animal for petting cats. Cats are considered to be a healthy animal when it comes to their health and well being.
+It's important
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 354, 843, 637, 409, 1012, 1218, 744, 2050, 0]
+first_step_topk_probs=[0.3435174822807312, 0.14171555638313293, 0.09841940551996231, 0.08027298003435135, 0.08027298003435135, 0.07585486769676208, 0.06835091859102249, 0.06158929318189621, 0.050006598234176636, 0.0]
+first_step_topk_text=[' 4', ' 1', ' 5', ' 3', ' 2', ' 6', ' 8', ' $', ' One', '']
+
+[New tokens 9] count=155 first30=[354, 13032, 333, 798, 10941, 17, 202, 3016, 914, 24847, 395, 715, 289, 263, 9849, 288, 7914, 34, 202, 24771, 932, 1218, 24847, 333, 843, 10941, 17, 202, 2774, 15]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples.
+How many oranges are there in a basket of fruits?
+Answer : 8 oranges = 5 apples.
+Now, the problem is that you have to divide the total number of apples by the number of oranges. So, you divide 8 apples by 10 oranges. Then, you add those numbers together.
+So, you have 5 apples and 5 oranges. What is the total number?
+Answer (1) + (2) = 15
+(2) + (3) = 18
+(4) + (5) = 12
+(6) + (7) = 21
+Answer (3) + (8) = 23
+Answer (10) + (9) = 25
+The answer is (4).
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 698, 1278, 382, 1509, 783, 1289, 360, 3919]
+first_step_topk_probs=[0.5857423543930054, 0.04658028483390808, 0.04658028483390808, 0.039842233061790466, 0.039842233061790466, 0.03782022371888161, 0.03590084984898567, 0.0323493517935276, 0.021888667717576027, 0.016014091670513153]
+first_step_topk_text=[' I', ' What', ' It', ' If', ' The', ' You', ' This', ' We', ' "', ' My']
+
+[New tokens 10] count=256 first30=[2575, 330, 669, 2942, 374, 269, 1759, 7042, 34, 202, 55, 12405, 15, 3182, 4235, 15, 2823, 202, 44, 873, 4253, 2449, 351, 263, 1554, 339, 1284, 1397, 299, 620]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience with the following topics?
+Tuesday, April 23, 2010
+I am currently working on a project for my students to do on their own. They are trying to create a website that will be used by their teachers and they have to make sure that the website has a good link to their curriculum. The problem is that they don't know how to find the appropriate link in the internet. I was thinking about using a web browser to create this site but it didn't seem to work. I wanted to try and find a way to use this site to help them learn what to do when they need help.
+Here's a link to the site I created for you. This site will give you some ideas of how to get started.
+The site I created contains several links to websites that have been developed over the years. The first one is called "Fitness" which is a website where you can see a list of all the different types of fitness activities available. It also includes a page where you can find information about different fitness programs. You can find out more about these programs here.
+The second site I created is called "KIDS" which is an online resource for parents who want to get their children involved in learning about healthy lif
+
+================================================================================

@@ -1,0 +1,354 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[418, 791, 330, 601, 2827, 3609, 15, 1628, 289, 728]
+first_step_topk_probs=[0.15258300304412842, 0.1374886929988861, 0.07752695679664612, 0.0735924020409584, 0.06985758990049362, 0.06294691562652588, 0.05335585027933121, 0.04851512983441353, 0.04605294391512871, 0.031983133405447006]
+first_step_topk_text=[' was', ' would', ' is', ' will', ' named', ' asked', ',', ' might', ' in', ' may']
+
+[New tokens 1] count=256 first30=[3609, 896, 3577, 299, 1432, 896, 1133, 17, 202, 5, 44, 699, 287, 2877, 961, 1024, 988, 17, 360, 7860, 988, 356, 791, 916, 299, 1137, 896, 741, 202, 509]
+[Full output 1]
+Once upon a time, a curious child asked her mother to take her back.
+"I had an idea," she said. "She said I would like to see her."
+The child was determined to make the journey and was soon joined by her mother's three other children. She also found herself in a strange land with many unknowns.
+Her mother had been waiting for her.
+"It is a strange place," she said, pointing to a pile of rubble.
+A few days later, the child was gone.
+"My mother had died," she said as she walked away.
+But her mother still had not found her.
+And so, she decided to go home.
+"This is my mother," she said proudly.
+With that, she left her mother's house.
+"If you don't know where this is going, I will tell you," she said with a smile.
+Then, she began to feel sad.
+"What do you think?" she asked.
+"You are mad at me. I am mad about it. You are mad about it," she said furiously.
+The child felt sorry for her mother.
+When she returned, she realized that she was still alive.
+"Well, it is just the way
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 263, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.9804984927177429, 0.01950143463909626, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' a', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 7535, 281, 8191, 15, 298, 330, 658, 269, 8492, 288, 263, 1723, 17, 202, 202, 6880, 202, 509, 2868, 418, 6214, 289, 269, 1745, 1291, 401, 2162]
+[Full output 2]
+Paris is the capital of the province of Catalonia, and is also the seat of a government.
+
+History
+The town was founded in the early 9th century by the Valladolid dynasty. The Valladians were the first inhabitants of the region, who established their own city, called Ponte del Rey. Their fortunes were strongly influenced by the Mafia and the Carthaginians, who conquered them from the Romans in A.D. 376.
+
+In the 11th century, the area became part of the Kingdom of Castile-La Mancha, which ruled the region until the mid-14th century. In the 15th century, Castilian influence extended to the whole of the territory of the municipality, as well as to the rest of the territory. The first recorded mention of the town dates back to the 12th century.
+
+During the Middle Ages, the town was part of the Counts of Catalunya, and their possessions included the territory of Fermo, Bocas de Oñate, Alba, and Valencia.
+
+The first written reference to the town comes from the 10th century, when it was mentioned as a place in the history of Cataluña. The
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 357, 483, 342, 3020, 359, 263, 1701, 288, 795, 7527, 17, 535, 269, 1832, 288, 263, 4409, 2714, 8490, 94, 89, 4373, 289, 423, 22, 15, 411, 491]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector that can be written as a sum of two vectors. In the case of a vector $\mathbf{v}$ in R3, we have:
+
+${\mathbf{v}}_{ij} = \sum _{i=1}^{n}{c}_{ij}x_j$, where $c_ij$ is the coefficient matrix of the complex number $x_j$.
+
+Now, let's consider the following problem:
+
+$$\begin{align*}
+& {\mathbf{v}}\left( 2 , - 1\right) \\
+&= & {\mathbf{u}}\left( {2 , - 1}\right),\\
+&\quad \text{and}
+\end{align*}$$
+
+We want to find the eigenvalues of $\mathbf{u}$. To do this, we need to solve the system of equations:
+
+$\mathbf{u}=\left[\begin{array}{cc} 0 & 0 & -1 \\ 1 & 0 & 0 \\ 0 & -0 & 1 \end{array}\right]$.
+
+To find the eigenvectors, we first identify the number of columns in our system and then apply the identity for $x_i$:
+
+$$x_i=\sum _{
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 491, 483, 395, 1420, 9845, 5546, 1798, 3069, 1991]
+first_step_topk_probs=[0.24283671379089355, 0.1971680223941803, 0.17766313254833221, 0.11659347265958786, 0.04586591571569443, 0.041328661143779755, 0.03923119977116585, 0.033556222915649414, 0.020998947322368622, 0.017961353063583374]
+first_step_topk_text=[' use', ' have', ' can', ' are', ' allow', ' rely', ' describe', ' learn', ' attempt', ' provide']
+
+[New tokens 4] count=256 first30=[395, 885, 299, 5951, 1623, 16, 7128, 2061, 17, 382, 3355, 2877, 330, 357, 1010, 25284, 578, 263, 3248, 1968, 15, 298, 1010, 1999, 330, 263, 2079, 1968, 353, 272]
+[Full output 4]
+Neural networks are a class of machine learning models that are used to solve real-world problems. The basic idea is that each neuron has a unique input, and each output is a single input (or a combination of inputs). The neural network model is a generalization of the classical linear regression (MLR) model for classification tasks.
+
+In this article we will focus on the work done by the authors in the context of the MLR framework. In particular, we will be interested in the two main questions:
+
+1. How do we use the data to train the neural network?
+2. What are the different ways to train the model?
+
+The first question is quite simple: how can we make our model more efficient? This is not an easy task, because there are many different methods available to us. However, we have found a good way to go with these methods.
+
+## The second question
+
+We will be looking at the problem of training the neural network model, which is a class of algorithms that allows us to learn new things. Let’s start by defining some terms.
+
+• A neural network model (NN) is a mathematical model that uses an input vector as input and outputs a set of weights. It consists of a number of neurons connected together by
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 5427, 6649, 29, 8163, 16, 27, 5427, 202, 807, 1401, 8644, 626, 655, 15551, 66, 22513, 202, 1018, 1656, 202, 1018, 306, 202, 1018]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+import os
+import re
+import time
+from datetime import date
+from functools import partial
+from itertools import chain
+from logging import getLogger
+logger = getLogger(__name__)
+
+from .config import config
+from .utils.log import log
+from .exceptions import *
+from .helpers import *
+
+class CacheFileHandler(object):
+
+    def __init__(self, cachefile=None):
+        self._cachefile = cachefile or self.__get_cachefile()
+
+        if not os.path.exists(self._cachefile):
+            self._cachedir = os.getcwd()
+            self._directory = self._cachefilename
+            self._lastdate = None
+            self._format = "%(asctime)s - %(levelname)s - [%(filename)s:%(lineno)d] - %(message)s" % (self._prefix, self._timestamp)
+        else:
+            self._starttime = time.time()
+            self.file_handler = FileHandler(self._directory)
+            self.starttime = self.file_.fileno()
+
+            # Make sure to
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=97 first30=[622, 311, 864, 353, 20, 1341, 353, 21, 2216, 353, 81, 552, 354, 3943, 711, 202, 1465, 330, 263, 1114, 2829, 1373, 17, 382, 28045, 1392, 330, 3821, 359, 4446]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n * (1 / (2 ** (n - 1)))
+
+
+This is a very simple example. The factorial function is defined as follows:
+
+if __name__ == '__main__':
+    print 'n = %d' % n
+    print 'p = %s' % p
+
+    print 'factorial(n) = %s times' % factorial(n)
+
+    print 'the factorial of n is %s'%(factorial(0))
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.6026851534843445, 0.39731481671333313, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 354, 647, 353, 20, 1341, 311, 12, 864, 353, 20, 552, 311, 12, 711, 202, 1465, 1392, 483, 342, 885, 299, 1098, 269, 775, 993, 289, 263, 1180, 15]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1 + (1 / n) * (1 - n)
+
+
+This function can be used to find the first number in a list, or it can be used as an input for a recursive function. The function can also be used to calculate the sum of all the Fibonacci numbers.
+
+## Example
+
+import numpy as np
+from scipy import stats
+from math import sqrt
+
+# Define the function to compute the Fibonacci numbers
+fib = lambda x: 0 if x == 0 else 1
+# Compute the Fibonacci numbers by multiplying each pair of numbers together
+F_i = fib(x)
+# Return the sum of the Fibonacci numbers, modulo 2^N
+sum = 0
+for i in range(len(fib)):
+    sum += (fib[i] ** 2) * (fib[-i] ** 3)
+print(sum)
+
+# Create a list of Fibonacci numbers and store them in a variable
+list_of_fibs = [0] * len(fib)
+for i, fib in enumerate(fib):
+if i % 2 == 0:
+list_fib.append(fib[0])
+else:
+list_.append
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 2590, 31412, 1541, 4619, 2, 3, 1, 0]
+first_step_topk_probs=[0.42686745524406433, 0.25356993079185486, 0.11020106822252274, 0.0849352777004242, 0.07653312385082245, 0.04789320006966591, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' No', ' Cats', ' There', ' Black', '', '', '', '']
+
+[New tokens 8] count=256 first30=[13676, 17, 31412, 395, 2645, 1091, 581, 491, 263, 17342, 11400, 12153, 702, 613, 2918, 17, 783, 330, 269, 2597, 2526, 2645, 10676, 395, 1431, 1255, 360, 10733, 7568, 741]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Yes. Cats are black because they have a lighter colored coat than other animals. This is the reason why black cats are often called "black dogs."
+The reason for this is that cats are not furry creatures. They're not furry like humans do. As long as there's a tail on top of the cat, it doesn't matter what color it is. That's why cats are black.
+Animals can be different from people in their behavior or appearance. Some cats are more affectionate than others. They may cry or show aggression when an animal wants to eat them. But if you see an animal who is affectionate, you'll know that it needs to be handled carefully.
+When you see an object that looks black, don't be afraid to touch it. You'll know that the object is a cat. If your cat is white, then you can't tell that the object has a black spot.
+A cat with a black spot on its body is not black. It's not a cat. A cat with a dark spot on its back is not black either.
+Why is the cat black? Because cats have a hard time keeping their hair down so they won't get a chance to grow up. The reason for this was discovered
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 843, 1012, 354, 637, 409, 1218, 382, 0, 1]
+first_step_topk_probs=[0.45470136404037476, 0.12366271764039993, 0.10577432811260223, 0.10577432811260223, 0.06456341594457626, 0.06456341594457626, 0.04363636672496796, 0.03732416033744812, 0.0, 0.0]
+first_step_topk_text=[' 4', ' 5', ' 6', ' 1', ' 3', ' 2', ' 8', ' The', '', '']
+
+[New tokens 9] count=256 first30=[843, 17, 27, 3, 711, 509, 1165, 415, 2073, 330, 2779, 299, 1409, 419, 1186, 4649, 289, 269, 1902, 1365, 973, 15, 2512, 299, 263, 719, 1399, 444, 269, 2176]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 5.8
+
+The world's population is expected to grow by 7 billion in the next 20 years, according to a new report from the World Bank.
+"Global population growth is likely to be much higher than previously thought," said the report, which was released at the World Economic Forum in Davos, Switzerland on Monday.
+Worldwide, about one-third of the world's population lives in urban areas. In the United States, that number is projected to increase to 9.5 billion by 2050.
+In comparison, less than 1 percent of the world population live in cities.
+"If we want to maintain the current level of human development, we need to make sure that our resources are used efficiently, not waste," said Mark Bittman, director of the World Bank's Development Research Center.
+The report found that only 11 percent of the global population lives in cities. That means that it would take a trillion people to feed each person on Earth today.
+The World Bank estimates that there will be roughly a billion people living in cities within the next decade.
+By 2030, it says, there could be around 4 billion people living on less than $1 per day.
+But the report notes that this figure represents just a fraction of the
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 1289, 783, 698, 1509, 2575, 1278, 3919, 1541]
+first_step_topk_probs=[0.694412887096405, 0.047020573168992996, 0.04463426023721695, 0.04021882638335228, 0.029424725100398064, 0.02721342071890831, 0.02651388943195343, 0.02583232894539833, 0.025168299674987793, 0.014566294848918915]
+first_step_topk_text=[' I', ' The', ' We', ' This', ' It', ' You', ' What', ' If', ' My', ' There']
+
+[New tokens 10] count=199 first30=[2575, 330, 669, 2942, 374, 269, 1759, 7042, 34, 202, 16, 2575, 330, 669, 1258, 415, 13297, 339, 263, 1413, 2690, 374, 4126, 298, 1397, 34, 202, 16, 1348, 483]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience with the following topics?
+- What is your school's reputation for a good relationship with teachers and students?
+- How can you make sure that you have a good relationship to work with?
+- Is there any way to be more positive about your child's academic performance or behavior?
+- Are you happy with your child's grades, attendance, and academic progress?
+- Do you feel like you're being treated fairly?
+- Does your child seem to be having trouble finding time in class?
+- If so, what do you think will happen if you are not able to meet your child's needs?
+- When will you get back to school?
+- Will you be able to continue your education after graduation?
+- In your opinion, what does this mean for you and your family?
+- Can you explain your feelings about this issue?
+- Has your child been affected by this issue? If so, how can you help?
+
+================================================================================

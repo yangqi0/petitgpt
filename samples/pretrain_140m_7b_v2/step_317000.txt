@@ -1,0 +1,328 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[791, 330, 418, 601, 2827, 15, 1628, 348, 3609, 289]
+first_step_topk_probs=[0.1259499490261078, 0.10773070901632309, 0.10226337611675262, 0.0830313041806221, 0.0547376424074173, 0.05045236647129059, 0.04681958630681038, 0.04444345086812973, 0.03608526661992073, 0.03425393998622894]
+first_step_topk_text=[' would', ' is', ' was', ' will', ' named', ',', ' might', ' st', ' asked', ' in']
+
+[New tokens 1] count=116 first30=[578, 733, 998, 289, 269, 1471, 288, 263, 1844, 17, 382, 929, 330, 263, 929, 668, 418, 3673, 299, 263, 3804, 298, 3577, 15, 298, 3338, 3222, 395, 1127, 1507]
+[Full output 1]
+Once upon a time, a curious child has been found in the care of a family. The child is a child who was born to a father and mother, and whose parents are both still alive.
+The child was placed on a special diet that contained the following:
+- A sweet-smelling fruit juice
+- An apple or pear (or any other fruit)
+- A piece of cheese or cheese
+- A small amount of milk
+- A glass of wine or beer
+A special diet may be recommended for a child with a medical condition such as diabetes, heart disease, or kidney problems.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 4455, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.9641731381416321, 0.03582686185836792, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' France', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 1134, 1112, 15, 298, 330, 12092, 289, 269, 7913, 288, 269, 9556, 17, 698, 330, 263, 1114, 1384, 2317, 374, 263, 2073, 288, 672, 2261, 15]
+[Full output 2]
+Paris is the capital of the province of the same name, and is situated in the centre of the province. It is a very important city with a population of about 100,000 people.
+The town has a long history of being a major centre for trade in the region. The first documented mention of the town was in 1269, when it was known as Sainte-Marie. In 1340, the town was acquired by France as a possession of the King of France. After the French conquest of France, the town became part of the French crown territory. During the 18th century, the town suffered from the constant raids by the French and Spanish. During the 19th century, many French citizens moved to the town. This also contributed to the growth of the town's economy.
+In 1803, the town of Saint-Jean-Baptiste was created in the municipality of Saint-Julien. This municipality had a population of 564 inhabitants in 1805.
+During the 19th and 20th centuries, the town experienced a boom in tourism and business development. A number of small hotels were built on the nearby lakeside. However, the city has never lost its pride and popularity.
+Today, the town is still an active tourist destination. The
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 483, 342, 998, 419, 4007, 269, 18956, 288, 263, 3823, 17, 1278, 269, 18956, 395, 1623, 1890, 15, 1000, 269, 4409, 330, 1255, 263, 10294, 8537, 17]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be found by finding the eigenvalues of a matrix. If the eigenvalues are real numbers, then the vector is called a eigenvector. The number of eigenvectors of a given matrix is equal to the sum of all its eigenvalues. The number and size of the vectors in a matrix are called eigenvectors.
+A square matrix is a square matrix with the property that all its entries are the same. A scalar is a vector or a matrix with one or more rows and columns. For example, if we have two matrices, m1 and m2, the product m1*m2 is m1*v1 + m2*v2.
+The matrix product of two matrices is a square transformation from the original matrix into the new matrix. It does not change the information about the original matrix. In this case, the matrix product is a square-matrix transformation.
+Matrix multiplication is a fundamental concept in linear algebra. When you multiply a matrix by a vector, you get another vector, which has the same magnitude as the original matrix, but also has the same direction. This means that the result will always be a square matrix.
+Matrix addition is the process of adding two matrices together. It involves multiplying each element of the matrix by a corresponding element of
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 491, 483, 395, 9845, 1420, 1798, 3069, 5546, 4478]
+first_step_topk_probs=[0.33896565437316895, 0.2013542503118515, 0.16348673403263092, 0.08287917822599411, 0.04446261748671532, 0.040064141154289246, 0.030878674238920212, 0.025071503594517708, 0.017411811277270317, 0.016528163105249405]
+first_step_topk_text=[' use', ' have', ' can', ' are', ' rely', ' allow', ' learn', ' attempt', ' describe', ' aim']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 298, 3235, 269, 8020, 17, 1658, 2269, 395, 1431, 885, 289, 4855, 2465, 15, 913, 581, 395, 885, 299, 24007, 3519, 1728, 351]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data and predict the outcome. These models are often used in machine learning, where they are used to classify objects based on their features.
+
+In the context of the above example, it is important to understand that the model only applies to one particular class (the class with the highest score) and not all classes. For instance, the model might use some classes like the car or the computer to predict the probability of a certain event.
+
+Now let us consider an example where we have two classes – the class with the lowest score and the class with highest score. The prediction of the model would then be given by:
+
+$$y_i = \frac{1}{2} + \frac{3}{4} + \ldots + \frac{(1-0)^2}{2}$$
+
+This equation represents a simple linear regression model that estimates the value of the target variable at every point along the line. This method works well when the target variable is unknown and has no correlation between the observed values and the predicted values. However, when the target variables are known, this method does not work because the prediction errors do not match up exactly with the actual values. Instead, the error should be very small compared to the
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 5427, 6649, 29, 8163, 16, 27, 5427, 202, 807, 1401, 8644, 626, 655, 15551, 66, 22513, 202, 1018, 1656, 202, 1018, 306, 202, 1018]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+import os
+import re
+import time
+
+from django.conf import settings
+from django import forms
+from django._utils import timezone
+from django_filters.rest_framework import DjangoFilterBackend
+from django.__main__.__name__ import main as main_module
+from djangourl.utils import dateutil.parser
+from djangouser.urls import reverse
+from djangoone.shortcuts import get_object_or_404
+from djangoclient.core.exceptions import PermissionDenied
+from django2.utils.functional import cached_property
+from django3.utils.translation import ugettext_lazy as _
+from django1.utils.html import escape_html
+from django0.utils.http import urlsafe_base64_encode
+from django4.views.decorators.cache import cache_page
+from django5.views.generic import ListView, DetailView, TemplateView
+from django6.views.simple import GetLastIndexPageMixin
+from django7.views.static import static
+from django10.views.common.mixins import ViewSetMixin
+from .models import
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.5774953961372375, 0.42250463366508484, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 6] count=134 first30=[622, 311, 13, 81, 202, 202, 856, 1271, 1714, 346, 1083, 801, 44, 4575, 2449, 351, 269, 408, 401, 2000, 288, 263, 6847, 15, 298, 356, 910, 299, 1098, 545]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n*n
+
+def main():
+    print("I'm working on the Nth term of a polynomial, and I need to find all the values of x such that the product of the coefficients is divisible by 2.")
+    x = [1] * 6
+    for i in range(6):
+        for j in range(i+1, 6):
+            if x[j] == 1:
+                break
+            else:
+                x[j], x[i] = x[i], x[j]*x[i]
+            print("Factor:", x)
+            print()
+
+
+if __name__ == "__main__":
+    main()
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 537, 339, 3, 2, 4, 5, 0, 1]
+first_step_topk_probs=[0.5783280730247498, 0.26477789878845215, 0.09842631965875626, 0.058467745780944824, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', ' #', ' for', '', '', '!', '"', '', '']
+
+[New tokens 7] count=256 first30=[537, 382, 775, 3190, 288, 269, 1180, 330, 269, 993, 288, 31393, 1890, 17, 346, 490, 311, 861, 643, 29, 331, 622, 354, 555, 1150, 1794, 29, 331, 537, 1278]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     # The first element of the list is the number of Fibonacci numbers.
+    if n == 0:
+        return 1
+
+    while True:
+        # If the number is even, then we have an empty list.
+        if n % 2 == 0:
+            return [1]
+
+        # Otherwise, we have an odd number in the list.
+        else:
+            # We can't have more than one.
+            if n % 3 == 0:
+                return [0]
+
+            # We can only have 2 consecutive numbers in the list, and it's not enough to sum them all.
+            if len(n) == 2:
+                return n[0] + 1
+
+            # We are at least two consecutive numbers in our list.
+            elif n < len(n):
+                return [i for i in range(len(n)) if n % i == 0]
+
+
+# Now we can use this function to compute the Fibonacci numbers recursion.
+def fib_recursive(n):
+    # The first digit in the list is an integer.
+    if (n % 2 == 1 or n % 4 == 0):
+        return 1
+    else:
+        return fib(n - 1)[2:] + fib(n-1)[3:] + fib_(
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 1541, 2590, 31412, 4619, 1906, 2, 1, 0]
+first_step_topk_probs=[0.34824317693710327, 0.3137931823730469, 0.0947098508477211, 0.08990325033664703, 0.07689832895994186, 0.050694532692432404, 0.025757713243365288, 0.0, 0.0, 0.0]
+first_step_topk_text=[' The', ' Yes', ' There', ' No', ' Cats', ' Black', ' All', '', '', '']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 808, 17, 202, 14405, 10676, 395, 269, 851, 1488, 1875, 288, 6783, 487, 3191, 289, 269, 1560, 1705, 17, 1109, 491, 263, 1114, 1059, 2484, 288, 1937]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is no.
+Black cats are the most common species of domesticated cat in the United States. They have a very high rate of disease transmission from humans to cats. Cats who are not domesticated tend to be less healthy than their wild counterparts. A cat with a genetic predisposition for disease is more likely to develop a disease if it has a mother or father.
+As with all other mammals, cats do not have the same health problems as dogs or cats. In fact, they may be healthier than dogs or cats when compared to other animals.
+The biggest difference between cats and dogs is that cats are generally smaller than dogs, but they also have an easier time controlling the food they eat. Dogs and cats have similar digestive systems and can eat just about anything without much trouble. Cats have a lot of appetite, so they can eat almost anything.
+In general, cats and dogs are less prone to diseases than dogs and cats. There are many different types of diseases affecting cats and dogs. Some of these diseases include:
+• Lyme disease
+• Rocky Mountain spotted fever
+• Rocky mountain spotted fever
+· Dog fleas
+· Dog pox
+· Dog bites
+· Dog bite
+· Dog biting
+· Dog saliva
+· Dog infection
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 843, 354, 409, 1012, 637, 1218, 2050, 382, 0]
+first_step_topk_probs=[0.4145928621292114, 0.14629586040973663, 0.07830652594566345, 0.07450095564126968, 0.0705600380897522, 0.06215628609061241, 0.057290274649858475, 0.054382745176553726, 0.04191446304321289, 0.0]
+first_step_topk_text=[' 4', ' 5', ' 1', ' 2', ' 6', ' 3', ' 8', ' One', ' The', '']
+
+[New tokens 9] count=175 first30=[2050, 13032, 330, 798, 10941, 15, 795, 395, 843, 10941, 15, 298, 619, 330, 1012, 10941, 17, 202, 43, 499, 29, 382, 993, 288, 10941, 330, 269, 1134, 359, 269]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple is 4 apples, two are 5 apples, and one is 6 apples.
+Hint: The number of apples is the same as the number of apples.
+Solution: There are two apples in a row, so there are three apples in total.
+
+If you divide the number of oranges by the number of bananas, you get a number that is the same for both apples and bananas.
+Example: In the first group, there are four apples and five bananas. The number of oranges is three because there are three of them.
+
+Therefore, there are three fruits in the first group.
+
+Example: A man lives with his wife and their children. He is a rich man who owns $100. How much money did he have at the end of the year?
+Answer : $100 +$100 = $0.50
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 1289, 382, 783, 2575, 1509, 698, 1278, 3919, 15255]
+first_step_topk_probs=[0.818229615688324, 0.029123490676283836, 0.027645474299788475, 0.02244636043906212, 0.02130720019340515, 0.02022586204111576, 0.018705863505601883, 0.018705863505601883, 0.013333705253899097, 0.010276693850755692]
+first_step_topk_text=[' I', ' We', ' The', ' This', ' What', ' You', ' It', ' If', ' My', ' Thanks']
+
+[New tokens 10] count=256 first30=[356, 3442, 733, 289, 263, 3313, 288, 9327, 374, 1284, 3694, 415, 8208, 17, 776, 330, 3124, 780, 298, 406, 330, 453, 4006, 833, 9522, 444, 269, 9525, 17, 356]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I've been in a lot of trouble with my son's medications. He is taking them and he is not getting any relief from the medication. I've had him take it for several weeks but never received any relief. He was on an anti-depressant and his prescription was no longer effective. The doctor told me that he was still taking the medication, but that he could not get the medicine to work properly. I have seen many times when he was given this medication without any relief. I think it has been a long time since I got this medication. I am not sure if this is true anymore. What should I do?
+Assistant, I'm feeling depressed.
+Assigned: a. I have had a few seizures recently.
+Asstered: I have had several seizures.
+Assuted: I have a very small seizure.
+Assicated: I am experiencing some difficulty in thinking or speaking.
+Assered: I have been having a hard time with the medication.
+Assivered: I have experienced a lot of problems with the medication, including having a low level of consciousness.
+Assrived: I have lost all of my senses.
+Assinated: I have suffered a number of serious physical injuries.
+Asselected: I
+
+================================================================================
