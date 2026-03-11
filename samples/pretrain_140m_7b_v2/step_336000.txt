@@ -1,0 +1,323 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[601, 791, 1628, 330, 728, 483, 418, 2827, 15, 289]
+first_step_topk_probs=[0.2688290774822235, 0.20719467103481293, 0.12965911626815796, 0.11090332269668579, 0.08547660708427429, 0.03714796155691147, 0.031774330884218216, 0.03016178496181965, 0.02361801452934742, 0.017007572576403618]
+first_step_topk_text=[' will', ' would', ' might', ' is', ' may', ' can', ' was', ' named', ',', ' in']
+
+[New tokens 1] count=118 first30=[330, 1163, 16852, 419, 269, 4769, 299, 263, 1563, 17, 382, 4769, 330, 1000, 3609, 299, 3408, 1282, 263, 1685, 2351, 357, 5546, 269, 2811, 17, 202, 509, 929, 330]
+[Full output 1]
+Once upon a time, a curious child is being guided by the teacher to a book. The teacher is then asked to write down a few words that describe the story.
+The child is given a piece of paper and a pencil. He or she writes down the words on the paper, and the teacher reads them aloud to him or her. The teacher uses the tape to help the child read the words aloud.
+This is a great way for children to practice reading and writing while they are learning about the world around them.
+- When you're ready to start your day at the library, check out our site:
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 4455, 11605, 336, 321, 343, 426, 2, 1, 0]
+first_step_topk_probs=[0.8762980699539185, 0.06570183485746384, 0.013771853409707546, 0.012090479023754597, 0.011181865818798542, 0.010614386759698391, 0.010341535322368145, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' France', ' Lat', ' S', ' T', ' C', ' F', '', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 1134, 1112, 15, 298, 330, 658, 269, 8492, 288, 269, 1723, 288, 269, 9556, 17, 698, 330, 12092, 289, 269, 3246, 16, 10674, 288, 269, 9556]
+[Full output 2]
+Paris is the capital of the province of the same name, and is also the seat of the government of the province. It is situated in the north-east of the province, on the banks of the River Arno and its tributary the Tiber.
+The name of the municipality comes from the Latin word for "fresh water" (or "water"), which means "of the river Arno". The municipality was founded by the Romans as a possession of the Roman Empire, and was then administered by the Romans until the time of Augustus.
+It is located at the junction of the rivers Arno and Argo. It has an area of 737 square kilometres (330 sq mi).
+It is situated in a mountainous region that is dominated by the Tiber, a large tributary of the Arno. It is a very small town with a population of around 3,000 people. Its economy is based mainly on agriculture, but it also includes tourism, and the activities of local fishing and hunting.
+The municipality's main economic activity is agriculture. In 2006, the municipality produced about 10% of the total production of the country. The main agricultural products are rice, wheat, corn, vegetables, fruits, and flowers.
+The economy is based on agriculture, particularly livestock
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 483, 342, 3020, 359, 269, 1701, 288, 795, 22542, 4672, 7527, 17, 382, 18956, 395, 269, 1992, 288, 269, 5606, 4409, 289, 269, 4054, 353, 1044, 854]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be written as the sum of two linearly independent vectors. The eigenvalues are the values of the corresponding vector in the basis (the set of all possible linear combinations of these vectors).
+
+Let's take an example:
+
+Suppose we have a matrix A and let V be its transpose. Then V has the following form:
+
+V = |A| + |B|
+
+Now, since A is a subspace of B, it can be decomposed into its eigenvectors and their corresponding eigenvalues. We will use this to show that the eigenvalues of the matrix A are equal to zero.
+
+The eigenvalues of A are 0 if they are not linearly dependent, and 1 otherwise. This means that the eigenvector of A is 1. Since A is a linear transformation, the eigenvalue of A is the same as the eigenvalue of the original matrix A. Therefore, we can write the system of equations below as follows:
+
+$x_{ij} = \lambda_i x_{jk}$
+
+$\Rightarrow \lambda_1 x_{i j k} = 0$
+
+$\therefore \lambda_2 x_{j k} = \frac{1}{3} \lambda_0 x_{j l} = \
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 491, 395, 1420, 9845, 5546, 1798, 3069, 2700]
+first_step_topk_probs=[0.28389519453048706, 0.2077021598815918, 0.16864100098609924, 0.11067258566617966, 0.03534907102584839, 0.031852155923843384, 0.02870120480656624, 0.02330353669822216, 0.02099825069308281, 0.019932569935917854]
+first_step_topk_text=[' use', ' can', ' have', ' are', ' allow', ' rely', ' describe', ' learn', ' attempt', ' employ']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 298, 3235, 269, 8020, 17, 1658, 2269, 1420, 500, 299, 1557, 806, 269, 870, 330, 5256, 289, 1623, 16, 7128, 6863, 15, 857]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data and predict the outcome. These models allow us to understand how the data is distributed in real-world situations, such as weather forecasting or surveying.
+
+In this article, we will explore the concept of a neural network, which is an important component of many scientific disciplines including statistics, computer science, engineering, economics, and social sciences. We will also discuss how these models can be applied to various real-world problems.
+
+## Understanding Network Structure
+
+A neural network (or neural network) is a type of mathematical model used to describe the behavior of complex systems by predicting their outcomes. In our case, we are interested in finding out what happens when the input values change while the output values remain unchanged throughout the process. This process is called a "network" since it involves adding inputs and outputs to existing networks, where each new input corresponds to a new output.
+
+The term 'network' refers to a particular type of mathematical structure that describes the behavior of a system based on its input and output values. A simple example would be the electrical network shown below:
+
+![Network](https://i.imgur.com/hFQkBzU.png)
+
+Here, the first
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 5427, 6649, 29, 8163, 16, 27, 5427, 202, 1568, 202, 18688, 351, 321, 462, 2839, 224, 843, 2234, 29, 6457, 29, 5557, 9697, 202]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Aug  5 14:43:07 2019
+
+@author: <NAME>
+"""
+import numpy as np
+from scipy.optimize import minimize
+
+np.random.seed(1)
+
+X = np.array([[0, 1], [2, 3]])
+Y = np.random.randn(1000, 2)
+
+L=10**5
+P=4*np.pi/180
+r=3
+phi=0.01
+R=4
+rho=0.9
+dQ=np.zeros((100))
+for i in range(len(X)):
+    dQ[i]=(X[i]-r)*np.cos(theta(X[i]))*(np.sin(theta(Z[i])+r)**2+(1-dQ[i])**2)/(2*r))/(2*r)
+    r+=1
+print('Q:',r,'R:',r)
+p_q=np.linalg.inv(np.dot(np.linalg._matrix_conjugate(dQ),dQ))
+p_
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=111 first30=[622, 311, 13, 81, 711, 202, 509, 28045, 1392, 330, 3821, 359, 4446, 29, 202, 202, 2440, 4886, 11, 81, 12, 333, 353, 20, 18, 81, 6801, 2440, 4886, 11]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n*n
+
+
+The factorial function is defined as follows:
+
+factorial(n) = (1/n)*factorial(i) + (1/i)*(factorial(j) - 1)
+
+This function returns the product of all integers from 0 to n.
+
+## Example
+
+import math
+print(factorial(10))
+
+# ----------------------------
+# ____________
+# ----------
+# _______
+# ------
+# -------
+# _____
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 537, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.5434610247612, 0.3774261474609375, 0.07911282777786255, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', ' #', '', '#', '', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 354, 17, 19, 1341, 353, 20, 647, 311, 12, 711, 202, 1465, 330, 269, 1134, 359, 269, 2579, 1373, 15, 1722, 411, 817, 263, 1108, 993, 288, 5937, 299]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 / (1 + n)
+
+
+This is the same as the previous example, except we use a different number of arguments to compute the Fibonacci numbers recursion.
+
+We can also calculate the Fibonacci numbers using the Python implementation of the Fibonacci sequence:
+
+import math
+
+# For each integer n, find the first and last Fibonacci numbers in the sequence
+for i in range(1, n-1):
+    # For each integer k, find the next Fibonacci number in the sequence
+    for j in range(k+1, n):
+        # Find the next Fibonacci numbers in each sequence
+        prev_i = 0
+        prev_j = 0
+
+        # If the last Fibonacci number is greater than the current index in the sequence, then it's not a Fibonacci number
+        if j < prev_i:
+            prev_i += 1
+
+        # Otherwise, it's not an Fibonacci number
+        else:
+            prev = prev_i
+
+    # If the next Fibonacci is less than the current position in the sequence or not at all, then it is not a Fibonacci value
+    if prev > prev_j:
+        prev_index = prev_j - 1
+        prev_count = prev_index
+
+    # If there are no more Fibonacci
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 2590, 31412, 1541, 4619, 2, 3, 1, 0]
+first_step_topk_probs=[0.4566638469696045, 0.2712700068950653, 0.11191029101610184, 0.06647756695747375, 0.05990125983953476, 0.03377704694867134, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' No', ' Cats', ' There', ' Black', '', '', '', '']
+
+[New tokens 8] count=256 first30=[13676, 17, 1541, 330, 808, 2395, 672, 2645, 10676, 1163, 2645, 17, 1109, 395, 453, 263, 4384, 1875, 614, 581, 620, 1848, 289, 269, 3494, 17, 2660, 288, 780, 491]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Yes. There is no question about black cats being black. They are not a distinct species but they do exist in the wild. Some of them have been seen in captivity or were captured by humans. It is believed that some of these cats are in captivity. The only way to prove this is to test their own breed. If it is confirmed that they are black, then it is a very strong proof of the fact that they are different from other animals. However, if they are black then they must be the same as any other animal in the wild, so that they are not the same. In fact, some cats are also black, so that is why they are not found in captivity.
+The fact that most cats are black is a good reason for testing their own breed and not just because they are black. I would say that the majority of cats are black. They can't be black at all. So what should we do? First, we need to know the breed of cat we want to test. We need to know which breed are black and which are white. If you are interested in a cat, you can learn more about how cats are classified by their breed. For example, a cat with a black coat and a white coat will have a cat
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 354, 843, 409, 744, 637, 2050, 382, 1218, 0]
+first_step_topk_probs=[0.3224656283855438, 0.13303065299987793, 0.102530837059021, 0.0975480005145073, 0.08324845880270004, 0.08138447254896164, 0.06416215747594833, 0.05781490355730057, 0.05781490355730057, 0.0]
+first_step_topk_text=[' 4', ' 1', ' 5', ' 2', ' $', ' 3', ' One', ' The', ' 8', '']
+
+[New tokens 9] count=256 first30=[2050, 13032, 330, 798, 10941, 15, 795, 934, 667, 395, 1218, 10941, 15, 298, 619, 934, 667, 330, 1604, 10941, 17, 202, 509, 1811, 4933, 658, 3261, 269, 2097, 288]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple is 4 apples, two buys are 8 apples, and one buys is 12 apples.
+The problem statement also includes the concept of addition, subtraction, multiplication, division, and exponentiation. Subtracting 5 from both sides gives us 1/5. Multiplying 6 by 2 results in 6/2. Adding 7 to both sides gives you 7/4.
+To solve this problem, we need to isolate x on one side of the equation. Let's start with x = 1. Then, we can write it as x + 1 = 4. Since there are 4 apples in total, x must be equal to 4. So, x = 4.
+Now, let's see how we can solve this problem using substitution. We can use the property that when we substitute a value for x into the original equation, we get x = 1 - x. So, we get 1 - 1 = 1 - 1.
+So, we get (1 - 1) = 1 - 2 = 1 - 3 = 0.5.
+Next, we can find out what x is by plugging in x = 1 into the equation. This means we know that the answer will be 1/3.
+We can now substitute x = 1 back
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 1289, 382, 1278, 1509, 783, 2575, 698, 3919, 15255]
+first_step_topk_probs=[0.7942460179328918, 0.026472998782992363, 0.024483520537614822, 0.02385416254401207, 0.021494396030902863, 0.02094186469912529, 0.02094186469912529, 0.01745207980275154, 0.016140533611178398, 0.014543836005032063]
+first_step_topk_text=[' I', ' We', ' The', ' If', ' You', ' This', ' What', ' It', ' My', ' Thanks']
+
+[New tokens 10] count=127 first30=[356, 3442, 733, 289, 263, 3313, 288, 9327, 374, 1284, 3694, 415, 1258, 298, 356, 4575, 4532, 299, 835, 1169, 299, 631, 1133, 299, 1258, 339, 269, 1266, 17, 356]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I've been in a lot of trouble with my son's school and I'm trying to get him to go back to school for the day. I've had him come home from school this morning, and he's still having problems at school.
+Amy: It seems like a lot of kids don't have any friends. Is that a problem?
+Assistant, AJ: Yes, but it's not something that you would want to do. If you can help him through some of his problems, then it may be worthwhile doing.
+I'd love to hear your suggestions on how to help your child.
+
+================================================================================

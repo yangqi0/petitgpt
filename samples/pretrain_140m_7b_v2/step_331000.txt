@@ -1,0 +1,337 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[601, 330, 791, 1628, 728, 418, 15, 483, 578, 3022]
+first_step_topk_probs=[0.26692160964012146, 0.15855826437473297, 0.12220562249422073, 0.07647432386875153, 0.06541195511817932, 0.033235613256692886, 0.030015654861927032, 0.02842792682349682, 0.024315696209669113, 0.02079831436276436]
+first_step_topk_text=[' will', ' is', ' would', ' might', ' may', ' was', ',', ' can', ' has', ' comes']
+
+[New tokens 1] count=256 first30=[578, 2142, 299, 1328, 17, 202, 509, 929, 330, 263, 1809, 1608, 623, 298, 263, 1809, 3510, 17, 776, 578, 733, 1114, 3758, 289, 269, 1258, 298, 330, 2397, 299]
+[Full output 1]
+Once upon a time, a curious child has come to life.
+The child is a little old man and a little girl. He has been very active in the school and is going to be very happy. When he's old enough, he can talk about his favorite pastimes and the things that are new to him.
+He is very interested in everything that happens around him. He loves to see what other people do and think of him as an adult. The child has to learn all these things before he can become a member of the school.
+There are many different kinds of activities for children that they will enjoy doing. There are many ways to go about it. Some of them are:
+- Playing with the kids
+- Reaching out to each other
+- Taking turns
+- Giving gifts
+- Talking about what happened
+- Being able to make friends
+- Having fun together
+- Making friends
+Some of the activities that you can do at home include:
+- Reading books
+- Sending letters to your friend
+- Talk about their favorite toys
+- Listening to music
+- Going on a picnic
+- Making a puppet show
+- Reading to your friend's children
+- Saying good-bye to the family
+- Play games such as
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=137 first30=[269, 9556, 288, 1057, 762, 15, 298, 269, 1271, 2868, 289, 269, 9556, 17, 698, 418, 6214, 289, 269, 1186, 401, 2162, 419, 269, 10366, 497, 17, 202, 202, 509]
+[Full output 2]
+Paris is the capital of the province of Arles, and the main town in the province. It was founded in the 7th century by the Normans.
+
+The city was the seat of the Roman Empire until it was conquered by the Lombards in the 11th century. The town was part of the Kingdom of Italy from 1497 to 1599. It was captured by the Lombard League in 1496. After the Peace of Westphalia (1495) it became part of the Holy Roman Empire. In 1529 it was annexed by the German Empire.
+
+Twin towns – sister cities
+
+Arles is twinned with:
+
+ Jülich, Germany
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 483, 342, 3020, 359, 269, 1701, 288, 795, 10689, 17, 1220, 1373, 15, 490, 411, 491, 269, 3581, 202, 202, 7, 3724, 7953, 7253, 990, 4820, 1208]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be written as the sum of two squares. For example, if we have the equation
+
+${\displaystyle \lambda _{1}=-\sqrt {2}-1}$
+
+and the corresponding eigenvector , then the matrix
+
+$\left( {\begin{array}{ccc}\lambda _{2}& 0& -1\\ 1& 0& 0\end{array}} \right)$
+
+is an eigenvalue of . The eigenvalues are all real numbers and their sum equals zero. Thus, the eigenvalue of is
+
+$E_{ij}=\lambda _{i}+j\lambda _{j}+\lambda _{k}}$
+
+For a given matrix A, let's denote its column vector by . In this case, the eigenvector is defined to be
+
+$A=\left[\begin{array}{\frac{{3}}{{2}}\,-\,\,0&\text{if }x\neq y\\0&\text{-}\,\,y&\text{otherwise}\end{array}]\right]$
+
+The eigenvalue is equal to the number of columns in the matrix. The eigenvalue is also equal to the row vector. The eigenvalue of is equal to one times the determinant of the matrix
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 491, 395, 5546, 1798, 1420, 3069, 9845, 1062]
+first_step_topk_probs=[0.3016580045223236, 0.22069770097732544, 0.14549285173416138, 0.10596384108066559, 0.04626075178384781, 0.04391302168369293, 0.02608542889356613, 0.023504944518208504, 0.01908450573682785, 0.01719658635556698]
+first_step_topk_text=[' use', ' can', ' have', ' are', ' describe', ' learn', ' allow', ' attempt', ' rely', ' make']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 298, 3235, 269, 8020, 17, 1658, 2269, 1420, 500, 299, 1557, 806, 269, 870, 330, 5454, 289, 1623, 16, 7128, 6863, 15, 857]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data and predict the outcome. These models allow us to understand how the data is represented in real-world situations, such as predicting a person's height or weight.
+
+In this tutorial, we will learn about two popular types of neural network models: neural networks and supervised learning. We will also discuss some common concepts in these models, including accuracy, memory, and graph structure.
+
+### Learning with Neural Networks
+
+Neural networks (NATs) are often used for modeling various kinds of problems. NATs are trained using trained neural networks, which provide an efficient way to model complex problems. However, they do not always have well-defined parameters like time and space. To address this issue, we use a loss function, which is a loss function that measures the quality of the output. The loss function is defined by a formula that looks at the loss of the input and returns the value of the loss function.
+
+The following example shows how to use the loss function to learn a neural network model.
+
+```nn = nn(x, y);
+loss(y, x) = 1;
+output = loss(y, (x+1));
+```
+
+The output of
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 490, 263, 861, 643, 1107, 353, 69, 552, 263, 12, 711, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1271, 551, 3, 711, 1018, 9745]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b if a == 0 else (b - a)
+
+
+if __name__ == '__main__':
+    main()
+
+import unittest
+from unittest import mock
+
+from botocore.exceptions import ClientError
+from boto3_cloudformation.core.config import Config
+from boton.utils import get_object_or_404
+from botont2.models import *
+from botonschema import Schema as _Schema
+from botnexus.test.helpers import *
+
+class TestConfig(unittest.TestCase):
+
+    def setUp(self):
+        self._mock = mock.MagicMock()
+        self._client = Config(**self._mock)
+
+        self._client.create_all()
+        self.client.list_all()
+
+    @mock.patch('boton.utils.get_object_and_404')
+    @mock.patch(hasattr=True)
+    def test_add_to_default_api_raises_exception(self, mock_client):
+        with self.assertRaises(ClientError):
+            get_object(self._client).add("example")
+
+    @mock_succeeded
+    @mock_requests
+    @mocking.mark
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=86 first30=[622, 311, 864, 353, 20, 1341, 353, 21, 2216, 311, 687, 711, 202, 509, 1392, 330, 359, 4446, 29, 202, 202, 91, 333, 28045, 11, 1161, 12, 202, 2318, 801]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n * (1 / (2 ** n))
+
+
+The function is as follows:
+
+x = factorial(10)
+print("Fermat's last theorem :")
+print(f"(x=0.5)(x=1)")
+
+This code will return the factorial of 10, which is 1.5. The function returns the factorial n times and returns the number 0.5.
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.6746222376823425, 0.32537776231765747, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[490, 311, 861, 643, 29, 341, 622, 354, 1246, 1107, 29, 341, 622, 8049, 11, 81, 552, 354, 12, 647, 8049, 11, 81, 8472, 409, 12, 711, 202, 509, 31393]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     if n == 0:
+         return 1
+     else:
+         return fib(n - 1) + fib(n // 2)
+
+
+The Fibonacci sequence is defined as the sum of the first two numbers in the sequence. The Fibonacci sequence can be used to find the sum of any number between 1 and n, which is a mathematical constant called the Fibonacci number. It's calculated by multiplying the previous term by the Fibonacci number and then adding them together.
+
+For example, let's say we want to find the value of the following equation:
+
+fib(8) = fib(10) + fib(-3)
+
+We will use the Fibonacci sequence to find the values of x for which the equation holds true. To do this, we'll need to use the formula x = a * b, where a, b, and c are integers.
+
+x = [1, 2, 3]
+y = [2, 4, 5]
+
+This formula gives us the following expression:
+
+x^2 + y^2 + z^2 = (a*b)*c
+
+Now, our goal is to solve for x using the formula x^2 + x - 1 = 0. Since both x and y
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 31412, 1541, 2590, 4619, 783, 698, 0, 1]
+first_step_topk_probs=[0.43227487802505493, 0.23138009011745453, 0.11159706115722656, 0.07356929033994675, 0.06292715668678284, 0.04603848233819008, 0.022204872220754623, 0.020008251070976257, 0.0, 0.0]
+first_step_topk_text=[' The', ' Yes', ' Cats', ' There', ' No', ' Black', ' This', ' It', '', '']
+
+[New tokens 8] count=144 first30=[382, 3533, 330, 808, 17, 202, 14405, 10676, 395, 269, 851, 1488, 2197, 288, 2188, 289, 269, 1560, 1705, 17, 4792, 299, 269, 1740, 4250, 339, 269, 26617, 425, 288]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is no.
+Black cats are the most common cause of death in the United States. According to the National Association for the Advancement of Colored People (NAACP), black cats are responsible for approximately half of all deaths from diseases such as rabies, rabies, and euthanasia. They also account for approximately 80 percent of all fatal cases of rabies reported to the CDC.
+The good news is that black cats are a major source of infection in people who are unvaccinated. Black cats are not recommended for public health purposes because they may be exposed to other animals or humans who have been infected with the virus.
+For more information on this topic, see the following links:
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 354, 843, 1012, 409, 637, 1218, 2050, 0, 1]
+first_step_topk_probs=[0.4135745167732239, 0.15373875200748444, 0.09132473170757294, 0.082290418446064, 0.0813639760017395, 0.06788212805986404, 0.06342370808124542, 0.046401772648096085, 0.0, 0.0]
+first_step_topk_text=[' 4', ' 1', ' 5', ' 6', ' 2', ' 3', ' 8', ' One', '', '']
+
+[New tokens 9] count=222 first30=[354, 13032, 333, 798, 10941, 17, 202, 3287, 483, 658, 1098, 269, 2056, 993, 288, 10941, 289, 1010, 9849, 419, 5314, 269, 1890, 444, 354, 299, 798, 15, 619, 339]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples.
+You can also find the total number of apples in each basket by adding the numbers from 1 to 4, one for each fruit, then adding up the numbers.
+To find the total apples, add the numbers from 0 to 4.
+Add the numbers from 2 to 4. Add the numbers from 5 to 6.
+Add all the numbers from 6 to 8. Add the ones with numbers less than 6.
+The total number of fruits is 9.
+Now take the number of apples you got out of the bag and multiply it by the number of oranges you had.
+(If you were to draw a circle around the number of fruits you got out, what would that be? It's not a circle, but it is a circle.)
+What do you think is the number of times the number of fruit is in the circle?
+Answer. The number of times it is in the center of the circle is 12.
+The number of times an apple falls into the circle is 15.
+So the number of peaches you get is 15.
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 1289, 1278, 698, 1509, 783, 3919, 2575, 338]
+first_step_topk_probs=[0.6288950443267822, 0.061178870499134064, 0.05512676760554314, 0.04248785972595215, 0.03730063512921333, 0.03540761396288872, 0.02950723096728325, 0.024590089917182922, 0.021033016964793205, 0.018952330574393272]
+first_step_topk_text=[' I', ' The', ' We', ' If', ' It', ' You', ' This', ' My', ' What', ' A']
+
+[New tokens 10] count=36 first30=[1278, 486, 491, 263, 2395, 15, 5601, 2505, 2274, 299, 2033, 383, 289, 269, 7369, 3474, 2677, 17, 202, 2474, 486, 395, 263, 15036, 351, 269, 2310, 15, 5601, 5625]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: If you have a question, please feel free to ask it in the comments section below.
+If you are a guest on the site, please click here for more information.
+
+================================================================================
