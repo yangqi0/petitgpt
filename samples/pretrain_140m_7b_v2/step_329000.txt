@@ -1,0 +1,305 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[601, 791, 330, 1628, 728, 418, 15, 289, 483, 2827]
+first_step_topk_probs=[0.2175402045249939, 0.15107865631580353, 0.12922444939613342, 0.06565847247838974, 0.059163257479667664, 0.04559890553355217, 0.04090235382318497, 0.027086911723017693, 0.024407334625720978, 0.024407334625720978]
+first_step_topk_text=[' will', ' would', ' is', ' might', ' may', ' was', ',', ' in', ' can', ' named']
+
+[New tokens 1] count=256 first30=[330, 1163, 3609, 299, 1889, 263, 360, 29227, 1563, 5, 357, 601, 2639, 269, 2811, 288, 263, 5585, 668, 418, 3673, 351, 263, 3256, 17, 202, 509, 775, 1993, 289]
+[Full output 1]
+Once upon a time, a curious child is being asked to create a "picture book" that will tell the story of a boy who was born on a farm.
+The first step in this process is to identify the animal and its characteristics. The animal's name and its behavior are the focus of the picture book. A few words about the animal and how it came to be are included. This is followed by a description of the animal's appearance, which includes details such as head, tail, legs, ears, and eyes.
+Next, the animal is presented with a drawing or an illustration. It is then given a question that asks if he/she has ever seen the animal before. If the answer is yes, the animal can be identified by his/her name, the animal's name, and the animal's behavior. Once the animal has been identified, the child begins to talk about what happened when the animal was born. This is done using the animal's own name and a picture of it, but it is not required for the child to have any information about the animal.
+After the child has been told what happened to the animal, the child continues to discuss the animal's life history and the ways it has changed over time. In some cases, the child may want to describe the animal
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 7535, 281, 8191, 15, 298, 330, 269, 1408, 3796, 2317, 289, 269, 9556, 17, 698, 330, 3323, 351, 269, 598, 3347, 17982, 288, 269, 6668, 1457, 920]
+[Full output 2]
+Paris is the capital of the province of Catalonia, and is the second largest city in the province. It is located on the outskirts of the mountain range between the cities of Borgo de Catalunya and Béarna.
+The name Catalan means "the land of the people" or "the land that gives them strength". The name Catalan is derived from the Catalan word for "land", "d'or" (from the Latin dolon meaning "with" or "to live").
+The region is part of the autonomous community of Castile-La Mancha. It has a long history of European settlement. Its first settlers were the Romans who arrived in the area around the 5th century BC. Their descendants settled in the region, forming the first independent community in Spain.
+In the early 13th century, the area was ruled by the Visigoths, a group of powerful families who ruled from the west coast of the Iberian Peninsula. The Visigothic kings of Portugal controlled the area until their death in 1409. In 1492, the Visigoth king Castricius II became King of Portugal.
+In 1543, the Spanish Armada was launched in Spain, which defeated the English and Portuguese armies at
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 357, 483, 342, 3020, 359, 269, 1701, 288, 795, 22542, 4672, 7527, 17, 382, 18956, 395, 269, 1992, 288, 269, 4349, 288, 269, 3823, 357, 1062, 656, 269]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector that can be written as the sum of two linearly independent vectors. The eigenvalues are the values of the variable of the matrix that make up the system. In other words, the eigenvalues are the vectors that determine the system's behavior.
+
+## Examples
+
+The following example shows how to calculate the eigenvalues of a matrix using a linear algebra calculator.
+
+### Example 1: Finding the Eigenvalues of a Matrix
+
+Suppose we have a square matrix A with entries from 1 to n and columns from 0 to m. We want to find the eigenvalues of A.
+
+First, let us solve for the eigenvalues of the matrix A.
+• If the determinant of A is zero, then the matrix is not invertible.
+• Since the determinant of a matrix is nonzero, it must also be invertible. For example, if A = [1 2 3] and B = [0; 0], then the eigenvalues are 0 and 1.
+
+Now, let us find the eigenvalues.
+• To find the eigenvalues, first we need to solve for the corresponding eigenvector.
+• Then, we have the equation of the linear transformation described above.
+
+We now have a linear transformation T : V → W which transforms a matrix into
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 491, 483, 395, 5546, 1798, 1420, 9845, 3069, 1085]
+first_step_topk_probs=[0.3061870038509369, 0.15557268261909485, 0.15557268261909485, 0.10232777148485184, 0.046955302357673645, 0.046955302357673645, 0.04231024160981178, 0.027892647311091423, 0.02385784313082695, 0.014172154478728771]
+first_step_topk_text=[' use', ' have', ' can', ' are', ' describe', ' learn', ' allow', ' rely', ' attempt', ' model']
+
+[New tokens 4] count=256 first30=[395, 885, 299, 5951, 1623, 16, 7128, 2061, 17, 382, 3355, 2877, 3722, 760, 2269, 330, 357, 269, 1085, 330, 8511, 351, 263, 5023, 15, 298, 1000, 383, 330, 1428]
+[Full output 4]
+Neural networks are a class of machine learning models that are used to solve real-world problems. The basic idea behind these models is that the model is trained on a dataset, and then it is run on the training data. This process is called classification.
+The following image shows the classification task in action.
+When you see the image, you can see that the network has been trained on the training set. If you want to learn more about how this network works, you can download the images from the web page.
+In the above example, the network was trained on the train set. When you see the training image, you will see that the training network has been fully trained on the test set. However, when you see the images from different classes, you will also see that the neural network has been completely trained on the validation set.
+This is where the classification comes in. In order to understand what the network does, you need to know its architecture. In this article, we will cover the architecture of the network.
+Now that you have learned the basics of the network, you can start exploring the network. You can think of the network as a collection of interconnected nodes or nodes. Each node has an individual role and each role is associated with a specific feature (or value).
+The network is
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 5427, 6649, 29, 8163, 16, 27, 5427, 202, 807, 1401, 8644, 626, 655, 15551, 66, 22513, 202, 202, 1018, 3266, 202, 202, 807, 5210]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
+import json
+
+from django.core.urlresolvers import reverse
+from django_babel.utils import gettext as _
+from django import forms
+from django._utils import six
+from django.__name__ import __version__, settings
+from django2.db.models import Count, Model, PermissionsMixin
+from django3.db.utils import TimeoutError
+from django4.contrib.auth.decorators import login_required
+from django1.utils.translation import ugettext_lazy as _
+
+from .forms import UserForm, UserProfileForm
+from .models import User, UserProfile, UserLoggedIn
+from .constants import (
+    ADMINS,
+    MEDIA_URL,
+    MESSAGE_KEY,
+    MISSING_STATUS,
+    REQUIRED_STATUSES,
+    RESPONSE_CHOICES,
+    RESOURCE_CHOICES
+)
+from .validators import validate_user_id
+
+
+@login_required
+def create_profile(request, user=None, **kwargs):
+    """Create a new profile"""
+
+   
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=33 first30=[622, 311, 13, 81, 711, 202, 509, 28045, 1392, 330, 3821, 359, 4446, 29, 202, 202, 350, 1401, 678, 626, 861, 7200, 3142, 7840, 346, 1083, 11, 2440, 4886, 11]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n*n
+
+
+The factorial function is defined as follows:
+
+if __name__ == '__main__':
+    print(factorial(10))
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.6394357681274414, 0.3605642020702362, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 354, 17, 19, 647, 311, 864, 353, 20, 552, 311, 12, 711, 202, 509, 775, 1993, 330, 299, 3296, 269, 1986, 288, 269, 31393, 3756, 15, 536, 330, 263]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + n * (1 - n)
+
+
+The first step is to determine the size of the Fibonacci sequence, which is a positive integer greater than zero. Then, we can use the formula for the number of Fibonacci numbers in the sequence:
+
+fib(n) = 1 + frac{2^n}{n!}
+
+Now, let's consider how to calculate the Fibonacci numbers using the following example:
+
+Fib(100) = 2 + 2*3 + 3*4 + 5*6 + 7*8 + 9*10 + 11*12 + 13*14 + 15*16 + 17*18 + 18*19 + 19*20 + 20*21 + 21*22 + 22*23 + 23*24 + 24*25 + 25*26 + 26*27 + 27*28 + 28*29 + 29*30 + 30*31 + 31*32 + 32*33 + 33*34 + 34*35 + 35*36 + 36*37 + 37*38 + 38*39 + 39*40 + 40*41 + 41*42 + 42*43 + 43*44 + 44*45 + 45*46 + 46*47 + 47*48
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 2590, 4619, 1541, 31412, 1906, 783, 0, 1]
+first_step_topk_probs=[0.3555915355682373, 0.3555915355682373, 0.07852097600698471, 0.06716254353523254, 0.054531730711460114, 0.0420292466878891, 0.02630123309791088, 0.020271170884370804, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' No', ' Black', ' There', ' Cats', ' All', ' This', '', '']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 808, 17, 202, 14405, 10676, 395, 269, 851, 1488, 1875, 288, 3191, 289, 269, 1560, 1705, 15, 374, 611, 702, 2759, 2153, 874, 2997, 374, 780, 17]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is no.
+Black cats are the most common species of cat in the United States, with more than 50 million people living with them. Black cats are also one of the few animals that do not have a coat of fur or other markings. They are usually found in large groups on rooftops, behind windows, and in urban areas.
+The reason for this is that black cats are extremely rare, and it's probably because they don't live long enough to breed and reproduce. A recent study showed that black cats were in fact domesticated, so there was a strong genetic link between their domestication and domestic cats. In the past, domestic cats had been kept as pets by their owners and not the domestic cats themselves. Now, however, they're being bred to be more closely related to humans.
+Some people think that the only way to distinguish a black cat from a domestic cat is to look at its coat. This is because black cats are very similar to white cats in coloration. However, a black cat is more likely to be black if it has a dark coat.
+So what's the best way to tell a black cat apart from a domesticated one? Well, you can tell a black dog from a domesticate cat by
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 354, 843, 409, 1012, 637, 1218, 2, 1, 0]
+first_step_topk_probs=[0.45710489153862, 0.16992036998271942, 0.0909518152475357, 0.08440282940864563, 0.08195439726114273, 0.05874945595860481, 0.056916188448667526, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 4', ' 1', ' 5', ' 2', ' 6', ' 3', ' 8', '', '', '']
+
+[New tokens 9] count=256 first30=[354, 13032, 333, 798, 10941, 17, 202, 3287, 483, 620, 269, 1134, 3467, 374, 833, 993, 288, 10941, 17, 382, 775, 993, 330, 269, 993, 288, 10941, 15, 269, 1408]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples.
+You can do the same thing with any number of apples. The first number is the number of apples, the second number is the amount of apples you have.
+To find the total number of apples you need to multiply the number of times you add the numbers of apples you know together by a certain number of times. For example, if you know that 3 apples equals 6 apples, then you would get 6 apples.
+Here's how it works:
+1. First, you need to figure out the number of ways you can add or subtract apples from every other number of apples in your group. For example:
+2 + 2 = 5
+3 + 3 = 6
+4 + 3 = 8
+5 + 3 = 10
+6 + 3 = 12
+Now you can divide the number of possible ways you can pick apples into two groups. For example 4/5 = 1/8 (since there are one apple in each group).
+In this case, we know that you have to take the number of apple pairs you could pick from your group and divide them by the number of different apples you picked. So for example, you might choose 4 apples for each apple pair. Then you can divide 4 apples among the three
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 1278, 1289, 1509, 360, 338, 783, 3919, 698]
+first_step_topk_probs=[0.8048781156539917, 0.038804467767477036, 0.024923892691731453, 0.022458301857113838, 0.02023662067949772, 0.02023662067949772, 0.01823470927774906, 0.01776598021388054, 0.016864348202943802, 0.015596973709762096]
+first_step_topk_text=[' I', ' The', ' If', ' We', ' You', ' "', ' A', ' This', ' My', ' It']
+
+[New tokens 10] count=172 first30=[356, 4575, 3934, 4252, 299, 263, 8926, 1266, 289, 269, 2519, 17, 202, 45, 358, 29, 698, 415, 263, 3851, 3103, 15, 614, 383, 330, 649, 1264, 1951, 702, 356]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I'm looking forward to a nice day in the future.
+Jay: It's a bit late, but it is so much better than I've been able to get.
+Bryan: I have a good idea of what you're going to do next week and I want to be back on the same page as last time.
+Susan: Thanks for taking my time with me today.
+Jonathan: Thank you very much.
+Brian: I'm glad I got here.
+Bruce: Good morning.
+I am going to have a nice day this week. I will be back soon.
+Aaron: Thank you for your attention.
+Lee: Thank you so much.
+(If you have more questions about this story, send an email at firstname.lastname@example.org.)
+
+================================================================================

@@ -1,0 +1,310 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[601, 791, 330, 1628, 728, 483, 15, 418, 2827, 388]
+first_step_topk_probs=[0.2693881094455719, 0.15190209448337555, 0.12992875277996063, 0.0856543630361557, 0.05948571488261223, 0.03354272618889809, 0.032349132001399994, 0.030224507674574852, 0.02329494059085846, 0.02211272343993187]
+first_step_topk_text=[' will', ' would', ' is', ' might', ' may', ' can', ',', ' was', ' named', ' or']
+
+[New tokens 1] count=146 first30=[330, 1163, 16852, 419, 269, 4769, 299, 263, 1563, 17, 382, 4769, 330, 1000, 3609, 299, 3408, 1282, 263, 1685, 2351, 357, 5546, 922, 269, 929, 578, 5025, 289, 269]
+[Full output 1]
+Once upon a time, a curious child is being guided by the teacher to a book. The teacher is then asked to write down a few words that describe what the child has learned in the book.
+The teacher then asks the child to go to the book and read it aloud. She will ask the child questions about the book before she reads it.
+After reading the book, the child must explain to the teacher that the book was written for him or her. This can be done with a little more practice as the children learn new things. If they are not able to understand the story, they may need to start again. Once the story is finished, the teacher is called back to the classroom and the child is given another chance to read the book.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 4455, 263, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.9383700489997864, 0.04363049939274788, 0.0179994348436594, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' France', ' a', '', '#', '', '"', '!', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 1057, 762, 15, 298, 269, 1271, 2868, 289, 269, 9556, 17, 698, 418, 6214, 419, 269, 10366, 497, 289, 269, 2508, 401, 2162, 17, 202, 202, 509]
+[Full output 2]
+Paris is the capital of the province of Arles, and the main town in the province. It was founded by the Normans in the 11th century.
+
+The city was the seat of the Roman Catholic archbishop of Arles and later of the bishopric of Clermont-Ferrand (later part of the diocese of Toulouse). The archbishop was made Archbishop of Arles in 1046.
+
+During the Middle Ages, the city was the site of the royal court and the seat of a court of justice. In 1277, it became the capital of a Kingdom of France, which was split into two parts: Paris and Arles.
+
+In the 18th century, the city became the scene of a series of battles between the French and English armies; this conflict was known as the Battle of the Hague, and was fought on August 5, 1792, when the French army under General Charles de Gaulle defeated an Austrian army led by Napoleon Bonaparte at the Battle of Waterloo.
+
+After the Treaty of Versailles, the city returned to the French crown, with the new government of Louis XVI taking over its administration.
+
+Notable people
+ Charles de Gaulley (1742–1815), diplomat,
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 357, 578, 269, 1134, 8878, 359, 686, 5606, 10294, 8537, 17, 1220, 1373, 15, 490, 486, 491, 263, 4409, 400, 333, 353, 91, 15, 371, 12, 298, 1418]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector that has the same magnitude as its corresponding eigenvector. For example, if you have a vector v = (x, y) and want to find the value of x when the absolute value of v equals zero, you can write it as:
+
+v = |x|
+
+For instance, let's say we have a scalar function f(x). The value of this function at x would be:
+
+f(x) = |x|^2
+
+So our equation becomes:
+
+|x|^2 = |x - x^2| + C
+
+Now, suppose we wanted to find the eigenvalues of this linear system. We could solve for x in terms of x by multiplying both sides of the equation by x^2:
+
+x^2 = x^2 + 2x + 1
+
+Substituting these values into the original equation gives us:
+
+0 = x^3 + 3x^2 + 6x + 1 = 0
+
+However, since we are dealing with a real-valued matrix, we need to consider how the matrix transforms under multiplication. To do so, we must first compute the determinant of the matrix. This is because any nonzero element in the matrix will always be equal to
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 491, 395, 5546, 1798, 1420, 3069, 1085, 1062]
+first_step_topk_probs=[0.27912595868110657, 0.20421290397644043, 0.12130767852067947, 0.1191297397017479, 0.0616360604763031, 0.03475522994995117, 0.032991405576467514, 0.029727725312113762, 0.019597716629505157, 0.018603134900331497]
+first_step_topk_text=[' use', ' can', ' have', ' are', ' describe', ' learn', ' allow', ' attempt', ' model', ' make']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 15, 857, 359, 269, 1549, 2613, 17, 202, 202, 509, 3207, 288, 3331, 14457, 8119, 330, 1728, 351, 269, 2877, 357, 263, 2673]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data, such as the human brain.
+
+The theory of deep neural networks is based on the idea that a network can be described by a set of equations and their corresponding inputs. The theory of deep networks is based upon the idea that the system will eventually learn how to adapt itself to new situations, or how to adapt to changes in the environment. In other words, if you have a network that has a lot of connections it will make sense to take the same amount of time to learn how to change its behavior. This is called the “deep learning” model.
+
+In this article we will focus on the concept of deep networks and how they are used to model real-world problems. We will also look at the problem of predicting the outcome of an experiment using the model.
+For more information about Deep Networks see the following articles:
+
+1. Brenner, R., & Vogelstein, K. (2008). A model for the prediction of the outcome of a game with hidden variables. Journal of Machine Learning Research, 27(3), 421–439. doi:10.1016/j.jmlr.2007.12.006
+2. DeVries,
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=227 first30=[263, 647, 286, 3, 711, 6, 1348, 620, 486, 5951, 637, 91, 65, 21, 552, 798, 92, 333, 843, 34, 202, 202, 7714, 2234, 15, 9211, 202, 202, 7, 22]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# How do you solve 3x^2 - 4y = 5?
+
+May 14, 2016
+
+$3 x \left(- 4 y\right) - 4 y \left(5 \right)$
+
+#### Explanation:
+
+$\frac{3}{4} {x}^{2} - 4 y = 5$
+
+$\Rightarrow 2 x y - 4 y - 5 = 0$
+
+$- 4 y \rightarrow 0$
+$\Rightarrow y = - 4$
+
+$y = 1$
+
+As $y = 1$, we have $\frac{1}{2}$
+
+$= \frac{1}{\sqrt{2}}$
+
+$=\frac{\sqrt{2}}{2}$
+$=\pm \sqrt{2}$
+$\therefore \frac{3}{\sqrt{4}} = \pm \sqrt{(2)} \times \pm \frac{2}{\sqrt{16}}$
+
+$\thereplace{\frac{3x}{4}} = 2$
+
+Hence the answer is option D.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=43 first30=[622, 311, 13, 81, 202, 202, 856, 1271, 1714, 346, 1083, 801, 509, 28045, 288, 637, 330, 798, 5049, 346, 1083, 801, 1693, 330, 634, 28045, 11, 22, 687, 711]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n*n
+
+def main():
+    print("The factorial of 3 is 4.")
+    print("It is", factorial(3))
+
+
+if __name__ == "__main__":
+    main()
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 537, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.5218381285667419, 0.4021967351436615, 0.07596513628959656, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', ' #', '', '#', '', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 354, 647, 353, 20, 1341, 311, 12, 864, 353, 20, 552, 311, 12, 711, 202, 1465, 1392, 483, 342, 885, 299, 1098, 269, 775, 993, 289, 287, 4067, 15]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1 + (1 / n) * (1 - n)
+
+
+This function can be used to find the first number in an array, or to find the last number in an iterable. It is also called as a recursive function, and it is a way of generating the sequence of numbers using the given function.
+
+Fibonacci sequence
+
+The Fibonacci sequence is a sequence of numbers where each term is the sum of the previous two terms. For example, the Fibonacci sequence is 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 38, 39, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104,
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 2590, 31412, 1541, 4619, 783, 2, 1, 0]
+first_step_topk_probs=[0.400237500667572, 0.3084751069545746, 0.09808241575956345, 0.07175863534212112, 0.06137840822339058, 0.038409627974033356, 0.02165835164487362, 0.0, 0.0, 0.0]
+first_step_topk_text=[' The', ' Yes', ' No', ' Cats', ' There', ' Black', ' This', '', '', '']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 808, 17, 202, 2573, 395, 914, 2584, 288, 2645, 10676, 289, 269, 1560, 1705, 17, 1109, 1457, 444, 1103, 374, 263, 2645, 12153, 299, 1103, 374, 263]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is no.
+There are many types of black cats in the United States. They range from those with a black coat to those with a white coat. Some are more common than others. Black cats come in all shapes and sizes, but most are either black or brown. There are also many different breeds of cats. Some cats have black eyes, while others have a black face.
+Black cats are more likely to be seen by people who do not know they are black. In fact, there are several different kinds of black cats.
+The color of a black cat's skin indicates its color. If you look closely at your cat's body, you will see it darkening, brownish in coloration, and tan on the sides of the body. This is called a black coat. It has a dark brown back and white belly.
+Black Cats Are Bizarre
+Black cats can be very frightening. They are often frightened by loud noises and may even bite. They are very sensitive to noise and are easily frightened away. Most cats are afraid of dogs, but they are not always afraid of humans.
+It is important for you to know that a black cat is not just a dog. A black cat does not belong to any other
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[354, 798, 843, 382, 409, 637, 744, 2050, 1012, 1218]
+first_step_topk_probs=[0.21572312712669373, 0.20477519929409027, 0.10960826277732849, 0.093752920627594, 0.08240003138780594, 0.06570249050855637, 0.06511004269123077, 0.06511004269123077, 0.05018232390284538, 0.047635529190301895]
+first_step_topk_text=[' 1', ' 4', ' 5', ' The', ' 2', ' 3', ' $', ' One', ' 6', ' 8']
+
+[New tokens 9] count=112 first30=[354, 13032, 333, 798, 10941, 17, 202, 3287, 483, 658, 1098, 269, 2056, 993, 288, 10941, 289, 263, 9849, 419, 10888, 269, 993, 288, 10941, 1010, 1419, 699, 374, 553]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples.
+You can also find the total number of apples in a basket by multiplying the number of apples each person had with their parents. For example, if you were to pick 3 apples out of 5 children, you would have 3 apples in the basket.
+The number of apples that each person picked is equal to the number of people who picked the same amount of apples. So the number of kids who picked apples is equal to 3 times the number of children who picked apples.
+How do you know which fruit to eat?
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 1289, 1278, 2575, 783, 698, 1509, 3919, 360]
+first_step_topk_probs=[0.6715793609619141, 0.04568089544773102, 0.0433625690639019, 0.03613656386733055, 0.02858637273311615, 0.027851538732647896, 0.026438076049089432, 0.026438076049089432, 0.01654452458024025, 0.016119234263896942]
+first_step_topk_text=[' I', ' The', ' We', ' If', ' What', ' This', ' It', ' You', ' My', ' "']
+
+[New tokens 10] count=256 first30=[2575, 330, 669, 2942, 374, 269, 1759, 7042, 34, 202, 55, 12405, 15, 3182, 4235, 15, 2823, 202, 1353, 29, 2766, 17, 336, 2434, 543, 24956, 285, 202, 44, 491]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience with the following topics?
+Tuesday, April 23, 2010
+by: Dr. Sudeep Kumar
+I have been having trouble seeing my response to this question.
+My response was:
+"How do you feel about this?"
+So I thought it would be good to know how you feel and what you want to say in the first place.
+The answer given by the question is: "Well, you are not able to see your answer. You are not able."
+However, I think the answer is "no".
+I am still not sure if this is a good answer.
+Please let me know if you have any questions or comments.
+Sunday, March 25, 2010
+By: Nishina Gangopadhyay
+I have a question about the use of the word "and" in the following sentence:
+- The words "and" and "but" are used interchangeably.
+This sentence is incorrect.
+It's correct that "and" is used for "and" but "but" is used only for "and", which is the correct meaning.
+If you read the above sentence, you will see that "and", "or", and "but",
+
+================================================================================
