@@ -11,16 +11,16 @@ bos_id=2 eos_id=3
 avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
 banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
 first_step_eos_prob=0.000e+00
-first_step_topk_ids=[601, 330, 1628, 791, 728, 418, 483, 15, 289, 578]
-first_step_topk_probs=[0.23233292996883392, 0.16997839510440826, 0.14539024233818054, 0.13100747764110565, 0.11205663532018661, 0.033821187913417816, 0.030475446954369545, 0.028217077255249023, 0.019071048125624657, 0.016312330961227417]
-first_step_topk_text=[' will', ' is', ' might', ' would', ' may', ' was', ' can', ',', ' in', ' has']
+first_step_topk_ids=[601, 330, 791, 1628, 728, 15, 483, 418, 289, 578]
+first_step_topk_probs=[0.24023331701755524, 0.16683870553970337, 0.12858763337135315, 0.12206181138753891, 0.1044050008058548, 0.030945995822548866, 0.02991253137588501, 0.02991253137588501, 0.019719550386071205, 0.016867024824023247]
+first_step_topk_text=[' will', ' is', ' would', ' might', ' may', ',', ' can', ' was', ' in', ' has']
 
-[New tokens 1] count=209 first30=[330, 1163, 16852, 419, 269, 4769, 299, 263, 1563, 17, 382, 4769, 330, 1000, 3609, 299, 3408, 1282, 263, 1685, 2351, 357, 5546, 269, 2811, 17, 202, 509, 929, 330]
+[New tokens 1] count=119 first30=[330, 1163, 16852, 419, 269, 4769, 299, 263, 1563, 17, 382, 4769, 330, 1000, 3609, 299, 3408, 1282, 263, 1685, 2351, 357, 5546, 269, 2811, 17, 202, 509, 929, 330]
 [Full output 1]
 Once upon a time, a curious child is being guided by the teacher to a book. The teacher is then asked to write down a few words that describe the story.
-The child is given a piece of paper and a pencil. He or she writes down the words on the paper. If the child reads the word correctly, he or she will be able to read it again. When the child does this, the teacher will ask questions about the words as well. For example: "What do you think of the story?"
-A story can also be told using different words and phrases. For example, in a story about a child who is going to go to the park, the teacher might say, "Let's go to the zoo." This is similar to saying, "We are going to see the zoo."
-When children have completed their comprehension skills, they begin to make predictions based on what they know. They may even predict when they will arrive at the zoo. This helps them understand how important it is for the child to know the answer to a question.
+The child is given a piece of paper and a pencil. He or she writes down the words on it. The teacher reads the words aloud as he or she draws them out.
+After reading the words, the child takes his or her own picture from the book and makes an outline. The child can use the outline to make pictures of things in the book.
+If you like this activity, you might want to try another one with your class.
 
 ================================================================================
 [Prompt 2] (prompt_tokens=6)
@@ -31,30 +31,17 @@ bos_id=2 eos_id=3
 avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
 banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
 first_step_eos_prob=0.000e+00
-first_step_topk_ids=[269, 4455, 0, 1, 6, 7, 5, 4, 2, 3]
-first_step_topk_probs=[0.9422484636306763, 0.05775153636932373, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-first_step_topk_text=[' the', ' France', '', '', '#', '$', '"', '!', '', '']
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
 
-[New tokens 2] count=256 first30=[269, 9556, 288, 7535, 281, 8191, 17, 698, 330, 658, 269, 8492, 288, 269, 412, 405, 295, 4830, 288, 7535, 281, 405, 5597, 15, 263, 11718, 536, 418, 3199, 289]
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 1134, 1112, 17, 698, 330, 658, 269, 8492, 288, 269, 1723, 288, 269, 9556, 15, 298, 269, 11127, 7913, 288, 269, 9556, 17, 202, 509, 16991]
 [Full output 2]
-Paris is the capital of the province of Catalonia. It is also the seat of the comunicado of Catalunya, a municipality which was established in 1786.
-
-Geography
-The municipality is located in the north-eastern part of the Province of Barcelona, and has an area of . The population density is 645 inhabitants/km2 (1,080 /sq mi). There are 143 housing units at an average density of 137 per square kilometre (940 /sq mi); the average population density is 992 per square kilometer (385 /sq mi) in 2006. there were 889 inhabited buildings in 2007.
-
-Economy
-It is a major agricultural center with the production of dairy products, meat, eggs, fruits, vegetables, and grains.
-
-Dairy farming is one of the main industries in Catalonia and other parts of Spain.
-
-Transportation
-
-There is a railway station on the Autogenero de la Ciudad del Perú.
-
-Religion
-From the 16th century to the 20th century, Catalan Christians maintained their religion in Catalunas. They have been known as the "Christians" because of their Christian faith.
-
-
+Paris is the capital of the province of the same name. It is also the seat of the government of the province, and the administrative centre of the province.
+The provincial capital is the city of Saint-Michel-de-Moulinville, in the commune of Moulins. The city's name is derived from the French word "méthode", which means "the city".
+In the 14th century, Saint-Michele was the site of a great religious revival that was spreading throughout France. In 1270, the town became the center of a crusade against the Moors. A local federation of churches was established by Pope Innocent III in 1301, and by 1499, Saint-Etienne was the capital of a religious union between the two countries.
+During the French Revolution, Saint-Ignace was burned down on September 28, 1793, but was rebuilt again after the war. During the French Revolution (1789–1800), Saint-Irmin was the site where the revolutionary army met to form a new state.
+From the early 18th century until the end of the 19th century, the province of Saint-Pierre was a part of the French Empire. In the Napole
 
 ================================================================================
 [Prompt 3] (prompt_tokens=7)
@@ -69,25 +56,29 @@ first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
 first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
 
-[New tokens 3] count=256 first30=[263, 4409, 357, 483, 342, 3020, 359, 269, 1701, 288, 795, 7527, 17, 1220, 1373, 15, 490, 411, 491, 263, 4409, 400, 333, 353, 68, 15, 286, 12, 298, 1418]
+[New tokens 3] count=256 first30=[263, 1623, 993, 357, 483, 342, 3020, 359, 263, 1677, 288, 795, 1623, 1890, 17, 382, 18956, 395, 269, 1992, 288, 269, 4349, 722, 269, 28071, 330, 3636, 298, 269]
 [Full output 3]
-In linear algebra, an eigenvalue is a vector that can be written as the sum of two vectors. For example, if we have a vector v = (a, b) and want to find the eigenvalues of the equation x^2 + y^2 - z^2 = 1, we need to know the values of x and y that make up this equation.
+In linear algebra, an eigenvalue is a real number that can be written as a product of two real numbers. The eigenvalues are the values of the variable when the eigenvalue is zero and the corresponding value when it is one or zero.
 
-The general form of an eigenvalue is:
+For example, consider the equation x2 + 2x - 3 = 0:
 
-x = λ1 + λ2
+x2 + 2(x-1) - 3 =0
 
-where λ1 and λ2 are the eigenvalues of a linear system, and λ1 and m are the parameters for the system.
+This means that if we have a square root of the form x2 + 4x - 3, then this will always be true because there will always be two real solutions for x in the square root.
 
-For a given system of equations, there will always be one solution (the value of x), and the system will always have one solution (λ1).
+Now let's look at some examples of linear equations with multiple roots. For example, consider x3 + 4x − 5 = 0. We can write this as ax3 + bx4 + cx5 = 0.
 
-Let's try to understand how these equations work mathematically. Let's say we have the following system of equations:
+The general solution to this system is x3 + 8x − 9 = 0. In other words, the roots are all real numbers.
 
-$$y_1=3x+5$$
+### Example 1: Solving Linear Equations With Multiple Roots
 
-To solve this system, we can use the method of "stabilization" or "derivative". When we get this system into a system of equations (which we call a "linear system"), we can write it in terms of the variables:
+Consider the following quadratic equation:
 
-$$\begin{array}{l}y_1&=-\lambda_{1}\end{
+y2 + 4y + 6 = 0
+
+Here, y represents the coefficient of x.
+
+To solve this, we need to isolate y on one side of the equation. This can be
 
 ================================================================================
 [Prompt 4] (prompt_tokens=11)
@@ -98,23 +89,16 @@ bos_id=2 eos_id=3
 avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
 banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
 first_step_eos_prob=0.000e+00
-first_step_topk_ids=[817, 483, 491, 395, 1798, 5546, 1420, 9845, 14071, 3069]
-first_step_topk_probs=[0.35443729162216187, 0.17094887793064117, 0.12506885826587677, 0.0854925736784935, 0.06354711204767227, 0.037748564034700394, 0.030649442225694656, 0.021285613998770714, 0.02020535245537758, 0.0191799309104681]
-first_step_topk_text=[' use', ' can', ' have', ' are', ' learn', ' describe', ' allow', ' rely', ' incorporate', ' attempt']
+first_step_topk_ids=[817, 483, 491, 395, 1798, 5546, 9845, 1420, 14071, 3069]
+first_step_topk_probs=[0.3444397449493408, 0.16612708568572998, 0.12154117971658707, 0.11774829030036926, 0.08440858870744705, 0.03137734532356262, 0.029784945771098137, 0.019635440781712532, 0.015133625827729702, 0.013636542484164238]
+first_step_topk_text=[' use', ' can', ' have', ' are', ' learn', ' describe', ' rely', ' allow', ' incorporate', ' attempt']
 
-[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 298, 3235, 269, 8020, 17, 1658, 2269, 1420, 500, 299, 1557, 806, 269, 870, 330, 5256, 289, 1623, 16, 7128, 6863, 15, 857]
+[New tokens 4] count=256 first30=[395, 885, 299, 5951, 1623, 16, 7128, 2061, 17, 382, 3355, 2877, 330, 357, 581, 395, 8511, 351, 870, 15, 298, 1000, 269, 1085, 330, 6998, 1674, 760, 2970, 870]
 [Full output 4]
-Neural networks are a class of machine learning models that can be used to model complex data and predict the outcome. These models allow us to understand how the data is distributed in real-world situations, such as weather forecasting or population growth.
-
-In this article, we will explore how to use a neural network to learn new information from existing data using an example from the popular video game. We will also examine some methods for training neural networks based on these concepts.
-
-## Learning with Neural Networks
-
-To begin our journey into the world of neural networks, let's first define what it means to learn a neural network. A neural network consists of a set of neurons (neurons) and a set of rules (or parameters). The rule set describes how the neuron will behave when its input changes. For example, if you have two different inputs, say f(x) and g(x), then you would expect that they should act differently depending on whether f(x + 1) = g(x) or f(x - 1) = f(x). This behavior is called a "learning rate."
-
-The output of a neural network is the sum of the outputs of all possible inputs combined. For example:
-
-$$A_1 + A_2 + ... + A_n
+Neural networks are a class of machine learning models that are used to solve real-world problems. The basic idea is that they are trained on data, and then the model is tested against these training data using an algorithm called a classifier.
+The most common classifier is a simple linear regression. In this case, the training data is the same as the training data, but instead of the training data being in the form of a matrix, the input data is represented by a vector of length n (n = 2) where n is the number of features. The training data is then fed into a model that learns the values of the feature vectors at each time step, and predicts the value of the training set based on the prediction.
+Another important component of the classifier is the use of the learning rate. The learning rate is a measure of how well the model is working with the data. It is usually expressed as a percentage of the total training data. If it is below 0%, the model will not learn anything new. However, if it is above 0% the model will still learn the training data. This is because the training data has already been trained beforehand.
+In practice, the learning rate is typically 1% or less, depending on the model's performance. One way to find out what the best model is
 
 ================================================================================
 [Prompt 5] (prompt_tokens=17)
@@ -132,23 +116,34 @@ first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
 first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
 
-[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 1348, 299, 1062, 263, 377, 19192, 288, 2851, 34, 202, 202, 44, 873, 4532, 299, 1062, 263, 4873, 288, 2851, 298, 356, 491, 263]
+[New tokens 5] count=163 first30=[263, 647, 286, 3, 711, 6, 1348, 620, 486, 5951, 637, 91, 65, 21, 552, 798, 92, 333, 843, 34, 202, 202, 7714, 3041, 15, 9281, 202, 202, 7, 22]
 [Full output 5]
 Complete the following Python function:
 
 def add(a, b):
     return a + b
 
-# How to make a Piece of paper?
+# How do you solve 3x^2 - 4y = 5?
 
-I am trying to make a piece of paper and I have a lot of pieces. I need to make a pie with all the different pieces.
+May 24, 2018
 
-How can I make a piece with all the pieces?
+$3 x { - 6} y = \left(5 , 1\right)$
 
-• It's not as easy as it sounds – Mithoron Oct 20 '16 at 14:31
-• @Mithoron I think you are asking for a piece of the same shape, but for some reason the paper is not cut up like this. – user41710 Oct 21 '16 at 12:33
-• You can use the piece of paper you want to make. For example, if you wanted to make a new piece of paper that has the same shape as the original one, you could do so by cutting out a square from the paper and putting it on top of the square. This would be called a pie. – Mithora Oct 22 '16 at 16:05
-• The problem is that the paper is too big for my needs. So I would like to have a piece of space around the paper so that the pie will fit better in the space. The paper is also too large for my needs, so I'd
+#### Explanation:
+
+$\textcolor{w h i t e}{\text{You can't divide by a number }}$
+
+${x}^{2} - 4 y = 5$
+
+$= {x}^{2}-4 y$
+
+$- 4 y = \frac{1}{5}$
+
+$x = - 2$
+
+$\Rightarrow x = - 2 \text{ or } \textcolor{b l u e}{- 2}$
+
+$\therefore x = - \frac{2}{5}$
 
 ================================================================================
 [Prompt 6] (prompt_tokens=19)
@@ -162,22 +157,35 @@ bos_id=2 eos_id=3
 avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
 banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
 first_step_eos_prob=0.000e+00
-first_step_topk_ids=[490, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
 first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-first_step_topk_text=[' if', '', '', '#', '$', '', '', '"', '%', '!']
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
 
-[New tokens 6] count=256 first30=[490, 311, 861, 643, 29, 341, 622, 354, 1246, 1107, 29, 341, 622, 311, 864, 353, 20, 1341, 353, 81, 552, 354, 687, 711, 202, 755, 482, 16028, 15, 411]
+[New tokens 6] count=256 first30=[622, 311, 13, 81, 711, 202, 509, 28045, 1392, 330, 3821, 359, 4446, 29, 202, 202, 20, 17, 17872, 269, 1677, 288, 545, 2136, 1890, 656, 299, 311, 15, 374]
 [Full output 6]
 Write a Python function that returns the factorial of n:
 
 def factorial(n):
-     if n == 0:
-         return 1
-     else:
-         return n * (1 / (n - 1))
+     return n*n
 
 
-In this tutorial, we will learn how to calculate the factorial of a number. The first step is to create a function that takes an integer as input and returns the factorial for that integer. We can use the built-in function f() to calculate the number of ways to choose between two integers. For example, the number of combinations of two people who have the same birthday are 3x3x2x2x1x1x0x0x5x6x7x8x9x10x11x12x13x14x15x16x17x18x19x20x21x22x23x24x25x26x27x28x29x30x31x32x33x34x35x36x37x38x39x40x41x42x43x44x45x46x47x48x49x50x51x52x53x54x55x56x57x58x59x60x61b1b4a4b5c4d5e5f9a76c8d8b77a96
+The factorial function is defined as follows:
+
+1. Compute the product of all natural numbers up to n, with the given value (the result of the multiplication).
+2. Return the product of the two numbers, or the first number in the sequence.
+3. Find the largest integer less than or equal to n.
+4. Calculate the sum of the three numbers.
+5. Repeat for n = 2^k.
+6. Check if k equals the number you are looking for. If so, return the factorial of that number. Otherwise, return 0.
+7. Repeat for k = k * n.
+8. Check if n equals the number returned by the function. If so then return n.
+9. Finally, return the product of n and the number returned from the function.
+10. Compare the results of the two functions.
+11. Write a program that calculates the factorial of a given number.
+12. Create a list of numbers and an array of integers.
+13. Return the number of the first element of the list.
+14. Write a function that takes a list of integers and returns the next element of the integer list.
+15. Write a new function
 
 ================================================================================
 [Prompt 7] (prompt_tokens=19)
@@ -191,48 +199,42 @@ bos_id=2 eos_id=3
 avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
 banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
 first_step_eos_prob=0.000e+00
-first_step_topk_ids=[490, 622, 0, 1, 6, 7, 5, 4, 2, 3]
-first_step_topk_probs=[0.6394359469413757, 0.3605640232563019, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-first_step_topk_text=[' if', ' return', '', '', '#', '$', '"', '!', '', '']
+first_step_topk_ids=[490, 622, 339, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.5680726766586304, 0.3744964599609375, 0.05743089318275452, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', ' for', '', '#', '', '"', '!', '', '']
 
-[New tokens 7] count=256 first30=[622, 354, 647, 353, 20, 1341, 311, 12, 864, 353, 20, 552, 311, 12, 711, 202, 1465, 1392, 483, 342, 885, 299, 1098, 269, 775, 993, 289, 287, 4067, 15]
+[New tokens 7] count=256 first30=[622, 354, 647, 353, 20, 552, 311, 12, 864, 409, 1190, 11, 81, 16, 20, 12, 711, 202, 1465, 330, 269, 1134, 359, 269, 775, 1373, 15, 1722, 2761, 288]
 [Full output 7]
 Write a Python function that computes Fibonacci numbers recursively:
 
 def fib(n):
-     return 1 + (1 / n) * (1 - n)
+     return 1 + (1 - n) * 2**(n-1)
 
 
-This function can be used to find the first number in an array, or it can be used as a function to find the next element. The function takes two arguments: the index of the current element and the length of the array. If the array is empty, then the function returns None.
+This is the same as the first example, except instead of the result being a sum of powers of two, it is just a list of numbers. The only difference is that you can use the first argument to create a new array and then call the second one with an extra argument to make sure that the resulting array doesn't overflow.
 
-The function is called with two arguments:
+Note that if you want to compute the next Fibonacci number, you need to write a function that takes a list of natural numbers and returns a new one. For example, this might be:
 
-• The first argument is the index of a new element, which is the length of an array.
-
-• the second argument is the length.
-
-### Example
-
-#include <iostream>
-using namespace std;
-int main() {
-int[] f = [1,2,3,4];
-for (int i=0; i<10; i++) {
-f[i] = 1;
-}
-return 0;
-}
+>>> def fib(n=0):
+...     return 1 + fib(n)
+>>> fib(2)
+[1, 2]
+>>> fib([1, 2])
+[1., 2.]
 
 
-### Output
+And so on for other numbers:
 
-If you want to output the first 10 numbers, you need to use the following code:
+import numpy as np
+from scipy import stats
+np.random.seed(123)
+x = np.arange(1000000000).reshape((10, 100))
+y = x @ y
+print(fib(x))
+print(np.sum(x ** 2))
+print('Fibonacci number')
+print(y)
 
-print("Here are the results: ")
-print("Fibonacci numbers: ")
-for i in range(1,10):
-if (f[i-1] == 2) {
-print("There
 
 ================================================================================
 [Prompt 8] (prompt_tokens=23)
@@ -244,17 +246,17 @@ bos_id=2 eos_id=3
 avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
 banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
 first_step_eos_prob=0.000e+00
-first_step_topk_ids=[382, 13676, 31412, 2590, 4619, 1541, 2660, 1906, 0, 1]
-first_step_topk_probs=[0.3169485032558441, 0.2573418617248535, 0.14510959386825562, 0.10077650845050812, 0.07372967153787613, 0.05120423808693886, 0.028872955590486526, 0.026016715914011, 0.0, 0.0]
-first_step_topk_text=[' The', ' Yes', ' Cats', ' No', ' Black', ' There', ' Some', ' All', '', '']
+first_step_topk_ids=[382, 13676, 31412, 2590, 1541, 4619, 1906, 2, 1, 0]
+first_step_topk_probs=[0.38371652364730835, 0.28073298931121826, 0.11581429839134216, 0.08473154902458191, 0.05884483829140663, 0.04777827113866806, 0.02838151529431343, 0.0, 0.0, 0.0]
+first_step_topk_text=[' The', ' Yes', ' Cats', ' No', ' There', ' Black', ' All', '', '', '']
 
-[New tokens 8] count=256 first30=[382, 3533, 330, 808, 17, 31412, 395, 453, 545, 2645, 1091, 581, 395, 839, 289, 269, 3494, 17, 202, 509, 2597, 339, 482, 330, 357, 851, 288, 500, 1118, 357]
+[New tokens 8] count=256 first30=[382, 3533, 330, 808, 17, 202, 14405, 10676, 395, 269, 851, 1488, 1875, 288, 3191, 289, 269, 1560, 1705, 17, 1109, 395, 269, 851, 5307, 298, 395, 998, 289, 545]
 [Full output 8]
 If all cats are animals and some animals are black, can we conclude that some cats are black?
-Answer: The answer is no. Cats are not all black because they are only in the wild.
-The reason for this is that most of us know that there are many types of cats that live in the wild and that most of them have a few black features. For example, black cats tend to be active at night, but they may also have dark eyes or ears. They do not have any outward markings, but they do have black hair on their head. Their tails are white and they have a long tail. Some cats are more than 10 years old when they are young. They will even look like their parents. They are also very social with other cats and their family. Some cats come from a large colony and spend the majority of their lives in one place. Others go into another area of the world where they live together.
-For example, some cats may live in a small group called a colony. They live in an urban environment and they live in different areas within the city. A colony may consist of several hundred individuals. There may be hundreds of different types of cats living in a colony. Most colonies are small and open to the outside world.
-Most people don't realize that cats are black. Cats have a wide range of colors and patterns. They can
+Answer: The answer is no.
+Black cats are the most common species of cat in the United States. They are the most numerous and are found in all parts of the country except for the southern states. Black cats have a much smaller range than other domesticated cats. Some black cats are more closely related to white cats (which are the same as black cats) than to other domesticated species.
+The exact reason why black cats are so rare in the United Sates is not known but it may be due to their proximity to humans. The black cat is an aggressive predator that will bite people or other animals if they approach. It is also a very dangerous animal. Black cats are very territorial, which means that they do not attack each other's homes unless provoked. Black cats also live in small groups of about 30 to 40 cats. If a cat is attacked by a black cat, it will try to run away from the attackers. In order to avoid being bitten, the cat must be kept in close proximity to its owner. If the cat is not bitten, it will take up residence in the house and become aggressive towards another cat.
+Most cats are not aggressive toward other cats because they are not social with other cats. However, if a cat
 
 ================================================================================
 [Prompt 9] (prompt_tokens=20)
@@ -266,23 +268,18 @@ bos_id=2 eos_id=3
 avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
 banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
 first_step_eos_prob=0.000e+00
-first_step_topk_ids=[798, 843, 637, 409, 1012, 1218, 354, 2, 1, 0]
-first_step_topk_probs=[0.5219655632972717, 0.10940992832183838, 0.08077429234981537, 0.08077429234981537, 0.08004602044820786, 0.06846698373556137, 0.05856291204690933, 0.0, 0.0, 0.0]
-first_step_topk_text=[' 4', ' 5', ' 3', ' 2', ' 6', ' 8', ' 1', '', '', '']
+first_step_topk_ids=[798, 843, 409, 1218, 1012, 354, 637, 744, 0, 1]
+first_step_topk_probs=[0.3869892358779907, 0.12304669618606567, 0.10359219461679459, 0.09002288430929184, 0.09002288430929184, 0.08111735433340073, 0.06586208194494247, 0.059346724301576614, 0.0, 0.0]
+first_step_topk_text=[' 4', ' 5', ' 2', ' 8', ' 6', ' 1', ' 3', ' $', '', '']
 
-[New tokens 9] count=256 first30=[843, 17, 27, 3, 711, 509, 1165, 415, 2073, 330, 2779, 299, 1409, 419, 1186, 4649, 289, 269, 1902, 1365, 973, 15, 2512, 299, 263, 719, 1399, 444, 269, 2176]
+[New tokens 9] count=256 first30=[843, 17, 27, 3, 711, 509, 1165, 415, 775, 5199, 13120, 4983, 1361, 2316, 15, 269, 31181, 723, 3620, 4983, 1361, 3785, 289, 20516, 418, 5153, 289, 8572, 17, 698]
 [Full output 9]
 John has 3 apples and buys 2 more. How many apples does he have?
 Answer: 5.8
 
-The world's population is expected to grow by 7 billion in the next 20 years, according to a new report from the World Bank.
-"It's not just about people," said Peter O'Toole, director of the World Bank's Population Division. "We're looking at how we can make a difference."
-The report was released today, but the head of the World Development Report, Thomas Sowell, said the report was based on "a real world analysis that uses data from around the world and gives us a picture of what the world will look like in the next two decades."
-The study found that the world will have an estimated 4.6 billion people by 2050.
-This figure includes the world's most populous countries such as China, India, Brazil, South Africa, Russia, Pakistan, and Afghanistan.
-However, it also includes the largest countries with an estimated 1.2 billion people -- including Australia, Indonesia, Japan, the United States, and Mexico.
-"These are the biggest increases in the world's population since the Industrial Revolution," said O'Tooles. "They're the biggest changes in the global economy."
-The world's per capita income for 2011 was $7,500, compared
+The world's first fully operational nuclear power plant, the Chernobyl nuclear power station in Ukraine was completed in 1986. It is a symbol of nuclear energy for the people of Ukraine. The reactor's design was based on the design of the original Russian design, but was later modified to incorporate modern technology and a new design with a much lower-than-expected cost than the original design.
+In order to provide a reliable source of electricity, the reactor uses a three-phase cycle that generates steam, which drives turbines to generate electricity. This type of operation is called a nuclear power plant because it produces no carbon dioxide emissions. In the case of the Chernobi nuclear power plant at Chernobyl, the reactor is designed to produce electricity using the same amount of fuel as the original plant. The reactor consists of two reactors, one in the northern part of Ukraine and one in the southern part of Russia. The power plant's primary use is for cooling water and heating.
+During the Chernoblin accident, the spent fuel rods were released into the atmosphere and this resulted in the release of radiation. The Chernoblin reactor also used a different type of reactor than the original reactor. In this reactor, the fuel rods are separated from each other
 
 ================================================================================
 [Prompt 10] (prompt_tokens=13)
@@ -294,25 +291,27 @@ bos_id=2 eos_id=3
 avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
 banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
 first_step_eos_prob=0.000e+00
-first_step_topk_ids=[356, 382, 1289, 698, 1509, 783, 360, 3919, 2575, 1278]
-first_step_topk_probs=[0.828087568283081, 0.024094458669424057, 0.022871654480695724, 0.022871654480695724, 0.022283731028437614, 0.02171090990304947, 0.01630312390625477, 0.015077927149832249, 0.015077927149832249, 0.011621013283729553]
-first_step_topk_text=[' I', ' The', ' We', ' It', ' You', ' This', ' "', ' My', ' What', ' If']
+first_step_topk_ids=[356, 1278, 1289, 2575, 382, 783, 1509, 15255, 698, 360]
+first_step_topk_probs=[0.7339978814125061, 0.0290264543145895, 0.028280317783355713, 0.028280317783355713, 0.026845082640647888, 0.02418944053351879, 0.02296181581914425, 0.01913542114198208, 0.016367394477128983, 0.01294767390936613]
+first_step_topk_text=[' I', ' If', ' We', ' What', ' The', ' This', ' You', ' Thanks', ' It', ' "']
 
-[New tokens 10] count=256 first30=[356, 3442, 733, 289, 263, 3313, 288, 9327, 374, 1284, 3694, 415, 1258, 17, 202, 26783, 29, 2575, 620, 486, 1645, 406, 330, 3573, 34, 202, 47, 12839, 29, 776]
+[New tokens 10] count=256 first30=[2575, 330, 669, 2942, 374, 269, 1759, 7042, 34, 202, 16, 2575, 330, 669, 1466, 1909, 288, 269, 2690, 920, 3222, 298, 1293, 34, 202, 16, 1348, 1223, 669, 1466]
 [Full output 10]
 User: I'm feeling stressed lately.
-Assistant: I've been in a lot of trouble with my son's school.
-Student: What do you think he is doing?
-Larry: He's having trouble with his math, so he can't even read the numbers.
-Student (Teacher): He's not getting any better than you.
-Larry, thank you for your help.
-Assar: You're just trying to get him to understand what's going on and to have him work through it.
-Student(Teacher): How did you feel when you were struggling with this problem?
-Laura: It was really hard. We had a few students who didn't understand the concept of addition. And they were very frustrated because we didn't know how to count or add. So we started looking at what's happening inside the classroom.
-Students: How many problems does it take to solve this problem? Can you tell me about them?
-Linda: The teacher told us that we could use our knowledge of subtraction to answer the problem. That would be great if we could use the same number of problems as the other two.
-Linda was working on his math skills.
-Assayee: There are only a couple of problems that we had to solve.
-Student
+Assistant: What is your experience with the following topics?
+- What is your current view of the relationship between parents and children?
+- How does your current perspective differ from the perspective of parents?
+- Does your current perspective change over time, or do you see it as a consequence of the parenting situation?
+- Do you see it in terms of what you've learned about your child's development?
+- Is there any difference between the developmental level of your child and that of his/her peers?
+- Are there differences between the level of the parent's level of competence versus that of the child's level of proficiency?
+- If so, how did you learn to manage this level of competence?
+- Have you seen your child's behavior change during the day?
+- Has your child experienced other types of stress, such as tension, anger, frustration, or frustration?
+- Can you tell me about the changes you have observed in your child's life?
+- Did you notice any changes in your child when he/she was younger?
+- When you were a child, what were the main things that happened at that age?
+- Were you able to identify any problems with your child's learning or behavior?
+- In general, are you
 
 ================================================================================

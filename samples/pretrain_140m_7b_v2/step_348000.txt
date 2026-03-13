@@ -1,0 +1,283 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[601, 330, 791, 1628, 728, 418, 15, 289, 2827, 483]
+first_step_topk_probs=[0.1927148699760437, 0.17365051805973053, 0.13383780419826508, 0.0837535709142685, 0.06455139815807343, 0.04483005404472351, 0.038869693875312805, 0.031133823096752167, 0.02663017250597477, 0.022777989506721497]
+first_step_topk_text=[' will', ' is', ' would', ' might', ' may', ' was', ',', ' in', ' named', ' can']
+
+[New tokens 1] count=256 first30=[330, 1163, 16852, 419, 269, 4769, 299, 263, 1563, 17, 382, 4769, 330, 1000, 3609, 299, 3408, 263, 2811, 672, 269, 1563, 298, 269, 5719, 17, 202, 509, 1293, 395]
+[Full output 1]
+Once upon a time, a curious child is being guided by the teacher to a book. The teacher is then asked to write a story about the book and the characters.
+The children are given the task of writing a story and are asked to write their own stories as well.
+This is the first lesson in the series. This is a good time for the children to think about what they have learned from the story. They will be able to tell their own stories and give them feedback on how they might improve the story.
+In this lesson, we have had our class create a "story" that they will be reading. We are going to read it to them using the words that we used in the story. Then we will use these words to write a short story about what we know about the book.
+I am going to ask the children to write a poem about what they would like to hear when they read this story. I want them to write a song about what they heard when they read the story. When they write the song, they should use the words that they heard during the story. I am going to go over the lyrics with them so that they can see if they have any ideas or clues. I want the children to feel that they have the knowledge and understanding that they need to
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 1134, 1112, 17, 698, 330, 12092, 289, 269, 7913, 288, 269, 9556, 15, 351, 269, 1179, 5358, 288, 269, 4549, 338, 473, 1338, 394, 15, 435]
+[Full output 2]
+Paris is the capital of the province of the same name. It is situated in the centre of the province, on the right bank of the river Aurelius, at an altitude of 1,430 metres above sea level.
+The town is also the seat of the municipality of the same. The town's name is derived from the Greek word 'kokaros', which means 'the city'. The ancient city was founded by the Persians in the 4th century BC and was later renamed after them as Kyzylopoi (Kyzylopoia).
+It has a population of about 840 people. The main language spoken is Turkish. There are a number of schools and colleges in the town. The city is also home to many restaurants and bars. The main street of the town is called Kale, which is named after the famous Greek hero of the war of Independence. The old streets of the town are called Kareliani and Koli, while the newer ones are called Veli, Vetri and Velina.
+The economy of the town depends mainly on agriculture. The most important crops are potatoes, wheat, barley, rye, oats, sugar beets, peas, beans, tomatoes, garlic, cuc
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1623, 993, 357, 483, 342, 6031, 359, 263, 1701, 288, 795, 13944, 2559, 17, 382, 18956, 395, 269, 1890, 288, 269, 876, 7492, 68, 2901, 5192, 96, 333, 990]
+[Full output 3]
+In linear algebra, an eigenvalue is a real number that can be expressed as a sum of two simpler terms. The eigenvalues are the numbers of the form $$a_{ij} = \lambda_i + \mu_j$$ where $$\lambda_1,\ldots,\lambda_n$$ are the distinct eigenvalues and $$\mu_j=\lambda_i+ \mu_k$$ are the corresponding eigenvectors. The eigenvalue equations are given by:
+
+\begin{align*} x_1 &= \lambda_1+\mu_2 \\ x_2 &= \lambda_{11}+ \mu_3 \\ x_3 &= \lambda_{\sqrt 2} + \mu_{12}+\mu_{13}\\ x_4 &= \lambda_\sqrt 2 + \mu_\sqrt 3\\ x_5 &= \lambda^\sqrt 2 - \mu_\frac{\sqrt 2}{2}\end{align*}
+
+and
+
+\left(x_1-\mu_1+\cdots+\mu_m\right)x_6 &= \lambda^2 + \mu^2+\mu_\frac{2}{3}\left(\lambda_1-x_1+\lambda_2\right)^2+\mu_3\right)\\ x_7 &= \lambda^{\frac{
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 491, 395, 1798, 5546, 1420, 9845, 3069, 14071]
+first_step_topk_probs=[0.31511035561561584, 0.20773348212242126, 0.11713649332523346, 0.10110372304916382, 0.069582000374794, 0.030240222811698914, 0.02870553359389305, 0.024553140625357628, 0.022124217823147774, 0.017963463440537453]
+first_step_topk_text=[' use', ' can', ' have', ' are', ' learn', ' describe', ' allow', ' rely', ' attempt', ' incorporate']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 298, 3235, 269, 8020, 17, 1658, 2269, 395, 1431, 885, 289, 4855, 2465, 15, 913, 581, 395, 885, 299, 24007, 3519, 1728, 351]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data and predict the outcome. These models are often used in machine learning, where they are used to classify objects based on their features.
+
+In the context of the current study, we are interested in finding out whether there is a relationship between the number of neurons in a neuron and its activation function. In other words, if we have a neural network with many neurons, it will take many more neurons than it would be for any given neuron to be active. This is known as a "discrete-time model". We will then use this model to understand how neurons behave under different conditions.
+
+## Conclusion
+
+We have shown that when we observe a neural network in real time, we can estimate the activation function using a discrete-time algorithm. The neurons are also trained by adding a small amount of noise to the input signal. We found that the activation function can be computed from the training data without any loss of generality. The estimation procedure is similar to the previous study which we have just described. However, the results show that the process is not completely clear to us.
+
+The main question is: why does the activation function change? Is it because of the way neurons are connected or is it due to the
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=192 first30=[263, 647, 286, 3, 711, 6, 1348, 620, 486, 5951, 637, 91, 65, 21, 16, 28, 32, 19, 34, 202, 202, 11608, 5653, 15, 9211, 202, 202, 7, 22, 892]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# How do you solve 3x^2-9=0?
+
+Aug 31, 2016
+
+$3 x = 9$
+
+#### Explanation:
+
+The first step is to isolate the variable on one side of the equation. We can use the distributive property for multiplying together like this:
+
+$\left(3 x - 9\right) \left(3 y - 9\left(y - 2\right)\right)$
+
+$= 3 x \left(9 y - 9 \right)$
+$= 9 x \left(- 9 y - 9 y\right)$
+Now we have the two equations above:
+
+$6 x = 9 y$
+
+$5 x = 9 x$
+$7 x = 9 \left(\frac{9}{9}\right)$
+So $x = 7$
+
+Hope it's clear!
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.5260182023048401, 0.4739817678928375, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 6] count=118 first30=[622, 311, 13, 81, 711, 202, 509, 28045, 1392, 330, 3821, 359, 4446, 29, 202, 202, 20, 17, 9419, 545, 3097, 9044, 311, 857, 357, 354, 647, 311, 333, 311]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n*n
+
+
+The factorial function is defined as follows:
+
+1. Find all positive integers n such that 1 + n = n^2 + 2n + 3.
+2. Return the number of distinct prime numbers less than or equal to n.
+3. Compute the product of all possible products of primes up to n. If there are no more than n factors, return 0.
+4. If n is even, return 1. Otherwise, return n itself.
+5. Return the sum of all positive integers less than or equals to n.
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 339, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.5645133256912231, 0.3721500337123871, 0.06333664059638977, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', ' for', '', '#', '', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 354, 647, 353, 20, 1341, 311, 12, 864, 353, 21, 2216, 353, 81, 552, 354, 687, 711, 202, 2141, 483, 620, 482, 419, 775, 2449, 598, 269, 993, 288]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1 + (1 / n) * (2 ** (n - 1))
+
+
+We can do this by first working out the number of primes, then finding the Fibonacci numbers. We then use the formula for calculating the Fibonacci numbers to find the smallest positive integer k such that the sum of the two values is less than or equal to the sum of all the other values divided by the sum of each value. For example, if we want to find the Fibonacci numbers for n = 6 and n = 7, we would compute:
+
+fib(6) = 2^7 * 3^5 * 5^4 * 4^3 * 8^2 * 9^1
+=> fib(6)^2 = 2^10 * 3^9 * 10^0 * 11^1 * 12^0 * 13^1 * 14^1 * 15^0 * 16^0 * 17^0 * 18^0 * 19^0 * 20^0 * 21^0 * 22^0 * 23^0 * 24^0 * 25^0 * 26^0 * 27^0 * 28^0 * 29^0 * 30^0 * 31^0 * 32^0 * 33^0 * 34^0
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 31412, 13676, 2590, 1541, 4619, 1906, 2, 1, 0]
+first_step_topk_probs=[0.4042268693447113, 0.24012108147144318, 0.17567633092403412, 0.0687958374619484, 0.055857859551906586, 0.02838117815554142, 0.026940835639834404, 0.0, 0.0, 0.0]
+first_step_topk_text=[' The', ' Cats', ' Yes', ' No', ' There', ' Black', ' All', '', '', '']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 808, 17, 31412, 395, 453, 545, 2645, 1091, 581, 395, 839, 289, 269, 3494, 17, 202, 509, 2597, 339, 482, 330, 357, 715, 395, 795, 2584, 288]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is no. Cats are not all black because they are only in the wild.
+The reason for this is that there are two types of cats – those which are mostly white and those which are mainly black. This is because most people think that black cats are less intelligent than white cats. But it's true! Black cats are more intelligent than white ones because they have a higher intelligence level. So the difference between black and white cats is more important than their size.
+One thing that I want to point out is that black cats do not always look like white cats. They may look different from white cats. In fact, black cats tend to be very similar to white cats.
+So what is the best way to tell if a cat is black or white? If you see a black cat, you know that it has a black coat and looks like a white one. A white cat is a black cat with a white coat. You can see that a white cat will look white and look like a white cat.
+But if you see a white cat, you can still tell that it is a black animal by looking at its head. If you see an orange cat, you should look at its tail.
+Now let's say you find a black cat
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 843, 1012, 1218, 409, 637, 354, 744, 0, 1]
+first_step_topk_probs=[0.3838113844394684, 0.1354341208934784, 0.10438314825296402, 0.09908571094274521, 0.08689011633396149, 0.06621488183736801, 0.06532130390405655, 0.058859385550022125, 0.0, 0.0]
+first_step_topk_text=[' 4', ' 5', ' 6', ' 8', ' 2', ' 3', ' 1', ' $', '', '']
+
+[New tokens 9] count=256 first30=[843, 17, 27, 3, 711, 509, 1165, 415, 3796, 16628, 15, 263, 1691, 16, 18424, 4187, 15, 354, 15, 5452, 16, 8835, 16, 4602, 3147, 15, 330, 1244, 435, 2241]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 5.8
+
+The world's largest asteroid, a 17-mile wide, 1,500-foot-wide rock, is now at least 15 times the size of Earth. The asteroid, which was discovered in June 2009, will be the first object to be seen from space since the 1970s.
+"This is a major milestone for the asteroid," said Dr. Brian P. Schmidt, director of NASA's Near-Earth Object Program Office at the Jet Propulsion Laboratory (JPL) in Pasadena, Calif., and lead author on the paper. "It's an exciting time to be here."
+The asteroid, which is about 8 million miles across, will be visible to the naked eye from the western U.S. and Canada. It is expected to pass within 1,000 miles of Earth at its closest point, and will be visible with binoculars or a small telescope. It will be visible in the southern hemisphere, though it will be easier to see through the clouds than through the side of the planet.
+In addition to the 1,500 mile-long asteroid, scientists are studying the asteroid's orbit, its movement, and the impact that caused it. They also are studying the rocks' composition, their orbits, and how they move around
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 1289, 783, 382, 1509, 2575, 698, 15255, 3919, 1278]
+first_step_topk_probs=[0.8414517045021057, 0.024846334010362625, 0.022979101166129112, 0.020173637196421623, 0.017710693180561066, 0.017710693180561066, 0.015148759819567204, 0.0143799539655447, 0.013299282640218735, 0.012299826368689537]
+first_step_topk_text=[' I', ' We', ' This', ' The', ' You', ' What', ' It', ' Thanks', ' My', ' If']
+
+[New tokens 10] count=256 first30=[356, 3442, 733, 289, 263, 3313, 288, 9327, 374, 1284, 3694, 415, 1258, 17, 202, 26783, 29, 2575, 620, 486, 1734, 419, 357, 34, 202, 8104, 6804, 16551, 29, 356]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I've been in a lot of trouble with my son's school.
+Student: What do you mean by that?
+Assistant Teacher: I've had some problems with the way he does things. He's not doing his homework, and he's getting so used to it that he's in trouble with the rest of the class. And when he gets home, he says, "I don't know what to do." And he's just going through the motions and trying to figure out how to get things done. So he's having a hard time making decisions.
+Student teacher: Oh, that's really annoying.
+Assigned Teacher: I feel like I can't handle that.
+Student Teacher: That's great.
+Assayer Teacher: Okay. I have to go look at that.
+Assutor Teacher: Ok, OK.
+Student Student Teacher: Oh, OK. I can't keep up with this.
+Assctor Teacher: Oh.
+Student Assistant Teacher: Ok.
+Assformer Teacher: You're right. I'm glad I was able to help him.
+Student Superintendent: Oh, I think that's where we're headed.
+Assted Teacher: We're going to go to the public schools.
+
+
+================================================================================

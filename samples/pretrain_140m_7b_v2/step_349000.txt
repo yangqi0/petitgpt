@@ -1,0 +1,344 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[601, 330, 791, 1628, 728, 418, 483, 15, 289, 578]
+first_step_topk_probs=[0.22766509652137756, 0.16656333208084106, 0.14246918261051178, 0.12837550044059753, 0.09894287586212158, 0.03678020089864731, 0.029863160103559494, 0.027838658541440964, 0.02184835635125637, 0.016839202493429184]
+first_step_topk_text=[' will', ' is', ' would', ' might', ' may', ' was', ' can', ',', ' in', ' has']
+
+[New tokens 1] count=256 first30=[330, 1163, 16852, 419, 269, 4769, 299, 263, 1563, 17, 382, 4769, 330, 1000, 3609, 299, 3408, 1282, 263, 1685, 2351, 357, 5546, 269, 2811, 17, 202, 509, 929, 330]
+[Full output 1]
+Once upon a time, a curious child is being guided by the teacher to a book. The teacher is then asked to write down a few words that describe the story.
+The child is given a piece of paper and a pencil. He or she writes down the words on the paper. If the child reads the word correctly, he or she will be able to read it again. When the child has finished reading, the teacher will ask him or her questions about the story. The child's response may include:
+- "What happened in the story?"
+- "How did you feel when you heard this?"
+- "...what did you think about what you were doing?"
+- How do you feel now?
+If the child reads correctly, the teacher can tell the child exactly what happened. For example, if the child says, "I saw this," the teacher may tell the child that the story was about a big dog. Or, if the story was told in the book, the child might say, "It was a big dog."
+When the child reads, the teacher asks the child to repeat the words from the book. The child repeats the words and answers them. The child may repeat the words again, but the teacher must also repeat the same words again. This is called an
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 4455, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.9314190745353699, 0.06858091056346893, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' France', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 7535, 281, 8191, 15, 298, 330, 658, 269, 8492, 288, 269, 412, 405, 295, 4830, 288, 7535, 16322, 17, 202, 509, 11718, 3399, 269, 11834, 93, 292]
+[Full output 2]
+Paris is the capital of the province of Catalonia, and is also the seat of the comunicado of Catania.
+The municipality contains the frazioni (subdivisions, mainly villages and hamlets) Souza, Casanova, Girona, and San Juan de la Piedra. It consists of the following municipalities:
+
+ Albuquerque (1)
+ Cenizo (2)
+ Comunicações (3)
+ Dolores (4)
+ Esteve (5)
+ Flores (6)
+ Girardino (7)
+ Guarani (8)
+ Guayasco (9)
+ Ibiza (10)
+ Istria (11)
+ Ibramacara (12)
+ Liguria (13)
+ Lima (14)
+ Lugares (15)
+ Málaga (16)
+ Mouradia (17)
+ Mondadori (18)
+ Nueva Vida (19)
+ Oviedo (20)
+ Ortosa (21)
+ Quintana Roo (22)
+ Souza (23)
+ Santa Maria de Tornada (24)
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 357, 483, 342, 3020, 359, 269, 1701, 288, 795, 7527, 17, 535, 482, 1832, 15, 269, 4409, 601, 491, 263, 8878, 3007, 299, 3636, 298, 601, 342, 3097]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector that can be written as the sum of two vectors. In this case, the vector will have a magnitude equal to zero and will be positive. For example, if we know the eigenvalue 0, then we can write it as 1/2 + 0 = 2.
+
+## What Is An Linear Algebra?
+
+Linear algebra is a branch of mathematics concerned with vectors and matrices. It involves the concept of vectors (which are usually represented by scalars or constants) and their associated numbers called "vectors." A matrix is a rectangular array of numbers arranged in rows and columns. The number of rows and columns of a matrix is called its column vector. When we talk about a vector, we mean a scalar value. For example:
+
+• A vector is a scalar if it has the same number of elements as all other vectors.
+• A matrix is an ordered list of numbers arranged into rows and columns, where each row represents a vector.
+
+If we want to find out how many distinct vectors there are, we need to take a look at the number of vectors in the matrix. If you don't see any vector in the matrix, just recall that there are 4 possible ways to choose one from the 3 remaining options. We call these combinations of
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 491, 395, 1798, 5546, 1420, 9845, 14071, 3069]
+first_step_topk_probs=[0.3612402379512787, 0.17423015832901, 0.1274695098400116, 0.0859576091170311, 0.06147989258170128, 0.038473132997751236, 0.02965240366756916, 0.022854022681713104, 0.021694162860512733, 0.0195480827242136]
+first_step_topk_text=[' use', ' can', ' have', ' are', ' learn', ' describe', ' allow', ' rely', ' incorporate', ' attempt']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 298, 3235, 269, 8020, 17, 1658, 2269, 1420, 500, 299, 1557, 806, 269, 870, 330, 5256, 289, 1623, 16, 7128, 6863, 15, 857]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data and predict the outcome. These models allow us to understand how the data is distributed in real-world situations, such as weather forecasting or population dynamics.
+
+In this article, we will explore how to use a neural network to learn how to model complex datasets using an online dataset. We will also discuss how to train a neural network on real-world datasets.
+
+## Learning from Scratch
+
+To start off, let's define some terms:
+
+• A dataset consists of a collection of observations (also called features), which may include images, sounds, video clips, etc.
+• A neural network is a type of computer program that takes inputs and outputs and returns a list of predicted values for each input.
+• An example of a dataset is a data set consisting of text, pictures, or videos.
+• The training process of a neural network is similar to the training process of an algorithm, except that instead of using the input of the network, it uses the output of the network.
+• For a neural network, there are several methods to learn the parameters of the network including gradient descent, maximum likelihood estimation, and adaptive neural nets.
+
+Now, let’s look at the basic
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 1348, 299, 1062, 263, 377, 19192, 288, 2851, 34, 202, 202, 44, 873, 4532, 299, 1062, 263, 4873, 288, 2851, 298, 356, 491, 263]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# How to make a Piece of paper?
+
+I am trying to make a piece of paper and I have a lot of paper pieces. I want each piece to be about $10$ inches long. How can I make it so that each piece is about $10\ \text{ inches}$ tall?
+
+• I don't know how to do this, but it should work for any other piece you like. – AJC Jan 11 '16 at 17:18
+• @AJC: Well, you can use a pencil and a ruler to measure the width of each piece. You can also use a ruler to draw the edges of the pieces. The easiest way to do this is to draw one side of each piece and then draw another side of the same piece. Then, you will have the pieces cut out. You could try drawing one side of the whole piece as you would with a ruler or even with a pencil. But you have to be careful when you draw the edges. If you are going to do this without a ruler, you might not need to use a pencil. It's a good idea to write down the dimensions of your pieces on the board. – A JC Jan 11 "17
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 311, 864, 353, 20, 1341, 353, 21, 2216, 311, 687, 711, 202, 509, 1392, 330, 359, 4446, 29, 202, 202, 91, 333, 28045, 11, 1161, 12, 202, 2318, 11]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n * (1 / (2 ** n))
+
+
+The function is as follows:
+
+x = factorial(10)
+print(x)
+
+# Example 1:
+
+# Input: x = 3
+# Output: 2
+# Explanation:
+# x = 3 * 2
+# x == 3 * 2 * 4
+# x %= 5
+# x //= 5
+
+## Examples of Fractions
+
+### Example 1: A Exam
+
+A = [3,2]
+b = [4,5]
+c = [6,7]
+d = [8,9]
+e = [11,12]
+f = [13,14]
+g = [15,16]
+h = [17,18]
+
+### Solution:
+
+For example, let's take the following code and calculate:
+
+a = 3 * 5 + 6 * 7
+b = 3 * 6 + 8 * 9
+c = 3 * 7 + 10 * 11
+d = 3 * 8 + 12 * 13
+e = 3 * 15 + 16 * 17
+f = 3 * 17 + 18 * 19
+g = 3 * 18 + 20 * 21
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.6394359469413757, 0.3605640232563019, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=156 first30=[622, 354, 647, 353, 20, 1341, 311, 12, 864, 353, 20, 552, 311, 12, 711, 202, 1465, 1392, 483, 342, 885, 299, 1098, 269, 775, 993, 289, 263, 1180, 15]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1 + (1 / n) * (1 - n)
+
+
+This function can be used to find the first number in a list, or it can be used as an expression for the value of the last element. For example, if we want to find the sum of all the numbers from 1 to 100, we could use this function:
+
+sum = 0
+for i in range(100):
+    sum += i
+print(fib(sum))
+
+# Solution
+
+-2
+
+
+The solution is quite simple:
+
+from math import factorial
+
+if __name__ == '__main__':
+
+list_of_numbers = [1, 2, 3]
+print(factorial(list_of\_numbers))
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 31412, 2590, 4619, 1541, 2660, 2, 1, 0]
+first_step_topk_probs=[0.3418751657009125, 0.25012120604515076, 0.17370572686195374, 0.09794887900352478, 0.06129484251141548, 0.049767524003982544, 0.025286704301834106, 0.0, 0.0, 0.0]
+first_step_topk_text=[' The', ' Yes', ' Cats', ' No', ' Black', ' There', ' Some', '', '', '']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 808, 17, 31412, 395, 453, 545, 2645, 17, 1109, 395, 545, 289, 269, 1134, 1844, 1440, 15, 536, 3261, 269, 2422, 3191, 15, 305, 20440, 15, 25162]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is no. Cats are not all black. They are all in the same family group, which includes the house cat, hawk, falcon, and owl. All cats are black except for a few black ones, including the brown-headed coward (Bubo bubo).
+There are many types of cats. Some are black, some white. Many have a dark face or black eyes. Most are black. A few are red, yellow, and blue. Some are red, orange, or yellow. Some are white, but not all.
+The number of different types of cats varies from person to person. In general, there are three categories of cats:
+1. Blue and gold cats
+2. Golden cats
+3. Green cats
+4. Red cats
+Cats are classified as either "black" or "white." Black cats are more likely than other cats to be black. Cows that are black are usually called "blue cats," because they are colorless. Yellow cats are generally considered to be a light colored breed.
+Snow cats are usually black. But they may also be known as "pink cats" or "purple cats."
+In the United States, most people think of black cats as
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 843, 1012, 1218, 409, 637, 354, 2, 1, 0]
+first_step_topk_probs=[0.46944308280944824, 0.10920360684394836, 0.10920360684394836, 0.08866631984710693, 0.08826564997434616, 0.07364020496606827, 0.06157752871513367, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 4', ' 5', ' 6', ' 8', ' 2', ' 3', ' 1', '', '', '']
+
+[New tokens 9] count=181 first30=[843, 17, 27, 3, 711, 509, 1165, 415, 2073, 330, 2779, 299, 1409, 419, 1186, 4649, 289, 269, 1902, 1365, 973, 15, 2512, 299, 263, 719, 1399, 444, 269, 2176]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 5.8
+
+The world's population is expected to grow by 7 billion in the next 20 years, according to a new report from the World Bank.
+"Global economic growth is likely to be much higher than that of any other developed country," said the report. "There are few things that can be done faster for a sustainable development."
+The report was released at the World Economic Forum in Davos, Switzerland on Thursday.
+It found that the global economy will grow by 6 percent per year between now and 2050 if current trends continue. The report also called for more aggressive policies aimed at meeting the challenges of climate change.
+In particular, it urged governments to take action to cut greenhouse gas emissions and help people adapt to climate change. It said that the World Bank and the UN Development Programme should work together to support the development of a global consensus on how to address climate change.
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 1289, 783, 1509, 698, 360, 2575, 3919, 1278]
+first_step_topk_probs=[0.8160244226455688, 0.024956298992037773, 0.024314776062965393, 0.02308080531656742, 0.021346254274249077, 0.02026292309165001, 0.016029292717576027, 0.016029292717576027, 0.014824670739471912, 0.013358144089579582]
+first_step_topk_text=[' I', ' The', ' We', ' This', ' You', ' It', ' "', ' What', ' My', ' If']
+
+[New tokens 10] count=256 first30=[356, 3442, 733, 289, 263, 3313, 288, 9327, 374, 1284, 3694, 415, 1258, 298, 356, 4575, 4532, 299, 835, 1169, 299, 631, 1133, 299, 1258, 339, 269, 1266, 17, 356]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I've been in a lot of trouble with my son's school and I'm trying to get him to go back to school for the day. I've had him sit down at home, but he's not doing well at school. He doesn't seem to be getting any better. He's just not getting the help he needs."
+"I think you're going to see some of the changes that we've seen over the last couple of years," says Mr. Zeng. "And he seems to have a lot more difficulty in school than you might expect. You know, he's not getting enough sleep, you know, he gets sick from something. It's not like you can't get enough sleep. But there are things you can do to help him."
+Mr. Zeng is one of several teachers who've found that having an early childhood education program makes it easier for children to learn. The program is designed to help children build their language skills by helping them develop language skills through play.
+"We try to do things that are important to kids -- such as making sure they're getting the right kinds of foods or toys, and teaching them how to say what they want and how to say it," says Dr. Elena Zeng.
+
+
+================================================================================

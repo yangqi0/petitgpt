@@ -14,6 +14,7 @@ import json
 import sys
 import time
 import subprocess
+import math
 from dataclasses import asdict
 from pathlib import Path
 from typing import Dict, Optional, Tuple
@@ -53,6 +54,25 @@ except Exception:
 # -----------------------------------------------------------------------------
 # Utilities
 # -----------------------------------------------------------------------------
+def append_jsonl(path: Path, record: dict) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "a", encoding="utf-8") as f:
+        f.write(json.dumps(record, ensure_ascii=False) + "\n")
+
+
+def maybe_ppl(loss_value: float, eos_weight: float) -> float | None:
+    # only when eos_weight==1, treat it as a more standard ppl
+    if abs(float(eos_weight) - 1.0) > 1e-12:
+        return None
+    try:
+        # avoid extreme values causing overflow
+        if loss_value > 20:
+            return None
+        return float(math.exp(loss_value))
+    except Exception:
+        return None
+
+
 def infer_vocab_size_from_tokenizer_json(path: str) -> int:
     """Infer vocab size from HF tokenizers' tokenizer.json."""
     with open(path, "r", encoding="utf-8") as f:
@@ -134,7 +154,6 @@ def run_bench_eval_v5(
         print(e.output, flush=True)
 
 
-
 def _resolve_resume_path(resume_path: str, out_dir: Path, resume_step: int = -1) -> Path | None:
     """Resolve a checkpoint path.
 
@@ -179,6 +198,8 @@ def _resolve_resume_path(resume_path: str, out_dir: Path, resume_step: int = -1)
         return p2
 
     return None
+
+
 def set_seed(seed: int) -> None:
     import random
 
@@ -740,6 +761,10 @@ def main() -> None:
         json.dumps({**vars(args), "model_cfg": asdict(cfg)}, indent=2),
         encoding="utf-8",
     )
+    metrics_path = out_dir / "metrics.jsonl"
+    best_val_path = out_dir / "best_val.json"
+    best_val = float("inf")
+    best_step = -1
 
     model.train()
     data_iter = iter(train_dl)
@@ -868,6 +893,18 @@ def main() -> None:
                 f"[train] step={global_step} loss={mean_loss_raw:.4f} "
                 f"(eos_w={cur_eos_weight:g}) lr={lr:.2e} tok/s={tok_s:.0f}"
             )
+            append_jsonl(
+                metrics_path,
+                {
+                    "kind": "train",
+                    "step": int(global_step),
+                    "loss": float(mean_loss_raw),
+                    "eos_weight": float(cur_eos_weight),
+                    "lr": float(lr),
+                    "tok_s": float(tok_s),
+                    "time": float(time.time()),
+                },
+            )
             t_window = time.time()
             window_sup_tokens_est = 0
 
@@ -882,7 +919,36 @@ def main() -> None:
                 eos_weight=float(cur_eos_weight),
                 max_batches=50,
             )
+            val_ppl = maybe_ppl(val_loss, cur_eos_weight)
             print(f"[eval] step={global_step} val_loss={val_loss:.4f}")
+
+            append_jsonl(
+                metrics_path,
+                {
+                    "kind": "val",
+                    "step": int(global_step),
+                    "val_loss": float(val_loss),
+                    "val_ppl": float(val_ppl) if val_ppl is not None else None,
+                    "eos_weight": float(cur_eos_weight),
+                    "lr": float(lr),
+                    "time": float(time.time()),
+                },
+            )
+
+            if val_loss < best_val:
+                best_val = float(val_loss)
+                best_step = int(global_step)
+                best_val_path.write_text(
+                    json.dumps(
+                        {
+                            "best_step": int(best_step),
+                            "best_val_loss": float(best_val),
+                            "time": float(time.time()),
+                        },
+                        indent=2,
+                    ),
+                    encoding="utf-8",
+                )
 
             samples_dir.mkdir(parents=True, exist_ok=True)
             out_path = samples_dir / f"step_{global_step:06d}.txt"
@@ -942,6 +1008,23 @@ def main() -> None:
                     min_new_tokens=int(args.bench_eval_min_new_tokens),
                     ban_first_steps=int(args.bench_eval_ban_first_steps),
                 )
+                try:
+                    with open(out_json, "r", encoding="utf-8") as f:
+                        bj = json.load(f)
+                    append_jsonl(
+                        metrics_path,
+                        {
+                            "kind": "bench",
+                            "step": int(global_step),
+                            "acc_arithmetic": float(bj.get("acc_arithmetic", 0.0)),
+                            "acc_syllogism": float(bj.get("acc_syllogism", 0.0)),
+                            "acc_code": float(bj.get("acc_code", 0.0)),
+                            "bench_json": out_json,
+                            "time": float(time.time()),
+                        },
+                    )
+                except Exception as e:
+                    print(f"[bench_eval] failed to summarize metrics: {e}", flush=True)
 
             print(f"[ckpt] saved latest + step_{global_step:06d}.pt to {out_dir}")
 
