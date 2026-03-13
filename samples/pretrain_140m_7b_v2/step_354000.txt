@@ -1,0 +1,281 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[601, 330, 791, 1628, 728, 15, 10444, 3022, 289, 2827]
+first_step_topk_probs=[0.18584807217121124, 0.1432388424873352, 0.11039850115776062, 0.07667022943496704, 0.06557952612638474, 0.0363149493932724, 0.033320724964141846, 0.033320724964141846, 0.03162969648838043, 0.03162969648838043]
+first_step_topk_text=[' will', ' is', ' would', ' might', ' may', ',', ' asks', ' comes', ' in', ' named']
+
+[New tokens 1] count=161 first30=[330, 1163, 16852, 419, 269, 4769, 299, 263, 1563, 17, 382, 4769, 330, 1000, 3609, 299, 3408, 1282, 263, 1685, 2351, 357, 5546, 269, 2811, 17, 776, 388, 1024, 601]
+[Full output 1]
+Once upon a time, a curious child is being guided by the teacher to a book. The teacher is then asked to write down a few words that describe the story. He or she will be given a book and asked to read it aloud as well.
+The children are now ready to begin reading the story. The teacher will say a few words and then ask them to give the next word to the child. The child will be able to identify the meaning of the words. The child's response will be a simple "I don't know" sentence. This child can then respond with "yes" or "no." This child will also be able to tell the story using the words he or she has seen in the book.
+If you have any questions about this lesson, please contact us at firstname.lastname@example.org
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 1134, 1112, 17, 698, 330, 263, 1204, 2868, 374, 263, 2073, 288, 672, 1186, 15, 1086, 874, 289, 269, 9556, 288, 3855, 16618, 298, 263, 1204]
+[Full output 2]
+Paris is the capital of the province of the same name. It is a small town with a population of about 7,000 people in the province of Antilles and a small part of the Caribbean Sea.
+The town was founded by French colonists in 1710. The first inhabitants were the French and Spanish, who had settled there since the 16th century. The French settlers settled in the area around Antillean soil. In 1715, they built a fort called Fort D'Este which later became the town of Antillean control.
+In 1814, the French established a colony on the island of Hispaniola. They named it Antilleosque. After the independence of Haiti, the colony was divided into two provinces: Antilleo (the capital) and Antilleo. The island of Hispaniosa is located at the southern tip of the island of Jamaica. The capital city is Antilleo, which is located on the island's west coast. The population of Antilleo is approximately 4,500 people.
+Antilleo is also known as the "Friendship City" because of its many ethnic groups. The city has an estimated population of 3,575 people. The city is also home to the Dominican Republic.
+Today, Antille
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1623, 993, 357, 483, 342, 3020, 359, 263, 1677, 288, 795, 1623, 1890, 17, 382, 18956, 395, 269, 1992, 288, 269, 1623, 298, 14628, 2721, 288, 269, 3823, 338]
+[Full output 3]
+In linear algebra, an eigenvalue is a real number that can be written as a product of two real numbers. The eigenvalues are the values of the real and imaginary parts of the matrix A. For example, if we have the following system of equations:
+| | | |
+|---------|-----------|
+| 0 | 0 |
+| 1 | 1 |
+| 2 | 2 |
+| 3 | 3 |
+The determinant of this system of equations is equal to the sum of the products of the individual eigenvectors of the matrix. This means that the eigenvalues are all real numbers.
+Let's look at some examples of matrices. We'll start with a square matrix. Then we will see how this matrix can be decomposed into its own eigenvector. We'll do this by finding the eigenvectors for each eigenvalue. We'll also see how this is done in practice. Let's take a look at an example.
+If we have the same number of rows and columns as our original matrix, then the eigenvalues are equal. But this does not mean that they are equal. To find the eigenvalues, we need to find the eigenvectors for the entire matrix. That means we must find the eigenvectors of the given matrix.
+We could write this as a matrix multiplication problem where we multiply the first
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 491, 483, 395, 1798, 1420, 9845, 5546, 14071, 3069]
+first_step_topk_probs=[0.29508355259895325, 0.19453120231628418, 0.19453120231628418, 0.11503421515226364, 0.03870653733611107, 0.0331074558198452, 0.029832324013113976, 0.026881156489253044, 0.019666673615574837, 0.014388445764780045]
+first_step_topk_text=[' use', ' have', ' can', ' are', ' learn', ' allow', ' rely', ' describe', ' incorporate', ' attempt']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 298, 3235, 269, 8020, 17, 1658, 2269, 395, 1431, 885, 289, 4855, 2465, 15, 913, 581, 395, 885, 299, 24007, 3519, 1728, 351]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data and predict the outcome. These models are often used in machine learning, where they are used to classify objects based on their features.
+
+In the first part of this article, we will discuss how to use a neural network to learn a new object or feature by using a simple example. The second part of this post deals with how to train a neural network. This is an important topic for any machine learning programmer because it allows us to train a new neural network on a large dataset. We will also look at some examples of training a neural network using a simple model.
+
+## Understanding Neural Networks
+
+A neural network is a powerful tool that helps us understand and describe the world around us. It is an algorithm that uses input data to create a prediction. A neural network is simply a computer program that combines all the input data into one big neural network.
+
+### What is a Neural Network?
+
+The term neural network refers to a network which consists of two parts: a neuron and a set of nodes (or inputs). Neurons are responsible for processing information about the environment. For example, if you were to ask a person who was a friend what color you would wear if she wore red shoes
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 1348, 299, 1098, 269, 3581, 288, 263, 1309, 7885, 888, 795, 1496, 2348, 34, 202, 202, 44, 491, 287, 3581, 288, 263, 5610, 374]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# How to find the equation of a line passing through two given points?
+
+I have an equation of a circle with center at (2,3) and radius 3. I want to find the slope of this line passing through the points (1,5), (-4,-8) and (7,8).
+
+If I know the equation of the line passing through these points, I can use the slope formula for a line in terms of x-intercept and y-intercept.
+
+So if I have the equation of line passing through (1,3) is (1,4), then the slope of the line passes through (0,2) and (9,6).
+
+Is there any way to find the value of the slope so that I can plug it into the equation of my line passing through those points?
+• I'm not sure what you mean by "the slope of the tangent line to the curve at point (x,y)" – user166817 Mar 23 '18 at 10:53
+• The slope of the tangents to the curve is the derivative of the slope of a tangent line to a curve. If you have the equation you get $f'(x)= \frac
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=54 first30=[490, 311, 861, 643, 29, 341, 622, 354, 1246, 1107, 29, 341, 622, 494, 11, 81, 12, 202, 202, 856, 1271, 1714, 346, 1083, 360, 509, 28045, 288, 311, 330]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     if n == 0:
+         return 1
+     else:
+         return int(n)
+
+def main():
+    print "The factorial of n is %d" % factorial(int(input()))
+
+
+if __name__ == "__main__":
+    main()
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.7490872144699097, 0.25091278553009033, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[490, 311, 1396, 643, 388, 311, 1542, 354, 29, 341, 622, 354, 1246, 1107, 29, 341, 490, 311, 861, 643, 29, 416, 622, 354, 331, 1107, 29, 416, 622, 8049]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     if n < 0 or n > 1:
+         return 1
+     else:
+         if n == 0:
+            return 1
+        else:
+            return fib(n - 1) + fib(n)
+
+
+The Fibonacci sequence is a series of numbers where each number is the sum of the previous two. For example, the Fibonacci sequence is defined as follows:
+
+fib(n) = [1, 2, 3, 4]
+fib_2(n) := fib(n-1) + fib(1-n) + fab(n-2)
+
+Here's an example of how to use the Fibonacci sequence:
+
+>>> from math import *
+>>> import sys
+>>> from itertools import cycle
+>>> print(fib(sys.maxint))
+0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 31412, 13676, 2590, 1541, 4619, 2660, 2, 1, 0]
+first_step_topk_probs=[0.3088924288749695, 0.22599053382873535, 0.22599053382873535, 0.09821511805057526, 0.061461448669433594, 0.05538136512041092, 0.024068647995591164, 0.0, 0.0, 0.0]
+first_step_topk_text=[' The', ' Cats', ' Yes', ' No', ' There', ' Black', ' Some', '', '', '']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 808, 17, 31412, 395, 453, 545, 2645, 17, 1109, 395, 545, 289, 269, 1134, 6309, 288, 2419, 17, 2660, 395, 2886, 15, 751, 395, 2645, 15, 751]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is no. Cats are not all black. They are all in the same category of color. Some are white, some are black, some are brown, some are all black. So if you look at a cat's body color it is black. But some cats have red blood cells or red blood cells in their skin. It is possible for a cat to be black just by looking at a cat. In fact, it is very difficult to see a cat with a blue eye because they are so small and light.
+There are many different colors of cats, but we will call them all black. All cats are black except a few black cats. There are also some cats that are all black, but not all black cats.
+The reason why black cats are so rare is because there are so many different types of cats. A black cat is one which has a black coat, one which has an orange face, one which is yellow eyes, and one which has black fur. It is not uncommon for a black cat to have dark hair on its head and body. Black cats are also known as "cat-heads" because they have a large black spot on their necks. Their black spots are often seen on the tail.
+A black cat's
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 843, 409, 2050, 637, 1012, 354, 1218, 0, 1]
+first_step_topk_probs=[0.40686944127082825, 0.10503833740949631, 0.09550861269235611, 0.08984405547380447, 0.08723768591880798, 0.08528447151184082, 0.07684768736362457, 0.05336965620517731, 0.0, 0.0]
+first_step_topk_text=[' 4', ' 5', ' 2', ' One', ' 3', ' 6', ' 1', ' 8', '', '']
+
+[New tokens 9] count=256 first30=[2050, 13032, 330, 263, 744, 21, 17, 429, 11948, 4039, 17, 382, 613, 798, 395, 744, 22, 17, 1517, 17, 2575, 330, 269, 2056, 993, 288, 10941, 357, 601, 342]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple is a $2.00 gift card. The other 4 are $3.50. What is the total number of apples that will be sold?
+Answer : $5.50
+To find the number of apples in a basket, we need to add up all the numbers. So, for example, if you had 5 apples, then add 5 + 2 = 6 apples. Then add the number of ways you can get 5 apples to get one basket, and the number of possible ways you can buy 5 apples.
+There are three different ways to do this. You could use either a single-ply or a combination of two types of baskets.
+Here's an example of a basket:
+The first basket has 5 apples, the second one has 3 apples, and the third one has 5 apples. Each basket has 5 children.
+Now, let's say you want to know how many apples there are on each of these baskets. To figure it out, you just multiply the number of children by the number of baskets. For example, if there were 8 children, then the number of people would be 9 x 8 x 8 = 36.
+So, the number of fruits in a basket is 36.
+You could also use a mix
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 1289, 783, 382, 1509, 698, 1278, 3919, 15255]
+first_step_topk_probs=[0.792181670665741, 0.027784384787082672, 0.027784384787082672, 0.02707017958164215, 0.023154351860284805, 0.0225591491907835, 0.0203274916857481, 0.01608036831021309, 0.01176464930176735, 0.011167588643729687]
+first_step_topk_text=[' I', ' What', ' We', ' This', ' The', ' You', ' It', ' If', ' My', ' Thanks']
+
+[New tokens 10] count=256 first30=[356, 3442, 733, 289, 263, 3313, 288, 9327, 374, 1284, 3694, 415, 1258, 298, 356, 4575, 4532, 299, 835, 1169, 299, 631, 1133, 299, 1258, 339, 269, 1266, 17, 356]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I've been in a lot of trouble with my son's school and I'm trying to get him to go back to school for the day. I've had some problems, but he still has to work hard. He doesn't seem to be getting any better at school. What can I do?
+Jessica: The best thing you can do is give him the opportunity to take charge of his learning and develop his abilities as a teacher. It helps to have a relationship with your child that will help them learn more effectively. You also need to talk about what you are going through and what you're doing differently than you were before. If you don't understand something, it might not be right for you. Also, if you're going to be working on something different, it may be harder to figure out how to make it work.
+Assistance: If you have any questions or concerns, please call our office. We'll try to answer them.
+Michele: I think there's a lot of misunderstanding in the world around us. We all know people who are really bad at math. But we also know that when they're really good at math, it's because they're doing something wrong. They're not going to do it right.
+
+================================================================================

@@ -1,0 +1,305 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[330, 601, 791, 1628, 728, 15, 418, 289, 483, 348]
+first_step_topk_probs=[0.19752086699008942, 0.16037428379058838, 0.1173323318362236, 0.08584216237068176, 0.08148568123579025, 0.050076924264431, 0.048404574394226074, 0.04140262305736542, 0.03541354462504387, 0.019968925043940544]
+first_step_topk_text=[' is', ' will', ' would', ' might', ' may', ',', ' was', ' in', ' can', ' st']
+
+[New tokens 1] count=256 first30=[330, 1163, 16852, 419, 269, 4769, 299, 263, 1563, 17, 382, 4769, 330, 1000, 3609, 299, 3408, 1282, 263, 1685, 2351, 357, 5546, 922, 269, 929, 578, 5025, 289, 269]
+[Full output 1]
+Once upon a time, a curious child is being guided by the teacher to a book. The teacher is then asked to write down a few words that describe what the child has learned in the book.
+The teacher then asks the child to go back and look at the pictures of the books he or she has read. This helps the child see how much he or she knows about the books. If the child is interested in the books, they can read them to themselves and ask questions about the books that are presented.
+If the child does not understand what the book is about, the teacher will ask him or her to read it aloud to themselves so that they can answer their questions. Sometimes this is done with the child's parents.
+After reading the book, the teacher takes the child on a guided tour through the book. When the child is ready, the teacher leads the child along the way.
+Once the child has finished the story, the teacher places the book on the board and reads it aloud to the child. The child then begins to read the book aloud again.
+When the child reaches the end of the book, he or she continues to read the next chapter.
+There are many different kinds of books that children can read. Some are very simple and some are more complex. Books such
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 1134, 1112, 15, 298, 330, 658, 269, 8492, 288, 263, 1723, 17, 202, 509, 11718, 3399, 269, 11834, 93, 292, 76, 353, 2038, 6607, 3481, 15]
+[Full output 2]
+Paris is the capital of the province of the same name, and is also the seat of a government.
+The municipality contains the frazioni (subdivisions, mainly villages and hamlets) Sotto-Fulani, Bacolabia, Girona, and San Pietro. It has an area of 1,052 km2.
+It is located in the eastern part of the province. The territory is mostly flat and mountainous. The mountains are mostly covered with lowlands. The climate is Mediterranean climate. The population is mainly concentrated in the north and south. The most important cities are San Pietra De'Avanzi, San Pietrosana, San Agustin de'Avanza, San Francesco de'Aveno, San Rocco de'Agustina, San Rocconi, San Rocque de'Anno, San Francesca de'Avedosa, San Pio Salardino, San Giovanni de'Aveschi, San Francesciano, San Giovannino, San Roccoles, San Lorenzo, San Pintorino, San Nicola, San Francescani, San Francesche, San Piedadco, San Nicolas, San Pa
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 357, 483, 342, 3020, 359, 269, 1701, 288, 795, 7527, 17, 1220, 1373, 15, 490, 411, 491, 263, 4409, 400, 333, 353, 91, 15, 371, 12, 298, 1418]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector that can be written as the sum of two vectors. For example, if we have a vector v = (x, y) and want to find the value of x when x=0, then v = 0.
+
+## Rational Expressions
+
+A rational expression is a mathematical representation of a number in terms of its numerator and denominator. It consists of all whole numbers, real numbers, or fractions.
+
+For example, if you are given the rational expression
+
+$$\frac{1}{2}$$
+
+and asked to solve it by finding the greatest common factor of both sides, you would write
+
+$$(\frac{1}{\sqrt{2}})(x + \frac{1}{(2)(3)})$$
+
+The first step is to make sure that the denominator of the fraction is equal to zero. If there are no numbers on the left side of the equation, then you should use the negative sign. If there is no number on the right side of the fraction, then you must use the positive sign. The second step is to eliminate the absolute values of the denominators. You can do this by subtracting the numerator from the denominator.
+
+If you are given an algebraic expression like
+
+$$\begin{array
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 491, 395, 1798, 1420, 5546, 9845, 1085, 3069]
+first_step_topk_probs=[0.3615703880786896, 0.17438924312591553, 0.15713775157928467, 0.10453415662050247, 0.05544861778616905, 0.031266264617443085, 0.026743456721305847, 0.024097854271531105, 0.015080051496624947, 0.01358826830983162]
+first_step_topk_text=[' use', ' can', ' have', ' are', ' learn', ' allow', ' describe', ' rely', ' model', ' attempt']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 298, 3235, 269, 8020, 17, 1658, 2269, 395, 1431, 885, 289, 4855, 2465, 15, 913, 581, 395, 885, 299, 24007, 3519, 1728, 351]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data and predict the outcome. These models are often used in machine learning, where they are used to classify objects based on their features.
+
+In the context of the current study, we consider the problem of predicting the outcome of a set of trials from a given set of data. We want to find the best possible combination of these two types of outcomes, such as the best combination of the best three outcomes (i.e., the trial with the highest probability) and the best combination (the trial with the lowest probability). This is known as the "invariance principle". The idea behind this principle is that if we have some information about the trial and its outcome, then we can use it to predict the outcome based on this information. For example, if we know the outcome of the trial X and the outcome of Y, then we could choose to add a new feature called "dependence" to our knowledge of the trial, and thus predict the outcome of X + Y. However, if we have many observations, then the "invariant principle" can be extended to include more observations.
+
+The main concept in the present paper is that of an inversion rule, which states that the number of observations is equal to the sum
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=190 first30=[263, 647, 286, 3, 711, 6, 5427, 6649, 29, 8163, 16, 27, 5427, 202, 1568, 202, 18688, 351, 321, 462, 2839, 4254, 2508, 29, 6457, 29, 5613, 9281, 202, 202]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Aug 26 11:43:56 2018
+
+@author: <NAME>
+"""
+import numpy as np
+from scipy.stats import norm
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+sns.set_style('whitegrid')
+sns_rc = sns.lineplot(x='Sensitivity', y='Ratio', data=np.array([1/4, 1/3, 1/2, 1/5, 1/6, 1/7]))
+plt.title("Variance of the Sensitivity")
+plt.xlabel("Frequency (Hz)")
+plt.ylabel("Probability")
+plt
+sns._set_figure()
+sns_.autoscale(alpha=0.05)
+plt.show()
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 311, 864, 353, 20, 1341, 353, 21, 2216, 311, 687, 711, 202, 509, 1392, 330, 1255, 359, 4446, 29, 202, 202, 13, 382, 28045, 1392, 330, 3821, 359, 269]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n * (1 / (2 ** n))
+
+
+The function is called as follows:
+
+* The factorial function is defined as the product of all positive integers up to n.
+* The function returns the value of the factorial at each iteration.
+* If n is not an integer, then the function returns -1.
+
+## Example 1:
+
+Input: n = 3
+Output: 2
+Explanation: The factorial function takes three arguments: 3, and returns the number 3.
+Example 1:
+Input: 3
+Output : 1
+Explanations: The factorial functions take two arguments: 3 and 4.
+Example 2:
+Input : 3
+Output :: 5
+Explanated: The factorial of 5 is 5.
+Example 3:
+Input :: 5
+Output :: 7
+Explanatted: The factorial is 7, but it's not a negative number.
+Example 4:
+Input = 5
+Output = 5
+Example 5:
+Input == 5
+Output == 5
+Examining the factorial function in the first example will produce the following output:
+
+What is the factorial of 3?
+
+A factorial of 3 is the product of 3 * 3.
+
+It can
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 537, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.5124755501747131, 0.4383436143398285, 0.04918079078197479, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', ' #', '', '#', '', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 354, 17, 19, 1341, 353, 20, 647, 311, 1190, 21, 12, 711, 202, 509, 775, 1993, 330, 299, 3296, 269, 1986, 288, 269, 31393, 3756, 15, 536, 330, 263]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 / (1 + n**2)
+
+
+The first step is to determine the size of the Fibonacci sequence, which is a power of 2. The second step is to find the index of the first number in the Fibonacci sequence. We will do this by finding the Fibonacci sequence for n=1 and n=2. For example, if we have the sequence 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 2590, 31412, 1541, 4619, 1906, 2, 1, 0]
+first_step_topk_probs=[0.33910098671913147, 0.27532848715782166, 0.1260545700788498, 0.10782019048929214, 0.06079745665192604, 0.05478305742144585, 0.036115240305662155, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' No', ' Cats', ' There', ' Black', ' All', '', '', '']
+
+[New tokens 8] count=184 first30=[382, 3533, 330, 808, 17, 202, 14405, 10676, 395, 269, 851, 1488, 1875, 288, 6783, 487, 10676, 289, 269, 1560, 1705, 17, 1109, 491, 263, 1114, 1059, 2484, 288, 1937]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is no.
+Black cats are the most common species of domesticated cats in the United States. They have a very high rate of disease transmission from humans to cats (in fact, many cats are infected with rabies), which causes an estimated $2 billion in annual costs for health care and veterinary services.
+The average adult cat gets about 20 times more than a dog or cat's litter box, so even if you think your cat is black, you should be aware that it is not. In fact, the average American cat has a slightly higher risk of contracting the disease than any other animal, including dogs, although cats do get it much less often. Cats are also less likely to die from this disease than dogs.
+How did you get the word "black" on the label?
+You can find out more about the history of the word "white" in the article by clicking here.
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 843, 354, 1012, 409, 637, 1218, 2050, 0, 1]
+first_step_topk_probs=[0.42034322023391724, 0.1204303503036499, 0.09281930327415466, 0.09281930327415466, 0.09177432209253311, 0.07656748592853546, 0.05808483809232712, 0.047161199152469635, 0.0, 0.0]
+first_step_topk_text=[' 4', ' 5', ' 1', ' 6', ' 2', ' 3', ' 8', ' One', '', '']
+
+[New tokens 9] count=256 first30=[2050, 13032, 330, 798, 18, 22, 288, 263, 18038, 17, 202, 3287, 483, 658, 620, 482, 1811, 419, 3124, 269, 3592, 3356, 288, 1127, 4717, 15, 649, 486, 835, 798]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple is 4/3 of a pound.
+You can also do this problem by taking the square root of both sides, so you get 4/3*4/3 = 1/8.
+Now multiply that result by the number of apples you have to make and divide it by the number you want to divide. You get 1/8=1/16.
+So 1/8 x 1/16 = 1/16
+There are only two apples in the box. If you take the first one out, you get 1/2 apples. If you go on with the second one, you get 0 apples.
+In this case, there are no apples left. The problem is that you cannot subtract the number of leftovers from the total number of apples.
+The same idea applies for the number of times you eat a sandwich.
+If you eat a piece of bread, you have 3/4 of a pound of bread. If you eat a slice of pizza, you have 1/4 of the size of the pizza. So 1/4 x 1/4 = 1/6 of a pound or 1/10 of a pound
+This means you have 1-pound of bread. You have 1/10 more than you have eaten
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 2575, 1289, 1278, 783, 1509, 698, 360, 3919]
+first_step_topk_probs=[0.6353799104690552, 0.04657195508480072, 0.03983510658144951, 0.038811128586530685, 0.03684144839644432, 0.03407277166843414, 0.03407277166843414, 0.026260923594236374, 0.02132219448685646, 0.015198657289147377]
+first_step_topk_text=[' I', ' The', ' What', ' We', ' If', ' This', ' You', ' It', ' "', ' My']
+
+[New tokens 10] count=256 first30=[2575, 330, 669, 2942, 374, 269, 1759, 7042, 34, 202, 55, 12405, 15, 3182, 4235, 15, 2823, 202, 9977, 15, 411, 395, 2397, 299, 342, 8093, 672, 269, 817, 288]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience with the following topics?
+Tuesday, April 23, 2010
+Today, we are going to be talking about the use of a variety of resources for our students. The first topic that we will be discussing in class is "Fluoride". This is an important topic in the classroom and it is very important that you understand what fluoride is. We will talk about the fluoride in this article. There are many different types of fluorides available and there are some that are not as commonly used as they should be. Fluoride is one of the most commonly used and is found in most water supplies today. It is also found in some foods such as eggs, milk, cheese, meat, fish, poultry, eggs, milk and dairy products. Fluoridation is the process by which fluoride is added to certain types of food to help prevent tooth decay. In the past, fluoride was used to help prevent cavities from developing. However, over time, the amount of fluoride in our environment has decreased dramatically due to the increase in population. Fluoridated water can help prevent dental caries. This type of water is also known as "fluoridated" because it contains fluoride. Fluorosis is a disease caused by the buildup of calcium deposits
+
+================================================================================

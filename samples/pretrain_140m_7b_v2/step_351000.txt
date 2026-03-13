@@ -1,0 +1,336 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[601, 330, 791, 1628, 418, 728, 15, 2827, 483, 289]
+first_step_topk_probs=[0.22086429595947266, 0.15338705480098724, 0.11222036927938461, 0.07793549448251724, 0.05701882764697075, 0.05701882764697075, 0.03836303949356079, 0.03215167671442032, 0.026105118915438652, 0.022328892722725868]
+first_step_topk_text=[' will', ' is', ' would', ' might', ' was', ' may', ',', ' named', ' can', ' in']
+
+[New tokens 1] count=256 first30=[330, 1163, 16852, 419, 269, 4769, 299, 263, 1563, 17, 382, 4769, 330, 1000, 3609, 299, 3408, 1282, 263, 1685, 2351, 357, 5546, 269, 2811, 17, 202, 509, 929, 330]
+[Full output 1]
+Once upon a time, a curious child is being guided by the teacher to a book. The teacher is then asked to write down a few words that describe the story.
+The child is given a piece of paper and a pencil. She can draw or paint any picture she wants. She can also ask her teacher to read a story about a different character from the story. The child is then told to name the character in the story. When she does so, she will be able to tell what he has seen.
+When the child is ready, the teacher will give him a turn to talk with his class. He will say things like "I'm sorry," "I know you're mad," "What's your name?" "You're not mad," and "My name is Liz." Then the teacher will ask the children to take turns reading the story. They may have to wait for their turn to finish.
+The next day, the child is allowed to take turns asking questions. At this point, the teacher is left with a list of questions that the child must answer. This time, the teacher asks the question again. He gives the child a chance to ask a question. The child may repeat it himself or ask another question at this point. The child will now be allowed to continue talking
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 1134, 1112, 17, 698, 330, 3323, 289, 269, 5235, 645, 288, 269, 9556, 15, 1661, 269, 2868, 288, 4414, 12110, 298, 269, 2317, 288, 343, 76]
+[Full output 2]
+Paris is the capital of the province of the same name. It is located in the southern part of the province, near the town of La Tour and the city of Ciudad Juárez.
+The municipality contains the localities of Baján, Zamora, Mecheras, Arrósito, Díaz, Guzmán, Hidalgo, and Jalapa.
+
+History
+
+In the year 2000, the municipality was created by merging the following municipalities:
+
+Coat-of-arms
+Ceppelos (Castile)
+Mecheras (Puerto Rico)
+Díaz (Alfonso's Land)
+Jalapa (Juan de la Plata)
+Arrósita (Arriaga)
+Hidrochilco (Hidrocha)
+Hunesce (Hunesces)
+Ibarra (Luz)
+La Valla de Zaragoza (Zaragoza)
+Ilkameña (Orange)
+Nuevo (El Ocho)
+Noble (Nova)
+Oguna (Oguro)
+Ramos (Ramos)
+
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 483, 342, 998, 419, 4007, 269, 18956, 288, 263, 3823, 17, 1278, 269, 18956, 395, 1623, 1890, 298, 263, 15, 286, 15, 276, 395, 1623, 1890, 15]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be found by finding the eigenvalues of a matrix. If the eigenvalues are real numbers and a, b, c are real numbers, then the matrix has a nonzero determinant.
+
+The matrix is defined as follows:
+
+$$A = \begin{bmatrix} 1 & 0 \\ 0 & 1\end{bmatrix}$$
+
+This means that the vectors $$a_1, a_2, \ldots$$ and $$b_1, b_2, c_1$$ are linearly independent.
+
+For example, consider the following matrix:
+
+$$\begin{bmatrix}\mathbf{x}_1&0\\0&\mathbf{y}_1\\0&\cdots\end{′′}$$
+
+We can see that this matrix has the same number of rows as the corresponding column vector. So we can write:
+
+$\mathbf{x}_{i} = \begin {bmatrix} 1&0\\ 0&1\end{ bookmark}$
+
+So, we have:
+
+$A=\begin{bmatrix}{1}&0\\0&1\\\\text{and}\\0&0\end{marks}$
+
+Now let's look at another example. Consider the following matrix, which is given
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 491, 395, 5546, 1798, 1420, 14071, 9845, 3069]
+first_step_topk_probs=[0.37874072790145874, 0.14831699430942535, 0.10851103812456131, 0.10001587122678757, 0.04249352961778641, 0.03634664788842201, 0.03275104612112045, 0.023961175233125687, 0.023961175233125687, 0.022745149210095406]
+first_step_topk_text=[' use', ' can', ' have', ' are', ' describe', ' learn', ' allow', ' incorporate', ' rely', ' attempt']
+
+[New tokens 4] count=256 first30=[395, 885, 299, 5951, 1623, 16, 7128, 2061, 17, 382, 3355, 2877, 330, 299, 817, 269, 1085, 299, 1798, 806, 299, 3235, 922, 601, 5891, 1902, 15, 298, 1000, 299]
+[Full output 4]
+Neural networks are a class of machine learning models that are used to solve real-world problems. The basic idea is to use the model to learn how to predict what will happen next, and then to apply it to other situations in the future.
+
+### Modeling
+
+The main task of a neural network is to predict the state of the network given the input data. In this case, we want to predict the probability of an event occurring based on the current state of the model.
+
+In the example above, we have the following inputs:
+
+• The input data: a list of strings (or numbers) representing the input data
+• The output data: a string representing the output data
+
+We can think of these as the inputs and outputs of our neural network.
+
+Let’s take a look at the inputs and the outputs of our network.
+• Input data: a sequence of strings (1 to 5). We will call this the input data set.
+• Output data: a single string. This is the set of all possible outputs for the input data, and we will call this set the set of possible outputs for each input.
+
+Now let’s look at the outputs of the network.
+A network consists of two parts:
+
+(1
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 1348, 299, 1062, 263, 377, 2586, 339, 263, 2829, 1373, 34, 202, 202, 44, 491, 263, 1114, 2829, 1811, 357, 356, 1418, 299, 5951]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# How to make a PDE for a simple example?
+
+I have a very simple problem that I want to solve. I know that the solutions are given by $$x_1=0$$ and $$x_2=1$$, but how do I find the solution in the form of $$y = f(x)$$?
+
+## 1 Answer
+
+To find the solution, we can use the following formula:
+
+$$\frac{d}{dx} y = \frac{dy}{dx}$$
+
+and then substitute this into the equation above to get:
+
+$$y = f\left(\frac{dx}{dx}\right) + \frac{1}{2}y^2$$
+
+This gives us:
+
+$y = \frac{\partial}{\partial x}f\left(\tfrac{dx}{\sqrt{1-x^2}}+\tfrac{1}{\sqrt{3}}x^2\right)$
+
+$= \frac{\Delta y}{\Delta x}$
+
+• You're right! I was thinking about it when I saw your post, but it didn't seem to work. – user10352 Jul 15 '14 at 9:
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.5389832258224487, 0.46101680397987366, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 6] count=58 first30=[622, 311, 13, 81, 202, 202, 856, 1271, 1714, 346, 1083, 360, 44, 4575, 2449, 351, 269, 2859, 5, 346, 1083, 360, 7121, 15, 2176, 4085, 555, 1083, 360, 509]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n*n
+
+def main():
+    print "I'm working on the code"
+    print "Hello, World!"
+
+    print "The factorial is a number in the form x!x!".split()
+
+if __name__ == "__main__":
+    main()
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 821, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.5577247738838196, 0.3313027620315552, 0.11097251623868942, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', ' """', '', '#', '', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 354, 647, 353, 20, 1341, 311, 12, 864, 353, 73, 554, 11, 81, 552, 354, 12, 552, 284, 554, 11, 81, 687, 711, 202, 5288, 415, 806, 299, 620]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1 + (1 / n) * (fib(n - 1) - fib(n))
+
+
+Here's how to do it:
+
+# Create a function called fib(n). This will compute the first n Fibonacci numbers.
+# The first n is a list of integers, and the second n is a number between 0 and 1.
+function fib_first(n):
+    # Return the first n integers.
+    return [0] * (n - 1,)
+
+# Calculate the first n fibonacci numbers.
+for i in range(1, n):
+    fib_first([i])
+
+# Find the first n consecutive Fibonacci numbers. 
+for i, j in enumerate(range(1, len(list(i)))):
+    if fib_first((i-j)/2) == fib_first():
+        print("Fibonacci number {} is {}".format(i, j))
+        break
+print()
+
+# Print the first n values of fibonacci number 1.
+for n in range(0, n):
+if fib_first([(n+1)/2)] == fib_second([1]) or fib_first()[n][1] == fib_third([
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 31412, 2590, 1541, 4619, 2, 3, 1, 0]
+first_step_topk_probs=[0.35283249616622925, 0.3179287612438202, 0.13817118108272552, 0.1121862456202507, 0.05410861596465111, 0.024772727862000465, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' Cats', ' No', ' There', ' Black', '', '', '', '']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 808, 17, 31412, 395, 453, 545, 2645, 1091, 581, 395, 839, 289, 269, 3494, 17, 202, 509, 2597, 339, 482, 330, 357, 715, 395, 795, 2584, 288]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is no. Cats are not all black because they are only in the wild.
+The reason for this is that there are two types of cats – those that are born white or black. One type is called 'white' and the other is called 'black'. Both are 'other' than cats.
+In fact, cats have been known to be black since ancient times. In fact, it was thought that cats were the first animal to evolve from a single species. However, as time went on, the evolution of cats began with the discovery of the first domesticated cat.
+Animals can be found throughout the world including, but not limited to, Africa, Europe, Asia, Australia, New Zealand, South America, and parts of Central and North America.
+We do know that cats are the most common group of living things in the world today. They are found in every continent except Antarctica. In fact they are the largest land mammal.
+There are about 4 billion people worldwide, although some scientists believe that there may be as many as 100 million.
+Because of their close association with humans, cats are often associated with being human beings.
+Some cats live in urban areas where there are more cats than there are people. People who live in
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 843, 2050, 382, 1012, 637, 409, 1218, 354, 744]
+first_step_topk_probs=[0.3388901352882385, 0.1259760856628418, 0.08748864382505417, 0.07883381843566895, 0.07483300566673279, 0.06758303940296173, 0.06758303940296173, 0.06400805711746216, 0.05474899709224701, 0.04005521908402443]
+first_step_topk_text=[' 4', ' 5', ' One', ' The', ' 6', ' 3', ' 2', ' 8', ' 1', ' $']
+
+[New tokens 9] count=107 first30=[2050, 4081, 1715, 288, 269, 2056, 993, 288, 10941, 330, 263, 2079, 13032, 17, 202, 509, 3533, 330, 619, 17, 202, 3544, 15, 806, 914, 10941, 395, 715, 289, 269]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One hundred percent of the total number of apples is a single apple.
+The answer is one.
+So, how many apples are there in the first place?
+There are 4 times as many apples as there were in the second place.
+If we add these two numbers together, we get 2^4 = 24 which is still not a multiple of 4.
+But, we can divide both sides by 4 to get 2*2=8 or 8/4=1.5.
+Hope it helps!
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 1289, 382, 1509, 783, 1278, 698, 360, 2575, 3919]
+first_step_topk_probs=[0.7836496829986572, 0.02992110326886177, 0.02840261161327362, 0.024294041097164154, 0.023669544607400894, 0.020245632156729698, 0.019218167290091515, 0.018724149093031883, 0.01731700636446476, 0.013698880560696125]
+first_step_topk_text=[' I', ' We', ' The', ' You', ' This', ' If', ' It', ' "', ' What', ' My']
+
+[New tokens 10] count=139 first30=[356, 3442, 733, 289, 269, 5988, 339, 263, 7543, 288, 4437, 1244, 298, 356, 483, 847, 4283, 4453, 1107, 17, 202, 45, 403, 3922, 29, 2575, 330, 383, 672, 357]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I've been in the hospital for a couple of weeks now and I can't remember anything else.
+Jessica: What is it about that you are feeling like you have a little bit of stress?
+Erica: It's really just a feeling that you're not feeling good, but maybe your life is going to be very stressful. So it's important to know what is causing that stress and how to deal with it.
+Assigned: Dr. Lisa Nunn
+Copyright © 2013 Baylor Health Care System All Rights Reserved. | 3500 Gaston Avenue, Dallas, TX 75246-2017 | 1.800.4BAYLOR
+
+================================================================================

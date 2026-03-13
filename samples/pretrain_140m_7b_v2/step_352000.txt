@@ -1,0 +1,302 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[601, 330, 791, 418, 2827, 1628, 15, 289, 728, 3609]
+first_step_topk_probs=[0.143328458070755, 0.13605456054210663, 0.12259534001350403, 0.08514077216386795, 0.056128229945898056, 0.053279727697372437, 0.045987196266651154, 0.041064292192459106, 0.041064292192459106, 0.033341605216264725]
+first_step_topk_text=[' will', ' is', ' would', ' was', ' named', ' might', ',', ' in', ' may', ' asked']
+
+[New tokens 1] count=220 first30=[330, 1163, 16852, 419, 269, 4769, 299, 263, 1563, 17, 382, 4769, 330, 1000, 3609, 299, 3408, 1282, 263, 1685, 2351, 357, 5546, 269, 2811, 17, 202, 509, 929, 330]
+[Full output 1]
+Once upon a time, a curious child is being guided by the teacher to a book. The teacher is then asked to write down a few words that describe the story.
+The child is given a piece of paper and a pencil. She can draw or paint any picture she wants. She can also take notes on what she sees in the picture.
+The teacher writes down her own thoughts about the story. She asks the child to say what he thinks it means. He can use his writing skills to make a list of all the characters in the story. This will help him remember the main character. It may be helpful for the child to write down the details of the story. For example, if the story is about a woman who is involved with a crime, she might write down her thoughts on how she feels about the situation.
+- Write the following sentence:
+|My daughter is in grade 1.|
+|What's the story about?|
+|I'm going to read the story.|
+|She'll start reading it.|
+|It will be very easy for her to learn to read this story.|
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 1057, 762, 15, 298, 269, 1271, 2868, 289, 269, 9556, 17, 698, 578, 263, 2073, 288, 637, 15, 28, 2863, 353, 9872, 10008, 573, 202, 202, 509]
+[Full output 2]
+Paris is the capital of the province of Arles, and the main town in the province. It has a population of 3,960 (2011 census).
+
+The city was founded by the Franks in the 6th century as the seat of a bishopric. The town was conquered by the Normans in 1066 and became part of the Holy Roman Empire. In 1276 it was captured by the Burgundians, but was recaptured in 1313. In 1421 the city was besieged by the French. In 1548 it was taken by the French and after the Treaty of Verdun, it was again recaptured by the English.
+
+In 1796 the city was captured by Napoleon I. In 1806 it was re-occupied by Napoleon's troops. In 1814 it was captured again by the French, and in 1815 it was occupied by the British. In 1918 it was again captured by the Germans. In 1930 it was taken back by the Allies.
+
+History
+
+Roman Catholic
+
+The first mention of the town comes from the year 574, when it was mentioned as an important place in the city of Clermont. The town's name is derived from the Latin word for "city". In the Middle Ages,
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 357, 483, 342, 3020, 359, 269, 1701, 288, 795, 7527, 17, 1220, 1373, 15, 490, 411, 491, 263, 4409, 400, 333, 353, 68, 15, 286, 12, 298, 1418]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector that can be written as the sum of two vectors. For example, if we have a vector v = (a, b) and want to find the value of x when the scalar product between v and b equals zero, we could write this as:
+x(v + b) = a + b
+This is a vector in the form of (x - a)(x + b). The "x" is the vector, and the "b" is the scalar product. If we take the dot product of a vector with itself, we get:
+x = a * b
+The vector x has the same magnitude as the vector a. We then add up all the vectors in the vector space to get the scalar product:
+x + a = a + a
+Now, let's look at some examples. Suppose you are given a matrix A containing numbers from 1 to n, where n is a positive integer. You can think of A as a list of numbers in the form (A[i], A[j]) where i, j is a whole number. Then, you can represent A by a vector in a matrix form:
+x1 = [1; 2; 3]
+x2 = [3; 4; 5
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 491, 395, 1798, 1420, 5546, 9845, 14071, 3069]
+first_step_topk_probs=[0.36533358693122864, 0.17620427906513214, 0.1289137899875641, 0.09388915449380875, 0.036934420466423035, 0.03328070789575577, 0.029988408088684082, 0.024348685517907143, 0.023112967610359192, 0.016909809783101082]
+first_step_topk_text=[' use', ' can', ' have', ' are', ' learn', ' allow', ' describe', ' rely', ' incorporate', ' attempt']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 298, 3235, 269, 8020, 17, 1658, 2269, 1420, 500, 299, 1557, 806, 269, 870, 330, 5256, 289, 1623, 16, 7128, 6863, 15, 857]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data and predict the outcome. These models allow us to understand how the data is distributed in real-world situations, such as predicting a person's age or gender.
+
+In this tutorial, we will learn about two popular methods for training neural networks: neural network architecture and deep learning. We will also explore how to train them using a variety of different datasets, including real-life scenarios, and other tasks.
+
+### What Is Neural Network?
+
+The neural network model is a powerful tool for studying the underlying processes governing many biological phenomena. It allows researchers to design new neural networks based on existing ones and adapt their designs accordingly. However, unlike traditional neural networks, which rely on simple rules, neural networks do not require any input or output signals. Instead, they rely on a combination of mathematical equations and algorithms to produce accurate predictions.
+
+#### Example 1: Creating a Simple Neural Network
+
+Let's consider a simple example where we have several types of neurons (neurons) connected via connections with a specified strength. In this case, our neural network has four layers – a hidden layer, a cross-layer layer, a second layer, and finally a third layer. Our goal is to create a network that describes
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=148 first30=[263, 647, 286, 3, 711, 6, 1348, 620, 486, 5951, 637, 91, 65, 21, 16, 28, 32, 19, 34, 202, 202, 11608, 5653, 15, 9211, 202, 202, 7, 22, 892]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# How do you solve 3x^2-9=0?
+
+Aug 31, 2016
+
+$3 x - 9 = 0$
+
+#### Explanation:
+
+The first step is to factor the quadratic equation. $3 x - 8 = 0$ or $3 x \left(- 8\right) = 0$.
+
+In this case, we have $3 x = - 8$, so we can write $3 x > 0$ as a linear combination of two roots of unity. We get that $3 x < 0$ as an answer and we are done!
+
+So, the solution is $3 x$ which is not a root of unity.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=92 first30=[622, 311, 864, 353, 20, 1341, 353, 21, 2216, 311, 687, 711, 202, 509, 1392, 330, 1255, 374, 269, 775, 6222, 311, 15, 298, 269, 1408, 6222, 311, 17, 382]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n * (1 / (2 ** n))
+
+
+The function is called with the first integer n, and the second integer n. The result is returned as the factorial of the nth value in the input.
+
+In Python 2.6, the function has been replaced by the built-in function factorial() to support the built-ins. This is useful for testing if the function has any differences between the two versions of Python.
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.6150878667831421, 0.3849121630191803, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 354, 647, 353, 20, 1341, 311, 12, 864, 353, 21, 2216, 353, 81, 552, 354, 687, 711, 202, 2141, 483, 620, 482, 289, 263, 2014, 1194, 15, 614, 2761]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1 + (1 / n) * (2 ** (n - 1))
+
+
+We can do this in a similar way, but instead of using the Fibonacci sequence, we use the recursion formula:
+
+fib(n) = f(n-1) + f(n+1)
+
+Now let's see how this works. First, we define our recursive function and check if it satisfies the given conditions. If it does not, then we have a recurrence relation for the Fibonacci number. In other words, we want to find out whether there exists an integer k such that:
+
+k <= n
+
+This is the same as saying that there must be an integer k greater than or equal to n.
+
+Next, we compute the first few terms of the Fibonacci sequence by applying the recursion rule. This is just like computing the next term of the Fibonacci series. We also need to ensure that every term is less than or equal than or equal enough to the previous term. For example, if the first term is 3, then the second term is 5, so we need to add 4 to the previous 3 term.
+
+Finally, we compute all the terms up to the last term of the sequence. This means
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 31412, 2590, 1541, 4619, 2, 3, 1, 0]
+first_step_topk_probs=[0.3473998010158539, 0.28206661343574524, 0.16755475103855133, 0.11636435985565186, 0.05327548459172249, 0.03333894908428192, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' Cats', ' No', ' There', ' Black', '', '', '', '']
+
+[New tokens 8] count=188 first30=[382, 3533, 330, 808, 17, 31412, 395, 453, 545, 2645, 1091, 581, 395, 839, 289, 269, 3494, 17, 202, 509, 2597, 339, 482, 330, 357, 851, 288, 500, 1118, 357]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is no. Cats are not all black because they are only in the wild.
+The reason for this is that most of us know that cats have a dark color to them. So if you look at a cat's body color it is black. But if you look closer you will see that there are many more colors than cats. So what do we do about these other colors?
+Let's start with the fact that cats are all white. That means that their bodies are black as well. So if we could say that cats are black then we would have to conclude that cats are white too. If we could say the same thing about the color of cats, it would be that cats are in fact white too. So the reason we don't have to conclude anything about cats is because we know that cats are mostly white. So the reasons why cats are white are the same as the reasons why they are black.
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 843, 1012, 409, 637, 354, 1218, 2050, 0, 1]
+first_step_topk_probs=[0.4170888662338257, 0.13261699676513672, 0.09702467918395996, 0.08058208972215652, 0.07360385358333588, 0.07098476588726044, 0.06738229840993881, 0.06071649491786957, 0.0, 0.0]
+first_step_topk_text=[' 4', ' 5', ' 6', ' 2', ' 3', ' 1', ' 8', ' One', '', '']
+
+[New tokens 9] count=226 first30=[2050, 13032, 330, 798, 10941, 15, 795, 395, 1186, 10941, 15, 298, 619, 330, 1012, 10941, 17, 202, 202, 2573, 395, 658, 637, 10941, 298, 354, 13032, 17, 1348, 914]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple is 4 apples, two are 7 apples, and one is 6 apples.
+
+There are also 3 apples and 1 apple. How many of these apples are in the box?
+
+To find the number of apples in the box, we need to add up all the numbers in each row and column. For example, if there were 3 apples in the first row, then 3 + 3 = 8 apples. We would get 9 apples because 3 + 3 + 3=9.
+
+For the second row, we can use the formula for adding the number of rows:
+
+Number of rows = Number of columns
+
+In this case, there are 3 apples in row 5 and 2 apples in row 6.
+
+So, there are 9 apples in the third row.
+
+Now, let's see how many apples are in our boxes.
+
+First row: 3 apples
+Second row: 2 apples
+Third row: 1 apple
+Fourth row: 0 apples
+Fifth row: 1 apples
+Sixth row: 2 apple
+Seventhrower: 3 apples
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 783, 382, 2575, 1289, 698, 1509, 3919, 360, 1278]
+first_step_topk_probs=[0.7468114495277405, 0.03017538972198963, 0.02790767513215542, 0.02790767513215542, 0.025146914646029472, 0.02150929719209671, 0.02041769213974476, 0.018397876992821693, 0.017464175820350647, 0.015736538916826248]
+first_step_topk_text=[' I', ' This', ' The', ' What', ' We', ' It', ' You', ' My', ' "', ' If']
+
+[New tokens 10] count=137 first30=[2575, 330, 669, 2942, 374, 269, 1759, 7042, 34, 202, 16, 2575, 330, 669, 1466, 1481, 351, 269, 2690, 920, 4083, 298, 6952, 34, 202, 16, 3189, 486, 491, 833]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience with the following topics?
+- What is your current research on the relationship between stress and depression?
+- Do you have any suggestions for improving your life or health?
+- How can you help yourself to cope better?
+- Is there a specific treatment that you would like to see your doctor do?
+- Are you worried about how your life will be affected by the changes in your environment?
+- Does it seem like you are not getting enough sleep?
+- Have you been experiencing any of the above symptoms?
+- If so, what might be causing them?
+- Can you give me some tips on how to improve your life?
+
+================================================================================

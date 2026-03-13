@@ -1,0 +1,335 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[791, 601, 330, 1628, 418, 728, 15, 2827, 289, 3609]
+first_step_topk_probs=[0.14869798719882965, 0.1411515772342682, 0.13398800790309906, 0.08384755253791809, 0.08384755253791809, 0.07171861827373505, 0.04269924759864807, 0.03459068015217781, 0.03283517435193062, 0.028085410594940186]
+first_step_topk_text=[' would', ' will', ' is', ' might', ' was', ' may', ',', ' named', ' in', ' asked']
+
+[New tokens 1] count=89 first30=[578, 699, 269, 5369, 299, 342, 2621, 289, 419, 263, 27775, 17, 382, 929, 330, 1114, 6323, 289, 269, 3984, 298, 483, 2861, 374, 269, 27775, 672, 922, 406, 388]
+[Full output 1]
+Once upon a time, a curious child has had the opportunity to be taken in by a stranger. The child is very interested in the room and can talk with the stranger about what he or she likes and feels.
+- How does your child feel when you're alone?
+- When do you come home from school?
+- What are some of the things that happen at school?
+What do you think is happening in your child's classroom? Share your thoughts below!
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 1134, 1112, 17, 698, 330, 12092, 289, 269, 7913, 288, 269, 9556, 15, 351, 269, 1179, 5358, 288, 269, 4549, 338, 473, 68, 298, 330, 12091]
+[Full output 2]
+Paris is the capital of the province of the same name. It is situated in the centre of the province, on the right bank of the river Aurea and is surrounded by three districts: the town of Arno (the capital), the town of Braga (the outlying district) and the town of Sestri, which is also known as Sestri.
+The main road from Rome to Cilicia passes through the town of Aulia. The city was founded in the 3rd century BC by the Romans, who built a new town at the site of the ancient Roman city of Rome.
+The city has a long history. In the 6th century AD it was the seat of the Aetolian dynasty, who ruled the region until the 7th century AD. At the beginning of the 9th century AD, the Romans invaded the area and conquered it. They then moved on to settle in the city, where they built a great number of churches and buildings. The city became a major centre for the production of woollen cloths and also the manufacture of textiles. The city grew rapidly during the 11th and 12th centuries. During the Middle Ages, the city's economy was heavily dependent on agriculture. It was one of the most important cities in
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 357, 483, 342, 3020, 359, 269, 1701, 288, 795, 7527, 17, 1220, 1373, 15, 1936, 269, 1759, 3823, 29, 202, 202, 63, 7018, 94, 17317, 96, 202, 68]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector that can be written as the sum of two vectors. For example, consider the following matrix:
+
+\begin{bmatrix}
+a & b \\
+c & d
+\end{bmatrix} = \begin{bmatrix}{1 & 0 & 1\\0 & 0 & 0\\0 & 1 & 0\\1 & 0& 0\\0& 0& 1\end{matrix}}
+
+This means that if we have two vectors $$a$$ and $$b$$, their product will always be zero. This means that any nonzero vector in this new matrix must also be zero! In other words, no matter how hard you try to solve the system of equations, you will never get a result like $$\lambda_1 = 0$$ or $$\lambda_2 = -1$$.
+
+The reason why eigenvalues are important is because they tell us which direction a matrix goes in. If a matrix has only one column (i.e., its transpose), then it will always have a unique eigenvalue. In fact, if you have two columns of your original matrix, you can always find a different one for each column without having to compute the determinant.
+
+So now you know what an eigenvalue is – it's simply a number that tells
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 491, 395, 1798, 9845, 1420, 1085, 5546, 3069]
+first_step_topk_probs=[0.35298600792884827, 0.15340714156627655, 0.1382313072681427, 0.10873257368803024, 0.08211292326450348, 0.02750438265502453, 0.023525744676589966, 0.0211984571069479, 0.02012263797223568, 0.017211802303791046]
+first_step_topk_text=[' use', ' can', ' have', ' are', ' learn', ' rely', ' allow', ' model', ' describe', ' attempt']
+
+[New tokens 4] count=256 first30=[395, 885, 299, 5951, 1623, 16, 7128, 2061, 17, 382, 3355, 2877, 3722, 760, 2269, 330, 299, 1798, 806, 299, 9847, 298, 24007, 870, 707, 263, 2079, 15, 1047, 16]
+[Full output 4]
+Neural networks are a class of machine learning models that are used to solve real-world problems. The basic idea behind these models is to learn how to combine and classify data into a single, well-defined set of features. This allows us to better understand the underlying structure of the dataset and its relationships with other datasets.
+
+In this article, we will focus on two classes of neural network models: the first one being the multivariate Gaussian and the second one being the SVM. We'll explore both types of models using the example provided in the text snippet.
+
+### Multivariate Gaussian Model
+
+The multivariate Gaussian model consists of three components: (1) a weight matrix, which represents the probability distribution of the data points; (2) a bias vector, which represents a random variable whose values can be estimated from the data; and (3) a activation function, which takes the input data as an argument and returns a value corresponding to the probability of the data being predicted.
+
+We start by defining our multivariate Gaussian variables as follows:
+
+X = [a b c] * p_i + [b d e] * q_j + ... + [c d i] * s_i
+
+Here, a, b, c, d, and e represent the
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 1348, 620, 486, 5951, 637, 91, 65, 21, 552, 798, 92, 333, 843, 34, 202, 202, 7714, 4254, 15, 8337, 202, 202, 7, 22]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# How do you solve 3x^2 - 4y = 5?
+
+May 26, 2015
+
+$3 x + y = 5$
+
+#### Explanation:
+
+First, let's get rid of the "x" and "y". The term $3 x + \frac{1}{4} y$ is called a common factor.
+
+Next, we can divide both sides by $3$ to get $5$.
+
+$\left(\frac{1}{\sqrt{3}}\right) \times \left(\frac{\sqrt{3}}{\sqrt{4}} \right)$
+
+This will give us the answer:
+
+$6 x = 6$
+
+Now we have two solutions for $x$, so we can start solving them individually.
+
+$- 2 x = - 2$
+
+$- 3 x = - 3$
+
+And $- 3 x = 3$
+and $x = - 3$.
+
+So we have found the value of $x$ that satisfies this equation.
+
+The only thing left is to subtract the other one from the first one.
+
+$7 x = 7$
+
+$9 x = 9$
+
+So
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 311, 864, 353, 20, 1341, 353, 21, 2216, 353, 81, 552, 354, 3943, 711, 202, 1465, 330, 263, 1114, 2829, 1373, 17, 3490, 415, 1721, 411, 1418, 299, 1098]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n * (1 / (2 ** (n - 1)))
+
+
+This is a very simple example. Let's say we want to find the number of people who are in a group of 50 people. We would write this as follows:
+
+A = [5, 6, 7]
+B = [4, 3, 2]
+C = [3, 4, 5]
+D = [6, 8, 9]
+E = [0, 0, 0, 1]
+F = [0 for i in range(50)]
+
+# Create an array of integers from 1 to 50
+x = [i for i in D if (i > x) and (i < x)]
+y = [i + (i % 50) for i in F]
+z = [i % 50 for i in E]
+
+# Find the sum of all numbers in the array
+sum_of_numbers = sum([i for i, v in enumerate(x)])
+print("Sum of numbers = " + str(sum_of(x)) + ", number = " +str(sum_number(x)))
+
+We can use the fact that, if you add two numbers together, the result
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 490, 537, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.4903741478919983, 0.4418638050556183, 0.06776200979948044, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', ' if', ' #', '', '#', '', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 354, 647, 353, 20, 1341, 311, 12, 864, 353, 20, 552, 311, 12, 711, 202, 1465, 1392, 483, 342, 885, 299, 1098, 269, 775, 993, 289, 263, 1180, 15]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1 + (1 / n) * (1 - n)
+
+
+This function can be used to find the first number in a list, or it can be used as an input for a recursive function. The function can also be used to solve a problem using recursion. The function has two arguments: the first is the current position of the list and the second is the index of the first element in the list.
+
+The function is defined by the following parameters:
+
+• n (int): the index of a list
+• x (float): the value of the first position in the list
+• y (float): a float value of the second position in the lists
+• k (int): a boolean indicating whether the function should continue in the future
+
+## Example
+
+#include <iostream>
+using namespace std;
+const int N = 10;
+
+void main()
+{
+x = 0;
+y = 0;
+
+
+printf("Fibonacci number %d\n", fib(N));
+}
+
+bool test()
+{
+    if (!is_list(x)) {
+        return false;
+    }
+
+    while (x != N && y != N && x
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 31412, 2590, 1541, 4619, 1906, 2, 1, 0]
+first_step_topk_probs=[0.2988314926624298, 0.2988314926624298, 0.13681502640247345, 0.12328057736158371, 0.06951529532670975, 0.03919816017150879, 0.03352796286344528, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' Cats', ' No', ' There', ' Black', ' All', '', '', '']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 808, 17, 31412, 395, 453, 2645, 1091, 581, 491, 263, 2886, 12153, 15, 614, 2645, 10676, 620, 453, 491, 833, 2419, 6145, 388, 7629, 17, 1109, 491]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is no. Cats are not black because they have a white coat, but black cats do not have any color vision or hearing. They have no color vision in the eye area. So if you look at an animal, it looks black because there's no color vision. If you look at a cat, it looks white because there's nothing to see. If you looked at a dog, it looks gray because there's only a lot of white blood cells on its skin. But if you look back at a cat and look at a dog again, it looks normal because there's none of them in the eye.
+The question is, why did the black cat come from Africa?
+Answer by Vivian A. Tucker
+"Why did the black cats come from Africa?"
+It's because the black cats were brought to the United States. It was a good idea for us to learn more about the history of African people before we got here. I think we should start with the story of the black cats. We had them in the U.S., where they were introduced to the American culture. And then we started to get involved in this industry. And the black cats came into our country because they were brought here.
+There were lots of
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 1012, 843, 409, 1218, 637, 354, 2, 1, 0]
+first_step_topk_probs=[0.46922236680984497, 0.13443446159362793, 0.10915225744247437, 0.08168642222881317, 0.07580474019050598, 0.06815119832754135, 0.06154857575893402, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 4', ' 6', ' 5', ' 2', ' 8', ' 3', ' 1', '', '', '']
+
+[New tokens 9] count=256 first30=[843, 17, 27, 3, 711, 509, 1165, 415, 2073, 330, 2779, 299, 1409, 419, 1186, 4649, 289, 269, 1902, 1365, 973, 15, 2512, 299, 263, 719, 1399, 444, 269, 2176]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 5.8
+
+The world's population is expected to grow by 7 billion in the next 20 years, according to a new report from the World Bank.
+"Global population growth is likely to be much higher than previously thought," said the report, which was released at the World Economic Forum in Davos, Switzerland on Monday.
+Worldwide, about half of all people will live in cities by 2030, with nearly one-third living in cities.
+That means that every year, 1.4 billion people will be living in cities, including more than half of those in developing countries.
+"If we don't change the current patterns, then we are going to see an increase in urban populations," said David Roper, director of the World Bank's International Population Division. "We're not going to see a doubling of the number of people."
+Roper said that's because the global economy has grown faster since the 1960s, and that's why it is important for governments to develop policies that encourage growth.
+He said the report showed that if nations continue to grow at the same rate as they did in the past, their population could rise by 8 percent between now and 2050.
+But he added that the report shows that the pace of growth in
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 783, 2575, 1289, 1509, 1278, 698, 360, 338]
+first_step_topk_probs=[0.6392289400100708, 0.046012941747903824, 0.040395330637693405, 0.0363992303609848, 0.0363992303609848, 0.0345519557595253, 0.03113391250371933, 0.02955385483801365, 0.017555734142661095, 0.015016215853393078]
+first_step_topk_text=[' I', ' The', ' This', ' What', ' We', ' You', ' If', ' It', ' "', ' A']
+
+[New tokens 10] count=256 first30=[2575, 330, 669, 2942, 374, 269, 1759, 7042, 34, 202, 55, 4074, 18, 19090, 268, 29, 356, 3442, 733, 2449, 351, 263, 719, 1554, 339, 751, 689, 15, 298, 383]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience with the following topics?
+Tech/Engineer: I've been working on a new project for some time, and it's definitely worthwhile to have someone else come up with the same idea. We'll be using it as an example of how we can use a high-tech application like a robotics system to make a robot move in real life. It will also help us understand the principles of how robots work and what they can do when they're in control.
+Gender: The first thing that comes to mind about this project is that there are lots of different things going on at the same time. If you're in a company or a university where you want to build a robot, you may want to consider some of these projects. You might have to go into the robotics field, but you don't need to be a robot scientist to get started. There are many ways to start, but the most important part is to understand the fundamentals of how people interact with robots. If you haven't done so already, then you should probably start by learning more about the world around you. Then, if you feel like you can do something useful, try to learn something new. For instance, if you're building a robot that
+
+================================================================================
