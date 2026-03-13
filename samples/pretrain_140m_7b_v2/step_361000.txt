@@ -1,0 +1,334 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[601, 330, 791, 728, 1628, 418, 15, 289, 2827, 483]
+first_step_topk_probs=[0.1943667232990265, 0.18450263142585754, 0.11545880138874054, 0.06858547031879425, 0.06858547031879425, 0.04763161391019821, 0.03876151144504547, 0.03140071779489517, 0.02829439379274845, 0.02420147694647312]
+first_step_topk_text=[' will', ' is', ' would', ' may', ' might', ' was', ',', ' in', ' named', ' can']
+
+[New tokens 1] count=221 first30=[330, 1163, 16852, 419, 269, 4769, 299, 263, 1563, 17, 382, 4769, 330, 1000, 3609, 299, 3408, 1282, 263, 1685, 2351, 357, 5546, 922, 269, 929, 578, 5025, 289, 1258]
+[Full output 1]
+Once upon a time, a curious child is being guided by the teacher to a book. The teacher is then asked to write down a few words that describe what the child has learned in school and the words he or she should use for their own learning. This is an easy way to encourage children to become more self-directed learners.
+The children are given a list of words they have learned from the teacher. They can choose any one of these words as they wish. Then they are given a special "place" where they can write their words on it. If they do not know how to spell their words correctly, they can read them aloud. When they get the place, they will be able to write their words. If they are having trouble with spelling, they may try to help them learn to spell.
+Once the children have completed this activity, they can begin to make their own word list. They can print out a copy of the word list and then take it home to share with the class.
+If you would like to use this idea in your classroom, please contact us at firstname.lastname@example.org
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=98 first30=[269, 9556, 288, 269, 1134, 1112, 17, 698, 330, 658, 269, 8492, 288, 263, 1723, 15, 536, 578, 686, 1231, 7477, 298, 12886, 953, 17, 202, 509, 2868, 330, 12091]
+[Full output 2]
+Paris is the capital of the province of the same name. It is also the seat of a government, which has its own constitution and constitutional system.
+The town is surrounded by three rivers: the Tagus River, the Tagus and the Tacoluia. The Tagus River is the main river in the area. The Tacoluco River runs through the town.
+The towns of Tinca and Lima are located in the municipality. They have their own municipal administration.
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 357, 483, 342, 3020, 359, 269, 1701, 288, 795, 7527, 17, 1220, 1373, 15, 490, 411, 491, 263, 4409, 892, 333, 353, 91, 20, 15, 13621, 91, 81]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector that can be written as the sum of two vectors. For example, if we have a vector x = (x1,...,xn) and a scalar λ = 1, then the eigenvalue is equal to the sum of the individual eigenvalues:
+
+λ = λ1 + λ2 + ... + λn
+
+This means that the total number of linearly independent vectors in the vector space must be zero.
+
+The following table shows how this occurs for each eigenvalue.
+
+Symmetric matrix
+
+The symmetric matrix is also called the conjugate transpose or the transpose of the original matrix. The complex conjugate of a matrix is denoted by i·j where j denotes the imaginary unit. This means that the complex conjugate of the matrix i·j is always equal to the real part of the matrix j. In other words, the complex conjugate is always equal!
+
+Symmetries
+
+A system of linear equations is said to be symmetry if there exists a bijective function f : R → R such that every element of the system has exactly one solution. Symmetry implies that all possible solutions are unique; it does not imply that the system has no solutions.
+
+Example
+
+Consider the system
+
+Ax=b
+
+where A is
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 491, 395, 1798, 9845, 1420, 5546, 3069, 14071]
+first_step_topk_probs=[0.308775931596756, 0.22590528428554535, 0.16527584195137024, 0.11874743551015854, 0.05255093052983284, 0.031216563656926155, 0.0216794703155756, 0.0216794703155756, 0.016709022223949432, 0.013566667214035988]
+first_step_topk_text=[' use', ' can', ' have', ' are', ' learn', ' rely', ' allow', ' describe', ' attempt', ' incorporate']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 298, 3235, 269, 8020, 17, 1658, 2269, 395, 1431, 885, 289, 4855, 2465, 15, 913, 581, 395, 885, 299, 24007, 3519, 1728, 351]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data and predict the outcome. These models are often used in machine learning, where they are used to classify objects based on their features.
+
+## How do we define a classifier?
+
+In this section, we will look at how to determine whether a given classifier is good or bad for different purposes.
+
+### A classifier is a classifier that can predict the value of a function using only one input (the input vector). The input is a set of vectors, each representing a possible outcome of the model.
+
+The input vector is called the classifier. We can think of a classifier as a list of numbers:
+
+• The number of classes
+• The value of the function
+• The probability of success
+• The loss function
+• And so on.
+
+Each classifier has its own set of values, which may differ from the original classifier. For example, if the first classifier was a binary classification, then it would have the following values:
+
+1. 0.5
+2. 1.0
+3. 2.0
+4. 3.0
+
+If the second classifier was a combination of binary and binary, then it could have been a combination of both.
+
+For example,
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 5427, 6649, 29, 8163, 16, 27, 5427, 202, 807, 1401, 8644, 626, 655, 15551, 66, 22513, 202, 1018, 1656, 202, 1018, 306, 202, 1018]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+import os
+import re
+import time
+from datetime import date
+from django.db import models
+from django import forms
+from django._utils import timezone
+from django_extensions.db.fields import CharField
+from django.__name__ import __version__, models as django_models_models
+from django2.utils import timezone
+
+
+class Keyword(models.Model):
+    """
+    A key for a word.
+    """
+
+    name = models.CharField(max_length=100)
+    slug = models.SlugField()
+    short_title = models.TextField(blank=True)
+    long_title = CharField(blank=False)
+    short_description = CharField()
+    text = models.ImageField(upload_to='words/', blank=True)
+
+    def __str__(self):
+        return self.short_title
+
+
+class Image(models.TextArea):
+    """A text area for images."""
+
+    name = CharField('Name', max_length=50)
+    slug  = CharField("slug", max_length = 50)
+    description = CharField().edition()
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 311, 864, 353, 20, 490, 311, 1319, 409, 861, 643, 1107, 354, 12, 711, 202, 1465, 330, 263, 1114, 2829, 1373, 17, 3490, 415, 1721, 411, 1418, 299, 1098]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n * (1 if n % 2 == 0 else 1)
+
+
+This is a very simple example. Let's say we want to find all integers between 1 and 10 inclusive, such as 5, 9, 11, 13, 17, 19, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122,
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 537, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.49977076053619385, 0.42747658491134644, 0.07275273650884628, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', ' #', '', '#', '', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 354, 647, 353, 20, 1341, 311, 12, 864, 353, 21, 2216, 353, 81, 552, 354, 687, 711, 202, 2141, 483, 620, 482, 289, 263, 993, 288, 2722, 17, 1289]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1 + (1 / n) * (2 ** (n - 1))
+
+
+We can do this in a number of ways. We can use the following functions to compute the Fibonacci numbers:
+
+fib(10) = fib(100)
+fib_sum(10, 10) = fib_sum(100)
+
+
+The first two are called recursive calls and the last one is called the base case. In the example above, we have an integer value of 10. If we want to compute the value of the Fibonacci numbers, we can use the formula:
+
+Fib_Sum(10, 5) = fib_(10) + fib_(5)
+Fib_(10, 0) = fib_{10}(0) + fib_{10}(-1)
+FIB_(10, 1) = fib_[0] + fib_[1]
+FIB_Sum(0, 1) += fib_[0]*FIB_(1, 1)
+FBIC_(0, 1, 2) = fib_.csc_prime()
+FBICA_(0, 2, 3) = fib._bic_prime()
+
+
+The last step is to compute the remainder after subtracting the Fibonacci
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[31412, 382, 13676, 2590, 1541, 4619, 2, 3, 1, 0]
+first_step_topk_probs=[0.354174941778183, 0.354174941778183, 0.14611221849918365, 0.05721837282180786, 0.04645764082670212, 0.04186185076832771, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Cats', ' The', ' Yes', ' No', ' There', ' Black', '', '', '', '']
+
+[New tokens 8] count=126 first30=[31412, 395, 2645, 1091, 581, 491, 263, 2645, 12153, 17, 382, 10978, 288, 269, 3191, 330, 2886, 17, 698, 415, 453, 2645, 289, 2419, 15, 614, 383, 415, 2886, 17]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Cats are black because they have a black coat. The fur of the cat is white. It's not black in color, but it's white.
+The color of a cat is determined by its coat color. Black cats are black when their coats are dark. White cats are black on the head, chest and back. White cats look white with black markings. If you look at a cat from any other color, you'll see that the body is black.
+What do you think is the reason why the color of a dog is black? Do you think that color is a sign of a disease or an infection?
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 843, 1012, 637, 354, 409, 1218, 2050, 382, 0]
+first_step_topk_probs=[0.37866008281707764, 0.12039835751056671, 0.09775573760271072, 0.08380451798439026, 0.0715196281671524, 0.06991825997829437, 0.06444459408521652, 0.06117397919297218, 0.05232487991452217, 0.0]
+first_step_topk_text=[' 4', ' 5', ' 6', ' 3', ' 1', ' 2', ' 8', ' One', ' The', '']
+
+[New tokens 9] count=65 first30=[2050, 4081, 1715, 288, 269, 2056, 993, 288, 10941, 330, 202, 54, 5742, 339, 269, 993, 288, 10941, 289, 269, 7240, 17, 202, 509, 3533, 330, 619, 4081, 17, 202]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One hundred percent of the total number of apples is
+Solve for the number of apples in the bag.
+The answer is one hundred.
+Can you complete this problem by joining me at a group of 5 or 7 students?
+If you could use all four basic arithmetic operations, how would you do it?
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 2575, 1278, 783, 1289, 1509, 698, 360, 3919]
+first_step_topk_probs=[0.6715219020843506, 0.03836818411946297, 0.03642098233103752, 0.03457260504364967, 0.03281804546713829, 0.03281804546713829, 0.03281804546713829, 0.027349181473255157, 0.022791670635342598, 0.017114680260419846]
+first_step_topk_text=[' I', ' The', ' What', ' If', ' This', ' We', ' You', ' It', ' "', ' My']
+
+[New tokens 10] count=256 first30=[2575, 330, 669, 2942, 374, 269, 1759, 7042, 34, 202, 16, 2575, 330, 669, 1466, 1481, 351, 269, 2690, 920, 4083, 298, 6952, 34, 202, 16, 3189, 486, 2505, 357]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience with the following topics?
+- What is your current research on the relationship between stress and depression?
+- Do you feel that stress can be a positive or negative force in your life? How do you know?
+- How does stress affect your relationships with others?
+- Does stress have an impact on how you interact with others, as well as your family members?
+- Is stress a normal part of aging? How do we deal with it?
+- Are there any other ways to manage stress?
+- When you are stressed, what are some things you can do to help yourself cope?
+- If you're depressed, what are you going to do about it?
+What kinds of activities will you enjoy doing each day?
+- Will you have any friends who are willing to take care of you?
+- Have you ever had a difficult time with someone who was not able to handle their stress?
+How long has this been happening for you?
+Do you feel stressed today?
+Are you at risk for becoming stressed again?
+Does stress make you more likely to develop depression?
+Do stress have a negative effect on your health?
+Have you experienced any changes in your mood?
+Is stress making you feel sad
+
+================================================================================
