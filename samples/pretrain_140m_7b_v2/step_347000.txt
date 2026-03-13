@@ -1,0 +1,318 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[601, 330, 1628, 791, 728, 418, 483, 15, 289, 578]
+first_step_topk_probs=[0.23233292996883392, 0.16997839510440826, 0.14539024233818054, 0.13100747764110565, 0.11205663532018661, 0.033821187913417816, 0.030475446954369545, 0.028217077255249023, 0.019071048125624657, 0.016312330961227417]
+first_step_topk_text=[' will', ' is', ' might', ' would', ' may', ' was', ' can', ',', ' in', ' has']
+
+[New tokens 1] count=209 first30=[330, 1163, 16852, 419, 269, 4769, 299, 263, 1563, 17, 382, 4769, 330, 1000, 3609, 299, 3408, 1282, 263, 1685, 2351, 357, 5546, 269, 2811, 17, 202, 509, 929, 330]
+[Full output 1]
+Once upon a time, a curious child is being guided by the teacher to a book. The teacher is then asked to write down a few words that describe the story.
+The child is given a piece of paper and a pencil. He or she writes down the words on the paper. If the child reads the word correctly, he or she will be able to read it again. When the child does this, the teacher will ask questions about the words as well. For example: "What do you think of the story?"
+A story can also be told using different words and phrases. For example, in a story about a child who is going to go to the park, the teacher might say, "Let's go to the zoo." This is similar to saying, "We are going to see the zoo."
+When children have completed their comprehension skills, they begin to make predictions based on what they know. They may even predict when they will arrive at the zoo. This helps them understand how important it is for the child to know the answer to a question.
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 4455, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.9422484636306763, 0.05775153636932373, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', ' France', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 7535, 281, 8191, 17, 698, 330, 658, 269, 8492, 288, 269, 412, 405, 295, 4830, 288, 7535, 281, 405, 5597, 15, 263, 11718, 536, 418, 3199, 289]
+[Full output 2]
+Paris is the capital of the province of Catalonia. It is also the seat of the comunicado of Catalunya, a municipality which was established in 1786.
+
+Geography
+The municipality is located in the north-eastern part of the Province of Barcelona, and has an area of . The population density is 645 inhabitants/km2 (1,080 /sq mi). There are 143 housing units at an average density of 137 per square kilometre (940 /sq mi); the average population density is 992 per square kilometer (385 /sq mi) in 2006. there were 889 inhabited buildings in 2007.
+
+Economy
+It is a major agricultural center with the production of dairy products, meat, eggs, fruits, vegetables, and grains.
+
+Dairy farming is one of the main industries in Catalonia and other parts of Spain.
+
+Transportation
+
+There is a railway station on the Autogenero de la Ciudad del Perú.
+
+Religion
+From the 16th century to the 20th century, Catalan Christians maintained their religion in Catalunas. They have been known as the "Christians" because of their Christian faith.
+
+
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 357, 483, 342, 3020, 359, 269, 1701, 288, 795, 7527, 17, 1220, 1373, 15, 490, 411, 491, 263, 4409, 400, 333, 353, 68, 15, 286, 12, 298, 1418]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector that can be written as the sum of two vectors. For example, if we have a vector v = (a, b) and want to find the eigenvalues of the equation x^2 + y^2 - z^2 = 1, we need to know the values of x and y that make up this equation.
+
+The general form of an eigenvalue is:
+
+x = λ1 + λ2
+
+where λ1 and λ2 are the eigenvalues of a linear system, and λ1 and m are the parameters for the system.
+
+For a given system of equations, there will always be one solution (the value of x), and the system will always have one solution (λ1).
+
+Let's try to understand how these equations work mathematically. Let's say we have the following system of equations:
+
+$$y_1=3x+5$$
+
+To solve this system, we can use the method of "stabilization" or "derivative". When we get this system into a system of equations (which we call a "linear system"), we can write it in terms of the variables:
+
+$$\begin{array}{l}y_1&=-\lambda_{1}\end{
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 491, 395, 1798, 5546, 1420, 9845, 14071, 3069]
+first_step_topk_probs=[0.35443729162216187, 0.17094887793064117, 0.12506885826587677, 0.0854925736784935, 0.06354711204767227, 0.037748564034700394, 0.030649442225694656, 0.021285613998770714, 0.02020535245537758, 0.0191799309104681]
+first_step_topk_text=[' use', ' can', ' have', ' are', ' learn', ' describe', ' allow', ' rely', ' incorporate', ' attempt']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 298, 3235, 269, 8020, 17, 1658, 2269, 1420, 500, 299, 1557, 806, 269, 870, 330, 5256, 289, 1623, 16, 7128, 6863, 15, 857]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data and predict the outcome. These models allow us to understand how the data is distributed in real-world situations, such as weather forecasting or population growth.
+
+In this article, we will explore how to use a neural network to learn new information from existing data using an example from the popular video game. We will also examine some methods for training neural networks based on these concepts.
+
+## Learning with Neural Networks
+
+To begin our journey into the world of neural networks, let's first define what it means to learn a neural network. A neural network consists of a set of neurons (neurons) and a set of rules (or parameters). The rule set describes how the neuron will behave when its input changes. For example, if you have two different inputs, say f(x) and g(x), then you would expect that they should act differently depending on whether f(x + 1) = g(x) or f(x - 1) = f(x). This behavior is called a "learning rate."
+
+The output of a neural network is the sum of the outputs of all possible inputs combined. For example:
+
+$$A_1 + A_2 + ... + A_n
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 1348, 299, 1062, 263, 377, 19192, 288, 2851, 34, 202, 202, 44, 873, 4532, 299, 1062, 263, 4873, 288, 2851, 298, 356, 491, 263]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# How to make a Piece of paper?
+
+I am trying to make a piece of paper and I have a lot of pieces. I need to make a pie with all the different pieces.
+
+How can I make a piece with all the pieces?
+
+• It's not as easy as it sounds – Mithoron Oct 20 '16 at 14:31
+• @Mithoron I think you are asking for a piece of the same shape, but for some reason the paper is not cut up like this. – user41710 Oct 21 '16 at 12:33
+• You can use the piece of paper you want to make. For example, if you wanted to make a new piece of paper that has the same shape as the original one, you could do so by cutting out a square from the paper and putting it on top of the square. This would be called a pie. – Mithora Oct 22 '16 at 16:05
+• The problem is that the paper is too big for my needs. So I would like to have a piece of space around the paper so that the pie will fit better in the space. The paper is also too large for my needs, so I'd
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[490, 311, 861, 643, 29, 341, 622, 354, 1246, 1107, 29, 341, 622, 311, 864, 353, 20, 1341, 353, 81, 552, 354, 687, 711, 202, 755, 482, 16028, 15, 411]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     if n == 0:
+         return 1
+     else:
+         return n * (1 / (n - 1))
+
+
+In this tutorial, we will learn how to calculate the factorial of a number. The first step is to create a function that takes an integer as input and returns the factorial for that integer. We can use the built-in function f() to calculate the number of ways to choose between two integers. For example, the number of combinations of two people who have the same birthday are 3x3x2x2x1x1x0x0x5x6x7x8x9x10x11x12x13x14x15x16x17x18x19x20x21x22x23x24x25x26x27x28x29x30x31x32x33x34x35x36x37x38x39x40x41x42x43x44x45x46x47x48x49x50x51x52x53x54x55x56x57x58x59x60x61b1b4a4b5c4d5e5f9a76c8d8b77a96
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.6394359469413757, 0.3605640232563019, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 354, 647, 353, 20, 1341, 311, 12, 864, 353, 20, 552, 311, 12, 711, 202, 1465, 1392, 483, 342, 885, 299, 1098, 269, 775, 993, 289, 287, 4067, 15]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1 + (1 / n) * (1 - n)
+
+
+This function can be used to find the first number in an array, or it can be used as a function to find the next element. The function takes two arguments: the index of the current element and the length of the array. If the array is empty, then the function returns None.
+
+The function is called with two arguments:
+
+• The first argument is the index of a new element, which is the length of an array.
+
+• the second argument is the length.
+
+### Example
+
+#include <iostream>
+using namespace std;
+int main() {
+int[] f = [1,2,3,4];
+for (int i=0; i<10; i++) {
+f[i] = 1;
+}
+return 0;
+}
+
+
+### Output
+
+If you want to output the first 10 numbers, you need to use the following code:
+
+print("Here are the results: ")
+print("Fibonacci numbers: ")
+for i in range(1,10):
+if (f[i-1] == 2) {
+print("There
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 31412, 2590, 4619, 1541, 2660, 1906, 0, 1]
+first_step_topk_probs=[0.3169485032558441, 0.2573418617248535, 0.14510959386825562, 0.10077650845050812, 0.07372967153787613, 0.05120423808693886, 0.028872955590486526, 0.026016715914011, 0.0, 0.0]
+first_step_topk_text=[' The', ' Yes', ' Cats', ' No', ' Black', ' There', ' Some', ' All', '', '']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 808, 17, 31412, 395, 453, 545, 2645, 1091, 581, 395, 839, 289, 269, 3494, 17, 202, 509, 2597, 339, 482, 330, 357, 851, 288, 500, 1118, 357]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is no. Cats are not all black because they are only in the wild.
+The reason for this is that most of us know that there are many types of cats that live in the wild and that most of them have a few black features. For example, black cats tend to be active at night, but they may also have dark eyes or ears. They do not have any outward markings, but they do have black hair on their head. Their tails are white and they have a long tail. Some cats are more than 10 years old when they are young. They will even look like their parents. They are also very social with other cats and their family. Some cats come from a large colony and spend the majority of their lives in one place. Others go into another area of the world where they live together.
+For example, some cats may live in a small group called a colony. They live in an urban environment and they live in different areas within the city. A colony may consist of several hundred individuals. There may be hundreds of different types of cats living in a colony. Most colonies are small and open to the outside world.
+Most people don't realize that cats are black. Cats have a wide range of colors and patterns. They can
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 843, 637, 409, 1012, 1218, 354, 2, 1, 0]
+first_step_topk_probs=[0.5219655632972717, 0.10940992832183838, 0.08077429234981537, 0.08077429234981537, 0.08004602044820786, 0.06846698373556137, 0.05856291204690933, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 4', ' 5', ' 3', ' 2', ' 6', ' 8', ' 1', '', '', '']
+
+[New tokens 9] count=256 first30=[843, 17, 27, 3, 711, 509, 1165, 415, 2073, 330, 2779, 299, 1409, 419, 1186, 4649, 289, 269, 1902, 1365, 973, 15, 2512, 299, 263, 719, 1399, 444, 269, 2176]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 5.8
+
+The world's population is expected to grow by 7 billion in the next 20 years, according to a new report from the World Bank.
+"It's not just about people," said Peter O'Toole, director of the World Bank's Population Division. "We're looking at how we can make a difference."
+The report was released today, but the head of the World Development Report, Thomas Sowell, said the report was based on "a real world analysis that uses data from around the world and gives us a picture of what the world will look like in the next two decades."
+The study found that the world will have an estimated 4.6 billion people by 2050.
+This figure includes the world's most populous countries such as China, India, Brazil, South Africa, Russia, Pakistan, and Afghanistan.
+However, it also includes the largest countries with an estimated 1.2 billion people -- including Australia, Indonesia, Japan, the United States, and Mexico.
+"These are the biggest increases in the world's population since the Industrial Revolution," said O'Tooles. "They're the biggest changes in the global economy."
+The world's per capita income for 2011 was $7,500, compared
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 1289, 698, 1509, 783, 360, 3919, 2575, 1278]
+first_step_topk_probs=[0.828087568283081, 0.024094458669424057, 0.022871654480695724, 0.022871654480695724, 0.022283731028437614, 0.02171090990304947, 0.01630312390625477, 0.015077927149832249, 0.015077927149832249, 0.011621013283729553]
+first_step_topk_text=[' I', ' The', ' We', ' It', ' You', ' This', ' "', ' My', ' What', ' If']
+
+[New tokens 10] count=256 first30=[356, 3442, 733, 289, 263, 3313, 288, 9327, 374, 1284, 3694, 415, 1258, 17, 202, 26783, 29, 2575, 620, 486, 1645, 406, 330, 3573, 34, 202, 47, 12839, 29, 776]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I've been in a lot of trouble with my son's school.
+Student: What do you think he is doing?
+Larry: He's having trouble with his math, so he can't even read the numbers.
+Student (Teacher): He's not getting any better than you.
+Larry, thank you for your help.
+Assar: You're just trying to get him to understand what's going on and to have him work through it.
+Student(Teacher): How did you feel when you were struggling with this problem?
+Laura: It was really hard. We had a few students who didn't understand the concept of addition. And they were very frustrated because we didn't know how to count or add. So we started looking at what's happening inside the classroom.
+Students: How many problems does it take to solve this problem? Can you tell me about them?
+Linda: The teacher told us that we could use our knowledge of subtraction to answer the problem. That would be great if we could use the same number of problems as the other two.
+Linda was working on his math skills.
+Assayee: There are only a couple of problems that we had to solve.
+Student
+
+================================================================================

@@ -1,0 +1,312 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[601, 791, 330, 1628, 728, 418, 15, 288, 2827, 289]
+first_step_topk_probs=[0.21707479655742645, 0.20605827867984772, 0.10469748079776764, 0.09434034675359726, 0.07271094620227814, 0.062192972749471664, 0.03652825579047203, 0.024355115368962288, 0.023119095712900162, 0.020832037553191185]
+first_step_topk_text=[' will', ' would', ' is', ' might', ' may', ' was', ',', ' of', ' named', ' in']
+
+[New tokens 1] count=256 first30=[330, 1163, 16852, 419, 269, 4769, 299, 263, 1563, 17, 382, 4769, 330, 1000, 3609, 299, 3408, 1282, 263, 1685, 2351, 357, 5546, 269, 2811, 17, 776, 388, 1024, 330]
+[Full output 1]
+Once upon a time, a curious child is being guided by the teacher to a book. The teacher is then asked to write down a few words that describe the story. He or she is told to take out a piece of paper and write down the name of the person who wrote it. If the child doesn't know what a character is, he or she can be asked to tell her the name of that character.
+A small group of children will have to decide how they want to talk about the characters in the story. They may choose to draw pictures, make a picture, create a word bank, or use the word bank as a starting point for writing their own stories. For example, you might have the child draw a picture of a girl with a tall woman on one side and a girl with an ordinary man on the other. Or you could have the child create a wordbank with the word bank on the left side and the word bank in the right side. You might have the children write down the names of the characters in their books.
+Some children will be very good at drawing and writing stories because they are already familiar with the text. Others will not. And some children will not even know the difference between a story and a storybook. A storybook is a storybook that tells a
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 1134, 1112, 17, 698, 330, 12092, 289, 269, 7913, 288, 269, 9556, 15, 289, 269, 7913, 298, 3446, 16, 10674, 288, 269, 9556, 17, 202, 509]
+[Full output 2]
+Paris is the capital of the province of the same name. It is situated in the centre of the province, in the centre and south-east of the province.
+The territory of the province is divided into two parts:
+The first part consists of the territory of the municipalities, which are located in the centre, east of the city of Rome, and north of the district of Viareggio, which is located in the south-west of the province and is bounded by the river Sangallo to the west, the lake of Santa Maria Maggiore to the east, and the river Tivoli to the south. The territory of the municipality is divided into four sections, the western section is separated from the eastern section by the river Tavola, while the eastern section is separated by the lake of Sangalli.
+The province has a population of 5,523,730 inhabitants (2011). Of this, 4,064,619 live in the provinces of the same and 4,987,340 live in the municipalities of the same.
+The municipality comprises the following districts:
+The municipal unit is composed of the following localities:
+- Viaregata, a village on the left bank of the Sang
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1239, 357, 483, 342, 998, 419, 4007, 269, 18956, 288, 263, 3823, 17, 535, 482, 7349, 411, 601, 1798, 806, 299, 1098, 269, 18956, 298, 28069, 288, 263, 3823]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be found by finding the eigenvalues of a matrix. In this lesson we will learn how to find the eigenvalues and eigenvectors of a matrix in a more detailed manner than just using a calculator.
+What is an eigenvalue? An eigenvalue is a number that, when multiplied by itself, gives the original vector or variable. When you multiply two vectors together, you get back the same vector or variable that was originally multiplied by itself. An example of an eigenvalue would be the product of two numbers that are not equal. For example, if you were working with a 3x3 matrix, the determinant would be 1, so the matrix would have 2 entries for each row and column. The determinant of a matrix is the product of its rows and columns. It's always positive, meaning it has no zeroes.
+The next step is to find the eigenvectors of the given matrix. To do this, we'll use the formula:
+If you remember the formula for the determinant, which tells us the length of a diagonal matrix, we can find out the eigenvectors by multiplying the matrix by itself. If you know the inverse of a matrix, you can also find the eigenvectors by taking the inverse of the matrix and multiplying it by itself. This process is called the "e
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 491, 395, 1798, 1420, 5546, 9845, 3069, 1991]
+first_step_topk_probs=[0.3660394549369812, 0.17654486000537872, 0.12916299700737, 0.10439816862344742, 0.05328517407178879, 0.03165275231003761, 0.02439572848379612, 0.023157646879553795, 0.017848296090960503, 0.016942497342824936]
+first_step_topk_text=[' use', ' can', ' have', ' are', ' learn', ' allow', ' describe', ' rely', ' attempt', ' provide']
+
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 298, 3235, 269, 8020, 17, 1658, 2269, 395, 1431, 885, 289, 4855, 2465, 15, 913, 581, 395, 885, 299, 24007, 3519, 1728, 351]
+[Full output 4]
+Neural networks are a class of machine learning models that can be used to model complex data and predict the outcome. These models are often used in machine learning, where they are used to classify objects based on their features.
+
+In the context of the current study, we are interested in finding out whether there is a relationship between the number of neurons in a neuron and its activation function. In other words, if we have a neural network with many neurons, then it would be more likely that the neuron will increase its activation function by one or more neurons (i.e., increasing the number of neuron). We will then use this information to develop an algorithm for optimizing the neural network.
+
+### Optimization of Neurons¶
+
+The goal of optimization is to find a sequence of values that maximizes the value of the objective function, i.e., maximize the value of a neuron at any given time. This can be achieved using a matrix-vector multiplication, which is an iterative process. The matrix-vector product of two matrices is called the gradient. A gradient is a vector that represents the change in the output of a function over time. The gradient is a scalar that represents the derivative of the function evaluated at each point in space.
+
+We first consider the case where the input is
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 1348, 620, 486, 5951, 637, 91, 65, 21, 552, 798, 92, 333, 843, 34, 202, 202, 7714, 5653, 15, 9281, 202, 202, 7, 22]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# How do you solve 3x^2 - 4y = 5?
+
+May 31, 2018
+
+$3 x - 4 y = 5$
+
+#### Explanation:
+
+We can use the property of square roots to find the value of $x$ if we know that $x \ne 0$. We then have $\sqrt{x} = 1$ and therefore $x = \frac{1}{0}$
+
+The product of two squares is equal to $\frac{1}{\sqrt{x}}$, so $x \times \frac{3}{\sqrt{y}} = \frac{\sqrt{x}}{\sqrt{y}}$
+
+Now we can say that $x = 2 \sqrt{y}$ and $y = \frac{(4)}{\sqrt{5}} = \sqrt{7}$.
+
+So we get $x = 4 \sqrt{6}$, which means $x = - 4$
+
+Hence $x = -\frac{4}{\sqrt{6}}$
+
+$\Rightarrow x = -\frac{- 4}{\sqrt{3}}$
+
+$- \frac{4}{3} = - \frac{8}{3}$
+
+$-\frac{16
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[622, 311, 864, 353, 20, 1341, 353, 21, 2216, 353, 81, 552, 354, 3943, 711, 202, 1465, 330, 263, 1114, 2829, 1373, 17, 3490, 415, 1721, 411, 1418, 299, 1098]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n * (1 / (2 ** (n - 1)))
+
+
+This is a very simple example. Let's say we want to find all the prime numbers between 1 and 10, where each number is between 0 and 9. We can do this by using the following code:
+
+# Generate random integers from 1 to 10
+for i in range(10):
+    print("i", i)
+    for j in range(9):
+        if j == i:
+            print("j", j)
+        else:
+            print()
+
+
+Let's see how it works. First, we will create an array of integers, which we'll call n[0] and n[1]. The first thing we'll do is to check if the array is empty. If it is, we'll just use the first element of the array as our first element. Otherwise, we'll simply write a new line. To get rid of the last element, we just use the next element.
+
+In [3]:
+print("First element:", n[0])
+print("Second element:", n[-1])
+print()
+
+Next, we'll add a second element to the array. This is the same as before, except that instead of writing
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 339, 0, 6, 3, 5, 4, 1, 2]
+first_step_topk_probs=[0.5585179924964905, 0.38788264989852905, 0.05359934642910957, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', ' for', '', '#', '', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 354, 17, 19, 647, 311, 864, 353, 20, 552, 311, 12, 711, 202, 509, 775, 1993, 330, 299, 3296, 269, 1986, 288, 269, 31393, 3756, 15, 536, 330, 263]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1.0 + n * (1 - n)
+
+
+The first step is to determine the size of the Fibonacci sequence, which is a sequence with one element. We need to find the length of the Fibonacci number, so we can use the recurrence relation for the sequence:
+
+fib(n) = 1 + 2*fib(3) + 3*fib(-2) + ... + fib(N-1) + fib(-1) + 2*Fib(N) + ...
+= 1 + 2 + 3 + ... + N
+
+Next, we will compute the values of the Fibonacci numbers using the recurrence relation:
+
+x = fib(5)
+x = 2*fiv(3)
+x += 2*fv(4)
+x -= 2*fuv(3)
+
+
+Here are some examples of how this works:
+
+Example 1: Find the value of x when f(x)=0.
+
+Solution:
+
+For x=0, f(0)=0 and f(x)=-x^2+2x+1
+= 0 + x^2 + x + 1
+= x^2 - x + 1
+
+
+
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 31412, 2590, 4619, 1541, 2, 3, 1, 0]
+first_step_topk_probs=[0.436519980430603, 0.287771612405777, 0.10697382688522339, 0.08685596287250519, 0.04413120821118355, 0.037747420370578766, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' The', ' Yes', ' Cats', ' No', ' Black', ' There', '', '', '', '']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 808, 17, 202, 14405, 10676, 395, 269, 851, 1488, 1875, 288, 6783, 487, 3191, 289, 269, 1560, 1705, 17, 1109, 491, 263, 1114, 1059, 2484, 288, 1937]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is no.
+Black cats are the most common species of domesticated cat in the United States. They have a very high rate of disease, and even some veterinary practices do not recommend this breed of cat for human consumption. There are many other breeds of domesticated cats, including the Chihuahua, African, European, American, and American breeds.
+In fact, there are over 400 different breeds of domestic cats in the United State. Some of these breeds include the African coatis, the European, the Asian, the Japanese, the Australian, the Cajun, the Chinese, the Pima, the Mojave, the Irish, the Mexican, the Canary Islander, the Spanish, the Zebra, the Irish (or European), the African, the Siberian, the Australian Indian, the Sumatran, the Mongolian, the Canari, the Malaysian, the Thai, the Taino, the Sindhi, the Maltese, the Yoruba, the Nubian, the Javanese, the Zulu, the Kruger, the Burmese, the Malagasy, the Kurdish, the Chamois, the Zambesi, the Bant
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 409, 843, 354, 1012, 1218, 637, 2050, 0, 1]
+first_step_topk_probs=[0.39668864011764526, 0.12727826833724976, 0.11972945183515549, 0.10788530856370926, 0.07112235575914383, 0.07112235575914383, 0.06166636571288109, 0.0445072278380394, 0.0, 0.0]
+first_step_topk_text=[' 4', ' 2', ' 5', ' 1', ' 6', ' 8', ' 3', ' One', '', '']
+
+[New tokens 9] count=256 first30=[2050, 13032, 330, 798, 10941, 298, 795, 934, 667, 330, 1218, 10941, 17, 202, 43, 499, 509, 993, 288, 10941, 298, 934, 1468, 430, 486, 491, 330, 798, 15, 649]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: One apple is 4 apples and two buys is 8 apples.
+HintThe number of apples and buggies you have is 4, so the total number of apples you have is 2x4=8 apples
+A) 4x2
+B) 8x2
+C) 12x2
+D) 6x2
+E) 9x2
+Explanation:
+We know that the number of apples in a bag is given by the sum of all the numbers in the bag plus one times the number of each number in the bag. So, the total number is 12x2 = 48 apples
+
+Now let's think about how we can find out the number of ways to choose between 3 apples and 2 buggies. We know that there are three possible choices for the number of items we need to pick from the bag (3 x 2), which means there are 3 * 2 = 6 different options. Therefore, there are 6 x 2 = 6 possible combinations for the number 3 apples and 1 buggy on the bag.
+
+So, the number of combinations for choosing 3 apples and one buggy is 6!
+
+To figure this out, let's try some examples together. First, consider picking 3 apples and
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 2575, 1278, 382, 1289, 1509, 783, 15255, 698, 13676]
+first_step_topk_probs=[0.710149347782135, 0.0341213159263134, 0.02995554357767105, 0.02843528613448143, 0.026298338547348976, 0.024321990087628365, 0.022494159638881683, 0.022494159638881683, 0.01826382428407669, 0.012683974578976631]
+first_step_topk_text=[' I', ' What', ' If', ' The', ' We', ' You', ' This', ' Thanks', ' It', ' Yes']
+
+[New tokens 10] count=194 first30=[2575, 330, 269, 1839, 1194, 299, 5930, 383, 34, 202, 55, 366, 9243, 29, 356, 3442, 733, 3573, 383, 339, 973, 15, 298, 356, 1755, 847, 491, 263, 3313, 288]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is the best way to handle it?
+Thermo: I've been doing it for years, and I don't have a lot of experience with it. It's not a big deal to me. But if you can find a way to use it, then I think you'll be able to help.
+Narrator: The heat from the sun can make your skin more sensitive to sunlight, so keep an eye on your body as much as possible.
+Bathe: I like it because it helps keep my skin healthy.
+Thermi: If you're going to go out in the winter, you need to get outside in the heat. That means wearing a hat, a scarf or some kind of clothing that keeps your skin cool. You also need to wear sunscreen.
+Assigned Editor: You may have to leave a comment below this one and give us a call at 785-818-8800.
+
+================================================================================

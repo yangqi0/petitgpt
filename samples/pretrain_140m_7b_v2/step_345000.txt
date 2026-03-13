@@ -1,0 +1,312 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[601, 330, 1628, 728, 791, 483, 15, 418, 289, 578]
+first_step_topk_probs=[0.24927419424057007, 0.16433162987232208, 0.1405602991580963, 0.13342685997486115, 0.1266554594039917, 0.032697658985853195, 0.029329899698495865, 0.025201071053743362, 0.014970079064369202, 0.014970079064369202]
+first_step_topk_text=[' will', ' is', ' might', ' may', ' would', ' can', ',', ' was', ' in', ' has']
+
+[New tokens 1] count=211 first30=[330, 1163, 16852, 419, 269, 4769, 299, 263, 1563, 17, 382, 4769, 330, 1000, 3609, 299, 3408, 1282, 263, 1685, 2351, 357, 5546, 922, 269, 929, 578, 5025, 672, 269]
+[Full output 1]
+Once upon a time, a curious child is being guided by the teacher to a book. The teacher is then asked to write down a few words that describe what the child has learned about the book and the book itself.
+The child is then given a number of instructions on how to read the book. The child then is asked to read the number aloud, making sure that it is clear from the beginning of the book that the child has already been taught about the book. This is done in an orderly fashion as each child is told the following:
+- Name the three main parts of the book:
+A. The book's name
+B. The book and its contents
+C. The book itself
+D. The book is complete with all the details that are needed for understanding the story
+E. The book has a picture inside it
+F. The book contains all the information that is required for understanding the book
+G. The book includes all the main points of the story
+H. The book begins with the main point and ends with the details of the story
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 1134, 1112, 15, 298, 330, 12092, 289, 269, 7913, 288, 269, 9556, 17, 202, 509, 2317, 330, 1414, 339, 686, 6251, 1241, 15, 2665, 339, 686]
+[Full output 2]
+Paris is the capital of the province of the same name, and is situated in the centre of the province.
+The city is known for its fine art, especially for its artworks of all types, such as the famous "Court" of the ancient city of Alexandria, which was the first church of the world. The city also has a famous temple of Apollo (the god of music) and an enormous statue of Apollo, which was dedicated to him in a very beautiful manner.
+Situated on the south-eastern coast of Africa, it is one of the most important ports of the Mediterranean and the largest port in the world. It is connected with the rest of the Mediterranean by the Aegean Sea.
+The climate of Sardinia is tropical, with temperatures ranging from 10°C to 20°C. The average annual temperature is about 25°C, with a minimum of 30°C. Summer temperatures are quite hot, with an average daily maximum of 34°C. Winter temperatures can be cold, but the average minimum is only 16°C.
+Sport in Sardinia includes football (soccer), hockey (socce), tennis (soccledo), volleyball (soclo), basketball (soccol
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 1623, 993, 357, 483, 342, 3020, 359, 263, 1677, 288, 795, 1623, 1890, 17, 382, 18956, 395, 269, 1992, 288, 269, 4349, 892, 339, 536, 269, 3581, 578, 269]
+[Full output 3]
+In linear algebra, an eigenvalue is a real number that can be written as a product of two real numbers. The eigenvalues are the values of the variable x for which the equation has the form (x - a) = 0.
+
+For example, consider the equation x2 + 3x - 2 = 0. In this case, x = 0 and y = 0. We have:
+
+(0)(0) = 0
+(1)(1) = 1
+(2)(3) = 6
+(4)(5) = 15
+
+This means that there must be at least one value of x such that x2 + x + 3x > 0. Since the function is not continuous, it cannot be differentiable at any point in its domain.
+
+It would be nice if we could find a solution to this problem. However, it would be very difficult to find solutions to this kind of problem because the system of equations is not able to solve all the equations simultaneously. For example, consider x2 + 5x + 7 = 0. If we want to find the solution to this system, we need to know how fast each equation is changing. This is called the "linear approximation".
+
+To find the solution, we use the following steps:
+
+Step 1
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 491, 395, 1798, 5546, 9845, 1420, 3069, 14071]
+first_step_topk_probs=[0.33232012391090393, 0.16028152406215668, 0.13013842701911926, 0.11515911668539047, 0.07730547338724136, 0.03539302200078964, 0.03189179673790932, 0.018944522365927696, 0.015381749719381332, 0.014601127244532108]
+first_step_topk_text=[' use', ' can', ' have', ' are', ' learn', ' describe', ' rely', ' allow', ' attempt', ' incorporate']
+
+[New tokens 4] count=256 first30=[395, 885, 299, 5951, 2175, 2061, 289, 2497, 15, 5766, 298, 5376, 17, 202, 509, 775, 2738, 288, 269, 1085, 418, 2657, 419, 2703, 435, 269, 1442, 288, 3409, 15]
+[Full output 4]
+Neural networks are a class of machine learning models that are used to solve various problems in science, engineering and mathematics.
+The first version of the model was developed by researchers at the University of California, Berkeley (UCSB) and published in the journal Nature. The second version is named after the physicist John G. Bose, who studied it extensively during his doctoral studies at the University.
+"This is the first time we have been able to demonstrate how neural networks can be used to solve a problem," said Dr. Michael Kostenko, a postdoctoral researcher at UCSB's Department of Computer Science and Engineering. "We've shown that our neural network can learn from its environment."
+Kostenko and his team are using this model to design an algorithm for generating random numbers from a set of data points. These numbers are then used to train a neural network to learn from their environment.
+In this case, the network learns from its environment. This is achieved through the use of a neural network architecture called a neural network representation.
+Using the representation, the network can learn to make predictions about the future states of the data points based on the predictions made in the previous training phase. In other words, the network will predict the next point, and if it predicts that the next point is
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=112 first30=[263, 647, 286, 3, 711, 6, 1348, 620, 486, 5951, 637, 91, 65, 21, 552, 798, 92, 333, 843, 34, 202, 202, 7714, 5653, 15, 9281, 202, 202, 7, 22]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# How do you solve 3x^2 - 4y = 5?
+
+May 31, 2018
+
+$3 x { - 6} y = 5$
+
+#### Explanation:
+
+$4 x { - 1} y = 0$
+
+$5 x { - 2} y = 1$
+
+$- 2 x y = 1$.
+
+$y = \frac{1}{2}$
+
+$- \frac{y}{2} = \frac{- 1}{2}$
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[622, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' return', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=217 first30=[622, 311, 13, 81, 711, 202, 509, 28045, 1392, 330, 3821, 359, 4446, 29, 202, 202, 20, 17, 17872, 269, 1677, 288, 545, 3097, 9044, 656, 299, 311, 17, 202]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     return n*n
+
+
+The factorial function is defined as follows:
+
+1. Compute the product of all positive integers up to n.
+2. Find the greatest common divisor (GCD) of the two numbers.
+3. Multiply each term in the GCD by the GCD of the two terms.
+4. Divide both sides by the GCF.
+5. Multiply the result by the GCP.
+6. Add the result back to the original number.
+7. Solve for the GCD.
+8. Check if the resulting value is divisible by the GCC.
+9. If so, add it to the GCP and divide by the GRC.
+10. Return the remainder when dividing by the GCEC.
+11. Return the quotient of the two results.
+12. Sum the result from the GCE and the GCI.
+13. The GEC will be divided by the GCI to get the GCD, which is the same as the GCI's GCD.
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.5901494026184082, 0.4098505973815918, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[622, 354, 490, 311, 1396, 409, 1107, 552, 20, 711, 202, 1465, 330, 269, 1134, 359, 269, 775, 1373, 2080, 15, 1722, 411, 817, 263, 1108, 993, 288, 5937, 17]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     return 1 if n < 2 else -1
+
+
+This is the same as the first example above, except we use a different number of arguments. For instance, we can have a function that returns the first 3 digits of the Fibonacci sequence:
+
+fib(3)
+print("Fibonacci Sequence")
+for i in range(0, 3):
+    print(fib(i))
+
+Note that this function has no output (it just outputs the first 3 bits of the Fibonacci numbers). We need to wrap it up by writing a function that takes two arguments: the first argument and the second argument. The first argument is the value of the Fibonacci number, and the second is the length of the sequence. The first input argument is the current value of the sequence, and the subsequent input argument is a list of the values for the Fibonacci numbers.
+
+The third example is a little more complicated, but the code below shows how to write a function that works with integers. We will now look at some other examples of functions with integer inputs.
+
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+int n = 5;
+int x[4];
+x[4]
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[382, 13676, 31412, 2590, 1541, 4619, 1906, 783, 0, 1]
+first_step_topk_probs=[0.440462201833725, 0.19142396748065948, 0.1261945366859436, 0.06754706799983978, 0.06754706799983978, 0.05484388396143913, 0.029355816543102264, 0.022625433281064034, 0.0, 0.0]
+first_step_topk_text=[' The', ' Yes', ' Cats', ' No', ' There', ' Black', ' All', ' This', '', '']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 808, 17, 202, 14405, 10676, 395, 269, 851, 1488, 1875, 288, 3191, 289, 269, 1560, 1705, 15, 374, 611, 702, 2759, 2153, 874, 2997, 374, 780, 17]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is no.
+Black cats are the most common species of cat in the United States, with more than 50 million people living with them. Black cats are also one of the few animals that do not have a coat of fur or other markings. They are usually found in the wild on roaming packs.
+The average lifespan of a black cat is about 13 years. However, some of these cats may live to be around 30 years old.
+Why does this happen?
+This behavior is believed to be related to the fact that black cats are an aggressive breed. They will defend their territory if attacked by a predator, but they will also attack if they encounter a predator. It's very important for you to understand why cats are so aggressive and how they act.
+You should know that black cats can be aggressive towards other cats and humans alike. You should know that the reason black cats are so dangerous is because they don't want to be near humans.
+Black cat bites can cause serious medical problems such as shock, dizziness, headache, nausea, vomiting, and even death.
+How long can black cats last?
+It takes one to two weeks for a black cat to shed its tail and become a white tailed cat. It takes a year
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 843, 409, 1218, 354, 1012, 637, 744, 0, 1]
+first_step_topk_probs=[0.34080764651298523, 0.13346219062805176, 0.11389799416065216, 0.09764302521944046, 0.09268765151500702, 0.08798367530107498, 0.07241440564393997, 0.061103448271751404, 0.0, 0.0]
+first_step_topk_text=[' 4', ' 5', ' 2', ' 8', ' 1', ' 6', ' 3', ' $', '', '']
+
+[New tokens 9] count=65 first30=[843, 10941, 298, 798, 934, 667, 17, 202, 5707, 1467, 2613, 734, 7054, 1100, 916, 482, 619, 1334, 202, 6018, 15, 1100, 835, 263, 2994, 2613, 734, 7054, 202, 2474]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 5 apples and 4 buys.
+See another brain teaser just like this one...
+Or, just get a random brain teaser
+If you become a registered user you can vote on this brain teaser, keep track of
+which ones you have seen, and even make your own.
+Back to Top
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 1278, 382, 2575, 1289, 1509, 783, 15255, 698, 1541]
+first_step_topk_probs=[0.7595431804656982, 0.032257482409477234, 0.027591289952397346, 0.026882043108344078, 0.025517771020531654, 0.021826505661010742, 0.020718812942504883, 0.017721740528941154, 0.014768552966415882, 0.011991128325462341]
+first_step_topk_text=[' I', ' If', ' The', ' What', ' We', ' You', ' This', ' Thanks', ' It', ' There']
+
+[New tokens 10] count=256 first30=[356, 3442, 733, 289, 263, 3313, 288, 9327, 374, 269, 953, 15, 298, 356, 491, 808, 2877, 922, 299, 620, 672, 383, 17, 202, 45, 267, 10960, 29, 356, 483]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I've been in a lot of trouble with the system, and I have no idea what to do about it.
+Jonathan: I can't get the system to work, but I'm not sure if it will be able to handle it. I'm not very good at doing this, but I could help.
+Ruth: It's a very important part of the system, so I'd like to keep it as simple as possible.
+Assent: How would you make it work?
+Joel: Well, I just don't want to take it seriously, but I think that it would be a really good idea for a system that is used by someone who doesn't know how to program.
+Josh: What are some things you might try?
+Josh Hearst: I would start with something simple, like writing a program. I would write the program as follows:
+
+1. Write a function that takes a string as input and returns a value.
+2. Use the function as the argument to the function.
+3. Write a procedure that takes a number as input and calls the function on the result.
+4. Repeat steps 1 through 4 until all the results are returned.
+5. Repeat steps 5
+
+================================================================================
