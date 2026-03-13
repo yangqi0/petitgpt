@@ -1,7 +1,7 @@
 {
-  "ckpt": "outputs/pretrain_140m_7b_v2/step_342000.pt",
+  "ckpt": "outputs/pretrain_140m_7b_v2/step_344000.pt",
   "bench": "pretrain/bench_v1.eval.jsonl",
-  "time_s": 361.428,
+  "time_s": 416.969,
   "acc_arithmetic": 0.0,
   "acc_syllogism": 0.6666666666666666,
   "acc_code": 0.3333333333333333,
@@ -27,7 +27,7 @@
       "ok": false,
       "prompt": "You are a precise assistant.\nRules for arithmetic questions:\n- Output ONLY the final numeric answer.\n- No explanation, no extra words, no punctuation.\n\nJohn has 3 apples and buys 2 more. How many apples does he have?\nAnswer:\n\n",
       "gold": "5",
-      "gen": " 3 3 4 5",
+      "gen": " 3 3 2 2",
       "detail": "pred=3.0 gold=5"
     },
     {
@@ -81,7 +81,7 @@
       "ok": true,
       "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n- Output ONLY the function body (no def line).\n- Do NOT use 'yield'.\n- Do NOT use semicolons ';'.\n- Write exactly ONE statement per line (no two statements on one line).\n- End your output with exactly: ###EOC###\n\nComplete the following Python function:\n\ndef add(a, b):\n    ",
       "gold": null,
-      "gen": " return a + b\n\ndef main():\n     print(add(1, 2))\n\nmain()",
+      "gen": " return a + b\n\ndef main():\n    print(add(2, 3))\n\nif __name__ == '__main__':\n    main()",
       "detail": ""
     },
     {
@@ -90,8 +90,8 @@
       "ok": false,
       "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n- Output ONLY the function body (no def line).\n- Do NOT use 'yield'.\n- Do NOT use semicolons ';'.\n- Write exactly ONE statement per line (no two statements on one line).\n- End your output with exactly: ###EOC###\n\nComplete the following Python function:\n\ndef factorial(n):\n    ",
       "gold": null,
-      "gen": " return n*n\n\ndef factorial_1(n):\n     return n*n\n\ndef factorial_2(n):\n     return n*n\n\ndef factorial_3(n):\n     return n*n\n\ndef factorial_4(n):\n     return n*n\n\ndef factorial_5(n):\n     return n*n\n\ndef factorial_6(n):\n     return n*n\n\ndef factorial_7(n):\n     return n*n\n\ndef factorial_8(n):\n     return n*n\n\ndef factorial_9(n):\n     return n*n\n\ndef factorial_10(n):\n     return n*n\n\ndef factorial_11(n):\n     return n*n\n\ndef factorial_12(n):\n     return n*n\n\ndef factorial_13(n):\n     return n*n\n\ndef factorial_14",
-      "detail": "Traceback (most recent call last):\n  File \"/tmp/tmpjjn8j3_a/tmp_eval.py\", line 4, in <module>\n    assert factorial(0)==1\nAssertionError\n\n[CODE_SNIPPET]\ndef factorial(n):\n    return n*n\n\nassert factorial(0)==1\nassert factorial(1)==1\nassert factorial(5)==120\nassert factorial(8)==40320\n"
+      "gen": " if n == 0:\n     return 1\n     else:\n     return n * (n - 1) / 2\n\ndef factorial_1(n):\n     if n == 0:\n     return 1\n     else:\n     return n * (n - 1) / 2\n\ndef factorial_2(n):\n     if n == 0:\n     return 2\n     else:\n     return n * (n - 1) / 2\n\ndef factorial_3(n):\n     if n == 0:\n     return 3\n     else:\n     return n * (n - 1) / 2\n\ndef factorial_4(n):\n     if n == 0:\n     return 4\n     else:\n     return n * (n - 1) / 2\n\ndef factorial_5(n):\n     if n == 0:\n     return 5\n     else:\n     return n * (n - 1) / 2\n\ndef factorial_6(n):\n    ",
+      "detail": "File \"/tmp/tmpo5fyxnf8/tmp_eval.py\", line 4\n    else:\n    ^^^^\nSyntaxError: invalid syntax\n\n[CODE_SNIPPET]\ndef factorial(n):\n    if n == 0:\n         return 1\n         else:\n         return n * (n - 1) / 2\n\nassert factorial(0)==1\nassert factorial(1)==1\nassert factorial(5)==120\nassert factorial(8)==40320\n"
     },
     {
       "id": "code_fib_0001",
@@ -99,8 +99,8 @@
       "ok": false,
       "prompt": "You are a coding assistant.\nRules:\n- Output ONLY Python code.\n- Do NOT write any explanation.\n- Do NOT write extra functions.\n- Do NOT write a main block.\n- Implement exactly the requested function.\n- Output ONLY the function body (no def line).\n- Do NOT use 'yield'.\n- Do NOT use semicolons ';'.\n- Write exactly ONE statement per line (no two statements on one line).\n- End your output with exactly: ###EOC###\n\nComplete the following Python function:\n\ndef fib(n):\n    ",
       "gold": null,
-      "gen": " return n*n\n\ndef fib(n):\n     return fib(n-1)\n\ndef fib(n):\n     return fib(n-2)\n\ndef fib(n):\n     return fib(n-1)\n\ndef fib(n):\n     return fib(n-2)\n\ndef fib(n):\n     return fib(n-1)\n\ndef fib(n):\n     return fib(n-2)\n\ndef fib(n):\n     return fib(n-1)\n\ndef fib(n):\n     return fib(n-2)\n\ndef fib(n):\n     return fib(n-1)\n\ndef fib(n):\n     return fib(n-2)\n\ndef fib(n):\n     return fib(n-1)\n\ndef fib(n):\n     return fib(n-2)\n\ndef fib(n):\n    ",
-      "detail": "Traceback (most recent call last):\n  File \"/tmp/tmpb5uv4jph/tmp_eval.py\", line 6, in <module>\n    assert fib(2)==1\nAssertionError\n\n[CODE_SNIPPET]\ndef fib(n):\n    return n*n\n\nassert fib(0)==0\nassert fib(1)==1\nassert fib(2)==1\nassert fib(7)==13\n"
+      "gen": " return n*n\n\ndef fib(n):\n     return fib(n)\n\ndef fib(n):\n     return fib(n)\n\ndef fib(n):\n     return fib(n)\n\ndef fib(n):\n     return fib(n)\n\ndef fib(n):\n     return fib(n)\n\ndef fib(n):\n     return fib(n)\n\ndef fib(n):\n     return fib(n)\n\ndef fib(n):\n     return fib(n)\n\ndef fib(n):\n     return fib(n)\n\ndef fib(n):\n     return fib(n)\n\ndef fib(n):\n     return fib(n)\n\ndef fib(n):\n     return fib(n)\n\ndef fib(n):\n     return fib(n)\n\ndef fib(n):\n     return fib(n)\n\ndef fib(n",
+      "detail": "Traceback (most recent call last):\n  File \"/tmp/tmpwzm7qugb/tmp_eval.py\", line 6, in <module>\n    assert fib(2)==1\nAssertionError\n\n[CODE_SNIPPET]\ndef fib(n):\n    return n*n\n\nassert fib(0)==0\nassert fib(1)==1\nassert fib(2)==1\nassert fib(7)==13\n"
     }
   ]
 }
