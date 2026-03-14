@@ -11,15 +11,18 @@ bos_id=2 eos_id=3
 avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
 banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
 first_step_eos_prob=0.000e+00
-first_step_topk_ids=[601, 791, 330, 728, 1628, 483, 418, 15, 10444, 289]
-first_step_topk_probs=[0.2585658133029938, 0.1618063598871231, 0.13840031623840332, 0.11237227916717529, 0.10666938871145248, 0.0440056137740612, 0.024813810363411903, 0.0247016791254282, 0.019124768674373627, 0.016358280554413795]
-first_step_topk_text=[' will', ' would', ' is', ' may', ' might', ' can', ' was', ',', ' asks', ' in']
+first_step_topk_ids=[601, 791, 330, 728, 1628, 483, 15, 418, 10444, 289]
+first_step_topk_probs=[0.2537272572517395, 0.16726742684841156, 0.12891803681850433, 0.11616480350494385, 0.11616480350494385, 0.038910336792469025, 0.023166118189692497, 0.023113731294870377, 0.016910366714000702, 0.014464203268289566]
+first_step_topk_text=[' will', ' would', ' is', ' may', ' might', ' can', ',', ' was', ' asks', ' in']
 
-[New tokens 1] count=130 first30=[330, 1163, 16852, 419, 269, 4769, 299, 263, 1563, 17, 382, 4769, 330, 1000, 3609, 299, 3408, 1282, 263, 1685, 2351, 357, 5546, 269, 2811, 17, 202, 509, 929, 330]
+[New tokens 1] count=165 first30=[330, 1163, 16852, 419, 269, 4769, 299, 263, 1563, 17, 382, 4769, 330, 1000, 3609, 299, 3408, 1282, 263, 1685, 2351, 357, 5546, 269, 2811, 17, 202, 509, 929, 330]
 [Full output 1]
 Once upon a time, a curious child is being guided by the teacher to a book. The teacher is then asked to write down a few words that describe the story.
-The child is given the words to make up a book and they are given to read through with their eyes closed. They are told that the book is a story about a boy who has been reading books for hours. They are then asked to read through the words in order to tell them what they have read.
-The teacher asks the child to say the words, and the child reads them out loud. When the child is ready, he or she will be asked to read the book aloud to the class.
+The child is given a piece of paper and a pencil with a marker. He or she has to decide which word is the story word and which is the story itself. The child can choose from one of the following:
+- A picture that describes the story
+- A description of the story
+Each child will have an individual list of words they need to write about their own story. Each child will be given a small piece of paper. They will then read each word aloud to the class and record their ideas on a chart. This helps them understand what the story is all about.
+This lesson was developed by a student in the Fall 2010 class at the University of Virginia.
 
 ================================================================================
 [Prompt 2] (prompt_tokens=6)
@@ -34,13 +37,15 @@ first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
 first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
 
-[New tokens 2] count=69 first30=[269, 9556, 288, 269, 1134, 1112, 17, 698, 330, 12092, 289, 269, 7913, 288, 269, 5566, 15, 351, 269, 4069, 288, 269, 5566, 288, 10068, 742, 17, 202, 509, 7694]
+[New tokens 2] count=256 first30=[269, 9556, 288, 7535, 281, 8191, 15, 298, 330, 658, 269, 8492, 288, 269, 412, 1838, 17, 202, 202, 509, 11718, 3399, 269, 11834, 93, 292, 76, 353, 2038, 6607]
 [Full output 2]
-Paris is the capital of the province of the same name. It is situated in the centre of the island, on the coast of the island of Crete.
-The territory of the municipality is divided into two parts:
-- The coastal region and the inland region.
-- The island of Cretes.
-This article was written by Kieran Kennedy.
+Paris is the capital of the province of Catalonia, and is also the seat of the comune.
+
+The municipality contains the frazioni (subdivisions, mainly villages and hamlets) of Arnoa, Cervignana, Cernes, Curette, Cavaia, Cajamarca, Chivas, and Valladolid. The comune is located in the north-east of the province, on the river Saguenay, a tributary of the Aosta River.
+
+Cuenca has an area of . Of this area, or 26.6% is used for agricultural purposes, while or 38.5% is forested. Of the rest of the land, or 7.0% is settled (buildings or roads), or 0.4% is either rivers or lakes and or 0.1% is unproductive land.
+
+Of the built up area, housing and buildings made up 2.2% and transportation infrastructure made up 1.3%. Out of the forested land, all of the forested population (0.9%) was made up of all trees and the pastureland and the marsh were used for hardy plants. Of the agricultural land, 13.7
 
 ================================================================================
 [Prompt 3] (prompt_tokens=7)
@@ -55,25 +60,29 @@ first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
 first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
 
-[New tokens 3] count=256 first30=[263, 4409, 357, 483, 342, 3020, 359, 269, 1701, 288, 795, 7527, 17, 1220, 1373, 15, 1936, 269, 4409, 400, 333, 353, 21, 15, 798, 504, 536, 578, 263, 8878]
+[New tokens 3] count=226 first30=[263, 4409, 288, 1623, 1890, 374, 1623, 645, 3007, 299, 269, 1623, 993, 17, 202, 202, 2152, 10294, 8537, 288, 263, 3823, 338, 330, 287, 3190, 288, 686, 17911, 1440]
 [Full output 3]
-In linear algebra, an eigenvalue is a vector that can be written as the sum of two vectors. For example, consider the vector v = (2, 4), which has a magnitude of 2 and a direction of 1. The eigenvalues of this vector are 0, 1, 2, ... , 3, and so on.
+In linear algebra, an eigenvalue is a vector of real numbers with real part equal to the real number.
 
-For a vector of length n, its associated eigenvector is called an eigenvector of the matrix A. If the matrix A is Hermitian, then it is Hermitian; if the matrix is not Hermitian, it is not Hermitaribial.
+An eigenvector of a matrix A is an element of its symmetric group that has the same eigenvalues as the original matrix.
 
-The matrix A has a special property: any square matrix with all entries equal to zero must have the same number of rows and columns. In other words, if A is Hermitic, then A must also be Hermitian.
+The set of all invertible matrices is called the matrix algebra. In this case, the matrix algebra is defined by the following definition:
 
-Example:
-Given a square matrix A = [1, -1, -2, 2], find the eigenvalues of A.
+Let A be a square matrix with entries in the form (A + B)n where n is any integer. If there exists an invertible matrix A such that A = I, then A is called a Hermitian matrix. The set of all non-zero eigenvalues of A is denoted by E and is denoted by λ or E for short.
 
-A= [[1, -3],[4, 6]]
+Example 1: For a 2x2 matrix A, find the eigenvalues of A.
 
-Here, A is a square matrix with the same number and size as the original matrix.
+Solution:
 
-Matrix B is a square symmetric matrix with ones on the diagonal and zeros elsewhere.
+For a 2x1 matrix A, we have:
 
-If A is Hermite-like, then B is Hermite symmetric.
+λ = (a - b)(c - d)
 
+Since λ is an eigenvalue of A, we can write:
+
+= λ(b - c)
+
+Therefore, λ is an eigenvector of A.
 
 ================================================================================
 [Prompt 4] (prompt_tokens=11)
@@ -84,15 +93,19 @@ bos_id=2 eos_id=3
 avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
 banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
 first_step_eos_prob=0.000e+00
-first_step_topk_ids=[817, 483, 491, 395, 1420, 5546, 1798, 9845, 3069, 1991]
-first_step_topk_probs=[0.3095652163028717, 0.18388964235782623, 0.12770868837833405, 0.12400387972593307, 0.05268526077270508, 0.03473225235939026, 0.03296959400177002, 0.02289690636098385, 0.02289690636098385, 0.018590835854411125]
-first_step_topk_text=[' use', ' can', ' have', ' are', ' allow', ' describe', ' learn', ' rely', ' attempt', ' provide']
+first_step_topk_ids=[817, 483, 491, 395, 1420, 1798, 5546, 3069, 9845, 1991]
+first_step_topk_probs=[0.32470405101776123, 0.19288229942321777, 0.12715592980384827, 0.11720108985900879, 0.04486900195479393, 0.036430779844522476, 0.03458188846707344, 0.022797800600528717, 0.021640794351696968, 0.015832742676138878]
+first_step_topk_text=[' use', ' can', ' have', ' are', ' allow', ' learn', ' describe', ' attempt', ' rely', ' provide']
 
-[New tokens 4] count=148 first30=[395, 885, 299, 5951, 2061, 289, 269, 1462, 288, 10314, 8755, 17, 382, 3355, 2877, 330, 299, 817, 14457, 8119, 359, 263, 1085, 339, 870, 298, 1000, 4116, 780, 299]
+[New tokens 4] count=256 first30=[483, 342, 885, 299, 1085, 2281, 870, 298, 3235, 269, 8020, 17, 382, 3355, 2877, 330, 299, 817, 14457, 8119, 359, 263, 1194, 299, 1798, 444, 269, 1968, 870, 15]
 [Full output 4]
-Neural networks are a class of machine learning models that are used to solve problems in the field of artificial intelligence. The basic idea is to use neural networks as a model for data and then apply them to the real world.
-In the first part of this article, we will look at how neural networks can be used to predict an object's position based on its current state and velocity. In the second part of this series, we will learn about the concept of 'advection' which is the process by which an object moves around the surface of the fluid.
-The next part of this post will cover the main parts of neural network modeling. We will also explore some of the applications of neural networks in various fields such as bioinformatics, molecular biology, and medicine.
+Neural networks are a class of machine learning models that can be used to model complex data and predict the outcome. The basic idea is to use neural networks as a way to learn from the input data, and then apply them to predict the output using the learned network.
+
+In this case, we will use a different kind of neural network called a neural network, which is an artificial neural network. Neural networks are used in many fields such as image processing, machine learning, etc., where the input is a sequence of images, and the output is a list of possible sequences of words. Neural nets are used for this purpose because they have many similarities with natural language processing.
+
+The neural network is the simplest type of machine learning algorithm. It uses a linear function to compute the probability distribution of the inputs. This function is known as the "linear function" and it has two parameters: the input size (the number of training examples) and the hidden layer size (the size of the hidden layers). The input size is the number of training samples, and the hidden state is the number the hidden units are in the hidden layer.
+
+For example, suppose we have a set of images, each of which contains one word. If we had a neural network that would take in the word "house", we
 
 ================================================================================
 [Prompt 5] (prompt_tokens=17)
@@ -126,39 +139,29 @@ Created on Tue Aug  5 14:43:07 2019
 import math
 from typing import List
 class Solution:
-    def shortestPathSum(self, nums: List[int]) -> int:
+    def shortestDistance(self, nums1: List[int], nums2: List[List[int]]) -> int:
         """
-        :type nums: List["int"]
+        :type nums1: list[int]
+        :typenums2: list[list[int]]
         :rtype: int
         """
-        if len(nums) == 0 or len(nums[0]) != 0:
-            return 0
-
-        left = 1
-        right = len(nums)-1
-        
-        while left <= right and nums[left] < nums[right]:
-            if nums[left]-nums[left] > 0:
-                left += 1
+        dp = [0 for _ in range(len(nums1))]
+        for i in range(1, len(nums1)):
+            if nums1[i] < nums2[i]:
+                dp[i] += 1
             else:
-                right -= 1
-                
-        return max(left, right)
+                dp[nums1[i]] -= 1
+        return dp[-1][-1]
 
-    def shortestPath(self, num: int) -> int: 
+    def shortestDistance_square(self, n: int) -> int: 
         """
-        :rtype int: int
-        :return: int
-        '''
-        if num >= len(num):
-            return 0
-        nums = [num]
-        res = []
-        for i in range(len(nums)):
-            nums.append(i)
-            res.append(nums[i])
-            
-        return sum(res)/len(res)
+        :param n:
+        :return:
+        """
+
+        dp = [[0 for _  in range(n)] for _  Inorder(range(n)) for _ in xrange(n)]
+        for i, j in enumerate(n):
+            if i == 0 or
 
 ================================================================================
 [Prompt 6] (prompt_tokens=19)
@@ -191,32 +194,27 @@ from datetime import date, timedelta
 import json
 import os
 
-# Importing the modules we need to create our class.
-class DateTime():
+# Importing the modules we need to create our project
+import pandas as pd
 
-    def __init__(self, start_date=None, end_date=datetime.now()):
-        self._start_date = start_date
-        self._end_date = end_date
-        if not isinstance(start_date, str):
-            raise TypeError('Start date must be string')
+# Creating the data structure for our project
+data = pd.read_csv('Data/pizza_data.csv')
 
-        self._start = start_time
-        self._ends = []
-        self._last_day = None
-        self._days = {}
+# Setting up the variables and setting them in the project
+data['date'] = data['Date'].apply(lambda x: date.today().year + x)
 
+# Adding the data to the data structure
+data['time'] = data[['Pizza', 'Sauce', 'Banana', 'Orange', 'Lemon', 'Mango', 'Dandelion', 'Salmon']]
 
-    def add_day(self, day):
-        self._dates[self._start] = day
-        self._sum += 1
-        self._total += 1
-        if self._sum >= 0 and self._days is not None:
-            self._days[self._sum - 1] = self._days['0'] + self._days["1"]
-            self._total -= 1
-            self._ends.append(self._ends[-1])
-            self._last = self._ends[-2]
+# Adding the data to our data structure
+print("Adding data")
+data['data'] = data.append(pd.DataFrame(data=data))
 
-    def add_
+# Using the Data Structure to create our data structure and get the data
+print("Creating the data structure")
+data = data.drop(['date'], axis=1)
+
+## Filling the data
 
 ================================================================================
 [Prompt 7] (prompt_tokens=19)
@@ -231,10 +229,10 @@ avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
 banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
 first_step_eos_prob=0.000e+00
 first_step_topk_ids=[490, 622, 537, 0, 6, 3, 5, 4, 1, 2]
-first_step_topk_probs=[0.5049633979797363, 0.3891904950141907, 0.10584607720375061, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_probs=[0.4848182201385498, 0.4368574917316437, 0.07832423597574234, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 first_step_topk_text=[' if', ' return', ' #', '', '#', '', '"', '!', '', '']
 
-[New tokens 7] count=256 first30=[622, 354, 647, 353, 20, 1341, 311, 12, 864, 353, 21, 2216, 311, 552, 354, 12, 711, 202, 6, 12602, 354, 29, 202, 6, 11922, 29, 311, 333, 798, 15]
+[New tokens 7] count=102 first30=[622, 354, 647, 353, 20, 1341, 311, 12, 864, 353, 21, 2216, 311, 552, 354, 12, 711, 202, 1465, 330, 269, 1134, 359, 269, 775, 1373, 15, 1722, 411, 491]
 [Full output 7]
 Write a Python function that computes Fibonacci numbers recursively:
 
@@ -242,36 +240,12 @@ def fib(n):
      return 1 + (1 / n) * (2 ** n - 1)
 
 
-# Example 1:
-# Input: n = 4, f = 2, g = 3
-# Output: 3
-# Explanation: The first two terms are 0 and 1. The third term is 1, and the fourth term is 2.
-#
-# Note: You may assume the first two terms of the series are positive integers.
-# The first two are even, so the second term is odd.
-# 
-# 	We have to find the sum of all the terms in the series.
-#  
-# 			Input: n = 2, f = 1, g = 1
-# Output :
-# 				Sum of all the elements in the series
-# 					Input: 3
-"""
+This is the same as the first example, except we have a helper function called fibonacci() which returns the value of the Fibonacci number, even if it's not equal to the original value. The Fibonacci number is computed using the recursive definition above.
 
-from collections import deque
-class Solution:
-    def fib(self, n):
-        """
-        :type n: int
-        :rtype: List[int]
-        """
-        result = []
+# Use the helper function to find the value of n in the Fibonacci sequence:
 
-        # find the largest value in the list
-        max_value = 0
-        for i in range(len(n)):
-            if n[i] > max_value:
-                max_value +=
+fib = fib(n)
+print(fib)
 
 ================================================================================
 [Prompt 8] (prompt_tokens=23)
@@ -284,16 +258,17 @@ avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
 banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
 first_step_eos_prob=0.000e+00
 first_step_topk_ids=[13676, 382, 2590, 31412, 3, 2, 4, 5, 0, 1]
-first_step_topk_probs=[0.5896318554878235, 0.25625303387641907, 0.10571517050266266, 0.04839992895722389, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_probs=[0.6120233535766602, 0.21596220135688782, 0.1217765063047409, 0.05023793503642082, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 first_step_topk_text=[' Yes', ' The', ' No', ' Cats', '', '', '!', '"', '', '']
 
-[New tokens 8] count=256 first30=[13676, 17, 31412, 395, 2645, 1091, 581, 491, 263, 2886, 12153, 298, 395, 649, 1204, 357, 269, 10978, 330, 453, 1121, 261, 5257, 17, 1109, 395, 658, 1114, 2466, 17]
+[New tokens 8] count=256 first30=[13676, 17, 31412, 395, 2645, 1091, 581, 491, 263, 2886, 12153, 17, 1109, 395, 658, 11400, 1091, 581, 491, 6078, 4887, 298, 6133, 17, 31412, 395, 2419, 9769, 1091, 581]
 [Full output 8]
 If all cats are animals and some animals are black, can we conclude that some cats are black?
-Answer: Yes. Cats are black because they have a white coat and are so small that the fur is not even tanned. They are also very strong.
-The reason for this is that cats are so tiny. If a cat were to be found in a house, it would take two or three years before it could breed. If a female cat was found in a room with a cat, she would probably have been able to produce more offspring than the male cat would have produced. This is because if the female cat had no offspring, her offspring would not be able to reproduce. So, even though there are only about one hundred cats in the world, there are thousands of cats who are black.
-The fact that the average number of cats in a household is around 10 does not mean that there are many cats in the house. There are only a few thousand cats in the entire world. It takes a lot of effort to find a few hundred cats in a home. However, there are millions of cats in the United States and other countries where there are only a handful of cats. In fact, there are a million cats in the U.S., and there are hundreds of thousands of cats in Europe alone!
-There are so many different types of cats in our homes
+Answer: Yes. Cats are black because they have a white coat. They are also colored because they have yellow eyes and hair. Cats are color blind because they do not have any visible eye markings or they have no fur on their body. The most common colors of cats are brown, black, and blue.
+There is a difference between the colors of cats and dogs. If you look at a cat, it is the red blood cells that make up the blood in the blood vessels. If you see a dog, it is usually a red blood cell. When a dog is walking around, he has the red blood cell on his legs and the blood on his feet. When a cat walks around, he will have the red blood blood cells on his legs.
+This means that if you look at the body of a cat, you can say that the color of the cat's skin is the same as that of the body of the cat. In other words, if you look back at the body, the color of your skin is the color of a cat.
+The color of a person does not matter to the person who is wearing a vase. It matters to the person that you are wearing vases.
+In the case of a dog, the color is the color
 
 ================================================================================
 [Prompt 9] (prompt_tokens=20)
@@ -305,15 +280,16 @@ bos_id=2 eos_id=3
 avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
 banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
 first_step_eos_prob=0.000e+00
-first_step_topk_ids=[798, 354, 843, 1012, 409, 637, 1218, 2050, 0, 1]
-first_step_topk_probs=[0.4657338857650757, 0.10834076255559921, 0.10284237563610077, 0.08796574175357819, 0.07609780877828598, 0.0695079043507576, 0.04708467051386833, 0.04242685064673424, 0.0, 0.0]
-first_step_topk_text=[' 4', ' 1', ' 5', ' 6', ' 2', ' 3', ' 8', ' One', '', '']
+first_step_topk_ids=[798, 843, 354, 1012, 409, 637, 1218, 2050, 0, 1]
+first_step_topk_probs=[0.46209171414375305, 0.10203812271356583, 0.09685968607664108, 0.08727782219648361, 0.08493807911872864, 0.0708639919757843, 0.049214061349630356, 0.04671645164489746, 0.0, 0.0]
+first_step_topk_text=[' 4', ' 5', ' 1', ' 6', ' 2', ' 3', ' 8', ' One', '', '']
 
-[New tokens 9] count=111 first30=[2050, 4081, 13693, 16, 16545, 17, 202, 3287, 395, 1496, 263, 1180, 288, 545, 269, 7914, 288, 269, 5786, 15, 298, 486, 1418, 299, 1118, 806, 914, 10941, 715, 601]
+[New tokens 9] count=90 first30=[2050, 4081, 13693, 16, 16545, 17, 202, 3287, 491, 795, 10941, 15, 614, 486, 483, 847, 3931, 780, 545, 17, 2575, 415, 269, 2012, 288, 263, 202, 83, 499, 288]
 [Full output 9]
 John has 3 apples and buys 2 more. How many apples does he have?
 Answer: One hundred fifty-six.
-You are given a list of all the fruits of the garden, and you want to know how many apples there will be in the garden after one year. The answer is 1/2*10^4 = 10^6.
+You have two apples, but you can't eat them all. What's the cost of a
+pint of water?
 See another brain teaser just like this one...
 Or, just get a random brain teaser
 If you become a registered user you can vote on this brain teaser, keep track of
@@ -330,21 +306,19 @@ bos_id=2 eos_id=3
 avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
 banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
 first_step_eos_prob=0.000e+00
-first_step_topk_ids=[356, 1278, 1509, 2575, 783, 1289, 382, 360, 15255, 698]
-first_step_topk_probs=[0.678764820098877, 0.037233006209135056, 0.036275919526815414, 0.03443490341305733, 0.03354974091053009, 0.03268733620643616, 0.029453733935952187, 0.017496269196271896, 0.014965351670980453, 0.014205853454768658]
-first_step_topk_text=[' I', ' If', ' You', ' What', ' This', ' We', ' The', ' "', ' Thanks', ' It']
+first_step_topk_ids=[356, 1509, 1278, 2575, 1289, 783, 382, 360, 698, 1803]
+first_step_topk_probs=[0.6477336883544922, 0.03850507736206055, 0.03751529008150101, 0.03751529008150101, 0.03380408510565758, 0.03380408510565758, 0.032935138791799545, 0.020610282197594643, 0.020080488175153732, 0.013587137684226036]
+first_step_topk_text=[' I', ' You', ' If', ' What', ' We', ' This', ' The', ' "', ' It', ' When']
 
-[New tokens 10] count=156 first30=[2575, 330, 669, 2942, 374, 269, 1759, 7042, 34, 202, 16, 2575, 330, 669, 1258, 415, 7803, 288, 2418, 34, 202, 16, 1348, 620, 486, 1645, 269, 1258, 330, 1839]
+[New tokens 10] count=256 first30=[2575, 330, 669, 2942, 374, 269, 1759, 7042, 34, 202, 16, 2575, 330, 669, 1258, 415, 13297, 339, 263, 1413, 2690, 374, 4126, 34, 202, 16, 1348, 1352, 486, 2505]
 [Full output 10]
 User: I'm feeling stressed lately.
 Assistant: What is your experience with the following topics?
-- What is your school's philosophy of education?
-- How do you think the school is best suited to teaching people who are not necessarily "schools"?
-- Do you have any ideas on how to improve your own schools?
-- Do the students in your school have a strong sense of community and pride in their learning?
-- Are there any issues that you feel are important for your school to address?
-- Have you heard of some of the things that you would like to see changed?
-- Has there been a change in your school's approach to educating young people?
-- If you are interested in having a school that has a particular philosophy of education, what other ideas might you have had?
+- What is your school's reputation for a good relationship with teachers?
+- How did you feel about your school's relationship with the teachers?
+A: I've been reading this article and it was very interesting to me. I think that the teachers' view of themselves as "culturally, historically, or even culturally different" is very important in their lives. They are the ones who have the right to be in charge of what they do. The teachers' views on their own may also influence how they see themselves as culturally different.
+What about you? Do you think that the teacher's views are just too personal to really understand? Or does it matter if you believe in yourself as a person?
+I don't think so. But I think that there is a lot of truth to the idea that the teacher is the one who is truly "cultured" from the past. If you look at the teachers' attitudes toward their students, you can see that they are very different from one another. They all have a sense of their own identity. You can't say that they are different because you're not being treated differently by them. It's just that they are in fact different.
+The
 
 ================================================================================

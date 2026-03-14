@@ -1,0 +1,328 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[601, 330, 791, 1628, 418, 728, 15, 2827, 348, 289]
+first_step_topk_probs=[0.158210888504982, 0.158210888504982, 0.13532494008541107, 0.06526865810155869, 0.0529940091073513, 0.0529940091073513, 0.04574058577418327, 0.03680357336997986, 0.03316280245780945, 0.02836564928293228]
+first_step_topk_text=[' will', ' is', ' would', ' might', ' was', ' may', ',', ' named', ' st', ' in']
+
+[New tokens 1] count=256 first30=[330, 1163, 16852, 419, 269, 4769, 299, 263, 1563, 17, 382, 4769, 330, 1000, 3609, 299, 3408, 1282, 263, 1685, 2351, 357, 5546, 269, 2811, 17, 202, 509, 929, 330]
+[Full output 1]
+Once upon a time, a curious child is being guided by the teacher to a book. The teacher is then asked to write down a few words that describe the story.
+The child is given a piece of paper and a pencil with a number on it. The child has to read the word from the book to the teacher. This is called a "reading" of the story. When the child reads the story, he or she must say the word again. If the child does not have to say the word, the teacher will ask him or her to repeat the word again and again until the child can read the story. Sometimes the child can only read the story once, but sometimes he or she needs to make a new word to complete the story. For example, if the child says "Say the word "crack" and the teacher tells him or her that "the crack is in the middle of the word." Or if the child asks "What is the crack?" the teacher says "The crack is in one corner of the room."
+Some children are very good at reading stories. They may even like to play games such as "I'm a snake," "My Grandpa's Pizza," or "The Piggy Banks." Some children enjoy playing and learning about stories. Others like
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 1134, 1112, 15, 298, 330, 658, 269, 8492, 288, 269, 1723, 288, 269, 9556, 17, 698, 330, 12092, 289, 269, 3246, 16, 10674, 8032, 288, 269]
+[Full output 2]
+Paris is the capital of the province of the same name, and is also the seat of the government of the province. It is situated in the north-east corner of the island of New Caledonia, and is the largest city on the island, with a population of 1,054,000.
+The first settlers were from the Nouabéen (Nouabé) tribe, who had settled in the island about 430 years before the arrival of the Spanish. The first permanent settlement was made at Hauteville in 1521 by Francisco de Narváez, a Spaniard from the Algarve region, who established a colony there. In 1670, the new Spanish governor, Pedro de Valdivia, was appointed to the colony, which he retained until his death in 1702.
+In 1704, the Nouabi occupied their territory, but were forced back by the French, who seized the island for France in 1799. The Nouabi were again expelled in 1808, when they were forced back into the mainland. They remained in the colony until 1820, when they became the sole inhabitants of the island.
+During the colonial period, the Nunavut Native American Council was formed in 1792 to promote the interests of the
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=160 first30=[263, 1239, 357, 483, 342, 998, 419, 4007, 269, 18956, 288, 263, 3823, 17, 202, 509, 18956, 395, 269, 1992, 288, 269, 3823, 15, 388, 7527, 15, 289, 263, 1496]
+[Full output 3]
+In linear algebra, an eigenvalue is a value that can be found by finding the eigenvalues of a matrix.
+The eigenvalues are the values of the matrix, or vectors, in a given vector space. For example, the following matrix has a single eigenvalue:
+If we have a matrix A with three rows and four columns, then its eigenvalues are
+When solving systems of linear equations, we often need to find the values of all the variables. This is called finding the solution to the system of equations. If you are looking for a particular solution, you may want to look at the following steps:
+- Find the values of each variable (eigenvalues) on the diagonal.
+- Find all the solutions to the system.
+- Write the system as a single equation.
+- Calculate the roots of the system.
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 483, 491, 395, 5546, 1420, 1798, 3069, 9845, 1991]
+first_step_topk_probs=[0.26102596521377563, 0.17207904160022736, 0.15505608916282654, 0.12086714059114456, 0.0519372820854187, 0.04442431032657623, 0.03423915430903435, 0.03423915430903435, 0.027800023555755615, 0.014880280941724777]
+first_step_topk_text=[' use', ' can', ' have', ' are', ' describe', ' allow', ' learn', ' attempt', ' rely', ' provide']
+
+[New tokens 4] count=256 first30=[395, 885, 299, 5951, 2061, 289, 269, 1462, 288, 10314, 8755, 17, 382, 3355, 2877, 330, 299, 817, 14457, 8119, 359, 263, 1085, 339, 870, 298, 4357, 2179, 15, 1150]
+[Full output 4]
+Neural networks are a class of machine learning models that are used to solve problems in the field of artificial intelligence. The basic idea is to use neural networks as a model for data and decision making, while the final part is to train the model using the training data.
+
+The main objective of this project is to develop a new model for Machine Learning with deep learning. It is a generalization of the deep learning model proposed by Gelman and Raven which was originally developed by Srinivasan and has been applied successfully in the area of machine learning. In this project, the model will be used to design new algorithms for Machine Learning based on deep learning, and to test it on real-world problems.
+
+Experimental
+
+In 2017, the project was awarded the European Union's International Training Initiative (ITI) award. This award is given out annually to those who have completed their undergraduate or graduate degree programs in Computer Science and Engineering, including:
+
+ University of Zurich, Switzerland
+ University of Vienna, Austria
+ University of Warwick, UK
+ University of Cambridge, England
+ University of Edinburgh, Scotland
+ University of Glasgow, Scotland
+ St Andrews University, Scotland
+ Université de Montréal, Canada
+ University of California, San Diego, USA
+ University of Oxford, England
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 5427, 6649, 29, 8163, 16, 27, 5427, 202, 1568, 202, 18688, 351, 321, 462, 3005, 224, 1291, 2234, 29, 6457, 29, 5557, 9697, 202]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Oct  9 14:43:07 2019
+
+@author: ygwangjin
+"""
+import numpy as np
+from matplotlib import pyplot as plt
+
+plt.style.use('seaborn')
+
+fig = plt.figure()
+ax1 = fig.add_subplot(111)
+ax2 = fig.subplots(figsize=(6, 6))
+for i in range(0, len(ax1)):
+    ax1[i].set_title("Fraction of Xs")
+    ax2[i].imshow(np.log10(np.abs(x)))
+    ax1.axis('off')
+    ax2.axis('on')
+
+#ax1.legend(['f', 'z'], loc='upper left')
+#ax2.legend(['y', 'z'])
+#ax3.legend(['x', 'y'])
+#plt.show()
+
+#plt.__str__()
+#plt._print_warnings()
+#plt
+#plt(ax1)
+#plt((ax1,))
+#plt([ax1])
+#plt(-
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=124 first30=[490, 311, 861, 643, 29, 341, 622, 354, 1246, 1107, 29, 341, 622, 311, 13, 2440, 4886, 11, 81, 16, 20, 12, 647, 28045, 11, 81, 16, 21, 12, 711]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     if n == 0:
+         return 1
+     else:
+         return n*factorial(n-1) + factorial(n-2)
+
+
+# Example 1:
+# Input: n = 3, k = 2
+# Output: 2
+# Explanation: The factorial of 3 is 2.
+#
+# Example 2:
+#
+class Solution:
+    def factorial(self, n: int) -> int:
+        if n == 1:
+            return 1
+        elif n % 2 == 0:
+            return n//2
+        else:
+            return factorial(n/2)
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.7079434990882874, 0.29205653071403503, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=216 first30=[490, 311, 861, 643, 29, 341, 622, 354, 1246, 1107, 29, 341, 622, 8049, 11, 81, 16, 20, 12, 647, 8049, 11, 81, 552, 354, 12, 711, 202, 6, 19968]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     if n == 0:
+         return 1
+     else:
+         return fib(n-1) + fib(n - 1)
+
+
+# Implement the recursion for Fibonacci numbers.
+def fib_recursive(n, n):
+    if n == 1:
+        return 1
+    elif n == 2:
+        return fib(2*n+1) + (fib(n-2)*fib(2))
+
+    if n == 3:
+        return 2**3 * fib(n/2) + fib(-1)
+    elif n > 3:
+        if n % 2 != 0:
+            return fib(1) + fib(1)
+        else:
+            return fib(0) + fib((1//2)*(n-1))
+
+    return fib(4) + fib_(4)
+
+
+if __name__ == '__main__':
+    n = int(input())
+    f = []
+    for _ in range(n):
+        f.append([])
+
+    for _ in f:
+        print(f[0])
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 31412, 2590, 1541, 4619, 2660, 2, 1, 0]
+first_step_topk_probs=[0.3603476583957672, 0.3247005045413971, 0.13395263254642487, 0.07169967889785767, 0.052456606179475784, 0.0328265056014061, 0.024016382172703743, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' Cats', ' No', ' There', ' Black', ' Some', '', '', '']
+
+[New tokens 8] count=256 first30=[382, 3533, 330, 808, 17, 202, 37, 1477, 395, 269, 839, 2918, 357, 395, 453, 263, 645, 288, 829, 2136, 1165, 17, 1109, 2068, 658, 269, 839, 11859, 357, 491]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: The answer is no.
+Bats are the only animals that are not a part of our natural world. They're also the only mammals that have been domesticated for millions of years. So if you want to know why we have so many wild animals, then you must know what they do.
+There are over 50 species of bats in North America. Some are very specialized and have adapted to certain environments, such as deserts or forests. Others are migratory, which means they fly north during the winter months. Still others are solitary creatures, which means that they spend most of their time alone in caves, under bark, or in the ground.
+They eat insects, rodents, birds, small reptiles, frogs, and even lizards. Most live in forests, but some are found in caves. Some bats are active at night while others are resting on the ground. Some bats can be seen flying at night, while others fly during the day.
+Some bats use echolocation to find prey. They will take pictures of other bats with them, sometimes giving them clues about where they are going to be. Other bats are able to detect sound by looking through a tree trunk.
+Some animals are known to be aggressive towards humans. This includes dogs, cats, horses
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 354, 843, 1012, 409, 637, 2, 3, 1, 0]
+first_step_topk_probs=[0.48980167508125305, 0.133208766579628, 0.12003106623888016, 0.09745761752128601, 0.08335983008146286, 0.07614105194807053, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 4', ' 1', ' 5', ' 6', ' 2', ' 3', '', '', '', '']
+
+[New tokens 9] count=60 first30=[354, 13032, 333, 798, 10941, 17, 202, 3287, 395, 1496, 357, 798, 10941, 330, 269, 993, 288, 10941, 486, 910, 299, 3931, 17, 202, 3287, 658, 1118, 357, 409, 10941]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 1 apple = 4 apples.
+You are given that 4 apples is the number of apples you need to eat.
+You also know that 2 apples is the total number of apples needed for 2 people.
+What do you notice about the answer?
+There are no right or wrong answers.
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 783, 382, 1509, 1278, 1289, 2575, 15255, 698, 360]
+first_step_topk_probs=[0.7074944376945496, 0.03609617054462433, 0.03516828641295433, 0.03008102998137474, 0.03008102998137474, 0.02710527367889881, 0.01983064040541649, 0.017868900671601295, 0.01610121689736843, 0.014508405700325966]
+first_step_topk_text=[' I', ' This', ' The', ' You', ' If', ' We', ' What', ' Thanks', ' It', ' "']
+
+[New tokens 10] count=256 first30=[356, 3442, 733, 289, 269, 5988, 339, 263, 7543, 288, 4437, 1244, 298, 356, 491, 808, 2061, 374, 383, 17, 202, 45, 267, 10960, 29, 2575, 330, 269, 1839, 1194]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: I've been in the hospital for a couple of weeks now and I have no problems with it.
+Jonathan: What is the best way to get help?
+Nancy: The best way is to go to the emergency room, because there are so many things that can be done at home. It's a great place to talk about what you need to do, but if you don't know how to do it yourself, it's just not going to work. If you're worried about your symptoms or any other health problem, you could try talking to a friend or family member.
+What are some of the ways you can help?
+Joe: You might start by talking to someone who has a heart condition, such as a high blood pressure, diabetes, or high cholesterol. Or you might ask a friend or relative about your condition.
+Doctors say they sometimes give people an injection of corticosteroids (a type of medicine that helps the body fight infection) to relieve their symptoms. But it's not clear whether this treatment will help them. And, it's possible that it may worsen their symptoms.
+Doctor: You think you might need to take medicine to treat your high blood pressure?
+Nantucket: There
+
+================================================================================
