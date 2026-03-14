@@ -1,0 +1,90 @@
+version: sft_mix_v2
+
+token_budget:
+  target_train_tokens: 80000000
+  val_ratio: 0.002
+  min_val_tokens_per_source: 100000
+
+mixture_by_token:
+  A_general: 0.52
+  B_code: 0.39
+  C_basic_math: 0.08
+  D_safety: 0.01
+
+buckets:
+  A_general:
+    sources:
+      - name: smol_smoltalk
+        weight_in_bucket: 0.45
+        max_rounds: 3
+        max_assistant_tokens: 320
+
+      - name: ultrachat_200k
+        weight_in_bucket: 0.25
+        max_rounds: 3
+        max_assistant_tokens: 320
+
+      - name: oasst1
+        weight_in_bucket: 0.20
+        max_rounds: 3
+        max_assistant_tokens: 384
+
+      - name: dolly_15k
+        weight_in_bucket: 0.10
+        max_rounds: 2
+        max_assistant_tokens: 256
+
+  B_code:
+    sources:
+      - name: magicoder_evol_110k
+        weight_in_bucket: 0.45
+        require_ast_parse: true
+        max_rounds: 2
+        max_assistant_tokens: 640
+
+      - name: viscode_200k
+        weight_in_bucket: 0.35
+        require_ast_parse: true
+        max_rounds: 2
+        max_assistant_tokens: 640
+
+      - name: codealpaca_20k
+        weight_in_bucket: 0.20
+        require_ast_parse: true
+        max_rounds: 2
+        max_assistant_tokens: 512
+
+  C_basic_math:
+    sources:
+      - name: gsm8k_train
+        weight_in_bucket: 0.45
+        max_rounds: 2
+        max_assistant_tokens: 384
+
+      - name: metamathqa
+        weight_in_bucket: 0.35
+        max_rounds: 2
+        max_assistant_tokens: 384
+
+      - name: math_glot_cleaned_10k
+        weight_in_bucket: 0.20
+        upsample: 2
+        max_rounds: 2
+        max_assistant_tokens: 384
+
+  D_safety:
+    sources:
+      - name: local_refusal_templates
+        type: jsonl
+        path: dataset/sft_canon/local_refusal_templates.canon.jsonl
+        n: 3000
+        weight_in_bucket: 1.00
+        max_rounds: 2
+        max_assistant_tokens: 192
+
+global_filters:
+  drop_if_empty: true
+  drop_if_too_short_chars: 16
+  ban_tokens_in_assistant:
+    - "###EOC###"
+  max_total_tokens_per_example: 1024

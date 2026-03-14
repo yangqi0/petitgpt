@@ -1,0 +1,355 @@
+Samples generated with tokenizer=tokenizer/tokenizer.json
+precision=bf16, temperature=0.6, top_p=0.85, top_k=0, max_new_tokens=256, min_new_tokens=32, greedy=False
+avoid_first_whitespace=True, first_whitespace_resample_tries=32, extra_ban_token_ids=None
+seed_base=1234 (step_tag=None)
+================================================================================
+[Prompt 1] (prompt_tokens=8)
+Once upon a time, a curious child
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[601, 330, 791, 1628, 728, 418, 15, 483, 289, 348]
+first_step_topk_probs=[0.18184587359428406, 0.17261703312397003, 0.1476471871137619, 0.09239523857831955, 0.08770619332790375, 0.040154822170734406, 0.03768780082464218, 0.02512824535369873, 0.019367093220353127, 0.019367093220353127]
+first_step_topk_text=[' will', ' is', ' would', ' might', ' may', ' was', ',', ' can', ' in', ' st']
+
+[New tokens 1] count=256 first30=[330, 1163, 16852, 419, 269, 4769, 299, 263, 1584, 913, 406, 388, 1024, 483, 1798, 2009, 719, 17, 202, 2303, 1373, 15, 263, 929, 1628, 342, 1496, 263, 4873, 288]
+[Full output 1]
+Once upon a time, a curious child is being guided by the teacher to a place where he or she can learn something new.
+For example, a child might be given a piece of paper and asked to write down a name for himself or herself. Then, after a few minutes, he or she will be able to tell you about what he or she has learned from that person's name.
+If you are using this method in your classroom, it may help to think about the following questions:
+- What are some things you would like to know about?
+- How do you want to know?
+- Are there any other ways you could use this method?
+The teacher might ask you to make a list of the things you'd like to know, and then you can tell whether or not you have done anything else. You might even try to figure out which one is the best.
+You might also ask if you need to know more about the subject of the lesson. For example, you might ask if you could go to a class on a different topic at a different time and get to know someone who already knows the same thing. Or you might ask how you might find out more about the world around you when you first meet with a friend.
+It might be helpful to think about
+
+================================================================================
+[Prompt 2] (prompt_tokens=6)
+Paris is the capital of
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[269, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' the', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 2] count=256 first30=[269, 9556, 288, 269, 1134, 1112, 17, 698, 330, 263, 1204, 2868, 374, 263, 2073, 288, 672, 1186, 15, 1086, 874, 353, 9872, 10008, 573, 202, 202, 509, 2868, 330]
+[Full output 2]
+Paris is the capital of the province of the same name. It is a small town with a population of about 7,000 people (2011 census).
+
+The town is located in the municipality of Algiers and the administrative centre of Algieri Province. The municipal territory of Algiacen was created on 25 January 2005 by merging the towns of Algien and Algieria, with the municipalities of Algiere and Algiel and the municipalities of La Mare de Trapa, Algiacena, Algierie, Algiorda and Algiace.
+
+Geography
+Algieri is located at . It has an area of .
+
+History
+
+In 1243, the bishop of Trapa founded the city of Algiarra which later became the seat of the city of Trapanu. In 1315, the Bishop of Trapano of Algiopoli bought the land around the city from the Valladolid in order to build a new church. In 1497, the city was made part of the kingdom of Naples. In 1803, it was transferred to the Kingdom of Italy. In 1881, the city became part of the Italian state of Apulia.
+
+
+================================================================================
+[Prompt 3] (prompt_tokens=7)
+In linear algebra, an eigenvalue is
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 3] count=256 first30=[263, 4409, 357, 483, 342, 3020, 359, 269, 1701, 288, 795, 7527, 17, 1220, 1373, 15, 490, 411, 491, 263, 4409, 400, 333, 353, 91, 15, 371, 12, 298, 1418]
+[Full output 3]
+In linear algebra, an eigenvalue is a vector that can be written as the sum of two vectors. For example, if we have a vector v = (x, y) and want to find the eigenvector of the equation v^2 + 1 = 0, we will first write it as v = x + y.
+
+For a vector v in the form v = (a, b), the eigenvalues are given by the product of their corresponding eigenvectors:
+
+v_e = (1/2)(a*b)
+v_f = (1/(2*a)) * (1/(3*b))
+
+where a and b are constants. The determinant of this matrix is the number of linearly independent vectors on the main diagonal.
+
+Let's try to find the eigenvalues of the equation . We'll start with the case where is a scalar variable and the vector is a vector. To do so, we'll use the fact that if we take the cross product of the vectors, then the dot product of the components of the vectors will also be zero. So the eigenvalues of are , which means that there must be some number between them for all vectors to be zero. Since the dot product is not zero, we can assume that all the vectors are linearly dependent.
+
+
+================================================================================
+[Prompt 4] (prompt_tokens=11)
+Neural networks are a class of machine learning models that
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[817, 491, 483, 395, 1420, 1798, 3069, 9845, 5546, 1991]
+first_step_topk_probs=[0.3385060131549835, 0.16326503455638885, 0.15497934818267822, 0.12218287587165833, 0.040009815245866776, 0.040009815245866776, 0.027786264196038246, 0.026376089081168175, 0.026376089081168175, 0.012721479870378971]
+first_step_topk_text=[' use', ' have', ' can', ' are', ' allow', ' learn', ' attempt', ' rely', ' describe', ' provide']
+
+[New tokens 4] count=256 first30=[395, 885, 299, 5951, 1623, 16, 7128, 2061, 17, 382, 3355, 2877, 330, 299, 817, 269, 1085, 359, 263, 4679, 1099, 15, 298, 1000, 1659, 383, 351, 263, 5023, 17]
+[Full output 4]
+Neural networks are a class of machine learning models that are used to solve real-world problems. The basic idea is to use the model as a starting point, and then train it on a dataset.
+The first step in training the neural network is to fit the data into a vector space (the space of possible inputs). To do this, we will use the concept of a "matrix" which is an array of numbers arranged in rows and columns. We will use the word matrix to represent the input vectors. The matrix is like a list of numbers: each number represents a row or column of the input vector.
+For example, the following code shows how to fit a linear regression model with a matrix of three values:
+(1) 0.617
+(2) 1.875
+(3) 2.433
+Here, the matrix is a matrix of 3 rows and 4 columns. The "matrix" contains all the elements in the original matrix. The "data" is a list of data points. Each point is represented by a pair of numbers. The numbers are separated by commas, so we can write a function that takes a single point and returns the corresponding value. For example, if the points are represented by the points 1, 2, 3, and 4, the function
+
+================================================================================
+[Prompt 5] (prompt_tokens=17)
+Complete the following Python function:
+
+def add(a, b):
+    return
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[263, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' a', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 5] count=256 first30=[263, 647, 286, 3, 711, 6, 5427, 6649, 29, 8163, 16, 27, 5427, 202, 1568, 202, 18688, 351, 321, 462, 2839, 4254, 2508, 29, 6457, 29, 5613, 9281, 202, 202]
+[Full output 5]
+Complete the following Python function:
+
+def add(a, b):
+    return a + b
+
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Aug 26 11:43:56 2018
+
+@author: <NAME>
+"""
+import numpy as np
+from scipy.stats import norm
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+sns.set()
+
+df = pd.read_csv('data/kaggle_paper.csv')
+df['date'] = df["Date"].apply(lambda x : x.split(".")[0])
+df['Ratio'] = df['Ratio'].str.replace(',', '.')
+print(df)
+
+plt.scatter(df['Date'], df['Ration'])
+plt.xlabel('Date')
+plt.ylabel('Ratio')
+plt=plt.gca()
+plt.show()
+
+# 这里是二叉树的父类
+class Data():
+
+    def __init__(self, data, ci, n=10):
+        self.data = data
+        self.ci = ci
+        self.n = n
+        self.cis = ci - 1
+        self.
+
+================================================================================
+[Prompt 6] (prompt_tokens=19)
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 1, 3, 6, 7, 0, 2, 5, 8, 4]
+first_step_topk_probs=[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', '', '', '#', '$', '', '', '"', '%', '!']
+
+[New tokens 6] count=256 first30=[490, 311, 861, 643, 29, 341, 622, 354, 1246, 1107, 29, 341, 622, 311, 13, 2440, 4886, 11, 81, 16, 20, 12, 647, 28045, 11, 81, 16, 21, 12, 711]
+[Full output 6]
+Write a Python function that returns the factorial of n:
+
+def factorial(n):
+     if n == 0:
+         return 1
+     else:
+         return n*factorial(n-1) + factorial(n-2)
+
+
+# Example 1:
+
+# Input: n = 3, n % 2 == 0
+# Output: 6
+# Explanation: The factorial of 3 is 6 because it equals 3 * 4.
+# Explans the solution to the problem as follows:
+# 1. n = 3
+# 2. n = 2
+# 3. n = 1
+# 4. n = 5
+# 5. n = 7
+# 6. n = 8
+# 7. n = 9
+# 8. n = 10
+# 11. n = 12
+# 12. n = 13
+# 13. n = 14
+# 15. n = 15
+# 16. n = 17
+# 17. n = 18
+# 18. n = 19
+# 19. n = 20
+# 20. n = 21
+# 21. n = 22
+# 22. n = 23
+# 23. n = 24
+# 24. n = 25
+# 25. n = 26
+# 26. n = 27
+# 27. n = 28
+# 28
+
+================================================================================
+[Prompt 7] (prompt_tokens=19)
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+    
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[490, 622, 0, 1, 6, 7, 5, 4, 2, 3]
+first_step_topk_probs=[0.7290055751800537, 0.2709944546222687, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' if', ' return', '', '', '#', '$', '"', '!', '', '']
+
+[New tokens 7] count=256 first30=[490, 311, 861, 643, 29, 341, 622, 354, 1246, 1107, 29, 341, 622, 8049, 11, 81, 16, 20, 12, 647, 8049, 11, 81, 552, 409, 12, 711, 202, 6, 19968]
+[Full output 7]
+Write a Python function that computes Fibonacci numbers recursively:
+
+def fib(n):
+     if n == 0:
+         return 1
+     else:
+         return fib(n-1) + fib(n - 2)
+
+
+# Implement the recursion for Fibonacci numbers.
+def fib_recursive(n, base=0):
+    if n < 0 or n > base:
+        return 0
+
+    # Fibonacci number recursively
+    fib = fib_recursiv(base * n)
+    fib_iterable = []
+    fib_count = 0
+
+    while fib_iterated:
+        fib_iteration = fib_iterative(n, fib_count)
+
+        if fib_iteratable and fib_count >= fib_count:
+            fib_iterate = fib_iterate()
+
+            # Fibonucleotide recursive recursively
+            fib_recursives = [fib_recursive([i]) for i in range(2, n+1)]
+            fib_list = list(set(fib_iterates))
+            fib_count += 1
+            fib_loop = 0
+            fib_iteration = 0
+            for fib_iter in fib_list:
+                fib_iter = fib_Iterator(fib)
+                fib_loop += fib_iter
+                fib_iteration += 1
+
+            # Iter
+
+================================================================================
+[Prompt 8] (prompt_tokens=23)
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[13676, 382, 31412, 2590, 1541, 3, 4, 2, 0, 1]
+first_step_topk_probs=[0.42518481612205505, 0.28029900789260864, 0.16650475561618805, 0.0803070142865181, 0.047704409807920456, 0.0, 0.0, 0.0, 0.0, 0.0]
+first_step_topk_text=[' Yes', ' The', ' Cats', ' No', ' There', '', '!', '', '', '']
+
+[New tokens 8] count=256 first30=[13676, 17, 31412, 395, 2645, 1091, 581, 491, 263, 2645, 12153, 298, 2645, 6133, 289, 553, 10978, 17, 202, 509, 3533, 330, 808, 17, 31412, 395, 453, 2645, 435, 545]
+[Full output 8]
+If all cats are animals and some animals are black, can we conclude that some cats are black?
+Answer: Yes. Cats are black because they have a black coat and black hair in their fur.
+The answer is no. Cats are not black at all. They do not have a black or white coat. They do have a black undercoat.
+In the past, cats were thought to be black, but now it appears that cats have been given a black appearance. This is a very strong argument for the existence of black cats.
+There is no evidence that cats are black at all, except perhaps in the case of cats with black coats.
+Black cats have been known to live in many countries, including Africa, Asia, Europe, South America, Australia, New Zealand, North America, Oceania, and the Middle East.
+Many people believe that cats are more aggressive than dogs. However, cats are not as aggressive as dogs.
+One theory suggests that cats are less aggressive than dogs because they tend to be smaller and heavier.
+Another theory suggests that if cats are to become aggressive, they must learn to fight back against them.
+Cats are also considered to be less aggressive than people. But they don't usually like being attacked by dogs.
+How did this happen?
+It was discovered that cats were getting used to being attacked by other
+
+================================================================================
+[Prompt 9] (prompt_tokens=20)
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[798, 843, 1012, 354, 409, 637, 1218, 2, 1, 0]
+first_step_topk_probs=[0.4657461941242218, 0.11413601785898209, 0.10284509509801865, 0.09762571007013321, 0.08998274803161621, 0.06857163459062576, 0.06109260395169258, 0.0, 0.0, 0.0]
+first_step_topk_text=[' 4', ' 5', ' 6', ' 1', ' 2', ' 3', ' 8', '', '', '']
+
+[New tokens 9] count=256 first30=[843, 17, 27, 3, 711, 509, 1165, 415, 3796, 16628, 15, 2807, 15404, 2213, 15, 330, 351, 686, 1194, 299, 2719, 415, 12759, 3176, 435, 263, 3360, 288, 354, 17]
+[Full output 9]
+John has 3 apples and buys 2 more. How many apples does he have?
+Answer: 5.8
+
+The world's largest asteroid, 2012 DA14, is on its way to Earth's closest approach at a distance of 1.6 million miles (2.5 million kilometers). The asteroid will pass within 1.4 million miles (1.6 million km) of Earth in 2029, according to the International Astronomical Union.
+The asteroid, which was discovered by amateur astronomers in 2008, is about twice as far from Earth as the moon. This makes it one of the most massive objects in the solar system. It orbits the sun at an average distance of 460,000 miles (980,000 km), making it the second-smallest object in the solar neighborhood.
+This asteroid is also known as the "Great Red Spot" because it is the size of the Moon and is visible from the Southern Hemisphere. Although the Great Red Spot is not visible from Earth, it is visible with the naked eye in the southern hemisphere.
+The Russian space agency, Asteroid 2012DA14 is currently about 630 feet (200 meters) wide and is about 17 miles (26 kilometers) across. This asteroid is about 1/20th the diameter of the moon. NASA says that it may be about 500 times larger than the moon itself
+
+================================================================================
+[Prompt 10] (prompt_tokens=13)
+User: I'm feeling stressed lately.
+Assistant:
+
+[Debug]
+bos_id=2 eos_id=3
+avoid_first_whitespace=True ban_first_steps=4 banned_ids_count=22
+banned_ids_head=[201, 202, 203, 204, 205, 220, 221, 222, 223, 224, 260, 265, 291, 303, 317, 331, 341, 346, 416, 711, 1920, 18236]
+first_step_eos_prob=0.000e+00
+first_step_topk_ids=[356, 382, 1278, 1509, 1289, 783, 2575, 698, 338, 360]
+first_step_topk_probs=[0.6933814287185669, 0.03993236646056175, 0.03598206862807274, 0.03505713865160942, 0.0332779735326767, 0.03158910199999809, 0.029215145856142044, 0.016908427700400352, 0.016908427700400352, 0.01563774049282074]
+first_step_topk_text=[' I', ' The', ' If', ' You', ' We', ' This', ' What', ' It', ' A', ' "']
+
+[New tokens 10] count=256 first30=[2575, 330, 669, 2942, 374, 269, 1759, 7042, 34, 202, 44, 491, 733, 299, 269, 24032, 339, 263, 1685, 3033, 1244, 298, 356, 3442, 733, 9027, 851, 288, 1284, 689]
+[Full output 10]
+User: I'm feeling stressed lately.
+Assistant: What is your experience with the following topics?
+I have been to the dentist for a few months now and I've been spending most of my time on this site. It's not a bad thing, but it's important that you understand what's going on. It can be a little frustrating at times because you're having problems getting a good grip on things.
+The most common problem I see in dentists is pain during the day or when you are not using any kind of restorative device. You may feel uncomfortable and tired all the time while you're doing these things. The pain gets worse over time as you get older. If you've had a recent injury or illness, it could be something that has gone away on its own. In fact, it might even become part of your daily routine.
+One of the reasons people tend to put more stress on their teeth is because they don't want to take their teeth out. This is called "biting." Biting is when you bite down on the tooth and then pull up the back of the jaw. That's why you need to biting at least twice a day.
+Biting can also cause a lot of pain and discomfort. Most people who biting at one time will notice a
+
+================================================================================
