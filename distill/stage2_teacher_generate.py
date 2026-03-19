@@ -6,7 +6,10 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import time
 from typing import Any, Dict, List
+
+from openai import OpenAI
 
 DEFAULT_SYSTEM = "You are a helpful assistant."
 
@@ -112,36 +115,61 @@ def build_messages(prompt: str, task_type: str) -> List[Dict[str, str]]:
 
 
 def generate_with_teacher(
-    messages: List[Dict[str, str]],
-    teacher_name: str,
-    temperature: float,
-    top_p: float,
-    max_new_tokens: int,
-    n: int,
-) -> List[str]:
-    """
-    Replace this function with your actual teacher call.
+    messages,
+    teacher_name,
+    temperature,
+    top_p,
+    max_new_tokens,
+    n,
+    reasoning_effort="low",
+    sleep_s=0.0,
+):
+    client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
-    For now, this is a stub that raises an error intentionally.
-    You can connect it to:
-      - a local vLLM / OpenAI-compatible endpoint
-      - a local HF model
-      - an external model API
-    """
-    raise NotImplementedError(
-        "Please implement generate_with_teacher(...) for your teacher backend."
-    )
+    # iterate n times to get n responses, instead of using n=... in the API call, to avoid getting multiple responses in one output which can be hard to parse.
+    outs = []
+    for _ in range(n):
+        response = client.responses.create(
+            model=teacher_name,
+            instructions=messages[0]["content"],  # system
+            input=messages[1]["content"],  # user
+            reasoning={"effort": reasoning_effort},
+            temperature=temperature,
+            top_p=top_p,
+            max_output_tokens=max_new_tokens,
+        )
+        outs.append(response.output_text.strip())
+        if sleep_s > 0:
+            time.sleep(sleep_s)
+    return outs
 
 
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--in_jsonl", required=True)
     ap.add_argument("--out_jsonl", required=True)
-    ap.add_argument("--teacher_name", required=True)
     ap.add_argument("--n", type=int, default=1)
     ap.add_argument("--temperature", type=float, default=0.2)
     ap.add_argument("--top_p", type=float, default=1.0)
     ap.add_argument("--max_new_tokens", type=int, default=256)
+    ap.add_argument(
+        "--model",
+        required=True,
+        default="gpt-5.4",
+        help="Model name for the teacher (e.g., 'gpt-5.4', 'gpt-5.3-codex')",
+    )
+    ap.add_argument(
+        "--reasoning_effort",
+        default="low",
+        choices=["none", "minimal", "low", "medium", "high", "xhigh"],
+        help="Reasoning effort level for the teacher model (e.g., 'low', 'medium', 'high')",
+    )
+    ap.add_argument(
+        "--sleep_s",
+        type=float,
+        default=0.0,
+        help="Seconds to sleep between API calls to avoid rate limits",
+    )
     args = ap.parse_args()
 
     rows = read_jsonl(args.in_jsonl)
@@ -157,11 +185,13 @@ def main() -> None:
             messages = build_messages(prompt, task_type)
             responses = generate_with_teacher(
                 messages=messages,
-                teacher_name=args.teacher_name,
+                teacher_name=args.model,
                 temperature=args.temperature,
                 top_p=args.top_p,
                 max_new_tokens=args.max_new_tokens,
                 n=args.n,
+                reasoning_effort=args.reasoning_effort,
+                sleep_s=args.sleep_s,
             )
 
             for cid, resp in enumerate(responses):
@@ -171,7 +201,7 @@ def main() -> None:
                     "prompt": prompt,
                     "candidate_id": cid,
                     "response": resp,
-                    "teacher": args.teacher_name,
+                    "teacher": args.model,
                 }
                 f.write(json.dumps(out, ensure_ascii=False) + "\n")
                 total += 1
