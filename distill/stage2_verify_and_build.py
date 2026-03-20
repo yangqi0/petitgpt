@@ -33,6 +33,15 @@ def write_jsonl(path: str, rows: List[Dict[str, Any]]) -> None:
             f.write(json.dumps(row, ensure_ascii=False) + "\n")
 
 
+def normalize_numeric_token(s: str) -> str:
+    s = s.strip().replace("%", "")
+    try:
+        x = float(s)
+        return f"{x:.8f}".rstrip("0").rstrip(".")
+    except Exception:
+        return s.strip().lower()
+
+
 def extract_code_block(text: str) -> Optional[str]:
     m = re.search(r"```python\s*\n(.*?)\n```", text, flags=re.DOTALL | re.IGNORECASE)
     if m:
@@ -85,25 +94,36 @@ def extract_final_answer(text: str) -> Optional[str]:
 
 
 def extract_numbers(text: str) -> List[str]:
-    return re.findall(r"-?\d+(?:\.\d+)?", text)
+    nums = re.findall(r"-?\d+(?:\.\d+)?", text)
+    return [normalize_numeric_token(x) for x in nums]
 
 
-def math_answer_is_correct(prompt_id: str, answer: str) -> bool:
-    allowed = MATH_ANSWER_KEY.get(prompt_id, [])
+def math_answer_is_correct(prompt_id: str, answer: str, answer_key: Dict[str, List[str]]) -> bool:
+    allowed = answer_key.get(prompt_id, [])
     if not allowed:
         return False
 
+    # 先做宽松字符串规范化匹配
     a_norm = normalize_answer(answer)
     allowed_norm = {normalize_answer(x) for x in allowed}
     if a_norm in allowed_norm:
         return True
 
-    # compare numbers in answer vs allowed, to allow for some formatting variation like "the answer is 5" or "5.0" instead of "5"
+    # 再做数字序列匹配（对 15.30 vs 15.3 / x=2 / 3/4 and 75% 更稳）
     ans_nums = extract_numbers(answer)
+
+    # 允许答案 key 里写成一个完整答案字符串
     for cand in allowed:
         cand_nums = extract_numbers(cand)
         if cand_nums and cand_nums == ans_nums:
             return True
+
+    # 允许把多个 allowed 条目拼在一起组成目标数字集合
+    flat_allowed_nums = []
+    for cand in allowed:
+        flat_allowed_nums.extend(extract_numbers(cand))
+    if flat_allowed_nums and flat_allowed_nums == ans_nums:
+        return True
 
     return False
 
@@ -157,6 +177,7 @@ MATH_ANSWER_KEY: Dict[str, List[str]] = {
     "math_ratio_0017": ["3/4", "75", "75.0", "75%"],
     "math_ratio_0018": ["21", "21.0"],
     "math_ratio_0019": ["15", "15.0"],
+    "math_ratio_0113": ["3/4 and 75%", "75% and 3/4", "3/4", "75%"],
 
     "math_stats_0020": ["5", "5.0"],
     "math_stats_0021": ["4.5"],
