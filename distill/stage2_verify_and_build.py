@@ -84,6 +84,30 @@ def extract_final_answer(text: str) -> Optional[str]:
     return m.group(1).strip()
 
 
+def extract_numbers(text: str) -> List[str]:
+    return re.findall(r"-?\d+(?:\.\d+)?", text)
+
+
+def math_answer_is_correct(prompt_id: str, answer: str) -> bool:
+    allowed = MATH_ANSWER_KEY.get(prompt_id, [])
+    if not allowed:
+        return False
+
+    a_norm = normalize_answer(answer)
+    allowed_norm = {normalize_answer(x) for x in allowed}
+    if a_norm in allowed_norm:
+        return True
+
+    # compare numbers in answer vs allowed, to allow for some formatting variation like "the answer is 5" or "5.0" instead of "5"
+    ans_nums = extract_numbers(answer)
+    for cand in allowed:
+        cand_nums = extract_numbers(cand)
+        if cand_nums and cand_nums == ans_nums:
+            return True
+
+    return False
+
+
 def check_math_format(text: str) -> Tuple[bool, str]:
     if "Brief steps:" not in text:
         return False, "missing_brief_steps"
@@ -120,22 +144,25 @@ MATH_ANSWER_KEY: Dict[str, List[str]] = {
     "math_word_0006": ["34", "34.0"],
     "math_word_0007": ["126", "126.0"],
     "math_word_0008": ["15", "15.0"],
-    "math_algebra_0001": ["6", "6.0"],
-    "math_algebra_0002": ["9", "9.0"],
-    "math_algebra_0003": ["9", "9.0"],
-    "math_algebra_0004": ["24", "24.0"],
-    "math_algebra_0005": ["4", "4.0"],
-    "math_algebra_0006": ["13", "13.0"],
-    "math_ratio_0001": ["25", "25.0", "25%"],
-    "math_ratio_0002": ["55", "55.0"],
-    "math_ratio_0003": ["3/4", "75", "75.0", "75%"],
-    "math_ratio_0004": ["21", "21.0"],
-    "math_ratio_0005": ["15", "15.0"],
-    "math_stats_0001": ["5", "5.0"],
-    "math_stats_0002": ["4.5"],
-    "math_stats_0003": ["4", "4.0"],
-    "math_stats_0004": ["5", "5.0"],
-    "math_stats_0005": ["14", "14.0", "14 and 8", "mean=14,variance=8", "8 and 14"],
+
+    "math_algebra_0009": ["6", "6.0", "x=6", "x = 6"],
+    "math_algebra_0010": ["9", "9.0", "x=9", "x = 9"],
+    "math_algebra_0011": ["9", "9.0", "x=9", "x = 9"],
+    "math_algebra_0012": ["24", "24.0", "x=24", "x = 24"],
+    "math_algebra_0013": ["4", "4.0", "x=4", "x = 4"],
+    "math_algebra_0014": ["13", "13.0", "y=13", "y = 13"],
+
+    "math_ratio_0015": ["25", "25.0", "25%"],
+    "math_ratio_0016": ["55", "55.0"],
+    "math_ratio_0017": ["3/4", "75", "75.0", "75%"],
+    "math_ratio_0018": ["21", "21.0"],
+    "math_ratio_0019": ["15", "15.0"],
+
+    "math_stats_0020": ["5", "5.0"],
+    "math_stats_0021": ["4.5"],
+    "math_stats_0022": ["4", "4.0"],
+    "math_stats_0023": ["5", "5.0"],
+    "math_stats_0024": ["14 and 8", "mean=14,variance=8", "mean = 14, variance = 8"],
 }
 
 
@@ -347,11 +374,16 @@ def main() -> None:
 
     # math
     math_rows = read_jsonl(args.math_raw)
+    rejected_math = []
     by_prompt = {}
     for row in math_rows:
         can = verify_math_row(row)
         if can is not None:
             by_prompt.setdefault(row["prompt_id"], []).append(can)
+        else:
+            rejected_math.append(row)
+
+    write_jsonl("data/stage2/debug/rejected_math.jsonl", rejected_math)
     kept_math = [pick_best_by_shortness(v) for v in by_prompt.values()]
     accepted.extend(kept_math)
     print(f"[math] raw={len(math_rows)} kept_prompts={len(kept_math)}")
