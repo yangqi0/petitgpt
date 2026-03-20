@@ -166,13 +166,23 @@ MATH_ANSWER_KEY: Dict[str, List[str]] = {
 }
 
 
-def math_answer_is_correct(prompt_id: str, answer: str) -> bool:
-    allowed = MATH_ANSWER_KEY.get(prompt_id, [])
+def math_answer_is_correct(prompt_id: str, answer: str, answer_key: Dict[str, List[str]]) -> bool:
+    allowed = answer_key.get(prompt_id, [])
     if not allowed:
         return False
-    a = normalize_answer(answer)
+
+    a_norm = normalize_answer(answer)
     allowed_norm = {normalize_answer(x) for x in allowed}
-    return a in allowed_norm
+    if a_norm in allowed_norm:
+        return True
+
+    ans_nums = extract_numbers(answer)
+    for cand in allowed:
+        cand_nums = extract_numbers(cand)
+        if cand_nums and cand_nums == ans_nums:
+            return True
+
+    return False
 
 
 def check_general(task_type: str, text: str) -> Tuple[bool, str]:
@@ -283,7 +293,7 @@ def verify_code_row(row: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     )
 
 
-def verify_math_row(row: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+def verify_math_row(row: Dict[str, Any], answer_key: Dict[str, List[str]]) -> Optional[Dict[str, Any]]:
     resp = row["response"]
     ok, why = check_math_format(resp)
     if not ok:
@@ -293,7 +303,7 @@ def verify_math_row(row: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     if not ans:
         return None
 
-    if not math_answer_is_correct(row["prompt_id"], ans):
+    if not math_answer_is_correct(row["prompt_id"], ans, answer_key):
         return None
 
     return make_canonical(
@@ -346,6 +356,7 @@ def main() -> None:
     ap.add_argument("--out_val", required=True)
     ap.add_argument("--val_ratio", type=float, default=0.02)
     ap.add_argument("--seed", type=int, default=1234)
+    ap.add_argument("--math_answer_key", default="")
     args = ap.parse_args()
 
     accepted: List[Dict[str, Any]] = []
@@ -373,17 +384,22 @@ def main() -> None:
     print(f"[general] raw={len(general_rows)} kept_prompts={len(kept_general)}")
 
     # math
+    math_answer_key = {}
+    if args.math_answer_key:
+        with open(args.math_answer_key, "r", encoding="utf-8") as f:
+            math_answer_key = json.load(f)
+
     math_rows = read_jsonl(args.math_raw)
     rejected_math = []
     by_prompt = {}
     for row in math_rows:
-        can = verify_math_row(row)
+        can = verify_math_row(row, math_answer_key)
         if can is not None:
             by_prompt.setdefault(row["prompt_id"], []).append(can)
         else:
             rejected_math.append(row)
 
-    write_jsonl("data/stage2/debug/rejected_math.jsonl", rejected_math)
+    write_jsonl("dataset/stage2/debug/rejected_math.jsonl", rejected_math)
     kept_math = [pick_best_by_shortness(v) for v in by_prompt.values()]
     accepted.extend(kept_math)
     print(f"[math] raw={len(math_rows)} kept_prompts={len(kept_math)}")
