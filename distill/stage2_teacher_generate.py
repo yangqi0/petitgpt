@@ -139,12 +139,6 @@ def generate_with_teacher(
             max_output_tokens=max_new_tokens,
         )
 
-        # if temperature is not None:
-        #     pass
-        # if top_p is not None:
-        #     kwargs["top_p"] = top_p
-
-        # response = client.responses.create(**kwargs)
         outs.append(response.output_text.strip())
 
         if sleep_s > 0:
