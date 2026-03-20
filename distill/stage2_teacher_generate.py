@@ -129,22 +129,22 @@ def generate_with_teacher(
     # iterate n times to get n responses, instead of using n=... in the API call, to avoid getting multiple responses in one output which can be hard to parse.
     outs = []
     for _ in range(n):
-        kwargs = {
-            "model": teacher_name,
-            "instructions": messages[0]["content"],  # system
-            "input": messages[1]["content"],  # user
-            "reasoning": {"effort": reasoning_effort},
+        response = client.responses.create(
+            model=teacher_name,
+            instructions=messages[0]["content"],  # system
+            input=messages[1]["content"],  # user
+            reasoning={"effort": reasoning_effort},
             # temperature=temperature,
             # top_p=top_p,
-            "max_output_tokens": max_new_tokens,
-        }
+            max_output_tokens=max_new_tokens,
+        )
 
         # if temperature is not None:
         #     pass
-        if top_p is not None:
-            kwargs["top_p"] = top_p
+        # if top_p is not None:
+        #     kwargs["top_p"] = top_p
 
-        response = client.responses.create(**kwargs)
+        # response = client.responses.create(**kwargs)
         outs.append(response.output_text.strip())
 
         if sleep_s > 0:
@@ -158,7 +158,7 @@ def main() -> None:
     ap.add_argument("--out_jsonl", required=True)
     ap.add_argument("--n", type=int, default=1)
     ap.add_argument("--temperature", type=float, default=None)
-    ap.add_argument("--top_p", type=float, default=1.0)
+    ap.add_argument("--top_p", type=float, default=None)
     ap.add_argument("--max_new_tokens", type=int, default=256)
     ap.add_argument(
         "--model",
