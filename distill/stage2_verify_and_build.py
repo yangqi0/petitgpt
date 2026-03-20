@@ -98,27 +98,29 @@ def extract_numbers(text: str) -> List[str]:
     return [normalize_numeric_token(x) for x in nums]
 
 
-def math_answer_is_correct(prompt_id: str, answer: str, answer_key: Dict[str, List[str]]) -> bool:
+def math_answer_is_correct(
+    prompt_id: str, answer: str, answer_key: Dict[str, List[str]]
+) -> bool:
     allowed = answer_key.get(prompt_id, [])
     if not allowed:
         return False
 
-    # 先做宽松字符串规范化匹配
+    # First, perform loose string normalization matching
     a_norm = normalize_answer(answer)
     allowed_norm = {normalize_answer(x) for x in allowed}
     if a_norm in allowed_norm:
         return True
 
-    # 再做数字序列匹配（对 15.30 vs 15.3 / x=2 / 3/4 and 75% 更稳）
+    # Then, perform numeric sequence matching (more stable for 15.30 vs 15.3 / x=2 / 3/4 and 75%)
     ans_nums = extract_numbers(answer)
 
-    # 允许答案 key 里写成一个完整答案字符串
+    # Allow the answer key to contain a full answer string
     for cand in allowed:
         cand_nums = extract_numbers(cand)
         if cand_nums and cand_nums == ans_nums:
             return True
 
-    # 允许把多个 allowed 条目拼在一起组成目标数字集合
+    # Allow combining multiple allowed entries to form the target set of numbers
     flat_allowed_nums = []
     for cand in allowed:
         flat_allowed_nums.extend(extract_numbers(cand))
@@ -164,21 +166,18 @@ MATH_ANSWER_KEY: Dict[str, List[str]] = {
     "math_word_0006": ["34", "34.0"],
     "math_word_0007": ["126", "126.0"],
     "math_word_0008": ["15", "15.0"],
-
     "math_algebra_0009": ["6", "6.0", "x=6", "x = 6"],
     "math_algebra_0010": ["9", "9.0", "x=9", "x = 9"],
     "math_algebra_0011": ["9", "9.0", "x=9", "x = 9"],
     "math_algebra_0012": ["24", "24.0", "x=24", "x = 24"],
     "math_algebra_0013": ["4", "4.0", "x=4", "x = 4"],
     "math_algebra_0014": ["13", "13.0", "y=13", "y = 13"],
-
     "math_ratio_0015": ["25", "25.0", "25%"],
     "math_ratio_0016": ["55", "55.0"],
     "math_ratio_0017": ["3/4", "75", "75.0", "75%"],
     "math_ratio_0018": ["21", "21.0"],
     "math_ratio_0019": ["15", "15.0"],
     "math_ratio_0113": ["3/4 and 75%", "75% and 3/4", "3/4", "75%"],
-
     "math_stats_0020": ["5", "5.0"],
     "math_stats_0021": ["4.5"],
     "math_stats_0022": ["4", "4.0"],
@@ -187,7 +186,9 @@ MATH_ANSWER_KEY: Dict[str, List[str]] = {
 }
 
 
-def math_answer_is_correct(prompt_id: str, answer: str, answer_key: Dict[str, List[str]]) -> bool:
+def math_answer_is_correct(
+    prompt_id: str, answer: str, answer_key: Dict[str, List[str]]
+) -> bool:
     allowed = answer_key.get(prompt_id, [])
     if not allowed:
         return False
@@ -314,7 +315,9 @@ def verify_code_row(row: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     )
 
 
-def verify_math_row(row: Dict[str, Any], answer_key: Dict[str, List[str]]) -> Optional[Dict[str, Any]]:
+def verify_math_row(
+    row: Dict[str, Any], answer_key: Dict[str, List[str]]
+) -> Optional[Dict[str, Any]]:
     resp = row["response"]
     ok, why = check_math_format(resp)
     if not ok:
