@@ -13,7 +13,7 @@ import sys
 import time
 from dataclasses import asdict
 from pathlib import Path
-from typing import Any, List, Optional, Tuple, Dict
+from typing import Any, List
 
 import torch
 import torch.nn.functional as F
@@ -92,7 +92,7 @@ def read_jsonl(path: str) -> list[dict[str, Any]]:
 # -------------------------
 # Fixed prompts
 # -------------------------
-FIXED_PROMPTS_V1 = [
+FIXED_PROMPTS = [
     "[Code] Write a Python function fib(n) that returns the n-th Fibonacci number iteratively. Raise ValueError if n < 0.",
     "[Code] Fix this Python function so it returns the reversed string correctly:\n\ndef reverse_string(s):\n    out = ''\n    for ch in s:\n        out = out + ch\n    return out\n",
     "[Code] Write a Python function dedup_preserve_order(items) that removes duplicates while keeping the first occurrence order.",
@@ -636,8 +636,6 @@ def main():
     refusal_patterns = [
         p.strip() for p in args.refusal_patterns.split(",") if p.strip()
     ]
-
-    FIXED_PROMPTS = FIXED_PROMPTS_V1
 
     cfg: GPTConfig | None = None
 
