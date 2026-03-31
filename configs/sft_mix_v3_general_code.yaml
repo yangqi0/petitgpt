@@ -1,0 +1,84 @@
+version: sft_mix_v3_general_code
+
+token_budget:
+  target_train_tokens: 60000000
+  val_ratio: 0.002
+  min_val_tokens_per_source: 100000
+
+mixture_by_token:
+  A_general: 0.63
+  B_code: 0.34
+  C_basic_math: 0.025
+  D_safety: 0.005
+
+buckets:
+  A_general:
+    sources:
+      - name: smol_smoltalk
+        weight_in_bucket: 0.50
+        max_rounds: 2
+        max_assistant_tokens: 256
+
+      - name: ultrachat_200k
+        weight_in_bucket: 0.20
+        max_rounds: 2
+        max_assistant_tokens: 256
+
+      - name: oasst1
+        weight_in_bucket: 0.20
+        max_rounds: 2
+        max_assistant_tokens: 320
+
+      - name: dolly_15k
+        weight_in_bucket: 0.10
+        max_rounds: 2
+        max_assistant_tokens: 192
+
+  B_code:
+    sources:
+      - name: magicoder_evol_110k
+        weight_in_bucket: 0.35
+        require_ast_parse: true
+        max_rounds: 1
+        max_assistant_tokens: 384
+
+      - name: viscode_200k
+        weight_in_bucket: 0.25
+        require_ast_parse: true
+        max_rounds: 1
+        max_assistant_tokens: 384
+
+      - name: codealpaca_20k
+        weight_in_bucket: 0.40
+        require_ast_parse: true
+        max_rounds: 1
+        max_assistant_tokens: 320
+
+  C_basic_math:
+    sources:
+      - name: gsm8k_train
+        weight_in_bucket: 0.80
+        max_rounds: 1
+        max_assistant_tokens: 256
+
+      - name: metamathqa
+        weight_in_bucket: 0.20
+        max_rounds: 1
+        max_assistant_tokens: 256
+
+  D_safety:
+    sources:
+      - name: local_refusal_templates
+        type: jsonl
+        path: dataset/sft_canon/local_refusal_templates.canon.jsonl
+        n: 1200
+        weight_in_bucket: 1.00
+        max_rounds: 1
+        max_assistant_tokens: 96
+
+global_filters:
+  drop_if_empty: true
+  drop_if_too_short_chars: 16
+  ban_tokens_in_assistant:
+    - "###EOC###"
+  max_total_tokens_per_example: 1024
