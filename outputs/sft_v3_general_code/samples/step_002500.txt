@@ -5,27 +5,27 @@ in_domain: n=10 mode=full_context show_ref=False dump_prompt=False sample_eval_j
 [Fixed prompts]
 --------------------------------------------------------------------------------
 [Q1] [Code] Write a Python function fib(n) that returns the n-th Fibonacci number iteratively. Raise ValueError if n < 0.
-[A1] Here is a Python solution for your problem:
+[A1] ```python
+def fib(x):
+    if x == 0:
+        return 0
+    else:
+        raise ValueError("Fibonacci number is not 0")
+```
 
-```python
-def fib(num):
+This function takes two arguments - `n` and `x`. It first checks if `n < 0`, which means the number is positive. If it is, then the number has been appended to the function. Otherwise, it raises a ValueError. 
+
+The function is called with the input `n = 0` and a `if x != 0`:
+
+```python  
+def fib(n):
     try:
-        # Define an empty list to store the Fibonacci numbers
-        Fibonacci_numbers = []
-
-        # Initialize the list with the numbers 0 through n
-        Fibonacci = [0, 1]
-        
-        # Iterate over the list and check if the current element is 0 or 1
-        for i in range(2, num + 1):
-            # Check if the element is at index 0 or not
-            if i % j == 0:
-                # If the element equals to 0, append it to the list
-                Fibonacci[i].append(j)
-            
-            # If there's no element at index 1, append a new element of size j to the Fibonacci list
-            else:
-                Fibonacci.append(
+        if n <= 0:
+            raise ValueError('Invalid input')
+        return n
+    except ValueError as e:
+        print(f"Error: {e}")
+```
 --------------------------------------------------------------------------------
 [Q2] [Code] Fix this Python function so it returns the reversed string correctly:
 
@@ -37,155 +37,154 @@ def reverse_string(s):
 
 [A2] ```python
 def reversed_string():
-    out_str = 'This is not a valid Python function'
-    return ''.join(reversed_string())
-
-print(reverse_string('This is NOT a valid python function'))  # Output: 'This string is not valid Python'
+    out_str = 'This is a test'
+    print(reverse_string('This is test'))
+    print()
+    print('This test passed')
+    print('\n') # Test with test cases
 ```
-
-In this function, we first check if the input string is valid Python language and then use the `*` operator to convert it into a string. If it is not, we use `+` to convert the string to lower case. If the string is invalid or not valid, we convert it back to upper case using `==`. If the input is valid, `+`, `-`, `=`, `*`, `/`, `&`, `$`,
+In this code, we first define a function `reverse_test()` that takes a string as an argument and returns the reverse string. Then, we use the `print()` function to print the reversed version of the string.
+The `reverse()` function is used to reverse the string after the test cases. It uses the `for` loop to iterate over the string and check if it is the reversed one. If it is, it prints the reversed input string. If not, it returns a message saying "This is
 --------------------------------------------------------------------------------
 [Q3] [Code] Write a Python function dedup_preserve_order(items) that removes duplicates while keeping the first occurrence order.
 [A3] ```python
 def dedup(items):
-    items = list(items[::-1])
+    items = list(set(items))
 
     # Remove duplicates and keep the first element
     for item in items:
-        item.pop()
+        items.remove(item)
 
     return items
 ```
 
-This implementation uses a function `dedup` to remove duplicates from the list of items. The `remove_duplicates` function takes two arguments: a list of lists where each element is a list containing only unique elements and the value at which it was removed.
-The `pop()` method of the function returns the result of removing duplicates in the list.
-This code assumes that the order of items in the input list is preserved. If not, you can use a dictionary comprehension to create a new dictionary with the same keys as the original list but with
+The `dedup` function converts the list of items into a set using a set comprehension. Then, it returns the first `item` in the list.
+```python 
+
+This function uses a set to remove duplicates, and then iterates through the `items` list to remove all duplicates. The `remove` function is used to remove duplicate items in the sorted list. Finally, it uses the `remove_first` method to remove the first item from the `Items`.
+
+Note: This function is case sensitive, so the
 --------------------------------------------------------------------------------
 [Q4] [Code] Write a Python function count_words(text) that returns a dictionary of lowercase word frequencies. Ignore punctuation like commas and periods.
 [A4] ```python
 def count_word_freqs(text):
     words = text.split()
-    freq_dict = {}
+    words_dict = {}
 
     for word in words:
         if word[0].isalpha():
-            freq_word = word[1:]
+            words_dictionary[word[1]].append(word)
         else:
-            freq = word[:2]
-
-            if freq not in freq_dic:
-                freq_dictionary[freq] = 1
-            freq += freq_words[freq][:-1]
-
-            freq_counter = freq_list.count(freq)
-            freq *= freq_frequency
-            freq %= freq_length
-
-    return freq
+            words_.append(str(word))
+    
+    return {k: v for k, v in zip(words_dict.keys(), words)}
 ```
 
-This function works by first checking the input text against the given list of words. If the word is a word, it iterates over all occurrences of the word and checks if it is
+This function uses the `zip` function to split the text into words and use it to count the frequency of each word. It also uses a list comprehension to iterate over the text and create a dictionary where each key is a word and its value is a count. The dictionary keys are `'words'`, `'counts'`, and
 --------------------------------------------------------------------------------
 [Q5] [Code] Explain in 3 sentences why binary search requires a sorted list, then write a Python function binary_search(nums, target).
-[A5] 1. Binary search is a technique used by cryptographers to determine the position of an element in a binary string. In Python, binary search is performed using the `bin()` function.
-2. A binary search algorithm is a method used to find the first number in a sequence and return the index of that number.
-3. The binary search for a given target can be done using the following code:
-
-```python
-def binary_find_target(nums):
-    target = 0
-    while True:
-        try:
-            target += 1
-            if target == len(nums) - 1:
-                break
-        except ValueError:
-            print("Error: Target must be non-negative")
-        else:
-            return target
-```
-
-In this function, we use the `len
+[A5] 1. Binary search is a popular algorithm for finding the exact index of a given array. It uses binary search to find the index of the array.
+2. Binary_search is a technique that can be used to find a subset of a binary search tree if the search tree is empty.
+3. In Python, binary search is used to compare two lists, and binary search algorithm is used for comparing two sets of elements.
+4. Binary Search is a built-in function in Python, so it's not commonly used in other programming languages.
+5. BinarySearch algorithm is a library in Python and is known for its efficient binary search algorithms.
+6. In this example, binary_find() function is used in binary_sort() function. It returns the sorted list
 --------------------------------------------------------------------------------
 [Q6] [Math] Solve: A notebook costs 8 euros. You buy 3 notebooks and get a 25% discount on the total. What is the final price?
 [A6] To solve this problem, we need to determine the cost of the notebook and the discount for each notebook.
-The cost of an notebook is $8.00.
-We can calculate the total cost by dividing the total amount spent by the number of noteboons we spend.
-$8/notebook = 4.00
-#### 4.0
+The cost of an notebook is x * 15 = 10 dollars.
+For a total cost of 8 + 30 = <<8+30=36>>36 dollars, the cost is x + 40 + 30 + 36 = <<x+40+30+36=480>>480 dollars. 
 
-This solution uses Python's built-in `cost` function to calculate the cost per notebook and discount, and then it calculates the final cost using the formula for the total profit.
-This approach assumes that the notebook costs $8 dollars, so you should consider the cost-of-a-notebook as the final profit. If there is a mistake in your code, you may need to adjust the calculation accordingly.
-#### 1
+Therefore, the final cost of A notebook is 480 - 8 = <<480-8=27>>27 dollars. We can now multiply these values by the discount amount and find the final profit.
+```python
+# Calculate the cost
+cost_of_notebook = (5 * 15) / 3
+print(cost_for_notebooks)
 --------------------------------------------------------------------------------
 [Q7] [Math] Solve for x: 3x + 5 = 23. Show the steps briefly.
-[A7] Here is a Python solution using a recursive function to solve the equation.
+[A7] [3x + 10 - 5 = -2]
+
 ```python
 def solve(x):
-    return x - 3 * x 
+    if x == 0:
+        return None
+    
+    # Convert x to its equivalent form, and add one to it
+    return x * (1/x) + 2
 
 # Test the function
-print(solve([3, 2, 5]))   # Output: 23
+print(solve([3, -2, -5]))  # Output: 23
 ```
 
-This program works by first checking if the input `x` is equal to 0 or 1, then checks if it's greater than 0. If it is, it prints `23`. Otherwise, it returns `3`. 
-
-If the input is not equal to zero, the function returns `23`, which is the correct answer. If the input equals zero, it uses the recursive function again to check the value of `x`.
-
-You can use this function like this:
-
-```Python
-print((
+This script first checks if the input is a number, then converts it to its standard form, so we can use Python's built-in functions like `multiply` and `divide`. Then, we check if this is an integer or a float. If so, we multiply both sides of the equation by `x`, and add them together. Finally, we return the result.
 --------------------------------------------------------------------------------
 [Q8] [Math] A ladder is 12 meters long. Tom climbs it 5 times. How many meters does he climb in total?
-[A8] If the ladder is 10 meters high and the top is 5 meters high, then the ladder will be 4 meters tall.
-If the top has 8 meters, then Tom climbers have 4*8 = <<4*8=16>>16 meters.
-#### 16
-The answer is: 16
-#### 64
-The problem statement can be solved by using Python code, which is a programming language for problem-solving.
-Let's break down the code to solve this problem.
-The ladder is made up of a 6 meter long ladder that reaches the top of the room.
-We need to calculate the number of meters he climbs the ladder in total.
-First, we need to find the total height of the ladder.
-Next, we multiply the height by the length of the
+[A8] If the ladder is 10 meters tall and the top of the ladder measures 5 meters, then the ladder can be described as a "trail" or a "walking walk."
+
+This problem can be solved using Python programming language, as follows:
+
+```python
+# Calculate the height of the top-of-the-level
+height = 6
+
+# Find the height at the bottom of the staircase
+h_lift = height - 5
+
+print(h_lifting)
+```
+
+When you run this program, it will print: `5 meters` because the ladder climbs up 5 times before the top reaches the bottom. 
+
+In this case, the top will be 5 meters and the bottom will be 4 meters.
+"""
 --------------------------------------------------------------------------------
 [Q9] [Math] Given the list [2, 4, 4, 4, 5, 5, 7, 9], compute the mean and variance, and explain the steps briefly.
-[A9] ```python
-def compute_mean(list):
-    sum = 0
-    for item in list:
-        sum += item * (item - 1)
-    return sum / len(list)
+[A9] 1. Define the function `mean` to calculate the mean.
+2. Compute the variance by subtracting the mean from each element in the array.
+3. Calculate the mean using the formula for the sum of squares of the differences between two numbers.
+4. Calculate and print the mean of the mean for the given array. This can be done in Python with the following steps:
 
-# Test the function
-print(compute_mean([2, 2, 4]))  # returns [0.5, 3.5]
+```python
+def mean(arr):
+    sum_squared = 0
+    for i in arr:
+        sum_square = sum_squares * i 
+        sum_sum = sum(i) 
+        sum += sum_sqr * i 
+    return sum
 ```
-This Python function will compute the sum of all elements in the list and then add them together. The function calculates the mean by multiplying each element by its corresponding value.
-The sum is calculated as the sum divided by the number of elements in each element, and the squared value is the sum multiplied by the given number of values.
-In the example, the output would be: `4.0`
 
-Note that this function
+This program uses the formula `sum_squared`, which calculates the sum squared difference between two values, and then sums
 --------------------------------------------------------------------------------
 [Q10] [General] Write a short polite email asking for an update on a job application after an interview.
 [A10] ```python
 import email
 
-# Create a new email address and add the employee to our new email
-email_new = email.email()
-
-print(f"Your new email is {email_old}")
+# Create a customer list
+customer_list = email.get('customer_data')
+print(customer_name)
 ```
 
-This will give you a response that is clear and readable. The email should be email@example.com. If you want to add a new employee, you can do so by running the following code:
+This will print:
 
 ```javascript
-email = "General"
-new_email = email_new + "@example"
+customer1
 ``` 
 
-This code will create a new account with the new email and create a list of employees with the given name.
-The email will now have a title and a description. The employee is added to
+You can then get the customer's name and email address by using the `get` method with the `email` function to retrieve the customer name.
+```java
+public class Customer {
+    public static void main(String[] args) {
+        System.out.println("Hi there! I'm Job Application Manager!");
+    }
+
+    // Get customer details
+    Customer customer_data;
+
+    // Send the customer details to the customer list
+    customer_list.send(customer);
+}
+```
 --------------------------------------------------------------------------------
 [Q11] [General] Summarize this in 3 bullet points: 'Python is widely used in data analysis, automation, and machine learning because it has a rich ecosystem of libraries and a readable syntax.'
 [A11] Here's a Python solution for your question:
@@ -194,21 +193,33 @@ The email will now have a title and a description. The employee is added to
 import math
 from typing import List
 
-def sum_functions(input_list: List[str], output_list):
-    if len(inputList) < 3:
-        return "Error: Input list must be a list of strings."
-    else:
-        num_functions = [math.factorial(i) for i in input_list]
-        return sum(num_functions) + math.log2(num)
+def sum_functions(numbers: List[int], functions: List['Function'] = None) -> int:
+    if functions is None:
+        return 0
+
+    result = 1
+    for i in range(len(numbers)):
+        result *= math.sqrt(numbers[i])
+    
+    return result
 ```
 
-The function `sum_functions` takes three arguments: the input list, a list containing the input numbers, and a function that returns the sum of the functions. The function is called with three arguments, `input_lists`, `output_lists`. If the
+This solution uses Python's built-in `math.sqrt()` function to calculate the square root of a number, and then checks if it's positive or negative. If the square roots are positive, the function returns 0. Otherwise, it returns the sum of the squares of the numbers. The result is then calculated by multiplying the square of the function with the sum
 --------------------------------------------------------------------------------
 [Q12] [General] Explain the difference between a Python list and a tuple in simple terms, using at most 5 sentences.
-[A12] A Python list is a collection of items which can be used to represent data as a single value or as a set. In other words, a list is an unordered collection of elements, while a tuple is a single item.
-In simpler terms, a tuple can be thought of as a list of tuples where each tuple is an instance of a specific type, such as a number, character, string, etc. A tuple is typically used for storing data, while in complex situations, it may be used for representing data as collections of items.
-The distinction between a list and an tuple in the given case can be seen as an example of a basic syntax error.
-An example of an example is "a list contains numbers" and it can be understood as a simple string that contains
+[A12] 1. Python is a powerful language that provides efficient and efficient programming methods for complex data structures such as lists and tuples.
+2. In this case, Python is the simplest way to define a Python function.
+3. Python's built-in `collections` module provides more complex data types, such as strings and integers.
+4. A Python list is an iterable object with elements from a list.
+5. Python has a built-ins `collections.Counter` that can be used to count how many times a particular element appears in a list, which is the key in Python's dictionary lookup function. 
+
+Here is the Python code for a Python List:
+
+```python
+from collections import Counter
+
+def get_lists(lst):
+    # Initialize an empty
 --------------------------------------------------------------------------------
 
 [In-domain prompts from val_jsonl]
@@ -219,27 +230,37 @@ An example of an example is "a list contains numbers" and it can be understood a
 [User]
 Write a short story about Batman, Superman and Spiderman where the bad guy wins
 [Model]
-The good guy is a good man. He always wins. The bad guy's not going to win because he's not the best of all things. He never wins because he has no friends. He doesn't have any friends. And he always wins because it's been raining too much. So he always won because he is the best guy in the world. But he never wins for it's not being good enough. That's why he's a good character, he's always winning.
-He always wins by the way he walks, he always takes his time, and he always gets the best out of everyone. So when he's got the best he can be, he won't get the best. So this story is about Batwoman, the bad lady, the good guy,
+The good guy is a good man. He always wins. The bad guy's not going to win because he's already been hit by a big machine. If you don't have a good leader to take on this, you can't have much of a good team that's out there. The good guy won't win because it's not really good. So, when I tell a bad guy what he's got in his mind, he will come up with a good strategy. It'll be like, "Wrong, don't do that." Or, "That's the way it should be done." Or "I'm here to help you get it done, and I'll take care of everything!" Or "You've got to do it, the bad guys." Or even "It
 --------------------------------------------------------------------------------
 [V2] idx=3873 bucket=C_basic_math
 [User]
 What is the largest prime number that divides evenly into the sum of 11! and 12!?
 [Model]
-The largest prime numbers greater than 10 that divide evenly into an even number of divisors of n are 1, 2, 3, 5, 7, 11, 13, 17, 19, 21, 29, 31, 37, 39, 40, 41, 43, 44, 47, 48, 49, 50, 53, 54, 55, 56, 57, 58, 59, 60, 61, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102
+The largest prime numbers greater than one that divide evenly into an even number of divisors of an integer divisible by any number less than that divisor must be divisible by the smallest prime number divisible by both the divisor and divisor.
+```python
+def is_prime(n):
+    if n < 2 or n % 2 == 0:
+        return False
+    for i in range(2, int(n**0.5) + 1):
+        if n % i == 0 and is_prime(i):
+            return False
+
+    return True
+```
+This function iterates through the list of divisors, checks each number's divisors, and if it's divisible by these divisors, it's prime. If a number is divisible by no divisors, then it's not prime. Otherwise, it is
 --------------------------------------------------------------------------------
 [V3] idx=3091 bucket=C_basic_math
 [User]
 John climbs up 9 flights of stairs.  Each flight is 10 feet.  If each step is 18 inches, how many steps does he climb up?
 [Model]
 If each step in the flight is 9 feet, then each step will be 17 feet * 9 = <<17*9=97>>97 feet.
-If each trip is 10 ft, then a total of 9 + 97 = <<9+97=135>>135 feet
-#### 135
-The answer is: 135
-In this case, each step would be x steps/flight = <<x-13=15>>15 feet
-So in total, the climb would be 13*15 = <<13*15=480>>480 feet
-The total number of steps is 130 feet + 135 feet = <<130+135=298>>298 feet
-Then the total distance from each step to the top of the stairs is 150 feet - 298 feet =<<150-
+If each trip is 10 ft, then a total of 5 x 10 = <<5*10=50>>50 feet will be done.
+#### 50
+The answer is: 50
+It means that each step can have a total height of 1 foot. 
+
+If a total distance of 7 feet is needed, then the total distance is 7 + 1 = <<7+1=14>>14 feet. 
+This simplifies to 14 + 5 = <<14+5=21>>21 feet. The total distance can be calculated by subtracting the number of steps required from the total height and dividing by the total time: 21 feet - 14
 --------------------------------------------------------------------------------
 [V4] idx=1368 bucket=A_general
 [User]
@@ -247,64 +268,76 @@ Has Thailand been part in the ABU TV Song Festival
 
 The participation of Thailand in the ABU TV Song Festival has occurred twice since the inaugural ABU TV Song Festival began in 2012. Since their début in 2013, the Thai entry has been organised by the national broadcaster Thai Public Broadcasting Service (TPBS). In 2015, Thailand withdrew from the festival.
 [Model]
-1. Thailand is part of the AUF and is also part of Borneo, Indonesia, Malaysia, Singapore, and Thailand.
-2. The entry of Thailand has been organized by the international broadcaster, Thai Public Television (TVP), which has been held in Thailand for over 10 years.
-3. Thailand has hosted several events such as the AUG, BAR, and SANK in 2013 and 2014.
-4. The participation of Thai in the annual ABU Fest was celebrated in 2016 and 2019.
-5. The ABU FAF Fest is the most recent event in Thailand and has been scheduled for the 2017/2018 season.
-6. The Thai entry will be broadcast on the internet on Friday, March 29th, 2018.
+1. Thailand is part of the AUF and is partnered with the national music agency and the Thai national television channel.
+2. The National broadcaster of Thailand has announced that Thailand will be part of AUFF, the national national broadcasters' network, and has requested to participate in the upcoming AU FAM.
+3. Thailand plans to withdraw from the event and the National broadcaster's network.
+4. The festival will be held at the Thai National Television Center.
+5. The AUFA TV Song Fest will be organized by the National wide channel and will take place at the TNT in Thailand.
+6. The national broadcast is expected to include the national and international music channels, the royalty, the local media outlets
 --------------------------------------------------------------------------------
 [V5] idx=443 bucket=A_general
 [User]
 Can you give me more information about the battery life of the Garmin 1030? Does it last longer than other Garmin models?
 [Model]
-Yes, the battery is a good source of energy for the Gymnosic 1030, and it's also a great source of maintenance and reliability. If the battery lasts longer than the original model, you might be able to save money on the battery if you run out of battery. The battery life is a key feature in the design and the Gluedge design is a great example of how to make your own life-saving electric car battery that runs on battery power. If it does last longer, you may want to consider purchasing a replacement battery that lasts longer. However, it is generally recommended to check the battery's battery life before buying it. Additionally:
-
-1. Battery life is important as it allows for the battery to last longer when the battery needs to be replaced
+Yes, the battery is significantly longer in the Garming 5.5L and 6.5 L models. The battery life varies depending on the model. However, in the 10th edition of the BALRAM, you can expect the battery to last around 5 years or more. You can purchase the 10-year-old version from our website for a $1600 fee. It's a great option for those who want to save money on their travel insurance and will still be able to afford it for a long time.
+In addition to the battery's battery life and rider comfort, the models also offer excellent rider support and safety features. The models can be purchased separately or as a standalone product for you. If it's not available, you may need to purchase the
 --------------------------------------------------------------------------------
 [V6] idx=624 bucket=A_general
 [User]
 What does the weight have to do with it? How does the weight of the hat influence the hat falling off or not? Can you explain this further?
 [Model]
-If the hat falls off, the body feels lighter and more buoyant. This is because the body has a lot of weight attached to it, which means that the weight gets pushed away faster than when the hat's weight is heavy. The amount of weight that's added to the hat will affect its shape and movement, making it harder for the hat to fall off. 
+If the hat falls off or is dropped in a hurry, the weight is the force that pulls the hat forward and downwards. If the hat has a mass of 1 kg, then the weight will also have a mass, which is 1 kg * mass = 1 kg. 
 
-In essence, the weight causes the hat in question to move up and down depending on the distance from the top of the tallest hat. When the hat reaches the height where the hat would normally fall, it might seem like the hat should stay in place, but the weight actually moves up the hat. In other words, the extra weight will make the hat feel lighter and less buoyant, while the weight will have
+If the hats fall off in a crash, the height of the hats will decrease as they fall over. As the hat's mass increases, the pressure inside the hat will increase, leading to a decrease in the height. This is because the weight causes the hat to fall more quickly, resulting in a decrease of the height when the hat starts to fall. The total impact on the hat remains the same, regardless of the distance between the hat and the ground. 
+ 
+
+To calculate the impact of the weight on
 --------------------------------------------------------------------------------
 [V7] idx=4067 bucket=C_basic_math
 [User]
 On a hot day, Megan likes to eat a Popsicle every X minutes. Assuming she keeps up that rate of consumption, Megan can finish 18 Popsicles in 4 hours and 30 minutes. What is the value of unknown variable X?
 [Model]
 Let's break down the information given:
-- Megan has an average daily consumption of 6 times the number of Popsles.
-- She eats 3 Popsises per hour.
-* The number of hours she eats each Popsle is equal to the number she eats: 6 * 3 = <<6*3=12>>12
+- Megan eats an hour per day for 6 hours and 3 minutes per day.
+- She has a total daily consumption of 8 ounces of popsicles.
+* The total daily intake of pics is 8 + 3 = <<8+3=12>>12
+
+The total daily usage of picard is 12 + 6 = <<12+6=17>>17
 
 We can set up the equation as follows:
-Number of Pipsles / Number of Pipesles per hour = Total Consumption
-12Popsles / 6xPopsels/hour = x
-We are given that the total daily consumption is 12Popsches per hour + 6Popslets per hour - 1Popsle = 12Pitsles
-The total consumption is the sum of the individual daily consumption,
+
+12 + 3 + 17 = 18
+
+Subtracting 18 from both sides gives us:
+6 - 17 = 15
+
+Now we need to isolate the left side of the equation by subtracting the value from both the right side:
+9 - 17 - 17
+
+Finally, we divide
 --------------------------------------------------------------------------------
 [V8] idx=1343 bucket=A_general
 [User]
 Tell me which of the following are breeds or types of cats: Maine Coon, corgi, golden retriever, Siamese, domestic short hair, Chihuahua, Samoyed, Sphynx, tabby
 [Model]
-Maine Coon is a breed and type of cat. Siameses is a type of dog and is not related to cats. The two breeds are the Golden Retrievers and the Siamesee. Both breeds are breed-specific. They are also closely related to each other in terms of their coloration, appearance, and behavior.
-The following are all breeds or varieties of cats that are not related by any other name: Maine Doberman, Maine Siskin, Maine Crayon, Maine Maltese, Maine Red-Eyed, Maine Long-Tail, Maine Poodle, Maine Ruff, Maine Witch, Maine Egg, Maine Bark, Maine Narcissus, Maine Vance, Maine Black, Maine Oak, Maine Mountain
+Maine Coon is a breed and type of cat.
+Maine is a type of dog and type is not breed.
+Silky is a cat. They are not breeds.
+Chihuot is a domesticated cat. It is not a breed. 
+
+They are not cats. They have a breed named "Fairfax" which means "Horse-Horn." They have been adopted by the Cat Island Society and have become a favorite pet for the cat owners. 
+	The cat has a breed called "Maine's" and the dog has a cat as its breed. The dog has also had a breed known as "Silky," which means a cat is a dog.
+	The dog has no breed as it is not an breed.
 --------------------------------------------------------------------------------
 [V9] idx=617 bucket=A_general
 [User]
 What would the world look like today if dinosaurs never went extinct?
 [Model]
-If the world looked like it was gone, there would be many things to imagine about dinosaurs that were once alive today. 
-There could be more than one species on earth, and they have been around for billions of years.  If there were any dinosaurs, there might be some dinosaurs that survived to become extinct, but these are just some examples.  
+If there were no dinosaurs, we would have a world with dinosaurs. If there were dinosaurs, it would be like our current situation. The world would look like this:
 
-If dinosaurs never came back to life, then there would still be many ways to think about dinosaurs being extinct today. 
+[This is a real world where dinosaurs died and many other animals died.]
 
-For example, if dinosaurs died out, then dinosaurs would probably be extinct today, but there could also be many new types of dinosaurs. 
- 
-
-Now, if the world looks like it is gone forever, then it will look like it has already gone extinct, so it may not be an accurate representation
+The world would have many dinosaurs, but only in a few places. For example, the dinosaurs in Jurassic Park in New Mexico would be extinct. There would be a few more dinosaurs alive than dinosaurs, and they would look different from each other. We would have multiple dinosaurs, with some living for example, and others on land. Each dinosaur would be able to adapt to their environment, and it would need to adapt and survive. This is a typical scenario for living in an area of Earth where dinosaurs continue to roam and evolve
 --------------------------------------------------------------------------------
 [V10] idx=1762 bucket=B_code
 [User]
@@ -314,16 +347,10 @@ Here is a Python implementation of the function:
 
 ```python
 def convert_to_currency(base_value):
-    base_currency = str(baseval) + '-' * int(round(float(basevalue))*100)
-
-    if base_value < 0 or base_string == '':
-        return base_code
-    else:
-        base_dollar = base_str() % int(baseprice)
-
-        return base
+    base_currency = str(baseval) + '-' * int(round(float(basevalue), 2))
+    base = base_value % base_price
+    return base
 ```
 
-This function uses the built-in `round()` function to round the decimal to the closest value that is in the base-string. The rounded decimal is then converted to the desired format using the `round` function. The result is a string with the decimal equivalent of the original decimal number as the decimal string.
-The
+This function will convert a given base-1 number into a standard USD currency format using the `round()` function. It then uses the built-in round() function to round the decimal to the closest decimal place. The rounded decimal point is the value at which the decimal is rounded to the decimal point. If the decimal value is positive, the rounded decimal is the correct decimal. Otherwise, the decimal in the specified decimal is converted to a decimal. Finally,
 --------------------------------------------------------------------------------
