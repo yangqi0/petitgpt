@@ -1,0 +1,65 @@
+version: sft_mix_v4_simple_general_code
+
+token_budget:
+  target_train_tokens: 50000000
+  val_ratio: 0.005
+  min_val_tokens_per_source: 50000
+
+mixture_by_token:
+  A_general: 0.70
+  B_code: 0.30
+
+buckets:
+  A_general:
+    sources:
+      - name: smol_smoltalk
+        weight_in_bucket: 0.35
+        max_rounds: 2
+        max_assistant_tokens: 192
+
+      - name: no_robots
+        weight_in_bucket: 0.25
+        max_rounds: 1
+        max_assistant_tokens: 192
+
+      - name: alpaca_cleaned
+        weight_in_bucket: 0.20
+        max_rounds: 1
+        max_assistant_tokens: 160
+
+      - name: dolly_15k
+        weight_in_bucket: 0.15
+        max_rounds: 1
+        max_assistant_tokens: 160
+
+      - name: lima
+        weight_in_bucket: 0.05
+        max_rounds: 1
+        max_assistant_tokens: 224
+
+  B_code:
+    sources:
+      - name: mbpp_sanitized
+        weight_in_bucket: 0.45
+        require_ast_parse: true
+        max_rounds: 1
+        max_assistant_tokens: 224
+
+      - name: codealpaca_20k
+        weight_in_bucket: 0.35
+        require_ast_parse: true
+        max_rounds: 1
+        max_assistant_tokens: 224
+
+      - name: viscode_200k
+        weight_in_bucket: 0.20
+        require_ast_parse: true
+        max_rounds: 1
+        max_assistant_tokens: 256
+
+global_filters:
+  drop_if_empty: true
+  drop_if_too_short_chars: 16
+  ban_tokens_in_assistant:
+    - "###EOC###"
+  max_total_tokens_per_example: 768
