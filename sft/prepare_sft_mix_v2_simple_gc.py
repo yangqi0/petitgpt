@@ -174,7 +174,7 @@ REG: Dict[str, SourceDef] = {
     "magicoder_evol_110k": SourceDef("ise-uiuc/Magicoder-Evol-Instruct-110K", "train"),
     "viscode_200k": SourceDef("TIGER-Lab/VisCode-200K", "train"),
     "codealpaca_20k": SourceDef("sahil2801/CodeAlpaca-20k", "train"),
-    "no_robots": SourceDef("HuggingFaceH4/no_robots", "train_sft"),
+    "no_robots": SourceDef("HuggingFaceH4/no_robots", "train"),
     "alpaca_cleaned": SourceDef("yahma/alpaca-cleaned", "train"),
     "lima": SourceDef("GAIR/lima", "train"),
     "mbpp_sanitized": SourceDef("Muennighoff/mbpp", "test", subset="sanitized"),
@@ -521,9 +521,23 @@ def main() -> None:
             if cat not in allowed:
                 return False
 
+        raw_prompt = row.get("prompt", "") or row.get("instruction", "") or row.get("text", "")
+        if not raw_prompt and isinstance(row.get("messages"), list):
+            try:
+                first_user = next((m.get("content", "") for m in row["messages"] if str(m.get("role", "")).strip().lower() == "user"), "")
+                raw_prompt = first_user
+            except Exception:
+                raw_prompt = ""
+        p = str(raw_prompt).lower()
+
+        must_contain = spec.get("allow_if_prompt_contains", None)
+        if must_contain:
+            keys = [str(x).strip().lower() for x in must_contain if str(x).strip()]
+            if keys and not any(k in p for k in keys):
+                return False
+
         banned_substrings = spec.get("ban_if_prompt_contains", None)
         if banned_substrings:
-            p = str(row.get("prompt", "") or row.get("instruction", "") or row.get("text", "")).lower()
             for bad in banned_substrings:
                 if str(bad).strip().lower() in p:
                     return False
@@ -558,6 +572,7 @@ def main() -> None:
     def fill(fp, split_name: str, bucket: str, name: str, target_tokens: int, spec: Dict[str, Any]) -> int:
         tokens = 0
         written = 0
+        max_examples_this_source = int(spec.get("max_examples", 0) or 0)
 
         if name == "oasst1" and spec.get("type") != "jsonl":
             sd = REG["oasst1"]
@@ -573,6 +588,8 @@ def main() -> None:
                 tokens += n
                 written += 1
                 if args.max_examples_per_source and written >= args.max_examples_per_source:
+                    break
+                if max_examples_this_source and written >= max_examples_this_source:
                     break
                 if tokens >= target_tokens:
                     break
@@ -593,6 +610,8 @@ def main() -> None:
             tokens += n
             written += 1
             if args.max_examples_per_source and written >= args.max_examples_per_source:
+                break
+            if max_examples_this_source and written >= max_examples_this_source:
                 break
             if tokens >= target_tokens:
                 break
