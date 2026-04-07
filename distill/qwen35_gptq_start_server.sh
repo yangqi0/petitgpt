@@ -28,7 +28,7 @@ SERVED_MODEL_NAME="${SERVED_MODEL_NAME:-teacher}"
 HOST="${HOST:-0.0.0.0}"
 PORT="${PORT:-8000}"
 API_KEY="${API_KEY:-EMPTY}"
-MAX_MODEL_LEN="${MAX_MODEL_LEN:-4096}"
+MAX_MODEL_LEN="${MAX_MODEL_LEN:-8192}"
 GPU_MEMORY_UTIL="${GPU_MEMORY_UTIL:-0.85}"
 
 source "$VENV_DIR/bin/activate"
@@ -61,3 +61,5 @@ vllm serve "$MODEL" \
   --api-key "$API_KEY" \
   --gpu-memory-utilization "$GPU_MEMORY_UTIL" \
   --max-model-len "$MAX_MODEL_LEN"
+  --language-model-only
+  --served-model-name teacher
