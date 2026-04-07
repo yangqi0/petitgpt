@@ -22,8 +22,8 @@ set -euo pipefail
 PROJECT_DIR="${PROJECT_DIR:-/workspace/petitgpt}"
 VENV_DIR="${VENV_DIR:-$PROJECT_DIR/.venv-qwen35}"
 
-# MODEL="${MODEL:-Qwen/Qwen3.5-35B-A3B-GPTQ-Int4}"
-MODEL="${MODEL:-Qwen/Qwen3.5-9B}"
+# MODEL="${MODEL:-Qwen/Qwen3.5-35B-A3B-FP8}"
+MODEL="${MODEL:-Qwen/Qwen3.5-35B-A3B-FP8}"
 SERVED_MODEL_NAME="${SERVED_MODEL_NAME:-teacher}"
 HOST="${HOST:-0.0.0.0}"
 PORT="${PORT:-8000}"
