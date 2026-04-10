@@ -1,22 +1,22 @@
-version: sft_mix_v4_2_simple_general_code
+version: sft_mix_v5_2_general_code
 
 token_budget:
-  target_train_tokens: 30000000
-  val_ratio: 0.005
-  min_val_tokens_per_source: 5000
+  target_train_tokens: 22000000
+  val_ratio: 0.004
+  min_val_tokens_per_source: 3000
 
 mixture_by_token:
-  A_general: 0.58
-  B_code: 0.42
+  A_general: 0.52
+  B_code: 0.48
 
 buckets:
   A_general:
     sources:
       - name: smol_smoltalk
-        weight_in_bucket: 0.45
+        weight_in_bucket: 0.44
         max_rounds: 2
-        max_assistant_tokens: 160
-        max_examples: 18000
+        max_assistant_tokens: 144
+        max_examples: 12000
         ban_if_prompt_contains:
           - "python"
           - "function"
@@ -28,177 +28,159 @@ buckets:
           - "write a program"
           - "write a script"
           - "binary search"
-          - "regex"
-          - "sql"
           - "csv"
           - "json"
-          - "api"
-          - "class"
-          - "algorithm"
+          - "sql"
+          - "regex"
           - "leetcode"
+          - "algorithm"
+          - "class"
+          - "dictionary"
+          - "list comprehension"
 
       - name: no_robots
-        weight_in_bucket: 0.25
-        max_rounds: 1
-        max_assistant_tokens: 160
-        max_examples: 9000
-        ban_if_prompt_contains:
-          - "python"
-          - "function"
-          - "code"
-          - "bug"
-          - "debug"
-          - "fix this"
-          - "implement"
-          - "write a program"
-          - "write a script"
-          - "binary search"
-          - "regex"
-          - "sql"
-          - "csv"
-          - "json"
-          - "api"
-          - "class"
-          - "algorithm"
-          - "leetcode"
-
-      - name: dolly_15k
-        weight_in_bucket: 0.15
+        weight_in_bucket: 0.24
         max_rounds: 1
         max_assistant_tokens: 144
-        max_examples: 7000
+        max_examples: 4500
         ban_if_prompt_contains:
           - "python"
           - "function"
           - "code"
           - "bug"
           - "debug"
-          - "fix this"
           - "implement"
           - "write a program"
           - "write a script"
-          - "binary search"
-          - "regex"
-          - "sql"
           - "csv"
           - "json"
-          - "api"
-          - "class"
+          - "sql"
+          - "regex"
           - "algorithm"
-          - "leetcode"
+          - "class"
 
-      - name: alpaca_cleaned
-        weight_in_bucket: 0.15
+      - name: dolly_15k
+        weight_in_bucket: 0.20
         max_rounds: 1
         max_assistant_tokens: 128
-        max_examples: 5000
+        max_examples: 4000
+        ban_if_prompt_contains:
+          - "python"
+          - "function"
+          - "code"
+          - "bug"
+          - "debug"
+          - "implement"
+          - "write a program"
+          - "write a script"
+          - "csv"
+          - "json"
+          - "sql"
+          - "regex"
+          - "algorithm"
+          - "class"
+
+      - name: alpaca_cleaned
+        weight_in_bucket: 0.12
+        max_rounds: 1
+        max_assistant_tokens: 112
+        max_examples: 1000
         allow_if_prompt_contains:
           - "rewrite"
           - "summar"
           - "email"
-          - "explain"
-          - "clarify"
           - "professional"
           - "formal"
           - "concise"
           - "shorter"
           - "clearer"
+          - "explain"
+          - "difference between"
           - "bullet"
-          - "checklist"
-          - "outline"
+          - "key takeaways"
+          - "polite"
         ban_if_prompt_contains:
+          - "write a story"
+          - "story"
+          - "poem"
+          - "poetry"
+          - "character"
+          - "fiction"
+          - "paragraph"
+          - "instagram"
+          - "dish"
+          - "recipe"
           - "python"
           - "function"
           - "code"
           - "bug"
           - "debug"
-          - "fix this"
           - "implement"
-          - "write a program"
-          - "write a script"
-          - "binary search"
-          - "regex"
-          - "sql"
+          - "script"
           - "csv"
           - "json"
-          - "api"
-          - "class"
+          - "sql"
+          - "regex"
           - "algorithm"
-          - "leetcode"
-          - "write a story"
-          - "write a poem"
-          - "write a paragraph"
-          - "main character"
-          - "fiction"
-          - "novel"
-          - "screenplay"
-          - "instagram"
-          - "dish"
-          - "recipe"
-          - "lyrics"
+          - "class"
 
   B_code:
     sources:
-      - name: local_mbpp_simple
-        type: jsonl
-        path: dataset/sft_canon/local_mbpp_simple.canon.jsonl
-        weight_in_bucket: 0.45
+      - name: local_mbpp_simple_split
+        type: jsonl_split
+        train_path: dataset/sft_mix_v5_general_code/local_mbpp_simple.train.jsonl
+        val_path: dataset/sft_mix_v5_general_code/local_mbpp_simple.val.jsonl
+        weight_in_bucket: 0.34
         require_ast_parse: true
         max_rounds: 1
-        max_assistant_tokens: 192
-        max_examples: 2500
+        max_assistant_tokens: 176
+        max_examples_train: 1800
+        max_examples_val: 120
+
+      - name: local_code_fix_simple_split
+        type: jsonl_split
+        train_path: dataset/sft_mix_v5_general_code/local_code_fix_simple.train.jsonl
+        val_path: dataset/sft_mix_v5_general_code/local_code_fix_simple.val.jsonl
+        weight_in_bucket: 0.24
+        require_ast_parse: true
+        max_rounds: 1
+        max_assistant_tokens: 176
+        max_examples_train: 1500
+        max_examples_val: 90
 
       - name: codealpaca_20k
-        weight_in_bucket: 0.30
+        weight_in_bucket: 0.26
         require_ast_parse: true
         max_rounds: 1
-        max_assistant_tokens: 192
+        max_assistant_tokens: 176
         max_examples: 7000
         allow_if_prompt_contains:
           - "python"
           - "function"
-          - "code"
+          - "write a function"
+          - "return only"
+          - "code block"
           - "bug"
-          - "debug"
-          - "implement"
-          - "write a program"
-          - "write a script"
-          - "string"
-          - "list"
-          - "dictionary"
+          - "fix"
           - "csv"
           - "json"
+          - "string"
+          - "list"
+          - "dictionary"
+          - "iterate"
+          - "reverse"
+          - "count"
 
       - name: viscode_200k
-        weight_in_bucket: 0.15
-        require_ast_parse: true
-        max_rounds: 1
-        max_assistant_tokens: 224
-        max_examples: 5000
-        allow_if_prompt_contains:
-          - "python"
-          - "function"
-          - "fix"
-          - "bug"
-          - "implement"
-          - "list"
-          - "string"
-          - "dictionary"
-          - "csv"
-          - "regex"
-
-      - name: local_code_fix_simple
-        type: jsonl
-        path: dataset/sft_canon/local_code_fix_simple.canon.jsonl
-        weight_in_bucket: 0.10
+        weight_in_bucket: 0.16
         require_ast_parse: true
         max_rounds: 1
         max_assistant_tokens: 192
-        max_examples: 1200
+        max_examples: 4500
 
 global_filters:
   drop_if_empty: true
   drop_if_too_short_chars: 16
   ban_tokens_in_assistant:
     - "###EOC###"
-  max_total_tokens_per_example: 512
+  max_total_tokens_per_example: 448
