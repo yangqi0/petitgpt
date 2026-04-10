@@ -1,0 +1,473 @@
+step=step_002500
+sampling: temp=0.2 top_p=1.0 top_k=0 max_new=160
+in_domain: n=10 mode=full_context show_ref=False dump_prompt=False sample_eval_jsonl=False
+================================================================================
+[Fixed prompts]
+--------------------------------------------------------------------------------
+[Q1] [Code] Write a Python function fib(n) that returns the n-th Fibonacci number iteratively. Raise ValueError if n < 0.
+[A1] def fib_num(n):
+    if n == 0:
+        return 0
+    elif n == 1:
+        print("Incorrect input")
+    else:
+        raise ValueError("Invalid input")
+
+fib_num = fib_ num for i in range(1, n+1):
+    print("Fibonacci number:", fib_Num(i))
+
+# Output
+0
+1
+1   2
+2   3
+3   4
+4   5
+5   6
+6  7
+7  8
+8  9
+9 10
+10 11
+11 12
+12 13
+13 14
+14 15
+15 16
+16 17
+17 18
+18 19
+19 20
+20 21
+21 22
+22 23
+23 24
+--------------------------------------------------------------------------------
+[Q2] [Code] Fix this Python function so it returns the reversed string correctly:
+
+def reverse_string(s):
+    out = ''
+    for ch in s:
+        out = out + ch
+    return out
+
+[A2] reverse_string("This is a new line that will be printed in the future.") # Outputs: "This is now "newline"."
+# Output: "The newline is now 'newline'"
+# Returns: "Newline"
+# """
+def reversed_string_print(s) :
+    out_str = ""
+    for char in s :
+        out_char = char.upper()
+        out += out_string[out_char]
+    return "New line with new character set to " + out_ str + "."
+
+if __name__ == '__main__':
+    print(reverse_ string("This new line will be print in the Future.")) # Output: 'Newline'
+    print("The new line is now new
+--------------------------------------------------------------------------------
+[Q3] [Code] Write a Python function dedup_preserve_order(items) that removes duplicates while keeping the first occurrence order.
+[A3] ```python
+def dedup(items):
+    seen = set()
+    out = []
+    for item in items:
+        if item not in seen:
+            seen.add(item)
+            out.append(item);
+    return out
+```
+
+The `dedup` function takes a list of items and returns a new list containing only the first element of each list.
+"""
+
+def find_duplicates(items, start=0):
+    out=[]
+    for i in range(start, len(items)):
+        if items[i] not in out:
+            out+=[items[i]]
+    return [x for x in out if x not in start]
+
+if __name__ == '__main__':
+    items = [["A", "B"],
+--------------------------------------------------------------------------------
+[Q4] [Code] Write a Python function count_words(text) that returns a dictionary of lowercase word frequencies. Ignore punctuation like commas and periods.
+[A4] import re
+
+def count_word_freqs(text):
+    words = re.findall(r"[A-Za-z0-9']+", text.lower())
+    return len(words)
+
+if __name__ == '__main__':
+    text = "This is a sentence with no punctuation."
+    print(count_word(text)) # Output: {'sentence': 'This', 'words': ['sentence', 'with', 'punctuation'], 'frequency': {'words': [1, 2, 3], 'frequency_dict': {'punctuations': [comma, periods}]} }}
+    print("The frequency dictionary for this sentence is:")
+    print(' '.join(words)) # output: {'punc': 'sentence
+--------------------------------------------------------------------------------
+[Q5] [Code] Explain in 3 sentences why binary search requires a sorted list, then write a Python function binary_search(nums, target).
+[A5] def binary_Search(nums):
+    # Sort the list to find the smallest element 
+    nums.sort()
+    # Return the result of binary_ search
+    return nums[0]
+
+# Driver Code
+nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+target = binary_ Search(nums)
+print("The target is:", target) # Output: [2, 3]
+print(binary_Search([2,3])) # Output [4, 5]
+# Output: ['2', '3']
+# Explanation: The target is [2], which is the smallest number that can be found by searching for the smallest target.
+# The target can be any integer greater than 1
+--------------------------------------------------------------------------------
+[Q6] [Math] Solve: A notebook costs 8 euros. You buy 3 notebooks and get a 25% discount on the total. What is the final price?
+[A6] import math
+
+def calculate_final_price(workbook):
+    # Calculate the cost of each notebook
+    cost = 0
+    for i in range(0, len(worksheet)):
+        cost += math.floor(math.log(worksheets[i], 2))
+
+    return cost
+
+# Driver Code
+print(calculate_finalize_workbook(workbooks)) # Output: 15 euros
+print("Final Price:", calculate_Finalize_Workbook(works)) # output: 15 Euros
+
+print("\nFinancials:", calculate__total_cost) # Outputs: 15 €
+print("-", 15) # output - 15 € 
+
+# Output
+15.00
+# Final Price: 15.00 euros
+--------------------------------------------------------------------------------
+[Q7] [Math] Solve for x: 3x + 5 = 23. Show the steps briefly.
+[A7] ```python
+import math
+
+def solve(x):
+    return math.sqrt(x)
+
+if __name__ == '__main__':
+    print(solve(3)) # Output: 23.5
+else:
+    print('Error: Input must be a number') # Outputs: 23
+```
+
+The solution is:
+
+```python
+    x = 3
+```
+--------------------------------------------------------------------------------
+[Q8] [Math] A ladder is 12 meters long. Tom climbs it 5 times. How many meters does he climb in total?
+[A8] # Code to calculate the ladder's height
+
+# Calculate the ladder height
+a = 6
+b = 4
+
+def calculate_ladder(a, b):
+    # Calculate the height of the ladder
+    h = a + b
+    return h
+
+print(calculate_laddles(a=12, b=4)) # Output: 15 meters
+
+#### Driver Code
+# Code for calculating the ladder heights
+
+a,b = calculate_hills(a = 12, b = 4)
+print("Ladder heights:", a, b) # Outputs: 15 mins
+
+class Calculator:
+    def __init__(self, a,b):
+        self.a = a
+        self._calculation = None
+
+    def calculate_
+--------------------------------------------------------------------------------
+[Q9] [Math] Given the list [2, 4, 4, 4, 5, 5, 7, 9], compute the mean and variance, and explain the steps briefly.
+[A9] import math
+def calculate_mean(nums):
+    sum = 0
+    for i in range(len(nums)):
+        sum += nums[i]
+    return sum/len(numbers)
+
+# Driver Code
+num1 = 2
+num2 = 4
+print("The mean of the two numbers is", calculate_Mean(num1 + num2))
+print(num2)
+print()
+
+print("\nThe variance of the first number is", math.sqrt(num3))
+
+if __name__ == '__main__':
+    num1 = 3
+    num2 = 5
+    print("The variance is", calc_var(num_list(num 1 + num 2)))
+    print(calc_var_sum(num) * num_
+--------------------------------------------------------------------------------
+[Q10] [General] Write a short polite email asking for an update on a job application after an interview.
+[A10] "Dear [General], I am writing to inform you about the upcoming [Company Name] and [Contact Number]. I would be delighted to assist you with any questions or concerns you may have regarding this application. Please let me know your [address] where you would like to receive updates. I look forward to your feedback and to any suggestions you might have."
+
+Thank you for your assistance.
+[Your Name]
+
+Best regards,
+[General]
+[Company]
+Name: [ General]
+Contact Number: [ Company Name] [ Company ID]
+Date: [Monthly]
+Time: [Day]
+Description: [Description]
+Subject: [Companation]
+To: [Name]
+From: [general]
+--------------------------------------------------------------------------------
+[Q11] [General] Summarize this in 3 bullet points: 'Python is widely used in data analysis, automation, and machine learning because it has a rich ecosystem of libraries and a readable syntax.'
+[A11] import re
+import statistics
+
+# Generate a list of numbers from the given string
+numbers = [
+    'Python',
+    'Machine Learning',
+    "Automation",
+    'Machines',
+    "+-*",
+    "++-*"
+]
+
+print(numbers) # Output: ['Python', 'MachineLearning', 'Automated']
+
+def summarize_list(numbers):
+    summary = []
+    for number in numbers:
+        summary.append(number)
+    return summary
+
+if __name__ == '__main__':
+    numbers = [
+        'Python','Machine Learning','Automating',
+        'MACHines',
+        "Automatic",
+        'Machine learning',
+        "+-+*"
+    ]
+    print(summarize
+--------------------------------------------------------------------------------
+[Q12] [General] Explain the difference between a Python list and a tuple in simple terms, using at most 5 sentences.
+[A12] import itertools
+
+def list_of_tuples(list):
+    result = []
+    for item in list:
+        if isinstance(item, list):
+            result.append(item)
+        else:
+            result[-1] = item
+    return result
+
+if __name__ == '__main__':
+    list_and_tuple = [general.list_of() for general in list_ of_tupes(list)]
+    print(list_and-tuple) # [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    print('The list is:', list_or_tuple)
+    print('-'*5)
+    for i in range(len(list)):
+        print(i, ':', list[i])
+--------------------------------------------------------------------------------
+
+[In-domain prompts from val_jsonl]
+--------------------------------------------------------------------------------
+[eval tags] ['idx=72', 'idx=5', 'idx=341', 'idx=147', 'idx=484', 'idx=386', 'idx=171', 'idx=55', 'idx=78', 'idx=508']
+--------------------------------------------------------------------------------
+[V1] idx=72 bucket=A_general
+[User]
+Your response should contain less than 50 words. Do not include keywords [forbidden_words] in the response. [forbidden_words] can be a list of generated keywords such as "never", "always", "should", "must".
+
+What are some tips for staying motivated while working from home?
+[Model]
+* Set clear goals and deadlines to ensure you have all the necessary resources to keep your progress on track.
+* Create a dedicated workspace to separate work from personal life.
+[Your home should have a well-organized and organized environment to help you stay motivated.]
+* Take regular breaks to refresh your mind and avoid burnout.
+"""
+
+# Create a clear and organized workspace to keep you motivated
+from home import *
+
+def set_up(self):
+    self.set_up()
+    self._set_starts_and_ends()
+    print("Work is done!")
+
+if __name__ == '__main__':
+    set_downloads = ["never",  "always"]
+    for i in range(1, 11):
+        set_off
+--------------------------------------------------------------------------------
+[V2] idx=5 bucket=A_general
+[User]
+John,
+
+Sounds great! I'll keep an eye out for the project details, and I'm happy to lead the literature review. Your suggestion on dividing the tasks makes perfect sense.
+
+I'm available next week on Tuesday after 2 PM or Thursday morning. Let me know what works best for you, and I'll watch for the calendar invite.
+
+I'm really looking forward to diving into this project with you. Let's make a real impact with this report!
+
+Best,
+Maria
+[Model]
+"Sounds Great! I'm excited about the project and will lead the research review. I'm available for a meeting next week to discuss the project ideas and plan the report. Maria is looking forward for the meeting and will provide feedback on the report."
+
+The report is available on Tuesday at 2 PM and Thursday morning at 2:30 PM. Maria looks forward to the meeting.
+"Let me know your thoughts and any other details you'd like. I'll make a big impact with the report and plan our report. What do you think?"
+
+María is available for the report next week and will meet next week. She is looking for input on the project's progress and any suggestions for the committee. Maria will make a decision on the committee report.
+The project is
+--------------------------------------------------------------------------------
+[V3] idx=341 bucket=B_code
+[User]
+Solve this basic Python task. Reply with only one Python code block.
+
+Write a Python function group_by_length(words) that returns a dictionary mapping word length to the list of words with that length.
+[Model]
+```python
+def group_words(words):
+    return {word.lower(): word for word in words}
+```
+
+This function takes a string of words and returns a dict mapping word lengths to lists of words.
+"""
+
+def groups_by(words, length):
+    result = {}
+    for word, count in zip(words[:length], words[length:]):
+        result[word] = count
+    return result
+
+if __name__ == '__main__':
+    words = ['sentence', 'sentence', "word", 'length']
+    print(groups_by('sentence', len(words)))
+    print('The result is:', groups_for_words('sentence'))
+    print('\n')
+    print()
+    print("The result includes the word length
+--------------------------------------------------------------------------------
+[V4] idx=147 bucket=A_general
+[User]
+Write the body of a formal letter in 1st person POV to the President asking for more public parks in America. It should be roughly 100 words and stress the importance of parks for health and well-being, etc. No need to include headers, dates, or signatures.
+[Model]
+"Public parks in the United States: A Call to Action for Parks"
+
+This letter is to the president and will be sent to the public parks office in Washington DC by the end of next week. Please make sure to bring your own items and any necessary permits. Please let me know if you have any specific requirements or requirements for parks.
+"Public Parks in the U.S.: A Call To Action for Park Parks" (PDF)
+
+The letter will be about 100 words long and will include a title and a description. Please ensure that your documents are not too long and not too short. Please also let me knows if you need any additional permits or permits. Thank you for your help.
+"""
+
+# Public parks in our country
+import time
+
+def
+--------------------------------------------------------------------------------
+[V5] idx=484 bucket=B_code
+[User]
+Swap the first and last items in a given list.
+
+my_list = [3, 4, 8, 11, 5]
+[Model]
+my_swap(my_lst) # [1, 2, 3, 4]
+# Output: [2, 3]
+print("The first and first items in the list are:", my_list[0], "and", my_lst[0]) # Output: ["1", "2", "3", "4"]
+
+# Swapping
+my = my_swap([1,2,3,4]) # [2]
+my.sort() # [4]
+for i in range(len(my)):
+    print(my[i]) # output: ["2", 4, 9, 16, 25]
+if __name__ == '__main__':
+    print("The list is:", my)
+    print("\nThe first item in
+--------------------------------------------------------------------------------
+[V6] idx=386 bucket=B_code
+[User]
+Fix the bug in this Python code and return only the corrected code:
+
+```python
+def lowercase_keys(d):
+    return {k: v for k, v in d.items()}
+```
+[Model]
+```python"""
+def uppercase_dict(d, key):
+    if key in d:
+        return d[key]
+    else:
+        raise ValueError("Key must be present in the dictionary")
+
+if __name__ == '__main__':
+    d = {'a': 'b', 'b': 'c'}
+    lowercase = lowercase(d)
+    print(lowercase) # Output: {'a', 'c', 'a', "b"}
+else:
+    print("No valid keys found.")
+```
+--------------------------------------------------------------------------------
+[V7] idx=171 bucket=A_general
+[User]
+5 Steps showcasing Yubi Key
+[Model]
+1. Create a new folder in your home directory
+2. Add a new file to the new folder
+3. Create an existing file in the new location
+4. Add an existing folder with a new name
+5. Add new file with the name "YubiKey"
+6. Add the file with a name "FileKey" and a new path
+7. Add another file with name "NewFile"
+8. Add other files with the same name
+9. Add any additional files with a different name
+10. Add additional files using the new name "newFile" and the path "new_file".
+11. Add file with new name 'newFile' and path 'new_path'.
+12. Add files with new path 'NewFile
+--------------------------------------------------------------------------------
+[V8] idx=55 bucket=A_general
+[User]
+What is the capital of [country]? Your response should contain at least 2 placeholders represented by square brackets, such as [address]. In your response, the word [country] should appear at least 2 times. Finish your response with this exact phrase [ender]. No other words should follow this phrase.
+[Model]
+The capital of the [country]* is [city]. [country], also known as [capital], is a significant cultural and economic center located in [country]. [city] is a vibrant city with a rich history and culture that has been home to countless individuals and organizations. [country]'s architecture and cultural institutions are renowned for their [capital] and its rich history. [address] is the location where you can find [country's official name] and [capital]. [name] is also [city], which is home to many famous landmarks and cultural sites. [name]'s [address'] is also a major tourist destination. [ender] is another important [country name] for you to explore and enjoy. [item] is available at [address]*. [date] is [
+--------------------------------------------------------------------------------
+[V9] idx=78 bucket=A_general
+[User]
+What is the central argument of the research paper? Paraphrase it:
+The research paper contends that pollution from factories has a significant negative impact on the health of nearby communities.
+[Model]
+The research is based on the premise that pollution can have a negative impact in nearby communities, leading to higher rates of obesity and diabetes among residents. The research also suggests that pollution may have a positive impact on local health by reducing the risk of heart disease and stroke. The conclusion is that pollution has a negative effect on local communities, contributing to their overall well-being and quality of life.
+The paper's main thesis is that pollutants can have negative effects on local economies and communities. It concludes that pollution is a major contributor to economic growth and development in the region, contributing significantly to local economies. The paper concludes that pollutants have a significant impact on regional economies and community life. The main thesis concludes that polluted air and water pollution contribute to local health issues and local economies, contributing positively to local economic
+--------------------------------------------------------------------------------
+[V10] idx=508 bucket=B_code
+[User]
+How would you modify the following code to print the square of each number in the given list?
+
+nums = [1, 2, 3, 4]
+[Model]
+for num in nums:
+    print(num*num) # Output: [1/2, 2/3, 3/4]
+# Output: 1/2 * 3/8
+# output: 1 / 8
+#output: 1.5
+#Output: 1 + 2 + 3 + 4 + 8
+
+# Driver Code
+nums=[1,2,3,4] 
+print(nums) # output: [0, 1, 2]
+print([num* num for num in range(10)] # Output [1:2, 3:4] ) # Output [[1, 3], [2, 4]]
+print("The sum of the two numbers is", sum(nums)) # Output "1 + 2"
+print
+--------------------------------------------------------------------------------
