@@ -17,6 +17,22 @@ import re
 from typing import Any, Dict, List
 
 from datasets import load_dataset
+from huggingface_hub import hf_hub_download
+
+def load_mbpp_subset_local(subset: str):
+    if subset == "sanitized":
+        filename = "sanitized/test/0000.parquet"
+    elif subset == "full":
+        filename = "full/test/0000.parquet"
+    else:
+        raise ValueError(f"unsupported subset: {subset}")
+
+    local_path = hf_hub_download(
+        repo_id="Muennighoff/mbpp",
+        repo_type="dataset",
+        filename=filename,
+    )
+    return load_dataset("parquet", data_files={"test": local_path}, split="test")
 
 PROMPT_TEMPLATES = [
     "Write a Python function for this task. Return only one Python code block.\n\n{prompt}",
@@ -114,14 +130,15 @@ def main() -> None:
     args = ap.parse_args()
 
     # url = PARQUET_URLS[args.subset]
-    if args.subset == "sanitized":
-        url = "https://huggingface.co/datasets/Muennighoff/mbpp/resolve/main/sanitized/test/0000.parquet"
-    elif args.subset == "full":
-        url = "https://huggingface.co/datasets/Muennighoff/mbpp/resolve/main/full/test/0000.parquet"
-    else:
-        raise ValueError(f"unsupported subset: {args.subset}")
+    # if args.subset == "sanitized":
+    #     url = "https://huggingface.co/datasets/Muennighoff/mbpp/resolve/main/sanitized/test/0000.parquet"
+    # elif args.subset == "full":
+    #     url = "https://huggingface.co/datasets/Muennighoff/mbpp/resolve/main/full/test/0000.parquet"
+    # else:
+    #     raise ValueError(f"unsupported subset: {args.subset}")
 
-    ds = load_dataset("parquet", data_files={"test": url}, split="test")
+    # ds = load_dataset("parquet", data_files={"test": url}, split="test")
+    ds = load_mbpp_subset_local(args.subset)
     rows = build_rows(ds, seed=args.seed, max_examples=args.max_examples, variants_per_problem=args.variants_per_problem)
     if not rows:
         raise SystemExit("no rows produced")
