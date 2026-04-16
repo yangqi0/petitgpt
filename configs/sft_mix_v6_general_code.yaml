@@ -1,0 +1,185 @@
+version: sft_mix_v6_general_code
+
+token_budget:
+  target_train_tokens: 22000000
+  val_ratio: 0.004
+  min_val_tokens_per_source: 3000
+
+mixture_by_token:
+  A_general: 0.52
+  B_code: 0.48
+
+buckets:
+  A_general:
+    sources:
+      - name: smol_smoltalk
+        weight_in_bucket: 0.42
+        max_rounds: 2
+        max_assistant_tokens: 144
+        max_examples: 11000
+        ban_if_prompt_contains:
+          - "python"
+          - "function"
+          - "code"
+          - "bug"
+          - "debug"
+          - "fix this"
+          - "implement"
+          - "write a program"
+          - "write a script"
+          - "binary search"
+          - "csv"
+          - "json"
+          - "sql"
+          - "regex"
+          - "algorithm"
+          - "class"
+          - "dictionary"
+          - "list comprehension"
+
+      - name: no_robots
+        weight_in_bucket: 0.24
+        max_rounds: 1
+        max_assistant_tokens: 144
+        max_examples: 4500
+        ban_if_prompt_contains:
+          - "python"
+          - "function"
+          - "code"
+          - "bug"
+          - "debug"
+          - "implement"
+          - "write a program"
+          - "write a script"
+          - "csv"
+          - "json"
+          - "sql"
+          - "regex"
+          - "algorithm"
+          - "class"
+
+      - name: dolly_15k
+        weight_in_bucket: 0.20
+        max_rounds: 1
+        max_assistant_tokens: 128
+        max_examples: 3500
+        ban_if_prompt_contains:
+          - "python"
+          - "function"
+          - "code"
+          - "bug"
+          - "debug"
+          - "implement"
+          - "write a program"
+          - "write a script"
+          - "csv"
+          - "json"
+          - "sql"
+          - "regex"
+          - "algorithm"
+          - "class"
+
+      - name: alpaca_cleaned
+        weight_in_bucket: 0.14
+        max_rounds: 1
+        max_assistant_tokens: 112
+        max_examples: 800
+        allow_if_prompt_contains:
+          - "rewrite"
+          - "summar"
+          - "email"
+          - "professional"
+          - "formal"
+          - "concise"
+          - "shorter"
+          - "clearer"
+          - "explain"
+          - "difference between"
+          - "bullet"
+          - "key takeaways"
+          - "polite"
+        ban_if_prompt_contains:
+          - "write a story"
+          - "story"
+          - "poem"
+          - "poetry"
+          - "character"
+          - "fiction"
+          - "paragraph"
+          - "instagram"
+          - "dish"
+          - "recipe"
+          - "python"
+          - "function"
+          - "code"
+          - "bug"
+          - "debug"
+          - "implement"
+          - "script"
+          - "csv"
+          - "json"
+          - "sql"
+          - "regex"
+          - "algorithm"
+          - "class"
+
+  B_code:
+    sources:
+      - name: local_mbpp_simple_split
+        type: jsonl_split
+        train_path: dataset/sft_canon/local_mbpp_simple.train.jsonl
+        val_path: dataset/sft_canon/local_mbpp_simple.val.jsonl
+        weight_in_bucket: 0.28
+        require_ast_parse: true
+        max_rounds: 1
+        max_assistant_tokens: 176
+        max_examples_train: 1200
+        max_examples_val: 120
+
+      - name: local_code_fix_simple_split
+        type: jsonl_split
+        train_path: dataset/sft_canon/local_code_fix_simple.train.jsonl
+        val_path: dataset/sft_canon/local_code_fix_simple.val.jsonl
+        weight_in_bucket: 0.18
+        require_ast_parse: true
+        max_rounds: 1
+        max_assistant_tokens: 176
+        max_examples_train: 600
+        max_examples_val: 90
+
+      - name: codealpaca_20k
+        weight_in_bucket: 0.34
+        require_ast_parse: true
+        max_rounds: 1
+        max_assistant_tokens: 176
+        max_examples: 6500
+        allow_if_prompt_contains:
+          - "python"
+          - "function"
+          - "write a function"
+          - "return only"
+          - "code block"
+          - "bug"
+          - "fix"
+          - "csv"
+          - "json"
+          - "string"
+          - "list"
+          - "dictionary"
+          - "iterate"
+          - "reverse"
+          - "count"
+
+      - name: viscode_200k
+        weight_in_bucket: 0.20
+        require_ast_parse: true
+        max_rounds: 1
+        max_assistant_tokens: 192
+        max_examples: 4000
+
+global_filters:
+  drop_if_empty: true
+  drop_if_too_short_chars: 16
+  ban_tokens_in_assistant:
+    - "###EOC###"
+  max_total_tokens_per_example: 448

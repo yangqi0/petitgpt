@@ -7,8 +7,14 @@ import json
 import random
 import textwrap
 from pathlib import Path
+from typing import Dict, List
 
 SYSTEM = "You are a helpful assistant."
+
+PROMPT_TEMPLATES = [
+    "Fix the bug in this Python code and return only the corrected code:\n\n```python\n{buggy}\n```",
+    "Repair this Python function. Do not explain anything. Return only one Python code block:\n\n```python\n{buggy}\n```",
+]
 
 TASKS = [
     {
@@ -22,7 +28,7 @@ TASKS = [
             def reverse_string(s):
                 out = ''
                 for ch in s:
-                    out += ch
+                    out = out + ch
                 return out
             """,
             """
@@ -35,11 +41,9 @@ TASKS = [
         "name": "dedup_preserve_order",
         "correct": """
         def dedup_preserve_order(items):
-            seen = set()
             out = []
             for item in items:
-                if item not in seen:
-                    seen.add(item)
+                if item not in out:
                     out.append(item)
             return out
         """,
@@ -139,9 +143,7 @@ TASKS = [
         "name": "safe_divide",
         "correct": """
         def safe_divide(a, b):
-            if b == 0:
-                return None
-            return a / b
+            return None if b == 0 else a / b
         """,
         "bugs": [
             """
@@ -150,43 +152,9 @@ TASKS = [
             """,
             """
             def safe_divide(a, b):
-                if a == 0:
-                    return None
-                return a / b
-            """,
-        ],
-    },
-    {
-        "name": "get_common_elements",
-        "correct": """
-        def get_common_elements(a, b):
-            bset = set(b)
-            return [x for x in a if x in bset]
-        """,
-        "bugs": [
-            """
-            def get_common_elements(a, b):
-                return [x for x in a if x not in b]
-            """,
-        ],
-    },
-    {
-        "name": "swap_first_last",
-        "correct": """
-        def swap_first_last(items):
-            if len(items) < 2:
-                return items[:]
-            out = items[:]
-            out[0], out[-1] = out[-1], out[0]
-            return out
-        """,
-        "bugs": [
-            """
-            def swap_first_last(items):
-                if len(items) < 2:
-                    return items
-                items[0] = items[-1]
-                return items
+                if b == 0:
+                    return 0
+                return a * b
             """,
         ],
     },
@@ -194,84 +162,31 @@ TASKS = [
         "name": "lowercase_keys",
         "correct": """
         def lowercase_keys(d):
-            return {str(k).lower(): v for k, v in d.items()}
+            return {k.lower() if isinstance(k, str) else k: v for k, v in d.items()}
         """,
         "bugs": [
             """
             def lowercase_keys(d):
-                return {k: v for k, v in d.items()}
+                return d.lower()
             """,
         ],
     },
     {
-        "name": "flatten_once",
+        "name": "group_by_length",
         "correct": """
-        def flatten_once(items):
-            out = []
-            for x in items:
-                if isinstance(x, list):
-                    out.extend(x)
-                else:
-                    out.append(x)
+        def group_by_length(words):
+            out = {}
+            for w in words:
+                out.setdefault(len(w), []).append(w)
             return out
         """,
         "bugs": [
             """
-            def flatten_once(items):
-                out = []
-                for x in items:
-                    out.append(x)
-                return out
+            def group_by_length(words):
+                return {w: len(w) for w in words}
             """,
         ],
     },
-    {
-        "name": "chunk_list",
-        "correct": """
-        def chunk_list(items, size):
-            if size <= 0:
-                raise ValueError('size must be positive')
-            return [items[i:i + size] for i in range(0, len(items), size)]
-        """,
-        "bugs": [
-            """
-            def chunk_list(items, size):
-                return [items[:size]]
-            """,
-        ],
-    },
-    {
-        "name": "binary_search",
-        "correct": """
-        def binary_search(nums, target):
-            left, right = 0, len(nums) - 1
-            while left <= right:
-                mid = (left + right) // 2
-                if nums[mid] == target:
-                    return mid
-                if nums[mid] < target:
-                    left = mid + 1
-                else:
-                    right = mid - 1
-            return -1
-        """,
-        "bugs": [
-            """
-            def binary_search(nums, target):
-                for i, x in enumerate(nums):
-                    if x > target:
-                        return i
-                return -1
-            """,
-        ],
-    },
-]
-
-PROMPT_TEMPLATES = [
-    "Fix the bug in this Python code and return only the corrected code:\n\n{buggy}",
-    "Correct this Python function. Reply with only one Python code block:\n\n{buggy}",
-    "The following Python code is wrong. Fix it and return only the corrected code:\n\n{buggy}",
-    "Repair this Python function. Do not explain anything. Return only the corrected code:\n\n{buggy}",
 ]
 
 
@@ -279,54 +194,58 @@ def normalize(code: str) -> str:
     return textwrap.dedent(code).strip() + "\n"
 
 
-def to_code_block(code: str) -> str:
-    return f"```python\n{normalize(code)}```"
-
-
-def ast_ok(code: str) -> bool:
-    try:
-        ast.parse(normalize(code))
-        return True
-    except Exception:
-        return False
+def code_block(code: str) -> str:
+    code = normalize(code)
+    ast.parse(code)
+    return f"```python\n{code.rstrip()}\n```"
 
 
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--out_jsonl", required=True)
     ap.add_argument("--seed", type=int, default=1234)
-    ap.add_argument("--repeat", type=int, default=28)
+    ap.add_argument("--repeat", type=int, default=2)
     args = ap.parse_args()
 
     rng = random.Random(args.seed)
     out_path = Path(args.out_jsonl)
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
-    examples = []
+    rows: List[Dict] = []
     for task in TASKS:
-        correct = normalize(task["correct"])
-        assert ast_ok(correct)
-        for buggy in task["bugs"]:
-            buggy_n = normalize(buggy)
-            assert ast_ok(buggy_n)
-            for _ in range(args.repeat):
-                tmpl = rng.choice(PROMPT_TEMPLATES)
-                user = tmpl.format(buggy=to_code_block(buggy_n))
-                assistant = to_code_block(correct)
-                examples.append({
-                    "messages": [
-                        {"role": "system", "content": SYSTEM},
-                        {"role": "user", "content": user},
-                        {"role": "assistant", "content": assistant},
-                    ]
-                })
+        name = task["name"]
+        correct_block = code_block(task["correct"])
+        for bug_idx, buggy in enumerate(task["bugs"]):
+            buggy_norm = normalize(buggy)
+            base_id = f"codefix_{name}_bug{bug_idx}"
+            for rep in range(max(1, args.repeat)):
+                tmpl = PROMPT_TEMPLATES[rep % len(PROMPT_TEMPLATES)]
+                rows.append(
+                    {
+                        "messages": [
+                            {"role": "system", "content": SYSTEM},
+                            {
+                                "role": "user",
+                                "content": tmpl.format(buggy=buggy_norm.rstrip()),
+                            },
+                            {"role": "assistant", "content": correct_block},
+                        ],
+                        "meta": {
+                            "dataset": "local_code_fix_simple",
+                            "base_id": base_id,
+                            "variant_id": f"{base_id}_v{rep}",
+                            "task_name": name,
+                            "bug_index": bug_idx,
+                        },
+                    }
+                )
 
-    rng.shuffle(examples)
+    rng.shuffle(rows)
     with out_path.open("w", encoding="utf-8") as f:
-        for ex in examples:
-            f.write(json.dumps(ex, ensure_ascii=False) + "\n")
+        for row in rows:
+            f.write(json.dumps(row, ensure_ascii=False) + "\n")
 
-    print(f"wrote {len(examples)} examples -> {out_path}")
+    print(f"wrote {len(rows)} examples -> {out_path}")
 
 
 if __name__ == "__main__":
