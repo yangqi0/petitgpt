@@ -1,0 +1,254 @@
+step=step_001500
+sampling: temp=0.2 top_p=1.0 top_k=0 max_new=160
+in_domain: n=10 mode=full_context show_ref=False dump_prompt=False sample_eval_jsonl=True
+================================================================================
+[Fixed prompts]
+--------------------------------------------------------------------------------
+[Q1] [Code] Write a Python function running_sum(nums) that returns cumulative sums.
+[A1] def get_cumulative_sums(nums):
+    return [num for num in nums if num > 0]
+
+get_cumulary_sum = get_sum([1, 2, 3, 4])
+print(get_cubular_sum()) # Output: [0, 1, 2]
+# Output: 0.5
+# Example: [2, 3]
+print (get_sum([-1, -2, -3])) # Output [0.5, 1.5]
+ # Example: [-1, 1]
+get = get([1], [2])
+result = get(0, 2)
+print("Cumulative Sum:", result) # Output "0.25"
+print ("Cumul
+--------------------------------------------------------------------------------
+[Q2] [Code] Write a Python function lowercase_keys(d) that returns a new dictionary with lowercase string keys.
+[A2] def lower_dict(d):
+    return dict(zip(d.split(' ')[::-1], d.split('-')))
+
+lower_dict = lower_list(lower_d)
+print(lowered_dict) # Output: {'d': {'low': 'low'}, 'd': [{'key': 'd', 'string': 'key'}, {'key': '{', 'value': 'value'}]}}
+print() # Outputs: {'a': {'d':'low'}, {'b': {'c':'high'}, {'d' : {'key':'value'}, {'value': {'key' : 'value'}}}]}
+# Output: {{'d': 'a', 'key': {'value':'value'}}, {'d'.value': 1
+--------------------------------------------------------------------------------
+[Q3] [General] Write a short polite email asking for an update on a job application after an interview.
+[A3] Dear General,
+
+I hope this message finds you well. I am writing to provide an update to a job app application after my interview. I would like to inform you of the recent interview. Please let me know if you have any questions or need assistance with the application.
+I look forward to your response.
+Best regards,
+[Name]
+
+[Email]
+[Date]
+Days of the week: [Weekly]
+The application is now ready. Please provide the details and any additional details.
+[Contact Name]
+(To be sent) [Email] [Date] [Friendly] [Email][Country] [Description] [Phone Number] [Type] [Name] [Age] [Year] [State] [
+--------------------------------------------------------------------------------
+[Q4] [General] Write a short professional email asking to reschedule a meeting to next week.
+[A4] Dear General,
+
+I hope this message finds you well. I am writing to inform you that we are currently hosting a meeting for next week, and I would like to schedule it in advance. Please let me know if you have any specific requirements or requirements that you believe will be met. I would appreciate your assistance with the scheduling process.
+I am eager to hear about your availability and availability. Please share your details and any additional details you may need.
+Additionally, please let me understand that we will be discussing the meeting at the next week's meeting. Please provide your details as requested.
+In addition to these requirements, I would also like to arrange for a meeting at your earliest convenience. Please make sure to arrive on time and provide your full details.
+Thank
+--------------------------------------------------------------------------------
+[Q5] [General] Summarize this in 3 bullet points: 'Regular exercise can improve mood, support heart health, and help maintain energy levels.'
+[A5] import re
+
+re.findall(r'[^\w\s]?[^\d]{3}\b', 'Regular Exercise can improve mental health and help protect your mind.')
+
+# Output: Regular exercise can enhance mood, help maintain physical activity levels, and support heart Health.
+# [Regular Exercise Can Improve Mental Health and Help Maintain Energy]
+
+def get_regular_activity(re):
+    return re.findall('Regular Exercise is important for overall well-being, please try to get some exercise.', re.sub('[^a-zA-Z0-9]', '', re.search('Regular exercise is important to improve mood', re.span()))
+
+print(get_regular(re)) # Output: Exercise can enhance mental health,
+--------------------------------------------------------------------------------
+[Q6] [General] Rewrite this to be more formal: 'Thanks for the quick reply. I’ll send the file tomorrow.'
+[A6] import re
+
+# Mocking a function to handle the request
+def send_file(filename):
+    # Create a new file object
+    file = open(filename, 'rb')
+    # Send the file
+    file.write(filename)
+
+send_file() # Output: thanks for the fast reply.
+# Output: Thanks for the Quick reply.
+--------------------------------------------------------------------------------
+[Q7] [General] Rewrite this to be more concise: 'I am writing this email in order to ask whether it would be possible to move our meeting to Friday afternoon.'
+[A7] "I am planning to attend the Friday afternoon meeting on Friday afternoon. I am currently working on a project that will allow us to move the meeting to Thursday afternoon. Please let me know if you have any specific instructions or requirements for this, and we can discuss how we can proceed."
+
+This is a quick and easy way to ensure that the meeting is not delayed. I will also provide a detailed outline of the project's timeline and any specific requirements. I hope this helps with your planning.
+"""
+
+# Program to move a meeting to Saturday afternoon
+import datetime
+
+def move_to_monday(date):
+    # Check if the date is correct
+    if date < datetime.datetime.strptime('01/01/2020', '%d/%m/%Y') or
+--------------------------------------------------------------------------------
+[Q8] [General] Explain in at most 4 sentences what a budget is, in simple everyday language.
+[A8] A budget is a set of financial statements that show how much money is spent on various items and services in a given period. In simple everyday terms, it's like a checklist for the budget to help you make informed decisions about your spending.
+"""
+
+# Basic usage of a budget
+def get_budget(start, end):
+    return [x[1:] for x in [start, start+end] if x[0] > 0]
+
+if __name__ == "__main__":
+    print(get_basket(4, 4)) # Output: [1, 2, 3, 4, 5]
+    print (get_billable(4)) #Output: [2, 3]
+    # Output [1]
+    [1], [
+--------------------------------------------------------------------------------
+
+[In-domain prompts from sample_eval_jsonl]
+--------------------------------------------------------------------------------
+[eval tags] ['code_running_sum', 'code_lowercase_keys', 'general_job_followup_email', 'general_reschedule_email', 'general_bullets_exercise', 'general_formal_rewrite', 'general_concise_rewrite', 'general_explain_budget']
+--------------------------------------------------------------------------------
+[V1] code_running_sum bucket=B_code
+[User]
+Write a Python function running_sum(nums) that returns cumulative sums.
+[Model]
+def running_total(nums):
+    total = 0
+    for num in nums:
+        total += num
+    return total
+
+print(running_total([1,2,3,4,5])) # Output: [0, 1, 2, 3, 4, 5]
+
+# Output: 0.0
+# This function runs_total() and returns the cumulative sum of all elements in the list.
+# Example:
+# [0.0, 0.1, 0, 0]
+#
+# The function will run_sum() and return the cumulative sums of all the elements in this list. 
+
+# Driver code
+num = 0
+for i in range(len(nums)):
+    if nums[i] > nums[0]:
+--------------------------------------------------------------------------------
+[V2] code_lowercase_keys bucket=B_code
+[User]
+Write a Python function lowercase_keys(d) that returns a new dictionary with lowercase string keys.
+[Model]
+def lower_dict(d):
+    return d.lower()
+
+print(lower_dict([1, 2, 3, 4])) # Output: {'1': 1, '2': 2, '3': 3, '4': 4}
+
+# Output: {1: 1, 2: 2, 4: 3, 5: 4, 6: 5, 7: 6, 8: 7, 9: 8, 10: 10, 11: 11, 12: 12, 13: 13, 14: 14, 15: 15, 16: 16, 17: 17, 18: 18, 19: 19, 20: 20, 21: 21, 22: 22, 23: 23, 24: 24, 25: 25, 26: 26, 27:
+--------------------------------------------------------------------------------
+[V3] general_job_followup_email bucket=A_general
+[User]
+Write a short polite email asking for an update on a job application after an interview.
+[Model]
+Dear [Name],
+
+I hope this message finds you well. I am writing to provide an update to the application application after my interview. I have been considering the possibility of a new application and would like to update you with any updates you might receive. Please let me know if you have any additional questions or need assistance.
+I look forward to your response.
+Best regards,
+
+[Name]
+
+Thank you for your time and consideration. I look forward for your response and will update you on the application.
+Thanks for your input and support.
+The application application is currently in progress. Please provide the details and any additional details.
+Please let me understand that you are looking forward to the process.
+Thankyou for your assistance. I will update
+--------------------------------------------------------------------------------
+[V4] general_reschedule_email bucket=A_general
+[User]
+Write a short professional email asking to reschedule a meeting to next week.
+[Model]
+Dear [Name],
+
+I hope this message finds you well. I am writing to inform you that we are scheduled to next weekend. Please let me know if you need to rescherate the meeting. Please provide your details and any additional details.
+I am reaching out to arrange an appointment for the next week to schedule the next meeting. I would greatly appreciate your assistance in scheduling the next session.
+Thank you for your cooperation.
+Best regards,
+
+[Name]
+
+We are scheduled for next week, and I will schedule the meeting on Monday. Please confirm your details. Please make sure to arrive on Monday at 5 PM.
+Please also provide details and details. Thank you for the assistance.
+Thanks so much for your help.
+The
+--------------------------------------------------------------------------------
+[V5] general_bullets_exercise bucket=A_general
+[User]
+Summarize this in 3 bullet points: 'Regular exercise can improve mood, support heart health, and help maintain energy levels.'
+[Model]
+Regular exercise boosts mood and supports heart health by reducing the risk of chronic diseases such as diabetes, heart disease, and obesity. It also helps in maintaining energy levels by reducing stress and anxiety levels. Regular physical activity can also enhance mental health by enhancing mood and reducing symptoms of depression and anxiety. Regular exercise can also improve mood by reducing feelings of depression, anxiety, and stress, and improving overall well-being. Regularly, regular physical activity improves mood and reduces the risk for chronic diseases like diabetes, cardiovascular disease, or obesity. Regular mental health can also boost mood and reduce anxiety by reducing anxiety and stress levels. Exercise can also help maintain physical health by increasing metabolism and building muscle, which can lead to better weight management and better overall health. Regular activities can also increase happiness and self-esteem
+--------------------------------------------------------------------------------
+[V6] general_formal_rewrite bucket=A_general
+[User]
+Rewrite this to be more formal: 'Thanks for the quick reply. I’ll send the file tomorrow.'
+[Model]
+I will send the response tomorrow. Please ensure you provide the correct email address and the date of the reply. 
+
+Thank you for the prompt. I hope this helps me understand the request better. 
+ 
+
+I hope this is clear and concise. I will send it tomorrow. 
+
+
+
+I will also send the request tomorrow. Thank you for your help. I can help with that. Please confirm the details and let me know if you need any further assistance. 
+
+
+
+
+Please confirm the request and send the email address. 
+
+ 
+Thank for the response. I am sorry for any confusion. 
+ 
+ 
+I have provided the requested information. 
+
+  
+I would appreciate your feedback on this request. 
+ 
+I am confident that the response will be delivered by tomorrow.
+--------------------------------------------------------------------------------
+[V7] general_concise_rewrite bucket=A_general
+[User]
+Rewrite this to be more concise: 'I am writing this email in order to ask whether it would be possible to move our meeting to Friday afternoon.'
+[Model]
+"I am requesting that the meeting be moved to Friday at noon. I am requesting the time to proceed with the meeting. Please confirm the time and location."
+
+This response is clear and concise. It is not intended as a response to a question or to provide a response that is specific to the event. The response should be followed by the details provided in the response. I hope this response meets your expectations.
+* *Please confirm the meeting time and place for the next meeting.*
+
+I hope this message finds you well. I want to inform you that we are moving to Friday morning at noon, and I will proceed with our meeting. I have already prepared the details for the meeting, and we will proceed accordingly. Please ensure you follow the instructions.
+I look forward to
+--------------------------------------------------------------------------------
+[V8] general_explain_budget bucket=A_general
+[User]
+Explain in at most 4 sentences what a budget is, in simple everyday language.
+[Model]
+A budget is a set of financial statements that show how much money is spent on various items and services in a given period. It's important to understand the budget to make informed decisions about spending and saving.
+"""
+
+# Example budget
+budget = [1, 2, 3, 4, 5]
+print(budget) # Output: [1.0, 2.0]
+
+basket = [
+    [1],
+    [2],
+    ['1', '2'],
+    ['2', '3', '4'],
+    [5],
+    ]
+print('Budget: ', basket) # output: [5.0 + 1.0 = 6.0
+
+print("Budget is:", budget) #Output: [6.0 -
+--------------------------------------------------------------------------------

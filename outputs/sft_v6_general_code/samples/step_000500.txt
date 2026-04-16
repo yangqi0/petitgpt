@@ -1,0 +1,307 @@
+step=step_000500
+sampling: temp=0.2 top_p=1.0 top_k=0 max_new=160
+in_domain: n=10 mode=full_context show_ref=False dump_prompt=False sample_eval_jsonl=True
+================================================================================
+[Fixed prompts]
+--------------------------------------------------------------------------------
+[Q1] [Code] Write a Python function running_sum(nums) that returns cumulative sums.
+[A1] def get_cumulative_sums(nums):
+    return sum(nums, 0) + sum(num, 1) + \
+           sum(x for x in nums if x > 0)
+
+print("The sum of the numbers is", get_sum([1, 2, 3, 4])) # Output: [1, 3]
+
+# Output: The sum of all the numbers in the array is [1 + 3 + 4 + 5 + 6]
+# Example: [3, 4, 7, 8]
+def getCumulativeSum(nums1, nums2):
+    cumulative_sum = 0
+    for num in nums1:
+        cumulative_total = cumulative_Sum(num)
+        cumulativeTotal += cumulative_totals[num]
+--------------------------------------------------------------------------------
+[Q2] [Code] Write a Python function lowercase_keys(d) that returns a new dictionary with lowercase string keys.
+[A2] def lower_case_dict(d):
+    return d.lower()
+
+print(lower_case(d)) # Output: [1, 2, 3, 4, 5, 6]
+# Output: ['a', 'b', 'c']
+
+# Example: [3, 5]
+print([3, 'a', 5]) # Output [3]
+
+[1, 'b']
+[2, 'c'].lower() # Output ['a']
+Output: ['b'] # Output ["a"]
+
+"""
+This code is written in Python and can be used to create a simple code for a lowercase key.
+"""
+--------------------------------------------------------------------------------
+[Q3] [General] Write a short polite email asking for an update on a job application after an interview.
+[A3] "General, please provide a response to the interview."
+
+"Please provide a detailed description of the application and its requirements."
+"Your response should be in the form of a message to the editor."
+"""
+
+import string
+
+def get_email_address(email):
+    email = email.split('@')
+    email_address = email[0].split(' ')
+    return email_Address(email_Address)
+
+print(get_emailaddress(string.ascii_letters + string.digits)) # Output: 'general'
+print("The application is now available at: " + string) # Outputs: "General, "General"
+print() # Outputing: "general"
+
+# Output: "The application now available
+--------------------------------------------------------------------------------
+[Q4] [General] Write a short professional email asking to reschedule a meeting to next week.
+[A4] "General" is a good idea because it helps with scheduling and scheduling tasks. "General" can also help with schedulers and schedulers. "Reschedule" can help with planning and schedulings. "Cancel" can be used to cancel the meeting.
+"""
+
+import time
+
+def schedule_rescheduling(time_seconds):
+    # Reschedule the meeting
+    rescheduled_meeting = time.strftime("%H:%M")
+    print("Reschedulation took %s seconds." % (reschedulate_meetings))
+    # Re-schedule the meeting to avoid cancellations
+    res_meets = time_seconds - reschedulate
+    print('Reschedules are now: %s' %
+--------------------------------------------------------------------------------
+[Q5] [General] Summarize this in 3 bullet points: 'Regular exercise can improve mood, support heart health, and help maintain energy levels.'
+[A5] import math
+
+def sum_of_numbers(num):
+    return math.pow(num, 2)
+
+print(sum_of(3)) # Output: 3 + 4 = 9
+# Output: 9 + 8 = 16
+
+# Example: [1, 2, 3, 4, 5]
+# The sum of the numbers is 1 + 2 + 3 + 6 + 8 + 16 = 9 + 16 + 8
+# This sum is equal to 9 + 12 + 16
+# It is not necessary to add the numbers together to get the sum.
+# However, it is possible to add and subtract the numbers from each other.
+def add_numbers_to_sum(num1, num2, num3):
+    sum1 = 0
+--------------------------------------------------------------------------------
+[Q6] [General] Rewrite this to be more formal: 'Thanks for the quick reply. I’ll send the file tomorrow.'
+[A6] import re
+
+def get_file(filename):
+    file = open(filename)
+    file_content = file.read()
+    file.close()
+    return file_Content
+
+print(get_file('Hello World')) # Output: "Hello World"
+print("Thanks for your quick reply.") # Output "Thanks for quick reply."
+
+# Output: Thank you for the fast response!
+# Input: "Hi, I'm sorry for any inconvenience. I hope this helps with your request."
+# Return: "Thank you for your fast response."
+print("\n") # Outputting the file: "Hey, I can help with your requests."
+file = get_File('HelloWorld')
+print('Thanks for my quick reply.')
+--------------------------------------------------------------------------------
+[Q7] [General] Rewrite this to be more concise: 'I am writing this email in order to ask whether it would be possible to move our meeting to Friday afternoon.'
+[A7] import email
+
+def move_to_day(email):
+    message = email.message
+       
+    if message.startswith('I am'):
+        return 'I can move to Friday at'
+    else:
+        return "I cannot move to Saturday at"
+
+print(move_to-day(Email.from_email('I can', 'I will'))) # Output: 'Hello, world!'
+print() # Outputs: 'Hi, I am writing here in order for you to move to the meeting.'
+# Output: "Hi, how are you doing today?"
+# Input: "I am going to move on to Friday."
+# Return: "Hello, World!"
+
+# Write a simple code to make the code more concise
+# Use
+--------------------------------------------------------------------------------
+[Q8] [General] Explain in at most 4 sentences what a budget is, in simple everyday language.
+[A8] A budget is a set of rules and instructions that describe how you will spend your money. It is a collection of rules that describe the amount of money you will use to spend each day. The rules are often written in terms of a specific amount of dollars, which can be different for different people or different situations. A budget is typically written in words that describe a specific situation or activity.
+"""
+
+# Create a simple budget
+import pandas as pd
+
+def budget_data(df):
+    """Create a simple basic budget."""
+    # Create a DataFrame
+    df = pd.DataFrame(df)
+    # Add some data to the DataFrame
+    budget = budget_addition(df, 'A', 'B')
+    return budget
+
+print(budget_data('A
+--------------------------------------------------------------------------------
+
+[In-domain prompts from sample_eval_jsonl]
+--------------------------------------------------------------------------------
+[eval tags] ['code_running_sum', 'code_lowercase_keys', 'general_job_followup_email', 'general_reschedule_email', 'general_bullets_exercise', 'general_formal_rewrite', 'general_concise_rewrite', 'general_explain_budget']
+--------------------------------------------------------------------------------
+[V1] code_running_sum bucket=B_code
+[User]
+Write a Python function running_sum(nums) that returns cumulative sums.
+[Model]
+def get_cumulative_sums(nums):
+    return [sum(i) for i in nums]
+
+print(get_cumuliniones(nums)) # Output: 0.0
+# Output: 1.0 - 0.5
+# Example: 1-2-3-4-5
+
+# Write a simple function to calculate the cumulative sum of the given numbers.
+def getCumulativeSum(nums1, nums2):
+    total = 0
+    for i, num in enumerate(nums2):
+        total += num
+    return total / len(nums3)
+
+if __name__ == '__main__':
+    print(getCumulinion(1, 2)) # output: 0
+    print()
+    print("The cumulative
+--------------------------------------------------------------------------------
+[V2] code_lowercase_keys bucket=B_code
+[User]
+Write a Python function lowercase_keys(d) that returns a new dictionary with lowercase string keys.
+[Model]
+def lower_case_dict(d):
+    return d.lower()
+
+print(lower_case(d)) # Output: 'low'
+# Output: ['low', 'low']
+# Example: 'lol'
+print('low') # Output 'low'.
+# Input: 'loose'
+
+# Returning a new string: 'Lol' 
+# Using lowercase keys to create a new list: 'luol' 
+
+# Create a new Python function that takes a string as input and returns a dictionary with the lowercase strings as keys. 
+
+def lowercase(str):
+    str = str.lower().replace(' ', '')
+    return str
+
+if __name__ == '__main__':
+    print(lowercase
+--------------------------------------------------------------------------------
+[V3] general_job_followup_email bucket=A_general
+[User]
+Write a short polite email asking for an update on a job application after an interview.
+[Model]
+"Hi there, I'm a newcomer in the field of computer science and I'm excited to learn more about the application you're looking for. I'm interested in your feedback and insights on how it can help me with my job."
+
+I would be happy to provide a response to the email.
+"""
+
+# Create a simple email to send to a new user
+email = "Hi there! How's that application? It's a great application for learning and problem solving!"
+
+print(email) # Outputs: "Hello, how's that app?"
+
+"""
+    Create a short email to receive feedback from a new customer
+
+This will send a message to the new user about the app and its potential for learning.
+The email should be sent
+--------------------------------------------------------------------------------
+[V4] general_reschedule_email bucket=A_general
+[User]
+Write a short professional email asking to reschedule a meeting to next week.
+[Model]
+"I'm sorry but I don't have time to schedule it. I'm really worried about the upcoming meeting."
+
+"I'll be back soon."
+"What's your plan for this meeting?"
+"It might be a bit too late."
+"""
+
+# Call the function to resend the meeting
+resend_meeting = input("Please provide a meeting date: ")
+
+if resend_Meeting == "I'm glad to schedule the meeting.":
+    print("I'm happy to schedule.")
+else:
+    # Resend the previous meeting
+    print(resend)
+    # Send the meeting to the next day
+    print()
+    # Wait for the meeting
+    time.sleep(1)
+    print('The meeting is scheduled.')
+else
+--------------------------------------------------------------------------------
+[V5] general_bullets_exercise bucket=A_general
+[User]
+Summarize this in 3 bullet points: 'Regular exercise can improve mood, support heart health, and help maintain energy levels.'
+[Model]
+Regular exercise helps reduce stress levels and improve mood. It enhances cardiovascular health by reducing the risk of heart disease and stroke. It also helps maintain energy level and reduces stress levels. Regular exercise can help maintain a healthy weight and reduce the risk for heart disease. It can also help maintain mental health by enhancing mood and reducing stress levels, which can lead to better overall well-being and overall wellness.
+* * * *
+
+* Regular exercise helps maintain a positive outlook on life by promoting a sense of well- being and being more active. * * **
+
+Practice daily exercises that can help improve mood and reduce stress. Make sure to get enough sleep, eat a balanced diet, and engage in physical activity to enhance your mood and support heart.
+** * *
+--------------------------------------------------------------------------------
+[V6] general_formal_rewrite bucket=A_general
+[User]
+Rewrite this to be more formal: 'Thanks for the quick reply. I’ll send the file tomorrow.'
+[Model]
+"Thanks for your response."
+
+I will send the first line of the file to the user. The second line will be the first and last line of your response.
+"""
+
+import requests
+
+# Mock data
+data = {
+    "name": "Rewrite",
+    "email": "example.com"
+}
+
+response = requests.get(data)
+
+print(response.json()) # prints the response as a string
+
+if response.status_code == 200:
+    print("Thanks for quick reply.")
+else:
+    raise Exception("Error")
+
+else,
+
+"Thanks to the quick response."
+--------------------------------------------------------------------------------
+[V7] general_concise_rewrite bucket=A_general
+[User]
+Rewrite this to be more concise: 'I am writing this email in order to ask whether it would be possible to move our meeting to Friday afternoon.'
+[Model]
+"I am planning to move my meeting to Thursday afternoon."
+
+This is a response that I can provide. It is not a response to the question you asked about the meeting to be moved to Friday. The response should be: "I am preparing to move the meeting on Friday afternoon." This response is not an answer to the query you asked. The statement that you provided is not the answer to your query. The question that you asked is: "How do you think we could move our meetings to Friday?"
+
+The response that you gave is:
+
+"I would like to discuss the possibility of moving our meeting on Saturday afternoon." The response is: 'It would be a great idea to move your meeting to Monday afternoon.' The response that the question is not answered is:
+--------------------------------------------------------------------------------
+[V8] general_explain_budget bucket=A_general
+[User]
+Explain in at most 4 sentences what a budget is, in simple everyday language.
+[Model]
+A budget is a set of rules and procedures that help us make informed decisions about our daily activities and expenses. It helps us manage our money wisely by focusing on the most important items and making sure to balance out any losses or expenses. A budget is also a set that includes all the necessary tools and resources to ensure we have a balanced budget. A good budget is essential for maintaining a healthy lifestyle and ensuring that we get enough to eat well.
+#### 4
+A budget can be a great tool for managing your money and managing your finances. It allows you to make informed choices about how much you spend and how much money you save. A better budget is crucial for maintaining your financial health and maintaining a balanced lifestyle. A well-rounded budget can help you manage your money effectively and
+--------------------------------------------------------------------------------

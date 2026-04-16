@@ -1,0 +1,266 @@
+step=step_005500
+sampling: temp=0.2 top_p=1.0 top_k=0 max_new=160
+in_domain: n=10 mode=full_context show_ref=False dump_prompt=False sample_eval_jsonl=True
+================================================================================
+[Fixed prompts]
+--------------------------------------------------------------------------------
+[Q1] [Code] Write a Python function running_sum(nums) that returns cumulative sums.
+[A1] def get_cumulative_sums(nums):
+    return [sum(num) for num in nums]
+
+get_cumump_sum = get_sum_cumulate
+print(get_ cumump_ sum(nums)) # Output: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+# Output: [-1, 3]
+[0, 3], [4, 5], [6, 7], [8, 9]
+print (get_sum([4,5])) # Output [0.2, 0.3, 0., 0.]
+# output: [-7, -9, -12, -15, 16, 18, 20]
+#### PREVIO
+--------------------------------------------------------------------------------
+[Q2] [Code] Write a Python function lowercase_keys(d) that returns a new dictionary with lowercase string keys.
+[A2] def lowercase(d):
+    return d.lower()
+
+lowercase_dict = lowercase("D")
+print(lowercase_)
+# Output: {'D': 'lowercase'}
+# Example usage: `lowercase({})`
+print("Lowercase Key: {key}").lower() # Output: { key }
+print("\nLowercase String Key: {}".format(lowcase_dict["key"], lowercase_{key})) # Outputs: { (key, value) : (value, lowercase{key})...}
+print("")
+print("-" * 20) # Output - "lowercase"
+print(*lowercase_, **lowercase_.keys())
+print('-' * 20)) # Output -- the first two strings
+--------------------------------------------------------------------------------
+[Q3] [General] Write a short polite email asking for an update on a job application after an interview.
+[A3] "Dear General,
+
+I hope this message finds you well. I am writing to inform you about a new task we are working on after our previous interview with General. I have been considering a new application that I believe could be particularly beneficial for my job application. Please let me know if you have any questions or concerns.
+"
+
+"Thank you for your time and consideration. Your support and insights will be invaluable.
+"""
+
+import string
+
+def is_valid_email(email):
+    try:
+        import re
+        regex = '^[a-z0-9]+[\._]?[a@[a+[0-7]]*@[A-Z0-1]+[@]\w+$'
+        return True
+    except
+--------------------------------------------------------------------------------
+[Q4] [General] Write a short professional email asking to reschedule a meeting to next week.
+[A4] "Dear General,
+
+I hope this message finds you well. I am writing to inform you that I will rescheternoon Delivery for the upcoming meeting. Please let me know if you have any questions or concerns. I will send you an email at least three days in advance to ensure we are prepared for your scheduled meeting.
+"
+
+Thank you, and I look forward to seeing you there.
+Please let me knows if there are any questions at all.
+Best regards,
+[Your Name]
+
+[General]
+[The Name] 
+
+[Forums]
+Your Name
+[To Reschedule]
+I am writing you to arrange for a rescheduled meeting to be scheduled for next week, please let me understand if there is
+--------------------------------------------------------------------------------
+[Q5] [General] Summarize this in 3 bullet points: 'Regular exercise can improve mood, support heart health, and help maintain energy levels.'
+[A5] import re
+
+def summarize(text):
+    text = re.sub('[^a-zA-Z ]', '', text)
+    return text
+
+print(summarize(text)) # [3, 4, 5, 6, 7, 8, 9, 10]
+# Output: [9, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+
+# Testing
+text = 'Regular Exercise can improve mental health and support heart Health'
+print (summarized(text).split(' ')) # ['Regular Exercise Can Improve Mental Health', 'Regular Heart Health']
+# output: ['Regular exercise could improve mental well-being', 'Support heart health']
+
+if __name__ == '__main__':
+--------------------------------------------------------------------------------
+[Q6] [General] Rewrite this to be more formal: 'Thanks for the quick reply. I’ll send the file tomorrow.'
+[A6] import re
+
+def thank_for_the_quick_reply(code):
+    print("Thank you for the fast reply.")
+
+# Driver Code
+general = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[-/]|[\//]+)', code)
+print("Thanks for quick reply.") # Thanks for the reply.
+print(re.findall('\d+', general)) # List of all the requests.
+# Output: Thanks for quick response.
+def thanks_for(code, request):
+    try:
+        file = open(request, 'r')
+        content = file.read()
+        file.close()
+        print("Thanks again.")
+        thank_
+--------------------------------------------------------------------------------
+[Q7] [General] Rewrite this to be more concise: 'I am writing this email in order to ask whether it would be possible to move our meeting to Friday afternoon.'
+[A7] "To move our upcoming meeting to Thursday afternoon, you can use the following code:
+
+```python
+email = "general"
+print(f"I am {email} in Friday afternoon.")
+```
+
+In this code, I will use the `to_write()` method to write down the information you want to include in the email. The `to` operator is used to create a new line, and the `print()` method uses print_mode to print the text you want printed. To proceed with your next step, please provide your desired data and the desired format for the text. If you have any further questions or need additional assistance, feel free to let me know."
+
+Please let me knows if you have more questions or require further assistance.
+```
+--------------------------------------------------------------------------------
+[Q8] [General] Explain in at most 4 sentences what a budget is, in simple everyday language.
+[A8] import datetime
+
+def get_budget(self):
+    """
+    This function takes in a list of financial data and returns a string containing the budget.
+    """
+
+    # Get the number of months
+    month = self.month
+    # Get a string of months from the list
+    months = self._get_months(month)
+
+    # Return the budget
+    return months[0].upper() + months[1:]
+
+if __name__ == '__main__':
+    print(get_bought_banks('General')) # Output: 'general'
+    print (get_buys_bannies('General', 'Budget')) # output: 'budget'
+    # Output will be: 'gross'
+    cash_barns = ['general
+--------------------------------------------------------------------------------
+
+[In-domain prompts from sample_eval_jsonl]
+--------------------------------------------------------------------------------
+[eval tags] ['code_running_sum', 'code_lowercase_keys', 'general_job_followup_email', 'general_reschedule_email', 'general_bullets_exercise', 'general_formal_rewrite', 'general_concise_rewrite', 'general_explain_budget']
+--------------------------------------------------------------------------------
+[V1] code_running_sum bucket=B_code
+[User]
+Write a Python function running_sum(nums) that returns cumulative sums.
+[Model]
+def run_sum (nums):
+    return sum(nums)/len(nums);
+
+run_sum([1,2,3,4,5]) # Outputs: 5.0
+
+# Driver Code
+nums = [1, 2, 3, 4, 5]
+print(run_Sum([1,-2,-3,-4])) # Output: -6.0
+ 
+# Output
+- 6.0 
+- 5.5 
++ 5.4 
+= 6.5
+
+print (run_ Sum([1.,2.,3.,4.])) #Outputs: 7.0 
+ 
+# Input
+nums=[1,3]
+result = run_Sum(nums)[1:] 
+print("Sum
+--------------------------------------------------------------------------------
+[V2] code_lowercase_keys bucket=B_code
+[User]
+Write a Python function lowercase_keys(d) that returns a new dictionary with lowercase string keys.
+[Model]
+def lowercase(d):
+    return d.lower()
+
+print(lowercase_keys("user")) # Output: {'user': 'l', 'l': 'o'}
+# Output: { 'user': ['l', "l"], 'l' : ['o', 'user'], 'o' : 'l'}
+
+# Driver Code
+d = lowercase('user')
+print (d.lower()) # Outputs {'user':'l', '-': 'oe'}
+print [k for k in d if k.lower()] == ['l']
+print list(set(d)) # Output -> {'user' : [l], 'l"': [o] }
+print [(k.lower(), k.upper()) for k,
+--------------------------------------------------------------------------------
+[V3] general_job_followup_email bucket=A_general
+[User]
+Write a short polite email asking for an update on a job application after an interview.
+[Model]
+Dear [Name],
+
+I hope this message finds you well. I am writing to inform you that I have been reviewing the application for the upcoming job application process. The application is now ready and has been completed successfully. Please let me know if there are any changes or additional requirements you may have.
+Thank you in advance for your time and assistance.
+Best regards,
+[Name]
+
+Dear (name)
+
+Thankyou for the opportunity to review the application. I look forward to hearing from you soon.
+Thanks again for your support.
+Please let me knows if there were any changes to the application or if there is anything I can do to improve it.
+I look forward again.
+Looking forward to seeing you soon!
+
+Best,
+--------------------------------------------------------------------------------
+[V4] general_reschedule_email bucket=A_general
+[User]
+Write a short professional email asking to reschedule a meeting to next week.
+[Model]
+Dear [Name],
+
+I hope this message finds you well. I am writing to inform you that we will rescheternoon Massage for next week, scheduled for next weekend. Please let me know if there are any specific details you would like to include or any suggestions you might have.
+Sincerely,
+[Your Name]
+
+Best regards,
+
+[Name]
+Directions:
+
+Dinner is scheduled for tomorrow at 5 PM EST to finalize the schedule. Please make sure to bring a blanket and a cup of coffee.
+To find out how long it will take you to reschedul your meeting, please click on the link provided below:
+Please let me knows if there is anything specific you would want to include in the resched
+--------------------------------------------------------------------------------
+[V5] general_bullets_exercise bucket=A_general
+[User]
+Summarize this in 3 bullet points: 'Regular exercise can improve mood, support heart health, and help maintain energy levels.'
+[Model]
+* Regular physical activity can significantly improve mood and support heart Health.
+* It is important to note that regular physical activity not only improves mood but also enhances support heart.
++ Promoting exercise to improve mood is a priority for the organization.
+1. Regular physical exercise can significantly enhance mood and supports heart health.
+2. Regular exercise can also improve mood.
+3. Regular support heart care is crucial for overall well-being.
+4. Regular Physical activity can positively affect mood and help support heart and mental health. Additionally, regular physical exercise has been shown to have numerous benefits for both physical and mental well- being.
+5. Regular activity can also positively impact support heart, mental health, financial stability.
+6. Regular active exercise can positively impact both physical health and support
+--------------------------------------------------------------------------------
+[V6] general_formal_rewrite bucket=A_general
+[User]
+Rewrite this to be more formal: 'Thanks for the quick reply. I’ll send the file tomorrow.'
+[Model]
+"Thank you for the fast reply."
+
+This sentence is written in a formal and polished tone. It conveys the same message in a more formal and professional manner. The use of "Thanks for" is a common and informal way to express gratitude for the help and assistance you receive. Additionally, "I'll send the files tomorrow." is a more informal and formal way to convey gratitude for receiving the information. Additionally," I will send the document tomorrow." provides a more precise and formal response to ensure clarity and concision. This approach is also suitable for writing a formal letter or other formal communication. The emphasis on the use of the "Thanks" term is a direct extension of the formal message. The formal message is also a more direct way to communicate the request, which is another
+--------------------------------------------------------------------------------
+[V7] general_concise_rewrite bucket=A_general
+[User]
+Rewrite this to be more concise: 'I am writing this email in order to ask whether it would be possible to move our meeting to Friday afternoon.'
+[Model]
+"To ensure that the meeting is moved on Friday afternoon, please provide the necessary information."
+
+This sentence conveys the same message in a more concise and direct manner. It is important to remember to include the necessary details such as the date and time to finalize the response. Additionally, it provides an example of a suitable format for the delivery of the meeting. This example is also suitable for printing purposes, as it shows a clear and concise response. Finally, the word "request" appears at the end of the sentence, providing a clear reference to the specific request or issue being addressed. By using these words, we can conclude the conversation without any delays. Please provide the correct information so I can proceed with the necessary actions. Thank you for your understanding and cooperation."
+In summary,
+--------------------------------------------------------------------------------
+[V8] general_explain_budget bucket=A_general
+[User]
+Explain in at most 4 sentences what a budget is, in simple everyday language.
+[Model]
+A budget is a set of financial statements that showcase the performance of a company or organization over time. It can include income statements, cash flow statements, and financial statements. In simple everyday terms, a budget shows how much money is currently spent on various items in a given period. In contrast, a financial statement, which is a summary of the company's financial health, shows how long it has been in business. The purpose of a budget, also known as a financial report, is to provide a clear and concise description of the financial position of a business. By using a budget it allows for easy identification and analysis of financial conditions. By providing detailed financial statements, a Budget will help managers and investors understand the business's financial status and strategies. By keeping an eye out for future events, a
+--------------------------------------------------------------------------------

@@ -1,0 +1,293 @@
+step=step_002500
+sampling: temp=0.2 top_p=1.0 top_k=0 max_new=160
+in_domain: n=10 mode=full_context show_ref=False dump_prompt=False sample_eval_jsonl=True
+================================================================================
+[Fixed prompts]
+--------------------------------------------------------------------------------
+[Q1] [Code] Write a Python function running_sum(nums) that returns cumulative sums.
+[A1] def running_Sum(nums):
+    return sum([num for num in nums if num % 2 == 0])
+
+print(running_Sum([code]))
+# Output: [0.0, 1.0]
+
+# Example: [1, 2, 3, 4, 5]
+# Running_Sum(['1', '2', '3', '5'])
+#Output: [4, 6, 8, 10]
+print('The sum of the given numbers is: ', running_ Sum([1,2,3,4,5]))
+
+Running_Sum(["1", "2", "3", "5"])
+# output: [6, 8]
+RunningSum(['6', '8'])
+
+Output: 6, 9
+--------------------------------------------------------------------------------
+[Q2] [Code] Write a Python function lowercase_keys(d) that returns a new dictionary with lowercase string keys.
+[A2] def lowercase(d):
+    return d.lower()
+
+print(lowercase_dict(d)) # Output: {'code': 'lowercase', 'd': 'lower'}
+# Output: {['code': ['code'], 'd']}
+# Example: {'d': ['Code'], 'code': {'code':'code'}}
+
+# Driver Code
+d = {'code' : 'code'}
+print('D: ', d)
+print({'d': {'Code': 'code'}, 'd: ', 'code'})
+
+Output: {'Code' : {'code'}, 'd' : { 'code':'Code'}} 
+
+# Python Function
+print("D: ", d) # Outputs {'code'.': 'Code
+--------------------------------------------------------------------------------
+[Q3] [General] Write a short polite email asking for an update on a job application after an interview.
+[A3] "Dear General,
+
+I hope you are well. I have been looking forward to our job application and am excited about it. I will keep you updated on the progress of the application. Please let me know if you have any questions or need assistance with any updates.
+"
+
+Thank you for your support. I look forward to hearing from you soon.
+Best regards,
+[Your Name]
+
+[General]
+[Suggestion]
+Dear general,
+I am writing to inform you that I have received an update regarding a new job application. I would appreciate it if you could send me a response at your earliest convenience.
+[For more details, please visit the official website of the company.]
+
+Please let me knows if you need
+--------------------------------------------------------------------------------
+[Q4] [General] Write a short professional email asking to reschedule a meeting to next week.
+[A4] "Dear General,
+
+I hope you are well. I am writing to inform you that I have been considering a specific meeting to be scheduled for next week and will be open to rescheduling. Please let me know if you have any questions or need assistance with the details.
+"""
+
+# Dear General
+
+import time
+
+time.sleep(0.5)
+
+print("I have been planning to attend the meeting to the next week.")
+
+reschedule_me = input("Please provide me with your details: ")
+
+if reschepit_me == "Dear general":
+    print("I am rescheasting the meeting.")
+else:
+    print(reschepit)
+print("\n")
+
+return
+--------------------------------------------------------------------------------
+[Q5] [General] Summarize this in 3 bullet points: 'Regular exercise can improve mood, support heart health, and help maintain energy levels.'
+[A5] import re
+
+def regular_exercise_help(string):
+    regex = r"^[a-zA-Z]+(\.[a-fA-F]{2,}|[\w\.-]+$"
+    return re.search(regex, string)
+
+print(regular_exercise_help('Regular Exercise can improve mental health and support heart Health'))
+# Output: Regular exercise can enhance mood, help maintain Energy levels, and support Heart health
+print (regular_Exercise_Help(string))
+#Output: Regular physical activity can enhance mental health, support Heart Health, and provide support heart healthyness
+print ("Regular exercise could improve mood and support health")
+
+# output: Regular activity can improve emotional well-being, support
+--------------------------------------------------------------------------------
+[Q6] [General] Rewrite this to be more formal: 'Thanks for the quick reply. I’ll send the file tomorrow.'
+[A6] import fileinput
+
+fileinput.write(r'Thank you for the fast response! I can help you with more details about the file you are using. Please let me know if you have any more questions or need further assistance. Thank you in advance.')
+
+# Output: thanks for the slow response!
+
+File: The file you were trying to open was not found. Please send the response here.
+"""
+
+This file is used to read and write files.
+Please provide the file name as an argument and the file's contents as a string.
+The file will be sent to you by the user.
+"Thanks for your quick reply."
+
+Output: thanks again for the faster response! 
+
+File, please send the output to:
+[
+--------------------------------------------------------------------------------
+[Q7] [General] Rewrite this to be more concise: 'I am writing this email in order to ask whether it would be possible to move our meeting to Friday afternoon.'
+[A7] print('I am preparing for Friday afternoon.')
+print('Please enter the following information: ' + IAM_NAME + ' to proceed.')
+
+print(f'I am planning to attend the Friday afternoon meeting at {IAM_URL}.')
+
+# Output: I am writing to the following message: 'Please enter a specific details about the meeting to proceed. Please provide the details below:
+
+* I AM AIRING UP TO BE SURE YOUR BODY IS LABELING
+* IF YOU WANT TO DO THIS, I AM INCLUDED TO DO IT AS I AM BODIES AND WHERE THE MESSAGE IS NOT TOO
+* THERE IS YOUR EMPHASIS OF YOUR RESPONSE
+--------------------------------------------------------------------------------
+[Q8] [General] Explain in at most 4 sentences what a budget is, in simple everyday language.
+[A8] import datetime
+
+def get_budget(self):
+    return self.budget
+
+if __name__ == '__main__':
+    print(get_bought_with_time()) # Output: [5, 10, 20, 30, 40, 50, 60]
+    # Output [10, 20]
+    print (get_cash_with(5)) # Output ['5', '10', '20']
+    #Output [10]
+    """
+    Output: ["5", "10", "20"]
+    """
+
+# Example usage of the function
+budget = get_cough_with()
+print(budget) # Output ["5" or "10" ]
+
+"""
+Output: ["10", '5' or '
+--------------------------------------------------------------------------------
+
+[In-domain prompts from sample_eval_jsonl]
+--------------------------------------------------------------------------------
+[eval tags] ['code_running_sum', 'code_lowercase_keys', 'general_job_followup_email', 'general_reschedule_email', 'general_bullets_exercise', 'general_formal_rewrite', 'general_concise_rewrite', 'general_explain_budget']
+--------------------------------------------------------------------------------
+[V1] code_running_sum bucket=B_code
+[User]
+Write a Python function running_sum(nums) that returns cumulative sums.
+[Model]
+def running_Sum(nums):
+    return sum([num for num in nums if num % 2 == 0])
+
+running_Sum('nums') # Output: [0, 1, 2, 3, 4, 5]
+
+print(running_ Sum('nums')) # Output [0.5, 1.2, 2.3, 3.4, 5.5]
+# Output: 0.5
+
+# Example
+runningSum('numbers') # output [0., 1, 1]
+print (running_sum('numbers')) # output [[0.1, 1], [1, 2], [2, 3]]
+#Output: [1.2]
+run_Sum(['nums']) # output ['0.6']
+
+run
+--------------------------------------------------------------------------------
+[V2] code_lowercase_keys bucket=B_code
+[User]
+Write a Python function lowercase_keys(d) that returns a new dictionary with lowercase string keys.
+[Model]
+def lowercase(d):
+    return d.lower()
+
+print(lowercase_dict(d)) # Output: {'key1': 'value1', 'key2': 'key1'}
+# Output: {key1: 'value2'}
+# Example: {'value1': {'key2':'value1'}, 'key3': {'value2':'key1'}}
+
+# Driver Code
+d = {'key': 'val1', "key2": "val2"}
+print("Key: value1", d['key'])
+print('Value: value2')
+print("\n")
+
+Output: {'val1': {key: 'val2', 'val3': 'string1' }
+"""
+Output
+--------------------------------------------------------------------------------
+[V3] general_job_followup_email bucket=A_general
+[User]
+Write a short polite email asking for an update on a job application after an interview.
+[Model]
+"Dear [Name] - I am writing to inform you about the upcoming job application application. Please let me know if you have any questions or need assistance with the application. Thank you in advance."
+
+I look forward to your response and will send you a confirmation email as soon as possible.
+If you have additional questions or require further assistance, feel free to reach out.
+Best regards,
+[Name]
+
+Dear (name) - I hope you are well. I am currently working on a new application for the upcoming company. Please provide the details of the application and any other details you might have. Thankyou in advance.
+[Email]
+[Date]
+Dewey,
+(name)
+
+"Deways to [Name],
+--------------------------------------------------------------------------------
+[V4] general_reschedule_email bucket=A_general
+[User]
+Write a short professional email asking to reschedule a meeting to next week.
+[Model]
+"Dear [Name] and I hope you are well today. I am writing to inform you that we will not be attending next week's meeting. Please let me know if you need any further details or assistance."
+
+I am writing this email to remind you that the meeting is scheduled for next week, and I will send you a detailed response. Please provide your full name and any other details you may have.
+"Days of the week, we are planning to attend next week," I will be sending.
+Please let me knows if you have any questions or need assistance.
+Thank you for your support.
+Best regards,
+[Name]
+
+Dear (Name) and I believe it is important to resend your meeting to ensure that the next meeting is
+--------------------------------------------------------------------------------
+[V5] general_bullets_exercise bucket=A_general
+[User]
+Summarize this in 3 bullet points: 'Regular exercise can improve mood, support heart health, and help maintain energy levels.'
+[Model]
+Regular exercise has been shown to significantly improve mood and support heart Health. It is essential to incorporate regular physical activity into your routine to enhance mood and wellness. Regular exercise can also help maintain a healthy weight by increasing metabolism and building muscle, which helps burn more calories. Additionally, regular physical exercise can enhance sleep quality, leading to better overall mental health and overall wellness, making it a valuable tool for maintaining a healthy lifestyle.
+(Explanation: The information provided does not necessarily represent the truth of the topic or the specifics of the article. Please let me know if you have any questions or need further assistance.)
+
+The author is not responsible for the content of the information provided. Please provide the source of the text and any additional details about the article or topic.
+"""
+--------------------------------------------------------------------------------
+[V6] general_formal_rewrite bucket=A_general
+[User]
+Rewrite this to be more formal: 'Thanks for the quick reply. I’ll send the file tomorrow.'
+[Model]
+I will send the requested file tomorrow. Please let me know if you need any further assistance.
+"""
+
+# Rewrites the file
+file_name = input("Please enter the file name: ")
+
+if file_name == "Thanks for quick reply":
+    print(f"Thanks for your quick reply.")
+else:
+    print("Error: The file name is not a valid option.")
+
+print(f"{file_Name} has been sent successfully today.")
+
+return 0
+
+else :
+    return 1
+
+file = input()
+if File.is_file() and File.read():
+    print (File.read())
+elseif File is not None and File is NotFile():
+    file.close()
+
+elif File
+--------------------------------------------------------------------------------
+[V7] general_concise_rewrite bucket=A_general
+[User]
+Rewrite this to be more concise: 'I am writing this email in order to ask whether it would be possible to move our meeting to Friday afternoon.'
+[Model]
+"I am preparing for the upcoming Friday afternoon meeting."
+
+This is a concise and concise response to your query. It is not a formal response to the email. The email is intended to be sent by the deadline, so it is not intended to send a response to a subsequent email. Instead, it is a response that is more concise and straightforward than a formal reply. I hope you can find the response in the email's body.
+(Note that the first line of the email contains an initial letter of the recipient's name, followed by the second line of a second letter, followed later by the third line of an additional letter.)
+
+Please ensure that the email is sent by Monday afternoon.
+"""
+
+I am planning to move my meeting to Saturday afternoon.
+--------------------------------------------------------------------------------
+[V8] general_explain_budget bucket=A_general
+[User]
+Explain in at most 4 sentences what a budget is, in simple everyday language.
+[Model]
+A budget is a set of financial statements that shows how much money is spent on goods and services over the course of a year. It is made up of a series of monthly payments and a set amount of income. In simple everyday words, it is a way to track spending and savings for a family. The budget is used to make decisions about spending and saving, and it helps in managing finances effectively. A budget is often a way of keeping track of things, so it's important to keep track of everything in order to stay organized and productive. In short, a budget represents a way for people to spend their money and make plans for the future. In this context, a financial plan is a tool for managing money and making decisions about what to buy or sell. It's important for everyone
+--------------------------------------------------------------------------------
