@@ -1,0 +1,314 @@
+step=step_000750
+sampling: temp=0.2 top_p=1.0 top_k=0 max_new=160
+in_domain: n=10 mode=full_context show_ref=False dump_prompt=False sample_eval_jsonl=True
+================================================================================
+[Fixed prompts]
+--------------------------------------------------------------------------------
+[Q1] [Code] Write a Python function running_sum(nums) that returns cumulative sums.
+[A1] def sum_nums(nums):
+    return nums.sum()
+
+nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 89, 97, 97]
+
+# Output
+sum_nums([1,2,3,4,5,6,7,8,9,11,12,13,14,15,17,19,23,29,31,37,41,43,47,53,67,71,73,79,83,97])
+
+print(sum_num
+--------------------------------------------------------------------------------
+[Q2] [Code] Write a Python function lowercase_keys(d) that returns a new dictionary with lowercase string keys.
+[A2] def lowercase(d):
+    return d.lower()
+
+print(lowercase_dict(d)) # Output: [code]
+
+# Output: {'code': 'code', 'string': 'value'}
+
+lowercase(dict(string=str)) # Input: {'value': 'string', 'key': 'key'}
+lowercasing(dict()) # Output
+lowercases(dict) # Output
+
+
+# Example code
+my_dict = {
+ 'code': ['code'],
+ 'string' : 'value',
+ 'key' : '',
+ 'value' : ''
+}
+
+mydict = my_dict.items()
+for key in mydict:
+    print(key)
+
+for item in my_list
+--------------------------------------------------------------------------------
+[Q3] [General] Write a short polite email asking for an update on a job application after an interview.
+[A3] "Hello, I am writing to provide you with an update about your application's status and the status of the job application. Please let me know if there is any specific requirements or requirements you have in mind."
+
+I hope this message finds you well. I would appreciate it if you could send me an email to let me understand what you think. I will be happy to assist you with any questions you might have.
+"""
+
+# Create a simple code block
+def get_job_application(job):
+    # Get the name of the application
+    application = job.get('name')
+
+    # Get all the details about the application and its status
+    details = application['details']
+
+    # Check if the application has been updated
+    if details['status'] == 'up
+--------------------------------------------------------------------------------
+[Q4] [General] Write a short professional email asking to reschedule a meeting to next week.
+[A4] "Hello, world! I hope you're doing well. I'm here to support you and help you stay on track. I'll keep you updated with your thoughts and any questions you might have. I can't wait to get back to you soon!"
+
+# A short professional address for a meeting
+
+print(f"Hello {name}! I'm sorry but I can’t attend this meeting today.") # Output: "Hello, World!"
+# Output: I can see that you're still on track, so I can help you get back on track soon.
+# I can also send you a reminder for a few minutes.
+print("Hello, I hope I can stay on schedule!") # Outputs: "Hi, World! I’m
+--------------------------------------------------------------------------------
+[Q5] [General] Summarize this in 3 bullet points: 'Regular exercise can improve mood, support heart health, and help maintain energy levels.'
+[A5] import re
+
+def summarize(text):
+    text = re.sub('[^A-Za-z0-9]+', '', text)
+    return text
+
+print(summarize(text)) # Output: [1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 89, 97, 97] ) # Output [2, 3]
+
+# Output: ['Hello', 'World']
+# [2]
+# The sum of the given text is [3, 4].
+# This sum is the sum of
+--------------------------------------------------------------------------------
+[Q6] [General] Rewrite this to be more formal: 'Thanks for the quick reply. I’ll send the file tomorrow.'
+[A6] # Create a file named "file_lastly.txt"
+file_name = "file-lastly"
+
+# Write the file to the file named file_lastwise.txt
+file = open(file_filename, 'w')
+file.write('Hello World!')
+file.__doc__ = file_name
+file._write()
+file().close()
+
+print(file.read()) # Output: File lastly.
+print("File lastly.") # Output "File lastely."
+
+file2 = open("file_firstly.py", "r")
+file3 = open('file_secondly.csv', 'w', encoding='utf-8')
+
+for line in file2:
+    print(line
+--------------------------------------------------------------------------------
+[Q7] [General] Rewrite this to be more concise: 'I am writing this email in order to ask whether it would be possible to move our meeting to Friday afternoon.'
+[A7] "I would like to remind you about the upcoming meeting on Friday morning."
+
+This is a simple code example that I can follow to help me with my code. I will also include a link to the email address for further assistance.
+"""
+
+# Example code
+print(f'I am planning to move my meeting to Thursday at {time.strftime("%A")}')
+
+print("I will move my meet to Friday at {date.strftime('%A')}")
+
+"""
+    This code is written in Python and can be used to create a Python code block for your code.
+    It will also provide a link for additional help.
+    """
+
+def move_meeting_to_day_of_week(date):
+    """
+    This function will move
+--------------------------------------------------------------------------------
+[Q8] [General] Explain in at most 4 sentences what a budget is, in simple everyday language.
+[A8] The budget is a set of financial statements that describe the amount of money that a company spends on goods and services. It is typically written as a single line, with each line representing a specific amount of income and a specific number of items. The first line represents the total amount of the company's income, while the second line represents its total expenses, such as rent, transportation, and utilities. The final line represents how much of the income is spent on goods, services, and personal consumption.
+"""
+
+# Sample data for a budget
+
+def budget_code(s):
+    # Create a list to store the budget
+    budget = []
+
+    # Iterate through the given string
+    for s in s:
+        if s == 'General':
+            budget.append('General')
+--------------------------------------------------------------------------------
+
+[In-domain prompts from sample_eval_jsonl]
+--------------------------------------------------------------------------------
+[eval tags] ['code_running_sum', 'code_lowercase_keys', 'general_job_followup_email', 'general_reschedule_email', 'general_bullets_exercise', 'general_formal_rewrite', 'general_concise_rewrite', 'general_explain_budget']
+--------------------------------------------------------------------------------
+[V1] code_running_sum bucket=B_code
+[User]
+Write a Python function running_sum(nums) that returns cumulative sums.
+[Model]
+def sum_nums(nums):
+    """
+    This function runs a sum of the given numbers and returns the sum of them.
+
+    Parameters
+    ----------
+    nums : list
+        The list of numbers to be summed.
+
+    Returns
+    -------
+    result : int
+        The sum of all the given number's elements.
+    """
+
+    # Initialize the sum
+    sum = 0
+
+    # Iterate over the given list
+    for num in nums:
+        sum += num
+
+    # Return the sum if the sum is greater than the given limit
+    if sum > max_sum:
+        return sum
+
+    # If the sum exceeds the limit, return the result
+    else:
+        # If it is less than the limit
+        return max_num_sum
+
+    # Otherwise, return 0
+    else :
+        return 0
+--------------------------------------------------------------------------------
+[V2] code_lowercase_keys bucket=B_code
+[User]
+Write a Python function lowercase_keys(d) that returns a new dictionary with lowercase string keys.
+[Model]
+def lowercase(d):
+    return d.lower()
+
+print(lowercase_dict(d)) # Output: { 'a': {'b': {'c': {'d': {'e': {'l': {'f': {'g': {'h': {'k': {'v': {'w': {'x': {'y': {'z': {'a': 't'}}, {'n': {'s': {'p': {'q': {'r': {'t': {'u': {'o': {'m': {'j': {'n' : {'s', 'p': 'v'}}, 'n': 'r'})}}}}}}}}}})}}}) }})
+
+# Output: {'a', 'b', 'c', 'd', 'e', 'i
+--------------------------------------------------------------------------------
+[V3] general_job_followup_email bucket=A_general
+[User]
+Write a short polite email asking for an update on a job application after an interview.
+[Model]
+I would appreciate it if you could send me an email with your name and any details about the application. I would appreciate your feedback and any questions you might have. I will be happy to assist you with any questions or concerns you may have.
+"""
+
+# Create a new email address
+email = '<EMAIL>'
+
+print(f"Hello {email}!")
+
+ # Send the email
+email_verified = email.verified()
+
+ print(f'Your email is verified by the company.')
+
+ email_verification_message = email_verify_message.format(email=email)
+
+ if email_Verified == email_confirmation_message:
+    print(email_confirmatory_message)
+ else:
+    email
+--------------------------------------------------------------------------------
+[V4] general_reschedule_email bucket=A_general
+[User]
+Write a short professional email asking to reschedule a meeting to next week.
+[Model]
+I would like to schedule a rescheduling for next week and would appreciate your feedback on how to get started. I would also like to consider scheduling a special event or a special day of the week to make sure everyone is on the same page. I am here to support you in your efforts to stay on track and make the most of your time.
+"""
+
+# Reschedule
+
+def rescheatization(date):
+    # Create a list to hold all the dates
+    dates = [datetime.date.today()]
+    # Iterate over the list
+    for date in dates:
+        # Check if the date is in the list
+        if date.year == date.month:
+            # Update the list
+            dates.append(date)
+
+    # Return
+--------------------------------------------------------------------------------
+[V5] general_bullets_exercise bucket=A_general
+[User]
+Summarize this in 3 bullet points: 'Regular exercise can improve mood, support heart health, and help maintain energy levels.'
+[Model]
+Regular exercise helps improve overall well-being and well-rounded health by strengthening the immune system and reducing the risk of chronic diseases. It also boosts the immune response and reduces the risk for infection and disease. Regular exercise also improves cardiovascular health and reduces stress levels. It is important to incorporate regular physical activity into your daily routine to build muscle and improve overall health.
+'''
+
+# Exercise can improve overall mood, help maintain health and support heart
+def summarize(num):
+    # Calculate total number of minutes of exercise
+    total_minutes = num * 60
+    # Summarized total number
+    sum_of_minutes_total = total_minute + total_hours
+    # Add the sum of the minutes to the total
+    sum = total + total
+    return sum
+
+print
+--------------------------------------------------------------------------------
+[V6] general_formal_rewrite bucket=A_general
+[User]
+Rewrite this to be more formal: 'Thanks for the quick reply. I’ll send the file tomorrow.'
+[Model]
+I will send the first line of the file yesterday. I will also send the last line of file tomorrow.
+This will be the first sentence of the second paragraph.
+I hope you have a great day! I hope you can do it!
+
+Best regards,
+Rewriting this to make it more formal is quite simple and fun. I just wanted to check in about the file today. I know it’s very important that we get it ready to go. I hope it‘s ready to be done soon.
+Thank you so much for your help!
+Best,
+
+Rabbit
+
+Dear Rewriter,
+I would like to send the second line of my file yesterday, which is a bit more formal than the
+--------------------------------------------------------------------------------
+[V7] general_concise_rewrite bucket=A_general
+[User]
+Rewrite this to be more concise: 'I am writing this email in order to ask whether it would be possible to move our meeting to Friday afternoon.'
+[Model]
+"I would appreciate your feedback on the proposal and would appreciate any feedback you have received from me."
+
+I would also appreciate any suggestions you might have made to move the meeting to Saturday afternoon. I would appreciate feedback on any suggestions I have made or any feedback I have received.
+"""
+
+# Write a program to check if the meeting is possible to go to Friday at the specified time
+def is_possible_to_go_to(time):
+    # Check if the time is valid
+    if time < 0:
+        return False
+
+    # Move the meeting
+    for i in range(time // 2):
+        if time % 2 == 0:
+            return True
+
+    # If the time has been reached, move the next meeting to Thursday afternoon
+    if (time % 2)
+--------------------------------------------------------------------------------
+[V8] general_explain_budget bucket=A_general
+[User]
+Explain in at most 4 sentences what a budget is, in simple everyday language.
+[Model]
+A budget is a set of financial statements that describe the amount of money that a company spends on goods and services. It is typically made up of several key components, such as sales, income, and expenses. The first part of the budget is called the budget, which is made up entirely of items like sales, expenses, and income. The second part is called expenses, which are the total amount of all the items in the budget. Finally, the third part is known as the balance sheet, which contains all the information about the company's income and expenses, including any changes in the company or any changes made to it over time.
+"""
+
+# Definition for a budget
+def budget(amount):
+    # Create a dictionary to store the budget
+    budget = {}
+
+    # Initialize a
+--------------------------------------------------------------------------------

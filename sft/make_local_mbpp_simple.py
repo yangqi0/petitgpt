@@ -19,20 +19,24 @@ from typing import Any, Dict, List
 from datasets import load_dataset
 from huggingface_hub import hf_hub_download
 
-def load_mbpp_subset_local(subset: str):
-    if subset == "sanitized":
-        filename = "sanitized/test/0000.parquet"
-    elif subset == "full":
-        filename = "full/test/0000.parquet"
-    else:
-        raise ValueError(f"unsupported subset: {subset}")
+# def load_mbpp_subset_local(subset: str):
+#     if subset == "sanitized":
+#         filename = "sanitized/mbpp-test.parquet"
+#     elif subset == "full":
+#         filename = "full/mbpp-test.parquet"
+#     else:
+#         raise ValueError(f"unsupported subset: {subset}")
 
-    local_path = hf_hub_download(
-        repo_id="Muennighoff/mbpp",
-        repo_type="dataset",
-        filename=filename,
-    )
-    return load_dataset("parquet", data_files={"test": local_path}, split="test")
+#     local_path = hf_hub_download(
+#         repo_id="Muennighoff/mbpp",
+#         repo_type="dataset",
+#         filename=filename,
+#         revision="refs/convert/parquet",
+#     )
+#     return load_dataset("parquet", data_files={"test": local_path}, split="test")
+
+def load_mbpp_subset_local(subset: str):
+    return load_dataset("google-research-datasets/mbpp", subset, split="test")
 
 PROMPT_TEMPLATES = [
     "Write a Python function for this task. Return only one Python code block.\n\n{prompt}",
@@ -143,7 +147,7 @@ def main() -> None:
     if not rows:
         raise SystemExit("no rows produced")
     write_jsonl(args.out_jsonl, rows)
-    print(f"loaded={len(ds)} from {url}")
+    print(f"loaded={len(ds)} examples from MBPP dataset")
     print(f"wrote={len(rows)} -> {args.out_jsonl}")
 
 

@@ -93,18 +93,14 @@ def read_jsonl(path: str) -> list[dict[str, Any]]:
 # Fixed prompts
 # -------------------------
 FIXED_PROMPTS = [
-    "[Code] Write a Python function fib(n) that returns the n-th Fibonacci number iteratively. Raise ValueError if n < 0.",
-    "[Code] Fix this Python function so it returns the reversed string correctly:\n\ndef reverse_string(s):\n    out = ''\n    for ch in s:\n        out = out + ch\n    return out\n",
-    "[Code] Write a Python function dedup_preserve_order(items) that removes duplicates while keeping the first occurrence order.",
-    "[Code] Write a Python function count_words(text) that returns a dictionary of lowercase word frequencies. Ignore punctuation like commas and periods.",
-    "[Code] Explain in 3 sentences why binary search requires a sorted list, then write a Python function binary_search(nums, target).",
-    "[Math] Solve: A notebook costs 8 euros. You buy 3 notebooks and get a 25% discount on the total. What is the final price?",
-    "[Math] Solve for x: 3x + 5 = 23. Show the steps briefly.",
-    "[Math] A ladder is 12 meters long. Tom climbs it 5 times. How many meters does he climb in total?",
-    "[Math] Given the list [2, 4, 4, 4, 5, 5, 7, 9], compute the mean and variance, and explain the steps briefly.",
+    "[Code] Write a Python function running_sum(nums) that returns cumulative sums.",
+    "[Code] Write a Python function lowercase_keys(d) that returns a new dictionary with lowercase string keys.",
     "[General] Write a short polite email asking for an update on a job application after an interview.",
-    "[General] Summarize this in 3 bullet points: 'Python is widely used in data analysis, automation, and machine learning because it has a rich ecosystem of libraries and a readable syntax.'",
-    "[General] Explain the difference between a Python list and a tuple in simple terms, using at most 5 sentences.",
+    "[General] Write a short professional email asking to reschedule a meeting to next week.",
+    "[General] Summarize this in 3 bullet points: 'Regular exercise can improve mood, support heart health, and help maintain energy levels.'",
+    "[General] Rewrite this to be more formal: 'Thanks for the quick reply. I’ll send the file tomorrow.'",
+    "[General] Rewrite this to be more concise: 'I am writing this email in order to ask whether it would be possible to move our meeting to Friday afternoon.'",
+    "[General] Explain in at most 4 sentences what a budget is, in simple everyday language.",
 ]
 
 
