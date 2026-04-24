@@ -5,7 +5,13 @@ import random
 from collections import Counter, defaultdict
 from typing import Any, Dict, List, Tuple
 
-from general_utils import normalize_prompt, read_jsonl, semantic_diversity_scores, stable_id, write_jsonl
+from general_utils import (
+    normalize_prompt,
+    read_jsonl,
+    semantic_diversity_scores,
+    stable_id,
+    write_jsonl,
+)
 
 TOTAL_FAMILY_QUOTAS = {
     "email_message": 1200,
@@ -15,11 +21,13 @@ TOTAL_FAMILY_QUOTAS = {
 }
 SPLIT_RATIOS = {"train": 0.85, "val": 0.075, "holdout": 0.075}
 
+
 def load_and_merge(paths: List[str]) -> List[Dict[str, Any]]:
     rows = []
     for p in paths:
         rows.extend(read_jsonl(p))
     return rows
+
 
 def dedup_pass_rows(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     seen = set()
@@ -34,22 +42,26 @@ def dedup_pass_rows(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         out.append(row)
     return out
 
+
 def sort_group(group: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     answers = [g["messages"][1]["content"] for g in group]
     diversity = semantic_diversity_scores(answers)
     enriched = []
     for row, div in zip(group, diversity):
         scores = row["meta"].get("scores", {})
-        enriched.append((
-            -(1 if row["meta"].get("generation_round", 1) == 1 else 0),
-            -scores.get("instruction_following", 0),
-            -scores.get("cleanliness", 0),
-            len(row["messages"][1]["content"].split()),
-            -div,
-            row,
-        ))
+        enriched.append(
+            (
+                -(1 if row["meta"].get("generation_round", 1) == 1 else 0),
+                -scores.get("instruction_following", 0),
+                -scores.get("cleanliness", 0),
+                len(row["messages"][1]["content"].split()),
+                -div,
+                row,
+            )
+        )
     enriched.sort()
     return [x[-1] for x in enriched]
+
 
 def quota_split(total: int) -> Dict[str, int]:
     train = int(round(total * SPLIT_RATIOS["train"]))
@@ -57,42 +69,62 @@ def quota_split(total: int) -> Dict[str, int]:
     holdout = total - train - val
     return {"train": train, "val": val, "holdout": holdout}
 
+
 def grouped_key(row: Dict[str, Any]) -> str:
     if row["meta"].get("from_template"):
-        return row["meta"].get("parent_seed_id") or row["meta"].get("source_key") or row["meta"]["subfamily"]
+        return (
+            row["meta"].get("parent_seed_id")
+            or row["meta"].get("source_key")
+            or row["meta"]["subfamily"]
+        )
     return stable_id("grp", normalize_prompt(row["messages"][0]["content"])[:180])
 
-def assign_splits(rows: List[Dict[str, Any]], family_quotas: Dict[str, int], rng: random.Random) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]], List[Dict[str, Any]]]:
+
+def assign_splits(
+    rows: List[Dict[str, Any]], family_quotas: Dict[str, int], rng: random.Random
+) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]], List[Dict[str, Any]]]:
     # group by family and grouped key to reduce leakage
     fam_groups = defaultdict(lambda: defaultdict(list))
     for row in rows:
         fam_groups[row["meta"]["family"]][grouped_key(row)].append(row)
 
     train, val, holdout = [], [], []
+
     for family, target in family_quotas.items():
         split_targets = quota_split(target)
         groups = list(fam_groups[family].values())
-        groups.sort(key=lambda g: (-len(g), g[0]["meta"].get("from_template", False)))
         rng.shuffle(groups)
+
         counts = Counter()
+
         for group in groups:
-            # pick split with most remaining capacity
-            remaining = {s: split_targets[s] - counts[s] for s in ["train", "val", "holdout"]}
-            split = max(remaining.items(), key=lambda kv: (kv[1], kv[0]))[0]
-            if remaining[split] <= 0:
+            remaining = {
+                s: split_targets[s] - counts[s] for s in ["train", "val", "holdout"]
+            }
+
+            candidates = [
+                s for s in ["train", "val", "holdout"] if remaining[s] >= len(group)
+            ]
+
+            if not candidates:
                 continue
-            room = remaining[split]
-            chosen = group[:room]
-            counts[split] += len(chosen)
+
+            split = max(candidates, key=lambda s: remaining[s])
+
             if split == "train":
-                train.extend(chosen)
+                train.extend(group)
             elif split == "val":
-                val.extend(chosen)
+                val.extend(group)
             else:
-                holdout.extend(chosen)
-            if counts["train"] >= split_targets["train"] and counts["val"] >= split_targets["val"] and counts["holdout"] >= split_targets["holdout"]:
+                holdout.extend(group)
+
+            counts[split] += len(group)
+
+            if all(counts[s] >= split_targets[s] for s in ["train", "val", "holdout"]):
                 break
+
     return train, val, holdout
+
 
 def select_by_family(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     by_family = defaultdict(list)
@@ -119,6 +151,7 @@ def select_by_family(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
             taken += 1
         print(f"{family}: selected {taken} / target {quota}")
     return selected
+
 
 def main() -> None:
     ap = argparse.ArgumentParser()
@@ -151,6 +184,7 @@ def main() -> None:
         print(f"[{name}_source_counts]")
         for k, v in src.most_common():
             print(f"  {k}: {v}")
+
 
 if __name__ == "__main__":
     main()
