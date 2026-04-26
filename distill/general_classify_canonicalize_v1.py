@@ -9,34 +9,94 @@ from general_utils import (
     cleanup_prompt_text,
     default_constraints_for_subfamily,
     extract_quoted_text,
-    normalize_space,
     read_jsonl,
     write_jsonl,
 )
 
+
 def classify_family(prompt: str) -> Optional[str]:
     low = prompt.lower()
-    if any(x in low for x in ["email", "follow up", "follow-up", "reschedule", "thank you", "confirm receipt", "professional email", "polite email", "write a message"]):
+    if any(
+        x in low
+        for x in [
+            "email",
+            "follow up",
+            "follow-up",
+            "reschedule",
+            "thank you",
+            "confirm receipt",
+            "professional email",
+            "polite email",
+            "write a message",
+        ]
+    ):
         return "email_message"
-    if any(x in low for x in ["rewrite", "rephrase", "more formal", "more concise", "more polite", "clearer", "shorter", "more direct"]):
+    if any(
+        x in low
+        for x in [
+            "rewrite",
+            "rephrase",
+            "more formal",
+            "more concise",
+            "more polite",
+            "clearer",
+            "shorter",
+            "more direct",
+        ]
+    ):
         return "rewrite_style"
-    if any(x in low for x in ["summarize", "summary", "bullet points", "key takeaways", "main points", "one sentence summary"]):
+    if any(
+        x in low
+        for x in [
+            "summarize",
+            "summary",
+            "bullet points",
+            "key takeaways",
+            "main points",
+            "one sentence summary",
+        ]
+    ):
         return "summary_bullets"
-    if any(x in low for x in ["explain", "what is", "difference between", "simple terms", "plain language", "everyday language"]):
+    if any(
+        x in low
+        for x in [
+            "explain",
+            "what is",
+            "difference between",
+            "simple terms",
+            "plain language",
+            "everyday language",
+        ]
+    ):
         return "explain_compare"
     return None
+
 
 def guess_email_subfamily(prompt: str) -> str:
     low = prompt.lower()
     if any(x in low for x in ["job", "application", "interview", "hiring"]):
         return "job_followup_email"
-    if any(x in low for x in ["reschedule", "move", "postpone", "next week", "meeting"]):
+    if any(
+        x in low for x in ["reschedule", "move", "postpone", "next week", "meeting"]
+    ):
         return "reschedule_email"
     if "thank" in low:
         return "thank_you_email"
-    if any(x in low for x in ["file", "report", "notes", "attachment", "slides", "document", "receipt"]):
+    if any(
+        x in low
+        for x in [
+            "file",
+            "report",
+            "notes",
+            "attachment",
+            "slides",
+            "document",
+            "receipt",
+        ]
+    ):
         return "request_or_confirm_email"
     return "polite_short_message"
+
 
 def guess_rewrite_subfamily(prompt: str) -> Optional[str]:
     low = prompt.lower()
@@ -54,11 +114,14 @@ def guess_rewrite_subfamily(prompt: str) -> Optional[str]:
         return "rewrite_more_direct"
     return None
 
+
 def guess_summary_subfamily(prompt: str) -> Optional[str]:
     low = prompt.lower()
     if "exactly 3" in low and "bullet" in low:
         return "summary_3_bullets"
-    if "exactly 2" in low and ("takeaway" in low or "main idea" in low or "key takeaway" in low):
+    if "exactly 2" in low and (
+        "takeaway" in low or "main idea" in low or "key takeaway" in low
+    ):
         return "summary_2_takeaways"
     if "one sentence" in low:
         return "summary_1_sentence"
@@ -67,6 +130,7 @@ def guess_summary_subfamily(prompt: str) -> Optional[str]:
     if "bullet" in low:
         return "summary_3_bullets"
     return None
+
 
 def guess_explain_subfamily(prompt: str) -> str:
     low = prompt.lower()
@@ -106,6 +170,7 @@ def guess_explain_subfamily(prompt: str) -> str:
             return v
     return "explain_budget_simple"
 
+
 def canonicalize_email(raw_prompt: str) -> Tuple[str, str]:
     sub = guess_email_subfamily(raw_prompt)
     low = raw_prompt.lower()
@@ -120,6 +185,7 @@ def canonicalize_email(raw_prompt: str) -> Tuple[str, str]:
     else:
         prompt = "Write a brief polite professional message for a workplace context. Keep it under 45 words. Do not use placeholders."
     return sub, prompt
+
 
 def canonicalize_rewrite(raw_prompt: str) -> Optional[Tuple[str, str]]:
     sub = guess_rewrite_subfamily(raw_prompt)
@@ -138,18 +204,29 @@ def canonicalize_rewrite(raw_prompt: str) -> Optional[Tuple[str, str]]:
     }
     return sub, f'{mapping[sub]}: "{quoted}" Return only the rewritten text.'
 
+
 def canonicalize_summary(raw_prompt: str) -> Optional[Tuple[str, str]]:
     sub = guess_summary_subfamily(raw_prompt)
     quoted = extract_quoted_text(raw_prompt)
     if not sub or not quoted:
         return None
     if sub == "summary_3_bullets":
-        return sub, f'Summarize this in exactly 3 bullet points: "{quoted}" Keep each bullet short.'
+        return (
+            sub,
+            f'Summarize this in exactly 3 bullet points: "{quoted}" Keep each bullet short.',
+        )
     if sub == "summary_2_takeaways":
-        return sub, f'Give exactly 2 key takeaways from this text: "{quoted}" Keep each takeaway short.'
+        return (
+            sub,
+            f'Give exactly 2 key takeaways from this text: "{quoted}" Keep each takeaway short.',
+        )
     if sub == "summary_1_sentence":
         return sub, f'Summarize this in one sentence: "{quoted}"'
-    return sub, f'List exactly 3 key points from this text: "{quoted}" Keep each point short.'
+    return (
+        sub,
+        f'List exactly 3 key points from this text: "{quoted}" Keep each point short.',
+    )
+
 
 def canonicalize_explain(raw_prompt: str) -> Tuple[str, str]:
     sub = guess_explain_subfamily(raw_prompt)
@@ -158,7 +235,10 @@ def canonicalize_explain(raw_prompt: str) -> Tuple[str, str]:
         if "difference between" in low:
             m = re.search(r"difference between\s+(.+)", raw_prompt, flags=re.IGNORECASE)
             tail = m.group(1).strip() if m else raw_prompt
-            return sub, f"Explain in simple terms the difference between {tail.rstrip('.?')}. Use at most 3 sentences."
+            return (
+                sub,
+                f"Explain in simple terms the difference between {tail.rstrip('.?')}. Use at most 3 sentences.",
+            )
     thing = None
     if "what is" in low:
         m = re.search(r"what is\s+(.+)", raw_prompt, flags=re.IGNORECASE)
@@ -167,7 +247,11 @@ def canonicalize_explain(raw_prompt: str) -> Tuple[str, str]:
         # fall back to subfamily naming
         pretty = sub.replace("explain_", "").replace("_simple", "").replace("_", " ")
         thing = pretty
-    return sub, f"Explain in at most 3 sentences what {thing} is, in simple everyday language."
+    return (
+        sub,
+        f"Explain in at most 3 sentences what {thing} is, in simple everyday language.",
+    )
+
 
 def canonicalize_open_row(row: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     raw_prompt = cleanup_prompt_text(row.get("raw_prompt", "") or "")
@@ -204,6 +288,7 @@ def canonicalize_open_row(row: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         },
     }
 
+
 def normalize_template_row(row: Dict[str, Any]) -> Dict[str, Any]:
     return {
         "id": row["id"],
@@ -220,6 +305,7 @@ def normalize_template_row(row: Dict[str, Any]) -> Dict[str, Any]:
             "parent_seed_id": row.get("parent_seed_id"),
         },
     }
+
 
 def main() -> None:
     ap = argparse.ArgumentParser()
@@ -254,6 +340,7 @@ def main() -> None:
     print("[rejects]")
     for k, v in reject.most_common():
         print(f"  {k}: {v}")
+
 
 if __name__ == "__main__":
     main()
