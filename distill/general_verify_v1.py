@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import argparse
 from collections import Counter
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List
 
 from general_utils import (
     body_sentence_count,
@@ -18,8 +18,6 @@ from general_utils import (
     has_numbered_list,
     has_prompt_echo,
     has_signoff,
-    jaccard_ngrams,
-    line_count,
     looks_like_email,
     looks_too_technical,
     mixed_bullet_styles,
@@ -30,6 +28,7 @@ from general_utils import (
     word_count,
     write_jsonl,
 )
+
 
 def global_hard_fail(answer: str, prompt: str) -> List[str]:
     reasons: List[str] = []
@@ -51,6 +50,7 @@ def global_hard_fail(answer: str, prompt: str) -> List[str]:
         reasons.append("meta_ai")
     return reasons
 
+
 def verify_email(answer: str, constraints: Dict[str, Any]) -> List[str]:
     reasons = []
     wc = word_count(answer)
@@ -67,6 +67,7 @@ def verify_email(answer: str, constraints: Dict[str, Any]) -> List[str]:
         reasons.append("email_body_sentence_count")
     return reasons
 
+
 def verify_rewrite(prompt: str, answer: str, constraints: Dict[str, Any]) -> List[str]:
     reasons = []
     source = extract_quoted_text(prompt) or ""
@@ -81,6 +82,7 @@ def verify_rewrite(prompt: str, answer: str, constraints: Dict[str, Any]) -> Lis
     if looks_like_email(answer):
         reasons.append("rewrite_became_email")
     return reasons
+
 
 def verify_summary(answer: str, constraints: Dict[str, Any]) -> List[str]:
     reasons = []
@@ -102,6 +104,7 @@ def verify_summary(answer: str, constraints: Dict[str, Any]) -> List[str]:
             reasons.append("summary_not_one_sentence")
     return reasons
 
+
 def verify_explain(answer: str, constraints: Dict[str, Any]) -> List[str]:
     reasons = []
     sc = sentence_count(answer)
@@ -116,11 +119,20 @@ def verify_explain(answer: str, constraints: Dict[str, Any]) -> List[str]:
         reasons.append("too_technical")
     return reasons
 
+
 def heuristic_scores(answer: str, family: str, reasons: List[str]) -> Dict[str, int]:
     base = 5
     penalty = len(reasons)
     cleanliness = max(1, base - penalty)
-    brevity = 5 if word_count(answer) <= 40 else 4 if word_count(answer) <= 70 else 3 if word_count(answer) <= 110 else 2
+    brevity = (
+        5
+        if word_count(answer) <= 40
+        else 4
+        if word_count(answer) <= 70
+        else 3
+        if word_count(answer) <= 110
+        else 2
+    )
     instr = max(1, base - penalty)
     natural = 4
     if "thank you" in answer.lower() or "best regards" in answer.lower():
@@ -134,16 +146,25 @@ def heuristic_scores(answer: str, family: str, reasons: List[str]) -> Dict[str, 
         "naturalness": natural,
     }
 
+
 def repairable(reasons: List[str]) -> bool:
-    hard = {"code_pollution", "placeholder", "prompt_echo", "multiple_answers", "meta_ai"}
+    hard = {
+        "code_pollution",
+        "placeholder",
+        "prompt_echo",
+        "multiple_answers",
+        "meta_ai",
+    }
     if any(r in hard for r in reasons):
         return False
     if any(r.startswith("lost_") for r in reasons):
         return False
     return True
 
+
 def answer_field(mode: str) -> str:
     return "answer_raw" if mode == "raw" else "answer_repaired"
+
 
 def main() -> None:
     ap = argparse.ArgumentParser()
@@ -178,24 +199,31 @@ def main() -> None:
                 reasons.extend(verify_explain(answer, cons))
 
         scores = heuristic_scores(answer, fam, reasons)
-        if not reasons and scores["instruction_following"] >= 4 and scores["cleanliness"] >= 4 and scores["brevity"] >= 4:
-            passes.append({
-                "id": row["id"],
-                "messages": [
-                    {"role": "user", "content": prompt},
-                    {"role": "assistant", "content": answer},
-                ],
-                "meta": {
-                    "bucket": "A_general",
-                    "family": row["family"],
-                    "subfamily": row["subfamily"],
-                    "source": row["meta"].get("source"),
-                    "source_key": row["meta"].get("source_key"),
-                    "from_template": row["meta"].get("from_template", False),
-                    "generation_round": row["meta"].get("generation_round", 1),
-                    "scores": scores,
-                },
-            })
+        if (
+            not reasons
+            and scores["instruction_following"] >= 4
+            and scores["cleanliness"] >= 4
+            and scores["brevity"] >= 4
+        ):
+            passes.append(
+                {
+                    "id": row["id"],
+                    "messages": [
+                        {"role": "user", "content": prompt},
+                        {"role": "assistant", "content": answer},
+                    ],
+                    "meta": {
+                        "bucket": "A_general",
+                        "family": row["family"],
+                        "subfamily": row["subfamily"],
+                        "source": row["meta"].get("source"),
+                        "source_key": row["meta"].get("source_key"),
+                        "from_template": row["meta"].get("from_template", False),
+                        "generation_round": row["meta"].get("generation_round", 1),
+                        "scores": scores,
+                    },
+                }
+            )
         else:
             for r in reasons:
                 reasons_counter[r] += 1
@@ -211,17 +239,23 @@ def main() -> None:
                 "meta": row.get("meta", {}),
             }
             rejects.append(reject_row)
-            if args.mode == "raw" and args.out_repair_candidates_jsonl and repairable(reasons):
-                repairs.append({
-                    "id": row["id"],
-                    "family": row["family"],
-                    "subfamily": row["subfamily"],
-                    "prompt": prompt,
-                    "bad_answer": answer,
-                    "repair_reasons": reasons,
-                    "constraints": cons,
-                    "meta": row.get("meta", {}),
-                })
+            if (
+                args.mode == "raw"
+                and args.out_repair_candidates_jsonl
+                and repairable(reasons)
+            ):
+                repairs.append(
+                    {
+                        "id": row["id"],
+                        "family": row["family"],
+                        "subfamily": row["subfamily"],
+                        "prompt": prompt,
+                        "bad_answer": answer,
+                        "repair_reasons": reasons,
+                        "constraints": cons,
+                        "meta": row.get("meta", {}),
+                    }
+                )
 
     write_jsonl(args.out_pass_jsonl, passes)
     write_jsonl(args.out_reject_jsonl, rejects)
@@ -235,6 +269,7 @@ def main() -> None:
     print("[top_reasons]")
     for k, v in reasons_counter.most_common(20):
         print(f"  {k}: {v}")
+
 
 if __name__ == "__main__":
     main()
