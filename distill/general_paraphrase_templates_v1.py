@@ -8,40 +8,61 @@ from typing import Any, Dict, List, Tuple
 from general_utils import (
     contains_code_markers,
     contains_placeholder,
-    cosine_sim,
-    default_constraints_for_subfamily,
-    extract_quoted_text,
     has_multiple_answer_pattern,
-    has_prompt_echo,
     has_meta_prefix,
-    jaccard_ngrams,
     normalize_prompt,
     openai_compatible_chat,
-    print_counter,
     read_jsonl,
     semantic_vectors,
     stable_id,
     write_jsonl,
+    jaccard_ngrams,
+    cosine_sim,
+    extract_quoted_text,
 )
 
-SYSTEM_PROMPT = """You are rewriting instruction prompts for a very small assistant.
+SYSTEM_PROMPT = """You are rewriting instruction prompts for a small assistant.
 
-Preserve the task intent exactly.
-Preserve the required output format exactly.
-Preserve any word limit, sentence limit, or bullet-count requirement exactly.
-Do not add new requirements.
-Do not remove important constraints.
-Do not turn the task into a different task.
-Do not add examples, explanations, code, or multiple options.
+Preserve the original task intent.
+Keep the same output format and constraints.
+Vary the wording naturally.
+Do not add examples, explanations, code, placeholders, or multiple options.
 
 Return only one rewritten prompt.
 """
 
 STYLE_INSTRUCTIONS = {
     "natural_reword": "Use natural wording changes, but keep the task identical.",
-    "instruction_verb_shift": "Prefer changing the instruction verb or opening phrase, while keeping all constraints identical.",
-    "light_contextualized": "Make the prompt sound slightly more natural and realistic, but do not add any new task requirements.",
+    "instruction_verb_shift": "Change the instruction verb or opening phrase while keeping the task identical.",
+    "light_contextualized": "Make the prompt slightly more natural and realistic, but do not add new task requirements.",
 }
+
+def normalize_for_contract(s: str) -> str:
+    return re.sub(r"\s+", " ", (s or "").lower()).strip()
+
+def token_overlap(a: str, b: str) -> float:
+    at = set(re.findall(r"[a-z0-9']+", normalize_for_contract(a)))
+    bt = set(re.findall(r"[a-z0-9']+", normalize_for_contract(b)))
+    if not at:
+        return 1.0
+    return len(at & bt) / max(1, len(at))
+
+def contains_prompt_stage_code_pollution(s: str) -> bool:
+    """Detect real code pollution in paraphrased prompts.
+
+    Important: do NOT flag the word 'return' here, because many valid
+    instruction prompts contain phrases such as 'Return only the rewritten text.'
+    """
+    low = s or ""
+    patterns = [
+        r"```",
+        r"\bimport\s+\w+",
+        r"\bfrom\s+\w+\s+import\b",
+        r"\bdef\s+\w+\s*\(",
+        r"\bclass\s+\w+",
+        r"\bprint\s*\(",
+    ]
+    return any(re.search(p, low, flags=re.IGNORECASE) for p in patterns)
 
 def build_user_prompt(seed: Dict[str, Any], style: str) -> str:
     return f"""Rewrite the following instruction prompt so that it sounds natural and varied, while keeping it semantically equivalent.
@@ -54,7 +75,7 @@ Rules:
 - Keep the same task.
 - Keep the same output contract.
 - Keep the same length or structure requirements.
-- Do not add any new constraints or extra tasks.
+- Do not add new constraints or extra tasks.
 - Do not add placeholders.
 - Keep it as a single-turn user instruction.
 - {STYLE_INSTRUCTIONS[style]}
@@ -63,137 +84,78 @@ Original prompt:
 {seed['canonical_prompt']}
 """
 
-def normalize_for_contract(s: str) -> str:
-    return re.sub(r"\s+", " ", (s or "").lower()).strip()
+def contract_warnings(seed: Dict[str, Any], para: str) -> List[str]:
+    """Warnings only. These do NOT reject by default.
 
-
-def fuzzy_contains_quoted_text(original_quote: str, para: str) -> bool:
-    """Return True if the paraphrase appears to preserve the quoted text."""
-    if not original_quote:
-        return True
-
-    q = normalize_for_contract(original_quote)
-    p = normalize_for_contract(para)
-
-    if q in p:
-        return True
-
-    q_toks = set(re.findall(r"[a-z0-9']+", q))
-    p_toks = set(re.findall(r"[a-z0-9']+", p))
-    if not q_toks:
-        return True
-
-    overlap = len(q_toks & p_toks) / max(1, len(q_toks))
-    return overlap >= 0.75
-
-
-def has_rewrite_contract(para: str) -> bool:
-    """Accept several equivalent ways of saying 'return only the rewritten text'."""
+    The first versions rejected too aggressively for these conditions, which caused
+    only a handful of paraphrases to survive. For this stage, we only need to remove
+    obviously bad generations; strict filtering belongs later in answer verification.
+    """
+    warnings: List[str] = []
+    cons = seed.get("constraints", {})
+    orig = seed.get("canonical_prompt", "")
     low = normalize_for_contract(para)
-    patterns = [
-        "return only the rewritten text",
-        "return only the revised text",
-        "return only the rephrased text",
-        "only return the rewritten text",
-        "only return the revised text",
-        "respond with only the rewritten text",
-        "provide only the rewritten text",
-        "give only the rewritten text",
-        "return just the rewritten text",
-        "do not include any explanation",
-        "without any explanation",
-    ]
-    return any(p in low for p in patterns)
+    orig_low = normalize_for_contract(orig)
 
+    if cons.get("must_be_email"):
+        if not any(x in low for x in ["email", "message", "note", "follow", "reschedule", "thank", "professional", "polite"]):
+            warnings.append("possibly_lost_email_task")
 
-def has_email_task(para: str) -> bool:
-    low = normalize_for_contract(para)
-    return any(
-        x in low
-        for x in [
-            "email",
-            "message",
-            "note",
-            "follow-up",
-            "follow up",
-            "reschedule",
-            "thank-you",
-            "thank you",
-            "professional",
-            "polite",
-        ]
-    )
+    if cons.get("exact_bullets") is not None:
+        n = str(cons["exact_bullets"])
+        if n not in low or not any(x in low for x in ["bullet", "takeaway", "point", "idea"]):
+            warnings.append("possibly_lost_bullet_contract")
 
+    if cons.get("max_sentences") is not None and any(x in orig_low for x in ["at most", "no more than", "use at most"]):
+        n = str(cons["max_sentences"])
+        if n not in low:
+            warnings.append("possibly_lost_sentence_limit")
 
-def has_sentence_limit(seed_prompt: str, para: str, max_sentences: int) -> bool:
-    """Accept common equivalent phrasings of sentence limits."""
-    orig = normalize_for_contract(seed_prompt)
-    low = normalize_for_contract(para)
+    if "return only the rewritten text" in orig_low:
+        if not any(x in low for x in [
+            "return only",
+            "only return",
+            "provide only",
+            "respond with only",
+            "give only",
+            "without explanation",
+            "do not include",
+        ]):
+            warnings.append("possibly_lost_rewrite_contract")
 
-    if "at most" not in orig and "use at most" not in orig and "no more than" not in orig:
-        return True
+    quote = extract_quoted_text(orig)
+    if quote and token_overlap(quote, para) < 0.55:
+        warnings.append("possibly_lost_quoted_text")
 
-    patterns = [
-        f"at most {max_sentences}",
-        f"no more than {max_sentences}",
-        f"up to {max_sentences}",
-        f"using at most {max_sentences}",
-        f"in {max_sentences} sentences or fewer",
-        f"in no more than {max_sentences}",
-    ]
-    return any(p in low for p in patterns)
+    return warnings
 
+def validate_paraphrase(seed: Dict[str, Any], para: str, strict_contract: bool = False) -> Tuple[bool, List[str], List[str]]:
+    """Soft paraphrase validator.
 
-def has_bullet_contract(para: str, n: int) -> bool:
-    low = normalize_for_contract(para)
-    return (
-        f"exactly {n}" in low
-        and ("bullet" in low or "takeaway" in low or "point" in low or "main idea" in low)
-    )
+    Reject only obvious bad generations:
+    - empty
+    - placeholders
+    - code pollution
+    - meta/multiple-answer outputs
 
-
-def validate_paraphrase(seed: Dict[str, Any], para: str) -> Tuple[bool, List[str]]:
-    """Validate template paraphrases without over-rejecting harmless wording changes.
-
-    This validator is intentionally softer than the final answer verifier.
-    Its job is only to ensure the prompt is still the same task family and still
-    keeps the important output contract.
+    Contract drift is recorded as warning unless --strict_contract is used.
     """
     reasons: List[str] = []
 
     if not para.strip():
         reasons.append("empty")
-
-    # Do not reject exact unchanged here. Dedup/diversity later can remove it.
     if contains_placeholder(para):
         reasons.append("placeholder")
-    if contains_code_markers(para):
+    if contains_prompt_stage_code_pollution(para):
         reasons.append("code_pollution")
     if has_meta_prefix(para) or has_multiple_answer_pattern(para):
         reasons.append("meta_or_multi")
 
-    cons = seed["constraints"]
-    orig = seed["canonical_prompt"].lower()
+    warnings = contract_warnings(seed, para)
+    if strict_contract:
+        reasons.extend(warnings)
 
-    if cons.get("must_be_email") and not has_email_task(para):
-        reasons.append("lost_email_task")
-
-    if cons.get("exact_bullets") is not None:
-        if not has_bullet_contract(para, int(cons["exact_bullets"])):
-            reasons.append("lost_exact_bullet_constraint")
-
-    if cons.get("max_sentences") is not None:
-        if not has_sentence_limit(seed["canonical_prompt"], para, int(cons["max_sentences"])):
-            reasons.append("lost_sentence_limit")
-
-    if "return only the rewritten text" in orig and not has_rewrite_contract(para):
-        reasons.append("lost_rewrite_contract")
-
-    m = extract_quoted_text(seed["canonical_prompt"])
-    if m and not fuzzy_contains_quoted_text(m, para):
-        reasons.append("lost_quoted_text")
-
-    return (len(reasons) == 0, reasons)
+    return (len(reasons) == 0, reasons, warnings)
 
 def exact_dedup(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     seen = set()
@@ -206,7 +168,7 @@ def exact_dedup(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         out.append(row)
     return out
 
-def lexical_dedup(rows: List[Dict[str, Any]], threshold: float = 0.92) -> List[Dict[str, Any]]:
+def lexical_dedup(rows: List[Dict[str, Any]], threshold: float = 0.95) -> List[Dict[str, Any]]:
     keep: List[Dict[str, Any]] = []
     by_sub = defaultdict(list)
     for row in rows:
@@ -219,65 +181,60 @@ def lexical_dedup(rows: List[Dict[str, Any]], threshold: float = 0.92) -> List[D
         keep.extend(selected)
     return keep
 
-def semantic_dedup(rows: List[Dict[str, Any]], hi: float = 0.985, cluster: float = 0.965) -> List[Dict[str, Any]]:
+def semantic_dedup(rows: List[Dict[str, Any]], threshold: float = 0.985) -> List[Dict[str, Any]]:
+    out: List[Dict[str, Any]] = []
     by_family = defaultdict(list)
     for row in rows:
         by_family[row["family"]].append(row)
 
-    out: List[Dict[str, Any]] = []
     for _, group in by_family.items():
         texts = [r["paraphrased_prompt"] for r in group]
         vecs = semantic_vectors(texts)
         if vecs is None:
             out.extend(group)
             continue
-        parent_kept = Counter()
-        used = [False] * len(group)
+        selected_ix: List[int] = []
         for i, row in enumerate(group):
-            if used[i]:
-                continue
-            cluster_ix = [i]
-            used[i] = True
-            for j in range(i + 1, len(group)):
-                if used[j]:
-                    continue
-                sim = cosine_sim(vecs, i, j)
-                if sim >= hi:
-                    used[j] = True
-                    continue
-                if sim >= cluster:
-                    cluster_ix.append(j)
-                    used[j] = True
-            # keep at most 3 from cluster, at most 3 per parent seed overall
-            kept_in_cluster = 0
-            for ix in cluster_ix:
-                parent = group[ix]["parent_seed_id"]
-                if parent_kept[parent] >= 3:
-                    continue
-                out.append(group[ix])
-                parent_kept[parent] += 1
-                kept_in_cluster += 1
-                if kept_in_cluster >= 3:
+            too_close = False
+            for j in selected_ix:
+                if cosine_sim(vecs, i, j) >= threshold:
+                    too_close = True
                     break
+            if not too_close:
+                selected_ix.append(i)
+                out.append(row)
     return out
+
+def apply_dedup(rows: List[Dict[str, Any]], mode: str) -> List[Dict[str, Any]]:
+    rows = exact_dedup(rows)
+    if mode == "exact":
+        return rows
+    rows = lexical_dedup(rows)
+    if mode == "exact_lexical":
+        return rows
+    rows = semantic_dedup(rows)
+    return rows
 
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--in_jsonl", required=True)
     ap.add_argument("--out_raw_jsonl", required=True)
     ap.add_argument("--out_dedup_jsonl", required=True)
-    ap.add_argument("--out_all_jsonl", default="", help="Optional: write every generated paraphrase with validation reasons.")
+    ap.add_argument("--out_all_jsonl", default="")
     ap.add_argument("--api_base", required=True)
     ap.add_argument("--model", required=True)
     ap.add_argument("--temperature", type=float, default=0.5)
     ap.add_argument("--max_new_tokens", type=int, default=120)
+    ap.add_argument("--strict_contract", action="store_true", help="Reject contract warnings. Usually NOT recommended.")
+    ap.add_argument("--dedup_mode", choices=["exact", "exact_lexical", "exact_lexical_semantic"], default="exact")
     args = ap.parse_args()
 
     seeds = read_jsonl(args.in_jsonl)
     raw_rows: List[Dict[str, Any]] = []
     all_rows: List[Dict[str, Any]] = []
-    style_order = ["natural_reword", "instruction_verb_shift", "light_contextualized"]
     rejected = Counter()
+    warnings_counter = Counter()
+    style_order = ["natural_reword", "instruction_verb_shift", "light_contextualized"]
 
     for seed in seeds:
         for idx, style in enumerate(style_order, start=1):
@@ -309,29 +266,43 @@ def main() -> None:
                     "paraphrase_index": idx,
                 },
             }
-            ok, reasons = validate_paraphrase(seed, para)
-            all_rows.append({**row, "accepted_by_paraphrase_validator": ok, "reject_reasons": reasons})
+
+            ok, reasons, warnings = validate_paraphrase(seed, para, strict_contract=args.strict_contract)
+            all_rows.append({
+                **row,
+                "accepted_by_paraphrase_validator": ok,
+                "reject_reasons": reasons,
+                "contract_warnings": warnings,
+            })
+
+            for w in warnings:
+                warnings_counter[w] += 1
+
             if ok:
                 raw_rows.append(row)
             else:
                 for r in reasons:
                     rejected[r] += 1
 
+    dedup_rows = apply_dedup(raw_rows, args.dedup_mode)
+
     if args.out_all_jsonl:
         write_jsonl(args.out_all_jsonl, all_rows)
     write_jsonl(args.out_raw_jsonl, raw_rows)
-
-    dedup_1 = exact_dedup(raw_rows)
-    dedup_2 = lexical_dedup(dedup_1)
-    dedup_3 = semantic_dedup(dedup_2)
-    write_jsonl(args.out_dedup_jsonl, dedup_3)
+    write_jsonl(args.out_dedup_jsonl, dedup_rows)
 
     print(f"Seeds: {len(seeds)}")
+    print(f"Generated candidates: {len(all_rows)}")
     print(f"Accepted raw paraphrases: {len(raw_rows)}")
-    print(f"After exact dedup: {len(dedup_1)}")
-    print(f"After lexical dedup: {len(dedup_2)}")
-    print(f"After semantic dedup: {len(dedup_3)}")
-    print_counter("rejected", rejected)
+    print(f"After dedup ({args.dedup_mode}): {len(dedup_rows)}")
+
+    print("\n[rejected]")
+    for k, v in rejected.most_common():
+        print(f"  {k}: {v}")
+
+    print("\n[contract_warnings_not_rejected]")
+    for k, v in warnings_counter.most_common():
+        print(f"  {k}: {v}")
 
 if __name__ == "__main__":
     main()
