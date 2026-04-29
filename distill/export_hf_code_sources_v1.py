@@ -30,18 +30,22 @@ def export_mbpp(config_name: str, split: str, out_jsonl: str, limit: Optional[in
         ds = load_dataset("mbpp", config_name, split=split)
     else:
         ds = load_dataset("mbpp", split=split)
-    rows = []
-    for row in ds:
-        rows.append(dict(row))
+
+    rows = [dict(row) for row in ds]
     rows = maybe_limit(rows, limit, seed)
     write_jsonl(out_jsonl, rows)
     print(f"[mbpp] wrote {len(rows)} -> {out_jsonl}")
 
 def export_apps(split: str, out_jsonl: str, limit: Optional[int], seed: int) -> None:
+    """Export APPS.
+
+    Note:
+    - codeparrot/apps is an old-style scripted HF dataset.
+    - With datasets>=4.0, dataset scripts are no longer supported, so this
+      will fail unless you run it in an environment with datasets<4.0.
+    """
     ds = load_dataset("codeparrot/apps", split=split, trust_remote_code=True)
-    rows = []
-    for row in ds:
-        rows.append(dict(row))
+    rows = [dict(row) for row in ds]
     rows = maybe_limit(rows, limit, seed)
     write_jsonl(out_jsonl, rows)
     print(f"[apps] wrote {len(rows)} -> {out_jsonl}")
@@ -55,24 +59,44 @@ def main() -> None:
     ap.add_argument("--limit_mbpp", type=int, default=0)
     ap.add_argument("--limit_apps", type=int, default=0)
     ap.add_argument("--seed", type=int, default=13)
+
+    ap.add_argument("--skip_mbpp", action="store_true", help="Do not export MBPP.")
+    ap.add_argument("--skip_apps", action="store_true", help="Do not export APPS. Useful with datasets>=4.0.")
+    ap.add_argument("--apps_allow_fail", action="store_true", help="If APPS export fails, print warning and continue.")
+
     args = ap.parse_args()
 
     out_dir = Path(args.out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    export_mbpp(
-        config_name=args.mbpp_config,
-        split=args.mbpp_split,
-        out_jsonl=str(out_dir / "mbpp_train.jsonl"),
-        limit=args.limit_mbpp or None,
-        seed=args.seed,
-    )
-    export_apps(
-        split=args.apps_split,
-        out_jsonl=str(out_dir / "apps_intro.jsonl"),
-        limit=args.limit_apps or None,
-        seed=args.seed,
-    )
+    if not args.skip_mbpp:
+        export_mbpp(
+            config_name=args.mbpp_config,
+            split=args.mbpp_split,
+            out_jsonl=str(out_dir / "mbpp_train.jsonl"),
+            limit=args.limit_mbpp or None,
+            seed=args.seed,
+        )
+    else:
+        print("[mbpp] skipped")
+
+    if not args.skip_apps:
+        try:
+            export_apps(
+                split=args.apps_split,
+                out_jsonl=str(out_dir / "apps_intro.jsonl"),
+                limit=args.limit_apps or None,
+                seed=args.seed,
+            )
+        except Exception as e:
+            if args.apps_allow_fail:
+                print(f"[apps] WARNING: export failed but continuing because --apps_allow_fail was set.")
+                print(f"[apps] error: {type(e).__name__}: {e}")
+            else:
+                raise
+    else:
+        print("[apps] skipped")
+
     print("Done.")
 
 if __name__ == "__main__":
