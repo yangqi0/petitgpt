@@ -89,7 +89,7 @@ def export_dolly(split: str, out_jsonl: str, limit: Optional[int], seed: int) ->
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--out_dir", required=True, help="Output directory, e.g. data/")
-    ap.add_argument("--no_robots_split", default="train_sft")
+    ap.add_argument("--no_robots_split", default="train")
     ap.add_argument("--alpaca_split", default="train")
     ap.add_argument("--dolly_split", default="train")
     ap.add_argument("--limit_no_robots", type=int, default=0)
