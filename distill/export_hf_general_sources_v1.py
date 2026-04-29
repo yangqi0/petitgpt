@@ -8,6 +8,7 @@ from typing import Any, Dict, Iterable, List, Optional
 
 from datasets import load_dataset
 
+
 def write_jsonl(path: str | Path, rows: Iterable[Dict[str, Any]]) -> None:
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -15,7 +16,10 @@ def write_jsonl(path: str | Path, rows: Iterable[Dict[str, Any]]) -> None:
         for row in rows:
             f.write(json.dumps(row, ensure_ascii=False) + "\n")
 
-def maybe_limit(rows: List[Dict[str, Any]], limit: Optional[int], seed: int) -> List[Dict[str, Any]]:
+
+def maybe_limit(
+    rows: List[Dict[str, Any]], limit: Optional[int], seed: int
+) -> List[Dict[str, Any]]:
     if limit is None or limit <= 0 or len(rows) <= limit:
         return rows
     rng = random.Random(seed)
@@ -25,48 +29,62 @@ def maybe_limit(rows: List[Dict[str, Any]], limit: Optional[int], seed: int) -> 
     idx.sort()
     return [rows[i] for i in idx]
 
-def export_no_robots(split: str, out_jsonl: str, limit: Optional[int], seed: int) -> None:
+
+def export_no_robots(
+    split: str, out_jsonl: str, limit: Optional[int], seed: int
+) -> None:
     ds = load_dataset("HuggingFaceH4/no_robots", split=split)
     rows = []
     for row in ds:
-        rows.append({
-            "prompt_id": row.get("prompt_id"),
-            "prompt": row.get("prompt", ""),
-            "messages": row.get("messages", []),
-            "category": row.get("category", ""),
-        })
+        rows.append(
+            {
+                "prompt_id": row.get("prompt_id"),
+                "prompt": row.get("prompt", ""),
+                "messages": row.get("messages", []),
+                "category": row.get("category", ""),
+            }
+        )
     rows = maybe_limit(rows, limit, seed)
     write_jsonl(out_jsonl, rows)
     print(f"[no_robots] wrote {len(rows)} -> {out_jsonl}")
 
-def export_alpaca_cleaned(split: str, out_jsonl: str, limit: Optional[int], seed: int) -> None:
+
+def export_alpaca_cleaned(
+    split: str, out_jsonl: str, limit: Optional[int], seed: int
+) -> None:
     ds = load_dataset("yahma/alpaca-cleaned", split=split)
     rows = []
     for i, row in enumerate(ds):
-        rows.append({
-            "id": row.get("id", i),
-            "instruction": row.get("instruction", ""),
-            "input": row.get("input", ""),
-            "output": row.get("output", ""),
-        })
+        rows.append(
+            {
+                "id": row.get("id", i),
+                "instruction": row.get("instruction", ""),
+                "input": row.get("input", ""),
+                "output": row.get("output", ""),
+            }
+        )
     rows = maybe_limit(rows, limit, seed)
     write_jsonl(out_jsonl, rows)
     print(f"[alpaca_cleaned] wrote {len(rows)} -> {out_jsonl}")
+
 
 def export_dolly(split: str, out_jsonl: str, limit: Optional[int], seed: int) -> None:
     ds = load_dataset("databricks/databricks-dolly-15k", split=split)
     rows = []
     for i, row in enumerate(ds):
-        rows.append({
-            "id": row.get("id", i),
-            "instruction": row.get("instruction", ""),
-            "context": row.get("context", ""),
-            "response": row.get("response", ""),
-            "category": row.get("category", ""),
-        })
+        rows.append(
+            {
+                "id": row.get("id", i),
+                "instruction": row.get("instruction", ""),
+                "context": row.get("context", ""),
+                "response": row.get("response", ""),
+                "category": row.get("category", ""),
+            }
+        )
     rows = maybe_limit(rows, limit, seed)
     write_jsonl(out_jsonl, rows)
     print(f"[dolly] wrote {len(rows)} -> {out_jsonl}")
+
 
 def main() -> None:
     ap = argparse.ArgumentParser()
@@ -102,6 +120,7 @@ def main() -> None:
         seed=args.seed,
     )
     print("Done.")
+
 
 if __name__ == "__main__":
     main()
