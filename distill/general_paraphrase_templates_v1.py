@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import re
 from collections import Counter, defaultdict
 from typing import Any, Dict, List, Tuple
 
@@ -62,36 +63,136 @@ Original prompt:
 {seed['canonical_prompt']}
 """
 
+def normalize_for_contract(s: str) -> str:
+    return re.sub(r"\s+", " ", (s or "").lower()).strip()
+
+
+def fuzzy_contains_quoted_text(original_quote: str, para: str) -> bool:
+    """Return True if the paraphrase appears to preserve the quoted text."""
+    if not original_quote:
+        return True
+
+    q = normalize_for_contract(original_quote)
+    p = normalize_for_contract(para)
+
+    if q in p:
+        return True
+
+    q_toks = set(re.findall(r"[a-z0-9']+", q))
+    p_toks = set(re.findall(r"[a-z0-9']+", p))
+    if not q_toks:
+        return True
+
+    overlap = len(q_toks & p_toks) / max(1, len(q_toks))
+    return overlap >= 0.75
+
+
+def has_rewrite_contract(para: str) -> bool:
+    """Accept several equivalent ways of saying 'return only the rewritten text'."""
+    low = normalize_for_contract(para)
+    patterns = [
+        "return only the rewritten text",
+        "return only the revised text",
+        "return only the rephrased text",
+        "only return the rewritten text",
+        "only return the revised text",
+        "respond with only the rewritten text",
+        "provide only the rewritten text",
+        "give only the rewritten text",
+        "return just the rewritten text",
+        "do not include any explanation",
+        "without any explanation",
+    ]
+    return any(p in low for p in patterns)
+
+
+def has_email_task(para: str) -> bool:
+    low = normalize_for_contract(para)
+    return any(
+        x in low
+        for x in [
+            "email",
+            "message",
+            "note",
+            "follow-up",
+            "follow up",
+            "reschedule",
+            "thank-you",
+            "thank you",
+            "professional",
+            "polite",
+        ]
+    )
+
+
+def has_sentence_limit(seed_prompt: str, para: str, max_sentences: int) -> bool:
+    """Accept common equivalent phrasings of sentence limits."""
+    orig = normalize_for_contract(seed_prompt)
+    low = normalize_for_contract(para)
+
+    if "at most" not in orig and "use at most" not in orig and "no more than" not in orig:
+        return True
+
+    patterns = [
+        f"at most {max_sentences}",
+        f"no more than {max_sentences}",
+        f"up to {max_sentences}",
+        f"using at most {max_sentences}",
+        f"in {max_sentences} sentences or fewer",
+        f"in no more than {max_sentences}",
+    ]
+    return any(p in low for p in patterns)
+
+
+def has_bullet_contract(para: str, n: int) -> bool:
+    low = normalize_for_contract(para)
+    return (
+        f"exactly {n}" in low
+        and ("bullet" in low or "takeaway" in low or "point" in low or "main idea" in low)
+    )
+
+
 def validate_paraphrase(seed: Dict[str, Any], para: str) -> Tuple[bool, List[str]]:
+    """Validate template paraphrases without over-rejecting harmless wording changes.
+
+    This validator is intentionally softer than the final answer verifier.
+    Its job is only to ensure the prompt is still the same task family and still
+    keeps the important output contract.
+    """
     reasons: List[str] = []
+
     if not para.strip():
         reasons.append("empty")
-    if normalize_prompt(para) == normalize_prompt(seed["canonical_prompt"]):
-        reasons.append("unchanged")
+
+    # Do not reject exact unchanged here. Dedup/diversity later can remove it.
     if contains_placeholder(para):
         reasons.append("placeholder")
     if contains_code_markers(para):
         reasons.append("code_pollution")
     if has_meta_prefix(para) or has_multiple_answer_pattern(para):
         reasons.append("meta_or_multi")
-    if has_prompt_echo(seed["canonical_prompt"], para):
-        reasons.append("prompt_echo")
+
     cons = seed["constraints"]
-    low = para.lower()
     orig = seed["canonical_prompt"].lower()
-    if cons.get("must_be_email") and "email" not in low and "message" not in low:
+
+    if cons.get("must_be_email") and not has_email_task(para):
         reasons.append("lost_email_task")
+
     if cons.get("exact_bullets") is not None:
-        needed = f"exactly {cons['exact_bullets']}"
-        if needed not in low or "bullet" not in low:
+        if not has_bullet_contract(para, int(cons["exact_bullets"])):
             reasons.append("lost_exact_bullet_constraint")
-    if cons.get("max_sentences") is not None and "at most" in orig and f"at most {cons['max_sentences']}" not in low and f"no more than {cons['max_sentences']}" not in low:
-        reasons.append("lost_sentence_limit")
-    if "return only the rewritten text" in orig and "return only the rewritten text" not in low:
+
+    if cons.get("max_sentences") is not None:
+        if not has_sentence_limit(seed["canonical_prompt"], para, int(cons["max_sentences"])):
+            reasons.append("lost_sentence_limit")
+
+    if "return only the rewritten text" in orig and not has_rewrite_contract(para):
         reasons.append("lost_rewrite_contract")
+
     m = extract_quoted_text(seed["canonical_prompt"])
-    if m and normalize_prompt(m) not in normalize_prompt(para):
+    if m and not fuzzy_contains_quoted_text(m, para):
         reasons.append("lost_quoted_text")
+
     return (len(reasons) == 0, reasons)
 
 def exact_dedup(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
@@ -105,7 +206,7 @@ def exact_dedup(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         out.append(row)
     return out
 
-def lexical_dedup(rows: List[Dict[str, Any]], threshold: float = 0.82) -> List[Dict[str, Any]]:
+def lexical_dedup(rows: List[Dict[str, Any]], threshold: float = 0.92) -> List[Dict[str, Any]]:
     keep: List[Dict[str, Any]] = []
     by_sub = defaultdict(list)
     for row in rows:
@@ -118,7 +219,7 @@ def lexical_dedup(rows: List[Dict[str, Any]], threshold: float = 0.82) -> List[D
         keep.extend(selected)
     return keep
 
-def semantic_dedup(rows: List[Dict[str, Any]], hi: float = 0.97, cluster: float = 0.93) -> List[Dict[str, Any]]:
+def semantic_dedup(rows: List[Dict[str, Any]], hi: float = 0.985, cluster: float = 0.965) -> List[Dict[str, Any]]:
     by_family = defaultdict(list)
     for row in rows:
         by_family[row["family"]].append(row)
@@ -147,16 +248,16 @@ def semantic_dedup(rows: List[Dict[str, Any]], hi: float = 0.97, cluster: float 
                 if sim >= cluster:
                     cluster_ix.append(j)
                     used[j] = True
-            # keep at most 2 from cluster, at most 2 per parent seed overall
+            # keep at most 3 from cluster, at most 3 per parent seed overall
             kept_in_cluster = 0
             for ix in cluster_ix:
                 parent = group[ix]["parent_seed_id"]
-                if parent_kept[parent] >= 2:
+                if parent_kept[parent] >= 3:
                     continue
                 out.append(group[ix])
                 parent_kept[parent] += 1
                 kept_in_cluster += 1
-                if kept_in_cluster >= 2:
+                if kept_in_cluster >= 3:
                     break
     return out
 
@@ -165,6 +266,7 @@ def main() -> None:
     ap.add_argument("--in_jsonl", required=True)
     ap.add_argument("--out_raw_jsonl", required=True)
     ap.add_argument("--out_dedup_jsonl", required=True)
+    ap.add_argument("--out_all_jsonl", default="", help="Optional: write every generated paraphrase with validation reasons.")
     ap.add_argument("--api_base", required=True)
     ap.add_argument("--model", required=True)
     ap.add_argument("--temperature", type=float, default=0.5)
@@ -173,6 +275,7 @@ def main() -> None:
 
     seeds = read_jsonl(args.in_jsonl)
     raw_rows: List[Dict[str, Any]] = []
+    all_rows: List[Dict[str, Any]] = []
     style_order = ["natural_reword", "instruction_verb_shift", "light_contextualized"]
     rejected = Counter()
 
@@ -207,12 +310,15 @@ def main() -> None:
                 },
             }
             ok, reasons = validate_paraphrase(seed, para)
+            all_rows.append({**row, "accepted_by_paraphrase_validator": ok, "reject_reasons": reasons})
             if ok:
                 raw_rows.append(row)
             else:
                 for r in reasons:
                     rejected[r] += 1
 
+    if args.out_all_jsonl:
+        write_jsonl(args.out_all_jsonl, all_rows)
     write_jsonl(args.out_raw_jsonl, raw_rows)
 
     dedup_1 = exact_dedup(raw_rows)
