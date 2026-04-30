@@ -1,0 +1,256 @@
+step=step_000400
+sampling: temp=0.1 top_p=1.0 top_k=0 max_new=100
+in_domain: n=10 mode=full_context show_ref=False dump_prompt=False sample_eval_jsonl=False
+================================================================================
+[Fixed prompts]
+--------------------------------------------------------------------------------
+[Q1] [Code] Write a Python function running_sum(nums) that returns cumulative sums.
+[A1] def running_sum():
+    result = []
+    current_sum = 0
+    for num in nums:
+        current_sum += num
+        result.append(current_sum)
+    return result
+
+if __name__ == '__main__':
+    nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    print(running_sum()) # Output: [0, 1, 2, 4, 6, 8, 10]
+else
+--------------------------------------------------------------------------------
+[Q2] [Code] Write a Python function lowercase_keys(d) that returns a new dictionary with lowercase string keys.
+[A2] def lowercase_dict(d):
+    result = {}
+    for key in d:
+        new_key = key.lower()
+        result[new_key] = d[key]
+    return result
+
+print(lowercase_dict(data)) # Outputs { 'a': 1, 'b': 2, 'c': 3 }
+# Output: {'a': 1}
+# Outputs { {'a': 2}, 'b': 3}
+# See below
+--------------------------------------------------------------------------------
+[Q3] [General] Write a short polite email asking for an update on a job application after an interview.
+[A3] Dear [Name], I am writing to provide an update on your application. Please let me know if you have any questions or concerns.
+
+Thank you, and we will send you the confirmation.
+
+Best regards,
+[Your Name]
+[Your Email]
+[Email Address]
+
+Please let me know your availability.
+
+Thanks, and we can discuss further.
+
+Looking forward to hearing from you soon.
+
+[Your Details]
+
+Best,
+--------------------------------------------------------------------------------
+[Q4] [General] Write a short professional email asking to reschedule a meeting to next week.
+[A4] Dear [Name],
+
+I am writing to arrange for you to reschetures the meeting for next week. Please let me know your availability and any details you would like.
+
+Thank you,
+[Your Name]
+
+Best regards,
+[your Name]
+[Your Date]
+
+Please let me know if you need any further assistance.
+
+Thanks,
+[ Your Name]
+(Your Date)
+
+Please also let me know when you would like
+--------------------------------------------------------------------------------
+[Q5] [General] Summarize this in 3 bullet points: 'Regular exercise can improve mood, support heart health, and help maintain energy levels.'
+[A5] - Regular physical activity boosts mood and supports heart health.
+- It helps manage stress and anxiety.
+- Exercise enhances mental well-being.
+- Physical activity boosts energy levels.
+- This helps maintain energy levels. Aim to get enough physical activity each day.
+- Regular physical exercise boosts mood.
+- The combination of these factors helps maintain energy.
+- To meet your daily needs, consider adding a variety of activities like walking, swimming, or playing tennis.
+--------------------------------------------------------------------------------
+[Q6] [General] Rewrite this to be more formal: 'Thanks for the quick reply. I’ll send the file tomorrow.'
+[A6] Thank you for the quick response. I hope we can discuss this further soon.
+
+Best regards,
+[Your Name]
+[Your Email]
+[The Date]
+[Thank you]
+
+Dear [Name],
+I hope this message finds you well. I am writing to provide an opportunity to share some insights and suggestions that I believe could greatly enhance our collaboration. Please let me know your availability for a meeting next week.
+
+Thank you in advance for your assistance
+--------------------------------------------------------------------------------
+[Q7] [General] Rewrite this to be more concise: 'I am writing this email in order to ask whether it would be possible to move our meeting to Friday afternoon.'
+[A7] Please ensure you arrive on Friday afternoon and send the meeting to Friday morning. Please provide your full details at your earliest convenience.
+
+Thank you, and we will keep you updated on the progress.
+
+Best regards,
+[Your Name]
+[Your Email]
+[Email Address]
+[Contact Details]
+
+Thank You, and we can proceed with the necessary steps. Please let me know if there is any specific time for you to meet.
+
+Thanks, and we
+--------------------------------------------------------------------------------
+[Q8] [General] Explain in at most 4 sentences what a budget is, in simple everyday language.
+[A8] A budget is a set of financial statements that shows how much money you have and how much it costs over time. It helps you make informed decisions about your spending. By showing the total amount of money you have, you can make informed decisions that benefit everyone. This makes your budget more accurate and efficient for managing your finances efficiently.
+
+In short, a budget is a list of all your expenses that you need to cover. It shows how much you have and when you want to buy things
+--------------------------------------------------------------------------------
+
+[In-domain prompts from val_jsonl]
+--------------------------------------------------------------------------------
+[eval tags] ['idx=14', 'idx=108', 'idx=1', 'idx=64', 'idx=62', 'idx=112', 'idx=31', 'idx=8', 'idx=85', 'idx=69']
+--------------------------------------------------------------------------------
+[V1] idx=14 bucket=B_code
+[User]
+Implement the function `count_words(text)`. Convert the text to lowercase, split on whitespace, and return a dictionary mapping each word to its count. Use a normal dictionary. Prefer clear loops and conditionals. Return only Python code.
+[Model]
+def count_words(txt):
+    result = {}
+    for word in txt:
+        if '.' not in word:
+            word = word.strip()
+            if word == '':
+                word = '.'
+            result[word] = word
+    return result
+
+if __name__ == '__main__':
+    text = "This is a sentence."
+    print(count_words("This"))
+    print(type(count_Words(text)))
+    print(dict(zip(text,
+--------------------------------------------------------------------------------
+[V2] idx=108 bucket=A_general
+[User]
+Are poisonous and venomous the same thing? I hear some people using the terms interchangeably. Explain the similarities and differences. Use at most 3 sentences.
+[Model]
+The two terms are both dangerous and venomous, which suggests that they are not related to any other substance. The first term is harmless but the second is dangerous because it does not cause pain or harm. Both terms are used to describe the same person's behavior. Therefore, the two terms are not similar. This difference is why the two terms should be avoided in all interactions. In contrast, the two words are not related by similarity, so the two terms cannot be related by similarity. These differences
+--------------------------------------------------------------------------------
+[V3] idx=1 bucket=A_general
+[User]
+What is your sister's role in the bakery? Use at most 3 sentences. Use simple everyday language.
+[Model]
+She is the boss of the bakeries and she plays a key role in the production process. She is also the boss of a special event where she helps the guests get ready for the next day. Her role is crucial because she is the boss who makes sure everyone gets ready to eat. So, her role is crucial as well.
+
+I hope this helps you understand how important bakery culture is for our customers. Let me know if you need any more information or if there is
+--------------------------------------------------------------------------------
+[V4] idx=64 bucket=B_code
+[User]
+Write `remove_none` as a Python function. Keep the order of the remaining items unchanged. For example, `[0, None, False, '']` should return `[0, False, '']`. Define exactly one top-level function. Return only Python code.
+[Model]
+def remove_none(lst):
+    result = []
+    for item in lst:
+        if item is not None:
+            result.append(item)
+    return result
+
+remove_none(list) # Outputs [None]
+# Output: [False]
+# Example: [True]
+# This will result in [False].
+
+print(remove_none([0, None])) # Outputs ['True', 'False']
+# Outputs ['False', '
+--------------------------------------------------------------------------------
+[V5] idx=62 bucket=B_code
+[User]
+Solve this short Python task by defining `lowercase_keys(d)`. Make a shallow copy of the dictionary where every key is lowercased. Do not use imports. Return only Python code.
+[Model]
+def lowercase_keys(data):
+    result = {}
+    for key in data:
+        new_key = key.lower()
+        result[new_key] = data[key]
+    return result
+
+if __name__ == '__main__':
+    print("Lowercase keys:")
+    data = {
+        'a': 1,
+        'b': 2,
+        'c': 3
+    }
+    lowercase_dict = lowercase_ keys(data)
+    print(lowercase
+--------------------------------------------------------------------------------
+[V6] idx=112 bucket=B_code
+[User]
+Create `remove_none(items)` for this simple Python task. Build a list containing all items except `None`. For example, `[1, None, 2]` should return `[1, 2]`. Prefer clear loops and conditionals. Return only Python code.
+[Model]
+def remove_none(lst):
+    result = []
+    for item in lst:
+        if item is not None:
+            result.append(item)
+    return result
+
+remove_none([1, None]) # Outputs [1, None]
+
+# Example
+result = remove_none([2, None, 1, None, 3, None, 4, 5, 6, 7, 8, 9, 10]])
+print(result) # Outputs [[1,
+--------------------------------------------------------------------------------
+[V7] idx=31 bucket=A_general
+[User]
+Porky Pig is selling his newest book. What is it about? Include things like a title and description. Use at most 3 sentences. Use simple everyday language.
+[Model]
+Porky Pigs is a superhero who has been making history by becoming the first person to win a Nobel Prize for his work. He is also the first person ever to win a gold medal in a professional competition, which he won in 2009. This remarkable achievement marks him as one of the greatest heroes of all time. Porky is a man who has made great strides in every field of science and technology. His story is truly inspiring and inspiring. PorkYo!
+--------------------------------------------------------------------------------
+[V8] idx=8 bucket=A_general
+[User]
+What is the world record for the largest gathering of people dressed up like superheroes? As in, how many people were there? Use at most 3 sentences. Use simple everyday language.
+[Model]
+The world record for superheroes was held by a group of five superheroes. They were all wearing clothes and had their heads covered with hair. This feat was achieved because they were able to hold onto the attention of the entire audience without any distractions. The superheroes were able to keep their heads covered even when they were standing on the floor. This achievement is known as the "superpower" rule. It is the first time that superheroes have been shown to be able
+--------------------------------------------------------------------------------
+[V9] idx=85 bucket=B_code
+[User]
+Create a small helper function called `merge_counts`. Merge two dictionaries from strings to integers, adding counts when a key appears in both. Use simple dictionary operations. Return only Python code.
+[Model]
+def merge_counts(d1, d2):
+    result = {}
+    for key in d1:
+        result[key] = d1[key]
+    for key, value in d2.items():
+        if key in result:
+            result[key], result[value] = result[key].split(value)
+        else:
+            result = {key}
+    return result
+
+if __name__ == '__main__':
+    d1 = {'a': 1, '
+--------------------------------------------------------------------------------
+[V10] idx=69 bucket=A_general
+[User]
+What are some nice hotels near Redwood National Park? Can you make a numbered list of at least 3? No need to include a description. Put the list in alphabetical order. Use at most 3 sentences. Use simple everyday language.
+[Model]
+Some nice hotels near redwood National Park include The Queen's Hotel, The King's Hotel, and The Queen's Resort. These places offer a variety of activities and dining options for everyone. Make sure to check their availability before you visit.
+
+P.S. Don't forget to check out the local attractions and restaurants nearby! They're always a great place to relax and enjoy the outdoors.
+
+Looking forward to seeing you there!
+
+Best,
+[Insert Name]
+--------------------------------------------------------------------------------

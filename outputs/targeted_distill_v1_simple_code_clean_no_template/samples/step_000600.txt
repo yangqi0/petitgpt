@@ -1,0 +1,218 @@
+step=step_000600
+sampling: temp=0.1 top_p=1.0 top_k=0 max_new=100
+in_domain: n=10 mode=full_context show_ref=False dump_prompt=False sample_eval_jsonl=False
+================================================================================
+[Fixed prompts]
+--------------------------------------------------------------------------------
+[Q1] [Code] Write a Python function running_sum(nums) that returns cumulative sums.
+[A1] def running_sum():
+    result = []
+    current_sum = 0
+    for num in nums:
+        current_sum += num
+        result.append(current_sum)
+    return result
+
+if __name__ == '__main__':
+    nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    print(running_sum(numbers)) # Output: [0, 1, 2, 4, 6, 8, 10]
+--------------------------------------------------------------------------------
+[Q2] [Code] Write a Python function lowercase_keys(d) that returns a new dictionary with lowercase string keys.
+[A2] def lowercase_dict(d):
+    result = {}
+    for key in d:
+        new_key = key.lower()
+        result[new_key] = d[key]
+    return result
+
+print(lowercase_dict(data)) # Outputs { 'a': 1, 'b': 2, 'c': 3 }
+# Output: {'a': 1}
+# Outputs { {'a': 2}, 'b': 3}
+# See below
+--------------------------------------------------------------------------------
+[Q3] [General] Write a short polite email asking for an update on a job application after an interview.
+[A3] Dear [Name], I am writing to provide an update on my application. Please let me know your availability and any specific details you would like me to include.
+
+Thank you, and we will be able to discuss this further soon.
+
+Best regards,
+[Your Name]
+[Your Email]
+[Please enter your full name]
+
+Thank You, and we look forward to hearing from you soon.
+[Your Address]
+
+Best,
+[General]
+--------------------------------------------------------------------------------
+[Q4] [General] Write a short professional email asking to reschedule a meeting to next week.
+[A4] Dear [Name], please reschedule your meeting for next week. Please let me know the time and location you would like to arrange.
+
+Thank you, and we will be happy to arrange this for you.
+
+Best regards,
+[Your Name]
+[Contact Name]
+
+Please let me know if you need any further assistance.
+
+Thanks, and we can arrange for you. Thank you.
+[Your Location]
+
+Best,
+[General]
+--------------------------------------------------------------------------------
+[Q5] [General] Summarize this in 3 bullet points: 'Regular exercise can improve mood, support heart health, and help maintain energy levels.'
+[A5] - Regular physical activity boosts mood and supports heart health.
+- It helps manage stress and anxiety.
+- Exercise enhances mental well-being.
+- This helps maintain energy levels.
+- These activities enhance overall well-being and well-being of those around you.
+- Regular physical exercise can lead to better emotional health and better sleep patterns.
+- The benefits extend beyond individual health. They extend beyond personal life.
+- Physical activity is a powerful tool for maintaining good health.
+--------------------------------------------------------------------------------
+[Q6] [General] Rewrite this to be more formal: 'Thanks for the quick reply. I’ll send the file tomorrow.'
+[A6] Thank you for the quick response. I hope we can chat soon.
+
+Best regards,
+[Your Name]
+[Your Email]
+[Please send the file today.]
+
+I am here to help you with any questions or concerns you might have. Please let me know your availability and we can discuss it further at your earliest convenience.
+
+Thank you for your assistance.
+
+[Your Address]
+[Thank you for our quick reply.]
+
+Best,
+[
+--------------------------------------------------------------------------------
+[Q7] [General] Rewrite this to be more concise: 'I am writing this email in order to ask whether it would be possible to move our meeting to Friday afternoon.'
+[A7] Please ensure you arrive on Friday afternoon and send me your confirmation. I will keep you updated on the progress.
+
+Thank you, and we can discuss further at your convenience.
+
+Best regards,
+[Your Name]
+[Your Email]
+[Email Address]
+
+Thank You, and we will keep you informed.
+
+Please ensure you bring your confirmation and send me the confirmation. I hope we can meet soon.
+
+Thanks, and we'll keep you updated.
+--------------------------------------------------------------------------------
+[Q8] [General] Explain in at most 4 sentences what a budget is, in simple everyday language.
+[A8] A budget is a set of financial statements that shows how much money you have in your life over a certain period. It helps you see where your money is going and how much it costs to cover expenses. By using these numbers, you can make a more accurate picture of your income and expenses without having to go through the entire process yourself. This makes your budget more accurate and easy to understand for everyone.
+
+For example, if you have a budget like this, you would need to find out
+--------------------------------------------------------------------------------
+
+[In-domain prompts from val_jsonl]
+--------------------------------------------------------------------------------
+[eval tags] ['idx=105', 'idx=71', 'idx=8', 'idx=82', 'idx=38', 'idx=61', 'idx=108', 'idx=45', 'idx=34', 'idx=31']
+--------------------------------------------------------------------------------
+[V1] idx=105 bucket=B_code
+[User]
+Write a Python function `running_sum(nums)`. Return a new list where each element is the cumulative sum up to that position. The input may contain negative numbers. For example, `[]` should return `[]`. Return only Python code.
+[Model]
+def running_sum(numbers):
+    result = []
+    current_sum = 0
+    for num in numbers:
+        current_sum += num
+        result.append(current_sum)
+    return result
+
+if __name__ == '__main__':
+    nums = [1, 2, 3, 4, 5]
+    print(running_sum([i for i in nums])) # Output: [0, 1, 2, 4, 6, 8, 10]
+    print("The
+--------------------------------------------------------------------------------
+[V2] idx=71 bucket=A_general
+[User]
+I want to quit smoking cigarettes, but I don't know how to go about it. Give me five tips on how to quit and explain why you think each suggestion will be effective. Format your response in a numbered list. Use at most 3 sentences.
+[Model]
+You can start by quitting smoking by taking short breaks throughout the day to clear your mind and reduce stress. Then, try to stop smoking once you feel well, even if you feel like you might just be feeling another way of saying "I'm not here to help." Finally, try to avoid second-hand smoke because they can make your lungs feel hot and hard, which can cause your lungs to work harder to heat up. Finally, try using a support system like a support group or a
+--------------------------------------------------------------------------------
+[V3] idx=8 bucket=A_general
+[User]
+What is the world record for the largest gathering of people dressed up like superheroes? As in, how many people were there? Use at most 3 sentences. Use simple everyday language.
+[Model]
+The world record for superheroes was held by a group of five superheroes in 2010. This record is known as the "Big Five" because it was the highest ever recorded. The total number of people who could be dressed as superheroes is 2,080,000. Therefore, the world record is 2,850,000 people. This is the first record that has been held by any team since the early 1990s. It is the second record held by a team
+--------------------------------------------------------------------------------
+[V4] idx=82 bucket=A_general
+[User]
+I am trying to understand the differences between a fruit and a vegetable. Can you explain this to me? Your response should contain at least 3 sentences. Your answer should also contain the keywords: botanical, culinary, and classification.
+[Model]
+A fruit is a vegetable that has a specific type of rootstock called a culinary root. A vegetable is a vegetable with a distinct culinary branch called a culuntoe, while a vegetable is a type of plant with a separate culinary branch. Both vegetables are classified as fruits because they have different characteristics and can be eaten raw or cooked. The distinction between a fruit, a vegetable, and a culinary branch remains unchanged after discussing these distinctions. This difference helps us understand how different types
+--------------------------------------------------------------------------------
+[V5] idx=38 bucket=A_general
+[User]
+Rewrite this to be clearer: "Her and I went to the movies" Return only the rewritten text.
+[Model]
+She went to the films, which were not shown in the original text.
+- Her and I went together.
+- She and I went for a walk together.
+
+The revised text is: "Her, and I went with her." This rewritten text conveys the same message as the original text but without the additional information provided. It does not accurately reflect the original content of the story or the context of the movies. Instead, it provides a more concise and direct way to understand
+--------------------------------------------------------------------------------
+[V6] idx=61 bucket=A_general
+[User]
+Rewrite this to be clearer: "t we do a super cool interdisciplinary project for the kids this semester? Like, something that combines all the STEAM stuff. We can make it epic! What do u think? 😁 Let" Return only the rewritten text.
+[Model]
+We are excited about the collaboration and look forward to hearing your thoughts on this project.
+
+Best regards,
+
+@Rewriter: Tweak interdisciplinary project for students this semester. The goal is to combine all the STEAMS and STEAM components. View the completed project in more detail.
+
+Please let me know if you have any questions or if there is anything else you need clarification.
+
+Thanks,
+[Insert Name]
+
+@rwamish
+--------------------------------------------------------------------------------
+[V7] idx=108 bucket=A_general
+[User]
+Are poisonous and venomous the same thing? I hear some people using the terms interchangeably. Explain the similarities and differences. Use at most 3 sentences.
+[Model]
+The two terms are similar because they refer to the same physical force that causes the body to move. The first term is harmless, while the second is dangerous, making it difficult for someone to stop or try to hurt themselves. Both terms are used to describe the same situation but with different meanings. Therefore, the difference between the two terms is not the exact reason for the difference. In this case, the two terms are both dangerous and dangerous, which makes them both distinct and dangerous. This difference is
+--------------------------------------------------------------------------------
+[V8] idx=45 bucket=B_code
+[User]
+Define `remove_none(items)`. Return a new list with every `None` value removed. Only remove values that are `None`. Define exactly one top-level function. Return only Python code.
+[Model]
+def remove_none(lst):
+    result = []
+    for item in lst:
+        if item is not None:
+            result.append(item)
+    return result
+
+if __name__ == '__main__':
+    lst = ["apple", "banana", "mango"]
+    print(remove_none([1, 2, 3, 4, 5]))
+    # Output: ['apple', 'banana']
+    # This will remove all the elements that are not in the list
+--------------------------------------------------------------------------------
+[V9] idx=34 bucket=A_general
+[User]
+Rewrite this to be more concise: "Heroes often have a noble purpose and can be looked up to as an example of someone who has done something that is considered brave or admirable." Return only the rewritten text.
+[Model]
+Heroes typically have a noble aim, which means they are courageous and worthy of being admired. This example shows how courage can be found in someone who has been proud of their noble character.
+
+This revised sentence conveys the same message in a more concise and direct way. It also highlights the importance of following the example set by the original author. This approach helps readers understand why the hero is courageous and worth studying for a deeper understanding. Finally, it emphasizes the importance of respect
+--------------------------------------------------------------------------------
+[V10] idx=31 bucket=A_general
+[User]
+Porky Pig is selling his newest book. What is it about? Include things like a title and description. Use at most 3 sentences. Use simple everyday language.
+[Model]
+Porky Pigs is a popular children's author who loves to read and write. He has been making great contributions to children's literature since he was a child. His latest book is called "The Lion King." This book is a delightful choice for kids because it is both engaging and fun. Porky is excited about the new technology and its potential for children. He is also a great writer and a great fan of children's books. Porkys love reading and writing, so
+--------------------------------------------------------------------------------
