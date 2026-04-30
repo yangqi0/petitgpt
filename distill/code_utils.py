@@ -63,11 +63,17 @@ def stable_id(prefix: str, *parts: str, length: int = 10) -> str:
     text = "||".join([prefix] + [str(p) for p in parts])
     return f"{prefix}_{hashlib.md5(text.encode('utf-8')).hexdigest()[:length]}"
 
+def normalize_code_text(s: str) -> str:
+    """Normalize generated code text without destroying indentation."""
+    s = (s or "").replace("’", "'").replace("“", '"').replace("”", '"')
+    s = re.sub(r"\r\n?", "\n", s)
+    return s.strip()
+
 def extract_first_code_block(text: str) -> str:
-    text = normalize_text(text)
+    text = normalize_code_text(text)
     m = re.search(r"```(?:python)?\s*(.*?)```", text, flags=re.DOTALL | re.IGNORECASE)
     if m:
-        return m.group(1).strip()
+        return normalize_code_text(m.group(1))
     return text.strip()
 
 def code_line_count(code: str) -> int:
@@ -115,6 +121,41 @@ def recursion_detected(tree: ast.AST, entry_point: str) -> bool:
             return True
     return False
 
+# def verify_ast_structure(code: str, entry_point: str) -> List[str]:
+#     reasons: List[str] = []
+#     try:
+#         tree = ast.parse(code)
+#     except Exception:
+#         return ["syntax_error"]
+
+#     top_funcs = [n for n in tree.body if isinstance(n, ast.FunctionDef)]
+#     if len(top_funcs) != 1:
+#         reasons.append("top_level_function_count")
+#     if top_funcs and top_funcs[0].name != entry_point:
+#         reasons.append("wrong_function_name")
+
+#     for node in tree.body:
+#         if isinstance(node, BANNED_TOPLEVEL):
+#             reasons.append("banned_toplevel_node")
+#             break
+
+#     for node in ast.walk(tree):
+#         if isinstance(node, BANNED_ANYWHERE):
+#             reasons.append("banned_node")
+#             break
+
+#     if has_banned_call(tree):
+#         reasons.append("banned_call")
+#     if recursion_detected(tree, entry_point):
+#         reasons.append("recursion")
+#     if code_line_count(code) > 25:
+#         reasons.append("too_many_lines")
+#     if ast_node_count(tree) > 140:
+#         reasons.append("too_many_ast_nodes")
+#     if max_ast_depth(tree) > 12:
+#         reasons.append("too_deep_ast")
+#     return reasons
+
 def verify_ast_structure(code: str, entry_point: str) -> List[str]:
     reasons: List[str] = []
     try:
@@ -123,31 +164,54 @@ def verify_ast_structure(code: str, entry_point: str) -> List[str]:
         return ["syntax_error"]
 
     top_funcs = [n for n in tree.body if isinstance(n, ast.FunctionDef)]
+
     if len(top_funcs) != 1:
         reasons.append("top_level_function_count")
+
+    # Require exactly one top-level node, and it must be the requested function.
+    if len(tree.body) != 1 or not isinstance(tree.body[0], ast.FunctionDef):
+        reasons.append("extra_top_level_code")
+
     if top_funcs and top_funcs[0].name != entry_point:
         reasons.append("wrong_function_name")
 
-    for node in tree.body:
-        if isinstance(node, BANNED_TOPLEVEL):
-            reasons.append("banned_toplevel_node")
-            break
+    banned_anywhere = (
+        ast.Import,
+        ast.ImportFrom,
+        ast.ClassDef,
+        ast.AsyncFunctionDef,
+        ast.With,
+        ast.AsyncWith,
+        ast.Try,
+        ast.Raise,
+        ast.Global,
+        ast.Nonlocal,
+        ast.Lambda,
+        ast.Yield,
+        ast.YieldFrom,
+        ast.Await,
+    )
 
     for node in ast.walk(tree):
-        if isinstance(node, BANNED_ANYWHERE):
+        if isinstance(node, banned_anywhere):
             reasons.append("banned_node")
             break
 
     if has_banned_call(tree):
         reasons.append("banned_call")
+
     if recursion_detected(tree, entry_point):
         reasons.append("recursion")
+
     if code_line_count(code) > 25:
         reasons.append("too_many_lines")
+
     if ast_node_count(tree) > 140:
         reasons.append("too_many_ast_nodes")
+
     if max_ast_depth(tree) > 12:
         reasons.append("too_deep_ast")
+
     return reasons
 
 def _run_tests_worker(code: str, entry_point: str, tests: List[str], queue: mp.Queue) -> None:
