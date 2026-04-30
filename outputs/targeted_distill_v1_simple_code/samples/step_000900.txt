@@ -15,12 +15,16 @@ in_domain: n=10 mode=full_context show_ref=False dump_prompt=False sample_eval_j
 
 print(running_sum(nums)) # Output: 3, 4, 5, 6, 7, 8, 9, 10
 
-# Driver code is needed to run this code and to test it
-nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-result = running_sum(nums)
-print("The sum of the numbers is", result)
+# Driver code is needed to run this code and see the results
+def running_sum(nums):
+    result = []
+    current_sum = 0
+    for num in nums:
+        current_sum = current_sum + num
+        result.append(current_sum)
+    return result
 
-# Output: 6, 8, 9, 12, 15, 18, 20, 24, 25, 26, 27
+print(running_sum(nums)) # Output: 3, 4, 5, 6, 7, 8,
 --------------------------------------------------------------------------------
 [Q2] [Code] Write a Python function lowercase_keys(d) that returns a new dictionary with lowercase string keys.
 [A2] def lowercase_keys(d):
@@ -30,272 +34,322 @@ print("The sum of the numbers is", result)
         result[new_key] = d[key]
     return result
 
-lowercase_keys(d) # returns a new dictionary with lowercase string keys
-Output: { 'apple': 1, 'banana': 2, 'mango': 3, 'strawberry': 4, 'grape': 5 }
-# Output: {'apple': 1, 'banana': 2, 'mango': 3, 'strawberry': 4, 'grape': 5}
+lowercase_keys(d) = {
+    'a': 'b',
+    'b': 'c',
+    'c': 'd'
+}
 
-import re
-
-def lowercase_keys(d):
-    result = {}
-    for key in d:
-        new_key = key.
+print(lowercase_keys(d)) # Output: {'a': 'b', 'b': 'c', 'c': 'd'}
+# Output: {'a': 'b', 'b': 'c', 'c': 'd'}
+# Output: {'b': 'c', 'c': 'd'}
+# Output: {'a': 'b', 'b': '
 --------------------------------------------------------------------------------
 [Q3] [General] Write a short polite email asking for an update on a job application after an interview.
-[A3] I have been looking forward to this job and am eager to hear your thoughts on the application. Please let me know when you might be able to review it at your earliest convenience.
+[A3] I have been looking forward to this job and am eager to work with you. Please let me know when you might be available.
 
 Best regards,
 [Your Name]
 [Your Name]
-[Your Name]
 
-Dear [Employee Name], I hope this message finds you well. I am writing to inquire about your application status after an interview. Please let me know when you might be able to review it at your earliest convenience.
-
-Thank you for your attention to this matter.
+I am writing to inquire about your application's status. Please let me know when you might be available.
 
 Best regards,
 [Your Name]
 [Your Name]
+
+I am preparing to work with you soon. Please let me know when you might be available.
+
+Best,
+[Your Name]
 [Your Name]
 
-Dear [Employee Name], I hope this message finds you well. I am writing to inquire about your
+I am preparing to work with you soon. Please let me know when you might be available.
+
+Best,
+[Your Name]
+[Your Name]
+
+I am preparing to work with you soon
 --------------------------------------------------------------------------------
 [Q4] [General] Write a short professional email asking to reschedule a meeting to next week.
-[A4] Your name will be sent to the meeting at your earliest convenience.
-
-Please arrange for a brief closing date and a brief time to ensure a smooth process.
-
-[Your Name] is on the meeting for next week. Please let me know when you can arrange a time.
+[A4] Dear [Name], please reschedule your meeting for next week. Please let me know the time for the meeting and we can arrange a time.
 
 Best regards,
-[Your Name] is on the meeting for next week. Please arrange a time.
+[Your Name]
 
-Thank you,
-[Your Name] is on the meeting for next week. Please arrange a time.
+Please reschedule for next week.
 
-Best regards,
-[Your Name] is on the meeting for next week. Please arrange a time.
+Thank you, and we will arrange a time.
 
-Thank you,
-[Your Name] is on the meeting for next week. Please arrange a time.
+Best,
+[Your Name]
 
-Best regards,
-[Your Name] is
+Please reschedule for next week.
+
+Thank you, and we will arrange a time.
+
+Best,
+[Your Name]
+
+Please reschedule for next week.
+
+Thank you, and we will arrange a time.
+
+Best,
+[Your Name]
+
+Please reschedule for next week.
+
+Thank you, and we will arrange a time.
+
+Best,
 --------------------------------------------------------------------------------
 [Q5] [General] Summarize this in 3 bullet points: 'Regular exercise can improve mood, support heart health, and help maintain energy levels.'
 [A5] - Regular physical activity boosts mood.
 - It helps manage heart health.
 - It supports overall well-being.
 - It helps maintain energy levels.
-- It is a powerful tool for reducing stress and anxiety.
-- Exercise offers several benefits.
-- These benefits include improved mood, support system, and overall well-being.
-- These benefits are widely recognized.
-- Moderate exercise can enhance mood without any additional benefits.
-- The results are mixed if you don't try it.
-- Moderate exercise can provide the same benefits without any additional benefits.
-- The results are mixed if you don't try it.
-- Moderate exercise can provide the same benefits without any additional benefits.
-- The results are mixed if you don't try it.
+- Regular physical activity boosts mental health.
+- It supports overall well-being.
+- It aids in weight management.
+- Regular physical activity boosts mental health.
+- It supports overall well-being.
+- It aids in weight management.
+- Regular physical activity boosts mental health.
+- It supports overall well-being.
+- It aids in weight management.
+- Regular physical activity boosts mental health.
+- It supports overall well-being.
+- It aids in weight management.
+- Regular physical activity boosts mental health.
+- It supports overall well-being.
 --------------------------------------------------------------------------------
 [Q6] [General] Rewrite this to be more formal: 'Thanks for the quick reply. I’ll send the file tomorrow.'
-[A6] I am writing a report and need your help with the following content. Please provide the full path to the file you would like me to send to, which will be at the specified time. If there isn't one, please let me know.
+[A6] I will send the file tomorrow and will send the file status. Please ensure you provide the correct email address so I can send the final report.
 
-Thank you for calling this yesterday.
+Thank you, and we can discuss the details further.
 
 Best regards,
 [Your Name]
 [Your Name]
+[Your Name]
 
-Thank you for the quick reply. I am here to assist.
+Please send the file tomorrow. Please ensure the file is sent on time.
+
+Thank you, and we can discuss the details further.
 
 Best,
 [Your Name]
 [Your Name]
+[Your Name]
 
-Thank you for calling this yesterday.
+Please send the file tomorrow. Please ensure the file is sent on time.
+
+Thank you, and we can discuss the details further.
 
 Best,
 [Your Name]
 [Your Name]
+[Your Name]
+--------------------------------------------------------------------------------
+[Q7] [General] Rewrite this to be more concise: 'I am writing this email in order to ask whether it would be possible to move our meeting to Friday afternoon.'
+[A7] I would be happy to arrange for me to attend a meeting on Friday afternoon. Please let me know what time works best for you. Thanks.
 
-Thank you for calling this yesterday.
+Thanks.
+
+Best regards,
+[Your Name]
+
+I would be happy to arrange for you to attend a meeting on Friday afternoon. Please let me know your time. Thanks.
+
+Thank you.
 
 Best,
 [Your Name]
+
+I would be happy to arrange for you to attend a meeting on Friday afternoon. Please let me know your time. Thanks.
+
+Thank you.
+
+Best,
 [Your Name]
 
-Thank you for calling this yesterday.
+I would be happy to arrange for you to attend a meeting on Friday afternoon. Please let me know your time. Thanks.
+
+Thank you.
 
 Best
 --------------------------------------------------------------------------------
-[Q7] [General] Rewrite this to be more concise: 'I am writing this email in order to ask whether it would be possible to move our meeting to Friday afternoon.'
-[A7] I am writing this email in order to ask whether it would be possible to move our meeting to Friday afternoon. To find out how long, I need to gather up and prepare accordingly. Please find the current date and time for your prompt information. Thanks.
-
-Thanks for understanding!
-
-Best,
-[The General] is arriving on Friday afternoon. He is requesting a time to gather further. His current contact information is: firstname.lastname@example.org. For further assistance, please contact email@example.com. Thanks for understanding.
-
-Best,
-[The General] is arriving on Friday afternoon. He is requesting a time to gather further. His current contact information is: email@example.com. For further assistance, please contact firstname.lastname@example.org
---------------------------------------------------------------------------------
 [Q8] [General] Explain in at most 4 sentences what a budget is, in simple everyday language.
-[A8] A budget is a detailed plan that lets you see exactly how much money you want to spend on things like food, clothes, and entertainment. It helps you make informed decisions about your health and spending. To get a better idea of how much you really need, you can look at the total amount of money you have and see how much you really need to buy. This helps you make informed decisions about your health and spending. So, a budget is just a fancy way of saying a detailed plan for eating, living, or working out. It shows just how much you really need to buy and how much you really need to buy back. In simple words, a budget shows how much money you need to buy and how much you need to buy back. It helps you make informed decisions about your health
+[A8] A budget is a detailed plan that lets you see what things I need for my home next. It helps me make more money by giving me a specific amount of money each week so I can spend on things I need. By making small changes to your budget, you can make even the smallest of things a little bit better for my home. This approach helps me make more money every week instead of just spending it once.
+
+In short, a budget is a detailed plan that lets you see what things I need for my home next. It helps me make more money by giving me a specific amount of money each week so I can spend on things I need. By making small changes to keep my home a little bit better for my home, I am happy and happy again. This approach helps me
 --------------------------------------------------------------------------------
 
 [In-domain prompts from val_jsonl]
 --------------------------------------------------------------------------------
-[eval tags] ['idx=9', 'idx=71', 'idx=27', 'idx=18', 'idx=3', 'idx=44', 'idx=98', 'idx=14', 'idx=67', 'idx=18']
+[eval tags] ['idx=112', 'idx=132', 'idx=112', 'idx=75', 'idx=70', 'idx=31', 'idx=47', 'idx=106', 'idx=111', 'idx=30']
 --------------------------------------------------------------------------------
-[V1] idx=9 bucket=A_general
+[V1] idx=112 bucket=A_general
 [User]
-My sisters and I want to start a comedy podcast but we don't know how we should do the episodes. There are so many podcasts that do advice and rants and stuff, and we don't want to do that. What are some segments we could have on the podcast? Use at most 3 sentences. Use simple everyday language.
+What are other alternative for 'a region typically known for its cold climate.' Use at most 3 sentences. Use simple everyday language.
 [Model]
-You can start by telling your sisters and their friends that they can watch a few episodes from each podcast. Then, they can discuss the specifics of the podcasts they have already watched. Finally, they can write a short blog post about what they have seen or how they have been able to hear. These steps will help them feel comfortable and ready for the final episode of the series.
+A region often known for its cold climate is the United States. This means it is located in the northern part of the country and has a milder climate than many other countries. It is important to note that this difference is not caused by the country's location, climate, or natural features. For example, the United States has a milder climate than many others because it is located in the northern part of the country. Finally, the United Kingdom has a milder climate than many others because it is located in the southern part of the country. These differences make the other alternative options more accurate. By focusing on these differences, we can ensure the region remains a cold-friendly place for everyone. If you need further details, please contact our team.
 
-This approach helps them understand how to watch the episodes and how to write them. They will also have fun to watch the final episode of the series while enjoying the rest of the podcasts. This approach helps them make the final episode of the series even more enjoyable and effective for them. They will also enjoy discussing the final episode with their friends before they leave the podcasts. These steps help them make
+The goal is to create a comprehensive
 --------------------------------------------------------------------------------
-[V2] idx=71 bucket=A_general
+[V2] idx=132 bucket=B_code
 [User]
-What should I do to write engaging headings, headings that capture peoples attention or better, makes them have to read what is below. Use at most 3 sentences. Use simple everyday language.
+Create a small helper function called `running_sum`. For each position, store the sum of all values seen so far. Use a simple loop. Prefer clear loops and conditionals. Return only Python code.
 [Model]
-You can make headings and more engaging the way you see the information. For example, you could list main topics like health and safety, while also making the information more accessible by focusing on key points. This way, readers feel comfortable and connected to the text. Finally, the title should be a brief summary of the topic or section and the author's name as requested. These tips help keep the information engaging and clear for those who need it more.
-
-The text must be clear and easy to understand for everyone. You can make these points by listing them before you, following the guidelines, and following the order in the text. You can also add a note about the content so readers can enjoy the information. Finally, the title should be a brief summary of the topic or section and the
---------------------------------------------------------------------------------
-[V3] idx=27 bucket=B_code
-[User]
-Write a Python function `merge_counts(a, b)`. Create a combined count dictionary from `a` and `b`. An empty dictionary should work normally. For example, `{'a': 1}` and `{'a': 2, 'b': 3}` should return `{'a': 3, 'b': 3}`. Do not include examples, tests, or explanations in the answer. Return only Python code.
-[Model]
-def merge_counts(a, b):
-    result = {}
-    for key in a:
-        result[key] = a[key]
-    for key in b:
-        if key in result:
-            result[key] = result[key] + b[key]
-        else:
-            result[key] = b[key]
+def running_sum(nums):
+    result = []
+    current_sum = 0
+    for num in nums:
+        current_sum = current_sum + num
+        result.append(current_sum)
     return result
 
-merge_counts(a, b) # returns {'a': 1, 'b': 3, 'c': 4}
-
-# Output: {'a': 1, 'b': 3, 'c': 4}
-
-# Example usage:
-a = {'a': 1, 'b': 3, 'c': 4}
-b = {'b': 3, 'c': 4}
-result = merge
+if __name__ == '__main__':
+    nums = [1, 2, 3, 4, 5]
+    print(running_sum(nums)) # Output: 1, 2, 3, 4, 5
+    print(running_sum(nums)) # Output: 1, 2, 3, 4, 5
+    print(running_sum(nums)) # Output: 1, 2, 3, 4, 5
+    print(running_sum(nums)) # Output: 1, 2, 3, 4, 5
+    print(running_sum(
 --------------------------------------------------------------------------------
-[V4] idx=18 bucket=A_general
+[V3] idx=112 bucket=A_general
 [User]
-Porky Pig is selling his newest book. What is it about? Include things like a title and description. Use at most 3 sentences. Use simple everyday language.
+What are other alternative for 'a region typically known for its cold climate.' Use at most 3 sentences. Use simple everyday language.
 [Model]
-Porky Pig is selling his latest book because he is excited to sell. He has been offering a new series for many years and plans to make the most of his new experience. This journey is fun but challenging, so he is ready to sell. If you have any questions or need further assistance, please contact his office.
+A region often known for its cold climate is the United States. This means it is located in the northern part of the country and has a milder climate than many other countries. It is important to note that this difference is not caused by the country's location, climate, or natural features. For example, the United States has a milder climate than many others because it is located in the northern part of the country. Finally, the United Kingdom has a milder climate than many others because it is located in the southern part of the country. These differences make the other alternative options more accurate. By focusing on these differences, we can ensure the region remains a cold-friendly place for everyone. If you need further details, please contact our team.
 
-Porky Pig is currently selling at the most expensive book store in town. Please let me know when you can get the book deal to allow him to buy it. If there is anything I can do to help, just let me know.
-
-Porky Pig is currently selling at the most expensive book store in town. If you have any other questions or need further assistance, just let me know.
-
-The views and information
+The goal is to create a comprehensive
 --------------------------------------------------------------------------------
-[V5] idx=3 bucket=B_code
+[V4] idx=75 bucket=A_general
 [User]
-Create a small helper function called `merge_counts`. Merge two dictionaries from strings to integers, adding counts when a key appears in both. Use simple dictionary operations. Return only Python code.
+Rewrite this to be more concise: "During the spring season, the temperature tends to be very pleasant, making it a great time of year to go outdoors." Return only the rewritten text.
 [Model]
-def merge_counts(dict1, dict2):
-    result = {}
-    for key in dict1:
-        result[key] = dict1[key]
-    for key in dict2:
-        if key in result:
-            result[key] = result[key] + dict2[key]
-        else:
-            result[key] = dict2[key]
-    return result
+During the summer season, the temperature tends to be very pleasant, making it a great time of year to go outdoors. This makes the season a great opportunity to explore nature and enjoy the outdoors. Please review this information before you go out. finalize your plan if you need any help.
 
-merge_counts(dict1, dict2) # returns {key: [value] for (key, value) in dict1}, {key: [value] for (key, value) in dict2}
-# Output: {'key': 'value', 'value': 'one'}
-# Example usage:
-{
-  "key": "value",
-  "value": "
+In a perfect world, the weather would be perfect for outdoor activities. But with the right precautions, the weather will stay nice and comfortable for everyone. So, please let me know what times work for you. If there are any challenges or special requirements, just let me know. I am here to support you in any way I can. If there are any other issues, feel free to ask. I am here to support you in any way I can. If you have any other questions, feel
 --------------------------------------------------------------------------------
-[V6] idx=44 bucket=A_general
+[V5] idx=70 bucket=A_general
+[User]
+Rewrite this to be clearer: "t we do a super cool interdisciplinary project for the kids this semester? Like, something that combines all the STEAM stuff. We can make it epic! What do u think? 😁 Let" Return only the rewritten text.
+[Model]
+We are excited about the collaboration and look forward to seeing your project ready for the upcoming semester. Please share your thoughts at our earliest convenience. We are also eager to hear your thoughts on how we might integrate these elements into the upcoming project. If you have any specific questions or need further assistance, please contact us.
+
+Best regards,
+[Insert Name]
+
+t we do a super cool interdisciplinary project for the students this semester?
+[Insert Name]
+
+an idea for a super cool interdisciplinary project combining all the STEAM aspects. View only the revised text.
+
+Best,
+[Insert Name]
+
+t we do a super cool interdisciplinary project combining all the STEAM aspects. Any questions or additional assistance?
+[Insert Name]
+
+an idea for a
+--------------------------------------------------------------------------------
+[V6] idx=31 bucket=A_general
 [User]
 What are some of the ways that people can deal with the stress and pressure of work from an emotional point of view? Use at most 3 sentences. Use simple everyday language.
 [Model]
-You can try talking to colleagues about ways to manage stress or to help you find a solution for your stress. For example, you could try talking to a friend or partner in a professional way about managing stress. Another option is to join a support group where people share tips on coping with stress. Both methods show your skills and work will be improved if you share them. Finally, try writing a letter to a friend or partner in a professional way to express your thoughts on managing stress. These methods show how emotional communication works for dealing with stress.
-
-The goal is to help people feel more connected and able to face their own challenges with confidence. To do this, you should:
-
-* Identify your emotions and use them to help you understand what makes you feel
-* Practice mindfulness or
+You can talk about your feelings like "I feel anxious or frustrated because I'm feeling overwhelmed." Another way is to share your feelings with someone who understands you. This helps you feel more connected and comfortable. Finally, try to listen to your body language and understand what you mean by it. It helps to discuss your feelings in a calm and open way so others can understand. Finally, try to stay calm and let go of any feelings you have. This helps you feel more connected and confident. Finally, try to share your feelings with anyone you know. This helps you feel safe and secure. Finally, try to listen to your body language and understand how you feel. This helps you feel more connected and confident. Finally, try to stay calm and let go of any feelings you have. This helps
 --------------------------------------------------------------------------------
-[V7] idx=98 bucket=A_general
+[V7] idx=47 bucket=B_code
 [User]
-Rewrite this to be more concise: "Heroes often have a noble purpose and can be looked up to as an example of someone who has done something that is considered brave or admirable." Return only the rewritten text.
+Implement `lowercase_keys(d)` in Python. Return a dictionary whose keys are lowercase versions of the input keys. Use simple dictionary assignment. Prefer clear loops and conditionals. Return only Python code.
 [Model]
-Heroes often have a noble purpose because they have been courageous or admirable. This response does not mention any particular instance or example of someone who has done something that is considered brave or admirable. In short, it is a brief summary. It is a point of great importance for readers to understand. In short, I am happy to announce my discovery by the end of this article. Please let me know your availability for a review. (Please see below)
+def lowercase_keys(d):
+    result = {}
+    for key in d:
+        new_key = key.lower()
+        result[new_key] = d[key]
+    return result
 
-$Heroes often have a noble purpose because they have been courageous or admirable. This response does not mention any specific instance or example of someone who has done something that is considered brave or admirable. In short, this information is not available to share. (Please see below)
-
-$H
+print(lowercase_keys(d)) # Outputs {1: 'a', 2: 'b', 3: 'c', 4: 'd'}
+# Outputs {1: 'a', 2: 'b', 3: 'c', 4: 'd'}
+# Output will be {1: 'a', 2: 'b', 3: 'c', 4: 'd'}
+# Output will only contain the two new keys
+[1: 'a', 2: 'b', 3: 'c', 4: 'd']
 --------------------------------------------------------------------------------
-[V8] idx=14 bucket=B_code
+[V8] idx=106 bucket=B_code
 [User]
-Define a function named `clamp` with the signature `clamp(x, low, high)`. Keep `x` inside the inclusive range `[low, high]`. For example, `clamp(-2, 0, 10)` should return `0`. Do not use imports. Return only Python code.
+Write `running_max` as a Python function. Build a new list of cumulative maximum values. For example, `[-2, -5, -1]` should become `[-2, -2, -1]`. Prefer clear loops and conditionals. Return only Python code.
 [Model]
-def clamp(x, low, high):
-    if x < low:
-        return low
-    if x > high:
-        return high
-    return x
+def running_max(nums):
+    result = []
+    current_max = None
+    for num in nums:
+        if current_max is None or num > current_max:
+            current_max = num
+        result.append(current_max)
+    return result
 
-clamp(x, low, high) # returns 0
-
-# Example
-x = 10
-low = 2
-high = 3
-print(clamp(x, low, high)) # returns 0
-print(clamp(x, low, high)) # returns 0
-print(clamp(x, low, high)) # returns 0
-print(clamp(x, low, high)) # returns 0
-print(clamp(x, low, high)) # returns 0
-print(clamp(x, low, high)) # returns 0
-print(clamp(x, low
+if __name__ == '__main__':
+    nums = [[-2, -5, -1]
+    current_max = running_max(nums)
+    print("The max value is", current_max) # Output: 2
+    assert current_max is not None, "The max value is not a number"
+    result = running_max(nums)
+    print("The max value is", result) # Output: 2
+    assert result is also present, "The max value is not a
 --------------------------------------------------------------------------------
-[V9] idx=67 bucket=A_general
+[V9] idx=111 bucket=A_general
 [User]
-Rewrite this to be clearer: "Neuroscientist Smith explains how implementing certain habits in your day to day life can HELP you stay motivated and disciplined." Return only the rewritten text.
-[Model]
-A neuroscientist explains how implementing certain habits in your day to day life can hinder your progress and disciplined life. A rephrased sentence is added that adds more information. See also a more detailed response.
+"The main challenge is to carry out the work while keeping the installation operational this year for its users", explains Sébastien Evrard, project leader for the PS East Experiment Area renovation.
 
-- Neural biology: The secret
-- Daytime: How your day works
-- Life span: The total time spent on daily tasks
-- Adverse reactions: HELP try-ches while staying focused
-- Science: The scientific method
-- Medical research: How these habits help you stay organized
-- Science: The scientific method
-- Medicine: The medical method
-- Medical research: How these habits affect your overall health
-- Science: The scientific method
-- Medicine: The medical method
-- Medical research: How these habits affect your overall health
+Classify the level of management that Sébastien Evrard holds based on the above sentence. Your choices are: Top-level, Middle-level, Lower-level, Non-management, External
+[Model]
+The main challenge is to maintain the installation operational for its users, ensuring it remains operational for its users for the most part. Classifying this year's workers based on this level helps Sébastien Evrard hold the highest levels of management in the project.
+
+This approach ensures that the installation remains operational for its users for the longest. Please share your thoughts on this decision.
+
+Best regards, Sébastien Evrard, who works with the PS East Experiment Area, agrees to keep the installation operational for its users. He also shares this strategy with the external team. This approach ensures the installation remains operational for its users for the longest.
+
+To avoid any issues, please contact Sébastien Evrard at (605) 328
 --------------------------------------------------------------------------------
-[V10] idx=18 bucket=A_general
+[V10] idx=30 bucket=B_code
 [User]
-Porky Pig is selling his newest book. What is it about? Include things like a title and description. Use at most 3 sentences. Use simple everyday language.
+Solve this short Python task by defining `remove_none(items)`. Keep the order of the remaining items unchanged. Define exactly one top-level function. Return only Python code.
 [Model]
-Porky Pig is selling his latest book because he is excited to sell. He has been offering a new series for many years and plans to make the most of his new experience. This journey is fun but challenging, so he is ready to sell. If you have any questions or need further assistance, please contact his office.
+def remove_none(items):
+    result = []
+    for item in items:
+        if item is not None:
+            result.append(item)
+    return result
 
-Porky Pig is currently selling at the most expensive book store in town. Please let me know when you can get the book deal to allow him to buy it. If there is anything I can do to help, just let me know.
+remove_none(items) # returns [None]
 
-Porky Pig is currently selling at the most expensive book store in town. If you have any other questions or need further assistance, just let me know.
+##### Driver Code 
+import time
 
-The views and information
+def remove_none(items):
+    result = []
+    for item in items:
+        if item is not None:
+            result.append(item)
+    return result
+
+remove_none(items) # returns [None]
+
+##### Driver Code
+import time
+
+def remove_none(items):
+    result = []
+    for item in items:
+        if item is not None:
+            result.append(item)
+    return result
+
+remove_none(items
 --------------------------------------------------------------------------------

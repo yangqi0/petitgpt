@@ -15,165 +15,209 @@ in_domain: n=10 mode=full_context show_ref=False dump_prompt=False sample_eval_j
 
 print(running_sum(nums)) # Output: 3, 4, 5, 6, 7, 8, 9, 10
 
-# Driver code is needed to run this code and to test it
-nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-result = running_sum(nums)
-print("The sum of the numbers is", result)
+# Driver code is needed to run this code and see the results
+def running_sum(nums):
+    result = []
+    current_sum = 0
+    for num in nums:
+        current_sum = current_sum + num
+        result.append(current_sum)
+    return result
 
-# Output: 6, 8, 9, 12, 15, 18, 20, 24, 25, 26, 27
+print(running_sum(nums)) # Output: 3, 4, 5, 6, 7, 8,
 --------------------------------------------------------------------------------
 [Q2] [Code] Write a Python function lowercase_keys(d) that returns a new dictionary with lowercase string keys.
 [A2] def lowercase_keys(d):
     result = {}
     for key in d:
-        new_key = key.lower()
+        if isinstance(key, str):
+            new_key = key.lower()
+        else:
+            new_key = key
         result[new_key] = d[key]
     return result
 
 lowercase_keys(d) # returns a new dictionary with lowercase string keys
-Output: { 'apple': 1, 'banana': 2, 'mango': 3, 'strawberry': 4, 'grape': 5 }
-# Output: {'apple': 1, 'banana': 2, 'mango': 3, 'strawberry': 4, 'grape': 5}
 
-import re
+# Example
+d = {
+    'apple': 'a',
+    'banana': 'b',
+    'grape': 'c',
+    'mango': 'd'
+}
 
-def lowercase_keys(d):
-    result = {}
-    for key in d:
-        new_key = key.
+print(lowercase_keys(d)) # returns a new dictionary with lowercase string keys
+# Output: {'apple': 'b', 'banana': 'c', 'grape
 --------------------------------------------------------------------------------
 [Q3] [General] Write a short polite email asking for an update on a job application after an interview.
-[A3] I have been looking forward to this job and am eager to hear your thoughts on the application. Please let me know when you might be able to get it ready.
+[A3] I have been looking forward to this job and am eager to work with you. Please let me know when you might be available.
 
 Best regards,
 [Your Name]
 [Your Name]
-[Your Name]
 
-I look forward to hearing from you soon.
+I am writing to inquire about your application's status. Please let me know when you might be available.
 
-Best,
-[General]
+Best regards,
 [Your Name]
 [Your Name]
 
-I look forward to hearing from you soon.
+I am preparing to work with you soon. Please let me know when you might be available.
 
 Best,
 [Your Name]
 [Your Name]
 
-I look forward to hearing from you soon.
+I am preparing to work with you soon. Please let me know when you might be available.
 
 Best,
-[General]
 [Your Name]
 [Your Name]
 
-I look forward to hearing from you soon.
-
-Best,
-[General]
-[Your Name]
+I am preparing to work with you soon
 --------------------------------------------------------------------------------
 [Q4] [General] Write a short professional email asking to reschedule a meeting to next week.
-[A4] Your name is Sarah, and we are scheduled to meet on Tuesday, Wednesday, and Friday. Please arrange for a brief interview with your choice to be arranged by me.
-
-Please let me know your availability for a rescheduling.
+[A4] Dear [Name], please reschedule your meeting for next week. Please let me know the time for the meeting and we can arrange a time.
 
 Best regards,
 [Your Name]
 
-Dear Sarah,
+Please reschedule for next week.
 
-I am writing to arrange a special meeting to next week. Please arrange for a brief interview with your choice to be arranged by me.
+Thank you, and we will arrange a time.
 
-Thank you, and we will proceed accordingly.
-
-Best regards,
+Best,
 [Your Name]
 
-Dear Sarah,
+Please reschedule for next week.
 
-I am writing to arrange a special meeting to next week. Please arrange for a brief interview with your choice.
+Thank you, and we will arrange a time.
 
-Thank you, and we will proceed accordingly.
+Best,
+[Your Name]
 
-Best regards
+Please reschedule for next week.
+
+Thank you, and we will arrange a time.
+
+Best,
+[Your Name]
+
+Please reschedule for next week.
+
+Thank you, and we will arrange a time.
+
+Best,
 --------------------------------------------------------------------------------
 [Q5] [General] Summarize this in 3 bullet points: 'Regular exercise can improve mood, support heart health, and help maintain energy levels.'
 [A5] - Regular physical activity boosts mood.
 - It helps manage heart health.
 - It supports overall well-being.
 - It helps maintain energy levels.
-- It is a powerful tool for reducing stress and anxiety.
-- Exercise offers several benefits.
-- These benefits include improved mood, support system, and overall well-being.
-- These benefits are widely recognized.
-- Moderate exercise can enhance mood without any additional benefits.
-- The results are mixed if you don't try it.
-- Moderate exercise can provide the same benefits without any additional benefits.
-- The results are mixed if you don't try it.
-- Moderate exercise can provide the same benefits without any additional benefits.
-- The results are mixed if you don't try it.
+- Regular physical activity boosts mental health.
+- It supports overall well-being.
+- It aids in weight management.
+- Regular physical activity boosts mental health.
+- It supports overall well-being.
+- It aids in weight management.
+- Regular physical activity boosts mental health.
+- It supports overall well-being.
+- It aids in weight management.
+- Regular physical activity boosts mental health.
+- It supports overall well-being.
+- It aids in weight management.
+- Regular physical activity boosts mental health.
+- It supports overall well-being.
 --------------------------------------------------------------------------------
 [Q6] [General] Rewrite this to be more formal: 'Thanks for the quick reply. I’ll send the file tomorrow.'
-[A6] I am writing a report and need your help with the following content. Please provide the full path to the file you would like me to send to, which will be at the specified time. If there isn't one, please let me know.
+[A6] I will send the file tomorrow and will send the file status. Please ensure you provide the correct email address so I can send the final report.
 
-Thank you for calling this yesterday.
+Thank you, and we can discuss the details further.
 
 Best regards,
 [Your Name]
 [Your Name]
+[Your Name]
 
-Thank you for the quick reply. I am here to assist.
+Please send the file tomorrow. Please ensure the file is sent on time.
+
+Thank you, and we can discuss the details further.
 
 Best,
 [Your Name]
 [Your Name]
+[Your Name]
 
-Thank you for calling this yesterday.
+Please send the file tomorrow. Please ensure the file is sent on time.
+
+Thank you, and we can discuss the details further.
 
 Best,
 [Your Name]
 [Your Name]
-
-Thank you for calling this yesterday.
-
-Best,
 [Your Name]
-[Your Name]
-
-Thank you for calling this yesterday.
-
-Best
 --------------------------------------------------------------------------------
 [Q7] [General] Rewrite this to be more concise: 'I am writing this email in order to ask whether it would be possible to move our meeting to Friday afternoon.'
-[A7] I am writing this email in order to ask whether it would be possible to move our meeting to Friday afternoon. To find out how long, I need to gather up and prepare accordingly. Please find the answer in the provided text or a specific response in the comments. This is the required response.
+[A7] I would be happy to arrange for me to attend a meeting on Friday afternoon. Please let me know what time works best for you. Thanks.
 
-Thank you for your attention to these constraints. We are currently in the process of preparing for Friday afternoon. Please let me know your availability for a meeting at your earliest convenience. Thanks.
+I look forward to hearing from you soon.
 
 Best regards,
-[General] Rewrite this to be more concise and efficient. For the task, please find the answer in the provided text or a specific response in the comments. This is the required response.
+[Your Name]
 
-Thank you for your attention to these constraints. We are currently in the
+I would be happy to arrange for you to attend a meeting on Friday afternoon. Please let me know when you need to stay on track. Thanks.
+
+Best,
+[Your Name]
+
+I would be happy to arrange for you to attend a meeting on Friday afternoon. Please let me know when you need to stay on. Thanks.
+
+Best,
+[Your Name]
+
+I would be happy to arrange for you to attend a meeting on Friday afternoon. Please let me know when you need to stay on.
 --------------------------------------------------------------------------------
 [Q8] [General] Explain in at most 4 sentences what a budget is, in simple everyday language.
-[A8] A budget is a detailed plan that lets you see exactly how much money you want to spend on things like food, clothes, and entertainment. It helps you make informed decisions about your health and expenses. To get a better view, you can use a budget like this:
+[A8] A budget is a detailed plan that lets you see what things I need for my home next. It helps me make more money by giving me a specific amount of money each week so I can spend on things I need. By making small changes to your budget, you can make even the smallest of things a little bit better for my home. This approach helps me make more money every week instead of just spending it once.
 
-- A clear, detailed budget for all your needs.
-- Show the total amount of money you are willing to spend.
-- Show the cost of living in that area.
-
-These plans help you make informed decisions about your health and expenses without needing to know anything about your personal life. You will only be able to see exactly how much money you want to spend and not know the exact cost of living in your area. This guide is designed to help you make informed decisions about your health and expenses without needing
+In short, a budget is a detailed plan that lets you see what things I need for my home next. It helps me make more money by giving me a specific amount of money each week so I can spend on things I need. By making small changes to keep my home a little bit better for my home, I am happy and happy again. This approach helps me
 --------------------------------------------------------------------------------
 
 [In-domain prompts from val_jsonl]
 --------------------------------------------------------------------------------
-[eval tags] ['idx=34', 'idx=19', 'idx=38', 'idx=108', 'idx=19', 'idx=99', 'idx=106', 'idx=59', 'idx=5', 'idx=72']
+[eval tags] ['idx=82', 'idx=114', 'idx=18', 'idx=20', 'idx=101', 'idx=54', 'idx=12', 'idx=73', 'idx=9', 'idx=56']
 --------------------------------------------------------------------------------
-[V1] idx=34 bucket=B_code
+[V1] idx=82 bucket=B_code
 [User]
-Create a small helper function called `running_sum`. For each position, store the sum of all values seen so far. Use a simple loop. Prefer clear loops and conditionals. Return only Python code.
+Write `reverse_string` as a Python function. Return `s` from end to beginning. For example, `'你好'` should return `'好你'`. Do not include examples, tests, or explanations in the answer. Return only Python code.
+[Model]
+def reverse_string(s):
+    result = ""
+    i = len(s) - 1
+    while i >= 0:
+        result = result + s[i]
+        i = i - 1
+    return result
+
+print(reverse_string("你好")) # Output: "好你"
+
+# Output: "好你"
+# Note: The output must be a string containing only the reverse characters.
+# Return only Python code.
+def reverse_string(s):
+    result = ""
+    i = len(s) - 1
+    while i >= 0:
+        result = result + s[i]
+        i = i - 1
+    return result
+
+print(reverse_string("你�
+--------------------------------------------------------------------------------
+[V2] idx=114 bucket=B_code
+[User]
+Create `running_sum(nums)` for this simple Python task. Transform a list of numbers into a list of prefix sums. For example, `[]` should return `[]`. Prefer clear loops and conditionals. Return only Python code.
 [Model]
 def running_sum(nums):
     result = []
@@ -185,185 +229,158 @@ def running_sum(nums):
 
 if __name__ == '__main__':
     nums = [1, 2, 3, 4, 5]
-    current_sum = 0
-    result = running_sum(nums)
-    print(result) # prints 1
-    current_sum = current_sum + 1
-    result = running_sum(nums)
-    print(result) # prints 1
-    current_sum = current_sum + 1
-    result = running_sum(nums)
-    print(result) # prints 1
-    current_sum = current_sum + 1
-    result = running
+    current_sum = running_sum(nums)
+    print(current_sum) # Output: 1 2 3 4 5 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71
 --------------------------------------------------------------------------------
-[V2] idx=19 bucket=B_code
+[V3] idx=18 bucket=B_code
 [User]
-Solve this short Python task by defining `lowercase_keys(d)`. Lowercase all keys without changing the values. Do not include examples, tests, or explanations in the answer. Return only Python code.
+Write a beginner-friendly implementation of `remove_none(items)`. Remove `None` entries while keeping all other items in their original order. Use a simple loop or list comprehension. Define exactly one top-level function. Return only Python code.
 [Model]
-def lowercase_keys(d):
-    result = {}
-    for key in d:
-        new_key = key.lower()
-        result[new_key] = d[key]
-    return result
-
-lowercase_keys(d) # Returns {'lower': 'lowercase', 'key': 'value'}
-"""
-Output: {'lower': 'value', 'key': 'first'}
-"""
-
-def lowercase_keys(d):
-    result = {}
-    for key in d:
-        new_key = key.lower()
-        result[new_key] = d[key]
-    return result
-
-if __name__ == '__main__':
-    print(lowercase_keys(d)) # Returns {'lower': 'lowercase', 'key
---------------------------------------------------------------------------------
-[V3] idx=38 bucket=A_general
-[User]
-What are the bones that are in the wrist? Use at most 3 sentences. Use simple everyday language.
-[Model]
-The bones in the wrist include the metacarpal bone, which is located behind the wrist, and the metatarsal bone, which is behind the hand. These bones help to move the hands and feet together like a joint. If you have any questions or need more information about these structures, feel free to ask!
-
-Last updated: March 20, 2013
-sounds, memory, and learning are all built on this bone. It is important to know that the bones in our hands and feet are also connected through this bone. To learn more, you can visit our website for more information. Please let me know your availability for a visit soon.
-
-The text is in the form provided in the text. If you need to see it for yourself, you can do so
---------------------------------------------------------------------------------
-[V4] idx=108 bucket=A_general
-[User]
-What is the difference between a nautical mile and a mile? Use at most 3 sentences. Use simple everyday language.
-[Model]
-A nautical mile is one mile in length, like a small boat or a ship, and a mile in width, like a large airplane or a small boat. It is also a short distance apart, like a small boat or a ship, but not both. Therefore, the nautical mile is divided into two parts: a small boat and a large airplane. Both devices use feet to measure distances, while the nautical mile uses a foot to measure distances, while the small boat uses a foot to measure distances. Together, these factors make a nautical mile the most accurate way to navigate and land.
-
-The difference between a nautical mile and a nautical mile is the distance you are flying and the distance you are travelingopportunas. A
---------------------------------------------------------------------------------
-[V5] idx=19 bucket=B_code
-[User]
-Solve this short Python task by defining `lowercase_keys(d)`. Lowercase all keys without changing the values. Do not include examples, tests, or explanations in the answer. Return only Python code.
-[Model]
-def lowercase_keys(d):
-    result = {}
-    for key in d:
-        new_key = key.lower()
-        result[new_key] = d[key]
-    return result
-
-lowercase_keys(d) # Returns {'lower': 'lowercase', 'key': 'value'}
-"""
-Output: {'lower': 'value', 'key': 'first'}
-"""
-
-def lowercase_keys(d):
-    result = {}
-    for key in d:
-        new_key = key.lower()
-        result[new_key] = d[key]
-    return result
-
-if __name__ == '__main__':
-    print(lowercase_keys(d)) # Returns {'lower': 'lowercase', 'key
---------------------------------------------------------------------------------
-[V6] idx=99 bucket=B_code
-[User]
-Write `running_max` as a Python function. Build a new list of cumulative maximum values. For example, `[-2, -5, -1]` should become `[-2, -2, -1]`. Prefer clear loops and conditionals. Return only Python code.
-[Model]
-def running_max(nums):
-    result = []
-    current_max = None
-    for num in nums:
-        if current_max is None or num > current_max:
-            current_max = num
-        result.append(current_max)
-    return result
-
-if __name__ == '__main__':
-    nums = [[-2, -5, -1]
-    current_max = running_max(nums)
-    print("The max value is", current_max) # Outputs 2
-    assert current_max is not None, "The max value is not a number"
-    result = running_max(nums)
-    print("The max value is", result) # Outputs 2
-    assert result is not None, "The result is not a number
---------------------------------------------------------------------------------
-[V7] idx=106 bucket=B_code
-[User]
-Write a Python function `flatten_once(items)`. Flatten only one list level and leave non-list values unchanged. Do not modify the input list. Do not use imports. Return only Python code.
-[Model]
-def flatten_once(items):
+def remove_none(items):
     result = []
     for item in items:
-        if isinstance(item, list):
-            for sub_item in item:
-                result.append(sub_item)
-        else:
-            result.append(item)
-    return result
-
-flatten_once(items) # returns [1, 2, 3, 4, 5]
-
-This function takes a list of items as an argument and returns only the result. The first element is the item to be flattened, and the second element is the number of items to be flattened. If the number of items is not provided, the function will return nothing. This function is designed to work with a list of lists, not individual items. Please verify the provided information before proceeding.
-
-Please verify
---------------------------------------------------------------------------------
-[V8] idx=59 bucket=A_general
-[User]
-"The main challenge is to carry out the work while keeping the installation operational this year for its users", explains Sébastien Evrard, project leader for the PS East Experiment Area renovation.
-
-Classify the level of management that Sébastien Evrard holds based on the above sentence. Your choices are: Top-level, Middle-level, Lower-level, Non-management, External
-[Model]
-The main challenge is to carry out the work while keeping the installation operational this year for its users. Sébastien Evrard holds this category. Top-level, Middle-level, Lower-level, Non-management, external
-
-The project is currently in its final stages and has no management members. Please let me know if you need any further assistance with the management of the work.
-
-Sébastien Evrard holds this category. Top-level, Middle-level, Lower-level, Non-management, external
-
-The project is currently in its final stages and has no management members. Please share any additional support or information you can give.
-
-Sébastien Evrard holds this category. Top-level, Middle-
---------------------------------------------------------------------------------
-[V9] idx=5 bucket=A_general
-[User]
-What are some fruits and vegetables I can grow in England. need to be able to grow them in my garden Use at most 3 sentences. Use simple everyday language.
-[Model]
-You can grow a variety of fruits like apples, bananas, and oranges that are easy to grow in your garden. Another option is a small tree or shrub that needs minimal care but can thrive in your garden. These choices are perfect for growing many different types of fruits and vegetables in your garden. How about you start growing your own delicious fruit?
-
-The answer is a simple home grown apple tree or banana tree. These trees are easy to grow and have a small size that makes them perfect for growing many different types of fruits and vegetables in your garden. If you want a simple home grown apple tree or banana tree, you can also grow one of these delicious fruits without any special equipment. Join us for an exciting adventure to enjoy a beautiful and delicious garden with your own unique fruit. Thanks for
---------------------------------------------------------------------------------
-[V10] idx=72 bucket=B_code
-[User]
-Write `remove_none` as a Python function. Filter out values that are exactly `None`. Return only Python code.
-[Model]
-def remove_none(values):
-    result = []
-    for item in values:
         if item is not None:
             result.append(item)
     return result
 
-remove_none(values) # returns [None]
+remove_none(items) # returns [None]
 
-##### Displaying the result
-print(remove_none(values)) # returns [None]
-##### Output
-[None]
+# Example usage:
+# Create a list to contain only the items that were removed
+list_of_items = [item for item in items if item is not None]
+print(remove_none(list_of_items)) # Output: [None]
 
-##### Usage
-print(remove_none(values)) # returns [None]
-##### Usage
-print(remove_none(values)) # returns [None]
-##### Output
-[None]
+# Example usage:
+# Create a list to contain only the items that were removed
+list_of_items = [item for item in items if item is not None]
+print(list_of_items) # Output: [None]
 
-##### Usage
-print(remove_none(values)) # returns [None]
-##### Output
-[None]
+#
+--------------------------------------------------------------------------------
+[V4] idx=20 bucket=A_general
+[User]
+Summarize this in exactly 3 bullet points: "* This is point 1. The response must contain at least 2 placeholders represented by square brackets, such as [address]. In your response, the word [keyword] should appear at least 2 times. 
 
-##### Usage
-print(remove_none
+What are the steps to follow when preparing for a [event] at [location]?" Keep each bullet short.
+[Model]
+- Choose a suitable [location] and time for the [event].
+- Plan the [event] so everyone knows what to expect.
+- Review the [location] thoroughly beforehand.
+- Make sure to arrive early to secure a good spot.
+- Bring a friend or family member to share the excitement.
+- Avoid any surprises during the [event].
+- Don't forget to bring a good book or a special piece of jewelry.
+- Seek back your [event] after the [event] so you can rest.
+
+The [event] is a long and exciting journey filled with exciting activities and delicious meals. Please let me know the [location] you would like me to review. Thanks!"ang soak, and I will send
+--------------------------------------------------------------------------------
+[V5] idx=101 bucket=B_code
+[User]
+Implement the function `safe_divide(a, b, default=0.0)`. Divide `a` by `b`, but avoid division by zero by returning `default` if `b == 0`. The function should not print anything. Do not use imports. Return only Python code.
+[Model]
+def safe_divide(a, b, default=0.0):
+    if b == 0:
+        return default
+    return a / b % b
+
+a = 10
+b = 5
+default = 0.0
+
+safe_divide(a, b, default, default)
+print(safe_divide(a, b, default, default))
+# Output: 5.0
+
+# Output: 5.0
+# Please verify this message is correct.
+
+# Output: 5.0
+# Please verify this message is correct.
+
+# Output: 5.0
+# Please verify this message is correct.
+
+# Output: 5.0
+# Please verify this message is correct.
+
+# Output: 5.
+--------------------------------------------------------------------------------
+[V6] idx=54 bucket=A_general
+[User]
+Can you explain a third riddle which is What can you catch, but not throw. Use at most 3 sentences.
+[Model]
+A man named John bought a box of candy for his birthday. He gave it to his friend, the cat, who then ate it. John was able to catch the cat without any trouble and never miss him. Finally, he threw the candy back into the box. This trick is known as the "touchdown" method because it works by finding the exact spot where the cat ate it. This method works because if the cat ate the candy, the candy would be immediately left behind in the box. If the cat ate the candy, the candy would be immediately eaten by the man. This trick is known as the "touchdown" method and is often used in computer science to find patterns in data. Therefore, it is what is known as the "touchdown" method for
+--------------------------------------------------------------------------------
+[V7] idx=12 bucket=B_code
+[User]
+Solve this short Python task by defining `merge_counts(a, b)`. Do not modify either input dictionary while combining their counts. Do not use imports. Return only Python code.
+[Model]
+def merge_counts(a, b):
+    result = {}
+    for key in a:
+        result[key] = a[key]
+    for key in b:
+        if key in result:
+            result[key] = result[key] + b[key]
+        else:
+            result[key] = b[key]
+    return result
+
+merge_counts(a, b) # returns {'a': 1, 'b': 2, 'c': 3}
+
+# Driver code
+a = {'a': 1, 'b': 2, 'c': 3}
+b = {'a': 1, 'b': 2, 'c': 3}
+result = merge_counts(a, b)
+print(result) # {'a
+--------------------------------------------------------------------------------
+[V8] idx=73 bucket=B_code
+[User]
+Write `remove_none` as a Python function. Keep the order of the remaining items unchanged. For example, `[0, None, False, '']` should return `[0, False, '']`. Define exactly one top-level function. Return only Python code.
+[Model]
+def remove_none(lst):
+    result = []
+    for item in lst:
+        if item is not None:
+            result.append(item)
+    return result
+
+remove_none(lst) # returns [None, True]
+
+##### Driver Code 
+import time
+
+def remove_none(lst):
+    result = []
+    for item in lst:
+        if item is not None:
+            result.append(item)
+    return result
+
+print(remove_none(lst)) # returns [None, True]
+##### Driver Code
+import time
+
+def remove_none(lst):
+    result = []
+    for item in lst:
+        if item is not None:
+            result.append(item)
+    return result
+--------------------------------------------------------------------------------
+[V9] idx=9 bucket=A_general
+[User]
+What is the world record for the largest gathering of people dressed up like superheroes? As in, how many people were there? Use at most 3 sentences. Use simple everyday language.
+[Model]
+The world record for the largest gathering of superheroes was held by the Greek army in 2010. This record was set by the Greek team to determine the total number of people who could be dressed for a single meeting. The previous record was held by the team to determine the total number of people who could be dressed for a single meeting. Therefore, the world record for the largest gathering of superheroes is held by the Greek team.
+
+The record for the largest gathering of superheroes is held by the team to determine the total number of people who could be dressed for a single meeting. This is because the team to which many people belong represents the entire team. Therefore, the record for the largest gathering of superheroes is held by the team to determine the total number of people
+--------------------------------------------------------------------------------
+[V10] idx=56 bucket=A_general
+[User]
+What is a confidence interval and how do you interpret one? Use at most 3 sentences. Use simple everyday language.
+[Model]
+A confidence interval is the average of a set of numbers that are exactly two in one, and it does not include any other factors. For example, if you have a mean of 2 and a standard deviation of 1, the interval would be 2 to 1. If you have a standard deviation of 1, the interval would be 1 to 2. This means the mean is two to one, and the standard error is the square root of both numbers. The confidence interval is the range that fits the data, so it is a good way to draw a line on the average. You can use this interval to find the value that fits the data better than the rest. If you need more detailed information, feel free to ask!
+
+In short, a confidence interval is the average of two numbers that
 --------------------------------------------------------------------------------

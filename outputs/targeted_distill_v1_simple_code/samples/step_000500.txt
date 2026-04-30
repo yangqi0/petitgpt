@@ -7,24 +7,29 @@ in_domain: n=10 mode=full_context show_ref=False dump_prompt=False sample_eval_j
 [Q1] [Code] Write a Python function running_sum(nums) that returns cumulative sums.
 [A1] def running_sum(nums):
     result = []
-    current_sum = 0
+    total = 0
     for num in nums:
-        current_sum = current_sum + num
-        result.append(current_sum)
+        total = total + num
+        result.append(total)
     return result
 
-print(running_sum(nums)) # Output: 3, 4, 5, 6, 7, 8, 9, 10
+print(running_sum(nums)) # Output: 35.0
 
-# Driver code is needed to run this code and see the results
-def running_sum(nums):
-    result = []
-    current_sum = 0
-    for num in nums:
-        current_sum = current_sum + num
-        result.append(current_sum)
-    return result
-
-print(running_sum(nums)) # Output: 3, 4, 5, 6, 7, 8,
+# Output: 35.0
+# Output: 35.5
+# Output: 35.5
+# Output: 35.5
+# Output: 35.5
+# Output: 35.5
+# Output: 35.5
+# Output: 35.5
+# Output: 35.5
+# Output: 35.5
+# Output: 35.5
+# Output: 35.5
+# Output: 35.5
+# Output: 35.5
+# Output: 35.5
 --------------------------------------------------------------------------------
 [Q2] [Code] Write a Python function lowercase_keys(d) that returns a new dictionary with lowercase string keys.
 [A2] def lowercase_keys(d):
@@ -51,250 +56,151 @@ print(lowercase_keys(d)) # returns a new dictionary with lowercase string keys
 # Output: {'apple': 'b', 'banana': 'c', 'grape
 --------------------------------------------------------------------------------
 [Q3] [General] Write a short polite email asking for an update on a job application after an interview.
-[A3] Hi, I'm writing to inquire about your application for the new job application. It looks like we have already completed our workload and am looking forward to discussing it further.
-
-Thank you so much for your time and understanding.
+[A3] Hi, I'm writing to provide an update on a job application after an interview. Please let me know what time works best. Thanks!
 
 Best regards,
 [Your Name]
 [Your Name]
-[Your Address]
 
-I hope this message finds you well. I am writing to inquire about your application for the new job application. Your availability will be confirmed soon.
+I am writing to provide an update on a job application after an interview. Please let me know your availability. Thanks!
 
-Thank you very much for your time and understanding.
-
-Best regards,
+Best,
 [Your Name]
 [Your Name]
-[Your Address]
 
-I hope this message finds you well. I am writing to inquire about your application for the new job application. Your availability is
+I am writing to provide an update on a job application after an interview. Please let me know your availability. Thanks!
+
+Best,
+[Your Name]
+[Your Name]
+
+I am writing to provide an update on a job application after an interview. Please let me know your availability. Thanks!
+
+Best,
+[Your Name]
+[
 --------------------------------------------------------------------------------
 [Q4] [General] Write a short professional email asking to reschedule a meeting to next week.
-[A4] Your name will be sent to the meeting at your earliest convenience. Please make sure to arrive early to secure a good spot.
-
-[Your Name] is here to stay organized and safe. Let's arrange for a quick meeting.
+[A4] Dear [Name], please reschedule your meeting for next week. Please let me know the time for the meeting and any details you would like.
 
 Best regards,
-[Your Name] is here to stay organized and safe. Let's arrange for a quick meeting.
+[Your Name]
 
-Please arrive early to secure a good spot.
+Please reschedule for next week.
 
-Best,
-[General] [General] Writing is here to stay organized and safe. Let's arrange for a quick meeting.
+Thank you,
+[Your Name]
 
-Please arrive early to secure a good spot.
+Please reschedule for next week.
 
-Best,
-[General] [General] Writing is here to stay organized and safe. Let's arrange for a quick meeting.
+Thank you,
+[Your Name]
 
-Please arrive early to secure a good
+Please reschedule for next week.
+
+Thank you,
+[Your Name]
+
+Please reschedule for next week.
+
+Thank you,
+[Your Name]
+
+Please reschedule for next week.
+
+Thank you,
+[Your Name]
+
+Please reschedule for next week.
+
+Thank you,
+[Your Name
 --------------------------------------------------------------------------------
 [Q5] [General] Summarize this in 3 bullet points: 'Regular exercise can improve mood, support heart health, and help maintain energy levels.'
-[A5] - Regular physical activity boosts mood and supports heart health.
-- It helps manage stress and anxiety.
-- It aids in weight management.
-- Regular physical activity boosts mood and supports overall well-being.
-- These benefits extend to both personal and professional life.
-- Staying active is essential for maintaining a healthy weight.
-- Regular physical activity boosts mood and supports overall well-being.
-- These benefits extend to both personal and professional life.
-- Staying active is essential for maintaining a healthy weight.
-- Regular physical activity boosts mood and supports overall well-being.
-- These benefits extend to both personal and professional life.
-- Staying active is essential for maintaining a healthy weight.
-- Regular physical activity boosts mood and supports overall
+[A5] - Regular physical activity boosts mood.
+- It helps manage stress.
+- It supports heart health.
+- It helps maintain energy levels.
+- Regular physical activity boosts mood.
+- It supports overall well-being.
+- The combination of these factors supports overall well-being.
+- Followed by a doctor.
+- Moderate to severe.
+- moderate to severe.
+- moderate to severe.
+- Stronger than.
+- Regular physical activity boosts mood.
+- It supports overall well-being.
+- The combination of these factors supports overall well-being.
+- Followed by a doctor.
+- Moderate to severe.
+- moderate to severe.
+- strong to strong.
+- Regular physical activity boosts mood
 --------------------------------------------------------------------------------
 [Q6] [General] Rewrite this to be more formal: 'Thanks for the quick reply. I’ll send the file tomorrow.'
-[A6] I will send the file tomorrow and will send it after tomorrow. Please let me know when you would like me to send the file.
+[A6] I will send the file tomorrow and will send it after tomorrow. Please ensure you provide the correct email address so I can send the file.
 
-Thank you, and we can discuss further.
-
-Best regards,
-[Your Name]
-[Your Name]
-
-Thank you for the quick reply. I am here to help. Please let me know when you would like me to send the file tomorrow. Please let me know when you would like me to send the file.
-
-Thank you, and we can discuss further.
+Thank you, and we can discuss the details further.
 
 Best regards,
 [Your Name]
 [Your Name]
 
-Thank you for the quick reply. I am here to help. Please let me know when you would like me to send the file tomorrow. Please let me know when you would
+Please send the file tomorrow. Please ensure you provide the correct email address so I can send the file.
+
+Thank you, and we can discuss the details further.
+
+Best,
+[Your Name]
+[Your Name]
+
+Please send the file tomorrow. Please ensure you provide the correct email address so I can send the file.
+
+Thank you, and we can discuss the details further.
+
+Best,
+[Your Name]
+[Your Name]
+
+Please send
 --------------------------------------------------------------------------------
 [Q7] [General] Rewrite this to be more concise: 'I am writing this email in order to ask whether it would be possible to move our meeting to Friday afternoon.'
-[A7] Please send a brief message to ensure the meeting is moved on Friday afternoon. This request is included as part of the deadline.
+[A7] I would be happy to arrange for a meeting to take place on Friday afternoon. Please let me know the time and date. I would also like to inform you if we are available for a meeting on Friday afternoon.
 
-Thank you for your attention to this matter.
-
-Best regards,
-[Your Name]
-[Your Email]
-[Your Email Address]
-[Your Email Address]
-
-I am writing this email in order to ask whether it would be possible to move our meeting to Friday afternoon. Please ensure the meeting is moved on Friday afternoon.
-
-Thank you for your attention to this matter.
+Thank you, and we can discuss this further at your convenience.
 
 Best regards,
 [Your Name]
-[Your Email]
-[Your Email Address]
+[Email Address]
+[Date]
+[Time]
 
-I am writing this email in order to ask whether it would be possible to move our meeting to Friday afternoon. Please ensure the meeting is moved on
+This email is to be sent to us by Friday afternoon. Please let me know the time and date. I will send you a meeting on Friday afternoon.
+
+Thank you, and we can discuss this further at your convenience.
+
+Best regards,
+[Your Name]
+[Email Address]
+[Date]
+[Time]
+
+This email is to be sent
 --------------------------------------------------------------------------------
 [Q8] [General] Explain in at most 4 sentences what a budget is, in simple everyday language.
-[A8] A budget is a detailed plan that lets you see what things you can buy and how much you can save over time. It helps you make informed decisions about your spending. For example, if you want to buy energy efficient appliances, a budget will help you choose the right ones that fit your budget. If you want to save money on your savings, a budget will help you save more than what you can buy without worrying about how much you save. This makes your budget a clear and easy-to-use tool for making smart decisions about your spending. In short, a budget is a clear and easy-to-use tool for making smart decisions about your spending. By using this format, you can make better financial decisions about saving money without needing to know every detail. In short, a budget
+[A8] A budget is a set of financial statements that shows how much money you have in your income and expenses over a specific period. It helps you see how much you actually spend each month. By using a simple formula, you can find the total amount of money you have in your income and expenses over a specific time. This helps you make informed decisions about your spending.
+
+For example, if you have a budget where you spend a lot of money, you would need to calculate how much money you have in your income and expenses over a specific time. This helps you make informed decisions about your spending. If you spend a lot of money on things like rent or utilities, you would need to calculate how much money you spend each month. This helps you make informed decisions about your spending. By doing
 --------------------------------------------------------------------------------
 
 [In-domain prompts from val_jsonl]
 --------------------------------------------------------------------------------
-[eval tags] ['idx=8', 'idx=76', 'idx=86', 'idx=11', 'idx=65', 'idx=74', 'idx=5', 'idx=34', 'idx=105', 'idx=71']
+[eval tags] ['idx=18', 'idx=1', 'idx=85', 'idx=36', 'idx=121', 'idx=96', 'idx=42', 'idx=13', 'idx=19', 'idx=127']
 --------------------------------------------------------------------------------
-[V1] idx=8 bucket=A_general
+[V1] idx=18 bucket=B_code
 [User]
-Summarize this in exactly 3 bullet points: "For example, if you have acne-prone skin, use a mild cleanser that removes oil." Keep each bullet short.
-[Model]
-- A mild cleanser removes oil.
-- It is effective for treating acne.
-- It is effective for preventing acne.
-- It is effective for preventing acne.
-- It is effective for preventing acne.
-- It is effective for preventing acne.
-- A mild cleanser is effective for treating acne.
-- A mild cleanser is effective for treating acne.
-- A mild cleanser is effective for treating acne.
-- A mild cleanser is effective for preventing acne.
-- A mild cleanser is effective for preventing acne.
-- A mild cleanser is effective for preventing acne.
-- A mild cleanser is effective for preventing acne.
-- A mild cleanser is effective for preventing acne.
-- A mild cleanser is effective for preventing acne
---------------------------------------------------------------------------------
-[V2] idx=76 bucket=B_code
-[User]
-Write `count_words` as a Python function. Convert the text to lowercase, split on whitespace, and return a dictionary mapping each word to its count. Do not include examples, tests, or explanations in the answer. Return only Python code.
-[Model]
-def count_words(text):
-    words = text.split()
-    counts = {}
-    for word in words:
-        if word in counts:
-            counts[word] = counts[word] + 1
-        else:
-            counts[word] = 1
-    return counts
-
-count_words("This is a test") # Outputs 3 words
-# Output: {'a': 1, 'b': 2, 'c': 3}
-# Output: {'b': 1, 'c': 2, 'd': 3}
-# Output: {'a': 1, 'b': 2, 'c': 3}
-# Output: {'d': 3, 'c': 4, 'e': 4, 'f': 4}
-# Output: {'e': 4
---------------------------------------------------------------------------------
-[V3] idx=86 bucket=B_code
-[User]
-Write `is_prime` as a Python function. Check whether the integer `n` is a prime number. For example, `is_prime(1)` should return `False`. Define exactly one top-level function. Return only Python code.
-[Model]
-def is_prime(n):
-    if n < 2:
-        return False
-    if n == 2:
-        return True
-    if n % 2 == 0:
-        return False
-    i = 3
-    while i * i <= n:
-        if n % i == 0:
-            return False
-        i = i + 2
-    return True
-
-if __name__ == '__main__':
-    n = 3
-    print(is_prime(n)) # Output: False
-    print(True) # True
-    print(True) # False
-    print(True) # False
-    print(True) # True
-    print(True) # False
-    print(True) # False
-    print(True) # False
-    print(True) # True
-    print(True) # False
-    print
---------------------------------------------------------------------------------
-[V4] idx=11 bucket=B_code
-[User]
-Solve this short Python task by defining `clamp(x, low, high)`. Return `x` unchanged when it is already between `low` and `high`. Do not include examples, tests, or explanations in the answer. Return only Python code.
-[Model]
-def clamp(x, low, high):
-    if x < low:
-        return low
-    if x > high:
-        return high
-    return x
-
-x = 10
-y = 5
-clamp(x, low, high)
-print("The value of x is", x)
-# Output: 5
-0
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
---------------------------------------------------------------------------------
-[V5] idx=65 bucket=B_code
-[User]
-Define `remove_none(items)`. Return a new list with every `None` value removed. Only remove values that are `None`. Define exactly one top-level function. Return only Python code.
+Write a beginner-friendly implementation of `remove_none(items)`. Remove `None` entries while keeping all other items in their original order. Use a simple loop or list comprehension. Define exactly one top-level function. Return only Python code.
 [Model]
 def remove_none(items):
     result = []
@@ -331,89 +237,172 @@ print(remove_none(items)) # returns [None]
 
 # Output
 --------------------------------------------------------------------------------
-[V6] idx=74 bucket=B_code
+[V2] idx=1 bucket=A_general
 [User]
-Write `reverse_string` as a Python function. Implement a simple string reversal function. For example, `'abc'` should return `'cba'`. Define exactly one top-level function. Return only Python code.
+What is your sister's role in the bakery? Use at most 3 sentences. Use simple everyday language.
 [Model]
-def reverse_string(s):
-    result = ""
-    i = 0
-    while i < len(s):
-        result = s[i] + result
-        i = i + 1
-    return result
-
-print(reverse_string("abc")) # Output: cba"
-
-# Output: cba"
-
-# Example
-def reverse_string(s):
-    result = ""
-    i = 0
-    while i < len(s):
-        result = s[i] + result
-        i = i + 1
-    return result
-
-print(reverse_string("cba")) # Output: cba"
-
-# Output: cba"
-
-# Example
-def reverse_string(s):
-    result = ""
-    i = 0
-    while i <
+She is the boss of the bakery and plays a key role in the production of the specials. She is also the boss of the specials that sell special items like cookies, cereal, and candy. Her job is to help the specials make the best possible choices for their guests. This role helps her stay in touch with the company and the people around her. So, she is the boss of the specials and the specials always keep her place in the team. She is also the boss of the specials where she plays a key role in making the best decisions for the specials. So, she is the boss of the specials and the specials always keep her place in the team. This role helps her stay in touch with the company and the people around her
 --------------------------------------------------------------------------------
-[V7] idx=5 bucket=A_general
+[V3] idx=85 bucket=A_general
 [User]
-What are some fruits and vegetables I can grow in England. need to be able to grow them in my garden Use at most 3 sentences. Use simple everyday language.
+Write a letter to my friend and client Debbie explaining that my phone number has changed and that I am sorry for the lapse in communication. Also, my massage therapy practice is no longer going to offer on-site services and her friend will have to come to the day spa if she wants a massage. Included in the letter are business cards and seasonal promotions for the business. Use at most 3 sentences.
 [Model]
-You can grow a variety of fruits like apples, bananas, and oranges that are easy to grow in your garden. These fruits are delicious and healthy for the garden. If you want a more individualized experience, try a few different varieties of fruits to get you started. Finally, enjoy your garden for a unique experience without needing any special equipment. If you need to add a small garden bed or a small plot of ground, try a few different varieties of fruits to get you started. This approach ensures a smooth and delicious garden for everyone. If you want a more individualized experience with just a few different fruits, try a few different varieties of fruits to get you started. Finally, enjoy your garden for a unique experience without needing any special equipment. If you want a more individualized experience with just
+My phone number has changed so I cannot speak with a friend. My massage therapy practice is no longer going to offer on-site services and her friend will have to come to the day spa. Please let me know when you would like this change. Thanks.
+
+Thank you, Debbie.
+
+Best regards,
+[Your name]
+[Your phone number]
+[Your massage therapy practice]
+[Your massage therapy]
+[Your massage therapy]
+[Your business cards]
+[Business cards]
+[Business cards]
+[Your massage therapy]
+[Your massage therapy]
+[Your personal statement]
+
+Please let me know when you would like this change. Thanks.
+
+Best regards,
+[Your phone
 --------------------------------------------------------------------------------
-[V8] idx=34 bucket=B_code
+[V4] idx=36 bucket=A_general
 [User]
-Create a small helper function called `running_sum`. For each position, store the sum of all values seen so far. Use a simple loop. Prefer clear loops and conditionals. Return only Python code.
+What is the concept of quantum computing, and how does it differ from classical computing? Use at most 3 sentences. Use simple everyday language.
 [Model]
-def running_sum(nums):
+Quantum computing allows computers to perform calculations in multiple states simultaneously, making them very fast and reliable. It is like having a superpower that can solve complex problems by breaking them down into smaller, more manageable steps. This makes it a powerful tool for solving many problems in the future. The reason why quantum computing is so important is because it enables faster and more efficient computer systems than classical methods. This difference is what makes quantum computing different from classical computing. This difference is why quantum computing is so important for our understanding of nature. Ultimately, quantum computing is the key to unlocking new possibilities in science and technology. So, the concept of quantum computing is a fundamental part of quantum computing. It is a crucial tool for exploring the universe and driving progress in science and technology. It is essential for our
+--------------------------------------------------------------------------------
+[V5] idx=121 bucket=A_general
+[User]
+Thinking Process:
+
+1.  **Analyze the Request:**
+    *   **Task:** Rewrite an instruction prompt for a small assistant.
+    *   **Constraints:**
+        *   Preserve original task intent (extract 2 main ideas from the text, keep points short).
+        *   Keep same output format and constraints (summary_bullets, extract_key_points, short points).
+        *   Vary wording naturally.
+        *   Do not add examples, explanations, code, placeholders, or multiple options.
+        *   Return only one rewritten prompt.
+[Model]
+- Extract 2 main ideas from the text.
+- Keep them in a single short paragraph.
+- List only the main ideas in this short paragraph.
+- Return only one rewritten prompt.
+- Please review these two sentences before proceeding with the final document.
+- [Insert summary]
+- This report contains the most important information.
+- [Insert next sentence]
+- This is the second most important piece of information.
+- [Insert next sentence]
+- This is the third most important piece.
+- [Insert next sentence]
+- This is the fourth most important piece.
+- [Insert next sentence]
+- This is the fifth most important piece.
+- [Insert next sentence]
+- This is the sixth most important piece.
+- [
+--------------------------------------------------------------------------------
+[V6] idx=96 bucket=A_general
+[User]
+Summarize this in exactly 3 bullet points: "For example, if you have acne-prone skin, use a mild cleanser that removes oil." Keep each bullet short.
+[Model]
+- Acne-prone skin is removed by a mild cleanser.
+- It is removed by a mild cleanser.
+- For example, a mild cleanser removes oil.
+- For example, a mild cleanser removes dirt.
+- For example, a mild cleanser removes oil.
+- For example, a mild cleanser removes dirt.
+- For example, a mild cleanser removes dirt.
+- For example, a mild cleanser removes dirt.
+- For example, a mild cleanser removes dirt.
+- For example, a mild cleanser removes dirt.
+- For example, a mild cleanser removes dirt.
+- For example, a mild cleanser removes dirt.
+- For example, a mild cleanser removes dirt.
+-
+--------------------------------------------------------------------------------
+[V7] idx=42 bucket=A_general
+[User]
+What are hyper signs and what can I do about hyperglycemia? Use at most 3 sentences. Use simple everyday language.
+[Model]
+Hyperglycemia is when blood sugar levels get too high without enough insulin or other nutrients to move through. It can be caused by problems in the body, such as diabetes or heart disease, or by taking too much medicine or food. To help you feel better, you should check your blood sugar regularly and eat a balanced diet. If you have any questions, call your doctor.
+
+For more information, please visit your doctor. They should be able to provide guidance on how to manage your blood sugar levels. They should also be able to refer you to a healthcare professional for advice on managing your blood sugar levels effectively.
+
+Last reviewed September 2012.
+
+What is hyperglycemia? Hyperglycemia is when blood sugar levels get too high without enough insulin or other nutrients to move through
+--------------------------------------------------------------------------------
+[V8] idx=13 bucket=A_general
+[User]
+Summarize this in exactly 3 bullet points: "ll definitely try to attend as well. It would be great to get a sense of how the community is feeling about the proposed development. I" Keep each bullet short.
+[Model]
+- Attendees feel a sense of belonging and community.
+- Attendees feel a sense of belonging.
+- Attendees feel a sense of belonging.
+- Attendees feel a sense of community.
+- Attendees feel a sense of belonging.
+- Attendees feel a sense of belonging.
+- Attendees feel a sense of belonging.
+- Attendees feel a sense of belonging.
+- Attendees feel a sense of belonging.
+- Attendees feel a sense of belonging.
+- Attendees feel a sense of belonging.
+- Attendees feel a sense of belonging.
+- Attendees feel a sense of belonging.
+- Attendees feel a sense of belonging.
+- Attendees
+--------------------------------------------------------------------------------
+[V9] idx=19 bucket=B_code
+[User]
+Write `remove_none` as a Python function. Filter out values that are exactly `None`. Return only Python code.
+[Model]
+def remove_none(lst):
     result = []
-    current_sum = 0
-    for num in nums:
-        current_sum = current_sum + num
-        result.append(current_sum)
+    for item in lst:
+        if item is not None:
+            result.append(item)
     return result
 
-if __name__ == '__main__':
-    nums = [1, 2, 3, 4, 5]
-    print(running_sum(nums)) # Output 1
-    print(running_sum(nums)) # Output 2
-    print(running_sum(nums)) # Output 3
-    print(running_sum(nums)) # Output 4
-    print(running_sum(nums)) # Output 5
-    print(running_sum(nums)) # Output 6
-    print(running_sum(nums)) # Output 7
-    print(running_sum(
+remove_none(lst) # returns [None]
+
+##### Output
+[None]
+##### See also
+[1]
+##### Reference
+[2]
+##### Reference
+[3]
+##### Reference
+[4]
+##### Reference
+[5]
+##### Reference
+[6]
+##### Reference
+[7]
+##### Reference
+[8]
+##### Reference
+[9]
+##### Reference
+[10]
+##### Reference
+[11]
+##### Reference
+[12]
+##### Reference
+[13
 --------------------------------------------------------------------------------
-[V9] idx=105 bucket=A_general
+[V10] idx=127 bucket=A_general
 [User]
-Who is Meghan McCain and what is she most known for? Use at most 3 sentences. Use simple everyday language.
+I'm an art student, and I'm going to be in Scottsdale in May. What are 5 places I can go that have good art, especially modern art? Use at most 3 sentences. Use simple everyday language.
 [Model]
-Meghan McCain is a former American football wide receiver who played in the National Football League (NFL) for the Los Angeles Rams and the New England Patriots. She is best known for her time as a member of the American Football League's first-ever All Star team, which he won in 2006. She also became famous for her time as a member of the New England Patriots in the NFL's first all-time leader in game history. Her most famous role was as the head coach for the New England Patriots during the 2006 season. She is also known for her time as the head coach for the New England Patriots during the 2007 season. Her most famous role was as the head coach for the New England Patriots during the 2007 season. Her most famous role was as
---------------------------------------------------------------------------------
-[V10] idx=71 bucket=A_general
-[User]
-What should I do to write engaging headings, headings that capture peoples attention or better, makes them have to read what is below. Use at most 3 sentences. Use simple everyday language.
-[Model]
-Make sure the headings are clear and easy for readers to read. They make the content more engaging and easier to understand. Make sure the headings are clear and easy for readers to read. Finally, make sure the headings are clear and easy to read without any distractions. These tips help you make the most of your reading time.
-
-P.S. If you need further assistance with headings, please consult a healthcare professional.
-
-#Heading_Tips #Biology
-
-When you want to make sure everyone is on the same page, make sure to include a few key points like the following:
-
-- Focus on clear and easy content.
-- Use clear and easy-to-use language.
-- Use clear and easy-to-use
+The city of Scottsdale is known for its modern art, with modern artworks like the "Chicago" exhibit and "The Great Gatsby," which showcase modern art. These places are perfect for exploring the city's rich history and vibrant culture. You can also explore the historic district of "The Gatsby" by visiting the "Garland" museum or the historic district of "The Gatsby" by visiting the historic district of "The Gatsby." These places are perfect for exploring the city's rich history and vibrant culture. If you prefer a more modern experience, you can visit the historic district of "The Gatsby" by visiting the historic district of "The Gatsby." These places are perfect for exploring the city's rich history and vibrant
 --------------------------------------------------------------------------------

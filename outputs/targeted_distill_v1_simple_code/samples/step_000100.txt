@@ -13,391 +13,294 @@ in_domain: n=10 mode=full_context show_ref=False dump_prompt=False sample_eval_j
         result.append(current_sum)
     return result
 
-print(running_sum([1, 2, 3, 4, 5]))
+print(running_sum([1, 2, 3, 4, 5])) # Output: 6.0
+
 # Output: 6.0
 
 # Output: 6.0
-# Output: 6.0
-# Output: 6.0
-# Output: 6.0
-# Output: 6.0
-# Output: 6.0
-# Output: 6.0
-# Output: 6.0
-# Output: 6.0
-# Output: 6.0
-# Output: 6.0
-# Output: 6.0
-# Output: 6
+
+# Output: 7.0
+
+# Output: 7.0
+
+# Output: 7.0
+
+# Output: 7.0
+
+# Output: 7.0
+
+# Output: 7.0
+
+# Output: 7.0
+
+# Output: 7.0
+
+# Output: 7.0
+
+#
 --------------------------------------------------------------------------------
 [Q2] [Code] Write a Python function lowercase_keys(d) that returns a new dictionary with lowercase string keys.
 [A2] def lowercase_keys(d):
     result = {}
     for key in d:
-        new_key = key.lower()
-        result[new_key] = d[key]
+        if key not in result:
+            result[key] = d[key]
+        else:
+            result[key] = d[key]
     return result
 
-print(lowercase_keys(d)) # Output: {'key1': 'value1', 'key2': 'value2'}
-# Output: {'key1': 'value1', 'key2': 'value2'}
-# Output: {'key1': 'value1', 'key2': 'value2'}
-# Output: {'key1': 'value1', 'key2': 'value2'}
-# Output: {'key1': 'value1', 'key2': 'value2'}
-# Output: {'key1':
+lower_dict = lowercase_keys(d)
+print(lower_dict) # Output: {'key': 'value', 'key': 'value'}
+# Output: {'key': 'value', 'key': 'value'}
+# Output: {'key': 'value', 'key': 'value'}
+# Output: {'key': 'value', 'key': 'value'}
+# Output: {'key': 'value', 'key': 'value'}
+# Output: {'key': 'value',
 --------------------------------------------------------------------------------
 [Q3] [General] Write a short polite email asking for an update on a job application after an interview.
-[A3] Dear [Name], I hope this message finds you well. I am writing to provide an update on your application. Please let me know if you have any questions or concerns.
+[A3] Hi, I am writing to provide an update on a new job application after my interview. Please let me know if there is anything I can do to help or if you need any assistance. Thank you.
 
-Thank you, and I look forward to hearing from you soon.
+Thank you!
+[Your name]
+[Your name]
+[Your name]
+[Your name]
+[Your name]
+[Your name]
+[Your name]
+[Your name]
+[Your name]
+[Your name]
 
-Best regards,
-[Your Name]
+Thanks,
+[Your name]
+[Your name]
+[Your name]
+[Your name]
+[Your name]
 
-Dear [Name], I hope this message finds you well. I am writing to provide an update on your application after an interview. Please let me know if you have any questions or concerns.
+Thank you,
+[Your name]
+[Your name]
+[Your name]
+[Your name]
+[Your name]
 
-Thank you, and I look forward to hearing from you soon.
-
-Best regards,
-[Your Name]
-
-Dear [Name], I hope this message finds you well. I am writing to provide an update on your application after an interview. Please share any questions
+Thank you,
 --------------------------------------------------------------------------------
 [Q4] [General] Write a short professional email asking to reschedule a meeting to next week.
-[A4] Dear [Name],
+[A4] Hi [General]! I hope you have time for this meeting. I am planning to attend next week and would like to arrange a rescheduled meeting. Please let me know if you need any more details or if you have any other questions. Thank you in advance.
 
-I hope this message finds you well. I am writing to inform you that we will next week arrange a meeting for next week. Please let me know your availability and any arrangements you might have.
-
-Thank you, and I look forward to hearing from you soon.
+Thank you!
 
 Best regards,
-[Your Name]
+[Your name]
+[Your name]
+[Your contact information]
+[Your email address]
+[Your email address]
+[Your email address]
+[Your email address]
+
+Thank you!
 
 Best regards,
-[Your Name]
+[Your name]
+[Your name]
+[Your contact information]
+[Your email address]
+[Your email address]
 
-Please send a letter to the meeting. We hope to meet next week to discuss further.
-
-Thank you, and I look forward to hearing from you soon.
+Thank you!
 
 Best regards,
-[Your Name]
-
-Please send a letter to the meeting. We hope to meet next week to discuss further.
-
-Thank you, and I look forward to hearing from you soon
+[Your name]
 --------------------------------------------------------------------------------
 [Q5] [General] Summarize this in 3 bullet points: 'Regular exercise can improve mood, support heart health, and help maintain energy levels.'
-[A5] - Regular physical activity boosts mood and helps manage stress levels.
-- It supports heart health by reducing the risk of heart disease.
-- It enhances mental health by reducing symptoms of depression and anxiety.
-- Regular physical activity can lead to better weight management by increasing metabolism and building muscle.
-- Physical activity boosts mood and energy levels by reducing stress levels.
-- Physical activity helps maintain energy levels by increasing metabolism and building muscle.
-- Physical activity boosts mood and energy levels by reducing stress levels.
-- Physical activity boosts mood and energy levels by increasing metabolism and building muscle.
-- Physical activity boosts mood and energy levels by decreasing stress levels.
-- Physical activity boosts mood and energy levels by increasing metabolism and building muscle.
-- Physical activity boosts mood
+[A5] - Regular physical activity helps manage stress levels by reducing the body's stress hormones like cortisol.
+- It helps regulate mood by releasing endorphins, which are natural mood lifters.
+- Exercise boosts energy levels by increasing metabolism and building muscle.
+- It promotes better sleep and improves overall well-being.
+- Regular physical activity can also improve mood by reducing stress hormones like cortisol.
+- Regular physical activity can also improve energy levels by increasing metabolism and building muscle.
+- Regular physical activity can also improve mood by reducing stress hormones like cortisol.
+- Regular physical activity can also improve energy levels by increasing metabolism and building muscle.
+- Regular physical activity can also improve mood by reducing stress hormones like cortisol.
+- Regular physical activity can also improve energy levels
 --------------------------------------------------------------------------------
 [Q6] [General] Rewrite this to be more formal: 'Thanks for the quick reply. I’ll send the file tomorrow.'
-[A6] Thank you for the quick reply. I hope you can send it tomorrow. I hope you can send it tomorrow.
+[A6] Thank you for the quick reply. I have sent the file tomorrow.
 
-Best regards,
-[Your Name]
-[Your Name]
-[Your Name]
-[Your Name]
+Please send the file tomorrow.
 
-Thank you for the quick reply. I hope you can send it tomorrow. I hope you can send it tomorrow.
+Thanks for the quick reply. I have sent the file tomorrow.
 
-Best regards,
-[Your Name]
-[Your Name]
-[Your Name]
+I hope you can send it tomorrow.
 
-Thank you for the quick reply. I hope you can send it tomorrow. I hope you can send it tomorrow.
+Thank you for the quick reply. I have sent the file tomorrow.
 
-Best regards,
-[Your Name]
-[Your Name]
-[Your Name]
+Please send the file tomorrow.
 
-Thank you for the quick reply. I hope you can send it tomorrow. I hope you can send
+Thanks for the quick reply. I have sent the file tomorrow.
+
+Thank you for the quick reply. I have sent the file tomorrow.
+
+Thank you for the quick reply. I have sent the file tomorrow.
+
+Thank you for the quick reply. I have sent the file tomorrow.
+
+Thank you for the quick reply. I have sent the file tomorrow.
+
+Thank you for the quick reply. I
 --------------------------------------------------------------------------------
 [Q7] [General] Rewrite this to be more concise: 'I am writing this email in order to ask whether it would be possible to move our meeting to Friday afternoon.'
-[A7] Please send me an email to ensure we can meet on Friday afternoon. I am also requesting that we schedule a meeting on Friday afternoon. Please let me know your availability and any other details you might need.
+[A7] Please send me an email to the meeting at Friday afternoon. Please let me know if you would like to move on to Friday afternoon.
 
 Thank you,
-[Your Name]
-[Your Name]
-[Your Name]
-[Your Name]
-[Your Name]
-[Your Name]
-[Your Name]
-[Your Name]
-[Your Name]
-[Your Name]
+[Name]
+[Email]
+[Date]
+[Time]
 
 Thank you,
-[Your Name]
-[Your Name]
-[Your Name]
-[Your Name]
-[Your Name]
-[Your Name]
+[Name]
+[Email]
+[Date]
 
 Thank you,
-[Your Name]
-[Your Name]
-[Your Name]
-[Your Name]
-[Your Name
+[Name]
+[Email]
+[Date]
+
+Thank you,
+[Name]
+[Email]
+[Date]
+
+Thank you,
+[Name]
+[Email]
+[Date]
+
+Thank you,
+[Name]
+[Email]
+[Date]
+
+Thank you,
+[Name]
+[Email]
+[Date]
+
+Thank you,
+[Name]
 --------------------------------------------------------------------------------
 [Q8] [General] Explain in at most 4 sentences what a budget is, in simple everyday language.
-[A8] A budget is a set of financial statements that shows how much money you have and how much you want to spend. It helps you make informed decisions about your spending. By showing how much you have, you can help you make informed decisions about your spending.
+[A8] A budget is a set of financial statements that shows how much money you have and how much you can save over the next year. It helps you make informed decisions about your finances and how to spend your money efficiently. In simple everyday terms, it helps you make informed decisions about your finances and how to save for your future. This makes your financial situation more manageable and easier to manage. By focusing on these basics, you can make a big difference in your financial health and well-being.
 
-In simple everyday language, a budget is a set of financial statements that shows how much money you have and how much you want to spend. It helps you make informed decisions about your spending. By showing how much you have, you can make informed decisions about your spending.
-
-The budget is important because it helps you make informed decisions about your spending. It helps you make informed decisions about your spending. By showing how much you have, you can make informed decisions about your spending.
-
-To make informed decisions, you need to
+The following text is an example of a budget. It shows how much money you have and how much you can save over the next year. The budget is a series of financial statements that show how much money you have and how to save for your future. By using these financial statements, you
 --------------------------------------------------------------------------------
 
 [In-domain prompts from val_jsonl]
 --------------------------------------------------------------------------------
-[eval tags] ['idx=99', 'idx=56', 'idx=14', 'idx=0', 'idx=11', 'idx=103', 'idx=74', 'idx=4', 'idx=85', 'idx=88']
+[eval tags] ['idx=112', 'idx=29', 'idx=1', 'idx=23', 'idx=8', 'idx=21', 'idx=25', 'idx=90', 'idx=60', 'idx=4']
 --------------------------------------------------------------------------------
-[V1] idx=99 bucket=B_code
+[V1] idx=112 bucket=A_general
 [User]
-Write `running_max` as a Python function. Build a new list of cumulative maximum values. For example, `[-2, -5, -1]` should become `[-2, -2, -1]`. Prefer clear loops and conditionals. Return only Python code.
+What are other alternative for 'a region typically known for its cold climate.' Use at most 3 sentences. Use simple everyday language.
 [Model]
-def running_max(nums):
-    result = []
-    current_max = None
-    for num in nums:
-        if current_max is None or num > current_max:
-            current_max = num
-        result.append(current_max)
-    return result
-
-if __name__ == '__main__':
-    nums = [[-2, -5, -1]
-    current_max = running_max(nums)
-    print("The max value is", current_max)
-    print("The max value is", current_max)
-    print("The max value is", current_max)
-    print("The max value is", current_max)
-    print("The max value is", current_max)
-    print("The max value is", current_max
+The cold climate is the place where you can find a warm and safe place to live. It's also where you can find a warm and safe place to go. This is a place where you can enjoy the warmth and peace of the world around you. It's also where you can find a safe place to go if you're feeling cold. So, don't forget to wear a hat or a sweater to stay cool and safe! #coldclimate #coolweather #hotcoldclimate #coldweather #aplacebrewing #hotcoldclimate #coldclimate #coldclimate #coldclimate #coldclimate #coldclimate #coldclimate #coldclimate #coldclimate #coldclimate #coldclimate #coldclimate #
 --------------------------------------------------------------------------------
-[V2] idx=56 bucket=B_code
+[V2] idx=29 bucket=A_general
 [User]
-Define a function named `remove_none` with the signature `remove_none(items)`. Do not remove falsey values such as `0`, `False`, or an empty string unless they are actually `None`. For example, `[None, None]` should return `[]`. Prefer clear loops and conditionals. Return only Python code.
+Explain the "no makeup" makeup look to a novice. Include a step-by-step explanation of what needs to be done to achieve this look. Use at most 3 sentences.
 [Model]
-def remove_none(items):
-    result = []
-    for item in items:
-        if item is not None:
-            result.append(item)
-    return result
-
-remove_none(items) # Returns [None, None]
-
-# Example
-result = remove_none(items)
-print(result) # Outputs [None, None]
-
-# Output: [None, None]
-
-# Example
-result = remove_none(items)
-print(result) # Outputs [None, None]
-
-# Output: [None, None]
-
-# Example
-result = remove_none(items)
-print(result) # Outputs [None, None]
-
-# Output: [None, None]
-
-#
+A skilled artist will create a unique and beautiful look that is both functional and visually appealing. This unique look is not just a simple brushwork but a unique blend of colors and shapes that allows for a smooth and vibrant effect. By combining these elements, a skilled artist can create a unique and vibrant look that is both functional and visually appealing. This unique look is a great way to engage with the audience and create a unique and vibrant experience. By combining these elements, a skilled artist can create a unique and vibrant look that is both functional and visually appealing. This unique and vibrant look is a great way to engage with the audience and create a unique and vibrant experience. By combining these elements, a skilled artist can create a unique and vibrant look that is both functional and visually appealing. This unique and vibrant
 --------------------------------------------------------------------------------
-[V3] idx=14 bucket=B_code
-[User]
-Define a function named `clamp` with the signature `clamp(x, low, high)`. Keep `x` inside the inclusive range `[low, high]`. For example, `clamp(-2, 0, 10)` should return `0`. Do not use imports. Return only Python code.
-[Model]
-def clamp(x, low, high):
-    if x < low:
-        return low
-    if x > high:
-        return high
-    return x
-
-clamp(x, low, high) # returns 0
-clamp(x, low, high) # returns 0
-print("Clamping", x, "to", low, "high", high)
-print("Clamping", x, "to", low, "low", low)
-print("Clamping", x, "to", high, "high", high)
-print("Clamping", x, "to", low, "low", low)
-print("Clamping", x, "to", high, "high", high)
-print("Clamping", x, "to", low
---------------------------------------------------------------------------------
-[V4] idx=0 bucket=B_code
-[User]
-Write a Python function `reverse_string(s)`. Reverse the characters of the string and return the result. An empty string should return an empty string. For example, `'你好'` should return `'好你'`. Use simple Python. Return only Python code.
-[Model]
-def reverse_string(s):
-    result = ""
-    i = 0
-    while i < len(s):
-        result = s[i] + result
-        i = i + 1
-    return result
-
-print(reverse_string("你好")) # Output: "你好"
-print(reverse_string("好你")) # Output: "好你"
-print(reverse_string("你好")) # Output: "好你"
-print(reverse_string("你好")) # Output: "好你"
-print(reverse_string("你好")) # Output: "好你"
-print(
---------------------------------------------------------------------------------
-[V5] idx=11 bucket=B_code
-[User]
-Solve this short Python task by defining `clamp(x, low, high)`. Return `x` unchanged when it is already between `low` and `high`. Do not include examples, tests, or explanations in the answer. Return only Python code.
-[Model]
-def clamp(x, low, high):
-    if x < low:
-        return low
-    if x > high:
-        return high
-    return x
-
-if __name__ == '__main__':
-    x = 10
-    low = 5
-    high = 3
-    print(clamp(x, low, high)) # Output: 5
-    print(clamp(x, low, high)) # Output: 3
-    print(clamp(x, low, high)) # Output: 4
-    print(clamp(x, low, high)) # Output: 5
-    print(clamp(x, low, high)) # Output: 6
-    print(clamp(x, low, high)) # Output: 7
-    print(clamp(x, low, high
---------------------------------------------------------------------------------
-[V6] idx=103 bucket=B_code
-[User]
-Implement `running_sum(nums)` in Python. Transform a list of numbers into a list of prefix sums. Use a simple loop. Define exactly one top-level function. Return only Python code.
-[Model]
-def running_sum(nums):
-    result = []
-    current_sum = 0
-    for num in nums:
-        current_sum = current_sum + num
-        result.append(current_sum)
-    return result
-
-print(running_sum([1, 2, 3, 4, 5]))
-# Output: [4, 6, 8, 10]
-# Explanation: The sum of the two numbers is 4 + 6 + 8 = 16.
-# This is the result of the first two numbers.
-# The second number is 16.
-
-# Example
-result = running_sum([1, 2, 3, 4, 5])
-print(result) # Output: 16
-# Explanation: The sum of the two numbers is
---------------------------------------------------------------------------------
-[V7] idx=74 bucket=B_code
-[User]
-Write `reverse_string` as a Python function. Implement a simple string reversal function. For example, `'abc'` should return `'cba'`. Define exactly one top-level function. Return only Python code.
-[Model]
-def reverse_string(s):
-    result = ""
-    i = 0
-    while i < len(s):
-        result = s[i] + result
-        i = i + 1
-    return result
-
-print(reverse_string("abc")) # Output: 'cba'
-print(reverse_string("cba")) # Output: 'bca'
-print(reverse_string("bca")) # Output: 'bca'
-print(reverse_string("bca")) # Output: 'bca'
-print(reverse_string("bca")) # Output: 'bca'
-print(reverse_string("bca")) # Output: 'bca'
-print(reverse_string("bca")) # Output: 'bca'
---------------------------------------------------------------------------------
-[V8] idx=4 bucket=B_code
-[User]
-Create `remove_none(items)` for this simple Python task. Build a list containing all items except `None`. For example, `[1, None, 2]` should return `[1, 2]`. Prefer clear loops and conditionals. Return only Python code.
-[Model]
-def remove_none(items):
-    result = []
-    for item in items:
-        if item is not None:
-            result.append(item)
-    return result
-
-remove_none(items) # Output: [1, None, 2]
-
-# Example
-print(remove_none(items)) # Output: [1, None, 2]
-
-# Output: [1, None, 2]
-
-# Example
-print(remove_none(items)) # Output: [1, None, 2]
-
-# Output: [1, None, 2]
-
-# Example
-print(remove_none(items)) # Output: [1, None, 2]
-
-# Output: [1, None, 2]
-
-#
---------------------------------------------------------------------------------
-[V9] idx=85 bucket=A_general
+[V3] idx=1 bucket=A_general
 [User]
 What is your sister's role in the bakery? Use at most 3 sentences. Use simple everyday language.
 [Model]
-She is the boss of the bakery and plays a key role in the production process. She is also the boss of the shop where the bakery is located. Her job is to ensure that the shop stays competitive and productive, ensuring everyone knows how to work together effectively. This role helps the shop stay competitive and productive for the entire shop.
-
-In addition, she plays a key role in the production process as a supervisor who ensures that the shop stays competitive and productive throughout the production process. This role helps the shop stay competitive and productive throughout the production process. Finally, she plays a key role in the marketing department as a sales manager who ensures the shop stays competitive and productive throughout the production process. This role helps the shop stay competitive and productive throughout the production process. By being
+She is the boss of the bakery and she plays a key role in the bakery's production. She is the boss of the shop where the bakery works. She is also the boss of the shop where the shop is the manager. She is also the boss of the shop where the shop is the manager. She is also the boss of the shop where the shop is the manager. She is also the boss of the shop where the shop is the manager. She is also the boss of the shop where the shop is the manager. She is also the boss of the shop where the shop is the manager. She is also the boss of the shop where the shop is the manager. She is also the boss of the shop where the shop is the manager. She is also
 --------------------------------------------------------------------------------
-[V10] idx=88 bucket=B_code
+[V4] idx=23 bucket=B_code
 [User]
-Solve this short Python task by defining `remove_none(items)`. Keep the order of the remaining items unchanged. Define exactly one top-level function. Return only Python code.
+Write a Python function `merge_counts(a, b)`. Create a combined count dictionary from `a` and `b`. An empty dictionary should work normally. For example, `{'a': 1}` and `{'a': 2, 'b': 3}` should return `{'a': 3, 'b': 3}`. Do not include examples, tests, or explanations in the answer. Return only Python code.
 [Model]
-def remove_none(items):
-    result = []
-    for item in items:
-        if item is not None:
-            result.append(item)
+def merge_counts(a, b):
+    result = {}
+    for key in a:
+        result[key] = a[key]
+    for key in b:
+        if key in result:
+            result[key] = result[key] + b[key]
+        else:
+            result[key] = b[key]
     return result
 
-remove_none(items) # Outputs [None]
+merge_counts(a, b) # returns {'a': 1, 'b': 3, 'c': 4}
+# Output: {'a': 1, 'b': 3, 'c': 4}
+# Example: {'a': 1, 'b': 3, 'c': 4}
+# Output: {'a': 1, 'b': 3, 'c': 4}
+# Example:
+--------------------------------------------------------------------------------
+[V5] idx=8 bucket=A_general
+[User]
+What are some fruits and vegetables I can grow in England. need to be able to grow them in my garden Use at most 3 sentences. Use simple everyday language.
+[Model]
+You can grow fruit and vegetables in your garden by growing them in your own garden or in a container that you can keep for yourself. You can also grow vegetables in containers that you can keep for your garden or in a garden with a garden that you can grow. These plants are easy to grow and have a lot of room for growth. You can also grow tomatoes, lettuce, and carrots in containers that you can grow. These plants are great for growing in your garden or in a container that you can grow. These plants are all grown in your garden or in a container that you can grow. These plants are easy to grow and have a lot of room for growth. You can also grow tomatoes, lettuce, and carrots in containers that you can grow. These plants are easy to grow
+--------------------------------------------------------------------------------
+[V6] idx=21 bucket=A_general
+[User]
+What are percentiles? A coworker at work told me to use that method to analyze data we are reviewing. Use at most 3 sentences. Use simple everyday language.
+[Model]
+To find the percentiles, you need to calculate the average of two numbers and then divide by their respective values. The percentile is the number that appears most frequently in the data. So, for example, if you have a total of 3 cows, the percentile would be 3/3 = 1.5. This means that the coworker has a mean of 1.5 cows per day.
 
-# Example
-print(remove_none(items)) # Outputs [None]
+The percentile is then calculated by dividing the total number of cows by the number of days, which equals 1.5 cows per day. This gives us a percentage that represents the overall percentage of cows that appear more frequently than the average cow. So, the percentile is 1.5 cows per day.
 
-# Output: [None]
-[None]
+The percentile is then multiplied by 100 to get a percentage
+--------------------------------------------------------------------------------
+[V7] idx=25 bucket=B_code
+[User]
+Solve this short Python task by defining `clamp(x, low, high)`. Limit a value so it cannot go below `low` or above `high`. Prefer clear loops and conditionals. Return only Python code.
+[Model]
+def clamp(x, low, high):
+    if x < low:
+        return low
+    if x > high:
+        return high
+    return x
 
-# Example
-print(remove_none(items)) # Outputs [None]
+if __name__ == '__main__':
+    x = 3
+    low = 5
+    high = 6
+    print(clamp(x, low, high)) # Outputs 5.0.0
+    print(clamp(x, low, high)) # Outputs 5.0.0
+    print(clamp(x, low, high)) # Outputs 5.0.0
+    print(clamp(x, low, high)) # Outputs 5.0.0
+    print(clamp(x, low, high)) # Outputs 5.0.0
+    print(clamp(x
+--------------------------------------------------------------------------------
+[V8] idx=90 bucket=A_general
+[User]
+What is the population of Tokyo, Japan? How does it rank among the most populous cities in the world? Use at most 3 sentences. Use simple everyday language.
+[Model]
+The population of Tokyo is approximately 3,000,000 people. This number represents the most populous city in the world. The other cities with more people are Tokyo, which has a much smaller population. So, the population of Tokyo is the most populous city in the world. The average number of people per household is close to 2 million people. Therefore, the population of Tokyo is approximately 2 million people.
 
-# Output: [None]
-[None]
+The population of Tokyo is approximately 3,000,000 people. This is the most populous city in the world, with a population of over 2 million people. The average number of people per household is close to 2 million people. Therefore, the population of Tokyo is approximately 3,000,000 people.
 
-# Example
-print(remove_none(items)) # Outputs [None]
-
-# Output: [None]
-[None]
-
-# Example
-print(remove_none(items)) # Outputs [None]
+The population of Tokyo is approximately 3,000,000
+--------------------------------------------------------------------------------
+[V9] idx=60 bucket=A_general
+[User]
+What are some good horror movies to watch? They should be monster films, I do not want any ghost or psychological picks. At least 4. Use at most 3 sentences. Use simple everyday language.
+[Model]
+You can watch a monster movie as a small, scary movie. You can also watch a horror movie as a big, scary movie. You can also watch a horror movie as a big, scary movie. You can also watch a horror movie as a big, scary movie. You can also watch a horror movie as a big, scary movie. You can also watch a horror movie as a big, scary movie. You can also watch a horror movie as a big, scary movie. You can also watch a horror movie as a big, scary movie. You can also watch a horror movie as a big, scary movie. You can also watch a horror movie as a big, scary movie. You can also watch a horror movie as a big, scary movie. You can also watch a horror movie
+--------------------------------------------------------------------------------
+[V10] idx=4 bucket=A_general
+[User]
+How can we develop antiviral therapies that target specific stages of the viral replication cycle, and what are the potential benefits and drawbacks of these therapies compared to broad-spectrum treatments? Use at most 3 sentences. Use simple everyday language.
+[Model]
+If you have a specific stage of viral replication, such as a single-celled virus, then you might be able to use these treatments to stop the virus from spreading. This could be because the virus is resistant to many different antibiotics, making it difficult for the immune system to fight off the infection effectively. Additionally, if the virus is a single-celled virus, it could be difficult to treat with other types of drugs, which could make the virus more resistant to treatment. These treatments would also be expensive and require a lot of money to get good. Finally, if the virus is a multi-celled virus, it could be hard to treat with other types of drugs, which could make the virus harder to treat. These treatments would also be expensive and require a lot of money to
 --------------------------------------------------------------------------------
