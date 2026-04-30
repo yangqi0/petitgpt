@@ -524,17 +524,14 @@ def openai_compatible_chat(
     max_tokens: int = 120,
     api_key: Optional[str] = None,
     timeout: int = 120,
+    disable_thinking: bool = True,
 ) -> str:
-    import urllib.error
     import urllib.request
+    import urllib.error
 
-    api_key = (
-        api_key
-        or os.environ.get("OPENAI_API_KEY")
-        or os.environ.get("VLLM_API_KEY")
-        or "EMPTY"
-    )
+    api_key = api_key or os.environ.get("OPENAI_API_KEY") or os.environ.get("VLLM_API_KEY") or "EMPTY"
     url = api_base.rstrip("/") + "/chat/completions"
+
     payload = {
         "model": model,
         "messages": [
@@ -544,6 +541,12 @@ def openai_compatible_chat(
         "temperature": temperature,
         "max_tokens": max_tokens,
     }
+
+    # Qwen3 / Qwen3.5 thinking models may emit visible reasoning unless thinking is disabled.
+    # vLLM accepts this non-OpenAI-standard field in the OpenAI-compatible endpoint.
+    if disable_thinking:
+        payload["chat_template_kwargs"] = {"enable_thinking": False}
+
     data = json.dumps(payload).encode("utf-8")
     req = urllib.request.Request(
         url,
@@ -556,10 +559,19 @@ def openai_compatible_chat(
     )
     with urllib.request.urlopen(req, timeout=timeout) as resp:
         out = json.loads(resp.read().decode("utf-8"))
-    return out["choices"][0]["message"]["content"]
 
+    msg = out["choices"][0]["message"]
+    content = msg.get("content") or ""
 
-def print_counter(title: str, counter: Counter) -> None:
-    print(f"\n[{title}]")
-    for k, v in counter.most_common():
-        print(f"  {k}: {v}")
+    # Safety cleanup in case the server still returns visible <think> blocks.
+    content = re.sub(r"(?is)<think>.*?</think>\s*", "", content).strip()
+
+    if content.lower().startswith("thinking process:"):
+        raise RuntimeError(
+            "Teacher returned visible thinking content. "
+            "Check that chat_template_kwargs={'enable_thinking': False} is supported by your vLLM server, "
+            "or restart vLLM with --default-chat-template-kwargs '{\"enable_thinking\": false}'."
+        )
+
+    return content
+
