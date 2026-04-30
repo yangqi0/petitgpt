@@ -28,7 +28,7 @@ def main() -> None:
     field = answer_field(args.mode)
 
     for row in rows:
-        raw = normalize_text(row.get(field, "") or "")
+        raw = row.get(field, "") or ""
         code = extract_first_code_block(raw)
         entry = row["entry_point"]
         reasons = verify_ast_structure(code, entry)
@@ -41,7 +41,22 @@ def main() -> None:
                 if test_err:
                     reasons.append(f"test_detail:{test_err}")
         if not reasons:
+            # passes.append({
+            #     "messages": [
+            #         {"role": "user", "content": row["prompt"]},
+            #         {"role": "assistant", "content": code},
+            #     ],
+            #     "meta": {
+            #         "bucket": "B_code",
+            #         "source": row["source"],
+            #         "source_key": row.get("source_key"),
+            #         "family": row.get("family"),
+            #         "entry_point": entry,
+            #         "generation_round": row["meta"].get("generation_round", 1),
+            #     },
+            # })
             passes.append({
+                "id": row["id"],
                 "messages": [
                     {"role": "user", "content": row["prompt"]},
                     {"role": "assistant", "content": code},
