@@ -217,9 +217,30 @@ def verify_ast_structure(code: str, entry_point: str) -> List[str]:
 def _run_tests_worker(code: str, entry_point: str, tests: List[str], queue: mp.Queue) -> None:
     try:
         builtins = {
-            "len": len, "range": range, "enumerate": enumerate, "sum": sum, "min": min, "max": max,
-            "abs": abs, "all": all, "any": any, "sorted": sorted, "list": list, "dict": dict,
-            "set": set, "tuple": tuple, "str": str, "int": int, "float": float, "bool": bool, "zip": zip
+            "len": len,
+            "range": range,
+            "enumerate": enumerate,
+            "sum": sum,
+            "min": min,
+            "max": max,
+            "abs": abs,
+            "all": all,
+            "any": any,
+            "sorted": sorted,
+            "reversed": reversed,
+            "zip": zip,
+            "isinstance": isinstance,
+            "type": type,
+            "chr": chr,
+            "ord": ord,
+            "list": list,
+            "dict": dict,
+            "set": set,
+            "tuple": tuple,
+            "str": str,
+            "int": int,
+            "float": float,
+            "bool": bool,
         }
         glb: Dict[str, Any] = {"__builtins__": builtins}
         loc: Dict[str, Any] = {}
