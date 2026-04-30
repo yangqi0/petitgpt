@@ -605,9 +605,9 @@ python distill/build_targeted_distill_mix_v1.py \
   --out_train_jsonl datasets/distill/targeted_distill_mix_v1/train.jsonl \
   --out_val_jsonl datasets/distill/targeted_distill_mix_v1/val.jsonl \
   --target_code_train 5000 \
-  --target_general_train 550 \
+  --target_general_train 650 \
   --target_code_val 500 \
-  --target_general_val 54 \
+  --target_general_val 60 \
   --seed 13
 ```
 
