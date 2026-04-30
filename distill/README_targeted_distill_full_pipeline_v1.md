@@ -4,17 +4,17 @@
 
 内容包括：
 
-1. Runpod 上如何准备环境  
-2. 如何用 vLLM 跑 `Qwen/Qwen3.5-35B-A3B-FP8` 作为 teacher  
-3. 需要准备哪些文件、放到哪里  
-4. 需要安装哪些 pip 包  
-5. 如何导出原始数据  
-6. 如何跑 general 侧脚本  
-7. 如何跑 code 侧脚本  
-8. 如何把 general + code 混成最终 distill train/val  
-9. 如何启动 targeted distill 训练  
-10. 如何记录和查看 loss 曲线  
-11. `smoke` 是什么，什么时候该用，什么时候可以直接跑全量  
+1. Runpod 上如何准备环境
+2. 如何用 vLLM 跑 `Qwen/Qwen3.5-35B-A3B-FP8` 作为 teacher
+3. 需要准备哪些文件、放到哪里
+4. 需要安装哪些 pip 包
+5. 如何导出原始数据
+6. 如何跑 general 侧脚本
+7. 如何跑 code 侧脚本
+8. 如何把 general + code 混成最终 distill train/val
+9. 如何启动 targeted distill 训练
+10. 如何记录和查看 loss 曲线
+11. `smoke` 是什么，什么时候该用，什么时候可以直接跑全量
 12. 一份建议的“从 0 到训练”的实际执行顺序
 
 ---
@@ -48,7 +48,7 @@
 这是这份 README 默认采用的 teacher 配置。
 
 ### 推荐模板
-推荐使用 **Runpod 官方 PyTorch 模板**。  
+推荐使用 **Runpod 官方 PyTorch 模板**。
 这样通常已经带好比较合适的 CUDA / Python / PyTorch 环境。
 
 ### 推荐连接方式
@@ -375,7 +375,7 @@ python distill/export_hf_code_sources_v1.py \
 
 ### 11.1 `smoke` 是什么
 
-`smoke` 就是一个 **小规模 sanity check**。  
+`smoke` 就是一个 **小规模 sanity check**。
 它不是最终训练集，而是用来先确认：
 
 - vLLM teacher 能正常返回结果
@@ -387,13 +387,13 @@ python distill/export_hf_code_sources_v1.py \
 因为只要有一个字段名写错、路径写错、verifier 太严，你全量跑会浪费很多时间。
 
 ### 11.3 smoke 能不能做大
-可以，但不建议把 smoke 当成最终训练集。  
+可以，但不建议把 smoke 当成最终训练集。
 更好的顺序是：
 
-1. 先做小 smoke  
-2. 看 reject reasons  
-3. 修一下问题  
-4. 再跑 full pipeline  
+1. 先做小 smoke
+2. 看 reject reasons
+3. 修一下问题
+4. 再跑 full pipeline
 5. 最终训练
 
 ---
@@ -403,15 +403,15 @@ python distill/export_hf_code_sources_v1.py \
 ### 12.1 生成 template seeds
 ```bash
 python distill/general_gen_template_seeds_v1.py \
-  --out_jsonl dataset/targeted_distill_general_v1/general_template_seeds_v1.jsonl
+  --out_jsonl dataset/distill/general_template_seeds_v1.jsonl
 ```
 
 ### 12.2 模板 paraphrase + dedup
 ```bash
 python distill/general_paraphrase_templates_v1.py \
-  --in_jsonl dataset/targeted_distill_general_v1/general_template_seeds_v1.jsonl \
-  --out_raw_jsonl dataset/targeted_distill_general_v1/general_template_paraphrases_raw_v1.jsonl \
-  --out_dedup_jsonl dataset/targeted_distill_general_v1/general_template_paraphrases_dedup_v1.jsonl \
+  --in_jsonl dataset/distill/general_template_seeds_v1.jsonl \
+  --out_raw_jsonl dataset/distill/general_template_paraphrases_raw_v1.jsonl \
+  --out_dedup_jsonl dataset/distill/general_template_paraphrases_dedup_v1.jsonl \
   --api_base http://127.0.0.1:8000/v1 \
   --model teacher
 ```
@@ -423,23 +423,23 @@ python distill/general_extract_open_v1.py \
   --smol_jsonl data/smol_smoltalk_train.jsonl \
   --alpaca_jsonl data/alpaca_cleaned_train.jsonl \
   --dolly_jsonl data/dolly_style_train.jsonl \
-  --out_jsonl dataset/targeted_distill_general_v1/raw_open_prompts_v1.jsonl
+  --out_jsonl dataset/distill/raw_open_prompts_v1.jsonl
 ```
 
 ### 12.4 classify + canonicalize
 ```bash
 python distill/general_classify_canonicalize_v1.py \
-  --raw_open_jsonl dataset/targeted_distill_general_v1/raw_open_prompts_v1.jsonl \
-  --template_jsonl dataset/targeted_distill_general_v1/general_template_paraphrases_dedup_v1.jsonl \
-  --out_jsonl dataset/targeted_distill_general_v1/canonical_prompts_v1.jsonl
+  --raw_open_jsonl dataset/distill/raw_open_prompts_v1.jsonl \
+  --template_jsonl dataset/distill/general_template_paraphrases_dedup_v1.jsonl \
+  --out_jsonl dataset/distill/canonical_prompts_v1.jsonl
 ```
 
 ### 12.5 teacher raw generation
 ```bash
 python distill/general_teacher_generate_v1.py \
   --mode raw \
-  --in_jsonl dataset/targeted_distill_general_v1/canonical_prompts_v1.jsonl \
-  --out_jsonl dataset/targeted_distill_general_v1/general_teacher_raw_v1.jsonl \
+  --in_jsonl dataset/distill/canonical_prompts_v1.jsonl \
+  --out_jsonl dataset/distill/general_teacher_raw_v1.jsonl \
   --api_base http://127.0.0.1:8000/v1 \
   --model teacher \
   --temperature 0.3
@@ -449,18 +449,18 @@ python distill/general_teacher_generate_v1.py \
 ```bash
 python distill/general_verify_v1.py \
   --mode raw \
-  --in_jsonl dataset/targeted_distill_general_v1/general_teacher_raw_v1.jsonl \
-  --out_pass_jsonl dataset/targeted_distill_general_v1/general_verified_pass_round1_v1.jsonl \
-  --out_reject_jsonl dataset/targeted_distill_general_v1/general_verified_reject_round1_v1.jsonl \
-  --out_repair_candidates_jsonl dataset/targeted_distill_general_v1/general_teacher_repair_candidates_v1.jsonl
+  --in_jsonl datasets/distill/general_teacher_raw_v1.jsonl \
+  --out_pass_jsonl datasets/distill/general_verified_pass_round1_v1.jsonl \
+  --out_reject_jsonl datasets/distill/general_verified_reject_round1_v1.jsonl \
+  --out_repair_candidates_jsonl datasets/distill/general_teacher_repair_candidates_v1.jsonl
 ```
 
 ### 12.7 repair
 ```bash
 python distill/general_teacher_generate_v1.py \
   --mode repair \
-  --in_jsonl dataset/targeted_distill_general_v1/general_teacher_repair_candidates_v1.jsonl \
-  --out_jsonl dataset/targeted_distill_general_v1/general_teacher_repaired_v1.jsonl \
+  --in_jsonl datasets/distill/general_teacher_repair_candidates_v1.jsonl \
+  --out_jsonl datasets/distill/general_teacher_repaired_v1.jsonl \
   --api_base http://127.0.0.1:8000/v1 \
   --model teacher \
   --temperature 0.4
@@ -470,20 +470,20 @@ python distill/general_teacher_generate_v1.py \
 ```bash
 python distill/general_verify_v1.py \
   --mode repair \
-  --in_jsonl dataset/targeted_distill_general_v1/general_teacher_repaired_v1.jsonl \
-  --out_pass_jsonl dataset/targeted_distill_general_v1/general_verified_pass_repair_v1.jsonl \
-  --out_reject_jsonl dataset/targeted_distill_general_v1/general_verified_reject_repair_v1.jsonl
+  --in_jsonl datasets/distill/general_teacher_repaired_v1.jsonl \
+  --out_pass_jsonl datasets/distill/general_verified_pass_repair_v1.jsonl \
+  --out_reject_jsonl datasets/distill/general_verified_reject_repair_v1.jsonl
 ```
 
 ### 12.9 build general bank
 ```bash
 python distill/general_build_bank_v1.py \
   --pass_jsonls \
-    dataset/targeted_distill_general_v1/general_verified_pass_round1_v1.jsonl \
-    dataset/targeted_distill_general_v1/general_verified_pass_repair_v1.jsonl \
-  --out_train_jsonl dataset/targeted_distill_general_v1/accepted_general_bank_v1.jsonl \
-  --out_val_jsonl dataset/targeted_distill_general_v1/general_val_bank_v1.jsonl \
-  --out_holdout_jsonl dataset/targeted_distill_general_v1/general_holdout_v1.jsonl
+    datasets/distill/general_verified_pass_round1_v1.jsonl \
+    datasets/distill/general_verified_pass_repair_v1.jsonl \
+  --out_train_jsonl datasets/distill/accepted_general_bank_v1.jsonl \
+  --out_val_jsonl datasets/distill/general_val_bank_v1.jsonl \
+  --out_holdout_jsonl datasets/distill/general_holdout_v1.jsonl
 ```
 
 ---
@@ -493,22 +493,22 @@ python distill/general_build_bank_v1.py \
 ### 13.1 生成 12 家族 prompts
 ```bash
 python distill/code_gen_core_families_v1.py \
-  --out_jsonl dataset/targeted_distill_code_v1/core_family_prompts_v1.jsonl \
+  --out_jsonl datasets/distill/core_family_prompts_v1.jsonl \
   --instances_per_family 80
 ```
 
 ### 13.2 抽 MBPP
 ```bash
 python distill/code_extract_mbpp_v1.py \
-  --in_jsonl data/mbpp_train.jsonl \
-  --out_jsonl dataset/targeted_distill_code_v1/mbpp_prompts_v1.jsonl
+  --in_jsonl datasets/distill/mbpp_train.jsonl \
+  --out_jsonl datasets/distill/mbpp_prompts_v1.jsonl
 ```
 
 ### 13.3 抽 APPS intro
 ```bash
 python distill/code_extract_apps_v1.py \
-  --in_jsonl data/apps_intro.jsonl \
-  --out_jsonl dataset/targeted_distill_code_v1/apps_prompts_v1.jsonl
+  --in_jsonl datasets/distill/apps_intro.jsonl \
+  --out_jsonl datasets/distill/apps_prompts_v1.jsonl
 ```
 
 ### 13.4 合并 prompt pool
@@ -520,22 +520,22 @@ python distill/code_extract_apps_v1.py \
 
 生成：
 
-- `dataset/targeted_distill_code_v1/code_canonical_prompts_v1.jsonl`
+- `datasets/distill/code_canonical_prompts_v1.jsonl`
 
 ```bash
 cat \
-  dataset/targeted_distill_code_v1/core_family_prompts_v1.jsonl \
-  dataset/targeted_distill_code_v1/mbpp_prompts_v1.jsonl \
-  dataset/targeted_distill_code_v1/apps_prompts_v1.jsonl \
-  > dataset/targeted_distill_code_v1/code_canonical_prompts_v1.jsonl
+  datasets/distill/core_family_prompts_v1.jsonl \
+  datasets/distill/mbpp_prompts_v1.jsonl \
+  datasets/distill/apps_prompts_v1.jsonl \
+  > datasets/distill/code_canonical_prompts_v1.jsonl
 ```
 
 ### 13.5 teacher raw generation
 ```bash
 python distill/code_teacher_generate_v1.py \
   --mode raw \
-  --in_jsonl dataset/targeted_distill_code_v1/code_canonical_prompts_v1.jsonl \
-  --out_jsonl dataset/targeted_distill_code_v1/code_teacher_raw_v1.jsonl \
+  --in_jsonl datasets/distill/code_canonical_prompts_v1.jsonl \
+  --out_jsonl datasets/distill/code_teacher_raw_v1.jsonl \
   --api_base http://127.0.0.1:8000/v1 \
   --model teacher \
   --temperature 0.15
@@ -545,18 +545,18 @@ python distill/code_teacher_generate_v1.py \
 ```bash
 python distill/code_verify_v1.py \
   --mode raw \
-  --in_jsonl dataset/targeted_distill_code_v1/code_teacher_raw_v1.jsonl \
-  --out_pass_jsonl dataset/targeted_distill_code_v1/code_verified_pass_round1_v1.jsonl \
-  --out_reject_jsonl dataset/targeted_distill_code_v1/code_verified_reject_round1_v1.jsonl \
-  --out_repair_candidates_jsonl dataset/targeted_distill_code_v1/code_teacher_repair_candidates_v1.jsonl
+  --in_jsonl datasets/distill/code_teacher_raw_v1.jsonl \
+  --out_pass_jsonl datasets/distill/code_verified_pass_round1_v1.jsonl \
+  --out_reject_jsonl datasets/distill/code_verified_reject_round1_v1.jsonl \
+  --out_repair_candidates_jsonl datasets/distill/code_teacher_repair_candidates_v1.jsonl
 ```
 
 ### 13.7 repair
 ```bash
 python distill/code_teacher_generate_v1.py \
   --mode repair \
-  --in_jsonl dataset/targeted_distill_code_v1/code_teacher_repair_candidates_v1.jsonl \
-  --out_jsonl dataset/targeted_distill_code_v1/code_teacher_repaired_v1.jsonl \
+  --in_jsonl datasets/distill/code_teacher_repair_candidates_v1.jsonl \
+  --out_jsonl datasets/distill/code_teacher_repaired_v1.jsonl \
   --api_base http://127.0.0.1:8000/v1 \
   --model teacher \
   --temperature 0.25
@@ -566,20 +566,20 @@ python distill/code_teacher_generate_v1.py \
 ```bash
 python distill/code_verify_v1.py \
   --mode repair \
-  --in_jsonl dataset/targeted_distill_code_v1/code_teacher_repaired_v1.jsonl \
-  --out_pass_jsonl dataset/targeted_distill_code_v1/code_verified_pass_repair_v1.jsonl \
-  --out_reject_jsonl dataset/targeted_distill_code_v1/code_verified_reject_repair_v1.jsonl
+  --in_jsonl datasets/distill/code_teacher_repaired_v1.jsonl \
+  --out_pass_jsonl datasets/distill/code_verified_pass_repair_v1.jsonl \
+  --out_reject_jsonl datasets/distill/code_verified_reject_repair_v1.jsonl
 ```
 
 ### 13.9 build code bank
 ```bash
 python distill/code_build_bank_v1.py \
   --pass_jsonls \
-    dataset/targeted_distill_code_v1/code_verified_pass_round1_v1.jsonl \
-    dataset/targeted_distill_code_v1/code_verified_pass_repair_v1.jsonl \
-  --out_train_jsonl dataset/targeted_distill_code_v1/accepted_code_bank_v1.jsonl \
-  --out_val_jsonl dataset/targeted_distill_code_v1/code_val_bank_v1.jsonl \
-  --out_holdout_jsonl dataset/targeted_distill_code_v1/code_holdout_v1.jsonl
+    datasets/distill/code_verified_pass_round1_v1.jsonl \
+    datasets/distill/code_verified_pass_repair_v1.jsonl \
+  --out_train_jsonl datasets/distill/accepted_code_bank_v1.jsonl \
+  --out_val_jsonl datasets/distill/code_val_bank_v1.jsonl \
+  --out_holdout_jsonl datasets/distill/code_holdout_v1.jsonl
 ```
 
 ---
@@ -589,21 +589,21 @@ python distill/code_build_bank_v1.py \
 ### 14.1 可选地做 smoke manifests
 ```bash
 python distill/build_smoke_manifests_v1.py \
-  --general_canonical_jsonl dataset/targeted_distill_general_v1/canonical_prompts_v1.jsonl \
-  --code_canonical_jsonl dataset/targeted_distill_code_v1/code_canonical_prompts_v1.jsonl \
-  --out_general_smoke_jsonl dataset/targeted_distill_mix_v1/general_smoke_v1.jsonl \
-  --out_code_smoke_jsonl dataset/targeted_distill_mix_v1/code_smoke_v1.jsonl
+  --general_canonical_jsonl datasets/distill/canonical_prompts_v1.jsonl \
+  --code_canonical_jsonl datasets/distill/code_canonical_prompts_v1.jsonl \
+  --out_general_smoke_jsonl datasets/targeted_distill_mix_v1/general_smoke_v1.jsonl \
+  --out_code_smoke_jsonl datasets/targeted_distill_mix_v1/code_smoke_v1.jsonl
 ```
 
 ### 14.2 build 最终 mix
 ```bash
 python distill/build_targeted_distill_mix_v1.py \
-  --code_train_jsonl dataset/targeted_distill_code_v1/accepted_code_bank_v1.jsonl \
-  --code_val_jsonl dataset/targeted_distill_code_v1/code_val_bank_v1.jsonl \
-  --general_train_jsonl dataset/targeted_distill_general_v1/accepted_general_bank_v1.jsonl \
-  --general_val_jsonl dataset/targeted_distill_general_v1/general_val_bank_v1.jsonl \
-  --out_train_jsonl dataset/targeted_distill_mix_v1/train.jsonl \
-  --out_val_jsonl dataset/targeted_distill_mix_v1/val.jsonl
+  --code_train_jsonl datasets/distill/accepted_code_bank_v1.jsonl \
+  --code_val_jsonl datasets/distill/code_val_bank_v1.jsonl \
+  --general_train_jsonl datasets/distill/accepted_general_bank_v1.jsonl \
+  --general_val_jsonl datasets/distill/general_val_bank_v1.jsonl \
+  --out_train_jsonl datasets/targeted_distill_mix_v1/train.jsonl \
+  --out_val_jsonl datasets/targeted_distill_mix_v1/val.jsonl
 ```
 
 默认目标是：
@@ -691,24 +691,24 @@ plt.savefig("outputs/targeted_distill_v1_from_sft_v6_3500/logs/loss_curve.png", 
 如果你问我最稳的现实顺序，我会建议：
 
 ### 路线 A：稳健版（推荐）
-1. 起 vLLM teacher  
-2. 导出原始数据  
-3. 跑 very small smoke  
-4. 看 reject reasons  
-5. 如果有必要，小修 verifier / canonicalization / path  
-6. 跑 general 全量  
-7. 跑 code 全量  
-8. build final mix  
-9. 跑 targeted distill training  
-10. 看 loss 曲线和 samples，选 checkpoint  
+1. 起 vLLM teacher
+2. 导出原始数据
+3. 跑 very small smoke
+4. 看 reject reasons
+5. 如果有必要，小修 verifier / canonicalization / path
+6. 跑 general 全量
+7. 跑 code 全量
+8. build final mix
+9. 跑 targeted distill training
+10. 看 loss 曲线和 samples，选 checkpoint
 
 ### 路线 B：激进版
-1. 起 vLLM teacher  
-2. 导出原始数据  
-3. 直接全量 general  
-4. 直接全量 code  
-5. build mix  
-6. 训练  
+1. 起 vLLM teacher
+2. 导出原始数据
+3. 直接全量 general
+4. 直接全量 code
+5. build mix
+6. 训练
 
 我更推荐路线 A。
 

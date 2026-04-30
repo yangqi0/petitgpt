@@ -335,8 +335,10 @@ def openai_compatible_chat(
     max_tokens: int = 120,
     api_key: Optional[str] = None,
     timeout: int = 120,
+    disable_thinking: bool = True,
 ) -> str:
     import urllib.request
+
     api_key = api_key or os.environ.get("OPENAI_API_KEY") or os.environ.get("VLLM_API_KEY") or "EMPTY"
     url = api_base.rstrip("/") + "/chat/completions"
     payload = {
@@ -348,6 +350,10 @@ def openai_compatible_chat(
         "temperature": temperature,
         "max_tokens": max_tokens,
     }
+
+    if disable_thinking:
+        payload["chat_template_kwargs"] = {"enable_thinking": False}
+
     data = json.dumps(payload).encode("utf-8")
     req = urllib.request.Request(
         url,
@@ -357,4 +363,14 @@ def openai_compatible_chat(
     )
     with urllib.request.urlopen(req, timeout=timeout) as resp:
         out = json.loads(resp.read().decode("utf-8"))
-    return out["choices"][0]["message"]["content"]
+
+    content = out["choices"][0]["message"].get("content") or ""
+    content = re.sub(r"(?is)<think>.*?</think>\s*", "", content).strip()
+
+    if content.lower().startswith("thinking process:"):
+        raise RuntimeError(
+            "Teacher returned visible thinking content. "
+            "Patch/request-level enable_thinking=False was not respected by the vLLM server."
+        )
+
+    return content
