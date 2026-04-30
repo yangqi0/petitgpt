@@ -602,8 +602,13 @@ python distill/build_targeted_distill_mix_v1.py \
   --code_val_jsonl datasets/distill/code_val_bank_v1.jsonl \
   --general_train_jsonl datasets/distill/accepted_general_bank_v1.jsonl \
   --general_val_jsonl datasets/distill/general_val_bank_v1.jsonl \
-  --out_train_jsonl datasets/targeted_distill_mix_v1/train.jsonl \
-  --out_val_jsonl datasets/targeted_distill_mix_v1/val.jsonl
+  --out_train_jsonl datasets/distill/targeted_distill_mix_v1/train.jsonl \
+  --out_val_jsonl datasets/distill/targeted_distill_mix_v1/val.jsonl \
+  --target_code_train 5000 \
+  --target_general_train 550 \
+  --target_code_val 500 \
+  --target_general_val 54 \
+  --seed 13
 ```
 
 默认目标是：
