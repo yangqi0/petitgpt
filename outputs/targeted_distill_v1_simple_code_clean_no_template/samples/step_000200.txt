@@ -1,0 +1,245 @@
+step=step_000200
+sampling: temp=0.1 top_p=1.0 top_k=0 max_new=100
+in_domain: n=10 mode=full_context show_ref=False dump_prompt=False sample_eval_jsonl=False
+================================================================================
+[Fixed prompts]
+--------------------------------------------------------------------------------
+[Q1] [Code] Write a Python function running_sum(nums) that returns cumulative sums.
+[A1] def running_sum():
+    result = []
+    current_sum = 0
+    for num in nums:
+        current_sum += num
+        result.append(current_sum)
+    return result
+
+print(running_sum()) # Output: 154.52582525252575252525, which is the total sum of all numbers in the list.
+
+# Driver code
+nums = [1, 2, 3, 4, 5, 6, 7
+--------------------------------------------------------------------------------
+[Q2] [Code] Write a Python function lowercase_keys(d) that returns a new dictionary with lowercase string keys.
+[A2] def lowercase_dict(d):
+    result = {}
+    for key in d:
+        new_key = key.lower()
+        result[new_key] = d[key]
+    return result
+
+print(lowercase_dict(data)) # Outputs {key: 'a', value: 'b'}
+# Output: {'a': 'b', 'b': 'c', 'c': 'd'}
+# output: {'a', 'b', "
+--------------------------------------------------------------------------------
+[Q3] [General] Write a short polite email asking for an update on a job application after an interview.
+[A3] Dear [Name], I hope this message finds you well. I am writing to provide an update on your application. Please let me know if you have any questions or concerns regarding the application. Thank you in advance.
+
+Best regards,
+[Your Name]
+
+Dear [name], I hope you are well. I would like to update you with an update on the application. Please share any questions or issues you have. Thank you for your assistance.
+
+Thank you in
+--------------------------------------------------------------------------------
+[Q4] [General] Write a short professional email asking to reschedule a meeting to next week.
+[A4] Dear [Name],
+
+I hope you have the opportunity to attend this meeting. Please let me know if there is anything I can do to help.
+
+Best regards,
+[Your Name]
+
+Please let me know your availability and any details you would like.
+
+Thank you for your time and support.
+
+[Your name]
+
+Thankyou for your time.
+
+Please send me an email to schedule a meeting.
+
+Thanks so much for your
+--------------------------------------------------------------------------------
+[Q5] [General] Summarize this in 3 bullet points: 'Regular exercise can improve mood, support heart health, and help maintain energy levels.'
+[A5] - Regular physical activity helps manage stress by reducing the body's natural stress hormones like cortisol.
+- It also boosts mood through the release of endorphins, which are chemicals that act as natural painkillers and mood elevators.
+- Exercise can also enhance sleep quality by increasing the production of endorphin, which is the body's naturally occurring mood lifter.
+- Regular physical exercise can also boost self-esteem and confidence by promoting emotional well-being and positive mood.
+--------------------------------------------------------------------------------
+[Q6] [General] Rewrite this to be more formal: 'Thanks for the quick reply. I’ll send the file tomorrow.'
+[A6] Thank you for the quick response. I hope we can discuss this further soon.
+
+Best regards,
+[Your Name]
+[Your Email]
+[The Date]
+[Thank you]
+
+Dear [Name],
+I hope this message finds you well. I am writing to inform you that I will send the file yesterday and will send it tomorrow. Please let me know your availability. Thank you for your assistance.
+
+Thank you for your prompt attention. I hope
+--------------------------------------------------------------------------------
+[Q7] [General] Rewrite this to be more concise: 'I am writing this email in order to ask whether it would be possible to move our meeting to Friday afternoon.'
+[A7] Please send me an email to confirm your request for the meeting to proceed. I will keep you informed of any changes to the schedule. Please let me know if there is anything else you need to consider.
+
+Thank you, and I look forward to hearing from you soon.
+
+Best regards,
+[Your Name]
+[Your Email]
+[Email Address]
+[Contact Details]
+
+Thank You, and I can assist with any adjustments. Thank you for your assistance.
+--------------------------------------------------------------------------------
+[Q8] [General] Explain in at most 4 sentences what a budget is, in simple everyday language.
+[A8] A budget is a set of financial statements that shows how much money you have and how much you can save over time. It helps us make informed decisions about spending and saving. By using these numbers, we can make better decisions for our families and ourselves.
+
+In this case, the budget shows how much you spend each month, so it's easy to see how much you save over time! This makes it easier to understand how your money is going to grow and grow over time. The more
+--------------------------------------------------------------------------------
+
+[In-domain prompts from val_jsonl]
+--------------------------------------------------------------------------------
+[eval tags] ['idx=88', 'idx=10', 'idx=12', 'idx=98', 'idx=45', 'idx=30', 'idx=2', 'idx=3', 'idx=100', 'idx=2']
+--------------------------------------------------------------------------------
+[V1] idx=88 bucket=A_general
+[User]
+Who is Frida Kahlo, and what are some of her notable works in the field of art? Use at most 3 sentences. Use simple everyday language.
+[Model]
+Frida Kahlos was a renowned artist who lived during the late 19th century. She is known for her unique style of painting that combines elements of traditional Japanese painting with modern techniques to create a unique and engaging work. Her works have been widely acclaimed as one of the greatest works of art in history. Her works are considered one of the most important works of art because they showcase the power of creativity and imagination in creating new forms. This unique style of art has inspired many artists worldwide
+--------------------------------------------------------------------------------
+[V2] idx=10 bucket=B_code
+[User]
+Write a beginner-friendly implementation of `running_max(nums)`. Return the running maximum after each number in `nums`. Use simple Python control flow. Return only Python code.
+[Model]
+def running_max(numbers):
+    result = []
+    current_max = None
+    for num in numbers:
+        if current_max is None or num > current_max:
+            current_max, num = num, current_max
+        result.append(current_max)
+    return result
+
+if __name__ == '__main__':
+    nums = [1, 2, 3, 4, 5]
+    print(running_max([1, 2])) # Output: 1
+--------------------------------------------------------------------------------
+[V3] idx=12 bucket=A_general
+[User]
+Summarize this in exactly 3 bullet points: "ll definitely try to attend as well. It would be great to get a sense of how the community is feeling about the proposed development. I" Keep each bullet short.
+[Model]
+- Please share your thoughts on attending the upcoming conference.
+- Please share any feedback from the attendees.
+- Thank you for joining us.
+- We look forward to hearing from you soon.
+- Thanks again.
+- I hope we can catch up soon.
+
+Please share your thoughts and any feedback.
+Thank you for joining me.
+Thanks again.
+Thankyou for joining us!
+Thank you so much for joining us too.
+Thank again.
+Thanks
+--------------------------------------------------------------------------------
+[V4] idx=98 bucket=A_general
+[User]
+What are the different cloud types, and how are they classified? Use at most 3 sentences. Use simple everyday language.
+[Model]
+Clouds are typically cloud-based applications that allow you to easily access data from anywhere with an internet connection. They also often have built-in security features like encryption and secure data storage. These services are widely used by businesses and governments around the world. Cloud providers usually offer robust security measures for users who don't have access to their data. Finally, cloud services often include cloud-to-cloud services where you can easily access your data without needing to install any software or hardware. This allows businesses
+--------------------------------------------------------------------------------
+[V5] idx=45 bucket=B_code
+[User]
+Define `remove_none(items)`. Return a new list with every `None` value removed. Only remove values that are `None`. Define exactly one top-level function. Return only Python code.
+[Model]
+def remove_none(lst):
+    result = []
+    for item in lst:
+        if item is not None:
+            result.append(item)
+    return result
+
+if __name__ == '__main__':
+    lst = ["apple", "banana", "mango"]
+    print(remove_none([1, 2, 3, 4, 5])) # Output: ['apple', 'banana']
+    print(list(filter(lambda x : x is not None,
+--------------------------------------------------------------------------------
+[V6] idx=30 bucket=B_code
+[User]
+Implement `merge_counts(a, b)` in Python. Create a combined count dictionary from `a` and `b`. Keys that appear in only one dictionary should keep their count. Prefer clear loops and conditionals. Return only Python code.
+[Model]
+def merge_counts(d):
+    result = {}
+    for key in d:
+        new_key = key.lower()
+        result[new_key] = d[key]
+    return result
+
+if __name__ == '__main__':
+    a = "a"
+    b = "b"
+    print(merge_counts([a, b], ['a', 'b'])) # Outputs {'a': 1, 'b': 2}
+    print(dict(a=
+--------------------------------------------------------------------------------
+[V7] idx=2 bucket=B_code
+[User]
+Solve this short Python task by defining `lowercase_keys(d)`. Lowercase all keys without changing the values. Do not include examples, tests, or explanations in the answer. Return only Python code.
+[Model]
+def lowercase_keys(data):
+    result = {}
+    for key in data:
+        new_key = key.lower()
+        result[new_key] = data[key]
+    return result
+
+if __name__ == '__main__':
+    print("Lowercase keys:")
+    result = lowercase_ keys(data)
+    print(result) # Output: {'lowercase': 'key', 'key': 'value'}
+    print(list(result)) # Output:
+--------------------------------------------------------------------------------
+[V8] idx=3 bucket=B_code
+[User]
+Implement the function `dedup_preserve_order(items)`. Deduplicate the list without changing the order of the remaining elements. An empty list should return an empty list. Use simple Python. Return only Python code.
+[Model]
+def dedup_preserves_order(list):
+    result = []
+    for item in list:
+        if item not in result:
+            result.append(item)
+    return result
+
+print(dedup_Preserve_Order([1, 2, 3, 4])) # Output: [2, 1]
+# Output: [3, 1] 
+# Example: [4, 5, 6]
+
+# Output
+[1, 2]
+[3
+--------------------------------------------------------------------------------
+[V9] idx=100 bucket=A_general
+[User]
+What are other alternative for 'a region typically known for its cold climate.' Use at most 3 sentences. Use simple everyday language.
+[Model]
+The cold climate is often found in the mountains, where temperatures can be quite cold. It's also common to find areas with snow and ice, which are often warmer than the surrounding mountains. These conditions can make it hard to stay warm even under these conditions. Another option is to live in a cold area like a city or a remote village, where you can enjoy the warmth without feeling cold. Finally, another option is to visit a mountain resort, where you feel comfortable and safe while enjoying the cold
+--------------------------------------------------------------------------------
+[V10] idx=2 bucket=B_code
+[User]
+Solve this short Python task by defining `lowercase_keys(d)`. Lowercase all keys without changing the values. Do not include examples, tests, or explanations in the answer. Return only Python code.
+[Model]
+def lowercase_keys(data):
+    result = {}
+    for key in data:
+        new_key = key.lower()
+        result[new_key] = data[key]
+    return result
+
+if __name__ == '__main__':
+    print("Lowercase keys:")
+    result = lowercase_ keys(data)
+    print(result) # Output: {'lowercase': 'key', 'key': 'value'}
+    print(list(result)) # Output:
+--------------------------------------------------------------------------------

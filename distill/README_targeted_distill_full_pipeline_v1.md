@@ -656,33 +656,32 @@ bash run_targeted_distill_v1.sh
 ---
 
 python distill/train_distill.py \
-  --train_jsonl datasets/distill/targeted_distill_mix_v1/train.jsonl \
-  --val_jsonl datasets/distill/targeted_distill_mix_v1/val.jsonl \
-  --out_dir outputs/targeted_distill_v1_simple_code \
+  --train_jsonl datasets/distill/targeted_distill_mix_v1/train.clean_no_template.jsonl \
+  --val_jsonl datasets/distill/targeted_distill_mix_v1/val.clean_no_template.jsonl \
+  --out_dir outputs/targeted_distill_v1_simple_code_clean_no_template \
   --tokenizer_path tokenizer/tokenizer.json \
   --init_from_pretrain outputs/sft_v6_general_code/step_003500.pt \
   --seq_len 1024 \
   --micro_bsz 4 \
   --grad_accum 4 \
-  --lr 2e-6 \
+  --lr 1e-6 \
   --weight_decay 0.01 \
-  --warmup_steps 50 \
-  --max_steps 1200 \
+  --warmup_steps 30 \
+  --max_steps 800 \
   --precision bf16 \
   --eval_every 100 \
   --eval_batches 50 \
   --save_every 100 \
   --sample_every 100 \
-  --samples_dir outputs/targeted_distill_v1_simple_code/samples \
-  --sample_max_new_tokens 160 \
-  --sample_temperature 0.2 \
+  --samples_dir outputs/targeted_distill_v1_simple_code_clean_no_template/samples \
+  --sample_max_new_tokens 100 \
+  --sample_temperature 0.1 \
   --sample_top_p 1.0 \
   --sample_top_k 0 \
-  --sample_repetition_penalty 1.08 \
-  --sample_no_repeat_ngram 0 \
+  --sample_repetition_penalty 1.12 \
+  --sample_no_repeat_ngram 4 \
   --loss_reduction example_mean \
   --refusal_downweight 1.0 \
-  --log_losses \
   --debug_first_batch
 
 ## 16. loss 记录在哪里

@@ -1,0 +1,266 @@
+step=step_000300
+sampling: temp=0.1 top_p=1.0 top_k=0 max_new=100
+in_domain: n=10 mode=full_context show_ref=False dump_prompt=False sample_eval_jsonl=False
+================================================================================
+[Fixed prompts]
+--------------------------------------------------------------------------------
+[Q1] [Code] Write a Python function running_sum(nums) that returns cumulative sums.
+[A1] def running_sum():
+    result = []
+    current_sum = 0
+    for num in nums:
+        current_sum += num
+        result.append(current_sum)
+    return result
+
+print(running_sum()) # Output: 154.52582525252575252525, which is the total sum of all numbers in the list.
+
+# Driver code
+nums = [1, 2, 3, 4, 5, 6, 7
+--------------------------------------------------------------------------------
+[Q2] [Code] Write a Python function lowercase_keys(d) that returns a new dictionary with lowercase string keys.
+[A2] def lowercase_dict(d):
+    result = {}
+    for key in d:
+        new_key = key.lower()
+        result[new_key] = d[key]
+    return result
+
+print(lowercase_dict(data)) # Outputs { 'a': 1, 'b': 2, 'c': 3 }
+# Output: {'a': 1}
+# Outputs { {'a': 2}, 'b': 3}
+# See below
+--------------------------------------------------------------------------------
+[Q3] [General] Write a short polite email asking for an update on a job application after an interview.
+[A3] Dear [Name], I am writing to provide an update on your application. Please let me know if you have any questions or concerns regarding the application. Thank you in advance.
+
+Thank you, and we hope to hear from you soon.
+
+Best regards,
+[Your Name]
+[Your Email]
+[Email Address]
+
+Dear [Age]
+I am writing to update you with an update on the application. Please check your work status and send it promptly
+--------------------------------------------------------------------------------
+[Q4] [General] Write a short professional email asking to reschedule a meeting to next week.
+[A4] Dear [Name],
+
+I hope this message finds you well. I am writing to arrange for you to reschetures the meeting for next week. Please let me know your availability and any details you would like.
+
+Thank you, and we will arrange for the necessary arrangements.
+
+Best regards,
+[Your Name]
+
+Best,
+[Contact]
+
+Please send an email to [Name] to rescheture the meeting for the next week. Your availability
+--------------------------------------------------------------------------------
+[Q5] [General] Summarize this in 3 bullet points: 'Regular exercise can improve mood, support heart health, and help maintain energy levels.'
+[A5] - Regular physical activity boosts mental health and supports overall well-being.
+- It enhances energy levels.
+- Exercise helps manage stress levels.
+
+These points are supported by evidence from studies on the effects of regular physical activity on mood, support, and overall well-Being. These findings highlight how regular exercise can enhance mood, support health, and support heart health. By focusing on these benefits, we can ensure that people stay active and healthy throughout their lives. This summary is an overview
+--------------------------------------------------------------------------------
+[Q6] [General] Rewrite this to be more formal: 'Thanks for the quick reply. I’ll send the file tomorrow.'
+[A6] Thank you for the quick response. I hope we can discuss this further soon.
+
+Best regards,
+[Your Name]
+[Your Email]
+[The Date]
+[Thank you]
+
+Dear [Name],
+I hope this message finds you well. I am writing to provide an opportunity to share some insights and suggestions that I have developed over the past few days. Please let me know if you need any further assistance or if there is anything I can do to help
+--------------------------------------------------------------------------------
+[Q7] [General] Rewrite this to be more concise: 'I am writing this email in order to ask whether it would be possible to move our meeting to Friday afternoon.'
+[A7] Please ensure you arrive on Friday afternoon. Please let me know your availability and any other details you might have.
+
+Thank you, and we can discuss the details further at our convenience.
+
+Best regards,
+[Your Name]
+[Email Address]
+[Date]
+[Time]
+
+This email is due tomorrow. Please let us know your availability.
+
+Thanks, and we will discuss the details at our convenience."
+
+Thank, and we are ready for the
+--------------------------------------------------------------------------------
+[Q8] [General] Explain in at most 4 sentences what a budget is, in simple everyday language.
+[A8] A budget is a set of financial statements that shows how much money you have and how much it costs over time. It helps you make informed decisions about your spending. By showing the total amount of money you spend, you can make informed decisions to help you stay on track.
+
+In this case, the budget includes all your income and expenses, so it shows you with a lot of money. The other options include some savings or spending, which means you only pay for those things you use.
+--------------------------------------------------------------------------------
+
+[In-domain prompts from val_jsonl]
+--------------------------------------------------------------------------------
+[eval tags] ['idx=44', 'idx=82', 'idx=79', 'idx=61', 'idx=78', 'idx=59', 'idx=19', 'idx=11', 'idx=23', 'idx=91']
+--------------------------------------------------------------------------------
+[V1] idx=44 bucket=A_general
+[User]
+Summarize this in one sentence: "Haystack is an open-source framework for building search systems that work intelligently over large document collections. Recent advances in NLP have enabled the application of question answering, retrieval and summarization to real world settings and Haystack is designed to be the bridge between research and industry."
+[Model]
+The author discusses the development of a new NLP tool called Haystack that can handle large documents and analyzes large documents to find answers quickly. This tool is designed to help scientists understand complex topics and helps them make informed decisions. The author also mentions the recent advancements in NLP technology and suggests using it to analyze large documents to identify patterns and improve decision-making. This tool will help scientists understand how to solve complex problems efficiently. The author concludes with a discussion on the potential applications of this
+--------------------------------------------------------------------------------
+[V2] idx=82 bucket=A_general
+[User]
+I am trying to understand the differences between a fruit and a vegetable. Can you explain this to me? Your response should contain at least 3 sentences. Your answer should also contain the keywords: botanical, culinary, and classification.
+[Model]
+A fruit is a vegetable that has a specific type of fruit called a fruit tree or a type of vegetable. A vegetable is a fruit that has only one type of fruit, such as a fruit tree, while a fruit tree is a type of plant that has multiple types of fruits like a fruit tree. These distinctions help us understand how different plants grow and interact with each other in different ways. By understanding these differences, we can make informed decisions about food choices and nutrition.
+
+I hope this
+--------------------------------------------------------------------------------
+[V3] idx=79 bucket=B_code
+[User]
+Write a Python function `flatten_once(items)`. Flatten only one list level and leave non-list values unchanged. Do not modify the input list. Do not use imports. Return only Python code.
+[Model]
+def flatten_once(item):
+    result = []
+    for item in item:
+        if isinstance(item, list):
+            for sub_item in item:
+                result.append(sub_item)
+        else:
+            result.append((item, item))
+    return result
+
+if __name__ == '__main__':
+    items = [1, 2, 3, 4, 5]
+    print(flatten_once([1, 2], ['A', 'B', 'C
+--------------------------------------------------------------------------------
+[V4] idx=61 bucket=A_general
+[User]
+Rewrite this to be clearer: "t we do a super cool interdisciplinary project for the kids this semester? Like, something that combines all the STEAM stuff. We can make it epic! What do u think? 😁 Let" Return only the rewritten text.
+[Model]
+We are excited about the collaboration and look forward to discussing it further at your convenience.
+
+Best regards,
+[Insert name]
+
+[Insert title]
+
+This semester brings together a team of students to collaborate on a project that integrates all the STEAMS components. The project aims to create a unique educational experience that aligns with the academic standards and encourages creativity. [Recommended journal entry]
+
+Please share your thoughts at your convenience, as we are eager to discuss this
+--------------------------------------------------------------------------------
+[V5] idx=78 bucket=B_code
+[User]
+Implement the function `remove_none(items)`. Build a list containing all items except `None`. An empty list should return an empty list. Return only Python code.
+[Model]
+def remove_none(lst):
+    result = []
+    for item in lst:
+        if item is not None:
+            result.append(item)
+    return result
+
+remove_none([1, 2, 3]) # Outputs [3]
+
+# Example
+result = remove_none([2, 3, 4, 5])
+print(result) # Outputs ['3']
+
+# Output
+[4, 5, 6]
+
+def remove_empty
+--------------------------------------------------------------------------------
+[V6] idx=59 bucket=B_code
+[User]
+Solve this short Python task by defining `clamp(x, low, high)`. Return `x` unchanged when it is already between `low` and `high`. Do not include examples, tests, or explanations in the answer. Return only Python code.
+[Model]
+def clamp(x):
+    if x < low:
+        return low
+    if x > high:
+        return high
+    return x
+
+clamp(5) # Output: 5
+clamp() # Output: 0
+print("Clamping") # Output: 1
+print("Cooling") # Output : 2
+print("Temperature") # Output = 5
+print("Pressure") # Output -> 3
+print("Heat") # Output => 4
+print("
+--------------------------------------------------------------------------------
+[V7] idx=19 bucket=A_general
+[User]
+What are percentiles? A coworker at work told me to use that method to analyze data we are reviewing. Use at most 3 sentences. Use simple everyday language.
+[Model]
+To find the percentiles, you need to calculate the average of two numbers and then divide by their respective values. The percentile is the number that appears most frequently in the data. So, for example, if you have a total of 5 cows and 2 employees, the percentile would be 0.5 or 1.0%. This means there are a total of 4 cows and 2 managers.
+
+The percentile is calculated by dividing the total number of cows by the number of employees,
+--------------------------------------------------------------------------------
+[V8] idx=11 bucket=B_code
+[User]
+Solve this short Python task by defining `merge_counts(a, b)`. Do not modify either input dictionary while combining their counts. Do not use imports. Return only Python code.
+[Model]
+def merge_counts(d):
+    result = {}
+    for key in d:
+        result[key] = d[key]
+    return result
+
+merge_counts([1, 2, 3, 4, 5]) # Outputs {1: 1, 2: 2, 3: 1, 4: 1}
+# Output: {'A': 1, 'B': 2, 'C': 3, 'D': 4}
+
+# Example
+merged_dict = dict
+--------------------------------------------------------------------------------
+[V9] idx=23 bucket=B_code
+[User]
+Solve this short Python task by defining `clamp(x, low, high)`. Limit a value so it cannot go below `low` or above `high`. Prefer clear loops and conditionals. Return only Python code.
+[Model]
+def clamp(x , low, high):
+    if x < low:
+        return low
+    if x > high:
+        return high
+    return x
+
+if __name__ == '__main__':
+    x = 3
+    low = 0
+    high = 5
+    print(clamp(0, low, High))
+    print(Clamp(0,-1, Low))
+    print()
+    print(0, -1, -1)
+    print(2, 1, 2)
+--------------------------------------------------------------------------------
+[V10] idx=91 bucket=B_code
+[User]
+Create a small helper function called `is_prime`. For numbers less than 2, return `False`; otherwise test divisibility. Small primes such as 2 and 3 should return `True`. For example, `is_prime(1)` should return `False`. Use simple Python. Return only Python code.
+[Model]
+def is_prime(n):
+    if n < 2:
+        return False
+    if n == 2:
+        if n % 2 == 0:
+            return False
+        else:
+            return True
+    else:
+        return True
+
+is_prime = is_prime()
+print(is_prime) # Output: False
+
+# Example
+print(2**3) # Outputs False
+
+"""
+This function checks if a given number is prime or not.
+It returns
+--------------------------------------------------------------------------------

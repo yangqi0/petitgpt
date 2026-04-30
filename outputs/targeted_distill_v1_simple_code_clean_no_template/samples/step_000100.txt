@@ -1,0 +1,252 @@
+step=step_000100
+sampling: temp=0.1 top_p=1.0 top_k=0 max_new=100
+in_domain: n=10 mode=full_context show_ref=False dump_prompt=False sample_eval_jsonl=False
+================================================================================
+[Fixed prompts]
+--------------------------------------------------------------------------------
+[Q1] [Code] Write a Python function running_sum(nums) that returns cumulative sums.
+[A1] def get_cumulative_sum(num):
+    result = []
+    for num in range(1, len(num)):
+        if num == num[0]:
+            result.append(num)
+    return result
+
+get_cumulative = get_cumulate([1, 2, 3, 4, 5])
+print(get_cumulate(5)) # Output: [3, 4, 6, 8, 10]
+# Output: [4, 5, 6
+--------------------------------------------------------------------------------
+[Q2] [Code] Write a Python function lowercase_keys(d) that returns a new dictionary with lowercase string keys.
+[A2] def lowercase_dict(d):
+    result = {}
+    for key in d:
+        if key not in result:
+            result[key] = d[key]
+        else:
+            result.setdefault(key, []).append(result[key])
+    return result
+
+lowercase_dict({
+    'a': 1,
+    'b': 2,
+    'c': 3,
+    'd': 4,
+    'e': 5,
+    'f': 6,
+--------------------------------------------------------------------------------
+[Q3] [General] Write a short polite email asking for an update on a job application after an interview.
+[A3] Dear [Name], I hope this message finds you well. I am writing to provide an update on your application. Please let me know if you have any questions or concerns regarding the application. Thank you in advance.
+
+Thank you, and we will send you a confirmation soon.
+
+Best regards,
+[Your Name]
+[Your Email]
+[Email Address]
+
+Thankyou,
+[The Job Application]
+[Contact Details]
+
+Thanks so much,
+--------------------------------------------------------------------------------
+[Q4] [General] Write a short professional email asking to reschedule a meeting to next week.
+[A4] Dear [Name],
+
+I hope you have been well. I am writing to arrange for you to reschevate your meeting. Please let me know if you need any further assistance or if there is anything else you would like to discuss.
+
+Thank you, and I look forward to hearing from you soon.
+
+Best regards,
+[Your Name]
+
+Dear [name],
+
+Please let me know what you think of this meeting. I am looking forward to
+--------------------------------------------------------------------------------
+[Q5] [General] Summarize this in 3 bullet points: 'Regular exercise can improve mood, support heart health, and help maintain energy levels.'
+[A5] - Regular physical activity helps manage stress levels by reducing the body's stress hormones like cortisol.
+- It enhances mental health by boosting mood and cognitive function.
+- Exercise can also enhance emotional well-being by promoting emotional well-Being.
+- Regular physical exercise can lead to better sleep patterns and overall well-being.
+- Physical activity can also enhance energy levels by increasing metabolism and building muscle.
+- This can lead to improved energy levels and overall wellness.
+- The
+--------------------------------------------------------------------------------
+[Q6] [General] Rewrite this to be more formal: 'Thanks for the quick reply. I’ll send the file tomorrow.'
+[A6] Thank you for the quick response. I hope we can chat soon about our upcoming meeting.
+
+Best regards,
+[Your Name]
+[Your Email]
+[The Date]
+[Thank you]
+
+Rewritten as: Thank you for the prompt reply. I hope you have time to meet tomorrow.
+
+Thank you for your quick reply.
+
+Good job, and thank you for the fast reply. I appreciate your help with the details.
+
+Thanks
+--------------------------------------------------------------------------------
+[Q7] [General] Rewrite this to be more concise: 'I am writing this email in order to ask whether it would be possible to move our meeting to Friday afternoon.'
+[A7] Please send me an email to confirm that we will meet on Friday afternoon. I hope you have the opportunity to discuss this further with us.
+
+Thank you,
+[Your Name]
+[Your Email]
+[Email Address]
+[Contact Number]
+
+Thank You,
+[The Address]
+
+I hope you have time for a meeting. Please let me know if you need any assistance or if there is anything else you need.
+
+Thanks,
+[Please Send
+--------------------------------------------------------------------------------
+[Q8] [General] Explain in at most 4 sentences what a budget is, in simple everyday language.
+[A8] A budget is a set of financial statements that shows how much money you have in your life every month and how much it means you will pay for those things over time. It helps you make informed decisions about spending and saving. In short, a budget is a plan that tells you how much you want to spend each month and how long you want to save. It helps keep track of your income and expenses, making sure you know how much you really need to spend each week. By using these tools
+--------------------------------------------------------------------------------
+
+[In-domain prompts from val_jsonl]
+--------------------------------------------------------------------------------
+[eval tags] ['idx=99', 'idx=56', 'idx=14', 'idx=0', 'idx=11', 'idx=116', 'idx=103', 'idx=74', 'idx=4', 'idx=85']
+--------------------------------------------------------------------------------
+[V1] idx=99 bucket=A_general
+[User]
+"The main challenge is to carry out the work while keeping the installation operational this year for its users", explains Sébastien Evrard, project leader for the PS East Experiment Area renovation.
+
+Classify the level of management that Sébastien Evrard holds based on the above sentence. Your choices are: Top-level, Middle-level, Lower-level, Non-management, External
+[Model]
+Top-level, Upper-level, lower-level, non-management, external, non-work
+
+Sébastian Evrard has been working with the PS East experiment since the end of the year. He is responsible for managing the installation and maintaining the project's operations. The project is expected to be completed by the end of next year. Sébasting is looking to work with the team to ensure the project remains operational. The project will be completed by next year
+--------------------------------------------------------------------------------
+[V2] idx=56 bucket=A_general
+[User]
+Rewrite this to be clearer: "Neuroscientist Smith explains how implementing certain habits in your day to day life can HELP you stay motivated and disciplined." Return only the rewritten text.
+[Model]
+Neuroscientists explain how implementing specific habits in your daily life can help you stay motivated, disciplined, and focused on your work. They also explain why these habits are important for staying motivated and disciplinary success. This helps us stay motivated and focused on our work.
+
+This revised version of the text is more concise and clear. It emphasizes the importance of practicing regularly to keep your motivation strong and focused. Additionally, it emphasizes the importance that these habits not only help you stay organized but
+--------------------------------------------------------------------------------
+[V3] idx=14 bucket=B_code
+[User]
+Implement the function `count_words(text)`. Convert the text to lowercase, split on whitespace, and return a dictionary mapping each word to its count. Use a normal dictionary. Prefer clear loops and conditionals. Return only Python code.
+[Model]
+def count_words(string):
+    result = {}
+    for word in string:
+        if word in result:
+            result[word] = result[word].value
+        else:
+            result['value'] = word
+            result['condition'] = word in conditionals
+            result['preferred'] = word + 1
+            result['split'] = word - 1
+    return result
+
+print(count_words("This is a sentence")) # Output: {'sentence': 'a', 'words
+--------------------------------------------------------------------------------
+[V4] idx=0 bucket=B_code
+[User]
+Implement `reverse_string(s)` in Python. Reverse the characters of the string and return the result. An empty string should return an empty string. Define exactly one top-level function. Return only Python code.
+[Model]
+def reverse_string(str):
+    result = ""
+    for i in range(len(str) - 1, -1, -1):
+        result = result + str[i]
+    return result
+
+print(reverse_string("Hello World")) # Output: Hello World!
+# Output: HELLO WORLD!
+# Example:
+result = reverse_string("Hell")
+print(result) # Output: I am Hello World!"
+--------------------------------------------------------------------------------
+[V5] idx=11 bucket=B_code
+[User]
+Solve this short Python task by defining `merge_counts(a, b)`. Do not modify either input dictionary while combining their counts. Do not use imports. Return only Python code.
+[Model]
+def merge_counts(d):
+    result = {}
+    for key in d:
+        if key in result:
+            result[key] = result[key].split(",")
+        else:
+            result = {key}
+            result = {}
+        for item in result: 
+            if item in result and result[item] > result[item]:
+                result[item], result[f"{key}"] = result[item"], result[f"{key}"]
+            else:
+                result
+--------------------------------------------------------------------------------
+[V6] idx=116 bucket=A_general
+[User]
+I'm arguing with my dad about what the biggest freshwater fish in North America is. He thinks it's a paddlefish. What is it actually? Use at most 3 sentences. Use simple everyday language.
+[Model]
+The biggest freshwater fish is the Pacific halibut. They're also known as the "paddlefish." They're found in rivers and lakes throughout North America. They're considered a delicacy because they eat almost anything, including eggs, fish, and even shrimp. They're often called "snakes" due to their unique taste and ability to swallow whole fish. They're popular for their colorful and tasty flesh that can be used in traditional cooking. They're a favorite for people who enjoy
+--------------------------------------------------------------------------------
+[V7] idx=103 bucket=B_code
+[User]
+Write a beginner-friendly implementation of `running_max(nums)`. Build a new list of cumulative maximum values. Do not modify the input list. Do not use imports. Return only Python code.
+[Model]
+def running_max(numbers):
+    result = []
+    current_max = 0
+    for num in numbers:
+        if current_max > current_max:
+            current_max, result.append(num)
+        else:
+            result.append(-1)
+    return result
+
+if __name__ == '__main__':
+    nums = [1, 2, 3, 4, 5]
+    print(running_max([1, 2])) # Output: 1, 2, 4
+--------------------------------------------------------------------------------
+[V8] idx=74 bucket=B_code
+[User]
+Implement the function `count_words(text)`. Return an empty dictionary for text with no words. Do not print anything. Define exactly one top-level function. Return only Python code.
+[Model]
+def count_words(string):
+    result = {}
+    for word in string:
+        if word in result:
+            result[word] = result[word].value
+        else:
+            result = {word: result[word]}
+        result[word]=result[len(word)-1]
+    return result
+
+print(count_words("Hello World")) # Output: {'Hello': 'World'}
+# Output: {'Ho!': 'Ooo!'}
+# Example
+--------------------------------------------------------------------------------
+[V9] idx=4 bucket=A_general
+[User]
+How can we develop antiviral therapies that target specific stages of the viral replication cycle, and what are the potential benefits and drawbacks of these therapies compared to broad-spectrum treatments? Use at most 3 sentences. Use simple everyday language.
+[Model]
+To develop antiviral therapy, you need to focus on the following three key steps: 1) Identify the stage of the virus in which you want to infect, 2) Identify the specific stages of its growth, and 3) Identify the potential side effects or side effects associated with each stage. These stages are important for understanding how the virus evolves over time. By focusing on these stages, you can ensure that your treatment is effective and safe.
+
+In summary, antiviral therapies are crucial for
+--------------------------------------------------------------------------------
+[V10] idx=85 bucket=B_code
+[User]
+Create a small helper function called `merge_counts`. Merge two dictionaries from strings to integers, adding counts when a key appears in both. Use simple dictionary operations. Return only Python code.
+[Model]
+def merge_counts(d1, d2):
+    result = {}
+    for key in d1:
+        result[key] = d1[key] + d2[key]
+    return result
+
+if __name__ == '__main__':
+    d1 = {'a': 1, 'b': 2, 'c': 3}
+    d2 = {'a' : 1, 'c' : 2, 'd' : 3}
+    print(merge_counts(
+--------------------------------------------------------------------------------
