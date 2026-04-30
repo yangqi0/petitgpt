@@ -30,307 +30,187 @@ print(running_sum(nums)) # Output: 3, 4, 5, 6, 7, 8,
 [A2] def lowercase_keys(d):
     result = {}
     for key in d:
-        if isinstance(key, str):
-            new_key = key.lower()
-        else:
-            new_key = key
+        new_key = key.lower()
         result[new_key] = d[key]
     return result
 
-lowercase_keys(d) # returns a new dictionary with lowercase string keys
-
-# Example
-d = {
-    'apple': 'a',
-    'banana': 'b',
-    'grape': 'c',
-    'mango': 'd'
+lowercase_keys(d) = {
+    'a': 'b',
+    'b': 'c',
+    'c': 'd'
 }
 
-print(lowercase_keys(d)) # returns a new dictionary with lowercase string keys
-# Output: {'apple': 'b', 'banana': 'c', 'grape
+print(lowercase_keys(d)) # Output: {'a': 'b', 'b': 'c', 'c': 'd'}
+# Output: {'a': 'b', 'b': 'c', 'c': 'd'}
+# Output: {'b': 'c', 'c': 'd'}
+# Output: {'a': 'b', 'b': '
 --------------------------------------------------------------------------------
 [Q3] [General] Write a short polite email asking for an update on a job application after an interview.
-[A3] Hi, I'm writing to inquire about your application for the new job application. It looks like we have already completed our work forms and am open to new opportunities. Please let me know when you might be able to review it. Thanks.
-
-Thanks,
-[Your Name]
-[Your Name]
-[Your Address]
-[Your Address]
-
-Thank you,
-[Your Name]
-[Your Address]
-
-I look forward to hearing from you soon.
+[A3] Hi, I'm writing to inquire about your application for the new job application. It looks like we have already completed the work you asked for. Please let me know when you might be able to review it. Thanks!
 
 Best regards,
 [Your Name]
 [Your Name]
-[Your Address]
 
-Thanks,
-[Your Name]
-[Your Address]
+I hope this message finds you well. I am writing to inquire about your application for the new job application. Your availability is assured.
 
-Thank you,
+Thank you for your attention to this matter.
+
+Best regards,
 [Your Name]
 [Your Name]
 
-Thank you,
-[Your Name]
-[
+I hope this message finds you well. I am writing to inquire about your application for the new job application. Your availability is assured.
+
+Thank you for your attention to this matter.
+
+Best
 --------------------------------------------------------------------------------
 [Q4] [General] Write a short professional email asking to reschedule a meeting to next week.
-[A4] Your name will be sent to the meeting at your earliest convenience. Please ensure you arrive on time.
-
-Thank you, and we look forward to hearing from you soon.
+[A4] Dear [Name], please reschedule your meeting for next week. Please let me know the time for the meeting and we can arrange a time.
 
 Best regards,
 [Your Name]
-[Your Name]
 
-Please reschedule next week.
-Please reschedule immediately.
-Please ensure you arrive on time.
+Please reschedule for next week.
 
-Thank you, and we look forward to seeing you.
+Thank you, and we will arrange a time.
 
 Best,
 [Your Name]
-[Your Name]
 
-Please reschedule next week.
-Please reschedule immediately.
-Please ensure you arrive on time.
+Please reschedule for next week.
 
-Thank you, and we look forward to hearing from you.
+Thank you, and we will arrange a time.
 
 Best,
 [Your Name]
+
+Please reschedule for next week.
+
+Thank you, and we will arrange a time.
+
+Best,
 [Your Name]
 
-Please reschedule next
+Please reschedule for next week.
+
+Thank you, and we will arrange a time.
+
+Best,
 --------------------------------------------------------------------------------
 [Q5] [General] Summarize this in 3 bullet points: 'Regular exercise can improve mood, support heart health, and help maintain energy levels.'
 [A5] - Regular physical activity boosts mood.
-- It helps manage heart health.
-- It supports overall well-being.
+- It helps manage stress.
+- It supports heart health.
 - It helps maintain energy levels.
 - Regular physical activity boosts mental health.
-- It supports overall well-being.
-- It aids in weight management.
-- Physical activity boosts mood.
-- Physical activity boosts mental health.
-- Physical activity boosts overall well-being.
-- Physical activity boosts overall well-being.
-- Physical activity boosts overall well-being.
-- Physical activity boosts overall well-being.
-- Physical activity boosts overall well-being.
-- Physical activity boosts overall well-being.
-- Physical activity boosts overall well-being.
-- Physical activity boosts
+- To support heart health, you should aim for a total of at least 30 minutes of moderate physical activity most days of the week.
+- Regular physical activity boosts mental health.
+- To support heart health, you should aim for a total of at least 30 minutes of moderate physical activity most days of the week.
+- Regular physical activity boosts mental health.
+- To support heart health, you should aim for a total of at least 30 minutes of moderate physical activity most days of the week.
+- Regular physical activity boosts mental health.
+- To support heart health
 --------------------------------------------------------------------------------
 [Q6] [General] Rewrite this to be more formal: 'Thanks for the quick reply. I’ll send the file tomorrow.'
-[A6] I will send the file tomorrow and will send a confirmation email after the request is sent. Please ensure you provide the correct email address before proceeding.
+[A6] I will send the file tomorrow and will send the file status. Please ensure you provide the correct email address so I can send the final report.
 
-Thank you, and we look forward to seeing your report.
+Thank you, and we can discuss the details further.
 
 Best regards,
 [Your Name]
-[Your Email]
-[Your Email Address]
-[Your Confirmation Email]
+[Your Name]
+[Your Name]
 
-Thanks so much for your help!
+Please send the file tomorrow. Please ensure the file is sent on time.
+
+Thank you, and we can discuss the details further.
 
 Best,
 [Your Name]
-[Your Email]
-[Your Email Address]
-[Your Confirmation Email]
+[Your Name]
+[Your Name]
 
-Thank you, and we look forward to seeing your report.
+Please send the file tomorrow. Please ensure the file is sent on time.
+
+Thank you, and we can discuss the details further.
 
 Best,
 [Your Name]
-[Your Email]
-[Your Email Address]
-[Your Confirmation Email]
-
-Thanks so much for your help!
+[Your Name]
+[Your Name]
 --------------------------------------------------------------------------------
 [Q7] [General] Rewrite this to be more concise: 'I am writing this email in order to ask whether it would be possible to move our meeting to Friday afternoon.'
-[A7] I am writing this email in order to ask whether it would be possible to move our meeting to Friday afternoon. Please confirm your information and let me know when you can arrange for a special meeting.
+[A7] I would greatly appreciate your feedback on this request. If you are available, please share a convenient time during the week.
 
-Thank you, and we will resolve this soon. (You can check our email schedule during the appointment)
+Thank you for considering this request.
 
 Best regards,
 [Your Name]
+
+I would greatly appreciate your feedback on this request. If you are free, I can arrange for a convenient time during the week.
+
+Thanks, and we can discuss further at your earliest convenience.
+
+Thank you for considering this request.
+
+Best regards,
 [Your Name]
 
-Please send an email to: [General] on Friday afternoon. Let's resolve this soon. (Your details are below)
+I would greatly appreciate your feedback on this request. If you are free, I can arrange for a convenient time during the week.
 
-Thank you, and we will resolve this soon. (Your details are below)
+Thanks, and we can discuss further at your earliest convenience.
 
-Best,
-[Your Name]
-[Your Name]
+Thank you for considering this request.
 
-Please send an email to: [General] on Friday afternoon. Let's resolve this soon. (Your details
+Best regards,
 --------------------------------------------------------------------------------
 [Q8] [General] Explain in at most 4 sentences what a budget is, in simple everyday language.
-[A8] A budget is a detailed plan that lets you see exactly how much money you want to spend on things like food, clothes, and entertainment. It helps you make informed decisions about your health and spending. To get a better idea of how much you really need, you can look at the total amount of money you have and see how much you really need to buy. This helps you make informed decisions about your health and spending. So, a budget is a clear way to measure your money.
+[A8] A budget is a detailed plan that lets you see what things I need for my home next. It helps me make more money by giving me a specific amount of money each week so I can spend on things I need. By making small changes to your budget, you can make even the smallest of things a little bit better for my home. This approach helps me make more money every week instead of just spending it once.
 
-In short, a budget is a detailed plan that lets you see exactly how much money you want to use, so it can help you make informed decisions about your health and spending. You will also find out how much you need to buy and how much you need to buy back. This helps you make
+In short, a budget is a detailed plan that lets you see what things I need for my home next. It helps me make more money by giving me a specific amount of money each week so I can spend on things I need. By making small changes to your budget, you can make more money by making more money every week. This approach helps me make more money
 --------------------------------------------------------------------------------
 
 [In-domain prompts from val_jsonl]
 --------------------------------------------------------------------------------
-[eval tags] ['idx=90', 'idx=60', 'idx=84', 'idx=48', 'idx=21', 'idx=6', 'idx=9', 'idx=75', 'idx=63', 'idx=20']
+[eval tags] ['idx=10', 'idx=98', 'idx=89', 'idx=126', 'idx=87', 'idx=119', 'idx=121', 'idx=11', 'idx=120', 'idx=43']
 --------------------------------------------------------------------------------
-[V1] idx=90 bucket=B_code
+[V1] idx=10 bucket=B_code
 [User]
-Implement `dedup_preserve_order(items)` in Python. Keep only the first time each item appears in the list. The returned list should contain the original values, not converted strings. Do not use imports. Return only Python code.
+Define a function named `remove_none` with the signature `remove_none(items)`. Do not remove falsey values such as `0`, `False`, or an empty string unless they are actually `None`. For example, `[None, None]` should return `[]`. Prefer clear loops and conditionals. Return only Python code.
 [Model]
-def dedup_preserve_order(items):
+def remove_none(items):
     result = []
-    seen = []
     for item in items:
-        if item not in seen:
-            seen.append(item)
+        if item is not None:
             result.append(item)
     return result
 
-if __name__ == '__main__':
-    items = ["Apple", "Banana", "Orange"]
-    dedup_preserve_order(items) # Output: [Apple, Orange]
-    print("Original Values:", dedup_preserve_order(items)) # Output: [Apple, Orange]
-    print("Consecutive Values:", dedup_preserve_order(items) + ["Banana", "Orange"]) # Output: [Banana, Orange
---------------------------------------------------------------------------------
-[V2] idx=60 bucket=A_general
-[User]
-I'm making a pilot for a TV show and the main characters include two best friends. The problem is, I can't think of any inspirations for the characters. What are some comedic duos that would translate well to a hospital setting? Don't include comedic duos who are already in a hospital setting, I don't want to rip anything off. Use at most 3 sentences. Use simple everyday language.
-[Model]
-The hospital setting is a great place to meet up and relax. The characters could be friends or family. For a more professional setting, you could try a local hospital or a private clinic. These options are perfect for working with your own medical teams and getting ready to discuss a few important questions about care. Let's talk soon!"
-
-The goal was to create a fun and engaging hospital setting that fits perfectly for both the patient and the team. It is a great fit for both the patient and the team. "
-
-"Comedy, The Hospice of Hospital, and The Hospice of Patient Care" is a great choice because it follows the same format as the hospital setting but focuses on a different patient. They both offer a unique opportunity to meet and share ideas for care
---------------------------------------------------------------------------------
-[V3] idx=84 bucket=A_general
-[User]
-Rewrite this to be clearer: "POTATO FLOUR , CANOLA OIL , CORNSTARCH , UNBLEACHED ENRICHED FLOUR (WHEAT FLOUR, NIACIN, REDUCED IRON, THIAMINE MONONITRATE {VITAMIN B1}, RIBOFLAVIN {VITAMIN B2}, FOLIC ACID) , WHEY (FROM MILK) , SUGAR , OAT FIBER , LEAVENING (CALCIUM PHOSPHATE, BAKING SODA) , SOY LECITHIN , SEA SALT , NATURAL FLAVOR , YEAST EXTRACT , ONION POWDER , SPICE" Return only the rewritten text.
-[Model]
-POTATO FLOUR, CANOLA OIL, CORNSTARCH, UNBLEACHED ENRICHED FLOUR, WHEY (FROM MILK) , SUGAR, OAT FIBER, LEAVENING, LEAVENING, SOY LECITHIN, SEA SALT, NATURAL FLAVOR, YEAST EXTRACT, ONION POWDER, SPICE" Return only the rewritten text.
-
-The revised text is as follows: "POTATO FLOUR, CANOLA OIL, CORNSTARCH, UNBLEACHED ENRICHED FLOUR, WHEY (F
---------------------------------------------------------------------------------
-[V4] idx=48 bucket=A_general
-[User]
-What is spin bowling in Cricket and what are the types of spin bowling? Use at most 3 sentences. Use simple everyday language.
-[Model]
-Cricket is a football game between two teams that are playing against each other. The players use their hands to kick, while the teams use their bodies to move around. In this case, the players use their hands to kick, while the teams use their bodies to kick. The main difference is that the players use their hands to kick, while the teams use their bodies to kick. The game is played using a court with a diameter of about half an inch, and the players use their hands to kick. The main difference is that the players use their hands to kick, while the teams use their bodies to kick. The game is played using a court with a diameter of about half an inch, whereas the players use their hands to kick. The main difference is that the players use their hands
---------------------------------------------------------------------------------
-[V5] idx=21 bucket=B_code
-[User]
-Create a small helper function called `reverse_string`. Implement a simple string reversal function. Unicode characters should work naturally. For example, `'ab cd'` should return `'dc ba'`. Do not include examples, tests, or explanations in the answer. Return only Python code.
-[Model]
-def reverse_string(s):
-    result = ""
-    for i in range(len(s) - 1, -1, -1):
-        result = result + s[i]
-    return result
-
-print(reverse_string("abcd")) # Output: abcdba"
-
-# Output: bd cba"
+remove_none(items) # returns [None, None]
 
 # Example
-print(reverse_string("bd cba")) # Output: bd cba"
+result = remove_none(items)
+print(result) # [None, None]
+
+# Output: [None, None]
 
 # Example
-print(reverse_string("bd cba")) # Output: bd cba"
+result = remove_none(items)
+print(result) # [None, None]
+
+# Output: [None, None]
 
 # Example
-print(reverse_string("bd cba")) # Output: bd cba"
+result = remove_none(items)
+print(result) # [None, None]
+
+# Output: [None, None]
 
 # Example
-print(reverse_string("bd cba")) # Output
+result = remove_
 --------------------------------------------------------------------------------
-[V6] idx=6 bucket=B_code
-[User]
-Solve this short Python task by defining `lowercase_keys(d)`. Make a shallow copy of the dictionary where every key is lowercased. Do not use imports. Return only Python code.
-[Model]
-def lowercase_keys(d):
-    result = {}
-    for key in d:
-        new_key = key.lower()
-        result[new_key] = d[key]
-    return result
-
-lowercase_keys(d) # Returns {key: lowercase_keys(d)}
-"""
-This short Python task uses the `set` method to create a new dictionary
-where each key is lowercased, which means the value is kept
-"""
-
-def lowercase_keys(d):
-    result = {}
-    for key in d:
-        new_key = key.lower()
-        result[new_key] = d[key]
-    return result
-
-if __name__ == '__main__':
-    d = {'lowercase_keys
---------------------------------------------------------------------------------
-[V7] idx=9 bucket=A_general
-[User]
-My sisters and I want to start a comedy podcast but we don't know how we should do the episodes. There are so many podcasts that do advice and rants and stuff, and we don't want to do that. What are some segments we could have on the podcast? Use at most 3 sentences. Use simple everyday language.
-[Model]
-You can start by telling your sisters and their friends that they can watch a few episodes from each podcast. Then, they can discuss the specifics of the podcasts they have already watched. Finally, they can write a short blog post about what they have seen and how they can improve their next episode. These steps will help them make the podcasts feel more real and compelling for them.
-
-This approach helps them make the podcasts feel real for them. They will also enjoy discussing the podcasts with their friends and family. They will also enjoy discussing the content of the podcasts they have already watched. Finally, they will enjoy discussing the content of the podcasts they have just watched. These steps help them make the podcasts feel real for them.
-
-The final segment asks them
---------------------------------------------------------------------------------
-[V8] idx=75 bucket=A_general
-[User]
-I want to quit smoking cigarettes, but I don't know how to go about it. Give me five tips on how to quit and explain why you think each suggestion will be effective. Format your response in a numbered list. Use at most 3 sentences.
-[Model]
-You can start by quitting by changing your habit for a longer period of time or by starting a new job before your old habits become apparent. For a more active life, try joining a local smoke-free line or taking a short walk along the way. Finally, seek support from friends or family for when you first stop to talk about what's happened. These tips help you stop smoking again and help you find a new way to live your life. If you need to speak with a professional counselor or other trained voice, please contact your local or state health department.
-
-The views and advice you are looking for are also helpful. Please let me know when you might be able to arrange a meeting or visit any time soon.
-
-P.S. If you have any other questions,
---------------------------------------------------------------------------------
-[V9] idx=63 bucket=B_code
-[User]
-Define a function named `clamp` with the signature `clamp(x, low, high)`. Return `x` unchanged when it is already between `low` and `high`. For example, `clamp(5, 1, 10)` should return `5`. Use simple Python. Return only Python code.
-[Model]
-def clamp(x, low, high):
-    if x < low:
-        return low
-    if x > high:
-        return high
-    return x
-
-clamp(5, 1, 10) # returns 5
-clamp(5, 1, 10) # returns 10
-
-# Example
-x = 5
-low = 2
-high = 3
-print(clamp(x, low, high)) # Output: low + 1 = high
-# Output: low + 1 = high
-# Example usage: clamp(x, low, high) # Output: low + 1 = high
-# Example usage: clamp(x, low, high) # Output: low + 1 = high
-# Example usage: clamp(x, low, high
---------------------------------------------------------------------------------
-[V10] idx=20 bucket=A_general
+[V2] idx=98 bucket=A_general
 [User]
 Thinking Process:
 
@@ -338,26 +218,226 @@ Thinking Process:
     *   **Task:** Rewrite an instruction prompt for a small assistant.
     *   **Goal:** Preserve original task intent, keep output format/constraints, vary wording naturally.
     *   **Constraints:** No examples, explanations, code, placeholders, or multiple options. Return only one rewritten prompt.
-    *   **Original Prompt:** "Rewrite this to be more formal: "Thanks for the quick reply. I'll send the file tomorrow." Return only the rewritten text."
-    *   **Context
+    *   **Input Prompt:** "Write a concise professional message apologizing for a delayed reply and saying you will respond fully tomorrow. Keep it under 45 words."
+    *   **Metadata:**
 [Model]
-Please rewrite the following sentence as "Thanks for the quick reply." Provide only the revised version. "Thanks for the quick reply." Return only the revised version."
-- thanks for the quick reply
-- thanks for the quick reply
-- thanks for the brief reply
-- thanks for the brief reply
-- thanks for the brief reply
-- thanks for the brief reply
-- thanks for the brief reply
-- thanks for the brief reply
-- thanks for the brief reply
-- thanks for the brief reply
-- thanks for the brief reply
-- thanks for the brief reply
-- thanks for the brief reply
-- thanks for the brief reply
-- thanks for the brief reply
-- thanks for the brief reply
-- thanks for the brief reply
-- thanks for the brief reply
+Please send a brief professional note with no further details. Keep it below the specified duration of your call.
+
+Thank you! [Insert Message]
+Thank you! [Insert Terminal]
+Thank you! [Insert Terminal]
+Thank you! [Insert Terminal]
+Thank you! [Insert Terminal]
+Thank you! [Insert Terminal]
+Thank you! [Insert Terminal]
+Thank you! [Insert Terminal]
+Thank you! [Insert Terminal]
+Thank you! [Insert Terminal]
+Thank you! [Insert Terminal]
+Thank you! [Insert Terminal]
+Thank you! [Insert Terminal]
+Thank you! [Insert Terminal]
+Thank you! [Insert Terminal]
+Thank you!
+--------------------------------------------------------------------------------
+[V3] idx=89 bucket=A_general
+[User]
+Thinking Process:
+
+1.  **Analyze the Request:**
+    *   **Task:** Rewrite an instruction prompt for a small assistant.
+    *   **Original Prompt:** "Rewrite this to be more formal: "Thanks again for your help." Return only the rewritten text."
+    *   **Constraints:**
+        *   Preserve original task intent (rewrite for formality).
+        *   Keep same output format and constraints (return only the rewritten text).
+        *   Vary wording naturally.
+        *   Do not add examples, explanations, code, placeholders
+[Model]
+Please rewrite the following sentence to be more formal: "Thanks again for your help." Return only the revised version without any additional commentary or formatting. These changes help us understand the meaning of the original sentence and ensure its finality. Let's try to understand better.
+
+- The rewritten sentence is clearer and more direct.
+- The revised sentence is more direct and direct.
+- The original sentence is more direct and direct.
+- The revised sentence is more direct and direct.
+- The original sentence is more direct and direct.
+- The revised sentence is more direct and direct.
+- The revised sentence is more direct and direct.
+- The revised sentence is more direct and direct.
+- The revised sentence is more direct and direct.
+- The revised sentence is
+--------------------------------------------------------------------------------
+[V4] idx=126 bucket=B_code
+[User]
+Create `remove_none(items)` for this simple Python task. Build a list containing all items except `None`. For example, `[1, None, 2]` should return `[1, 2]`. Prefer clear loops and conditionals. Return only Python code.
+[Model]
+def remove_none(items):
+    result = []
+    for item in items:
+        if item is not None:
+            result.append(item)
+    return result
+
+remove_none(items) # returns [1, None, 2]
+
+# Example
+print(remove_none(items)) # Outputs [1, None, 2]
+
+# Output
+[1, None, 2]
+
+# Example
+print(remove_none(items)) # Outputs [1, None, 2]
+
+# Output
+[1, None, 2]
+
+# Example
+print(remove_none(items)) # Outputs [1, None, 2]
+
+# Output
+[1, None, 2]
+
+# Example
+--------------------------------------------------------------------------------
+[V5] idx=87 bucket=B_code
+[User]
+Implement the function `remove_none(items)`. Build a list containing all items except `None`. An empty list should return an empty list. Return only Python code.
+[Model]
+def remove_none(items):
+    result = []
+    for item in items:
+        if item is not None:
+            result.append(item)
+    return result
+
+remove_none(items) # Outputs [None]
+# Outputs [None]
+
+# Example
+# List with no items
+[
+  [None],
+  [None],
+  [None]
+]
+
+# Output: [None]
+[None]
+
+# Example
+# List without any items
+[
+  [None],
+  [None],
+  [None]
+]
+
+# Example
+# List without any items
+[
+  [None],
+  [None],
+  [None]
+]
+
+# Output: [None]
+[None]
+
+#
+--------------------------------------------------------------------------------
+[V6] idx=119 bucket=B_code
+[User]
+Write a function to replace all spaces in the given string with character * list item * list item * list item * list item '%20'. Return only Python code.
+[Model]
+def replace_char(s, item):
+    result = []
+    for char in s:
+        if char == item:
+            result.append(char)
+    return result
+
+replace_char(s, 'A') # returns ['A', 'A', 'A', 'A', 'A', 'A']
+
+# Output: ['A', 'A', 'A', 'A', 'A', 'A', 'A', 'A']
+
+# Output: ['A', 'A', 'A', 'A', 'A', 'A', 'A', 'A']
+
+def replace_char_list(s, item):
+    result = []
+    for char in s:
+        if char == item:
+            result.append(char)
+--------------------------------------------------------------------------------
+[V7] idx=121 bucket=A_general
+[User]
+Thinking Process:
+
+1.  **Analyze the Request:**
+    *   **Task:** Rewrite an instruction prompt for a small assistant.
+    *   **Constraints:**
+        *   Preserve original task intent (extract 2 main ideas from the text, keep points short).
+        *   Keep same output format and constraints (summary_bullets, extract_key_points, short points).
+        *   Vary wording naturally.
+        *   Do not add examples, explanations, code, placeholders, or multiple options.
+        *   Return only one rewritten prompt.
+[Model]
+- Extract 2 main ideas from the text.
+- Keep them in a single short paragraph.
+- Listen to the response.
+- Serve.
+- Contact person(s) you are looking for a quick and easy way to share these ideas.
+- The result is only the first two bullet points.
+- Please let me know when you can arrange for a better environment.
+- Please let me know when you can arrange for a better environment.
+- Thank you for considering this request.
+- Please let me know when you can arrange for a better environment.
+- Thank you for considering this request.
+- Please let me know when you can arrange for a better environment.
+- Thank you for considering this request.
+- Please let me know when you
+--------------------------------------------------------------------------------
+[V8] idx=11 bucket=B_code
+[User]
+Write a beginner-friendly implementation of `running_max(nums)`. Return the running maximum after each number in `nums`. Use simple Python control flow. Return only Python code.
+[Model]
+def running_max(nums):
+    result = []
+    current_max = None
+    for num in nums:
+        if current_max is None or num > current_max:
+            current_max = num
+        result.append(current_max)
+    return result
+
+if __name__ == '__main__':
+    nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    print(running_max(nums)) # Output: 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39
+--------------------------------------------------------------------------------
+[V9] idx=120 bucket=A_general
+[User]
+Are poisonous and venomous the same thing? I hear some people using the terms interchangeably. Explain the similarities and differences. Use at most 3 sentences.
+[Model]
+The term "venomous" refers to a venomous animal that can cause severe pain and loss in the form of swelling. People often use the word "venomous" to describe a dangerous situation, but the exact meaning is not clear. The difference lies in how the venom is absorbed into the bloodstream and how it causes damage to cells. This difference makes the term "venomous" more accurate than the actual venom. Therefore, the two terms are considered interchangeable. This difference makes the term "venomous" more precise and accurate for describing a dangerous situation. By using the correct term, we can determine the exact difference between the two terms.
+
+In summary, the term "venomous" is a dangerous and accurate term because it describes a dangerous situation where the
+--------------------------------------------------------------------------------
+[V10] idx=43 bucket=A_general
+[User]
+Rewrite this to be clearer: "Her and I went to the movies" Return only the rewritten text.
+[Model]
+She went to the movies to watch her and I went to the movies.
+
+This revised sentence uses the same format but uses the new word "and" instead of the old one. It does not include the new word "and," which is used in this context. The revised sentence is: "Her and I went to the movies."
+
+The revised sentence is: "Her and I went to the movies."
+
+The revised sentence is: "Her and I went to the movies."
+
+The revised sentence is: "Her and I went to the movies."
+
+The revised sentence is: "Her and I went to the movies."
+
+The revised sentence is: "Her and I went to the movies."
+
+The revised sentence is: "Her and I
 --------------------------------------------------------------------------------

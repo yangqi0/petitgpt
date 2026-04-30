@@ -7,13 +7,21 @@ in_domain: n=10 mode=full_context show_ref=False dump_prompt=False sample_eval_j
 [Q1] [Code] Write a Python function running_sum(nums) that returns cumulative sums.
 [A1] def running_sum(nums):
     result = []
-    total = 0
+    current_sum = 0
     for num in nums:
-        total = total + num
-        result.append(total)
+        current_sum = current_sum + num
+        result.append(current_sum)
     return result
 
-print(running_sum(nums)) # Output: 6,048,024,023,023,023,023,023,023,023,023,023,023,023,023,023,023,023,023,023,023,023,023,023,023,023,023,023,023,023,023,023,023,023,023,023,023,
+print(running_sum(nums)) # Output: 3, 4, 5, 6, 7, 8, 9, 10
+
+# Output: 3, 4, 5, 6, 7, 8, 9, 10
+
+# Output: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+
+# Output: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+
+# Output: 1, 2, 3, 4, 5, 6, 7,
 --------------------------------------------------------------------------------
 [Q2] [Code] Write a Python function lowercase_keys(d) that returns a new dictionary with lowercase string keys.
 [A2] def lowercase_keys(d):
@@ -26,411 +34,370 @@ print(running_sum(nums)) # Output: 6,048,024,023,023,023,023,023,023,023,023,023
         result[new_key] = d[key]
     return result
 
-lowercase_keys(d) # returns a new dictionary with lowercase string keys
-
-# Output: {'a': 'b', 'b': 'c', 'c': 'd'}
-
-# Output: {'a': 'b', 'b': 'c', 'c': 'd'}
-
-# Output: {'a': 'b', 'b': 'c', 'c': 'd'}
-
-# Output: {'a': 'b', 'b
+if __name__ == '__main__':
+    print(lowercase_keys(dict)) # {'a', 'b', 'c', 'd'} == {'a', 'b', 'c', 'd'} # {'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n'} # {'o', 'p', 'q', 'r', 's', 't', 'u', 'v
 --------------------------------------------------------------------------------
 [Q3] [General] Write a short polite email asking for an update on a job application after an interview.
-[A3] Hi, I'm writing to provide an update on my application after an interview. Please let me know your availability and any updates you might have.
-
-Thank you, and we can discuss this further.
+[A3] Hi, I am writing to provide an update on a new job application. Please let me know your availability and any other details you would like. Thanks!
 
 Best regards,
-[Your name]
-[Your name]
+[Your Name]
+[Your Name]
 
-Please send a brief email to [your name] so we can review the application.
+I am writing to provide an update on the application. Please let me know your availability and any other details you would like. Thanks!
 
-Thank you, and we can discuss this further.
+Best regards,
+[Your Name]
+[Your Name]
 
-Best,
-[Your name]
-[Your name]
-
-Please send a brief email to [your name] so we can review the application.
-
-Thank you, and we can discuss this further.
+I am writing to provide an update on the application. Please share your availability and any other details you would like. Thanks!
 
 Best,
-[Your name]
-[Your name]
+[Your Name]
+[Your Name]
 
-Please send a brief email to [your name] so we
+I am writing to provide an update on the application. Please share your availability and any other details you would like. Thanks!
 --------------------------------------------------------------------------------
 [Q4] [General] Write a short professional email asking to reschedule a meeting to next week.
-[A4] Dear [Name],
+[A4] Hi, I am writing to arrange a rescheduled meeting for next week. Please let me know your availability and availability.
 
-I am writing to arrange for you to reschedule my meeting to next week. Please let me know your availability.
-
-Please let me know your availability.
+Thank you!
 
 Best regards,
 [Your Name]
-
-Please send a brief email to the meeting to reschedule. Please let me know your availability.
-
-Best regards,
 [Your Name]
 
-Please send a brief email to the meeting to reschedule. Please let me know your availability.
+Please reschedule the meeting for next week. Please let me know your availability.
 
-Best regards,
+Thanks!
+
+Best,
+[Your Name]
 [Your Name]
 
-Please send a brief email to the meeting to reschedule. Please let me know your availability.
+Please reschedule the meeting for next week. Please let me know your availability.
 
-Best regards,
+Thanks!
+
+Best,
+[Your Name]
 [Your Name]
 
-Please send a brief email to the meeting to reschedule
+Please reschedule the meeting for next week. Please let me know your availability.
+
+Thanks!
+
+Best,
+[Your Name]
+[Your Name]
+
+Please
 --------------------------------------------------------------------------------
 [Q5] [General] Summarize this in 3 bullet points: 'Regular exercise can improve mood, support heart health, and help maintain energy levels.'
 [A5] - Regular physical activity boosts mood and supports heart health.
-- It helps manage stress and anxiety.
-- It enhances mental health.
-- It supports overall well-being.
-- Regular physical activity boosts heart health.
-- It supports overall well-being.
-- Regular physical activity boosts mood and supports overall well-being.
-- Regular physical activity boosts mental health.
-- It supports overall well-being.
-- Regular physical activity boosts mood and supports overall well-being.
-- Regular physical activity boosts mood and supports overall well-being.
-- Regular physical activity boosts mood and supports overall well-being.
-- Regular physical activity boosts mood and supports overall well-being.
-- Regular physical activity boosts mood and supports
+- It helps manage stress levels.
+- Regular physical activity boosts mood and supports heart health.
+- Regular physical activity boosts energy levels.
+- Regular physical activity boosts mood and supports heart health.
+- Regular physical activity boosts mood and supports heart health.
+- Regular physical activity boosts mood and supports heart health.
+- Regular physical activity boosts mood and supports heart health.
+- Regular physical activity boosts mood and supports heart health.
+- Regular physical activity boosts mood and supports heart health.
+- Regular physical activity boosts mood and supports heart health.
+- Regular physical activity boosts mood and supports heart health.
+- Regular physical activity boosts mood and supports heart health.
 --------------------------------------------------------------------------------
 [Q6] [General] Rewrite this to be more formal: 'Thanks for the quick reply. I’ll send the file tomorrow.'
-[A6] Thank you for the quick reply. I have attached the file.
+[A6] Hi, can you please send the file tomorrow? I am sorry for any confusion. Please let me know what time works best for you.
+
+Thank you!
 
 Best regards,
 [Your Name]
-
-Please send the file tomorrow.
-
-Thank you for the quick reply. I have attached the file.
-
-Best regards,
 [Your Name]
 
-Please send the file tomorrow.
+Rewrite this to be more formal: Thank you!
 
-Thank you for the quick reply. I have attached the file.
+Thank you!
 
 Best,
 [Your Name]
+[Your Name]
 
-Please send the file tomorrow.
+Rewrite this to be more formal: Thank you!
 
-Thank you for the quick reply. I have attached the file.
+Thank you!
 
 Best,
 [Your Name]
+[Your Name]
 
-Please send the file tomorrow.
+Rewrite this to be more formal: Thank you!
 
-Thank you for the quick reply. I have attached the file.
+Thank you!
 
 Best,
 [Your Name]
+[Your Name]
 
-Please send the file tomorrow.
+Rewrite this to be more formal: Thank you
 --------------------------------------------------------------------------------
 [Q7] [General] Rewrite this to be more concise: 'I am writing this email in order to ask whether it would be possible to move our meeting to Friday afternoon.'
-[A7] Please send me an email at your earliest convenience to ensure you arrive on Friday afternoon. Please provide the exact date and time for the meeting.
+[A7] Please send me an email to ensure we are on Friday afternoon.
 
-Thank you, and we will proceed with the necessary arrangements. Please let me know if you have any other details to add.
-
-Best regards,
-[Your Name]
-[Your Email]
-[Your Address]
-
-Please send me an email at your earliest convenience. Please provide the exact date and time for the meeting.
-
-Thank you, and we will proceed with the necessary arrangements. Please provide the exact date and time.
-
-Thank you, and we will proceed with the necessary arrangements. Please let me know your availability.
+Thank you, and I look forward to hearing from you soon.
 
 Best regards,
-[Your Name]
-[Your Email]
-[Your Address
+[Your name]
+[Your email]
+[Your email]
+[Your name]
+
+Rewrite this to be more concise: Please move our meeting to Friday afternoon.
+
+Thank you, and I look forward to hearing from you soon.
+
+Best,
+[Your name]
+[Your email]
+[Your name]
+
+Rewrite this to be more concise: Please move our meeting to Friday afternoon.
+
+Thank you, and I look forward to hearing from you soon.
+
+Best,
+[Your name]
+[Your email]
+[Your name]
 --------------------------------------------------------------------------------
 [Q8] [General] Explain in at most 4 sentences what a budget is, in simple everyday language.
-[A8] A budget is a set of financial statements that shows how much money you have in your life over a certain period. It helps you see where your money is going and how much it costs to pay back your expenses. By using these numbers, you can make a clear picture of how much money you have in your life over a specific time. This helps you make informed decisions about your finances.
+[A8] A budget is a set of financial statements that shows how much money you will spend each month based on your income and expenses. It helps you understand how much you will spend each month based on your income and expenses. By using these numbers, you can make better decisions about your future spending.
 
-In more complex situations, a budget can help you understand how much money you have in your life over a specific time. This helps you make better decisions about your finances and how to save money over the long term. This helps you make better decisions about your finances over the long term. This helps you make better decisions about your finances over the long term. These changes help you make
+For example, if you have a monthly income of $100 and your expenses are $20, then your budget would look like this:
+
+$100 + $20 = $30
+$30 = $45
+
+This means you spend $45 on your monthly expenses. This makes your money spend $45 on your next monthly expenses. This makes your future spending even more money! Your budget is now a budget, so it is a good starting point for making better decisions about your future spending
 --------------------------------------------------------------------------------
 
 [In-domain prompts from val_jsonl]
 --------------------------------------------------------------------------------
-[eval tags] ['idx=82', 'idx=79', 'idx=61', 'idx=78', 'idx=59', 'idx=19', 'idx=11', 'idx=23', 'idx=91', 'idx=14']
+[eval tags] ['idx=128', 'idx=124', 'idx=63', 'idx=16', 'idx=119', 'idx=17', 'idx=22', 'idx=131', 'idx=11', 'idx=69']
 --------------------------------------------------------------------------------
-[V1] idx=82 bucket=A_general
+[V1] idx=128 bucket=B_code
 [User]
-I'm an art student, and I'm going to be in Scottsdale in May. What are 5 places I can go that have good art, especially modern art? Use at most 3 sentences. Use simple everyday language.
-[Model]
-The city is known for its modern art because it has the best art collection in the world. It also offers a wide range of museums and art galleries that specialize in preserving ancient artifacts. These places make the city a great place to explore new art forms and learn more about the history of art. To find these places, you can visit the museum or visit the local art museum. If you need more detailed information, call the museum directly.
-
-You can also check out the art museum at the local art museum to see all the exhibits and artworks that are on display. This includes the oldest pieces from the city's past and the latest works from the museum. Finally, the museum offers a comprehensive tour of the city's art collection. Please feel free to ask if you need any
---------------------------------------------------------------------------------
-[V2] idx=79 bucket=B_code
-[User]
-Write a Python function `running_sum(nums)`. Return a new list where each element is the cumulative sum up to that position. The input may contain negative numbers. For example, `[]` should return `[]`. Return only Python code.
+Define `running_sum(nums)`. Build the prefix sums of `nums` from left to right and return them as a list. Use a simple loop. Do not use imports. Return only Python code.
 [Model]
 def running_sum(nums):
     result = []
-    total = 0
+    current_sum = 0
     for num in nums:
-        total = total + num
-        result.append(total)
+        current_sum = current_sum + num
+        result.append(current_sum)
     return result
 
 if __name__ == '__main__':
     nums = [1, 2, 3, 4, 5]
-    print(running_sum(nums)) # Output: [2, 4, 6, 8, 10]
-    # Output: [4, 6, 8, 10]
-    # Output: [10, 12, 15, 18, 25, 30]
-    # Output: [15, 18, 20, 20, 30]
-    # Output: [20, 21, 24, 25, 30]
-    # Output: [30, 40, 50, 60, 70]
+    running_sum(nums)
+    print("The sum of the numbers is", running_sum(nums)) # Output: 4.5
+    print("The sum of the numbers is", 4.5) # Output: 4.5
+    print("The sum of the numbers is", 4) # Output: 5.5
+    print("The sum of the numbers is", 5) # Output: 5.5
+    print("The sum of
 --------------------------------------------------------------------------------
-[V3] idx=61 bucket=A_general
+[V2] idx=124 bucket=A_general
 [User]
-Rewrite this to be clearer: "m quite disappointed. Your comments suggest that you have no faith in my technical abilities. We" Return only the rewritten text.
+What is the difference between a nautical mile and a mile? Use at most 3 sentences. Use simple everyday language.
 [Model]
-I am disappointed that your comments do not align with my technical skills. I believe your expertise is crucial for success. Please review and let me know if you need any further assistance.
+A nautical mile is a distance that travels in one direction only and does not change direction. It is like a tiny bit of water that stays still in one place without any movement. A mile is a long distance, so it is not a single small step but a long time. A nautical mile is a long distance, so it is a long time. Both are important because they are the same thing, but a nautical mile is just a short distance that travels in one direction only. The difference is how much you use your feet to move around. For example, a nautical mile is about 1 foot, while a nautical mile is about 2 feet. Both are important because they help you stay safe and safe on the ground. Finally, a naut
+--------------------------------------------------------------------------------
+[V3] idx=63 bucket=A_general
+[User]
+Rewrite this to be clearer: "Neuroscientist Smith explains how implementing certain habits in your day to day life can HELP you stay motivated and disciplined." Return only the rewritten text.
+[Model]
+A neuroscientist explains how implementing specific habits in your day can help keep your motivation high. Return only the rewritten text.
 
-Thank you for understanding.
+Let me know if you need any further assistance.
 
 Best regards,
-[Your name]
-[Your email address]
-[Your email address]
-[Your email address]
-[Your email address]
 
-I am very disappointed that your comments do not align with my technical skills. Please review and let me know if you need any further assistance.
+Dr. Smith,
 
-Thanks for understanding.
+Smith,
 
-Best regards,
-[Your name]
-[Your email address]
-[Your email address]
-[Your email address]
+Dr. Smith,
 
-I am very disappointed that your comments do not align with my technical skills. Please review
+Dr. Smith,
+
+Dr. Smith,
+
+Dr. Smith,
+
+Dr. Smith,
+
+Dr. Smith,
+
+Dr. Smith,
+
+Dr. Smith,
+
+Dr. Smith,
+
+Dr. Smith,
+
+Dr. Smith,
+
+Dr. Smith,
+
+Dr. Smith,
+
+Dr. Smith,
+
+Dr. Smith,
+
+Dr. Smith,
+
+Dr. Smith,
+
+Dr. Smith
 --------------------------------------------------------------------------------
-[V4] idx=78 bucket=B_code
+[V4] idx=16 bucket=A_general
 [User]
-Write `remove_none` as a Python function. Keep the order of the remaining items unchanged. For example, `[0, None, False, '']` should return `[0, False, '']`. Define exactly one top-level function. Return only Python code.
+What are leptokurtic, platykurtic and mesokurtic distributions? What are the implications for statistical analysis when data is leptokurtic or platykurtic in form? Use at most 3 sentences. Use simple everyday language.
 [Model]
-def remove_none(lst):
+Lemons are leptokurtic and platykurtic in the same way. This means they are the only two types of leptokurtic plants that grow in the same place. In this case, the leptokurtic plants are platykurtic and mesokurtic. The other difference is that leptokurtic plants are not platykurtic. These two plants are different because leptokurtic plants are not platykurtic and mesokurtic plants are not platykurtic. These differences make leptokurtic plants more useful than platykurtic plants. Therefore, leptokurtic and platykurtic plants are the only two types of plants that can grow
+--------------------------------------------------------------------------------
+[V5] idx=119 bucket=B_code
+[User]
+Write a function to replace all spaces in the given string with character * list item * list item * list item * list item '%20'. Return only Python code.
+[Model]
+def replace_char(s, item):
     result = []
-    for item in lst:
-        if item is not None:
-            result.append(item)
+    for char in s:
+        if char == item:
+            result.append(char)
     return result
 
-remove_none(lst) # Output only one top-level function
-"""
-Remove all the elements from a given list
-"""
+replace_char(s, 'A') # returns ['A', 'A', 'A', 'A', 'A', 'A']
+# Output: ['A', 'A', 'A', 'A', 'A', 'A', 'A']
+# Output: ['A', 'A', 'A', 'A', 'A', 'A', 'A']
+# Output: ['A', 'A', 'A', 'A', 'A', 'A', 'A']
+# Output: ['A', 'A', 'A', 'A', 'A',
+--------------------------------------------------------------------------------
+[V6] idx=17 bucket=A_general
+[User]
+Please generate a numbered list of four taglines for my movie "Gone with the Skins" about a society of skeletons in the post-apocalypse who migrate via road trip from the east coast to the west coast. The tones for all of them should be upbeat and goofy. You should explain why each might be a good tagline with one sentence no longer than fifty words for each. Please avoid all mention of witches or pumpkins.
+[Model]
+- A skeleton is a place where people go to die
+- A person is a person who travels to die
+- A person is a person who travels to die
+- A person is a person who travels to die
+- A person is a person who travels to die
+- A person is a person who travels to die
+- A person is a person who travels to die
+- A person is a person who travels to die
+- A person is a person who travels to die
+- A person is a person who travels to die
+- A person is a person who travels to die
+- A person is a person who travels to die
+- A person is a person who travels to die
+- A person is a person who travels to die
+- A person is a
+--------------------------------------------------------------------------------
+[V7] idx=22 bucket=A_general
+[User]
+Rewrite this to be clearer: "s begin. Choose colors from Bernat Softee Baby, which is OEKO-TEX Standard 100 certified, so it" Return only the rewritten text.
+[Model]
+Choose colors from Bernat Softee Baby, which is OEKO-TEX Standard 100 certified, so it"s OEKO-TEX Standard 100 certified. Choose colors from Bernat Softee Baby, which is OEKO-TEX Standard 100 certified, so it"s OEKO-TEX Standard 100 certified. Choose colors from Bernat Softee Baby, which is OEKO-TEX Standard 100 certified, so it"s OEKO-TEX Standard 100 certified."
 
-def remove_none(lst):
+The revised sentence is: "s begin. Choose colors from Bernat Softee Baby, which is OEKO-TEX Standard 100 certified, so it" return only the rewritten
+--------------------------------------------------------------------------------
+[V8] idx=131 bucket=A_general
+[User]
+A company wants to understand its retention rate of employees over a period of one year. It analyzes the data for the last year and determines that there were 500 employees at the beginning of the year and 550 at the end of the year. However, it is also determined that 120 employees left the company during that same year.
+
+What is the employee retention rate of this company for the last year? Use at most 3 sentences. Use simple everyday language.
+[Model]
+The employee retention rate for this company is 120%. This means that the company lost 600 employees in the first year. The next year, 120 employees lost 600 employees. So, the total retention rate for this company is 120/550 = 1.1. This is because the last year has more employees than the previous year, so the total retention rate for this company is 1.1. This means that the company lost 600 employees in the first year.
+
+The total retention rate for this company is 1.1. This is because the last year lost 600 employees, so the total retention rate for this company is 1.1. This means that the company lost 600 employees in the first year.
+
+The total retention rate for this company is 1.1. This is because the
+--------------------------------------------------------------------------------
+[V9] idx=11 bucket=B_code
+[User]
+Write a beginner-friendly implementation of `running_max(nums)`. Return the running maximum after each number in `nums`. Use simple Python control flow. Return only Python code.
+[Model]
+def running_max(nums):
     result = []
-    for item in lst:
-        if item is not None:
-            result.append(item)
+    current_max = None
+    for num in nums:
+        if current_max is None or num > current_max:
+            current_max = num
+        result.append(current_max)
     return result
 
 if __name__ == '__main__':
-    lst = ["0", "None", "False", "[']"]
-    result = remove_none(lst)
-    print(result) # Output only one top-level function
-"""
-Remove all the elements from a given list
-"""
+    nums = [1, 2, 3, 4, 5]
+    running_max(nums)
+    print("The running maximum is", running_max(nums)) # Output: 4.5
+    print("The running maximum is", 4.5) # Output: 8.0
+    print("The running maximum is", 8.5) # Output: 16.0
+    print("The running maximum is", 16.5) # Output: 18.0
 --------------------------------------------------------------------------------
-[V5] idx=59 bucket=A_general
-[User]
-"The main challenge is to carry out the work while keeping the installation operational this year for its users", explains Sébastien Evrard, project leader for the PS East Experiment Area renovation.
-
-Classify the level of management that Sébastien Evrard holds based on the above sentence. Your choices are: Top-level, Middle-level, Lower-level, Non-management, External
-[Model]
-Top-level, Middle-level, Lower-level, Non-management, external
-
-Sébastien Evrard holds the highest level of management in the project. He has a strong management system and a strong non-management role. He also has a strong non-management role. The top-level team is responsible for managing the project. Sébastien Evrard holds the highest level of management in the project. He has a strong non-management role. The top-level team is responsible for managing the project. Sébastien Evrard holds the highest level of management in the project. The top-level team is responsible for managing the project. The top-level team is responsible for managing the project. The top-level team is
---------------------------------------------------------------------------------
-[V6] idx=19 bucket=B_code
-[User]
-Solve this short Python task by defining `lowercase_keys(d)`. Lowercase all keys without changing the values. Do not include examples, tests, or explanations in the answer. Return only Python code.
-[Model]
-def lowercase_keys(d):
-    result = {}
-    for key in d:
-        new_key = key.lower()
-        result[new_key] = d[key]
-    return result
-
-print(lowercase_keys(d)) # Outputs { 'lowercase_keys': [ 'key', 'name', 'value', 'type', 'key', 'value', 'lower', 'upper'] } ) # Outputs { 'lowercase_keys': [ 'key', 'name', 'value', 'type', 'key', 'value', 'lower', 'upper'] } }
-# Output: {'key': 'lowercase_keys', 'value': 'value'}
-
-# Example
-lowercase_keys(d) # Output
---------------------------------------------------------------------------------
-[V7] idx=11 bucket=B_code
-[User]
-Solve this short Python task by defining `clamp(x, low, high)`. Return `x` unchanged when it is already between `low` and `high`. Do not include examples, tests, or explanations in the answer. Return only Python code.
-[Model]
-def clamp(x, low, high):
-    if x < low:
-        return low
-    if x > high:
-        return high
-    return x
-
-x = 10
-low = 5
-high = 4
-print(clamp(x, low, high)) # Outputs 5
-# Output: 5
-# Output: 4
-# Output: 4
-# Output: 3
-# Output: 2
-# Output: 1
-# Output: 1
-# Output: 0
-# Output: 0
-# Output: 1
-# Output: 1
-# Output: 1
-# Output: 1
-# Output: 1
-# Output: 1
-# Output: 1
-# Output: 1
-# Output: 1
-# Output: 1
-# Output: 1
---------------------------------------------------------------------------------
-[V8] idx=23 bucket=B_code
-[User]
-Create a small helper function called `is_prime`. For numbers less than 2, return `False`; otherwise test divisibility. Small primes such as 2 and 3 should return `True`. For example, `is_prime(1)` should return `False`. Use simple Python. Return only Python code.
-[Model]
-def is_prime(n):
-    if n < 2:
-        return False
-    if n == 2:
-        return True
-    if n % 2 == 0:
-        return False
-    i = 3
-    while i * i <= n:
-        if n % i == 0:
-            return False
-        i = i + 2
-    return True
-
-is_prime(2)
-
-# Output
-True
-False
-- 2
-- 1
-- 2
-- 1
-- 1
-- 1
-- 2
-- 1
-- 1
-- 1
-- 1
-- 1
-- 1
-- 1
-- 1
-- 1
-- 1
-- 1
-- 1
-- 1
-- 1
-- 1
-- 1
-- 1
-- 1
---------------------------------------------------------------------------------
-[V9] idx=91 bucket=A_general
+[V10] idx=69 bucket=A_general
 [User]
 Thinking Process:
 
 1.  **Analyze the Request:**
     *   **Task:** Rewrite an instruction prompt for a small assistant.
-    *   **Input Prompt:** "Rewrite this to sound more polite: "This explanation is unclear." Return only the rewritten text."
-    *   **Constraints:**
-        *   Preserve original task intent (rewrite for politeness).
-        *   Keep same output format and constraints (return only the rewritten text).
-        *   Vary the wording naturally.
-        *   Do not add examples, explanations, code, placeholders
+    *   **Goal:** Preserve original task intent, keep output format/constraints, vary wording naturally.
+    *   **Constraints:** No examples, explanations, code, placeholders, or multiple options. Return only one rewritten prompt.
+    *   **Original Prompt:** "Rewrite this to be more concise: "I hope you are doing well and having a good start to the week." Return only the rewritten text."
+    *
 [Model]
-Please rewrite the following sentence to sound more polite: "This explanation is unclear."
+Please rewrite this to be more concise: "I hope you are doing well and having a good start to the week." Return only the revised version without any additional commentary or formatting.
 
-Please rephrase the following sentence to sound more polite: "This explanation is unclear."
+Thank you!
 
-Please rephrase the following sentence to sound more polite: "This explanation is unclear."
+Best regards,
+[Your Name]
+[Your Name]
 
-Please rephrase the following sentence to sound more polite: "This explanation is unclear."
+[Your Name]
 
-Please rephrase the following sentence to sound more polite: "This explanation is unclear."
+[Your Name]
 
-Please rephrase the sentence to sound more polite: "This explanation is unclear."
+[Your Name]
 
-Please rephrase the sentence to sound more polite: "This explanation is unclear."
+[Your Name]
 
-Please rephrase the sentence to sound more polite: "This explanation is unclear."
+[Your Name]
 
-Please rephrase the
---------------------------------------------------------------------------------
-[V10] idx=14 bucket=B_code
-[User]
-Define a function named `clamp` with the signature `clamp(x, low, high)`. Keep `x` inside the inclusive range `[low, high]`. For example, `clamp(-2, 0, 10)` should return `0`. Do not use imports. Return only Python code.
-[Model]
-def clamp(x, low, high):
-    if x < low:
-        return low
-    if x > high:
-        return high
-    return x
+[Your Name]
 
-clamp(x, low, high) # returns 0
-clamp(x, low, high) # returns 0
-print("Clamping", low, "to", high)
-print("Clamping", low, "to", high)
-print("Clamping", low, "to", high)
-print("Clamping", low, "to", high)
-# Output: 0
-# Clamping
-0
-# Output: 0
-# Clamping
-1
-# Output: 1
-# Clamping
-1
-# Output: 1
-# Clamping
-1
-# Output: 1
+[Your Name]
+
+[Your Name]
+
+[Your Name]
+
+[Your Name]
+
+[Your Name]
+
+[Your Name]
+
+[Your Name]
+
+[Your Name]
+
+[Your Name]
+
+[Your Name]
+
+[Your Name]
 --------------------------------------------------------------------------------
