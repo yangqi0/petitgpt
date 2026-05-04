@@ -96,22 +96,15 @@ petitgpt/
 │   └── train_sft.py
 ├── distill/
 │   ├── train_distill.py
-│   ├── general_*.py
-│   ├── code_*.py
-│   ├── build_targeted_distill_mix_v1.py
-│   └── *_utils.py
+│   └── tools for generating synthetic data
 ├── datasets/
-│   ├── pretrain_*
-│   ├── distill/
-│   └── ...
+├── src/
+│   └── model.py
 ├── outputs/
-│   ├── pretrain_*
-│   ├── sft_*
-│   └── targeted_distill_*
 └── README.md
 ```
 
-The exact structure may vary across experiments, but the main stages are separated into `pretrain/`, `sft/`, and `distill/`.
+
 
 ---
 
