@@ -55,15 +55,7 @@ The project has completed several major stages:
 ```text
 outputs/sft_v6_general_code/step_003500.pt -->
 ```
-<!--
-A later targeted distillation run improved some local simple-code behavior, but generation quality remained unstable. In particular, the model often generated a reasonable function prefix but failed to stop cleanly, continuing with examples, print statements, or repeated text.
 
-Therefore, the current project should be viewed as:
-
-```text
-A small language model training and post-training pipeline demonstration,
-not a production-quality chatbot.
-``` -->
 
 ---
 
