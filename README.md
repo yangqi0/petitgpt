@@ -14,7 +14,7 @@ The project covers:
 - checkpoint selection,
 - sampling and failure analysis. -->
 
-The current model is approximately **137M parameters**. It remains limited as a general assistant, but the project demonstrates an end-to-end research-engineering workflow for small language model training.
+The current model is approximately **137M parameters**. The entire training process can be run on a single RTX 4090 GPU.
 
 ---
 
@@ -28,7 +28,7 @@ The main focus areas are:
    Building a full training pipeline rather than relying only on high-level frameworks.
 
 2. **Small-model post-training**
-   Understanding how SFT and targeted distillation behave for a small 137M model.
+   Understanding how CPT, SFT, and targeted distillation behave for a small model.
 
 3. **Data quality and verification**
    Building filters, canonicalization scripts, AST-based code verification, unit tests, and repair loops.
@@ -50,12 +50,12 @@ The project has completed several major stages:
 - AST + unit-test verification for code data,
 - multiple targeted distillation runs and checkpoint comparisons.
 
-The best SFT checkpoint used as the base for targeted distillation was approximately:
+<!-- The best SFT checkpoint used as the base for targeted distillation was approximately:
 
 ```text
-outputs/sft_v6_general_code/step_003500.pt
+outputs/sft_v6_general_code/step_003500.pt -->
 ```
-
+<!--
 A later targeted distillation run improved some local simple-code behavior, but generation quality remained unstable. In particular, the model often generated a reasonable function prefix but failed to stop cleanly, continuing with examples, print statements, or repeated text.
 
 Therefore, the current project should be viewed as:
@@ -63,7 +63,7 @@ Therefore, the current project should be viewed as:
 ```text
 A small language model training and post-training pipeline demonstration,
 not a production-quality chatbot.
-```
+``` -->
 
 ---
 
