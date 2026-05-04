@@ -1,6 +1,6 @@
 # PetitGPT: End-to-End Small Language Model Training Pipeline
 
-`PetitGPT` is a small-scale language model training project implemented in PyTorch. The goal is to develop and analyze a complete language model training and post-training pipeline under realistic compute constraints.
+`PetitGPT` is a small-scale language model training project implemented in PyTorch. The goal is to develop, understand, and analyze a complete language model training and post-training pipeline under realistic compute constraints.
 
 The project covers:
 
