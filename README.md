@@ -42,13 +42,13 @@ The main focus areas are:
 
 The project has completed several major stages:
 
-- pretraining from a mixed general/code/math corpus,
+- Tokenizer training,
+- Pretraining on a mixed general/code/math corpus,
+- Continued pretraining on a new general/code/math mix, with a particular focus on code + math,
 - SFT on a general + code instruction mixture,
-- targeted distillation for simple Python function generation,
-- vLLM teacher generation with Qwen-family models,
-- general answer verification,
-- AST + unit-test verification for code data,
-- multiple targeted distillation runs and checkpoint comparisons.
+- Targeted distillation for simple Python function generation,
+- General answer verification, AST + unit-test verification for code data,
+- Multiple targeted distillation runs and checkpoint comparisons.
 
 
 
