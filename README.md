@@ -1,17 +1,18 @@
-# petitgpt: End-to-End Small Language Model Training Pipeline
+# PetitGPT: End-to-End Small Language Model Training Pipeline
 
-`petitgpt` is a small-scale language model training project implemented in PyTorch. The goal is not to build a frontier-level assistant, but to develop and analyze a complete language model training and post-training pipeline under realistic compute constraints.
+`PetitGPT` is a small-scale language model training project implemented in PyTorch. The goal is to develop and analyze a complete language model training and post-training pipeline under realistic compute constraints.
 
 The project covers:
 
 - tokenizer training and data preparation,
 - pretraining a GPT-style model from scratch,
+- continued pretraining,
 - supervised fine-tuning,
 - targeted distillation with an open-source teacher model,
-- teacher generation through vLLM,
+<!-- - teacher generation through vLLM,
 - data verification and filtering,
 - checkpoint selection,
-- sampling and failure analysis.
+- sampling and failure analysis. -->
 
 The current model is approximately **137M parameters**. It remains limited as a general assistant, but the project demonstrates an end-to-end research-engineering workflow for small language model training.
 
@@ -23,16 +24,16 @@ This project explores what can be achieved with a small GPT-style model trained 
 
 The main focus areas are:
 
-1. **End-to-end implementation**  
+1. **End-to-end implementation**
    Building a full training pipeline rather than relying only on high-level frameworks.
 
-2. **Small-model post-training**  
+2. **Small-model post-training**
    Understanding how SFT and targeted distillation behave for a small 137M model.
 
-3. **Data quality and verification**  
+3. **Data quality and verification**
    Building filters, canonicalization scripts, AST-based code verification, unit tests, and repair loops.
 
-4. **Failure analysis**  
+4. **Failure analysis**
    Studying issues such as overfitting, prompt-like data contamination, visible teacher reasoning, EOS/boundary control, and mismatch between validation loss and sample quality.
 
 ---
