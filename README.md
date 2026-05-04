@@ -14,7 +14,7 @@ The project covers:
 - checkpoint selection,
 - sampling and failure analysis. -->
 
-The current model is approximately **137M parameters**. The entire training process can be run on a single RTX 4090 GPU.
+The current model has approximately **137M parameters**. The entire training process can be run on a single RTX 4090 GPU. New MoE-based models are coming soon.
 
 ---
 
@@ -207,9 +207,9 @@ holdout: 54
 
 Most accepted code examples came from the curated core families, while a smaller number came from MBPP.
 
----
+<!-- --- -->
 
-## 8. Teacher Generation with vLLM
+<!-- ## 8. Teacher Generation with vLLM
 
 The teacher model was served through vLLM using an OpenAI-compatible API endpoint, for example:
 
@@ -241,9 +241,9 @@ in each vLLM OpenAI-compatible request, or to configure vLLM with equivalent ser
 
 This was an important debugging lesson: **teacher output must be inspected before it is trusted as training data**.
 
----
+--- -->
 
-## 9. General Data Pipeline
+### 7.1 General Data Pipeline
 
 The general distillation bank used a mixture of open-source prompts and teacher-generated answers.
 
@@ -274,9 +274,9 @@ holdout: 78 examples
 
 A later cleaned mixture removed contaminated `template_paraphrase` examples that had been generated while teacher thinking mode was still enabled.
 
----
+<!-- --- -->
 
-## 10. Code Verification
+### 7.2 Code Verification
 
 Code data was verified more strictly than general data.
 
@@ -304,9 +304,9 @@ One bug found during verification was that normalizing generated text destroyed 
 
 Another issue was that the safe execution environment initially omitted some harmless Python builtins such as `isinstance`, `type`, `chr`, `ord`, and `reversed`. Adding these improved pass rate without opening unsafe operations such as `eval`, `exec`, `open`, or `__import__`.
 
----
+<!-- --- -->
 
-## 11. Building the Targeted Distillation Mix
+### 7.3. Building the Targeted Distillation Mix
 
 One targeted distillation mix used approximately:
 
@@ -333,9 +333,9 @@ A_general: 773
 
 The general data was used mainly to reduce catastrophic narrowing toward code-only behavior, while the code data carried the targeted simple Python objective.
 
----
+<!-- --- -->
 
-## 12. Targeted Distillation Training
+### 7.4. Targeted Distillation Training
 
 A representative targeted distillation command was:
 
@@ -369,7 +369,7 @@ Validation loss was useful but not sufficient. Several checkpoints with reasonab
 
 ---
 
-## 13. Observed Failure Modes
+<!-- ## 13. Observed Failure Modes
 
 The project produced several important engineering lessons.
 
@@ -400,6 +400,7 @@ def running_sum(nums):
     ...
     return result
 
+
 print(running_sum(...))
 # Output: ...
 ```
@@ -414,9 +415,9 @@ Validation loss sometimes improved while sample quality remained poor. Manual sa
 
 A 137M model can learn local patterns, but robust instruction following and clean stopping behavior remain difficult, especially after small-data post-training.
 
----
+--- -->
 
-## 14. Current Limitations
+<!-- ## 14. Current Limitations
 
 The current model remains limited.
 
@@ -432,9 +433,9 @@ Known limitations include:
 
 The project is therefore best understood as a **training pipeline and failure-analysis project**, not as a finished assistant model.
 
----
+--- -->
 
-## 15. Lessons Learned
+<!-- ## 8. Lessons Learned
 
 Key lessons from the project:
 
@@ -446,24 +447,26 @@ Key lessons from the project:
 6. Small models can learn local code templates but still fail at answer-boundary control.
 7. Honest failure analysis is often more valuable than an over-optimistic demo.
 
----
+--- -->
 
-## 16. Suggested Next Steps
+## 8. Next Steps
 
 Future improvements could include:
 
-- verifying EOS supervision in the training script,
-- adding explicit answer-boundary examples,
+<!-- - verifying EOS supervision in the training script, -->
+<!-- - adding explicit answer-boundary examples,
 - improving sampling stop rules for code generation,
 - rebuilding template paraphrase data after disabling teacher thinking mode,
 - improving MBPP canonicalization so prompts and `entry_point` are aligned,
 - adding a small code-only boundary distillation run,
 - creating a lightweight benchmark for the target simple Python families,
-- comparing checkpoints using executable code tests rather than only text samples.
+- comparing checkpoints using executable code tests rather than only text samples. -->
+- MoE-based models
+- Reinforcement learning techniques for post-training
 
 ---
 
-## 17. Resume Summary
+<!-- ## 17. Resume Summary
 
 A concise resume description could be:
 
@@ -471,8 +474,8 @@ A concise resume description could be:
 Built an end-to-end GPT-style small language model training pipeline in PyTorch, covering tokenizer training, pretraining, SFT, targeted distillation, vLLM teacher generation, AST/unit-test verification for Python code data, checkpoint analysis, and systematic debugging of post-training failure modes such as data contamination and answer-boundary instability.
 ```
 
----
+--- -->
 
-## 18. Disclaimer
+## 9. Disclaimer
 
 This is a personal research-engineering project. It is not intended to compete with production LLMs. The value of the project lies in the implementation, experimentation, data pipeline, and failure analysis.
