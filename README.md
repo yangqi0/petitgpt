@@ -62,10 +62,10 @@ The main model is a GPT-style decoder-only Transformer, roughly 137M parameters.
 A typical configuration used in the project is close to:
 
 ```text
-n_layers   = 12
+n_layers   = 16
 d_model    = 768
 n_heads    = 12
-d_ff       = 3072
+d_ff       = 1920
 seq_len    = 1024 or 2048
 vocab_size = 32000
 RoPE       = enabled
