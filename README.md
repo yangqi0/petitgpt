@@ -50,11 +50,7 @@ The project has completed several major stages:
 - AST + unit-test verification for code data,
 - multiple targeted distillation runs and checkpoint comparisons.
 
-<!-- The best SFT checkpoint used as the base for targeted distillation was approximately:
 
-```text
-outputs/sft_v6_general_code/step_003500.pt -->
-```
 
 
 ---
