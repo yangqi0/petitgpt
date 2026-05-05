@@ -9,10 +9,7 @@ The project covers:
 - continued pretraining,
 - supervised fine-tuning,
 - targeted distillation with an open-source teacher model,
-<!-- - teacher generation through vLLM,
-- data verification and filtering,
-- checkpoint selection,
-- sampling and failure analysis. -->
+
 
 The current model has approximately **137M parameters**. The entire training process can be run on a single RTX 4090 GPU. New MoE-based models are coming soon.
 
@@ -207,42 +204,6 @@ holdout: 54
 
 Most accepted code examples came from the curated core families, while a smaller number came from MBPP.
 
-<!-- --- -->
-
-<!-- ## 8. Teacher Generation with vLLM
-
-The teacher model was served through vLLM using an OpenAI-compatible API endpoint, for example:
-
-```text
-http://127.0.0.1:8000/v1
-```
-
-A critical issue encountered during the project was that Qwen-family thinking models may return visible reasoning such as:
-
-```text
-Thinking Process:
-1. Analyze the Request:
-...
-```
-
-This contaminated generated data when not disabled.
-
-The fix was to pass:
-
-```json
-{
-  "chat_template_kwargs": {
-    "enable_thinking": false
-  }
-}
-```
-
-in each vLLM OpenAI-compatible request, or to configure vLLM with equivalent server-level defaults.
-
-This was an important debugging lesson: **teacher output must be inspected before it is trusted as training data**.
-
---- -->
-
 ### 7.1 General Data Pipeline
 
 The general distillation bank used a mixture of open-source prompts and teacher-generated answers.
@@ -274,8 +235,6 @@ holdout: 78 examples
 
 A later cleaned mixture removed contaminated `template_paraphrase` examples that had been generated while teacher thinking mode was still enabled.
 
-<!-- --- -->
-
 ### 7.2 Code Verification
 
 Code data was verified more strictly than general data.
@@ -304,8 +263,6 @@ One bug found during verification was that normalizing generated text destroyed 
 
 Another issue was that the safe execution environment initially omitted some harmless Python builtins such as `isinstance`, `type`, `chr`, `ord`, and `reversed`. Adding these improved pass rate without opening unsafe operations such as `eval`, `exec`, `open`, or `__import__`.
 
-<!-- --- -->
-
 ### 7.3. Building the Targeted Distillation Mix
 
 One targeted distillation mix used approximately:
@@ -332,8 +289,6 @@ A_general: 773
 ```
 
 The general data was used mainly to reduce catastrophic narrowing toward code-only behavior, while the code data carried the targeted simple Python objective.
-
-<!-- --- -->
 
 ### 7.4. Targeted Distillation Training
 
@@ -369,112 +324,16 @@ Validation loss was useful but not sufficient. Several checkpoints with reasonab
 
 ---
 
-<!-- ## 13. Observed Failure Modes
-
-The project produced several important engineering lessons.
-
-### 13.1 Visible teacher reasoning contamination
-
-When Qwen thinking mode was not disabled, generated data included visible reasoning text. Some of this entered the training pipeline and caused prompt-like or reasoning-like model outputs.
-
-### 13.2 Prompt-like assistant contamination
-
-Some template paraphrase data accidentally treated rewritten prompts as assistant answers. This caused outputs such as:
-
-```text
-Please rewrite the following...
-Return only the rewritten text...
-Format the output...
-```
-
-These examples had to be removed from the final clean mix.
-
-### 13.3 EOS and answer-boundary instability
-
-The model often generated a reasonable function prefix, but then continued with examples, print statements, comments, or repeated output.
-
-Example failure pattern:
-
-```python
-def running_sum(nums):
-    ...
-    return result
-
-
-print(running_sum(...))
-# Output: ...
-```
-
-This suggests that EOS supervision, answer-boundary modeling, and decoding stop rules are important remaining bottlenecks.
-
-### 13.4 Validation loss versus sample quality
-
-Validation loss sometimes improved while sample quality remained poor. Manual sample inspection was essential for checkpoint selection.
-
-### 13.5 Small-model limitations
-
-A 137M model can learn local patterns, but robust instruction following and clean stopping behavior remain difficult, especially after small-data post-training.
-
---- -->
-
-<!-- ## 14. Current Limitations
-
-The current model remains limited.
-
-Known limitations include:
-
-- unstable answer boundaries,
-- tendency to continue after a correct function,
-- occasional wrong function signatures,
-- poor general instruction following compared with modern LLMs,
-- sensitivity to data contamination,
-- mismatch between teacher-forcing loss and generation quality,
-- limited generalization from small targeted distillation sets.
-
-The project is therefore best understood as a **training pipeline and failure-analysis project**, not as a finished assistant model.
-
---- -->
-
-<!-- ## 8. Lessons Learned
-
-Key lessons from the project:
-
-1. Data quality matters more than raw data quantity for small-model post-training.
-2. Teacher outputs must be inspected and filtered carefully.
-3. Thinking-mode teachers can silently contaminate data if visible reasoning is not disabled.
-4. Code verification should use AST checks and unit tests, but must preserve indentation and allow safe builtins.
-5. Validation loss alone is not enough for checkpoint selection.
-6. Small models can learn local code templates but still fail at answer-boundary control.
-7. Honest failure analysis is often more valuable than an over-optimistic demo.
-
---- -->
 
 ## 8. Next Steps
 
 Future improvements could include:
 
-<!-- - verifying EOS supervision in the training script, -->
-<!-- - adding explicit answer-boundary examples,
-- improving sampling stop rules for code generation,
-- rebuilding template paraphrase data after disabling teacher thinking mode,
-- improving MBPP canonicalization so prompts and `entry_point` are aligned,
-- adding a small code-only boundary distillation run,
-- creating a lightweight benchmark for the target simple Python families,
-- comparing checkpoints using executable code tests rather than only text samples. -->
 - MoE-based models
 - Reinforcement learning techniques for post-training
 
 ---
 
-<!-- ## 17. Resume Summary
-
-A concise resume description could be:
-
-```text
-Built an end-to-end GPT-style small language model training pipeline in PyTorch, covering tokenizer training, pretraining, SFT, targeted distillation, vLLM teacher generation, AST/unit-test verification for Python code data, checkpoint analysis, and systematic debugging of post-training failure modes such as data contamination and answer-boundary instability.
-```
-
---- -->
 
 ## 9. Disclaimer
 
