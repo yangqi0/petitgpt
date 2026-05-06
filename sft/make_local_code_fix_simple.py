@@ -4,9 +4,9 @@ from __future__ import annotations
 import argparse
 import ast
 import json
+from pathlib import Path
 import random
 import textwrap
-from pathlib import Path
 from typing import Dict, List
 
 SYSTEM = "You are a helpful assistant."
@@ -15,6 +15,7 @@ PROMPT_TEMPLATES = [
     "Fix the bug in this Python code and return only the corrected code:\n\n```python\n{buggy}\n```",
     "Repair this Python function. Do not explain anything. Return only one Python code block:\n\n```python\n{buggy}\n```",
 ]
+
 
 TASKS = [
     {
@@ -220,25 +221,23 @@ def main() -> None:
             base_id = f"codefix_{name}_bug{bug_idx}"
             for rep in range(max(1, args.repeat)):
                 tmpl = PROMPT_TEMPLATES[rep % len(PROMPT_TEMPLATES)]
-                rows.append(
-                    {
-                        "messages": [
-                            {"role": "system", "content": SYSTEM},
-                            {
-                                "role": "user",
-                                "content": tmpl.format(buggy=buggy_norm.rstrip()),
-                            },
-                            {"role": "assistant", "content": correct_block},
-                        ],
-                        "meta": {
-                            "dataset": "local_code_fix_simple",
-                            "base_id": base_id,
-                            "variant_id": f"{base_id}_v{rep}",
-                            "task_name": name,
-                            "bug_index": bug_idx,
+                rows.append({
+                    "messages": [
+                        {"role": "system", "content": SYSTEM},
+                        {
+                            "role": "user",
+                            "content": tmpl.format(buggy=buggy_norm.rstrip()),
                         },
-                    }
-                )
+                        {"role": "assistant", "content": correct_block},
+                    ],
+                    "meta": {
+                        "dataset": "local_code_fix_simple",
+                        "base_id": base_id,
+                        "variant_id": f"{base_id}_v{rep}",
+                        "task_name": name,
+                        "bug_index": bug_idx,
+                    },
+                })
 
     rng.shuffle(rows)
     with out_path.open("w", encoding="utf-8") as f:
