@@ -9,7 +9,7 @@ The project covers:
 - continued pretraining,
 - supervised fine-tuning,
 - targeted distillation with an open-source teacher model,
-
+- DPO (Direct Preference Optimization) post-training.
 
 The current model has approximately **137M parameters**. The entire training process can be run on a single RTX 4090 GPU. New MoE-based models are coming soon.
 
@@ -25,7 +25,7 @@ The main focus areas are:
    Building a full training pipeline rather than relying only on high-level frameworks.
 
 2. **Small-model post-training**
-   Understanding how CPT, SFT, and targeted distillation behave for a small model.
+   Understanding how CPT, SFT, targeted distillation, and DPO behave for a small model.
 
 3. **Data quality and verification**
    Building filters, canonicalization scripts, AST-based code verification, unit tests, and repair loops.
@@ -45,10 +45,8 @@ The project has completed several major stages:
 - SFT on a general + code instruction mixture,
 - Targeted distillation for simple Python function generation,
 - General answer verification, AST + unit-test verification for code data,
-- Multiple targeted distillation runs and checkpoint comparisons.
-
-
-
+- Multiple targeted distillation runs and checkpoint comparisons,
+- DPO preference post-training on open preference data.
 
 ---
 
@@ -83,29 +81,54 @@ The repository is organized approximately as follows:
 
 ```text
 petitgpt/
-├── tokenizer/
+├── tokenizer/                 # BPE tokenizer + training/sanity-check scripts
 │   └── tokenizer.json
-├── pretrain/
+├── configs/                   # declarative SFT mix configs (sft_mix_*.yaml)
+├── pretrain/                  # shard building, pretraining, sampling, bench eval
 │   ├── build_pretrain_shards.py
 │   ├── train_pretrain_with_bench.py
+│   ├── eval_bench_v5.py
 │   └── sample.py
-├── sft/
+├── sft/                       # SFT mix preparation + training
+│   ├── prepare_sft_mix_split_local.py
 │   └── train_sft.py
-├── distill/
+├── distill/                   # teacher generation, verification, mix building, training
 │   ├── train_distill.py
-│   └── tools for generating synthetic data
-├── datasets/
+│   ├── code_verify_v1.py
+│   ├── general_verify_v1.py
+│   └── ...                    # teacher generation + data pipeline tools
+├── dpo/                       # preference post-training
+│   ├── prepare_dpo_data.py
+│   └── dpo.py
 ├── src/
-│   └── model.py
-├── outputs/
+│   └── model.py               # the GPT model definition
+├── eval/                      # benchmark eval results
+├── datasets/                  # training data (local only, gitignored)
+├── outputs/                   # checkpoints (local only, gitignored)
 └── README.md
 ```
 
+---
 
+## 5. Setup
+
+Python 3.10+ is required. Install the dependencies with:
+
+```bash
+pip install -r requirements.txt
+```
+
+Then install the CUDA build of `torch` matching your system separately, for example for CUDA 12.1:
+
+```bash
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+```
+
+Training scripts expect a CUDA GPU and can be run from anywhere as `python <stage>/<script>.py ...` — no package install is needed.
 
 ---
 
-## 5. Pretraining
+## 6. Pretraining
 
 The pretraining stage uses a mixed corpus with general web text, educational text, Python code, Wikipedia-style text, math, and algebraic/proof-related data.
 
@@ -128,7 +151,7 @@ outputs/pretrain_140m_v3_general_code/step_372000.pt
 
 ---
 
-## 6. Supervised Fine-Tuning
+## 7. Supervised Fine-Tuning
 
 The SFT stage used a mixture of general instruction data and code instruction data.
 
@@ -170,7 +193,7 @@ The SFT checkpoint around step 3250-3500 was treated as the best base for target
 
 ---
 
-## 7. Targeted Distillation
+## 8. Targeted Distillation
 
 The targeted distillation stage was designed to improve simple Python coding behavior without fully redoing SFT.
 
@@ -204,7 +227,7 @@ holdout: 54
 
 Most accepted code examples came from the curated core families, while a smaller number came from MBPP.
 
-### 7.1 General Data Pipeline
+### 8.1 General Data Pipeline
 
 The general distillation bank used a mixture of open-source prompts and teacher-generated answers.
 
@@ -235,7 +258,7 @@ holdout: 78 examples
 
 A later cleaned mixture removed contaminated `template_paraphrase` examples that had been generated while teacher thinking mode was still enabled.
 
-### 7.2 Code Verification
+### 8.2 Code Verification
 
 Code data was verified more strictly than general data.
 
@@ -263,7 +286,7 @@ One bug found during verification was that normalizing generated text destroyed 
 
 Another issue was that the safe execution environment initially omitted some harmless Python builtins such as `isinstance`, `type`, `chr`, `ord`, and `reversed`. Adding these improved pass rate without opening unsafe operations such as `eval`, `exec`, `open`, or `__import__`.
 
-### 7.3. Building the Targeted Distillation Mix
+### 8.3 Building the Targeted Distillation Mix
 
 One targeted distillation mix used approximately:
 
@@ -290,7 +313,7 @@ A_general: 773
 
 The general data was used mainly to reduce catastrophic narrowing toward code-only behavior, while the code data carried the targeted simple Python objective.
 
-### 7.4. Targeted Distillation Training
+### 8.4 Targeted Distillation Training
 
 A representative targeted distillation command was:
 
@@ -324,17 +347,51 @@ Validation loss was useful but not sufficient. Several checkpoints with reasonab
 
 ---
 
+## 9. DPO
 
-## 8. Next Steps
+The DPO stage applies preference post-training on top of an SFT or distillation checkpoint, using the standard DPO loss with a frozen reference model (a deep copy of the initial policy by default).
 
-Future improvements could include:
+Preference data is built from open preference datasets:
 
-- MoE-based models
-- Reinforcement learning techniques for post-training
+```text
+UltraFeedback (binarized)
+Orca DPO pairs
+Anthropic hh-rlhf (harmless subset)
+```
+
+`dpo/prepare_dpo_data.py` filters pairs by prompt/completion token counts (computed to exactly match training-time encoding) and writes train/val JSONL files with `messages` plus `chosen`/`rejected` completions:
+
+```bash
+python dpo/prepare_dpo_data.py \
+  --tokenizer_path tokenizer/tokenizer.json \
+  --out_dir datasets/dpo
+```
+
+A representative training command was:
+
+```bash
+python dpo/dpo.py \
+  --train_jsonl datasets/dpo/train.jsonl \
+  --val_jsonl datasets/dpo/val.jsonl \
+  --out_dir outputs/dpo_run \
+  --tokenizer_path tokenizer/tokenizer.json \
+  --init_ckpt outputs/sft_v6_general_code/step_003500.pt \
+  --beta 0.1
+```
+
+Training logs the implicit reward margin and preference accuracy alongside the loss, which helps catch runs where the loss decreases without the policy actually separating chosen from rejected completions.
 
 ---
 
+## 10. Next Steps
 
-## 9. Disclaimer
+Future improvements could include:
+
+- MoE-based models,
+- online reinforcement learning for post-training (e.g., PPO/GRPO-style methods).
+
+---
+
+## 11. Disclaimer
 
 This is a personal research-engineering project. It is not intended to compete with production LLMs. The value of the project lies in the implementation, experimentation, data pipeline, and failure analysis.
