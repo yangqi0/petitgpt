@@ -45,7 +45,7 @@ import sys
 import time
 from dataclasses import asdict
 from pathlib import Path
-from typing import Any, List
+from typing import Any
 
 import torch
 import torch.nn.functional as F
@@ -292,14 +292,17 @@ def collate_fn_builder(
 def sequence_logps(logits: torch.Tensor, labels: torch.Tensor) -> torch.Tensor:
     """Sum of log-probs of the supervised (label != -100) next-token targets,
     per example. logits: [B,T,V], labels: [B,T]."""
+    B, T, V = logits.size()
     logits2 = logits[:, :-1, :].float()
     labels2 = labels[:, 1:]
-    logp = F.log_softmax(logits2, dim=-1)
-    mask = labels2 != -100
-    safe_labels = labels2.clamp_min(0)
-    tok_logp = torch.gather(logp, dim=2, index=safe_labels.unsqueeze(-1)).squeeze(-1)
-    tok_logp = tok_logp * mask.float()
-    return tok_logp.sum(dim=1)
+    # per-token NLL; ignore_index positions contribute exactly 0 to the sum
+    nll = F.cross_entropy(
+        logits2.reshape(-1, V),
+        labels2.reshape(-1),
+        ignore_index=-100,
+        reduction="none",
+    ).view(B, T - 1)
+    return -nll.sum(dim=1)
 
 
 def get_batch_logps(
@@ -445,7 +448,7 @@ def emit_samples(
 ) -> None:
     Path(samples_dir).mkdir(parents=True, exist_ok=True)
     out_path = os.path.join(samples_dir, f"{step_tag}.txt")
-    lines: List[str] = [f"step={step_tag}\n", "=" * 80 + "\n"]
+    lines: list[str] = [f"step={step_tag}\n", "=" * 80 + "\n"]
     for i, q in enumerate(FIXED_PROMPTS, start=1):
         prompt = SYS_PREFIX + default_system.strip() + SEP + USER_PREFIX + q.strip() + SEP + ASSIST_PREFIX
         ans = sample_from_prompt(policy, tok, prompt, device, seq_len, max_new_tokens, temperature, top_p)
@@ -473,13 +476,13 @@ def evaluate(
     for j, batch in enumerate(val_loader):
         if j >= max_batches:
             break
-        ic = batch["input_ids_chosen"].to(device, non_blocking=True)
-        lc = batch["labels_chosen"].to(device, non_blocking=True)
-        ir = batch["input_ids_rejected"].to(device, non_blocking=True)
-        lr_ = batch["labels_rejected"].to(device, non_blocking=True)
+        in_c = batch["input_ids_chosen"].to(device, non_blocking=True)
+        lb_c = batch["labels_chosen"].to(device, non_blocking=True)
+        in_r = batch["input_ids_rejected"].to(device, non_blocking=True)
+        lb_r = batch["labels_rejected"].to(device, non_blocking=True)
 
-        pc, pr = get_batch_logps(policy, ic, lc, ir, lr_, autocast_dtype)
-        rc, rr = get_batch_logps(reference, ic, lc, ir, lr_, autocast_dtype)
+        pc, pr = get_batch_logps(policy, in_c, lb_c, in_r, lb_r, autocast_dtype)
+        rc, rr = get_batch_logps(reference, in_c, lb_c, in_r, lb_r, autocast_dtype)
         loss_vec, chosen_rewards, rejected_rewards = dpo_loss(pc, pr, rc, rr, beta)
 
         losses.append(float(loss_vec.mean().item()))
@@ -630,14 +633,14 @@ def main() -> None:
                 train_iter = iter(train_loader)
                 batch = next(train_iter)
 
-            ic = batch["input_ids_chosen"].to(device, non_blocking=True)
-            lc = batch["labels_chosen"].to(device, non_blocking=True)
-            ir = batch["input_ids_rejected"].to(device, non_blocking=True)
-            lr_ = batch["labels_rejected"].to(device, non_blocking=True)
+            in_c = batch["input_ids_chosen"].to(device, non_blocking=True)
+            lb_c = batch["labels_chosen"].to(device, non_blocking=True)
+            in_r = batch["input_ids_rejected"].to(device, non_blocking=True)
+            lb_r = batch["labels_rejected"].to(device, non_blocking=True)
 
-            pc, pr = get_batch_logps(policy, ic, lc, ir, lr_, autocast_dtype)
+            pc, pr = get_batch_logps(policy, in_c, lb_c, in_r, lb_r, autocast_dtype)
             with torch.no_grad():
-                rc, rr = get_batch_logps(reference, ic, lc, ir, lr_, autocast_dtype)
+                rc, rr = get_batch_logps(reference, in_c, lb_c, in_r, lb_r, autocast_dtype)
 
             loss_vec, chosen_rewards, rejected_rewards = dpo_loss(pc, pr, rc, rr, args.beta)
             loss = loss_vec.mean() / args.grad_accum

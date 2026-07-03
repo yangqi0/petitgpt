@@ -44,9 +44,10 @@ import hashlib
 import json
 import random
 import re
+from collections.abc import Callable, Iterable
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Callable, Iterable
+from typing import Any
 
 from datasets import load_dataset
 from tokenizers import Tokenizer
@@ -89,46 +90,59 @@ def encode_strip_special(tok: Tokenizer, text: str) -> list[int]:
     return ids
 
 
-def render_plain_with_completion(
-    messages: list[dict[str, str]], completion: str, default_system: str
-) -> str:
-    """Render System:/User:/Assistant: text ending in `completion`, for token counting.
-    Mirrors the template used by dpo/dpo.py's build_completion_example()."""
-    msgs = messages[:]
-    if msgs and msgs[0].get("role") != "system":
+def prompt_segments(messages: list[dict[str, str]], default_system: str) -> list[str]:
+    """Prompt text segments (system/user/context turns through the trailing
+    'Assistant: ' prefix), mirroring dpo/dpo.py's render_prompt_segments."""
+    msgs = messages or []
+    if msgs and (msgs[0].get("role") or "").strip().lower() != "system" and default_system:
         msgs = [{"role": "system", "content": default_system}] + msgs
 
-    out: list[str] = []
-    if msgs and msgs[0].get("role") == "system":
+    segs: list[str] = []
+    start = 0
+    if msgs and (msgs[0].get("role") or "").strip().lower() == "system":
         sys_txt = norm_newlines(msgs[0].get("content", "")).strip()
         if sys_txt:
-            out.append(SYS_PREFIX + sys_txt + SEP)
+            segs += [SYS_PREFIX, sys_txt, SEP]
         start = 1
-    else:
-        start = 0
 
     for m in msgs[start:]:
-        role = m.get("role")
+        role = (m.get("role") or "").strip().lower()
         txt = norm_newlines(m.get("content", ""))
+        if role != "assistant":
+            txt = txt.strip()
+        if not txt:
+            continue
         if role == "user":
-            out.append(USER_PREFIX + txt.strip() + SEP)
+            segs += [USER_PREFIX, txt, SEP]
         elif role == "assistant":
-            out.append(ASSIST_PREFIX + txt + SEP)
+            segs += [ASSIST_PREFIX, txt, SEP]
 
-    out.append(ASSIST_PREFIX)
-    if completion:
-        out.append(norm_newlines(completion))
-    return "".join(out)
+    segs.append(ASSIST_PREFIX)
+    return segs
 
 
-def count_tokens(tok: Tokenizer, messages: list[dict[str, str]], completion: str, default_system: str) -> int:
+def count_pair_tokens(
+    tok: Tokenizer,
+    messages: list[dict[str, str]],
+    chosen: str,
+    rejected: str,
+    default_system: str,
+) -> tuple[int, int, int]:
+    """(prompt_tokens, chosen_tokens, rejected_tokens).
+
+    Counted segment-wise — each template segment encoded separately, exactly as
+    dpo/dpo.py's build_completion_example builds the training sequence. Encoding
+    the whole rendered string instead would undercount, because BPE merges
+    across segment boundaries (e.g. the trailing space of 'Assistant: ' merging
+    into the completion's first token)."""
     has_bos, has_eos = tokenizer_auto_bos_eos(tok)
-    n = len(encode_strip_special(tok, render_plain_with_completion(messages, completion, default_system)))
-    if has_bos:
-        n += 1
-    if has_eos:
-        n += 1
-    return n
+    n_prompt = sum(
+        len(encode_strip_special(tok, s)) for s in prompt_segments(messages, default_system)
+    )
+    n_prompt += int(has_bos) + int(has_eos)
+    n_chosen = len(encode_strip_special(tok, norm_newlines(chosen)))
+    n_rejected = len(encode_strip_special(tok, norm_newlines(rejected)))
+    return n_prompt, n_chosen, n_rejected
 
 
 @dataclass
@@ -256,17 +270,14 @@ def passes_filters(pair: Pair, tok: Tokenizer, args: argparse.Namespace) -> Pair
     if len(chosen) < args.min_completion_chars or len(rejected) < args.min_completion_chars:
         return None
 
-    prompt_toks = count_tokens(tok, pair.messages, "", DEFAULT_SYSTEM)
-    if prompt_toks > args.max_prompt_tokens:
+    n_prompt, n_chosen, n_rejected = count_pair_tokens(
+        tok, pair.messages, pair.chosen, pair.rejected, DEFAULT_SYSTEM
+    )
+    if n_prompt > args.max_prompt_tokens:
         return None
-
-    n_chosen = count_tokens(tok, pair.messages, pair.chosen, DEFAULT_SYSTEM)
-    n_rejected = count_tokens(tok, pair.messages, pair.rejected, DEFAULT_SYSTEM)
-    if n_chosen > args.seq_len or n_rejected > args.seq_len:
+    if n_chosen < args.min_completion_tokens or n_rejected < args.min_completion_tokens:
         return None
-    if (n_chosen - prompt_toks) < args.min_completion_tokens:
-        return None
-    if (n_rejected - prompt_toks) < args.min_completion_tokens:
+    if n_prompt + n_chosen > args.seq_len or n_prompt + n_rejected > args.seq_len:
         return None
 
     return pair
@@ -321,7 +332,7 @@ def main() -> None:
                     pair = passes_filters(raw_pair, tok, args)
                     if pair is None:
                         continue
-                    prompt_text = render_plain_with_completion(pair.messages, "", DEFAULT_SYSTEM)
+                    prompt_text = "".join(prompt_segments(pair.messages, DEFAULT_SYSTEM))
                     key = sha1_hex(norm_for_hash(prompt_text[-2000:] + "\x1f" + pair.chosen[:2000]))
                     if key in seen:
                         continue
