@@ -66,34 +66,51 @@ def test_render_segments_supervises_only_assistant_content():
 
 
 def test_build_example_masks_prompt_and_bos(tok):
-    ex = {"messages": [
-        {"role": "user", "content": "What is two plus two"},
-        {"role": "assistant", "content": "It is four"},
-    ]}
+    ex = {
+        "messages": [
+            {"role": "user", "content": "What is two plus two"},
+            {"role": "assistant", "content": "It is four"},
+        ]
+    }
     input_ids, labels, weight = build_example(
-        ex, tok, seq_len=64, pad_id=PAD_ID, default_system="You are helpful.",
-        bos_id=BOS_ID, eos_id=EOS_ID, refusal_downweight=1.0,
-        refusal_patterns=[], refusal_mode="contains_any",
+        ex,
+        tok,
+        seq_len=64,
+        pad_id=PAD_ID,
+        default_system="You are helpful.",
+        bos_id=BOS_ID,
+        eos_id=EOS_ID,
+        refusal_downweight=1.0,
+        refusal_patterns=[],
+        refusal_mode="contains_any",
     )
     assert input_ids.shape == labels.shape
     # BOS (if present) is never supervised
     if input_ids[0].item() == BOS_ID:
         assert labels[0].item() == -100
 
-    supervised_ids = [int(i) for i, l in zip(input_ids.tolist(), labels.tolist()) if l != -100]
+    pairs = list(zip(input_ids.tolist(), labels.tolist(), strict=True))
+    supervised_ids = [tid for tid, lab in pairs if lab != -100]
     expected = encode_strip_special(tok, clean_text_assistant("It is four"), BOS_ID, EOS_ID)
     assert supervised_ids == expected
     # where supervised, label == input (pre-shift alignment)
-    for i, l in zip(input_ids.tolist(), labels.tolist()):
-        if l != -100:
-            assert l == i
+    for tid, lab in pairs:
+        if lab != -100:
+            assert lab == tid
     assert weight > 0
 
 
 def test_empty_messages_rejected(tok):
     with pytest.raises(ValueError):
         build_example(
-            {"messages": []}, tok, seq_len=32, pad_id=PAD_ID,
-            default_system="", bos_id=BOS_ID, eos_id=EOS_ID,
-            refusal_downweight=1.0, refusal_patterns=[], refusal_mode="contains_any",
+            {"messages": []},
+            tok,
+            seq_len=32,
+            pad_id=PAD_ID,
+            default_system="",
+            bos_id=BOS_ID,
+            eos_id=EOS_ID,
+            refusal_downweight=1.0,
+            refusal_patterns=[],
+            refusal_mode="contains_any",
         )

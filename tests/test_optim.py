@@ -8,8 +8,15 @@ from src.optim import Muon, build_optimizer, zeropower_via_newtonschulz5
 
 
 def _cfg():
-    return GPTConfig(vocab_size=256, n_layers=2, d_model=64, n_heads=4, d_ff=160,
-                     max_seq_len=64, tie_embeddings=True)
+    return GPTConfig(
+        vocab_size=256,
+        n_layers=2,
+        d_model=64,
+        n_heads=4,
+        d_ff=160,
+        max_seq_len=64,
+        tie_embeddings=True,
+    )
 
 
 def test_newton_schulz_is_semi_orthogonal():
@@ -69,12 +76,13 @@ def _train_toy(name, steps=60):
             pg["lr"] = lr * pg.get("lr_ratio", 1.0)
         logits = m(ids)
         loss = torch.nn.functional.cross_entropy(
-            logits[:, :-1].reshape(-1, cfg.vocab_size), ids[:, 1:].reshape(-1))
+            logits[:, :-1].reshape(-1, cfg.vocab_size), ids[:, 1:].reshape(-1)
+        )
         o.zero_grad(set_to_none=True)
         loss.backward()
         torch.nn.utils.clip_grad_norm_(m.parameters(), 1.0)
         o.step()
-        first = first if first is not None else loss.item()
+        first = loss.item() if first is None else first
         last = loss.item()
     return first, last
 
@@ -97,18 +105,25 @@ def test_muon_state_dict_roundtrip():
     ids = torch.randint(0, cfg.vocab_size, (2, 16))
     for _ in range(3):
         loss = torch.nn.functional.cross_entropy(
-            m(ids)[:, :-1].reshape(-1, cfg.vocab_size), ids[:, 1:].reshape(-1))
-        o.zero_grad(); loss.backward(); o.step()
+            m(ids)[:, :-1].reshape(-1, cfg.vocab_size), ids[:, 1:].reshape(-1)
+        )
+        o.zero_grad()
+        loss.backward()
+        o.step()
     sd = o.state_dict()
 
-    m2 = GPT(cfg); m2.load_state_dict(m.state_dict())
+    m2 = GPT(cfg)
+    m2.load_state_dict(m.state_dict())
     o2 = build_optimizer(m2, name="muon", lr=3e-3, weight_decay=0.01, verbose=False)
     o2.load_state_dict(sd)
     assert isinstance(o2, Muon)
     # one more step continues without error
     loss = torch.nn.functional.cross_entropy(
-        m2(ids)[:, :-1].reshape(-1, cfg.vocab_size), ids[:, 1:].reshape(-1))
-    o2.zero_grad(); loss.backward(); o2.step()
+        m2(ids)[:, :-1].reshape(-1, cfg.vocab_size), ids[:, 1:].reshape(-1)
+    )
+    o2.zero_grad()
+    loss.backward()
+    o2.step()
 
 
 def test_cross_optimizer_state_load_raises():

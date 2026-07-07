@@ -2,8 +2,8 @@
 `sft.*`, `distill.*` resolve when tests run from anywhere. Mirrors the sys.path
 insertion each training script does for itself."""
 
-import sys
 from pathlib import Path
+import sys
 
 _REPO_ROOT = str(Path(__file__).resolve().parent)
 if _REPO_ROOT not in sys.path:
