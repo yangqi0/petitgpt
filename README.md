@@ -153,6 +153,15 @@ pip install torch torchvision torchaudio --index-url https://download.pytorch.or
 
 Training scripts expect a CUDA GPU and can be run from anywhere as `python <stage>/<script>.py ...` — no package install is needed.
 
+### 5.1 Testing
+
+The test suite is **CPU-only** and needs no GPU or checkpoints — it exercises correctness invariants (model shapes, strict causality, RoPE properties, the MoE router, the Muon/AdamW optimizer, the DPO loss, tokenizer round-trips, and chat-template loss masking) on tiny models that run in a couple of seconds. The same suite runs in GitHub Actions (`.github/workflows/ci.yml`) on Python 3.10 and 3.12, alongside `ruff`.
+
+```bash
+pip install -r requirements-test.txt   # CPU torch + pytest + ruff + tokenizers
+pytest                                  # ~2s, 46 tests
+```
+
 ---
 
 ## 6. Pretraining
@@ -414,7 +423,8 @@ Training logs the implicit reward margin and preference accuracy alongside the l
 
 Future improvements could include:
 
-- MoE-based models,
+- training and evaluating the MoE variant (`src/model_moe.py`) end-to-end and A/B-comparing it against the dense model under matched data/steps,
+- a KV cache / incremental-decoding path for faster sampling,
 - online reinforcement learning for post-training (e.g., PPO/GRPO-style methods).
 
 ---
