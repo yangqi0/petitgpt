@@ -11,7 +11,7 @@ The project covers:
 - targeted distillation with an open-source teacher model,
 - DPO (Direct Preference Optimization) post-training.
 
-The current model has approximately **137M parameters**. The entire training process can be run on a single RTX 4090 GPU. New MoE-based models are coming soon.
+The current dense model has approximately **137M parameters**. The entire training process can be run on a single RTX 4090 GPU. A **Mixture-of-Experts (MoE)** variant (`src/model_moe.py`) and a **Muon** optimizer (`src/optim.py`, now the default) have also been added — see [Section 3](#3-model-overview).
 
 ---
 
@@ -73,6 +73,29 @@ The tokenizer is a 32k BPE tokenizer stored at:
 tokenizer/tokenizer.json
 ```
 
+The architecture is a LLaMA-style modernized GPT: pre-norm with RMSNorm, RoPE, SwiGLU MLPs, fused QKV projection using `F.scaled_dot_product_attention`, tied input/output embeddings, and GPT-2 depth-scaled residual initialization. See `src/model.py`.
+
+### 3.1 Mixture-of-Experts variant
+
+`src/model_moe.py` provides an MoE version of the same decoder (`MoEGPT` / `MoEConfig`). Everything except the feed-forward layer is shared with the dense model (attention, RMSNorm, RoPE, initialization); each block's single SwiGLU MLP is replaced by a **top-k routed mixture of SwiGLU experts**:
+
+- **Router** — a linear layer produces per-expert logits; a softmax over all experts selects the top-`n_experts_per_tok`, whose gate weights are (optionally) renormalized. Tokens are dispatched to their selected experts with one batched matmul per expert.
+- **Load balancing** — a DeepSeek/Switch-style auxiliary loss (≈1.0 when routing is balanced) is accumulated over all MoE layers on every forward pass. It is exposed both as `model.aux_loss` and via `model(input_ids, return_aux_loss=True)`, so the default `logits = model(input_ids)` call remains a drop-in replacement for the dense model. Training code adds `cfg.moe_aux_loss_coef * aux_loss` to the cross-entropy loss.
+- **Optional refinements** — always-on *shared experts* (`n_shared_experts`, DeepSeek-MoE style) and *leading dense layers* (`n_dense_layers`, keeping a plain SwiGLU FFN in the first few blocks). `num_parameters()` reports total vs. per-token-active parameter counts. MoE checkpoints embed `asdict(MoEConfig)` and stay self-describing, exactly like the dense model.
+
+### 3.2 RoPE implementation fix
+
+An earlier version of `src/model.py` mixed two incompatible RoPE conventions: `_rotate_half` used the interleaved (GPT-J) pairing `(2i, 2i+1)`, while the cos/sin cache used the half-split (LLaMA/GPT-NeoX) layout `cat([freqs, freqs])`. The result was not an orthogonal rotation — it did not preserve norms and, more importantly, broke the defining property that `⟨R_t q, R_s k⟩` depends only on the relative offset `s − t`. This was fixed by making `_rotate_half` half-split (matching the cache), so the implementation now agrees element-for-element with the reference LLaMA RoPE. The fix is pinned by regression tests in `tests/test_model.py` (norm preservation, relative-position invariance, reference agreement) that failed before and pass after.
+
+### 3.3 Optimizer: Muon (default) + AdamW
+
+All training stages build their optimizer through `src/optim.py:build_optimizer`, selected with `--optimizer {muon,adamw}` (default **muon**):
+
+- **Muon** applies Newton–Schulz-orthogonalized momentum updates to the hidden 2D weight matrices, while embeddings, the `lm_head`, RMSNorm gains, and MoE router gates keep an AdamW update. It uses Moonlight-style RMS matching (the orthogonalized update is scaled by `0.2·sqrt(max(fan_in, fan_out))`) so the AdamW-tuned `--lr` / `--weight_decay` transfer directly with no re-tuning. Both halves live in a single optimizer instance, so the checkpoint schema is unchanged.
+- **AdamW** was also corrected: weight decay is applied only to matrices/embeddings (never to 1-D norm gains and biases), with betas `(0.9, 0.95)` and the fused CUDA kernel.
+
+Resuming a checkpoint whose optimizer state does not match the current `--optimizer` prints a warning and continues with fresh optimizer state (model weights still load).
+
 ---
 
 ## 4. Repository Structure
@@ -101,7 +124,11 @@ petitgpt/
 │   ├── prepare_dpo_data.py
 │   └── dpo.py
 ├── src/
-│   └── model.py               # the GPT model definition
+│   ├── model.py               # dense GPT model definition
+│   ├── model_moe.py           # Mixture-of-Experts variant (MoEGPT / MoEConfig)
+│   └── optim.py               # Muon + AdamW optimizer factory (build_optimizer)
+├── tests/                     # pytest suite (CPU-only, runs in seconds)
+├── .github/workflows/ci.yml   # GitHub Actions: ruff + pytest on CPU
 ├── eval/                      # benchmark eval results
 ├── datasets/                  # training data (local only, gitignored)
 ├── outputs/                   # checkpoints (local only, gitignored)
