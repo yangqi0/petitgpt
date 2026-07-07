@@ -9,7 +9,8 @@ The project covers:
 - continued pretraining,
 - supervised fine-tuning,
 - targeted distillation with an open-source teacher model,
-- DPO (Direct Preference Optimization) post-training.
+- DPO (Direct Preference Optimization) post-training,
+- GRPO (Group Relative Policy Optimization) online RL post-training.
 
 The current dense model has approximately **137M parameters**. The entire training process can be run on a single RTX 4090 GPU. A **Mixture-of-Experts (MoE)** variant (`src/model_moe.py`) and a **Muon** optimizer (`src/optim.py`, now the default) have also been added — see [Section 3](#3-model-overview).
 
@@ -123,6 +124,9 @@ petitgpt/
 ├── dpo/                       # preference post-training
 │   ├── prepare_dpo_data.py
 │   └── dpo.py
+├── grpo/                      # online RL post-training (GRPO)
+│   ├── grpo.py                # trainer: group rollouts + clipped surrogate + KL
+│   └── rewards.py             # pluggable reward registry (rule-based + code RLVR)
 ├── src/
 │   ├── model.py               # dense GPT model definition
 │   ├── model_moe.py           # Mixture-of-Experts variant (MoEGPT / MoEConfig)
@@ -419,16 +423,47 @@ Training logs the implicit reward margin and preference accuracy alongside the l
 
 ---
 
-## 10. Next Steps
+## 10. GRPO (Online RL Post-Training)
+
+`grpo/grpo.py` implements Group Relative Policy Optimization (Shao et al., DeepSeekMath 2024), an online, critic-free RL stage on top of an SFT/distill/DPO checkpoint. Unlike DPO (which learns from a fixed dataset of preference *pairs*), GRPO generates its own completions during training and scores them with a **reward function** — so the data is just a JSONL of prompts.
+
+For each prompt, GRPO:
+
+1. **samples a group of `G` completions** from the current policy;
+2. **scores** each with the reward (`--reward`) and computes **group-relative advantages** `A_i = (r_i − mean(r)) / (std(r) + eps)` — the group mean is the baseline, so no value network is trained (that is the "group relative" trick);
+3. optimizes a **PPO-style clipped surrogate** `min(ratio·A, clip(ratio, 1±eps)·A)` with a **per-token KL penalty** to a frozen reference (the k3 unbiased estimator).
+
+Rewards are pluggable via a small registry in `grpo/rewards.py` (`fn(completion, example) -> float`), combined with a spec string like `code:1.0+no_repeat:0.1`:
+
+- rule-based rewards: `nonempty`, `length`, `no_repeat`, `reference_exact`, `reference_contains`;
+- `code` — a **verifiable reward (RLVR)** that reuses the distillation verifier (`distill/code_utils.py`): extract the function, check its AST structure, and run the example's unit tests in the restricted sandbox. This is the natural reward for the project's coding target.
+
+Data is one prompt per line (`{"messages": [...], "reference": "...", "tests": [...]}`), rendered with the same plain chat template as the other stages. Representative command:
+
+```bash
+python grpo/grpo.py \
+  --train_jsonl datasets/grpo/train.jsonl \
+  --out_dir outputs/grpo_run \
+  --tokenizer_path tokenizer/tokenizer.json \
+  --init_ckpt outputs/sft_v6_general_code/step_003500.pt \
+  --reward "code:1.0+no_repeat:0.1" \
+  --group_size 8 --groups_per_step 4 --lr 1e-6 --kl_coef 0.04
+```
+
+Training logs mean reward, mean |advantage|, KL to the reference, and the fraction of clipped/zero-advantage groups. Note that sampling reuses the full-sequence forward (there is no KV cache yet), so rollouts are the throughput bottleneck.
+
+---
+
+## 11. Next Steps
 
 Future improvements could include:
 
 - training and evaluating the MoE variant (`src/model_moe.py`) end-to-end and A/B-comparing it against the dense model under matched data/steps,
-- a KV cache / incremental-decoding path for faster sampling,
-- online reinforcement learning for post-training (e.g., PPO/GRPO-style methods).
+- a KV cache / incremental-decoding path for faster sampling (which would speed up GRPO rollouts the most),
+- scaling up the GRPO stage with verifiable (code/math) rewards.
 
 ---
 
-## 11. Disclaimer
+## 12. Disclaimer
 
 This is a personal research-engineering project. It is not intended to compete with production LLMs. The value of the project lies in the implementation, experimentation, data pipeline, and failure analysis.
