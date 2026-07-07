@@ -1,5 +1,6 @@
 """Tests for the shared optimizer factory (src/optim.py): Muon + AdamW."""
 
+import pytest
 import torch
 
 from src.model import GPT, GPTConfig
@@ -113,7 +114,6 @@ def test_muon_state_dict_roundtrip():
 def test_cross_optimizer_state_load_raises():
     """Loading an AdamW-shaped state into a Muon optimizer must fail loudly so
     the training scripts can catch it and fall back to fresh state."""
-    import pytest
     m = GPT(_cfg())
     muon = build_optimizer(m, name="muon", lr=1e-3, weight_decay=0.1, verbose=False)
     adamw_state = torch.optim.AdamW(m.parameters(), lr=1e-3).state_dict()
@@ -122,7 +122,6 @@ def test_cross_optimizer_state_load_raises():
 
 
 def test_muon_rejects_non_2d_param_in_muon_group():
-    import pytest
     p1d = torch.nn.Parameter(torch.randn(8))
     with pytest.raises(ValueError):
         Muon([{"params": [p1d], "use_muon": True, "lr": 1e-3, "weight_decay": 0.0}])

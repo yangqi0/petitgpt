@@ -2,6 +2,7 @@
 
 from dataclasses import asdict
 
+import pytest
 import torch
 
 from src.model import SwiGLU
@@ -86,7 +87,6 @@ def test_active_params_less_than_total():
 
 
 def test_invalid_topk_rejected():
-    import pytest
     with pytest.raises(ValueError):
         MoEFeedForward(_cfg(n_experts=4, n_experts_per_tok=5))
 
