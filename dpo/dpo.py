@@ -57,6 +57,7 @@ if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
 
 from src.model import GPT, GPTConfig  # noqa: E402
+from src.optim import build_optimizer  # noqa: E402
 
 # -------------------------
 # Plain chat template (NO bracket tags; robust to tokenizer)
@@ -514,6 +515,11 @@ def main() -> None:
 
     ap.add_argument("--lr", type=float, default=5e-6)
     ap.add_argument("--weight_decay", type=float, default=0.0)
+    ap.add_argument("--optimizer", choices=["muon", "adamw"], default="muon",
+                    help="muon: Muon on hidden matrices + AdamW on embeddings/norms (default). adamw: AdamW everywhere.")
+    ap.add_argument("--muon_lr", type=float, default=0.0,
+                    help="LR for Muon matrix groups (<=0: reuse --lr; Muon update RMS is matched to AdamW's).")
+    ap.add_argument("--muon_momentum", type=float, default=0.95)
     ap.add_argument("--warmup_steps", type=int, default=150)
     ap.add_argument("--max_steps", type=int, default=1000)
     ap.add_argument("--grad_clip", type=float, default=1.0, help="0 disables grad clipping")
@@ -565,7 +571,14 @@ def main() -> None:
     for p in reference.parameters():
         p.requires_grad_(False)
 
-    optimizer = torch.optim.AdamW(policy.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+    optimizer = build_optimizer(
+        policy,
+        name=args.optimizer,
+        lr=args.lr,
+        weight_decay=args.weight_decay,
+        muon_lr=args.muon_lr,
+        muon_momentum=args.muon_momentum,
+    )
 
     use_fp16 = args.precision == "fp16" and device == "cuda"
     use_bf16 = args.precision == "bf16" and device == "cuda"
@@ -624,7 +637,7 @@ def main() -> None:
 
         lr = get_lr(step)
         for pg in optimizer.param_groups:
-            pg["lr"] = lr
+            pg["lr"] = lr * pg.get("lr_ratio", 1.0)
 
         for _ in range(args.grad_accum):
             try:

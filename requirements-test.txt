@@ -1,0 +1,11 @@
+# Minimal dependency set for running the test suite / CI.
+# Everything here is CPU-only — no CUDA build of torch is required, and the tests
+# use tiny models that run in seconds on a laptop or a GitHub Actions runner.
+#
+# Local:  pip install -r requirements-test.txt && pytest -q
+# In CI:  torch's CPU wheel is installed separately (see .github/workflows/ci.yml)
+# so this stays index-agnostic.
+pytest>=8.0
+numpy>=1.24
+tokenizers>=0.15
+ruff>=0.6

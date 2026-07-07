@@ -23,8 +23,8 @@ remains self-describing and reconstructable via `MoEConfig(**cfg_dict)`.
 
 from __future__ import annotations
 
-import math
 from dataclasses import dataclass
+import math
 
 import torch
 import torch.nn as nn
