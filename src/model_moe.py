@@ -88,9 +88,9 @@ class MoEFeedForward(nn.Module):
 
         d_ff = cfg.expert_d_ff()
         self.gate = nn.Linear(cfg.d_model, self.n_experts, bias=False)
-        self.experts = nn.ModuleList(
-            [Expert(cfg.d_model, d_ff, cfg.dropout) for _ in range(self.n_experts)]
-        )
+        self.experts = nn.ModuleList([
+            Expert(cfg.d_model, d_ff, cfg.dropout) for _ in range(self.n_experts)
+        ])
 
         if cfg.n_shared_experts > 0:
             self.shared = Expert(cfg.d_model, d_ff * int(cfg.n_shared_experts), cfg.dropout)
@@ -181,9 +181,9 @@ class MoEGPT(nn.Module):
         self.drop = nn.Dropout(cfg.dropout)
 
         n_dense = max(0, int(cfg.n_dense_layers))
-        self.blocks = nn.ModuleList(
-            [MoEBlock(cfg, use_moe=(i >= n_dense)) for i in range(cfg.n_layers)]
-        )
+        self.blocks = nn.ModuleList([
+            MoEBlock(cfg, use_moe=(i >= n_dense)) for i in range(cfg.n_layers)
+        ])
         self.norm_f = RMSNorm(cfg.d_model)
 
         self.lm_head = nn.Linear(cfg.d_model, cfg.vocab_size, bias=False)

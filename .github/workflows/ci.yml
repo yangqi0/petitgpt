@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Cancel superseded runs on the same ref.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install CPU dependencies
+        run: |
+          python -m pip install --upgrade pip
+          # CPU-only torch wheel — the tests use tiny models and never need CUDA.
+          pip install torch --index-url https://download.pytorch.org/whl/cpu
+          pip install -r requirements-test.txt
+
+      # Lint/format-check only the code added with the test suite. The older
+      # training scripts carry pre-existing ruff findings (tracked separately in
+      # NOTES.md); linting the whole repo would make CI red on day one.
+      - name: Ruff lint
+        run: ruff check src/optim.py src/model_moe.py tests conftest.py
+
+      - name: Ruff format check
+        run: ruff format --check src/optim.py src/model_moe.py tests conftest.py
+
+      - name: Pytest
+        run: pytest

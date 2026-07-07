@@ -33,11 +33,14 @@ def test_special_token_ids_are_stable(tok):
     assert tok.id_to_token(EOS_ID) == "[EOS]"
 
 
-@pytest.mark.parametrize("text", [
-    "The quick brown fox jumps over the lazy dog.",
-    "def add(a, b):\n    return a + b\n",
-    "Numbers: 3.14159 and 42 — and unicode: café, naïve.",
-])
+@pytest.mark.parametrize(
+    "text",
+    [
+        "The quick brown fox jumps over the lazy dog.",
+        "def add(a, b):\n    return a + b\n",
+        "Numbers: 3.14159 and 42 — and unicode: café, naïve.",
+    ],
+)
 def test_roundtrip_preserves_non_whitespace(tok, text):
     ids = tok.encode(text).ids
     decoded = tok.decode(ids)

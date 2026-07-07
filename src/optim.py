@@ -190,8 +190,11 @@ def build_optimizer(
     name = name.lower()
     if name == "adamw":
         groups = [
-            {"params": matrix_params + adam_decay_params, "weight_decay": weight_decay,
-             "lr_ratio": 1.0},
+            {
+                "params": matrix_params + adam_decay_params,
+                "weight_decay": weight_decay,
+                "lr_ratio": 1.0,
+            },
             {"params": no_decay_params, "weight_decay": 0.0, "lr_ratio": 1.0},
         ]
         groups = [g for g in groups if g["params"]]
@@ -204,13 +207,34 @@ def build_optimizer(
         muon_lr = float(muon_lr) if muon_lr and muon_lr > 0 else float(lr)
         ratio = muon_lr / lr if lr > 0 else 1.0
         groups = [
-            {"params": matrix_params, "lr": muon_lr, "weight_decay": weight_decay,
-             "momentum": muon_momentum, "nesterov": True, "ns_steps": ns_steps,
-             "use_muon": True, "lr_ratio": ratio},
-            {"params": adam_decay_params, "lr": lr, "weight_decay": weight_decay,
-             "betas": betas, "eps": eps, "use_muon": False, "lr_ratio": 1.0},
-            {"params": no_decay_params, "lr": lr, "weight_decay": 0.0,
-             "betas": betas, "eps": eps, "use_muon": False, "lr_ratio": 1.0},
+            {
+                "params": matrix_params,
+                "lr": muon_lr,
+                "weight_decay": weight_decay,
+                "momentum": muon_momentum,
+                "nesterov": True,
+                "ns_steps": ns_steps,
+                "use_muon": True,
+                "lr_ratio": ratio,
+            },
+            {
+                "params": adam_decay_params,
+                "lr": lr,
+                "weight_decay": weight_decay,
+                "betas": betas,
+                "eps": eps,
+                "use_muon": False,
+                "lr_ratio": 1.0,
+            },
+            {
+                "params": no_decay_params,
+                "lr": lr,
+                "weight_decay": 0.0,
+                "betas": betas,
+                "eps": eps,
+                "use_muon": False,
+                "lr_ratio": 1.0,
+            },
         ]
         groups = [g for g in groups if g["params"]]
         opt = Muon(groups)

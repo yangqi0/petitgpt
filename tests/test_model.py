@@ -36,8 +36,15 @@ def test_backward_runs(tiny_cfg):
 
 
 def test_tied_embeddings_share_storage():
-    cfg = GPTConfig(vocab_size=128, n_layers=2, d_model=32, n_heads=4, d_ff=80,
-                    max_seq_len=32, tie_embeddings=True)
+    cfg = GPTConfig(
+        vocab_size=128,
+        n_layers=2,
+        d_model=32,
+        n_heads=4,
+        d_ff=80,
+        max_seq_len=32,
+        tie_embeddings=True,
+    )
     model = GPT(cfg)
     # Same parameter object, same underlying storage — not just equal values.
     assert model.lm_head.weight is model.tok_emb.weight
@@ -45,8 +52,15 @@ def test_tied_embeddings_share_storage():
 
 
 def test_untied_embeddings_are_separate():
-    cfg = GPTConfig(vocab_size=128, n_layers=2, d_model=32, n_heads=4, d_ff=80,
-                    max_seq_len=32, tie_embeddings=False)
+    cfg = GPTConfig(
+        vocab_size=128,
+        n_layers=2,
+        d_model=32,
+        n_heads=4,
+        d_ff=80,
+        max_seq_len=32,
+        tie_embeddings=False,
+    )
     model = GPT(cfg)
     assert model.lm_head.weight is not model.tok_emb.weight
 
@@ -99,8 +113,10 @@ def test_rope_relative_position_invariance():
     q_vec, k_vec = torch.randn(head_dim), torch.randn(head_dim)
 
     def dot_at(m, n):
-        qq = torch.zeros(T, head_dim); qq[m] = q_vec
-        kk = torch.zeros(T, head_dim); kk[n] = k_vec
+        qq = torch.zeros(T, head_dim)
+        kk = torch.zeros(T, head_dim)
+        qq[m] = q_vec
+        kk[n] = k_vec
         return (_apply_rope(rope, qq)[m] * _apply_rope(rope, kk)[n]).sum().item()
 
     delta = 4
@@ -144,9 +160,11 @@ def test_rope_partial_rotation_rotates_only_prefix():
     q = torch.randn(1, 1, T, head_dim)
     out, _ = rope(q, q, seq_len=T)
     # untouched tail is passed through unchanged
-    assert torch.allclose(out[..., rope.rope_dim:], q[..., rope.rope_dim:], atol=1e-6)
+    assert torch.allclose(out[..., rope.rope_dim :], q[..., rope.rope_dim :], atol=1e-6)
     # rotated prefix keeps its norm
-    err = (q[..., :rope.rope_dim].norm(dim=-1) - out[..., :rope.rope_dim].norm(dim=-1)).abs().max()
+    err = (
+        (q[..., : rope.rope_dim].norm(dim=-1) - out[..., : rope.rope_dim].norm(dim=-1)).abs().max()
+    )
     assert err < 1e-5
 
 
