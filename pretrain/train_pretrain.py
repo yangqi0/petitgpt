@@ -31,6 +31,7 @@ if str(PROJECT_ROOT) not in sys.path:
 from dataset_pretrain import PackedBinDataset  # noqa: E402
 from sample import generate_default_samples  # noqa: E402
 from src.model import GPT, GPTConfig  # noqa: E402
+from src.optim import build_optimizer  # noqa: E402
 
 # -----------------------------------------------------------------------------
 # Performance toggles
@@ -308,7 +309,11 @@ def load_ckpt(
 
     if resume_full:
         if ckpt.get("optim") is not None:
-            optim.load_state_dict(ckpt["optim"])
+            try:
+                optim.load_state_dict(ckpt["optim"])
+            except ValueError as e:
+                print(f"[resume] WARNING: optimizer state incompatible (ckpt saved with a "
+                      f"different --optimizer?); continuing with fresh optimizer state: {e}")
         if scaler is not None and ckpt.get("scaler") is not None:
             scaler.load_state_dict(ckpt["scaler"])
 
@@ -519,6 +524,11 @@ def parse_args() -> argparse.Namespace:
     ap.add_argument("--grad_accum", type=int, default=8)
     ap.add_argument("--lr", type=float, default=5e-5)
     ap.add_argument("--weight_decay", type=float, default=0.1)
+    ap.add_argument("--optimizer", choices=["muon", "adamw"], default="muon",
+                    help="muon: Muon on hidden matrices + AdamW on embeddings/norms (default). adamw: AdamW everywhere.")
+    ap.add_argument("--muon_lr", type=float, default=0.0,
+                    help="LR for Muon matrix groups (<=0: reuse --lr; Muon update RMS is matched to AdamW's).")
+    ap.add_argument("--muon_momentum", type=float, default=0.95)
     ap.add_argument("--warmup_steps", type=int, default=1000)
     ap.add_argument("--max_steps", type=int, default=100000)
     ap.add_argument("--grad_clip", type=float, default=1.0)
@@ -593,11 +603,14 @@ def main() -> None:
     ac_dtype = _autocast_dtype(args.precision)
     scaler = torch.amp.GradScaler("cuda", enabled=use_fp16)
 
-    optim = torch.optim.AdamW(
-        model.parameters(),
+    optim = build_optimizer(
+        model,
+        name=str(args.optimizer),
         lr=float(args.lr),
         weight_decay=float(args.weight_decay),
         betas=(0.9, 0.95),
+        muon_lr=float(args.muon_lr),
+        muon_momentum=float(args.muon_momentum),
     )
 
     # Data
@@ -687,7 +700,7 @@ def main() -> None:
     while local_step < int(args.max_steps):
         lr = lr_schedule(global_step, int(args.warmup_steps), float(args.lr))
         for pg in optim.param_groups:
-            pg["lr"] = lr
+            pg["lr"] = lr * pg.get("lr_ratio", 1.0)
 
         optim.zero_grad(set_to_none=True)
 

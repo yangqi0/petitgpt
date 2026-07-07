@@ -26,6 +26,7 @@ if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
 
 from src.model import GPT, GPTConfig  # noqa: E402
+from src.optim import build_optimizer  # noqa: E402
 
 # -------------------------
 # Plain chat template (NO bracket tags; robust to tokenizer)
@@ -531,6 +532,11 @@ def main():
 
     ap.add_argument("--lr", type=float, default=2e-5)
     ap.add_argument("--weight_decay", type=float, default=0.1)
+    ap.add_argument("--optimizer", choices=["muon", "adamw"], default="muon",
+                    help="muon: Muon on hidden matrices + AdamW on embeddings/norms (default). adamw: AdamW everywhere.")
+    ap.add_argument("--muon_lr", type=float, default=0.0,
+                    help="LR for Muon matrix groups (<=0: reuse --lr; Muon update RMS is matched to AdamW's).")
+    ap.add_argument("--muon_momentum", type=float, default=0.95)
     ap.add_argument("--max_steps", type=int, default=15000)
     ap.add_argument("--warmup_steps", type=int, default=300)
 
@@ -696,8 +702,13 @@ def main():
         )
         model = GPT(cfg).to(device)
 
-    optimizer = torch.optim.AdamW(
-        model.parameters(), lr=args.lr, weight_decay=args.weight_decay
+    optimizer = build_optimizer(
+        model,
+        name=args.optimizer,
+        lr=args.lr,
+        weight_decay=args.weight_decay,
+        muon_lr=args.muon_lr,
+        muon_momentum=args.muon_momentum,
     )
 
     use_fp16 = args.precision == "fp16" and device == "cuda"
@@ -721,7 +732,11 @@ def main():
 
         opt = ck.get("optimizer") or ck.get("optim")
         if opt is not None:
-            optimizer.load_state_dict(opt)
+            try:
+                optimizer.load_state_dict(opt)
+            except ValueError as e:
+                print(f"[warn] optimizer state incompatible (ckpt saved with a different "
+                      f"--optimizer?); starting with fresh optimizer state: {e}")
 
         sc = ck.get("scaler")
         if sc is not None and use_fp16:
@@ -1073,7 +1088,7 @@ def main():
 
         lr = get_lr(step)
         for pg in optimizer.param_groups:
-            pg["lr"] = lr
+            pg["lr"] = lr * pg.get("lr_ratio", 1.0)
 
         for _ in range(args.grad_accum):
             try:
