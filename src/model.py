@@ -37,11 +37,12 @@ class RMSNorm(nn.Module):
 
 
 def _rotate_half(x: torch.Tensor) -> torch.Tensor:
-    # x: [..., D]
-    x1 = x[..., ::2]
-    x2 = x[..., 1::2]
-    out = torch.stack((-x2, x1), dim=-1)
-    return out.flatten(-2)
+    # x: [..., D]. Half-split layout (Llama/GPT-NeoX): pairs are (i, i+D/2),
+    # matching the `cat([freqs, freqs])` cos/sin cache below.
+    half = x.shape[-1] // 2
+    x1 = x[..., :half]
+    x2 = x[..., half:]
+    return torch.cat((-x2, x1), dim=-1)
 
 
 class RotaryEmbedding(nn.Module):
