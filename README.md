@@ -97,6 +97,12 @@ All training stages build their optimizer through `src/optim.py:build_optimizer`
 
 Resuming a checkpoint whose optimizer state does not match the current `--optimizer` prints a warning and continues with fresh optimizer state (model weights still load).
 
+### 3.4 Incremental decoding (KV cache)
+
+`GPT.forward` supports an optional KV cache: `model(input_ids, use_cache=True)` returns `(logits, past_kv)` — a per-layer list of cached `(k, v)` — and subsequent calls feed only the new token(s) with `past_kv=...`, rotating RoPE at the correct absolute positions and attending over the cached keys via a bottom-right causal mask. The default `model(input_ids)` call is unchanged (returns just logits), so training is unaffected. `GPT.generate(input_ids, max_new_tokens, temperature/top_k/top_p/eos_id)` uses the cache to decode with O(T) length-1 forwards instead of re-running the growing sequence each step.
+
+Correctness is pinned by equivalence tests in `tests/test_kv_cache.py` (cached prefill and step-by-step decoding reproduce the plain forward's logits exactly; cached greedy generation matches naive full-recompute). The speedup is asymptotic (attention recompute is O(T²) without a cache, O(T) with it): on tiny models / short sequences the per-step launch overhead can make it a wash, but it wins as sequences grow (measured ≈1.4× at 900 generated tokens on a small model + weak GPU, and more on a 4090 with the full model / longer context).
+
 ---
 
 ## 4. Repository Structure
@@ -126,7 +132,8 @@ petitgpt/
 │   └── dpo.py
 ├── grpo/                      # online RL post-training (GRPO)
 │   ├── grpo.py                # trainer: group rollouts + clipped surrogate + KL
-│   └── rewards.py             # pluggable reward registry (rule-based + code RLVR)
+│   ├── rewards.py             # pluggable reward registry (rule-based + code RLVR)
+│   └── prepare_grpo_data.py   # build a prompts-only bank from local code/message data
 ├── src/
 │   ├── model.py               # dense GPT model definition
 │   ├── model_moe.py           # Mixture-of-Experts variant (MoEGPT / MoEConfig)
@@ -438,9 +445,13 @@ Rewards are pluggable via a small registry in `grpo/rewards.py` (`fn(completion,
 - rule-based rewards: `nonempty`, `length`, `no_repeat`, `reference_exact`, `reference_contains`;
 - `code` — a **verifiable reward (RLVR)** that reuses the distillation verifier (`distill/code_utils.py`): extract the function, check its AST structure, and run the example's unit tests in the restricted sandbox. This is the natural reward for the project's coding target.
 
-Data is one prompt per line (`{"messages": [...], "reference": "...", "tests": [...]}`), rendered with the same plain chat template as the other stages. Representative command:
+Data is one prompt per line (`{"messages": [...], "reference": "...", "tests": [...]}`), rendered with the same plain chat template as the other stages. `grpo/prepare_grpo_data.py` assembles such a bank from the project's own local data (no downloads): it converts distillation code-prompt banks (carrying `entry_point`/`tests` for the `code` reward) and/or SFT-style `messages` JSONL (keeping the prompt up to the last user turn) into deduplicated, length-filtered `train.jsonl` / `val.jsonl`. Representative commands:
 
 ```bash
+python grpo/prepare_grpo_data.py \
+  --code_bank dataset/distill/code_canonical_prompts.jsonl \
+  --tokenizer_path tokenizer/tokenizer.json --out_dir datasets/grpo --max_prompt_tokens 384
+
 python grpo/grpo.py \
   --train_jsonl datasets/grpo/train.jsonl \
   --out_dir outputs/grpo_run \
@@ -450,7 +461,7 @@ python grpo/grpo.py \
   --group_size 8 --groups_per_step 4 --lr 1e-6 --kl_coef 0.04
 ```
 
-Training logs mean reward, mean |advantage|, KL to the reference, and the fraction of clipped/zero-advantage groups. Note that sampling reuses the full-sequence forward (there is no KV cache yet), so rollouts are the throughput bottleneck.
+Training logs mean reward, mean |advantage|, KL to the reference, and the fraction of clipped/zero-advantage groups. Rollouts (sampling G completions per prompt) are the throughput bottleneck; they can adopt the model's KV cache ([Section 3.4](#34-incremental-decoding-kv-cache)) for a speedup.
 
 ---
 
@@ -459,7 +470,7 @@ Training logs mean reward, mean |advantage|, KL to the reference, and the fracti
 Future improvements could include:
 
 - training and evaluating the MoE variant (`src/model_moe.py`) end-to-end and A/B-comparing it against the dense model under matched data/steps,
-- a KV cache / incremental-decoding path for faster sampling (which would speed up GRPO rollouts the most),
+- wiring the KV cache (`GPT.generate`, [Section 3.4](#34-incremental-decoding-kv-cache)) into the training-time samplers (GRPO rollouts, SFT/DPO sampling) to cut sampling cost,
 - scaling up the GRPO stage with verifiable (code/math) rewards.
 
 ---
