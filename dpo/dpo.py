@@ -58,6 +58,8 @@ if ROOT not in sys.path:
 
 from src.model import GPT, GPTConfig  # noqa: E402
 from src.optim import build_optimizer  # noqa: E402
+from src.special_tokens import assert_special_token_ids  # noqa: E402
+from src.tracking import Tracker  # noqa: E402
 
 # -------------------------
 # Plain chat template (NO bracket tags; robust to tokenizer)
@@ -128,13 +130,6 @@ def encode_strip_special(tok: Tokenizer, text: str, bos_id: int, eos_id: int) ->
     return ids
 
 
-def tokenizer_auto_bos_eos(tok: Tokenizer, bos_id: int, eos_id: int) -> tuple[bool, bool]:
-    probe = tok.encode("x").ids
-    has_bos = bool(probe) and probe[0] == bos_id
-    has_eos = bool(probe) and probe[-1] == eos_id
-    return has_bos, has_eos
-
-
 # -------------------------
 # Prompt rendering + preference-pair example building
 # -------------------------
@@ -191,32 +186,26 @@ def build_completion_example(
     default_system: str,
 ) -> tuple[torch.Tensor, torch.Tensor]:
     """Render (prompt + completion) and return (input_ids, labels), with
-    labels=-100 everywhere except the completion tokens (EOS excluded from
-    supervision, matching sft/train_sft.py's build_example)."""
+    labels=-100 everywhere except the completion tokens. The completion ends
+    with a SUPERVISED EOS and the sequence starts with BOS, matching
+    sft/train_sft.py's build_example (so DPO logps include the stop decision)."""
     segs = render_prompt_segments(messages, default_system)
     segs.append((ASSIST_PREFIX, False))
     segs.append((clean_text_assistant(completion), True))
 
-    has_bos, has_eos = tokenizer_auto_bos_eos(tok, bos_id, eos_id)
-
-    ids_all: list[int] = []
-    labels_all: list[int] = []
-
-    if has_bos:
-        ids_all.append(bos_id)
-        labels_all.append(-100)
+    ids_all: list[int] = [bos_id]
+    labels_all: list[int] = [-100]
 
     for seg_text, supervise in segs:
         seg_ids = encode_strip_special(tok, seg_text, bos_id, eos_id)
         ids_all.extend(seg_ids)
         if supervise:
             labels_all.extend(seg_ids)
+            # completion (assistant content) ends with a supervised EOS
+            ids_all.append(eos_id)
+            labels_all.append(eos_id)
         else:
             labels_all.extend([-100] * len(seg_ids))
-
-    if has_eos:
-        ids_all.append(eos_id)
-        labels_all.append(-100)
 
     # Truncate/pad (keep tail so the completion is more likely preserved)
     if len(ids_all) > seq_len:
@@ -399,6 +388,9 @@ def sample_from_prompt(
         prompt_ids = prompt_ids[:-1]
     if not prompt_ids:
         return ""
+    # match training: sequences start with BOS
+    if prompt_ids[0] != BOS_ID:
+        prompt_ids = [BOS_ID] + prompt_ids
     if len(prompt_ids) >= seq_len:
         prompt_ids = prompt_ids[-(seq_len - 1) :]
 
@@ -551,7 +543,9 @@ def main() -> None:
     if device == "cuda":
         torch.cuda.manual_seed_all(args.seed)
 
+    assert_special_token_ids(args.tokenizer_path)
     tok = Tokenizer.from_file(args.tokenizer_path)
+    tracker = Tracker(args.out_dir)
     vocab_size = tok.get_vocab_size()
     pad_id = 0
 
@@ -690,6 +684,14 @@ def main() -> None:
                 f"reward_margin={running_margin / 20:.4f} reward_acc={running_acc / 20:.4f} "
                 f"lr={lr:.2e} dt={dt:.1f}s"
             )
+            tracker.log(
+                "train",
+                step,
+                loss=running_loss / 20,
+                reward_margin=running_margin / 20,
+                reward_acc=running_acc / 20,
+                lr=lr,
+            )
             running_loss = 0.0
             running_margin = 0.0
             running_acc = 0.0
@@ -702,6 +704,8 @@ def main() -> None:
                 f"val_reward_margin={metrics['val_reward_margin']:.4f} "
                 f"val_reward_acc={metrics['val_reward_acc']:.4f}"
             )
+            tracker.log("val", step, **{k: float(v) for k, v in metrics.items()})
+            tracker.render()
 
         if args.save_every > 0 and step % args.save_every == 0:
             ckpt = {
@@ -731,6 +735,7 @@ def main() -> None:
                 args.sample_top_p,
             )
 
+    tracker.render()
     print("[done]")
 
 

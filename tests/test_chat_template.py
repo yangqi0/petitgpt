@@ -4,8 +4,9 @@ The template constants and rendering logic are duplicated verbatim across
 sft/train_sft.py, distill/train_distill.py, dpo/dpo.py, and grpo/grpo.py
 (intentionally, per CLAUDE.md). Training/inference template drift is the classic
 silent SFT bug, so these tests (a) guard the copies against drifting apart and
-(b) pin down the loss-masking contract: only assistant *content* tokens are
-supervised.
+(b) pin down the loss-masking contract: sequences start with an unsupervised
+BOS, and the supervised span is exactly the assistant *content* tokens plus one
+trailing EOS per assistant turn (so the model is taught to stop).
 """
 
 from pathlib import Path
@@ -88,19 +89,48 @@ def test_build_example_masks_prompt_and_bos(tok):
         refusal_mode="contains_any",
     )
     assert input_ids.shape == labels.shape
-    # BOS (if present) is never supervised
-    if input_ids[0].item() == BOS_ID:
-        assert labels[0].item() == -100
+    # sequences always start with an unsupervised BOS
+    assert input_ids[0].item() == BOS_ID
+    assert labels[0].item() == -100
 
     pairs = list(zip(input_ids.tolist(), labels.tolist(), strict=True))
     supervised_ids = [tid for tid, lab in pairs if lab != -100]
     expected = encode_strip_special(tok, clean_text_assistant("It is four"), BOS_ID, EOS_ID)
-    assert supervised_ids == expected
+    # supervised span = assistant content + one trailing EOS (the stop signal)
+    assert supervised_ids == expected + [EOS_ID]
     # where supervised, label == input (pre-shift alignment)
     for tid, lab in pairs:
         if lab != -100:
             assert lab == tid
     assert weight > 0
+
+
+def test_each_assistant_turn_ends_with_supervised_eos(tok):
+    ex = {
+        "messages": [
+            {"role": "user", "content": "Say hi"},
+            {"role": "assistant", "content": "Hi"},
+            {"role": "user", "content": "Say bye"},
+            {"role": "assistant", "content": "Bye"},
+        ]
+    }
+    input_ids, labels, _ = build_example(
+        ex,
+        tok,
+        seq_len=64,
+        pad_id=PAD_ID,
+        default_system="",
+        bos_id=BOS_ID,
+        eos_id=EOS_ID,
+        refusal_downweight=1.0,
+        refusal_patterns=[],
+        refusal_mode="contains_any",
+    )
+    pairs = list(zip(input_ids.tolist(), labels.tolist(), strict=True))
+    supervised_ids = [tid for tid, lab in pairs if lab != -100]
+    a1 = encode_strip_special(tok, clean_text_assistant("Hi"), BOS_ID, EOS_ID)
+    a2 = encode_strip_special(tok, clean_text_assistant("Bye"), BOS_ID, EOS_ID)
+    assert supervised_ids == a1 + [EOS_ID] + a2 + [EOS_ID]
 
 
 def test_empty_messages_rejected(tok):

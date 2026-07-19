@@ -501,11 +501,11 @@ def parse_args() -> argparse.Namespace:
 
     # Model
     ap.add_argument("--vocab_size", type=int, default=32000)
-    ap.add_argument("--seq_len", type=int, default=1024)
-    ap.add_argument("--layers", type=int, default=12)
+    ap.add_argument("--seq_len", type=int, default=2048)
+    ap.add_argument("--layers", type=int, default=16)
     ap.add_argument("--d_model", type=int, default=768)
     ap.add_argument("--n_heads", type=int, default=12)
-    ap.add_argument("--d_ff", type=int, default=3072)
+    ap.add_argument("--d_ff", type=int, default=1920)
     ap.add_argument("--dropout", type=float, default=0.0)
 
     # Special tokens

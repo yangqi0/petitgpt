@@ -29,6 +29,7 @@ import json
 import os
 import random
 import re
+import sys
 from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
@@ -36,6 +37,12 @@ from typing import Any, Iterator, Optional
 
 import numpy as np
 from tokenizers import Tokenizer
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if ROOT not in sys.path:
+    sys.path.insert(0, ROOT)
+
+from src.special_tokens import assert_special_token_ids  # noqa: E402
 
 
 # -------------------------
@@ -565,8 +572,18 @@ def main():
     ap.add_argument("--min_val_tokens_per_source", type=int, default=200_000)
     ap.add_argument("--seed", type=int, default=1234)
 
-    ap.add_argument("--add_bos", action="store_true")
-    ap.add_argument("--add_eos", action="store_true")
+    ap.add_argument(
+        "--add_bos",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Wrap each document with a leading BOS (default ON; --no-add_bos to disable).",
+    )
+    ap.add_argument(
+        "--add_eos",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Wrap each document with a trailing EOS (default ON; --no-add_eos to disable).",
+    )
     ap.add_argument("--bos_id", type=int, default=2)
     ap.add_argument("--eos_id", type=int, default=3)
 
@@ -597,6 +614,9 @@ def main():
         raise SystemExit("--target_train_tokens must be > 0")
     if args.min_val_tokens_per_source < 0:
         raise SystemExit("--min_val_tokens_per_source must be >= 0")
+
+    # Fail fast if the tokenizer's special-token IDs drift from the hardcoded ones.
+    assert_special_token_ids(args.tokenizer_path)
 
     write_shards(
         sources=sources,
