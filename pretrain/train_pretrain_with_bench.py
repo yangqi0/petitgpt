@@ -34,6 +34,8 @@ from dataset_pretrain import PackedBinDataset  # noqa: E402
 from sample import generate_default_samples  # noqa: E402
 from src.model import GPT, GPTConfig  # noqa: E402
 from src.optim import build_optimizer  # noqa: E402
+from src.special_tokens import assert_special_token_ids  # noqa: E402
+from src.tracking import Tracker  # noqa: E402
 
 # -----------------------------------------------------------------------------
 # Performance toggles
@@ -55,12 +57,6 @@ except Exception:
 # -----------------------------------------------------------------------------
 # Utilities
 # -----------------------------------------------------------------------------
-def append_jsonl(path: Path, record: dict) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with open(path, "a", encoding="utf-8") as f:
-        f.write(json.dumps(record, ensure_ascii=False) + "\n")
-
-
 def maybe_ppl(loss_value: float, eos_weight: float) -> float | None:
     # only when eos_weight==1, treat it as a more standard ppl
     if abs(float(eos_weight) - 1.0) > 1e-12:
@@ -575,11 +571,11 @@ def parse_args() -> argparse.Namespace:
 
     # Model
     ap.add_argument("--vocab_size", type=int, default=32000)
-    ap.add_argument("--seq_len", type=int, default=1024)
-    ap.add_argument("--layers", type=int, default=12)
+    ap.add_argument("--seq_len", type=int, default=2048)
+    ap.add_argument("--layers", type=int, default=16)
     ap.add_argument("--d_model", type=int, default=768)
     ap.add_argument("--n_heads", type=int, default=12)
-    ap.add_argument("--d_ff", type=int, default=3072)
+    ap.add_argument("--d_ff", type=int, default=1920)
     ap.add_argument("--dropout", type=float, default=0.0)
 
     # Special tokens
@@ -659,6 +655,9 @@ def main() -> None:
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     assert device.type == "cuda", "This script expects a CUDA GPU."
+
+    # Fail fast if the tokenizer's special-token IDs drift from the hardcoded ones.
+    assert_special_token_ids(str(tok_path))
 
     # vocab_size from tokenizer.json
     try:
@@ -774,7 +773,7 @@ def main() -> None:
         json.dumps({**vars(args), "model_cfg": asdict(cfg)}, indent=2),
         encoding="utf-8",
     )
-    metrics_path = out_dir / "metrics.jsonl"
+    tracker = Tracker(out_dir)
     best_val_path = out_dir / "best_val.json"
     best_val = float("inf")
     best_step = -1
@@ -906,17 +905,13 @@ def main() -> None:
                 f"[train] step={global_step} loss={mean_loss_raw:.4f} "
                 f"(eos_w={cur_eos_weight:g}) lr={lr:.2e} tok/s={tok_s:.0f}"
             )
-            append_jsonl(
-                metrics_path,
-                {
-                    "kind": "train",
-                    "step": int(global_step),
-                    "loss": float(mean_loss_raw),
-                    "eos_weight": float(cur_eos_weight),
-                    "lr": float(lr),
-                    "tok_s": float(tok_s),
-                    "time": float(time.time()),
-                },
+            tracker.log(
+                "train",
+                global_step,
+                loss=float(mean_loss_raw),
+                eos_weight=float(cur_eos_weight),
+                lr=float(lr),
+                tok_s=float(tok_s),
             )
             t_window = time.time()
             window_sup_tokens_est = 0
@@ -935,18 +930,15 @@ def main() -> None:
             val_ppl = maybe_ppl(val_loss, cur_eos_weight)
             print(f"[eval] step={global_step} val_loss={val_loss:.4f}")
 
-            append_jsonl(
-                metrics_path,
-                {
-                    "kind": "val",
-                    "step": int(global_step),
-                    "val_loss": float(val_loss),
-                    "val_ppl": float(val_ppl) if val_ppl is not None else None,
-                    "eos_weight": float(cur_eos_weight),
-                    "lr": float(lr),
-                    "time": float(time.time()),
-                },
+            tracker.log(
+                "val",
+                global_step,
+                val_loss=float(val_loss),
+                val_ppl=float(val_ppl) if val_ppl is not None else None,
+                eos_weight=float(cur_eos_weight),
+                lr=float(lr),
             )
+            tracker.render()
 
             if val_loss < best_val:
                 best_val = float(val_loss)
@@ -1024,18 +1016,15 @@ def main() -> None:
                 try:
                     with open(out_json, "r", encoding="utf-8") as f:
                         bj = json.load(f)
-                    append_jsonl(
-                        metrics_path,
-                        {
-                            "kind": "bench",
-                            "step": int(global_step),
-                            "acc_arithmetic": float(bj.get("acc_arithmetic", 0.0)),
-                            "acc_syllogism": float(bj.get("acc_syllogism", 0.0)),
-                            "acc_code": float(bj.get("acc_code", 0.0)),
-                            "bench_json": out_json,
-                            "time": float(time.time()),
-                        },
+                    tracker.log(
+                        "bench",
+                        global_step,
+                        acc_arithmetic=float(bj.get("acc_arithmetic", 0.0)),
+                        acc_syllogism=float(bj.get("acc_syllogism", 0.0)),
+                        acc_code=float(bj.get("acc_code", 0.0)),
+                        bench_json=out_json,
                     )
+                    tracker.render()
                 except Exception as e:
                     print(f"[bench_eval] failed to summarize metrics: {e}", flush=True)
 
@@ -1052,6 +1041,7 @@ def main() -> None:
         model_config=asdict(cfg),
         train_args=vars(args),
     )
+    tracker.render()
     print(f"[done] saved final checkpoint to {out_dir}")
 
 

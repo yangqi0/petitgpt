@@ -72,6 +72,8 @@ except ModuleNotFoundError:
     from rewards import get_reward_fn  # noqa: E402
 from src.model import GPT, GPTConfig  # noqa: E402
 from src.optim import build_optimizer  # noqa: E402
+from src.special_tokens import assert_special_token_ids  # noqa: E402
+from src.tracking import Tracker  # noqa: E402
 
 # -------------------------
 # Plain chat template (NO bracket tags; robust to tokenizer)
@@ -134,13 +136,6 @@ def encode_strip_special(tok: Tokenizer, text: str, bos_id: int, eos_id: int) ->
     return ids
 
 
-def tokenizer_auto_bos_eos(tok: Tokenizer, bos_id: int, eos_id: int) -> tuple[bool, bool]:
-    probe = tok.encode("x").ids
-    has_bos = bool(probe) and probe[0] == bos_id
-    has_eos = bool(probe) and probe[-1] == eos_id
-    return has_bos, has_eos
-
-
 def render_prompt_text(messages: list[dict[str, str]], default_system: str) -> str:
     """Render the prompt context and the trailing 'Assistant: ' cue as plain
     text, so the policy generates the assistant completion from there."""
@@ -175,9 +170,8 @@ def encode_prompt(
 ) -> list[int]:
     text = render_prompt_text(messages, default_system)
     ids = encode_strip_special(tok, text, BOS_ID, EOS_ID)
-    has_bos, _ = tokenizer_auto_bos_eos(tok, BOS_ID, EOS_ID)
-    if has_bos:
-        ids = [BOS_ID] + ids
+    # match training: sequences start with BOS
+    ids = [BOS_ID] + ids
     if len(ids) > max_prompt_len:
         ids = ids[-max_prompt_len:]  # keep the tail (most recent turn + cue)
     return ids
@@ -519,7 +513,9 @@ def main() -> None:
         raise ValueError("--max_new_tokens must be < --seq_len")
     max_prompt_len = args.seq_len - args.max_new_tokens
 
+    assert_special_token_ids(args.tokenizer_path)
     tok = Tokenizer.from_file(args.tokenizer_path)
+    tracker = Tracker(args.out_dir)
     vocab_size = tok.get_vocab_size()
     pad_id = 0
     reward_fn = get_reward_fn(args.reward)
@@ -675,6 +671,17 @@ def main() -> None:
                 f"kl={agg['kl'] / g:.4f} clipped={agg['clipped'] / g:.3f} "
                 f"zero_std_groups={int(agg['std0'])}/{g} lr={lr:.2e} dt={time.time() - t0:.1f}s"
             )
+            tracker.log(
+                "train",
+                step,
+                loss=agg["loss"],
+                reward=agg["reward"] / g,
+                adv_abs=agg["adv_abs"] / g,
+                kl=agg["kl"] / g,
+                clipped_frac=agg["clipped"] / g,
+                zero_std_frac=agg["std0"] / g,
+                lr=lr,
+            )
             t0 = time.time()
 
         if args.save_every > 0 and step % args.save_every == 0:
@@ -690,7 +697,9 @@ def main() -> None:
             save_checkpoint_atomic(os.path.join(args.out_dir, f"step_{step:06d}.pt"), ckpt)
             save_checkpoint_atomic(os.path.join(args.out_dir, "latest.pt"), ckpt)
             print(f"[ckpt] saved step_{step:06d}.pt")
+            tracker.render()
 
+    tracker.render()
     print("[done]")
 
 

@@ -26,6 +26,8 @@ if ROOT not in sys.path:
 
 from src.model import GPT, GPTConfig  # noqa: E402
 from src.optim import build_optimizer  # noqa: E402
+from src.special_tokens import assert_special_token_ids  # noqa: E402
+from src.tracking import Tracker  # noqa: E402
 
 # -------------------------
 # Plain chat template (NO bracket tags; robust to tokenizer)
@@ -118,16 +120,6 @@ def encode_strip_special(
     if ids and ids[-1] == eos_id:
         ids = ids[:-1]
     return ids
-
-
-def tokenizer_auto_bos_eos(
-    tok: Tokenizer, bos_id: int, eos_id: int
-) -> tuple[bool, bool]:
-    """Detect whether tokenizer auto-adds BOS/EOS (using a tiny probe)."""
-    probe = tok.encode("x").ids
-    has_bos = bool(probe) and probe[0] == bos_id
-    has_eos = bool(probe) and probe[-1] == eos_id
-    return has_bos, has_eos
 
 
 # -------------------------
@@ -263,26 +255,22 @@ def build_example(
     if isinstance(w0, (int, float)):
         ex_weight *= float(w0)
 
-    has_bos, has_eos = tokenizer_auto_bos_eos(tok, bos_id, eos_id)
-
-    ids_all: list[int] = []
-    labels_all: list[int] = []
-
-    if has_bos:
-        ids_all.append(bos_id)
-        labels_all.append(-100)
+    # Sequences start with BOS (matching pretrain shards built with --add_bos),
+    # and every assistant answer ends with a SUPERVISED EOS so the model is
+    # explicitly taught to stop (inference already stops on EOS).
+    ids_all: list[int] = [bos_id]
+    labels_all: list[int] = [-100]
 
     for seg_text, supervise in segs:
         seg_ids = encode_strip_special(tok, seg_text, bos_id, eos_id)
         ids_all.extend(seg_ids)
         if supervise:
             labels_all.extend(seg_ids)
+            # supervise=True segments are exactly the assistant-content segments
+            ids_all.append(eos_id)
+            labels_all.append(eos_id)
         else:
             labels_all.extend([-100] * len(seg_ids))
-
-    if has_eos:
-        ids_all.append(eos_id)
-        labels_all.append(-100)
 
     # Truncate/pad (keep tail so assistant targets more likely preserved)
     if len(ids_all) > seq_len:
@@ -532,10 +520,10 @@ def main():
     ap.add_argument("--resume", default="")
     ap.add_argument("--default_system", default="You are a helpful assistant.")
 
-    ap.add_argument("--n_layers", type=int, default=12)
+    ap.add_argument("--n_layers", type=int, default=16)
     ap.add_argument("--d_model", type=int, default=768)
     ap.add_argument("--n_heads", type=int, default=12)
-    ap.add_argument("--d_ff", type=int, default=3072)
+    ap.add_argument("--d_ff", type=int, default=1920)
     ap.add_argument("--dropout", type=float, default=0.0)
     ap.add_argument("--tie_embeddings", action="store_true")
 
@@ -631,9 +619,12 @@ def main():
     if device == "cuda":
         torch.cuda.manual_seed_all(args.seed)
 
+    assert_special_token_ids(args.tokenizer_path)
     tok = Tokenizer.from_file(args.tokenizer_path)
     vocab_size = tok.get_vocab_size()
     pad_id = 0  # if no [PAD], use 0
+
+    tracker = Tracker(args.out_dir)
 
     refusal_patterns = [
         p.strip() for p in args.refusal_patterns.split(",") if p.strip()
@@ -788,6 +779,9 @@ def main():
             prompt_ids = prompt_ids[:-1]
         if not prompt_ids:
             return ""
+        # match training: sequences start with BOS
+        if prompt_ids[0] != BOS_ID:
+            prompt_ids = [BOS_ID] + prompt_ids
 
         if len(prompt_ids) >= args.seq_len:
             prompt_ids = prompt_ids[-(args.seq_len - 1) :]
@@ -1082,6 +1076,7 @@ def main():
             print(
                 f"[train] step={step} loss={running_loss / 50:.4f} lr={get_lr(step):.2e} tok/s≈{tok_s:.0f} dt={dt:.1f}s"
             )
+            tracker.log("train", step, loss=running_loss / 50, lr=get_lr(step), tok_s=tok_s)
             running_loss = 0.0
             t0 = time.time()
 
@@ -1108,6 +1103,8 @@ def main():
             print(
                 f"[eval] step={step} val_loss={sum(losses) / max(1, len(losses)):.4f}"
             )
+            tracker.log("val", step, val_loss=sum(losses) / max(1, len(losses)))
+            tracker.render()
             model.train()
 
         if args.save_every > 0 and step % args.save_every == 0:
@@ -1132,6 +1129,7 @@ def main():
         ):
             emit_samples(f"step_{step:06d}")
 
+    tracker.render()
     print("[done]")
 
 

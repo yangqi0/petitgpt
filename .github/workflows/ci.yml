@@ -37,10 +37,10 @@ jobs:
       # training scripts carry pre-existing ruff findings (tracked separately in
       # NOTES.md); linting the whole repo would make CI red on day one.
       - name: Ruff lint
-        run: ruff check src/optim.py src/model_moe.py grpo tests conftest.py
+        run: ruff check src/optim.py src/model_moe.py src/special_tokens.py src/tracking.py scripts grpo tests conftest.py
 
       - name: Ruff format check
-        run: ruff format --check src/optim.py src/model_moe.py grpo tests conftest.py
+        run: ruff format --check src/optim.py src/model_moe.py src/special_tokens.py src/tracking.py scripts grpo tests conftest.py
 
       - name: Pytest
         run: pytest

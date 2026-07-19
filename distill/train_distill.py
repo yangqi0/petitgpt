@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import argparse
-import csv
 import json
 import math
 import os
@@ -27,6 +26,8 @@ if ROOT not in sys.path:
 
 from src.model import GPT, GPTConfig  # noqa: E402
 from src.optim import build_optimizer  # noqa: E402
+from src.special_tokens import assert_special_token_ids  # noqa: E402
+from src.tracking import Tracker  # noqa: E402
 
 # -------------------------
 # Plain chat template (NO bracket tags; robust to tokenizer)
@@ -119,16 +120,6 @@ def encode_strip_special(
     if ids and ids[-1] == eos_id:
         ids = ids[:-1]
     return ids
-
-
-def tokenizer_auto_bos_eos(
-    tok: Tokenizer, bos_id: int, eos_id: int
-) -> tuple[bool, bool]:
-    """Detect whether tokenizer auto-adds BOS/EOS (using a tiny probe)."""
-    probe = tok.encode("x").ids
-    has_bos = bool(probe) and probe[0] == bos_id
-    has_eos = bool(probe) and probe[-1] == eos_id
-    return has_bos, has_eos
 
 
 # -------------------------
@@ -264,26 +255,22 @@ def build_example(
     if isinstance(w0, (int, float)):
         ex_weight *= float(w0)
 
-    has_bos, has_eos = tokenizer_auto_bos_eos(tok, bos_id, eos_id)
-
-    ids_all: list[int] = []
-    labels_all: list[int] = []
-
-    if has_bos:
-        ids_all.append(bos_id)
-        labels_all.append(-100)
+    # Sequences start with BOS (matching pretrain shards built with --add_bos),
+    # and every assistant answer ends with a SUPERVISED EOS so the model is
+    # explicitly taught to stop (inference already stops on EOS).
+    ids_all: list[int] = [bos_id]
+    labels_all: list[int] = [-100]
 
     for seg_text, supervise in segs:
         seg_ids = encode_strip_special(tok, seg_text, bos_id, eos_id)
         ids_all.extend(seg_ids)
         if supervise:
             labels_all.extend(seg_ids)
+            # supervise=True segments are exactly the assistant-content segments
+            ids_all.append(eos_id)
+            labels_all.append(eos_id)
         else:
             labels_all.extend([-100] * len(seg_ids))
-
-    if has_eos:
-        ids_all.append(eos_id)
-        labels_all.append(-100)
 
     # Truncate/pad (keep tail so assistant targets more likely preserved)
     if len(ids_all) > seq_len:
@@ -415,22 +402,6 @@ def load_ckpt(path: str) -> dict[str, Any]:
     return torch.load(path, map_location="cpu")
 
 
-def append_jsonl(path: str, row: dict[str, Any]) -> None:
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    with open(path, "a", encoding="utf-8") as f:
-        f.write(json.dumps(row, ensure_ascii=False) + "\n")
-
-
-def append_csv_row(path: str, row: dict[str, Any], fieldnames: list[str]) -> None:
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    write_header = (not os.path.exists(path)) or os.path.getsize(path) == 0
-    with open(path, "a", encoding="utf-8", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=fieldnames)
-        if write_header:
-            w.writeheader()
-        w.writerow(row)
-
-
 # -------------------------
 # In-domain prompt building (plain template)
 # -------------------------
@@ -549,10 +520,10 @@ def main():
     ap.add_argument("--resume", default="")
     ap.add_argument("--default_system", default="You are a helpful assistant.")
 
-    ap.add_argument("--n_layers", type=int, default=12)
+    ap.add_argument("--n_layers", type=int, default=16)
     ap.add_argument("--d_model", type=int, default=768)
     ap.add_argument("--n_heads", type=int, default=12)
-    ap.add_argument("--d_ff", type=int, default=3072)
+    ap.add_argument("--d_ff", type=int, default=1920)
     ap.add_argument("--dropout", type=float, default=0.0)
     ap.add_argument("--tie_embeddings", action="store_true")
 
@@ -635,13 +606,13 @@ def main():
     ap.add_argument(
         "--log_losses",
         action="store_true",
-        help="If set, append train/eval loss records to JSONL/CSV files under out_dir/logs.",
+        help="(deprecated, ignored) metrics now always go to out_dir/metrics.jsonl via src/tracking.py.",
     )
     ap.add_argument(
         "--loss_log_every",
         type=int,
         default=50,
-        help="Write one train-loss log record every N optimizer steps (default: 50, matching console train logging).",
+        help="(deprecated, ignored) train metrics are logged every 50 steps with the console log.",
     )
     ap.add_argument(
         "--sample_only_ckpt",
@@ -659,9 +630,12 @@ def main():
     if device == "cuda":
         torch.cuda.manual_seed_all(args.seed)
 
+    assert_special_token_ids(args.tokenizer_path)
     tok = Tokenizer.from_file(args.tokenizer_path)
     vocab_size = tok.get_vocab_size()
     pad_id = 0  # if no [PAD], use 0
+
+    tracker = Tracker(args.out_dir)
 
     refusal_patterns = [
         p.strip() for p in args.refusal_patterns.split(",") if p.strip()
@@ -763,33 +737,6 @@ def main():
         f"[*] refusal downweight: mode={args.refusal_mode} downweight={args.refusal_downweight} patterns={len(refusal_patterns)}"
     )
 
-    logs_dir = os.path.join(args.out_dir, "logs")
-    train_loss_jsonl = os.path.join(logs_dir, "train_loss.jsonl")
-    train_loss_csv = os.path.join(logs_dir, "train_loss.csv")
-    eval_loss_jsonl = os.path.join(logs_dir, "eval_loss.jsonl")
-    eval_loss_csv = os.path.join(logs_dir, "eval_loss.csv")
-    train_loss_fields = [
-        "step",
-        "loss",
-        "lr",
-        "tok_per_s",
-        "dt_seconds",
-        "loss_reduction",
-        "train_jsonl",
-        "val_jsonl",
-    ]
-    eval_loss_fields = [
-        "step",
-        "val_loss",
-        "eval_batches_used",
-        "loss_reduction",
-        "train_jsonl",
-        "val_jsonl",
-    ]
-    if args.log_losses:
-        os.makedirs(logs_dir, exist_ok=True)
-        print(f"[*] loss logging enabled -> {logs_dir}")
-
     train_loader = DataLoader(
         train_ds,
         batch_size=args.micro_bsz,
@@ -843,6 +790,9 @@ def main():
             prompt_ids = prompt_ids[:-1]
         if not prompt_ids:
             return ""
+        # match training: sequences start with BOS
+        if prompt_ids[0] != BOS_ID:
+            prompt_ids = [BOS_ID] + prompt_ids
 
         if len(prompt_ids) >= args.seq_len:
             prompt_ids = prompt_ids[-(args.seq_len - 1) :]
@@ -1138,19 +1088,7 @@ def main():
             print(
                 f"[train] step={step} loss={train_loss_avg:.4f} lr={get_lr(step):.2e} tok/s≈{tok_s:.0f} dt={dt:.1f}s"
             )
-            if args.log_losses and step % max(1, args.loss_log_every) == 0:
-                row = {
-                    "step": step,
-                    "loss": round(float(train_loss_avg), 8),
-                    "lr": float(get_lr(step)),
-                    "tok_per_s": round(float(tok_s), 4),
-                    "dt_seconds": round(float(dt), 4),
-                    "loss_reduction": args.loss_reduction,
-                    "train_jsonl": args.train_jsonl,
-                    "val_jsonl": args.val_jsonl,
-                }
-                append_jsonl(train_loss_jsonl, row)
-                append_csv_row(train_loss_csv, row, train_loss_fields)
+            tracker.log("train", step, loss=train_loss_avg, lr=get_lr(step), tok_s=tok_s)
             running_loss = 0.0
             t0 = time.time()
 
@@ -1178,17 +1116,8 @@ def main():
             print(
                 f"[eval] step={step} val_loss={val_loss_avg:.4f}"
             )
-            if args.log_losses:
-                row = {
-                    "step": step,
-                    "val_loss": round(float(val_loss_avg), 8),
-                    "eval_batches_used": int(len(losses)),
-                    "loss_reduction": args.loss_reduction,
-                    "train_jsonl": args.train_jsonl,
-                    "val_jsonl": args.val_jsonl,
-                }
-                append_jsonl(eval_loss_jsonl, row)
-                append_csv_row(eval_loss_csv, row, eval_loss_fields)
+            tracker.log("val", step, val_loss=val_loss_avg)
+            tracker.render()
             model.train()
 
         if args.save_every > 0 and step % args.save_every == 0:
@@ -1213,6 +1142,7 @@ def main():
         ):
             emit_samples(f"step_{step:06d}")
 
+    tracker.render()
     print("[done]")
 
 

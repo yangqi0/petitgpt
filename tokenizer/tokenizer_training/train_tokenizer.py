@@ -10,7 +10,11 @@ Design goals
 2) Avoid forced prefix-space behavior by default (add_prefix_space=False),
    so decode(encode(x)) == x for whitespace-sensitive strings like "\\n".
 3) Keep BOS/EOS insertion out of the tokenizer (no post_processor by default).
-   Add BOS/EOS in your dataset/sharding pipeline exactly once.
+   Add BOS/EOS in your dataset/sharding pipeline exactly once
+   (pretrain/build_pretrain_shards.py wraps each document as [BOS] doc [EOS] by
+   default; SFT/distill/DPO/GRPO prepend BOS and supervise a trailing EOS after
+   each assistant answer). "\n\n" inside a document is just paragraph text —
+   document boundaries are ALWAYS the BOS/EOS special tokens, never "\n\n".
 
 Supported input JSONL formats
 -----------------------------
@@ -166,7 +170,7 @@ def main() -> None:
     )
     ap.add_argument("--messages_key", type=str, default="messages", help="Chat messages key.")
     ap.add_argument("--no_messages", action="store_true", help="Disable chat messages parsing.")
-    ap.add_argument("--vocab_size", type=int, default=16000, help="Target vocabulary size.")
+    ap.add_argument("--vocab_size", type=int, default=32000, help="Target vocabulary size.")
     ap.add_argument("--min_freq", type=int, default=2, help="Minimum token frequency.")
     ap.add_argument("--out_dir", type=str, required=True, help="Output directory.")
     ap.add_argument(
@@ -181,8 +185,10 @@ def main() -> None:
     )
     ap.add_argument(
         "--strict_special_ids",
-        action="store_true",
-        help="Assert [PAD]=0,[UNK]=1,[BOS]=2,[EOS]=3. Enable if downstream code assumes fixed IDs.",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Assert [PAD]=0,[UNK]=1,[BOS]=2,[EOS]=3 (default ON: all downstream scripts "
+        "hardcode these IDs, see src/special_tokens.py). --no-strict_special_ids to disable.",
     )
     ap.add_argument(
         "--model_max_length",

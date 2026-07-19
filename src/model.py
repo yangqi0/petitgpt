@@ -14,8 +14,8 @@ class GPTConfig:
     n_layers: int = 16
     d_model: int = 768
     n_heads: int = 12
-    d_ff: int = 2048  # SwiGLU recommended width for d_model=768
-    max_seq_len: int = 1024
+    d_ff: int = 1920  # SwiGLU: ~2.5x d_model (matches the trained 135M-class config)
+    max_seq_len: int = 2048
     dropout: float = 0.0
     tie_embeddings: bool = True
 
