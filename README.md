@@ -129,7 +129,8 @@ petitgpt/
 ├── tokenizer/                 # BPE tokenizer + training/sanity-check scripts
 │   └── tokenizer.json
 ├── configs/                   # declarative SFT mix configs (sft_mix_*.yaml)
-├── pretrain/                  # shard building, pretraining, sampling, bench eval
+├── pretrain/                  # source inspection, shard building, training, evaluation
+│   ├── inspect_python_sources.py  # bounded, revision-pinned inspection; not a corpus downloader
 │   ├── build_pretrain_shards.py
 │   ├── train_pretrain_with_bench.py
 │   ├── eval_bench_v5.py
@@ -187,7 +188,7 @@ The test suite is **CPU-only** and needs no GPU or checkpoints — it exercises 
 
 ```bash
 pip install -r requirements-test.txt   # CPU torch + pytest + ruff + tokenizers
-pytest                                  # a few seconds, ~90 tests
+pytest                                  # runs the complete CPU-only test suite
 ```
 
 ---
