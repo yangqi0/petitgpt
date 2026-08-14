@@ -36,20 +36,22 @@ Example:
 from __future__ import annotations
 
 import argparse
+from collections.abc import Mapping
 import copy
+from dataclasses import asdict
 import json
 import math
 import os
+from pathlib import Path
 import random
 import sys
 import time
-from dataclasses import asdict
-from pathlib import Path
 from typing import Any
 
+import numpy as np
+from tokenizers import Tokenizer
 import torch
 import torch.nn.functional as F
-from tokenizers import Tokenizer
 from torch.utils.data import DataLoader, Dataset
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -57,14 +59,32 @@ if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
 
 from src.chat_template import (  # noqa: E402
+    IGNORE_INDEX,
     decode_completion,
     encode_completion,
     encode_prompt,
     load_chat_tokenizer,
     pad_or_truncate,
+    truncate_chat_sequence,
 )
 from src.model import GPT, GPTConfig  # noqa: E402
 from src.optim import build_optimizer  # noqa: E402
+from src.posttrain_preflight import (  # noqa: E402
+    require_preflight_passed,
+    run_jsonl_preflight,
+)
+from src.posttrain_resume import (  # noqa: E402
+    DeterministicEpochBatchSampler,
+    build_resume_contract_base,
+    capture_rng_state,
+    make_loader_generator,
+    require_resume_step,
+    restore_rng_state,
+    restore_training_state,
+    resume_contract_for_step,
+    validate_resume_contract,
+    validate_training_controls,
+)
 from src.special_tokens import EOS_ID, PAD_ID  # noqa: E402
 from src.tracking import Tracker  # noqa: E402
 
@@ -103,6 +123,44 @@ class JsonlOffsetsDataset(Dataset):
 # -------------------------
 # Preference-pair example building (token-level template, src/chat_template.py)
 # -------------------------
+def preflight_dpo_record(
+    _split: str,
+    example: dict[str, Any],
+    *,
+    tok: Tokenizer,
+    seq_len: int,
+    default_system: str,
+) -> dict[str, int]:
+    """Validate both preference branches with the production token contract."""
+    messages = example.get("messages")
+    if not isinstance(messages, list):
+        raise ValueError("missing messages list")
+
+    metrics = {
+        "encoded_tokens": 0,
+        "retained_tokens": 0,
+        "supervised_tokens": 0,
+        "truncated_branches": 0,
+    }
+    for field in ("chosen", "rejected"):
+        completion = example.get(field)
+        if not isinstance(completion, str) or not completion.strip():
+            raise ValueError(f"{field} completion must be non-empty and non-whitespace")
+        ids, labels = encode_completion(tok, messages, completion, default_system)
+        kept_ids, kept_labels = truncate_chat_sequence(ids, labels, max_len=seq_len)
+        assert kept_labels is not None
+        supervised = sum(label != IGNORE_INDEX for label in kept_labels)
+        if supervised < 2:
+            raise ValueError(
+                f"{field} branch must retain assistant content plus supervised EOS"
+            )
+        metrics["encoded_tokens"] += len(ids)
+        metrics["retained_tokens"] += len(kept_ids)
+        metrics["supervised_tokens"] += supervised
+        metrics["truncated_branches"] += int(len(kept_ids) != len(ids))
+    return metrics
+
+
 def build_completion_example(
     messages: list[dict[str, str]],
     completion: str,
@@ -263,8 +321,7 @@ def build_model_from_ckpt(ckpt: dict[str, Any], vocab_size: int, seq_len: int, d
     if any(k.startswith("_orig_mod.") for k in sd.keys()):
         sd = {k[len("_orig_mod.") :]: v for k, v in sd.items()}
 
-    missing, unexpected = model.load_state_dict(sd, strict=False)
-    print(f"    missing keys: {len(missing)}, unexpected keys: {len(unexpected)}")
+    model.load_state_dict(sd, strict=True)
     return model, cfg
 
 
@@ -285,16 +342,14 @@ def sample_from_prompt(
     """Generate from an already-encoded prompt (ending in the <|assistant|>
     cue) and decode ONLY the generated tokens."""
     model.eval()
-    if not prompt_ids:
-        return ""
-    if len(prompt_ids) >= seq_len:
-        prompt_ids = prompt_ids[-(seq_len - 1) :]
+    prompt_ids, _ = truncate_chat_sequence(
+        prompt_ids, labels=None, max_len=seq_len - 1
+    )
 
     ids = torch.tensor(prompt_ids, device=device, dtype=torch.long)[None, :]
     prompt_len = ids.size(1)
-    for _ in range(max_new_tokens):
-        if ids.size(1) > seq_len:
-            ids = ids[:, -seq_len:]
+    generation_steps = min(max_new_tokens, seq_len - prompt_len)
+    for _ in range(generation_steps):
         logits = model(ids)[0, -1, :].float()
 
         if temperature <= 0:
@@ -388,6 +443,26 @@ def evaluate(
     }
 
 
+def validate_dpo_args(args: argparse.Namespace) -> None:
+    validate_training_controls(
+        args,
+        positive_fields=(
+            "micro_bsz",
+            "grad_accum",
+            "eval_batches",
+            "sample_max_new_tokens",
+        ),
+        nonnegative_fields=(
+            "num_workers",
+            "eval_every",
+            "save_every",
+            "sample_every",
+        ),
+    )
+    if args.seq_len <= 1:
+        raise ValueError("--seq_len must be greater than 1")
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--train_jsonl", required=True)
@@ -400,10 +475,11 @@ def main() -> None:
     ap.add_argument(
         "--resume",
         default="",
-        help="Resume a DPO run from one of ITS OWN checkpoints (e.g. <out_dir>/latest.pt): "
-        "restores policy weights, optimizer/scaler state, and the step counter. "
-        "--init_ckpt must still point at the ORIGINAL starting checkpoint — the frozen "
-        "reference is rebuilt from it, never from the resumed (already-DPO'd) policy.",
+        help="Exact continuation from this run's own DPO checkpoint. Requires matching "
+        "arguments, input bytes, runtime, policy/optimizer/scaler, all RNG streams, loop "
+        "state, and deterministic data cursor. --init_ckpt must still point at the original "
+        "starting checkpoint; use --init_ckpt without --resume for a weights-only new run. "
+        "The frozen reference is rebuilt from it, never from the resumed policy.",
     )
 
     ap.add_argument("--seq_len", type=int, default=1024)
@@ -440,10 +516,12 @@ def main() -> None:
 
     args = ap.parse_args()
 
+    validate_dpo_args(args)
     os.makedirs(args.out_dir, exist_ok=True)
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
     random.seed(args.seed)
+    np.random.seed(args.seed)
     torch.manual_seed(args.seed)
     if device == "cuda":
         torch.cuda.manual_seed_all(args.seed)
@@ -453,6 +531,66 @@ def main() -> None:
     tracker.log_run_start(vars(args), args.tokenizer_path)
     vocab_size = tok.get_vocab_size()
     pad_id = PAD_ID
+
+    report = run_jsonl_preflight(
+        stage="dpo",
+        datasets={"train": args.train_jsonl, "val": args.val_jsonl},
+        validate_record=lambda split, record: preflight_dpo_record(
+            split,
+            record,
+            tok=tok,
+            seq_len=args.seq_len,
+            default_system=args.default_system,
+        ),
+        report_path=os.path.join(args.out_dir, "posttrain_preflight.json"),
+        metadata={"seq_len": args.seq_len, "default_system": args.default_system},
+    )
+    tracker.log(
+        "preflight",
+        0,
+        status=report["status"],
+        records=report["total_records"],
+        valid=report["total_valid"],
+        rejected=report["total_rejected"],
+    )
+    require_preflight_passed(report)
+
+    resume_checkpoint: Mapping[str, Any] | None = None
+    start_step = 0
+    if args.resume:
+        loaded_resume = load_ckpt(args.resume)
+        if not isinstance(loaded_resume, Mapping):
+            raise RuntimeError("--resume checkpoint must be a mapping")
+        resume_checkpoint = loaded_resume
+        start_step = require_resume_step(
+            resume_checkpoint,
+            stage="dpo",
+            weights_only_hint="--init_ckpt",
+        )
+
+    resume_inputs: dict[str, str] = {
+        "tokenizer": args.tokenizer_path,
+        "train_jsonl": args.train_jsonl,
+        "val_jsonl": args.val_jsonl,
+        "init_ckpt": args.init_ckpt,
+    }
+    if args.ref_ckpt:
+        resume_inputs["ref_ckpt"] = args.ref_ckpt
+    resume_contract_base = build_resume_contract_base(
+        stage="dpo",
+        args=vars(args),
+        input_paths=resume_inputs,
+        dataset_size=int(report["splits"]["train"]["records"]),
+        batch_size=args.micro_bsz,
+        batches_per_step=args.grad_accum,
+        seed=args.seed,
+    )
+    if resume_checkpoint is not None:
+        validate_resume_contract(
+            resume_checkpoint,
+            resume_contract_for_step(resume_contract_base, start_step),
+            weights_only_hint="--init_ckpt",
+        )
 
     print(f"[*] loading policy init from: {args.init_ckpt}")
     init_ckpt = load_ckpt(args.init_ckpt)
@@ -484,27 +622,14 @@ def main() -> None:
     autocast_dtype = torch.float16 if use_fp16 else (torch.bfloat16 if use_bf16 else None)
     scaler = torch.amp.GradScaler("cuda", enabled=use_fp16)
 
-    start_step = 0
-    if args.resume and os.path.exists(args.resume):
-        ck = load_ckpt(args.resume)
-        sd = ck.get("model")
-        if sd is None:
-            raise RuntimeError("resume ckpt missing 'model'")
-        if any(k.startswith("_orig_mod.") for k in sd.keys()):
-            sd = {k[len("_orig_mod.") :]: v for k, v in sd.items()}
-        policy.load_state_dict(sd, strict=False)
-
-        opt = ck.get("optimizer") or ck.get("optim")
-        if opt is not None:
-            try:
-                optimizer.load_state_dict(opt)
-            except ValueError as e:
-                print(f"[warn] optimizer state incompatible (ckpt saved with a different "
-                      f"--optimizer?); starting with fresh optimizer state: {e}")
-        sc = ck.get("scaler")
-        if sc is not None and use_fp16:
-            scaler.load_state_dict(sc)
-        start_step = int(ck.get("step", 0))
+    if resume_checkpoint is not None:
+        restore_training_state(
+            resume_checkpoint,
+            model=policy,
+            optimizer=optimizer,
+            scaler=scaler,
+            use_fp16=use_fp16,
+        )
         print(f"[*] resumed policy from: {args.resume} at step={start_step} "
               f"(frozen reference stays the one built from --init_ckpt/--ref_ckpt)")
 
@@ -516,14 +641,20 @@ def main() -> None:
         f" = {args.micro_bsz * args.grad_accum}"
     )
 
+    train_batch_sampler = DeterministicEpochBatchSampler(
+        len(train_ds),
+        args.micro_bsz,
+        seed=args.seed,
+        start_batch=start_step * args.grad_accum,
+        drop_last=True,
+    )
     train_loader = DataLoader(
         train_ds,
-        batch_size=args.micro_bsz,
-        shuffle=True,
+        batch_sampler=train_batch_sampler,
         num_workers=args.num_workers,
         pin_memory=(device == "cuda"),
         collate_fn=collate_fn_builder(tok, args.seq_len, pad_id, args.default_system, args.debug_first_batch),
-        drop_last=True,
+        generator=make_loader_generator(args.seed, 1),
     )
     val_loader = DataLoader(
         val_ds,
@@ -533,6 +664,7 @@ def main() -> None:
         pin_memory=(device == "cuda"),
         collate_fn=collate_fn_builder(tok, args.seq_len, pad_id, args.default_system, False),
         drop_last=False,
+        generator=make_loader_generator(args.seed, 2),
     )
 
     def get_lr(step: int) -> float:
@@ -550,6 +682,55 @@ def main() -> None:
     running_margin = 0.0
     running_acc = 0.0
     step = start_step
+    if resume_checkpoint is not None:
+        loop_state = resume_checkpoint.get("loop_state")
+        if not isinstance(loop_state, Mapping):
+            raise RuntimeError("DPO exact resume checkpoint lacks loop_state")
+        try:
+            running_loss = float(loop_state["running_loss"])
+            running_margin = float(loop_state["running_margin"])
+            running_acc = float(loop_state["running_acc"])
+        except (KeyError, TypeError, ValueError) as exc:
+            raise RuntimeError("DPO exact resume has invalid loop_state") from exc
+        if not all(
+            math.isfinite(value)
+            for value in (running_loss, running_margin, running_acc)
+        ):
+            raise RuntimeError("DPO exact resume loop_state must be finite")
+        restore_rng_state(resume_checkpoint["rng_state"])
+
+    last_saved_step: int | None = None
+
+    def save_training_checkpoint(checkpoint_step: int) -> None:
+        nonlocal last_saved_step
+        if last_saved_step == checkpoint_step:
+            return
+        ckpt = {
+            "step": checkpoint_step,
+            "model": policy.state_dict(),
+            "optimizer": optimizer.state_dict(),
+            "scaler": scaler.state_dict() if use_fp16 else None,
+            "cfg": asdict(cfg),
+            "args": vars(args),
+            "kind": "dpo",
+            "resume_contract": resume_contract_for_step(
+                resume_contract_base, checkpoint_step
+            ),
+            "rng_state": capture_rng_state(),
+            "loop_state": {
+                "running_loss": running_loss,
+                "running_margin": running_margin,
+                "running_acc": running_acc,
+            },
+        }
+        retained_path = os.path.join(
+            args.out_dir, f"step_{checkpoint_step:06d}.pt"
+        )
+        save_checkpoint_atomic(retained_path, ckpt)
+        save_checkpoint_atomic(os.path.join(args.out_dir, "latest.pt"), ckpt)
+        last_saved_step = checkpoint_step
+        print(f"[ckpt] saved {retained_path}")
+
     train_iter = iter(train_loader)
 
     while step < args.max_steps:
@@ -636,20 +817,6 @@ def main() -> None:
             tracker.log("val", step, **{k: float(v) for k, v in metrics.items()})
             tracker.render()
 
-        if args.save_every > 0 and step % args.save_every == 0:
-            ckpt = {
-                "step": step,
-                "model": policy.state_dict(),
-                "optimizer": optimizer.state_dict(),
-                "scaler": scaler.state_dict() if use_fp16 else None,
-                "cfg": asdict(cfg),
-                "args": vars(args),
-                "kind": "dpo",
-            }
-            save_checkpoint_atomic(os.path.join(args.out_dir, f"step_{step:06d}.pt"), ckpt)
-            save_checkpoint_atomic(os.path.join(args.out_dir, "latest.pt"), ckpt)
-            print(f"[ckpt] saved step_{step:06d}.pt")
-
         if args.sample_every and args.sample_every > 0 and step % args.sample_every == 0:
             emit_samples(
                 policy,
@@ -664,6 +831,10 @@ def main() -> None:
                 args.sample_top_p,
             )
 
+        if args.save_every > 0 and step % args.save_every == 0:
+            save_training_checkpoint(step)
+
+    save_training_checkpoint(step)
     tracker.render()
     print("[done]")
 

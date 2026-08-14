@@ -5,6 +5,8 @@ the alignment between sampling-time log-probs and the training-forward log-probs
 (the importance ratio), so that has a dedicated end-to-end test.
 """
 
+from types import SimpleNamespace
+
 import pytest
 import torch
 
@@ -14,10 +16,12 @@ from grpo.grpo import (
     _sample_step,
     build_group_batch,
     completion_text,
+    encode_prompt,
     group_advantages,
     grpo_loss,
     rollout_group,
     token_logprobs,
+    validate_grpo_args,
 )
 from src.model import GPT, GPTConfig
 
@@ -33,6 +37,45 @@ def _tiny_model():
         tie_embeddings=True,
     )
     return GPT(cfg).eval()
+
+
+def _valid_grpo_args(**updates):
+    values = {
+        "max_new_tokens": 8,
+        "seq_len": 32,
+        "group_size": 2,
+        "groups_per_step": 1,
+        "max_steps": 1,
+        "lr": 1e-6,
+        "warmup_steps": 0,
+        "log_every": 0,
+        "save_every": 0,
+        "dump_rollouts_every": 0,
+    }
+    values.update(updates)
+    return SimpleNamespace(**values)
+
+
+def test_validate_grpo_args_accepts_final_only_checkpoint_cadence():
+    validate_grpo_args(_valid_grpo_args(save_every=0))
+
+
+@pytest.mark.parametrize(
+    ("updates", "message"),
+    [
+        ({"max_new_tokens": 0}, "--max_new_tokens"),
+        ({"max_new_tokens": 32}, "--max_new_tokens"),
+        ({"group_size": 1}, "--group_size"),
+        ({"groups_per_step": 0}, "--groups_per_step"),
+        ({"max_steps": 0}, "--max_steps"),
+        ({"log_every": -1}, "--log_every"),
+        ({"save_every": -1}, "--save_every"),
+        ({"dump_rollouts_every": -1}, "--dump_rollouts_every"),
+    ],
+)
+def test_validate_grpo_args_rejects_nonproductive_run(updates, message):
+    with pytest.raises(ValueError, match=message):
+        validate_grpo_args(_valid_grpo_args(**updates))
 
 
 # --------------------------------------------------------------------------
@@ -164,6 +207,46 @@ def test_sample_step_greedy_picks_argmax_with_true_logprob():
 # --------------------------------------------------------------------------
 # rollout + batch alignment (the important integration test)
 # --------------------------------------------------------------------------
+def test_grpo_prompt_budget_keeps_system_and_latest_complete_turn(chat_tok):
+    messages = [
+        {"role": "system", "content": "Keep this policy."},
+        {"role": "user", "content": "Old question with extra words"},
+        {"role": "assistant", "content": "Old answer with extra words"},
+        {"role": "user", "content": "Latest question"},
+    ]
+    full = encode_prompt(chat_tok, messages, default_system="", max_prompt_len=256)
+    users = [i for i, token_id in enumerate(full) if token_id == 5]
+    prefix_end = users[0]
+    budget = prefix_end + len(full) - users[-1]
+    kept = encode_prompt(chat_tok, messages, default_system="", max_prompt_len=budget)
+    assert kept == full[:prefix_end] + full[users[-1] :]
+    assert kept[0] == 2 and kept[1] == 4 and kept[-1] == 6
+
+
+def test_grpo_prompt_budget_rejects_cutting_latest_turn(chat_tok):
+    messages = [
+        {"role": "system", "content": "Keep this policy."},
+        {"role": "user", "content": "A long latest question that must remain whole"},
+    ]
+    full = encode_prompt(chat_tok, messages, default_system="", max_prompt_len=256)
+    with pytest.raises(ValueError, match="latest user-led suffix"):
+        encode_prompt(chat_tok, messages, default_system="", max_prompt_len=len(full) - 1)
+
+
+def test_rollout_requires_positive_generation_budget():
+    with pytest.raises(ValueError, match="max_new_tokens must be positive"):
+        rollout_group(
+            _tiny_model(),
+            [2, 10, 11],
+            group_size=1,
+            seq_len=16,
+            max_new_tokens=0,
+            temperature=0.0,
+            top_p=1.0,
+            device="cpu",
+        )
+
+
 def test_rollout_old_logp_matches_training_forward():
     """old_logp captured during greedy rollout must equal the training-forward
     token_logprobs on the built batch (i.e. importance ratio == 1 initially)."""
@@ -197,6 +280,47 @@ def test_rollout_old_logp_matches_training_forward():
     # comp_mask marks exactly the number of generated tokens per row
     for g in range(G):
         assert int(batch["comp_mask"][g].sum().item()) == len(samples[g]["gen_ids"])
+
+
+def test_rollout_caps_generation_at_remaining_context():
+    model = _tiny_model()
+    samples = rollout_group(
+        model,
+        [2] * 62,
+        group_size=2,
+        seq_len=64,
+        max_new_tokens=10,
+        temperature=0.0,
+        top_p=1.0,
+        device="cpu",
+    )
+    assert all(len(sample["gen_ids"]) <= 2 for sample in samples)
+
+
+def test_rollout_rejects_prompt_with_no_generation_room():
+    with pytest.raises(ValueError, match="leave room"):
+        rollout_group(
+            _tiny_model(),
+            [2] * 64,
+            group_size=1,
+            seq_len=64,
+            max_new_tokens=1,
+            temperature=0.0,
+            top_p=1.0,
+            device="cpu",
+        )
+
+
+def test_group_batch_rejects_silent_completion_truncation():
+    with pytest.raises(ValueError, match="refusing to truncate"):
+        build_group_batch(
+            [2, 10, 11],
+            [{"gen_ids": [12, 13], "old_logps": [-1.0, -1.0]}],
+            torch.zeros(1),
+            seq_len=4,
+            pad_id=0,
+            device="cpu",
+        )
 
 
 def test_completion_text_strips_trailing_eos():

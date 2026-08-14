@@ -24,6 +24,76 @@ class GPTConfig:
     rope_pct: float = 1.0  # fraction of head_dim to rotate (1.0 = full head_dim)
 
 
+CANONICAL_DENSE_PARAMETER_COUNT = 133_128_960
+_CANONICAL_PARAMETERIZATION = {
+    "vocab_size": 32_000,
+    "n_layers": 16,
+    "d_model": 768,
+    "n_heads": 12,
+    "d_ff": 1_920,
+    "tie_embeddings": True,
+}
+
+
+def expected_gpt_parameter_count(cfg: GPTConfig) -> int:
+    """Derive the unique parameter count for the dense bias-free GPT."""
+    integer_fields = {
+        "vocab_size": cfg.vocab_size,
+        "n_layers": cfg.n_layers,
+        "d_model": cfg.d_model,
+        "n_heads": cfg.n_heads,
+        "d_ff": cfg.d_ff,
+    }
+    for name, value in integer_fields.items():
+        if isinstance(value, bool) or not isinstance(value, int) or value <= 0:
+            raise ValueError(f"GPTConfig.{name} must be a positive integer")
+    if cfg.d_model % cfg.n_heads:
+        raise ValueError("GPTConfig.d_model must be divisible by n_heads")
+
+    token_matrices = 1 if cfg.tie_embeddings else 2
+    embeddings = token_matrices * cfg.vocab_size * cfg.d_model
+    attention = 4 * cfg.d_model * cfg.d_model
+    swiglu = 3 * cfg.d_model * cfg.d_ff
+    block_norms = 2 * cfg.d_model
+    final_norm = cfg.d_model
+    return int(embeddings + cfg.n_layers * (attention + swiglu + block_norms) + final_norm)
+
+
+def audit_gpt_parameter_count(model: nn.Module, cfg: GPTConfig) -> dict[str, int | bool | str]:
+    """Fail fast on implementation/config drift and return manifest metadata."""
+    expected = expected_gpt_parameter_count(cfg)
+    actual = int(sum(parameter.numel() for parameter in model.parameters()))
+    trainable = int(
+        sum(parameter.numel() for parameter in model.parameters() if parameter.requires_grad)
+    )
+    if actual != expected:
+        raise RuntimeError(
+            "GPT parameter count disagrees with the architecture-derived count: "
+            f"actual={actual:,}, expected={expected:,}"
+        )
+
+    canonical = all(
+        getattr(cfg, field) == expected_value
+        for field, expected_value in _CANONICAL_PARAMETERIZATION.items()
+    )
+    if canonical and actual != CANONICAL_DENSE_PARAMETER_COUNT:
+        raise RuntimeError(
+            "canonical PetitGPT parameter count mismatch: "
+            f"actual={actual:,}, expected={CANONICAL_DENSE_PARAMETER_COUNT:,}"
+        )
+
+    return {
+        "status": "passed",
+        "counting_method": "unique_parameter_objects_excluding_buffers",
+        "actual_total": actual,
+        "actual_trainable": trainable,
+        "derived_expected_total": expected,
+        "canonical_parameterization": canonical,
+        "canonical_expected_total": CANONICAL_DENSE_PARAMETER_COUNT,
+        "canonical_match": canonical and actual == CANONICAL_DENSE_PARAMETER_COUNT,
+    }
+
+
 class RMSNorm(nn.Module):
     def __init__(self, dim: int, eps: float = 1e-6):
         super().__init__()
@@ -63,7 +133,9 @@ class RotaryEmbedding(nn.Module):
         self.rope_dim = rope_dim
 
         if self.rope_dim > 0:
-            inv_freq = 1.0 / (self.theta ** (torch.arange(0, self.rope_dim, 2).float() / self.rope_dim))
+            inv_freq = 1.0 / (
+                self.theta ** (torch.arange(0, self.rope_dim, 2).float() / self.rope_dim)
+            )
             t = torch.arange(self.max_seq_len, dtype=torch.float32)
             freqs = torch.outer(t, inv_freq)  # [T, rope_dim/2]
             emb = torch.cat([freqs, freqs], dim=-1)  # [T, rope_dim]
@@ -87,7 +159,9 @@ class RotaryEmbedding(nn.Module):
         """
         end = offset + seq_len
         if end > self.max_seq_len:
-            raise ValueError(f"position {end} exceeds max_seq_len={self.max_seq_len} for RoPE cache")
+            raise ValueError(
+                f"position {end} exceeds max_seq_len={self.max_seq_len} for RoPE cache"
+            )
         if self.rope_dim == 0:
             return q, k
 
@@ -190,7 +264,10 @@ class CausalSelfAttention(nn.Module):
                 )
             else:
                 y = F.scaled_dot_product_attention(
-                    q, k, v, attn_mask=self._incremental_mask(T, past_len, q.device),
+                    q,
+                    k,
+                    v,
+                    attn_mask=self._incremental_mask(T, past_len, q.device),
                     dropout_p=dropout_p,
                 )
         else:

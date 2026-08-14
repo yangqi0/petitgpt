@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Sampling / text generation for petitgpt.
 
@@ -18,24 +17,40 @@ Key features:
 from __future__ import annotations
 
 import argparse
-import json
-import re
-import random
-from pathlib import Path
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Tuple
+import json
+from pathlib import Path
+import random
+import re
+import sys
+from typing import Any
 
 import numpy as np
-import torch
 from tokenizers import Tokenizer
+import torch
 
-import sys
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
+
+from src.special_tokens import BOS_ID, EOS_ID, assert_tokenizer_contract  # noqa: E402
+
+
+def _assert_sampling_contract(
+    tokenizer_path: str, *, eos_id: int | None, add_bos: bool, bos_id: int | None
+) -> None:
+    assert_tokenizer_contract(tokenizer_path)
+    if eos_id != EOS_ID:
+        raise ValueError(f"canonical sampling requires eos_id={EOS_ID}, got {eos_id!r}")
+    if bos_id != BOS_ID or not add_bos:
+        raise ValueError(
+            f"canonical sampling requires add_bos=True and bos_id={BOS_ID}, "
+            f"got add_bos={add_bos!r}, bos_id={bos_id!r}"
+        )
 # -------------------------
 # Utilities
 # -------------------------
+
 
 def _set_seed(seed: int) -> None:
     random.seed(seed)
@@ -68,7 +83,7 @@ def _top_k_top_p_filtering(logits: torch.Tensor, top_k: int = 0, top_p: float = 
     return logits
 
 
-def _apply_repetition_penalty(logits: torch.Tensor, history: List[int], penalty: float) -> torch.Tensor:
+def _apply_repetition_penalty(logits: torch.Tensor, history: list[int], penalty: float) -> torch.Tensor:
     """CTRL-style repetition penalty on logits (1D)."""
     if penalty is None or penalty <= 1.0 or not history:
         return logits
@@ -78,7 +93,7 @@ def _apply_repetition_penalty(logits: torch.Tensor, history: List[int], penalty:
     return logits
 
 
-def _apply_no_repeat_ngram(logits: torch.Tensor, history: List[int], n: int) -> torch.Tensor:
+def _apply_no_repeat_ngram(logits: torch.Tensor, history: list[int], n: int) -> torch.Tensor:
     """Ban next tokens that would create an already-seen n-gram (single sequence)."""
     if n is None or n <= 0:
         return logits
@@ -101,7 +116,7 @@ def _apply_no_repeat_ngram(logits: torch.Tensor, history: List[int], n: int) -> 
     return logits
 
 
-def _ban_consecutive_repeats(logits: torch.Tensor, history: List[int], max_repeat_token: int) -> torch.Tensor:
+def _ban_consecutive_repeats(logits: torch.Tensor, history: list[int], max_repeat_token: int) -> torch.Tensor:
     """If last token repeats too many times consecutively, ban it."""
     if max_repeat_token is None or max_repeat_token <= 0 or not history:
         return logits
@@ -147,7 +162,7 @@ def _sample_next_id(
 def _load_ckpt_and_build_model(
     ckpt_path: str,
     device: str,
-) -> Tuple[torch.nn.Module, Dict[str, Any]]:
+) -> tuple[torch.nn.Module, dict[str, Any]]:
     """
     Compatible with the checkpoint produced by your train_pretrain.py:
     - ckpt["config"]  (dict)
@@ -184,7 +199,7 @@ def _load_ckpt_and_build_model(
         sd = ckpt["state_dict"]
     else:
         # heuristic: first dict that looks like a state_dict
-        for k, v in ckpt.items():
+        for _k, v in ckpt.items():
             if isinstance(v, dict) and any(isinstance(x, torch.Tensor) for x in v.values()):
                 sd = v
                 break
@@ -199,7 +214,7 @@ def _load_ckpt_and_build_model(
     return model, ckpt
 
 
-def _build_whitespace_ban_ids(tokenizer: Tokenizer) -> List[int]:
+def _build_whitespace_ban_ids(tokenizer: Tokenizer) -> list[int]:
     """
     Build a small set of whitespace-ish token ids to ban early.
     We *do not* scan full vocab (too slow). We collect from encodings and a few known ids.
@@ -236,10 +251,11 @@ def _get_vocab_size(tokenizer: Tokenizer) -> int:
     except Exception:
         try:
             return len(tokenizer.get_vocab())
-        except Exception:
-            raise RuntimeError("Cannot determine tokenizer vocab size")
+        except Exception as exc:
+            raise RuntimeError("Cannot determine tokenizer vocab size") from exc
 
-def _build_allowed_token_ids(tokenizer: Tokenizer, mode: str, eos_id: Optional[int]) -> Optional[List[int]]:
+
+def _build_allowed_token_ids(tokenizer: Tokenizer, mode: str, eos_id: int | None) -> list[int] | None:
     """
     Build an allowlist of token ids for constrained decoding.
 
@@ -287,6 +303,7 @@ def _build_allowed_token_ids(tokenizer: Tokenizer, mode: str, eos_id: Optional[i
 
     raise ValueError(f"Unknown restrict mode: {mode}")
 
+
 @dataclass
 class StopConfig:
     """
@@ -295,10 +312,11 @@ class StopConfig:
     - stop_on_newline: stop when a newline is generated (first '\\n').
     - include_stop_in_output: whether to keep stop marker in final output text.
     """
-    stop_strings: List[str]
-    stop_regexes: List["re.Pattern"]
+    stop_strings: list[str]
+    stop_regexes: list[re.Pattern]
     stop_on_newline: bool = False
     include_stop_in_output: bool = False
+
 
 def _postprocess_stop(text: str, stop_cfg: StopConfig) -> str:
     """
@@ -321,6 +339,7 @@ def _postprocess_stop(text: str, stop_cfg: StopConfig) -> str:
 # Generation core
 # -------------------------
 
+
 @torch.no_grad()
 def generate(
     model: torch.nn.Module,
@@ -333,29 +352,29 @@ def generate(
     top_k: int = 0,
     max_new_tokens: int = 256,
     min_new_tokens: int = 0,
-    eos_id: Optional[int] = None,
+    eos_id: int | None = None,
     add_bos: bool = True,
-    bos_id: Optional[int] = None,
+    bos_id: int | None = None,
     greedy: bool = False,
     debug: bool = False,
     debug_topk: int = 10,
     repetition_penalty: float = 1.10,
     no_repeat_ngram_size: int = 3,
     max_repeat_token: int = 3,
-    seed: Optional[int] = None,
+    seed: int | None = None,
     # new:
     avoid_first_whitespace: bool = False,
     ban_first_steps: int = 0,
     first_whitespace_resample_tries: int = 32,
-    extra_ban_token_ids: Optional[List[int]] = None,
+    extra_ban_token_ids: list[int] | None = None,
     # stopping:
-    stop_strings: Optional[List[str]] = None,
+    stop_strings: list[str] | None = None,
     stop_on_newline: bool = False,
     include_stop_in_output: bool = False,
-    stop_regex: Optional[List[str]] = None,
+    stop_regex: list[str] | None = None,
     # restriction:
-    allowed_token_ids: Optional[List[int]] = None,
-) -> Dict[str, Any]:
+    allowed_token_ids: list[int] | None = None,
+) -> dict[str, Any]:
     if seed is not None:
         _set_seed(int(seed))
 
@@ -372,7 +391,7 @@ def generate(
         prompt_ids = prompt_ids[-(max_seq_len - 1):]
 
     ids = torch.tensor(prompt_ids, device=device, dtype=torch.long)[None, :]
-    generated: List[int] = []
+    generated: list[int] = []
 
     # stop_cfg = StopConfig(
     #     stop_strings=list(stop_strings or []),
@@ -381,7 +400,7 @@ def generate(
     # )
 
     # compile regex once
-    compiled: List[re.Pattern] = []
+    compiled: list[re.Pattern] = []
     for pat in (stop_regex or []):
         if not pat:
             continue
@@ -394,7 +413,7 @@ def generate(
         include_stop_in_output=bool(include_stop_in_output),
     )
 
-    dbg: Dict[str, Any] = {}
+    dbg: dict[str, Any] = {}
     if debug:
         dbg["bos_id"] = bos_id
         dbg["eos_id"] = eos_id
@@ -405,7 +424,7 @@ def generate(
         dbg["stop_regex"] = (stop_regex or [])
         dbg["include_stop_in_output"] = bool(stop_cfg.include_stop_in_output)
 
-    whitespace_ban_ids: List[int] = []
+    whitespace_ban_ids: list[int] = []
     if avoid_first_whitespace and ban_first_steps > 0:
         whitespace_ban_ids = _build_whitespace_ban_ids(tokenizer)
     if extra_ban_token_ids:
@@ -416,7 +435,7 @@ def generate(
         dbg["banned_ids_head"] = whitespace_ban_ids[:32]
 
     # Allowed-token mask (optional): constrain decoding to a whitelist.
-    allowed_mask: Optional[torch.Tensor] = None
+    allowed_mask: torch.Tensor | None = None
     if allowed_token_ids:
         vsz = None
         try:
@@ -439,8 +458,8 @@ def generate(
     # gen_text_buf: str = ""
     # stopped_by: Optional[str] = None
     gen_text_buf: str = ""   # generated text only (no prompt)
-    stopped_by: Optional[str] = None
-    stop_cut: Optional[int] = None  # truncate generated text to this length (in chars)
+    stopped_by: str | None = None
+    stop_cut: int | None = None  # truncate generated text to this length (in chars)
 
     for step in range(max_new_tokens):
         if ids.size(1) > max_seq_len:
@@ -578,9 +597,9 @@ def generate_default_samples(
     top_p: float,
     top_k: int,
     max_new_tokens: int,
-    eos_id: Optional[int],
+    eos_id: int | None,
     add_bos: bool,
-    bos_id: Optional[int],
+    bos_id: int | None,
     min_new_tokens: int,
     greedy: bool = False,
     debug: bool = True,
@@ -591,14 +610,16 @@ def generate_default_samples(
     avoid_first_whitespace: bool = True,
     ban_first_steps: int = 4,
     first_whitespace_resample_tries: int = 32,
-    extra_ban_token_ids: Optional[List[int]] = None,
+    extra_ban_token_ids: list[int] | None = None,
     # stopping (optional, usually leave off for story prompts)
-    stop_strings: Optional[List[str]] = None,
+    stop_strings: list[str] | None = None,
     stop_on_newline: bool = False,
     include_stop_in_output: bool = False,
-    seed_base: Optional[int] = None,
-    step_tag: Optional[int] = None,
+    seed_base: int | None = None,
+    step_tag: int | None = None,
 ) -> None:
+    _assert_sampling_contract(tokenizer_path, eos_id=eos_id, add_bos=add_bos, bos_id=bos_id)
+
     tok = Tokenizer.from_file(tokenizer_path)
     # literal special-token strings in prompts stay plain text (pipeline-wide rule)
     tok.encode_special_tokens = True
@@ -621,7 +642,7 @@ def generate_default_samples(
         "Write a Python function that computes Fibonacci numbers recursively:\n\ndef fib(n):\n    ",
         "If all cats are animals and some animals are black, can we conclude that some cats are black?\nAnswer:",
         "John has 3 apples and buys 2 more. How many apples does he have?\nAnswer:",
-        "User: I'm feeling stressed lately.\nAssistant:",
+        "A practical way to manage everyday stress is",
     ]
 
     out_path = Path(out_path)
@@ -659,7 +680,7 @@ def generate_default_samples(
                 with torch.autocast(
                     device_type,
                     dtype=autocast_dtype,
-                    enabled=(autocast_dtype is not None and device_type=="cuda"),
+                    enabled=(autocast_dtype is not None and device_type == "cuda"),
                 ):
                     res = generate(
                         model=model,
@@ -749,9 +770,14 @@ def main() -> None:
     ap.add_argument("--min_new_tokens", type=int, default=0)
 
     # tokenizer special ids
-    ap.add_argument("--eos_id", type=int, default=3)
-    ap.add_argument("--add_bos", action="store_true")
-    ap.add_argument("--bos_id", type=int, default=2)
+    ap.add_argument("--eos_id", type=int, default=EOS_ID)
+    ap.add_argument(
+        "--add_bos",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Canonical default ON; --no-add_bos is rejected.",
+    )
+    ap.add_argument("--bos_id", type=int, default=BOS_ID)
 
     # sampling quality guards
     ap.add_argument("--greedy", action="store_true")
@@ -782,6 +808,16 @@ def main() -> None:
     ap.add_argument("--quiet", action="store_true", help="print only generated text")
 
     args = ap.parse_args()
+
+    try:
+        _assert_sampling_contract(
+            args.tokenizer_path,
+            eos_id=args.eos_id,
+            add_bos=args.add_bos,
+            bos_id=args.bos_id,
+        )
+    except ValueError as exc:
+        raise SystemExit(str(exc)) from exc
 
     allowed_ids = None
 
@@ -849,7 +885,7 @@ def main() -> None:
             print(res["output_text"])
 
         if args.debug and res.get("debug") is not None:
-                print("\n[debug]\n" + json.dumps(res["debug"], ensure_ascii=False, indent=2))
+            print("\n[debug]\n" + json.dumps(res["debug"], ensure_ascii=False, indent=2))
         return
 
     # default sampling to file
