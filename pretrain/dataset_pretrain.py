@@ -1,12 +1,30 @@
 # pretrain/dataset_pretrain.py
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from typing import List, Tuple
 
 import numpy as np
 import torch
 from torch.utils.data import Dataset
+
+
+def _shard_dtype(shard_dir: str) -> np.dtype:
+    """Read the shard dtype from the build's meta.json (default uint16).
+
+    build_pretrain_shards.py switches to uint32 when vocab_size > 65535; reading
+    the recorded dtype here prevents silently mis-decoding such shards."""
+    d = Path(shard_dir)
+    for meta_path in (d.parent / "meta.json", d.parent.parent / "meta.json"):
+        try:
+            meta = json.loads(meta_path.read_text(encoding="utf-8"))
+            if meta.get("dtype") == "uint32":
+                return np.dtype(np.uint32)
+            return np.dtype(np.uint16)
+        except (OSError, json.JSONDecodeError):
+            continue
+    return np.dtype(np.uint16)
 
 
 def list_shards(dir_path: str) -> List[Path]:
@@ -60,13 +78,14 @@ class PackedBinDataset(Dataset):
         self.resample_tries = int(resample_tries)
 
         self.shards = list_shards(shard_dir)
+        self._dtype = _shard_dtype(shard_dir)
         self._mms: List[np.memmap] = []
         self._lens: List[int] = []
         self._prefix_blocks: List[int] = [0]
 
         total_blocks = 0
         for f in self.shards:
-            mm = np.memmap(f, dtype=np.uint16, mode="r")
+            mm = np.memmap(f, dtype=self._dtype, mode="r")
             n_tokens = int(mm.shape[0])
             n_blocks = n_tokens // self.block
             self._mms.append(mm)
@@ -118,8 +137,11 @@ class PackedBinDataset(Dataset):
 
     def _slice_block(self, shard_i: int, start: int) -> torch.Tensor:
         mm = self._mms[shard_i]
-        toks_u16 = np.array(mm[start : start + self.block], dtype=np.uint16, copy=True)
-        return torch.from_numpy(toks_u16)  # uint16 CPU
+        toks = np.array(mm[start : start + self.block], copy=True)
+        if toks.dtype != np.uint16:
+            # torch has no full uint32 support; widen to int64 for safety.
+            toks = toks.astype(np.int64)
+        return torch.from_numpy(toks)  # CPU
 
     def __getitem__(self, i: int) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         rng = self._rng()

@@ -91,7 +91,12 @@ def fast_count_lines(p: Path, max_lines: int) -> dict[str, Any]:
 # Tokenizer helpers
 # -------------------------
 def load_tokenizer(tokenizer_path: str) -> Tokenizer:
-    return Tokenizer.from_file(tokenizer_path)
+    tok = Tokenizer.from_file(tokenizer_path)
+    # Treat special-token strings occurring in corpus text as plain text.
+    # BOS/EOS are inserted by ID below — a document containing the literal
+    # string "[EOS]" must never inject a real EOS token into the shards.
+    tok.encode_special_tokens = True
+    return tok
 
 
 def _tokenizer_vocab_size(tok: Tokenizer) -> Optional[int]:
@@ -290,6 +295,10 @@ def write_shards(
     out_val = out_dir / "val"
     out_train.mkdir(parents=True, exist_ok=True)
     out_val.mkdir(parents=True, exist_ok=True)
+    # Per-source validation shards (in ADDITION to the combined val/): enables
+    # domain-wise val-loss curves during training. Mixed val shards cannot be
+    # split by source after the fact, so this must be written at build time.
+    out_val_by_src = out_dir / "val_by_source"
 
     rng = random.Random(seed)
     tok = load_tokenizer(tokenizer_path)
@@ -299,8 +308,9 @@ def write_shards(
     if dtype == np.uint16 and vocab_size is not None and vocab_size > 65535:
         raise AssertionError("Unexpected: vocab_size>65535 but dtype selected uint16")
 
-    if doc_sep == "":
-        doc_sep = "\n\n"
+    # Documents are separated by their [EOS]/[BOS] wrapping only. A textual
+    # separator (the legacy "\n\n") would sit AFTER the EOS as a supervised
+    # target, teaching the model that EOS is followed by paragraph breaks.
     doc_sep_ids = _encode_base(tok, doc_sep) if doc_sep else []
 
     buf_train: list[int] = []
@@ -319,6 +329,37 @@ def write_shards(
 
     first_tok_all: Counter[int] = Counter()
     first_tok_per_src: dict[str, Counter[int]] = {}
+
+    # short filesystem-safe directory name per source (stem, deduped)
+    src_dirname: dict[str, str] = {}
+    used_names: set[str] = set()
+    for p, _w in sources:
+        base = re.sub(r"[^A-Za-z0-9_.-]", "_", Path(p).stem) or "source"
+        name = base
+        k = 2
+        while name in used_names:
+            name = f"{base}_{k}"
+            k += 1
+        used_names.add(name)
+        src_dirname[str(p)] = name
+
+    buf_val_src: dict[str, list[int]] = {str(p): [] for p, _ in sources}
+    shard_idx_val_src: dict[str, int] = {str(p): 0 for p, _ in sources}
+    total_val_src: dict[str, int] = {str(p): 0 for p, _ in sources}
+
+    def flush_val_src(src_name: str, force: bool = False) -> None:
+        buf = buf_val_src[src_name]
+        d = out_val_by_src / src_dirname[src_name]
+        while len(buf) >= val_shard_tokens or (force and buf):
+            n_take = min(val_shard_tokens, len(buf))
+            chunk = buf[:n_take]
+            del buf[:n_take]
+            d.mkdir(parents=True, exist_ok=True)
+            p_out = d / f"shard_{shard_idx_val_src[src_name]:05d}.bin"
+            total_val_src[src_name] += flush(chunk, p_out)
+            shard_idx_val_src[src_name] += 1
+            if force and not buf:
+                break
 
     states: list[SrcState] = []
     for p, w in sources:
@@ -426,9 +467,13 @@ def write_shards(
             if doc_sep_ids and buf_val:
                 buf_val.extend(doc_sep_ids)
             buf_val.extend(ids)
+            if doc_sep_ids and buf_val_src[src_name]:
+                buf_val_src[src_name].extend(doc_sep_ids)
+            buf_val_src[src_name].extend(ids)
             per_src[src_name]["val_tokens"] += len(ids)
             val_remaining[src_name] = max(0, val_remaining[src_name] - len(ids))
             maybe_flush_val()
+            flush_val_src(src_name)
         else:
             if doc_sep_ids and buf_train:
                 buf_train.extend(doc_sep_ids)
@@ -503,6 +548,8 @@ def write_shards(
         n = flush(buf_val, p)
         total_val += n
         shard_idx_val += 1
+    for st in states:
+        flush_val_src(st.name, force=True)
 
     first_tok_meta = {
         "topk_all": topk_counter(first_tok_all, first_token_topk),
@@ -552,6 +599,16 @@ def write_shards(
         "source_line_precheck": source_line_precheck,
         "first_token_topk": first_tok_meta,
         "per_source": per_src,
+        # Per-source val shards (val_by_source/<name>/) for domain-wise val loss
+        "val_by_source": {
+            src_dirname[st.name]: {
+                "source": st.name,
+                "dir": str(out_val_by_src / src_dirname[st.name]),
+                "tokens": int(total_val_src[st.name]),
+                "shards": int(shard_idx_val_src[st.name]),
+            }
+            for st in states
+        },
     }
 
     (out_dir / "meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -587,7 +644,13 @@ def main():
     ap.add_argument("--bos_id", type=int, default=2)
     ap.add_argument("--eos_id", type=int, default=3)
 
-    ap.add_argument("--doc_sep", type=str, default="", help='optional doc separator, default="\\n\\n"')
+    ap.add_argument(
+        "--doc_sep",
+        type=str,
+        default="",
+        help="Optional textual separator between documents. Default: none — "
+        "documents are delimited by [BOS]/[EOS] only (mainstream packing).",
+    )
     ap.add_argument("--first_token_topk", type=int, default=50)
     ap.add_argument("--precheck_max_lines", type=int, default=300_000)
 

@@ -12,8 +12,8 @@ on preference pairs with the standard DPO loss (Rafailov et al., 2023):
 where w/l are the chosen/rejected completions and logpi_*/logref_* are the
 summed log-probs of the completion tokens under the policy / reference model.
 
-Expected data format (JSONL, one example per line), matching the plain chat
-template used by sft/train_sft.py and distill/train_distill.py:
+Expected data format (JSONL, one example per line), matching the token-level
+chat template in src/chat_template.py (shared with SFT/distill/GRPO):
 
     {"messages": [{"role": "system", "content": "..."},
                    {"role": "user", "content": "..."}],
@@ -22,8 +22,8 @@ template used by sft/train_sft.py and distill/train_distill.py:
 
 `messages` is the shared prompt context (system/user turns, and any earlier
 assistant turns for multi-turn prompts); `chosen`/`rejected` are plain
-assistant-completion strings that get rendered with the same
-"System: .../User: .../Assistant: ..." template and appended to that context.
+assistant-completion strings appended after the `<|assistant|>` cue, each
+ending with a supervised EOS (so DPO logps include the stop decision).
 
 Example:
     python dpo/dpo.py \\
@@ -56,22 +56,17 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
 
+from src.chat_template import (  # noqa: E402
+    decode_completion,
+    encode_completion,
+    encode_prompt,
+    load_chat_tokenizer,
+    pad_or_truncate,
+)
 from src.model import GPT, GPTConfig  # noqa: E402
 from src.optim import build_optimizer  # noqa: E402
-from src.special_tokens import assert_special_token_ids  # noqa: E402
+from src.special_tokens import EOS_ID, PAD_ID  # noqa: E402
 from src.tracking import Tracker  # noqa: E402
-
-# -------------------------
-# Plain chat template (NO bracket tags; robust to tokenizer)
-# Kept identical to sft/train_sft.py and distill/train_distill.py.
-# -------------------------
-BOS_ID = 2
-EOS_ID = 3
-
-SYS_PREFIX = "System: "
-USER_PREFIX = "User: "
-ASSIST_PREFIX = "Assistant: "
-SEP = "\n\n"
 
 FIXED_PROMPTS = [
     "[Code] Write a Python function running_sum(nums) that returns cumulative sums.",
@@ -79,19 +74,6 @@ FIXED_PROMPTS = [
     "[General] Write a short polite email asking for an update on a job application after an interview.",
     "[General] Rewrite this to be more concise: 'I am writing this email in order to ask whether it would be possible to move our meeting to Friday afternoon.'",
 ]
-
-
-def norm_newlines(s: str) -> str:
-    return (s or "").replace("\r\n", "\n").replace("\r", "\n")
-
-
-def clean_text(s: str) -> str:
-    return norm_newlines(s).strip()
-
-
-def clean_text_assistant(s: str) -> str:
-    # do not strip: keeps code indentation / markdown formatting in completions
-    return norm_newlines(s)
 
 
 # -------------------------
@@ -119,106 +101,24 @@ class JsonlOffsetsDataset(Dataset):
 
 
 # -------------------------
-# Encoding helpers (robust to tokenizer auto BOS/EOS)
+# Preference-pair example building (token-level template, src/chat_template.py)
 # -------------------------
-def encode_strip_special(tok: Tokenizer, text: str, bos_id: int, eos_id: int) -> list[int]:
-    ids = tok.encode(text).ids
-    if ids and ids[0] == bos_id:
-        ids = ids[1:]
-    if ids and ids[-1] == eos_id:
-        ids = ids[:-1]
-    return ids
-
-
-# -------------------------
-# Prompt rendering + preference-pair example building
-# -------------------------
-def render_prompt_segments(
-    messages: list[dict[str, str]], default_system: str
-) -> list[tuple[str, bool]]:
-    """Render shared prompt context (system/user/earlier-assistant turns) as
-    unsupervised segments. The trailing chosen/rejected completion is appended
-    separately by build_completion_example()."""
-    msgs = messages or []
-    segs: list[tuple[str, bool]] = []
-    if not msgs:
-        return segs
-
-    if (msgs[0].get("role") or "").strip().lower() != "system" and default_system:
-        msgs = [{"role": "system", "content": default_system}] + msgs
-
-    if msgs and (msgs[0].get("role") or "").strip().lower() == "system":
-        sys_txt = clean_text(msgs[0].get("content", ""))
-        if sys_txt:
-            segs.append((SYS_PREFIX, False))
-            segs.append((sys_txt, False))
-            segs.append((SEP, False))
-        start = 1
-    else:
-        start = 0
-
-    for m in msgs[start:]:
-        role = (m.get("role") or "").strip().lower()
-        raw = m.get("content", "")
-        txt = clean_text_assistant(raw) if role == "assistant" else clean_text(raw)
-        if not txt:
-            continue
-        if role == "user":
-            segs.append((USER_PREFIX, False))
-            segs.append((txt, False))
-            segs.append((SEP, False))
-        elif role == "assistant":
-            segs.append((ASSIST_PREFIX, False))
-            segs.append((txt, False))
-            segs.append((SEP, False))
-
-    return segs
-
-
 def build_completion_example(
     messages: list[dict[str, str]],
     completion: str,
     tok: Tokenizer,
     seq_len: int,
     pad_id: int,
-    bos_id: int,
-    eos_id: int,
     default_system: str,
 ) -> tuple[torch.Tensor, torch.Tensor]:
-    """Render (prompt + completion) and return (input_ids, labels), with
-    labels=-100 everywhere except the completion tokens. The completion ends
-    with a SUPERVISED EOS and the sequence starts with BOS, matching
-    sft/train_sft.py's build_example (so DPO logps include the stop decision)."""
-    segs = render_prompt_segments(messages, default_system)
-    segs.append((ASSIST_PREFIX, False))
-    segs.append((clean_text_assistant(completion), True))
-
-    ids_all: list[int] = [bos_id]
-    labels_all: list[int] = [-100]
-
-    for seg_text, supervise in segs:
-        seg_ids = encode_strip_special(tok, seg_text, bos_id, eos_id)
-        ids_all.extend(seg_ids)
-        if supervise:
-            labels_all.extend(seg_ids)
-            # completion (assistant content) ends with a supervised EOS
-            ids_all.append(eos_id)
-            labels_all.append(eos_id)
-        else:
-            labels_all.extend([-100] * len(seg_ids))
-
-    # Truncate/pad (keep tail so the completion is more likely preserved)
-    if len(ids_all) > seq_len:
-        ids_all = ids_all[-seq_len:]
-        labels_all = labels_all[-seq_len:]
-    else:
-        pad_n = seq_len - len(ids_all)
-        ids_all = ids_all + [pad_id] * pad_n
-        labels_all = labels_all + [-100] * pad_n
-
+    """Encode (prompt context + completion) and return (input_ids, labels), with
+    labels=-100 everywhere except the completion tokens + their SUPERVISED EOS
+    (so DPO logps include the stop decision). Matches SFT's encoding exactly."""
+    ids, labels = encode_completion(tok, messages, completion, default_system)
+    ids, labels = pad_or_truncate(ids, labels, seq_len, pad_id)
     return (
-        torch.tensor(ids_all, dtype=torch.long),
-        torch.tensor(labels_all, dtype=torch.long),
+        torch.tensor(ids, dtype=torch.long),
+        torch.tensor(labels, dtype=torch.long),
     )
 
 
@@ -243,10 +143,10 @@ def collate_fn_builder(
                 raise ValueError("missing chosen/rejected completion")
 
             xc, yc = build_completion_example(
-                messages, chosen, tok, seq_len, pad_id, BOS_ID, EOS_ID, default_system
+                messages, chosen, tok, seq_len, pad_id, default_system
             )
             xr, yr = build_completion_example(
-                messages, rejected, tok, seq_len, pad_id, BOS_ID, EOS_ID, default_system
+                messages, rejected, tok, seq_len, pad_id, default_system
             )
             xs_c.append(xc)
             ys_c.append(yc)
@@ -375,26 +275,23 @@ def build_model_from_ckpt(ckpt: dict[str, Any], vocab_size: int, seq_len: int, d
 def sample_from_prompt(
     model: torch.nn.Module,
     tok: Tokenizer,
-    prompt_text: str,
+    prompt_ids: list[int],
     device: str,
     seq_len: int,
     max_new_tokens: int,
     temperature: float,
     top_p: float,
 ) -> str:
+    """Generate from an already-encoded prompt (ending in the <|assistant|>
+    cue) and decode ONLY the generated tokens."""
     model.eval()
-    prompt_ids = tok.encode(prompt_text).ids
-    if prompt_ids and prompt_ids[-1] == EOS_ID:
-        prompt_ids = prompt_ids[:-1]
     if not prompt_ids:
         return ""
-    # match training: sequences start with BOS
-    if prompt_ids[0] != BOS_ID:
-        prompt_ids = [BOS_ID] + prompt_ids
     if len(prompt_ids) >= seq_len:
         prompt_ids = prompt_ids[-(seq_len - 1) :]
 
     ids = torch.tensor(prompt_ids, device=device, dtype=torch.long)[None, :]
+    prompt_len = ids.size(1)
     for _ in range(max_new_tokens):
         if ids.size(1) > seq_len:
             ids = ids[:, -seq_len:]
@@ -420,11 +317,9 @@ def sample_from_prompt(
         if nxt == EOS_ID:
             break
 
-    text = tok.decode(ids[0].tolist())
-    pos = text.rfind(ASSIST_PREFIX)
-    out = text[pos + len(ASSIST_PREFIX) :] if pos != -1 else text
+    out = decode_completion(tok, ids[0, prompt_len:].tolist())
     model.train()
-    return out.strip()
+    return out
 
 
 def emit_samples(
@@ -443,8 +338,10 @@ def emit_samples(
     out_path = os.path.join(samples_dir, f"{step_tag}.txt")
     lines: list[str] = [f"step={step_tag}\n", "=" * 80 + "\n"]
     for i, q in enumerate(FIXED_PROMPTS, start=1):
-        prompt = SYS_PREFIX + default_system.strip() + SEP + USER_PREFIX + q.strip() + SEP + ASSIST_PREFIX
-        ans = sample_from_prompt(policy, tok, prompt, device, seq_len, max_new_tokens, temperature, top_p)
+        prompt_ids = encode_prompt(
+            tok, [{"role": "user", "content": q}], default_system, mode="last_user"
+        )
+        ans = sample_from_prompt(policy, tok, prompt_ids, device, seq_len, max_new_tokens, temperature, top_p)
         lines.append(f"[Q{i}] {q}\n[A{i}] {ans}\n" + "-" * 80 + "\n")
     with open(out_path, "w", encoding="utf-8") as f:
         f.writelines(lines)
@@ -500,6 +397,14 @@ def main() -> None:
 
     ap.add_argument("--init_ckpt", required=True, help="SFT or distill checkpoint to init policy+reference from")
     ap.add_argument("--ref_ckpt", default="", help="Optional separate reference checkpoint (default: deep-copy of the initialized policy)")
+    ap.add_argument(
+        "--resume",
+        default="",
+        help="Resume a DPO run from one of ITS OWN checkpoints (e.g. <out_dir>/latest.pt): "
+        "restores policy weights, optimizer/scaler state, and the step counter. "
+        "--init_ckpt must still point at the ORIGINAL starting checkpoint — the frozen "
+        "reference is rebuilt from it, never from the resumed (already-DPO'd) policy.",
+    )
 
     ap.add_argument("--seq_len", type=int, default=1024)
     ap.add_argument("--micro_bsz", type=int, default=2)
@@ -543,11 +448,11 @@ def main() -> None:
     if device == "cuda":
         torch.cuda.manual_seed_all(args.seed)
 
-    assert_special_token_ids(args.tokenizer_path)
-    tok = Tokenizer.from_file(args.tokenizer_path)
+    tok = load_chat_tokenizer(args.tokenizer_path)
     tracker = Tracker(args.out_dir)
+    tracker.log_run_start(vars(args), args.tokenizer_path)
     vocab_size = tok.get_vocab_size()
-    pad_id = 0
+    pad_id = PAD_ID
 
     print(f"[*] loading policy init from: {args.init_ckpt}")
     init_ckpt = load_ckpt(args.init_ckpt)
@@ -578,6 +483,30 @@ def main() -> None:
     use_bf16 = args.precision == "bf16" and device == "cuda"
     autocast_dtype = torch.float16 if use_fp16 else (torch.bfloat16 if use_bf16 else None)
     scaler = torch.amp.GradScaler("cuda", enabled=use_fp16)
+
+    start_step = 0
+    if args.resume and os.path.exists(args.resume):
+        ck = load_ckpt(args.resume)
+        sd = ck.get("model")
+        if sd is None:
+            raise RuntimeError("resume ckpt missing 'model'")
+        if any(k.startswith("_orig_mod.") for k in sd.keys()):
+            sd = {k[len("_orig_mod.") :]: v for k, v in sd.items()}
+        policy.load_state_dict(sd, strict=False)
+
+        opt = ck.get("optimizer") or ck.get("optim")
+        if opt is not None:
+            try:
+                optimizer.load_state_dict(opt)
+            except ValueError as e:
+                print(f"[warn] optimizer state incompatible (ckpt saved with a different "
+                      f"--optimizer?); starting with fresh optimizer state: {e}")
+        sc = ck.get("scaler")
+        if sc is not None and use_fp16:
+            scaler.load_state_dict(sc)
+        start_step = int(ck.get("step", 0))
+        print(f"[*] resumed policy from: {args.resume} at step={start_step} "
+              f"(frozen reference stays the one built from --init_ckpt/--ref_ckpt)")
 
     train_ds = JsonlOffsetsDataset(args.train_jsonl)
     val_ds = JsonlOffsetsDataset(args.val_jsonl)
@@ -620,7 +549,7 @@ def main() -> None:
     running_loss = 0.0
     running_margin = 0.0
     running_acc = 0.0
-    step = 0
+    step = start_step
     train_iter = iter(train_loader)
 
     while step < args.max_steps:

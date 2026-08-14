@@ -12,8 +12,12 @@ time with scripts/plot_metrics.py.
 
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
+import shutil
+import subprocess
+import sys
 import time
 
 # Row keys that are structure, not metrics.
@@ -52,6 +56,67 @@ class Tracker:
             render_curves(self.path, self.curves_dir)
         except Exception as e:
             print(f"[tracking] curve render failed: {e}")
+
+    def log_run_start(self, args: dict | None = None, tokenizer_path: str | None = None) -> None:
+        """Record reproducibility metadata at the start of a run (best-effort,
+        never raises into a training script):
+
+        - appends a kind="run" row to metrics.jsonl (git commit + dirty flag,
+          full command line, tokenizer fingerprint);
+        - writes <out_dir>/run_meta.json with the same info plus all argparse
+          values (checkpoints may be cleaned up later; this file is tiny and
+          survives);
+        - snapshots the tokenizer into <out_dir>/tokenizer.snapshot.json, so a
+          run's samples/checkpoints stay decodable even if tokenizer/ is later
+          retrained in place.
+        """
+        try:
+            meta: dict = {"cmd": " ".join(sys.argv)}
+
+            repo = Path(__file__).resolve().parents[1]
+            try:
+                meta["git_commit"] = (
+                    subprocess.run(
+                        ["git", "rev-parse", "HEAD"],
+                        cwd=repo,
+                        capture_output=True,
+                        text=True,
+                        timeout=5,
+                    ).stdout.strip()
+                    or "unknown"
+                )
+                dirty = subprocess.run(
+                    ["git", "status", "--porcelain"],
+                    cwd=repo,
+                    capture_output=True,
+                    text=True,
+                    timeout=5,
+                ).stdout.strip()
+                meta["git_dirty"] = bool(dirty)
+            except Exception:
+                meta["git_commit"] = "unknown"
+
+            if tokenizer_path and Path(tokenizer_path).is_file():
+                blob = Path(tokenizer_path).read_bytes()
+                meta["tokenizer_path"] = str(tokenizer_path)
+                meta["tokenizer_sha256"] = hashlib.sha256(blob).hexdigest()
+                snap = self.out_dir / "tokenizer.snapshot.json"
+                self.out_dir.mkdir(parents=True, exist_ok=True)
+                if not snap.exists() or snap.read_bytes() != blob:
+                    shutil.copyfile(tokenizer_path, snap)
+
+            self.log("run", 0, **meta)
+
+            full = dict(meta)
+            if args is not None:
+                full["args"] = {k: v for k, v in dict(args).items()}
+            full["time"] = time.time()
+            (self.out_dir / "run_meta.json").write_text(
+                json.dumps(full, ensure_ascii=False, indent=2, default=str),
+                encoding="utf-8",
+            )
+        except Exception as e:
+            print(f"[tracking] run-start metadata failed: {e}")
 
 
 def read_metrics(path: str | Path) -> list[dict]:

@@ -11,6 +11,7 @@ from __future__ import annotations
 import os
 import argparse
 import json
+import math
 import sys
 import time
 from dataclasses import asdict
@@ -32,6 +33,7 @@ from dataset_pretrain import PackedBinDataset  # noqa: E402
 from sample import generate_default_samples  # noqa: E402
 from src.model import GPT, GPTConfig  # noqa: E402
 from src.optim import build_optimizer  # noqa: E402
+from src.tracking import Tracker  # noqa: E402
 
 # -----------------------------------------------------------------------------
 # Performance toggles
@@ -142,13 +144,27 @@ def set_seed(seed: int) -> None:
     torch.cuda.manual_seed_all(seed)
 
 
-def lr_schedule(step: int, warmup_steps: int, base_lr: float) -> float:
-    """Linear warmup then constant LR (stable baseline)."""
-    if warmup_steps <= 0:
-        return base_lr
-    if step < warmup_steps:
+def lr_schedule(
+    step: int,
+    warmup_steps: int,
+    base_lr: float,
+    *,
+    schedule: str = "cosine",
+    max_steps: int = 0,
+    min_lr_ratio: float = 0.1,
+) -> float:
+    """Linear warmup, then cosine decay to min_lr_ratio*base_lr (mainstream
+    pretraining schedule), or constant after warmup (legacy baseline)."""
+    if warmup_steps > 0 and step < warmup_steps:
         return base_lr * float(step + 1) / float(warmup_steps)
-    return base_lr
+    if schedule == "constant" or max_steps <= warmup_steps:
+        return base_lr
+    if schedule != "cosine":
+        raise ValueError(f"unknown lr schedule: {schedule}")
+    t = (step - warmup_steps) / float(max_steps - warmup_steps)
+    t = min(max(t, 0.0), 1.0)
+    min_lr = base_lr * float(min_lr_ratio)
+    return min_lr + (base_lr - min_lr) * 0.5 * (1.0 + math.cos(math.pi * t))
 
 
 def _autocast_dtype(precision: str) -> Optional[torch.dtype]:
@@ -530,6 +546,11 @@ def parse_args() -> argparse.Namespace:
                     help="LR for Muon matrix groups (<=0: reuse --lr; Muon update RMS is matched to AdamW's).")
     ap.add_argument("--muon_momentum", type=float, default=0.95)
     ap.add_argument("--warmup_steps", type=int, default=1000)
+    ap.add_argument("--lr_schedule", choices=["cosine", "constant"], default="cosine",
+                    help="cosine: warmup then cosine decay to min_lr_ratio*lr (mainstream). "
+                    "constant: warmup then flat (legacy baseline).")
+    ap.add_argument("--min_lr_ratio", type=float, default=0.1,
+                    help="Cosine floor as a fraction of --lr.")
     ap.add_argument("--max_steps", type=int, default=100000)
     ap.add_argument("--grad_clip", type=float, default=1.0)
     ap.add_argument("--num_workers", type=int, default=2)
@@ -575,6 +596,9 @@ def main() -> None:
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     assert device.type == "cuda", "This script expects a CUDA GPU."
+
+    tracker = Tracker(out_dir)
+    tracker.log_run_start(vars(args), str(tok_path))
 
     # vocab_size from tokenizer.json
     try:
@@ -653,6 +677,33 @@ def main() -> None:
         drop_last=True,
     )
 
+    # Optional per-source/domain val loss (val_by_source/ from build_pretrain_shards.py).
+    # Domain curves cannot be reconstructed from the mixed val shards later, so
+    # they are tracked during training whenever the directory exists.
+    domain_val: list[tuple[str, DataLoader]] = []
+    val_by_src_root = val_dir.parent / "val_by_source"
+    if val_by_src_root.is_dir():
+        for sub in sorted(p for p in val_by_src_root.iterdir() if p.is_dir()):
+            try:
+                dom_ds = PackedBinDataset(
+                    str(sub),
+                    seq_len=int(args.seq_len),
+                    bos_id=int(args.bos_id),
+                    eos_id=int(args.eos_id),
+                    mask_bos_in_loss=not bool(args.no_mask_bos_in_loss),
+                    mask_last_label_in_loss=not bool(args.no_mask_last_label_in_loss),
+                )
+            except (RuntimeError, FileNotFoundError) as e:
+                print(f"[val_by_source] skip {sub.name}: {e}")
+                continue
+            domain_val.append((
+                sub.name,
+                DataLoader(dom_ds, batch_size=int(args.micro_bsz), shuffle=False,
+                           num_workers=0, pin_memory=True, drop_last=False),
+            ))
+        if domain_val:
+            print(f"[val_by_source] domain val loss tracked for: {[n for n, _ in domain_val]}")
+
     # Resume
     global_step = 0
     local_step = 0
@@ -698,7 +749,14 @@ def main() -> None:
     window_sup_tokens_est = 0  # estimated supervised tokens (avoid GPU sync)
 
     while local_step < int(args.max_steps):
-        lr = lr_schedule(global_step, int(args.warmup_steps), float(args.lr))
+        lr = lr_schedule(
+            global_step,
+            int(args.warmup_steps),
+            float(args.lr),
+            schedule=str(args.lr_schedule),
+            max_steps=int(args.max_steps),
+            min_lr_ratio=float(args.min_lr_ratio),
+        )
         for pg in optim.param_groups:
             pg["lr"] = lr * pg.get("lr_ratio", 1.0)
 
@@ -818,21 +876,41 @@ def main() -> None:
                 f"[train] step={global_step} loss={mean_loss_raw:.4f} "
                 f"(eos_w={cur_eos_weight:g}) lr={lr:.2e} tok/s={tok_s:.0f}"
             )
+            tracker.log(
+                "train",
+                global_step,
+                loss=float(mean_loss_raw),
+                lr=float(lr),
+                tok_s=float(tok_s),
+                eos_weight=float(cur_eos_weight),
+            )
             t_window = time.time()
             window_sup_tokens_est = 0
 
         # Eval + samples
         if global_step % int(args.eval_every) == 0:
+            # eos_weight=1.0: val loss stays a clean, run-comparable metric
+            # regardless of the training-time EOS weighting schedule.
             val_loss = evaluate(
                 model=model,
                 dl=val_dl,
                 device=device,
                 precision=args.precision,
                 eos_id=int(args.eos_id),
-                eos_weight=float(cur_eos_weight),
+                eos_weight=1.0,
                 max_batches=50,
             )
             print(f"[eval] step={global_step} val_loss={val_loss:.4f}")
+            dom_metrics: Dict[str, float] = {}
+            for dom_name, dom_dl in domain_val:
+                dom_loss = evaluate(
+                    model=model, dl=dom_dl, device=device, precision=args.precision,
+                    eos_id=int(args.eos_id), eos_weight=1.0, max_batches=20,
+                )
+                dom_metrics[f"val_loss_{dom_name}"] = float(dom_loss)
+                print(f"[eval] step={global_step} val_loss[{dom_name}]={dom_loss:.4f}")
+            tracker.log("val", global_step, val_loss=float(val_loss), **dom_metrics)
+            tracker.render()
 
             samples_dir.mkdir(parents=True, exist_ok=True)
             out_path = samples_dir / f"step_{global_step:06d}.txt"
@@ -884,6 +962,7 @@ def main() -> None:
         model_config=asdict(cfg),
         train_args=vars(args),
     )
+    tracker.render()
     print(f"[done] saved final checkpoint to {out_dir}")
 
 

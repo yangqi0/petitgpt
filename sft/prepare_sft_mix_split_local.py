@@ -21,25 +21,23 @@ import json
 import os
 import random
 import re
+import sys
 from dataclasses import dataclass
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 import yaml
 from datasets import load_dataset
-from tokenizers import Tokenizer
 
-DEFAULT_SYSTEM = "You are a helpful assistant."
-BOS_ID = 2
-EOS_ID = 3
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if ROOT not in sys.path:
+    sys.path.insert(0, ROOT)
 
-SYS_PREFIX = "System: "
-USER_PREFIX = "User: "
-ASSIST_PREFIX = "Assistant: "
-SEP = "\n\n"
-
-
-def norm_newlines(s: str) -> str:
-    return (s or "").replace("\r\n", "\n").replace("\r", "\n")
+from src.chat_template import (  # noqa: E402
+    DEFAULT_SYSTEM,
+    count_chat_tokens,
+    load_chat_tokenizer,
+    norm_newlines,
+)
 
 
 def norm_for_hash(s: str) -> str:
@@ -115,50 +113,9 @@ def passes_ast_parse(text: str) -> bool:
         return False
 
 
-def tokenizer_auto_bos_eos(tok: Tokenizer) -> Tuple[bool, bool]:
-    probe = tok.encode("x").ids
-    return (bool(probe) and probe[0] == BOS_ID, bool(probe) and probe[-1] == EOS_ID)
-
-
-def encode_strip_special(tok: Tokenizer, text: str) -> List[int]:
-    ids = tok.encode(text).ids
-    if ids and ids[0] == BOS_ID:
-        ids = ids[1:]
-    if ids and ids[-1] == EOS_ID:
-        ids = ids[:-1]
-    return ids
-
-
-def render_plain(messages: List[Dict[str, str]], default_system: str = DEFAULT_SYSTEM) -> str:
-    msgs = messages[:]
-    if msgs and msgs[0]["role"] != "system":
-        msgs = [{"role": "system", "content": default_system}] + msgs
-    out: List[str] = []
-    if msgs and msgs[0]["role"] == "system":
-        sys_txt = norm_newlines(msgs[0]["content"]).strip()
-        if sys_txt:
-            out.append(SYS_PREFIX + sys_txt + SEP)
-        start = 1
-    else:
-        start = 0
-    for m in msgs[start:]:
-        role = m["role"]
-        txt = norm_newlines(m["content"])
-        if role == "user":
-            out.append(USER_PREFIX + txt.strip() + SEP)
-        elif role == "assistant":
-            out.append(ASSIST_PREFIX + txt + SEP)
-    return "".join(out)
-
-
-def count_tokens(tok: Tokenizer, messages: List[Dict[str, str]]) -> int:
-    has_bos, has_eos = tokenizer_auto_bos_eos(tok)
-    n = len(encode_strip_special(tok, render_plain(messages)))
-    if has_bos:
-        n += 1
-    if has_eos:
-        n += 1
-    return n
+def render_for_hash(messages: List[Dict[str, str]]) -> str:
+    """Canonical plain-text rendering used ONLY for dedup hashing."""
+    return "\n\n".join(f"{m['role']}: {m['content']}" for m in messages)
 
 
 @dataclass
@@ -237,7 +194,7 @@ def main() -> None:
 
     cfg = yaml.safe_load(open(args.config, "r", encoding="utf-8"))
     os.makedirs(args.out_dir, exist_ok=True)
-    tok = Tokenizer.from_file(args.tokenizer_path)
+    tok = load_chat_tokenizer(args.tokenizer_path)
 
     token_budget = cfg["token_budget"]
     target_train_tokens = int(token_budget.get("target_train_tokens", 200_000_000))
@@ -309,7 +266,7 @@ def main() -> None:
                 if drop_short_chars and len(content.strip()) < drop_short_chars:
                     return None
                 ma = spec.get("max_assistant_tokens", None)
-                if ma is not None and len(encode_strip_special(tok, content)) > int(ma):
+                if ma is not None and len(tok.encode(content).ids) > int(ma):
                     return None
                 if spec.get("require_ast_parse", False) and not passes_ast_parse(content):
                     return None
@@ -324,11 +281,11 @@ def main() -> None:
             return None
         if not any(m["role"] == "assistant" for m in out):
             return None
-        n = count_tokens(tok, out)
+        n = count_chat_tokens(tok, out, DEFAULT_SYSTEM)
         if n > max_total:
             return None
 
-        text = render_plain(out)
+        text = render_for_hash(out)
         tail = text[-3000:] if len(text) > 3000 else text
         h = sha1_hex(norm_for_hash(tail))
         if h in seen:

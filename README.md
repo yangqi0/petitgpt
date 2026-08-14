@@ -47,7 +47,8 @@ The project has completed several major stages:
 - Targeted distillation for simple Python function generation,
 - General answer verification, AST + unit-test verification for code data,
 - Multiple targeted distillation runs and checkpoint comparisons,
-- DPO preference post-training on open preference data.
+- DPO preference post-training on open preference data,
+- A full pipeline review and rework aligning the training stack with current mainstream practice (token-level chat template with role special tokens, lossless tokenizer, cosine pretraining schedule, unified single-source chat encoding — see [Section 3.5](#35-chat-encoding-rework-token-level-template-2026-08)) in preparation for a from-scratch retrain.
 
 ---
 
@@ -103,6 +104,20 @@ Resuming a checkpoint whose optimizer state does not match the current `--optimi
 
 Correctness is pinned by equivalence tests in `tests/test_kv_cache.py` (cached prefill and step-by-step decoding reproduce the plain forward's logits exactly; cached greedy generation matches naive full-recompute). The speedup is asymptotic (attention recompute is O(T²) without a cache, O(T) with it): on tiny models / short sequences the per-step launch overhead can make it a wash, but it wins as sequences grow (measured ≈1.4× at 900 generated tokens on a small model + weak GPU, and more on a 4090 with the full model / longer context).
 
+### 3.5 Chat-encoding rework: token-level template (2026-08)
+
+Ahead of the from-scratch retrain, a review of the training files against current mainstream practice surfaced a silent train/inference mismatch in the original plain-text chat template (`"System: ...\n\nUser: ...\n\nAssistant: ..."`). Training encoded each template segment separately and concatenated the ids, while inference encoded the fully rendered prompt string in one pass — and byte-level BPE merges differently across those two paths. Measured on the real tokenizer, every turn boundary diverged (e.g. training produced `":", " ", "You"` where inference produced `":", " You"`; a standalone `"\n\n"` became one token in training but two `"\n"` tokens in context). The model still worked only because the assistant-generation start position happened to agree.
+
+The fix replaces the plain-text markers with **role special tokens**, making the template token-level:
+
+```text
+[BOS] <|system|> {system} <|user|> {question} <|assistant|> {answer} [EOS] <|user|> ...
+```
+
+Special tokens are hard BPE boundaries, so the generation prompt is now *guaranteed* to be a token-exact prefix of the training encoding — the entire mismatch class is eliminated by construction, and the guarantee is pinned by a contract test. `[EOS]` appears only after assistant turns, keeping a single stop semantics shared with pretraining document ends, so no sampling/stop logic changed. The encoding lives in one module (`src/chat_template.py`) imported by the SFT, distillation, DPO, and GRPO trainers and their samplers, replacing seven previously duplicated copies (`distill/train_distill.py` itself became a thin wrapper over the SFT trainer, removing an 1100-line verbatim clone).
+
+The same rework hardened two adjacent issues: tokenizers are loaded with `encode_special_tokens=True`, so a literal `"[EOS]"` string inside corpus or user text can no longer inject a real control token; and pretraining shards no longer insert a legacy `"\n\n"` separator between documents — documents are delimited by `[EOS]`/`[BOS]` alone, so the model is never supervised to predict text after a document ends. The tokenizer itself dropped its NFKC normalizer (full-width unicode in code string literals is now preserved verbatim, keeping `decode(encode(x)) == x` exact), and its special-token layout — `[PAD]=0 [UNK]=1 [BOS]=2 [EOS]=3 <|system|>=4 <|user|>=5 <|assistant|>=6` — is asserted at startup by every pipeline script.
+
 ---
 
 ## 4. Repository Structure
@@ -137,7 +152,9 @@ petitgpt/
 ├── src/
 │   ├── model.py               # dense GPT model definition
 │   ├── model_moe.py           # Mixture-of-Experts variant (MoEGPT / MoEConfig)
-│   └── optim.py               # Muon + AdamW optimizer factory (build_optimizer)
+│   ├── optim.py               # Muon + AdamW optimizer factory (build_optimizer)
+│   ├── special_tokens.py      # canonical special-token IDs (single source of truth)
+│   └── chat_template.py       # token-level chat template shared by SFT/distill/DPO/GRPO
 ├── tests/                     # pytest suite (CPU-only, runs in seconds)
 ├── .github/workflows/ci.yml   # GitHub Actions: ruff + pytest on CPU
 ├── eval/                      # benchmark eval results
@@ -170,7 +187,7 @@ The test suite is **CPU-only** and needs no GPU or checkpoints — it exercises 
 
 ```bash
 pip install -r requirements-test.txt   # CPU torch + pytest + ruff + tokenizers
-pytest                                  # ~2s, 46 tests
+pytest                                  # a few seconds, ~90 tests
 ```
 
 ---

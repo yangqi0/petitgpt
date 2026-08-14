@@ -97,13 +97,19 @@ def test_split_is_deterministic():
     assert split_train_val(recs, 0.25, seed=7) == split_train_val(recs, 0.25, seed=7)
 
 
-def test_prepared_prompts_are_valid_grpo_input():
-    """A converted record should be consumable by the GRPO trainer's renderer."""
+def test_prepared_prompts_are_valid_grpo_input(chat_tok):
+    """A converted record should be consumable by the GRPO trainer's encoder."""
     grpo = pytest.importorskip("grpo.grpo")
+    from src.special_tokens import ASSISTANT_ID, BOS_ID, USER_ID
+
     rec = code_bank_record_to_prompt({
         "canonical_prompt": "add two ints",
         "entry_point": "add",
         "tests": ["assert add(1,1)==2"],
     })
-    text = grpo.render_prompt_text(rec["messages"], default_system="You are helpful.")
-    assert "User:" in text and text.rstrip().endswith("Assistant:")
+    ids = grpo.encode_prompt(
+        chat_tok, rec["messages"], default_system="You are helpful.", max_prompt_len=128
+    )
+    assert ids[0] == BOS_ID
+    assert USER_ID in ids
+    assert ids[-1] == ASSISTANT_ID

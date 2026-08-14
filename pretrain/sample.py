@@ -600,6 +600,8 @@ def generate_default_samples(
     step_tag: Optional[int] = None,
 ) -> None:
     tok = Tokenizer.from_file(tokenizer_path)
+    # literal special-token strings in prompts stay plain text (pipeline-wide rule)
+    tok.encode_special_tokens = True
 
     model.eval()
     if precision in ("fp16", "float16"):
@@ -799,6 +801,7 @@ def main() -> None:
 
     if args.prompt is not None:
         tok = Tokenizer.from_file(args.tokenizer_path)
+        tok.encode_special_tokens = True
 
         allowed_ids = _build_allowed_token_ids(tok, args.restrict, eos_id=(None if args.eos_id < 0 else args.eos_id))
 

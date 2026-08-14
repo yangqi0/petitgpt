@@ -1,5 +1,16 @@
 #!/usr/bin/env python3
 
+"""Supervised fine-tuning on chat data (also the engine behind distill/train_distill.py).
+
+Chat encoding, loss masking, and refusal weighting all live in
+src/chat_template.py — a single source of truth shared with DPO/GRPO and with
+the sampling code below, so training-time and inference-time token sequences
+are identical by construction.
+
+Contract: [BOS] <|system|> ... <|user|> ... <|assistant|> {answer} [EOS] ...,
+supervised span = every assistant answer + its trailing EOS.
+"""
+
 from __future__ import annotations
 
 import argparse
@@ -17,42 +28,23 @@ from typing import Any, List
 
 import torch
 import torch.nn.functional as F
-from tokenizers import Tokenizer
 from torch.utils.data import DataLoader, Dataset
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
 
+from src.chat_template import (  # noqa: E402
+    build_example,
+    decode_completion,
+    encode_prompt,
+    extract_last_user_and_ref,
+    load_chat_tokenizer,
+)
 from src.model import GPT, GPTConfig  # noqa: E402
 from src.optim import build_optimizer  # noqa: E402
-from src.special_tokens import assert_special_token_ids  # noqa: E402
+from src.special_tokens import EOS_ID, PAD_ID  # noqa: E402
 from src.tracking import Tracker  # noqa: E402
-
-# -------------------------
-# Plain chat template (NO bracket tags; robust to tokenizer)
-# -------------------------
-BOS_ID = 2
-EOS_ID = 3
-
-SYS_PREFIX = "System: "
-USER_PREFIX = "User: "
-ASSIST_PREFIX = "Assistant: "
-SEP = "\n\n"
-
-
-def norm_newlines(s: str) -> str:
-    return (s or "").replace("\r\n", "\n").replace("\r", "\n")
-
-
-def clean_text(s: str) -> str:
-    # for system/user text: strip leading/trailing whitespace
-    return norm_newlines(s).strip()
-
-
-def clean_text_assistant(s: str) -> str:
-    # IMPORTANT: do not strip assistant text (keeps code indentation / markdown formatting)
-    return norm_newlines(s)
 
 
 # -------------------------
@@ -107,191 +99,9 @@ FIXED_PROMPTS = [
 ]
 
 
-# -------------------------
-# Encoding helpers (robust to tokenizer auto BOS/EOS)
-# -------------------------
-def encode_strip_special(
-    tok: Tokenizer, text: str, bos_id: int, eos_id: int
-) -> list[int]:
-    """Encode text and strip a leading BOS and trailing EOS if present."""
-    ids = tok.encode(text).ids
-    if ids and ids[0] == bos_id:
-        ids = ids[1:]
-    if ids and ids[-1] == eos_id:
-        ids = ids[:-1]
-    return ids
-
-
-# -------------------------
-# Refusal detection (downweight)
-# -------------------------
-def is_refusal_text(text: str, patterns: list[str]) -> bool:
-    """
-    Very simple heuristic:
-    If assistant content contains any refusal-ish patterns, treat as refusal.
-    """
-    t = (text or "").strip().lower()
-    if not t:
-        return False
-    for p in patterns:
-        p2 = p.strip().lower()
-        if not p2:
-            continue
-        if p2 in t:
-            return True
-    return False
-
-
-# -------------------------
-# Build example: input_ids + labels (assistant-only, exact spans)
-# plus ex_weight for refusal downweight
-# -------------------------
-def render_segments_plain(
-    messages: list[dict[str, str]], default_system: str
-) -> list[tuple[str, bool]]:
-    """
-    Return list of (text_segment, supervise).
-    supervise=True only for assistant *content* (not the 'Assistant: ' prefix).
-    """
-    msgs = messages or []
-    segs: list[tuple[str, bool]] = []
-
-    if not msgs:
-        return segs
-
-    if (msgs[0].get("role") or "").strip().lower() != "system" and default_system:
-        msgs = [{"role": "system", "content": default_system}] + msgs
-
-    # System
-    if msgs and (msgs[0].get("role") or "").strip().lower() == "system":
-        sys_txt = clean_text(msgs[0].get("content", ""))
-        if sys_txt:
-            segs.append((SYS_PREFIX, False))
-            segs.append((sys_txt, False))
-            segs.append((SEP, False))
-        start = 1
-    else:
-        start = 0
-
-    for m in msgs[start:]:
-        role = (m.get("role") or "").strip().lower()
-        raw = m.get("content", "")
-        # strip user/system; keep assistant formatting
-        txt = clean_text_assistant(raw) if role == "assistant" else clean_text(raw)
-        if not txt or (role != "assistant" and not txt.strip()):
-            continue
-
-        if role == "user":
-            segs.append((USER_PREFIX, False))
-            segs.append((txt, False))
-            segs.append((SEP, False))
-        elif role == "assistant":
-            segs.append((ASSIST_PREFIX, False))
-            segs.append((txt, True))
-            segs.append((SEP, False))
-        else:
-            continue
-
-    return segs
-
-
-def compute_example_weight_from_messages(
-    messages: list[dict[str, str]],
-    refusal_downweight: float,
-    refusal_patterns: list[str],
-    refusal_mode: str,
-) -> float:
-    """
-    Decide a scalar weight for this training example.
-    We downweight if the *final assistant* (or any assistant) looks like refusal.
-
-    refusal_mode:
-      - "contains_any": downweight if ANY assistant message contains any pattern.
-    """
-    if refusal_downweight >= 1.0:
-        return 1.0
-    if refusal_downweight <= 0.0:
-        # never contribute (not recommended, but allow)
-        return 0.0
-
-    if refusal_mode != "contains_any":
-        raise ValueError(f"unknown refusal_mode: {refusal_mode}")
-
-    for m in messages or []:
-        if (m.get("role") or "").strip().lower() == "assistant":
-            if is_refusal_text(m.get("content", ""), refusal_patterns):
-                return refusal_downweight
-    return 1.0
-
-
-def build_example(
-    ex: dict[str, Any],
-    tok: Tokenizer,
-    seq_len: int,
-    pad_id: int,
-    default_system: str,
-    bos_id: int,
-    eos_id: int,
-    refusal_downweight: float,
-    refusal_patterns: list[str],
-    refusal_mode: str,
-) -> tuple[torch.Tensor, torch.Tensor, float]:
-    messages = ex.get("messages") or []
-    if not messages:
-        raise ValueError("missing messages")
-
-    segs = render_segments_plain(messages, default_system)
-    if not segs:
-        raise ValueError("empty rendered segments")
-
-    meta = ex.get("meta") or {}
-    bucket = str(meta.get("bucket", "")).strip()
-    # Do NOT downweight refusals inside the safety bucket (otherwise safety examples get muted).
-    refusal_dw_eff = 1.0 if bucket in ("D_safety", "D") else refusal_downweight
-    ex_weight = compute_example_weight_from_messages(
-        messages, refusal_dw_eff, refusal_patterns, refusal_mode
-    )
-    w0 = meta.get("weight", None) if isinstance(meta, dict) else None
-    if isinstance(w0, (int, float)):
-        ex_weight *= float(w0)
-
-    # Sequences start with BOS (matching pretrain shards built with --add_bos),
-    # and every assistant answer ends with a SUPERVISED EOS so the model is
-    # explicitly taught to stop (inference already stops on EOS).
-    ids_all: list[int] = [bos_id]
-    labels_all: list[int] = [-100]
-
-    for seg_text, supervise in segs:
-        seg_ids = encode_strip_special(tok, seg_text, bos_id, eos_id)
-        ids_all.extend(seg_ids)
-        if supervise:
-            labels_all.extend(seg_ids)
-            # supervise=True segments are exactly the assistant-content segments
-            ids_all.append(eos_id)
-            labels_all.append(eos_id)
-        else:
-            labels_all.extend([-100] * len(seg_ids))
-
-    # Truncate/pad (keep tail so assistant targets more likely preserved)
-    if len(ids_all) > seq_len:
-        ids_all = ids_all[-seq_len:]
-        labels_all = labels_all[-seq_len:]
-    else:
-        pad_n = seq_len - len(ids_all)
-        ids_all = ids_all + [pad_id] * pad_n
-        labels_all = labels_all + [-100] * pad_n
-
-    return (
-        torch.tensor(ids_all, dtype=torch.long),
-        torch.tensor(labels_all, dtype=torch.long),
-        float(ex_weight),
-    )
-
-
 def collate_fn_builder(
-    tok: Tokenizer,
+    tok,
     seq_len: int,
-    pad_id: int,
     default_system: str,
     debug_first_batch: bool,
     refusal_downweight: float,
@@ -307,13 +117,11 @@ def collate_fn_builder(
                 ex,
                 tok,
                 seq_len,
-                pad_id,
                 default_system,
-                BOS_ID,
-                EOS_ID,
                 refusal_downweight,
                 refusal_patterns,
                 refusal_mode,
+                pad_id=PAD_ID,
             )
             xs.append(x)
             ys.append(y)
@@ -347,14 +155,16 @@ def masked_ce_loss(
     logits: torch.Tensor,
     labels: torch.Tensor,
     weights: torch.Tensor | None = None,
-    reduction: str = "example_mean",
+    reduction: str = "token_mean",
 ) -> torch.Tensor:
     """
     Next-token CE, ignoring -100 labels.
 
     reduction:
-      - token_mean: average over all supervised tokens in batch (standard)
-      - example_mean: mean CE per-example (over supervised tokens), then average across batch
+      - token_mean: average over all supervised tokens in batch (mainstream
+        default: every supervised token gets equal weight)
+      - example_mean: mean CE per-example (over supervised tokens), then average
+        across batch (upweights tokens in short answers)
 
     If weights provided (shape [B]), they act as per-example scalars (e.g. refusal downweight).
     """
@@ -402,95 +212,7 @@ def load_ckpt(path: str) -> dict[str, Any]:
     return torch.load(path, map_location="cpu")
 
 
-# -------------------------
-# In-domain prompt building (plain template)
-# -------------------------
-def find_last_user_idx(messages: list[dict[str, str]]) -> int:
-    for i in range(len(messages) - 1, -1, -1):
-        if (messages[i].get("role") or "").strip().lower() == "user":
-            return i
-    return -1
-
-
-def extract_last_user_and_ref(messages: list[dict[str, str]]) -> tuple[str, str]:
-    """Return (last_user_text, last_assistant_text_if_any)."""
-    last_user = ""
-    ref = ""
-    for m in reversed(messages):
-        if (m.get("role") or "").strip().lower() == "user":
-            last_user = clean_text(m.get("content", ""))
-            break
-    for m in reversed(messages):
-        if (m.get("role") or "").strip().lower() == "assistant":
-            ref = clean_text_assistant(m.get("content", ""))
-            break
-    return last_user, ref
-
-
-def build_prompt_from_messages_plain(
-    messages: list[dict[str, str]], default_system: str, mode: str
-) -> str:
-    """
-    mode:
-      - 'last_user': System + last user + 'Assistant:'
-      - 'full_context': render conversation up to the last user (inclusive), then append 'Assistant:'
-    """
-    msgs = messages or []
-    if not msgs:
-        return (
-            SYS_PREFIX + default_system + SEP + USER_PREFIX + "" + SEP + ASSIST_PREFIX
-        )
-
-    if (msgs[0].get("role") or "").strip().lower() != "system" and default_system:
-        msgs = [{"role": "system", "content": default_system}] + msgs
-
-    if mode == "last_user":
-        user_q, _ = extract_last_user_and_ref(msgs)
-        parts: list[str] = []
-        if msgs and (msgs[0].get("role") or "").strip().lower() == "system":
-            sys_txt = clean_text(msgs[0].get("content", ""))
-            if sys_txt:
-                parts += [SYS_PREFIX, sys_txt, SEP]
-        parts += [USER_PREFIX, user_q.strip(), SEP, ASSIST_PREFIX]
-        return "".join(parts)
-
-    if mode != "full_context":
-        raise ValueError(f"unknown in-domain prompt mode: {mode}")
-
-    lu = find_last_user_idx(msgs)
-    if lu == -1:
-        return build_prompt_from_messages_plain(msgs, default_system, "last_user")
-
-    trimmed = msgs[: lu + 1]
-
-    parts: list[str] = []
-    if trimmed and (trimmed[0].get("role") or "").strip().lower() == "system":
-        sys_txt = clean_text(trimmed[0].get("content", ""))
-        if sys_txt:
-            parts += [SYS_PREFIX, sys_txt, SEP]
-        start = 1
-    else:
-        start = 0
-
-    for m in trimmed[start:]:
-        role = (m.get("role") or "").strip().lower()
-        txt = (
-            clean_text_assistant(m.get("content", ""))
-            if role == "assistant"
-            else clean_text(m.get("content", ""))
-        )
-        if not txt:
-            continue
-        if role == "user":
-            parts += [USER_PREFIX, txt, SEP]
-        elif role == "assistant":
-            parts += [ASSIST_PREFIX, txt, SEP]
-
-    parts.append(ASSIST_PREFIX)
-    return "".join(parts)
-
-
-def main():
+def build_arg_parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser()
     ap.add_argument("--train_jsonl", required=True)
     ap.add_argument("--val_jsonl", required=True)
@@ -510,6 +232,7 @@ def main():
     ap.add_argument("--muon_momentum", type=float, default=0.95)
     ap.add_argument("--max_steps", type=int, default=15000)
     ap.add_argument("--warmup_steps", type=int, default=300)
+    ap.add_argument("--grad_clip", type=float, default=1.0, help="0 disables grad clipping")
 
     ap.add_argument("--precision", choices=["fp16", "bf16", "fp32"], default="bf16")
     ap.add_argument("--eval_every", type=int, default=500)
@@ -534,7 +257,9 @@ def main():
     ap.add_argument(
         "--loss_reduction",
         choices=["token_mean", "example_mean"],
-        default="example_mean",
+        default="token_mean",
+        help="token_mean (mainstream default): every supervised token weighs the same. "
+        "example_mean: every example weighs the same (upweights short answers).",
     )
 
     # ---- refusal downweight (TRAINING, not sampling) ----
@@ -596,7 +321,7 @@ def main():
     ap.add_argument(
         "--sample_in_domain_dump_prompt",
         action="store_true",
-        help="also dump the rendered prompt text (for debugging inputs)",
+        help="also dump the rendered prompt (decoded) for debugging inputs",
     )
     ap.add_argument(
         "--sample_eval_jsonl",
@@ -608,8 +333,11 @@ def main():
         default="",
         help="Optional ckpt path. If set, load this checkpoint, write samples once, then exit without training.",
     )
+    return ap
 
-    args = ap.parse_args()
+
+def main(argv: list[str] | None = None):
+    args = build_arg_parser().parse_args(argv)
 
     os.makedirs(args.out_dir, exist_ok=True)
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -619,12 +347,11 @@ def main():
     if device == "cuda":
         torch.cuda.manual_seed_all(args.seed)
 
-    assert_special_token_ids(args.tokenizer_path)
-    tok = Tokenizer.from_file(args.tokenizer_path)
+    tok = load_chat_tokenizer(args.tokenizer_path)
     vocab_size = tok.get_vocab_size()
-    pad_id = 0  # if no [PAD], use 0
 
     tracker = Tracker(args.out_dir)
+    tracker.log_run_start(vars(args), args.tokenizer_path)
 
     refusal_patterns = [
         p.strip() for p in args.refusal_patterns.split(",") if p.strip()
@@ -735,7 +462,6 @@ def main():
         collate_fn=collate_fn_builder(
             tok,
             args.seq_len,
-            pad_id,
             args.default_system,
             args.debug_first_batch,
             args.refusal_downweight,
@@ -753,7 +479,6 @@ def main():
         collate_fn=collate_fn_builder(
             tok,
             args.seq_len,
-            pad_id,
             args.default_system,
             False,
             args.refusal_downweight,
@@ -771,22 +496,18 @@ def main():
         return args.lr * 0.5 * (1.0 + math.cos(math.pi * t))
 
     @torch.no_grad()
-    def sample_from_prompt(prompt_text: str) -> str:
+    def sample_from_ids(prompt_ids: list[int]) -> str:
+        """Generate a completion for an already-encoded prompt (which ends with
+        the <|assistant|> cue) and decode ONLY the generated tokens."""
         model.eval()
 
-        prompt_ids = tok.encode(prompt_text).ids
-        if prompt_ids and prompt_ids[-1] == EOS_ID:
-            prompt_ids = prompt_ids[:-1]
         if not prompt_ids:
             return ""
-        # match training: sequences start with BOS
-        if prompt_ids[0] != BOS_ID:
-            prompt_ids = [BOS_ID] + prompt_ids
-
         if len(prompt_ids) >= args.seq_len:
             prompt_ids = prompt_ids[-(args.seq_len - 1) :]
 
         ids = torch.tensor(prompt_ids, device=device, dtype=torch.long)[None, :]
+        prompt_len = ids.size(1)
         g = torch.Generator(device=device)
         g.manual_seed(args.sample_seed)
 
@@ -883,22 +604,14 @@ def main():
             if nxt == EOS_ID:
                 break
 
-        text = tok.decode(ids[0].tolist())
-        pos = text.rfind(ASSIST_PREFIX)
-        if pos != -1:
-            out = text[pos + len(ASSIST_PREFIX) :]
-            return out.strip()
-        return text.strip()
+        return decode_completion(tok, ids[0, prompt_len:].tolist())
 
-    def build_fixed_prompt(user_q: str) -> str:
-        return (
-            SYS_PREFIX
-            + args.default_system.strip()
-            + SEP
-            + USER_PREFIX
-            + user_q.strip()
-            + SEP
-            + ASSIST_PREFIX
+    def build_fixed_prompt_ids(user_q: str) -> list[int]:
+        return encode_prompt(
+            tok,
+            [{"role": "user", "content": user_q}],
+            default_system=args.default_system,
+            mode="last_user",
         )
 
     def build_sampling_examples() -> tuple[str, list[tuple[str, dict[str, Any]]]]:
@@ -955,8 +668,7 @@ def main():
         lines.append("[Fixed prompts]\n")
         lines.append("-" * 80 + "\n")
         for i, q in enumerate(FIXED_PROMPTS):
-            prompt = build_fixed_prompt(q)
-            ans = sample_from_prompt(prompt)
+            ans = sample_from_ids(build_fixed_prompt_ids(q))
             lines.append(f"[Q{i + 1}] {q}\n")
             lines.append(f"[A{i + 1}] {ans}\n")
             lines.append("-" * 80 + "\n")
@@ -976,10 +688,10 @@ def main():
                 if not user_q:
                     continue
 
-                prompt = build_prompt_from_messages_plain(
-                    msgs, args.default_system, args.sample_in_domain_mode
+                prompt_ids = encode_prompt(
+                    tok, msgs, args.default_system, args.sample_in_domain_mode
                 )
-                ans = sample_from_prompt(prompt)
+                ans = sample_from_ids(prompt_ids)
 
                 meta = ex.get("meta") or {}
                 bucket = str(meta.get("bucket", ""))
@@ -989,7 +701,7 @@ def main():
 
                 if args.sample_in_domain_dump_prompt:
                     lines.append("[Prompt]\n")
-                    p = prompt
+                    p = tok.decode(prompt_ids)
                     if len(p) > 4000:
                         p = p[:4000] + "\n...[truncated]\n"
                     lines.append(p + "\n")
@@ -1060,6 +772,11 @@ def main():
 
             micro_loss += float(loss.item())
 
+        if args.grad_clip > 0:
+            if use_fp16:
+                scaler.unscale_(optimizer)
+            torch.nn.utils.clip_grad_norm_(model.parameters(), args.grad_clip)
+
         if use_fp16:
             scaler.step(optimizer)
             scaler.update()
@@ -1072,11 +789,12 @@ def main():
         if step % 50 == 0:
             dt = time.time() - t0
             tokens_per_step = args.micro_bsz * args.grad_accum * args.seq_len
+            train_loss_avg = running_loss / 50
             tok_s = tokens_per_step * 50.0 / max(dt, 1e-9)
             print(
-                f"[train] step={step} loss={running_loss / 50:.4f} lr={get_lr(step):.2e} tok/s≈{tok_s:.0f} dt={dt:.1f}s"
+                f"[train] step={step} loss={train_loss_avg:.4f} lr={get_lr(step):.2e} tok/s≈{tok_s:.0f} dt={dt:.1f}s"
             )
-            tracker.log("train", step, loss=running_loss / 50, lr=get_lr(step), tok_s=tok_s)
+            tracker.log("train", step, loss=train_loss_avg, lr=get_lr(step), tok_s=tok_s)
             running_loss = 0.0
             t0 = time.time()
 
@@ -1089,21 +807,23 @@ def main():
                         break
                     vi = vb["input_ids"].to(device)
                     vl = vb["labels"].to(device)
-                    vw = vb["weights"].to(device)
                     with torch.autocast(
                         device_type="cuda",
                         dtype=autocast_dtype,
                         enabled=(autocast_dtype is not None),
                     ):
                         v_logits = model(vi)
+                        # Unweighted token-mean: val loss stays a clean metric,
+                        # comparable across runs and refusal/weight settings.
                         v_loss = masked_ce_loss(
-                            v_logits, vl, weights=vw, reduction=args.loss_reduction
+                            v_logits, vl, weights=None, reduction="token_mean"
                         )
                     losses.append(float(v_loss.item()))
+            val_loss_avg = sum(losses) / max(1, len(losses))
             print(
-                f"[eval] step={step} val_loss={sum(losses) / max(1, len(losses)):.4f}"
+                f"[eval] step={step} val_loss={val_loss_avg:.4f}"
             )
-            tracker.log("val", step, val_loss=sum(losses) / max(1, len(losses)))
+            tracker.log("val", step, val_loss=val_loss_avg)
             tracker.render()
             model.train()
 

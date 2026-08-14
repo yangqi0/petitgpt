@@ -6,15 +6,20 @@ Train a Byte-Level BPE tokenizer for LLM pretraining/SFT.
 
 Design goals
 ------------
-1) Preserve whitespace exactly (do NOT strip text fields).
-2) Avoid forced prefix-space behavior by default (add_prefix_space=False),
-   so decode(encode(x)) == x for whitespace-sensitive strings like "\\n".
+1) Preserve whitespace AND unicode exactly (no normalizer, do NOT strip text
+   fields), so decode(encode(x)) == x. Mainstream code tokenizers (GPT-4,
+   Llama) do not normalize; NFKC silently rewrote full-width/compatibility
+   characters, which corrupts string literals in code.
+2) Avoid forced prefix-space behavior by default (add_prefix_space=False).
 3) Keep BOS/EOS insertion out of the tokenizer (no post_processor by default).
-   Add BOS/EOS in your dataset/sharding pipeline exactly once
-   (pretrain/build_pretrain_shards.py wraps each document as [BOS] doc [EOS] by
-   default; SFT/distill/DPO/GRPO prepend BOS and supervise a trailing EOS after
-   each assistant answer). "\n\n" inside a document is just paragraph text —
-   document boundaries are ALWAYS the BOS/EOS special tokens, never "\n\n".
+   Add special tokens by ID exactly once in the data pipeline:
+   - pretrain/build_pretrain_shards.py wraps each document as [BOS] doc [EOS];
+     documents are separated by those special tokens ONLY (never "\\n\\n").
+   - SFT/distill/DPO/GRPO use the token-level chat template in
+     src/chat_template.py: [BOS] <|system|> ... <|user|> ... <|assistant|> ... [EOS]
+     with a supervised EOS after every assistant answer.
+4) Special tokens are single-source-of-truth in src/special_tokens.py:
+   [PAD]=0 [UNK]=1 [BOS]=2 [EOS]=3 <|system|>=4 <|user|>=5 <|assistant|>=6.
 
 Supported input JSONL formats
 -----------------------------
@@ -27,10 +32,9 @@ Usage example
 python train_tokenizer.py \
   --data datasets/tokenization/fineweb_sample.jsonl datasets/tokenization/tinystories_train.jsonl \
   --fields text \
-  --vocab_size 16000 \
+  --vocab_size 32000 \
   --out_dir tokenizer \
-  --min_freq 2 \
-  --strict_special_ids
+  --min_freq 2
 """
 
 from __future__ import annotations
@@ -38,19 +42,39 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import sys
 from collections.abc import Iterator
 from typing import Any
 
 from tokenizers import Tokenizer, pre_tokenizers
 from tokenizers.decoders import ByteLevel as ByteLevelDecoder
 from tokenizers.models import BPE
-from tokenizers.normalizers import NFKC
 from tokenizers.pre_tokenizers import ByteLevel
 from tokenizers.processors import TemplateProcessing
 from tokenizers.trainers import BpeTrainer
 
+ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+if ROOT not in sys.path:
+    sys.path.insert(0, ROOT)
 
-SPECIAL_TOKENS = ["[PAD]", "[UNK]", "[BOS]", "[EOS]"]
+from src.special_tokens import SPECIAL_TOKEN_IDS, SPECIAL_TOKENS  # noqa: E402
+
+# HF-transformers-compatible rendering of src/chat_template.py's token-level
+# format (works when special tokens are encoded as specials, the HF default).
+HF_CHAT_TEMPLATE = (
+    "{{ '[BOS]' }}"
+    "{% if messages[0]['role'] != 'system' %}"
+    "{{ '<|system|>You are a helpful assistant.' }}"
+    "{% endif %}"
+    "{% for m in messages %}"
+    "{% if m['role'] == 'assistant' %}"
+    "{{ '<|assistant|>' + m['content'] + '[EOS]' }}"
+    "{% else %}"
+    "{{ '<|' + m['role'] + '|>' + m['content'] }}"
+    "{% endif %}"
+    "{% endfor %}"
+    "{% if add_generation_prompt %}{{ '<|assistant|>' }}{% endif %}"
+)
 
 
 def _json_loads(line: str) -> Any | None:
@@ -66,10 +90,10 @@ def _string_or_none(x: Any) -> str | None:
 
 def _render_messages(messages: list[dict[str, Any]]) -> str | None:
     """
-    Convert chat-style messages into a single training string.
+    Convert chat-style messages into a single training string for BPE.
 
-    We intentionally keep formatting minimal and whitespace-stable.
-    If you later standardize a chat template, you can update this function.
+    Role special tokens are NOT written here on purpose — they are added
+    tokens, invisible to BPE merge learning; this is just corpus text.
     """
     parts: list[str] = []
     for m in messages:
@@ -131,11 +155,10 @@ def build_tokenizer(add_prefix_space: bool) -> Tokenizer:
     """
     Build a Byte-Level BPE tokenizer.
 
-    - NFKC helps normalize common unicode variants (full-width, compatibility chars).
-    - ByteLevel makes it robust to code/symbols/rare unicode by falling back to bytes.
+    No normalizer: byte-level fallback already handles rare unicode, and any
+    normalization (e.g. NFKC) breaks decode(encode(x)) == x for code.
     """
     tok = Tokenizer(BPE(unk_token="[UNK]"))
-    tok.normalizer = NFKC()
     tok.pre_tokenizer = ByteLevel(add_prefix_space=add_prefix_space)
     tok.decoder = ByteLevelDecoder()
     return tok
@@ -187,8 +210,8 @@ def main() -> None:
         "--strict_special_ids",
         action=argparse.BooleanOptionalAction,
         default=True,
-        help="Assert [PAD]=0,[UNK]=1,[BOS]=2,[EOS]=3 (default ON: all downstream scripts "
-        "hardcode these IDs, see src/special_tokens.py). --no-strict_special_ids to disable.",
+        help="Assert the src/special_tokens.py ID layout (default ON: all downstream "
+        "scripts hardcode these IDs). --no-strict_special_ids to disable.",
     )
     ap.add_argument(
         "--model_max_length",
@@ -226,10 +249,8 @@ def main() -> None:
     assert len(set(tok2id.values())) == len(tok2id), f"Special token IDs are not unique: {tok2id}"
 
     if args.strict_special_ids:
-        assert tok2id["[PAD]"] == 0, f"Expected [PAD]=0, got {tok2id['[PAD]']}"
-        assert tok2id["[UNK]"] == 1, f"Expected [UNK]=1, got {tok2id['[UNK]']}"
-        assert tok2id["[BOS]"] == 2, f"Expected [BOS]=2, got {tok2id['[BOS]']}"
-        assert tok2id["[EOS]"] == 3, f"Expected [EOS]=3, got {tok2id['[EOS]']}"
+        for t, expected in SPECIAL_TOKEN_IDS.items():
+            assert tok2id[t] == expected, f"Expected {t}={expected}, got {tok2id[t]}"
     else:
         print("Special token IDs:", tok2id)
 
@@ -250,6 +271,8 @@ def main() -> None:
                 "eos_token": "[EOS]",
                 "unk_token": "[UNK]",
                 "pad_token": "[PAD]",
+                "additional_special_tokens": ["<|system|>", "<|user|>", "<|assistant|>"],
+                "chat_template": HF_CHAT_TEMPLATE,
             },
             f,
             ensure_ascii=False,
@@ -263,6 +286,7 @@ def main() -> None:
                 "eos_token": "[EOS]",
                 "unk_token": "[UNK]",
                 "pad_token": "[PAD]",
+                "additional_special_tokens": ["<|system|>", "<|user|>", "<|assistant|>"],
             },
             f,
             ensure_ascii=False,

@@ -21,8 +21,8 @@ Per-token objective (PPO-style clipped surrogate + KL, maximized):
 per rollout the ratio starts at 1 and the clip guards the accumulated drift.
 
 Starts from an SFT/distill/DPO checkpoint (same schema as dpo/dpo.py: keys
-"model" + "cfg"/"config"), builds a frozen reference copy, and reuses the plain
-chat template ("System: .../User: .../Assistant: ...").
+"model" + "cfg"/"config"), builds a frozen reference copy, and reuses the
+token-level chat template from src/chat_template.py.
 
 Data format (JSONL, one PROMPT per line) — no chosen/rejected, GRPO generates
 its own completions and scores them with `--reward`:
@@ -70,35 +70,19 @@ try:
 except ModuleNotFoundError:
     # run as a script (`python grpo/grpo.py`), where grpo/ is on sys.path[0]
     from rewards import get_reward_fn  # noqa: E402
+from src.chat_template import (  # noqa: E402
+    encode_prompt as chat_encode_prompt,
+    load_chat_tokenizer,
+)
 from src.model import GPT, GPTConfig  # noqa: E402
 from src.optim import build_optimizer  # noqa: E402
-from src.special_tokens import assert_special_token_ids  # noqa: E402
+from src.special_tokens import BOS_ID, EOS_ID, PAD_ID  # noqa: E402
 from src.tracking import Tracker  # noqa: E402
 
-# -------------------------
-# Plain chat template (NO bracket tags; robust to tokenizer)
-# Kept identical to sft/train_sft.py, distill/train_distill.py, dpo/dpo.py.
-# -------------------------
-BOS_ID = 2
-EOS_ID = 3
-
-SYS_PREFIX = "System: "
-USER_PREFIX = "User: "
-ASSIST_PREFIX = "Assistant: "
-SEP = "\n\n"
-
 
 # -------------------------
-# Text cleaning + jsonl dataset (prompts only)
+# jsonl dataset (prompts only)
 # -------------------------
-def norm_newlines(s: str) -> str:
-    return (s or "").replace("\r\n", "\n").replace("\r", "\n")
-
-
-def clean_text(s: str) -> str:
-    return norm_newlines(s).strip()
-
-
 class JsonlOffsetsDataset(Dataset):
     def __init__(self, path: str):
         self.path = path
@@ -125,53 +109,16 @@ def collate_passthrough(batch: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 
 # -------------------------
-# Prompt rendering + encoding
+# Prompt encoding (token-level template, src/chat_template.py)
 # -------------------------
-def encode_strip_special(tok: Tokenizer, text: str, bos_id: int, eos_id: int) -> list[int]:
-    ids = tok.encode(text).ids
-    if ids and ids[0] == bos_id:
-        ids = ids[1:]
-    if ids and ids[-1] == eos_id:
-        ids = ids[:-1]
-    return ids
-
-
-def render_prompt_text(messages: list[dict[str, str]], default_system: str) -> str:
-    """Render the prompt context and the trailing 'Assistant: ' cue as plain
-    text, so the policy generates the assistant completion from there."""
-    msgs = list(messages or [])
-    if not msgs:
-        raise ValueError("missing messages")
-    if (msgs[0].get("role") or "").strip().lower() != "system" and default_system:
-        msgs = [{"role": "system", "content": default_system}] + msgs
-
-    parts: list[str] = []
-    start = 0
-    if msgs and (msgs[0].get("role") or "").strip().lower() == "system":
-        sys_txt = clean_text(msgs[0].get("content", ""))
-        if sys_txt:
-            parts.append(SYS_PREFIX + sys_txt + SEP)
-        start = 1
-    for m in msgs[start:]:
-        role = (m.get("role") or "").strip().lower()
-        txt = clean_text(m.get("content", ""))
-        if not txt:
-            continue
-        if role == "user":
-            parts.append(USER_PREFIX + txt + SEP)
-        elif role == "assistant":
-            parts.append(ASSIST_PREFIX + txt + SEP)
-    parts.append(ASSIST_PREFIX)
-    return "".join(parts)
-
-
 def encode_prompt(
     tok: Tokenizer, messages: list[dict[str, str]], default_system: str, max_prompt_len: int
 ) -> list[int]:
-    text = render_prompt_text(messages, default_system)
-    ids = encode_strip_special(tok, text, BOS_ID, EOS_ID)
-    # match training: sequences start with BOS
-    ids = [BOS_ID] + ids
+    """Encode the prompt context ending in the <|assistant|> cue — identical to
+    the SFT training-time prefix, so rollouts start from the same distribution."""
+    if not messages:
+        raise ValueError("missing messages")
+    ids = chat_encode_prompt(tok, messages, default_system, mode="full_context")
     if len(ids) > max_prompt_len:
         ids = ids[-max_prompt_len:]  # keep the tail (most recent turn + cue)
     return ids
@@ -499,6 +446,23 @@ def main() -> None:
     ap.add_argument("--seed", type=int, default=1234)
     ap.add_argument("--log_every", type=int, default=1)
     ap.add_argument("--save_every", type=int, default=100)
+    ap.add_argument(
+        "--dump_rollouts_every",
+        type=int,
+        default=25,
+        help="Every N steps, write the last rollout group (prompt + all G completions "
+        "with their rewards) to <out_dir>/rollouts/step_XXXXXX.txt. Rollouts depend on "
+        "the policy AND sampling RNG at that moment — they cannot be reproduced later, "
+        "so this is the only record of how generations evolve under RL. 0 disables.",
+    )
+    ap.add_argument(
+        "--resume",
+        default="",
+        help="Resume a GRPO run from one of ITS OWN checkpoints (e.g. <out_dir>/latest.pt): "
+        "restores policy weights, optimizer/scaler state, and the step counter. "
+        "--init_ckpt must still point at the ORIGINAL starting checkpoint — the frozen KL "
+        "reference is rebuilt from it, never from the resumed policy.",
+    )
 
     args = ap.parse_args()
 
@@ -513,11 +477,11 @@ def main() -> None:
         raise ValueError("--max_new_tokens must be < --seq_len")
     max_prompt_len = args.seq_len - args.max_new_tokens
 
-    assert_special_token_ids(args.tokenizer_path)
-    tok = Tokenizer.from_file(args.tokenizer_path)
+    tok = load_chat_tokenizer(args.tokenizer_path)
     tracker = Tracker(args.out_dir)
+    tracker.log_run_start(vars(args), args.tokenizer_path)
     vocab_size = tok.get_vocab_size()
-    pad_id = 0
+    pad_id = PAD_ID
     reward_fn = get_reward_fn(args.reward)
     print(f"[*] reward: {args.reward}")
 
@@ -551,6 +515,34 @@ def main() -> None:
     autocast_dtype = torch.float16 if use_fp16 else (torch.bfloat16 if use_bf16 else None)
     scaler = torch.amp.GradScaler("cuda", enabled=use_fp16)
 
+    start_step = 0
+    if args.resume and os.path.exists(args.resume):
+        ck = load_ckpt(args.resume)
+        sd = ck.get("model")
+        if sd is None:
+            raise RuntimeError("resume ckpt missing 'model'")
+        if any(k.startswith("_orig_mod.") for k in sd.keys()):
+            sd = {k[len("_orig_mod.") :]: v for k, v in sd.items()}
+        policy.load_state_dict(sd, strict=False)
+
+        opt = ck.get("optimizer") or ck.get("optim")
+        if opt is not None:
+            try:
+                optimizer.load_state_dict(opt)
+            except ValueError as e:
+                print(
+                    f"[warn] optimizer state incompatible (ckpt saved with a different "
+                    f"--optimizer?); starting with fresh optimizer state: {e}"
+                )
+        sc = ck.get("scaler")
+        if sc is not None and use_fp16:
+            scaler.load_state_dict(sc)
+        start_step = int(ck.get("step", 0))
+        print(
+            f"[*] resumed policy from: {args.resume} at step={start_step} "
+            f"(KL reference stays the one built from --init_ckpt/--ref_ckpt)"
+        )
+
     train_ds = JsonlOffsetsDataset(args.train_jsonl)
     print(f"[*] prompts: train={len(train_ds)}")
     print(
@@ -572,8 +564,29 @@ def main() -> None:
         t = (step - args.warmup_steps) / max(1, args.max_steps - args.warmup_steps)
         return args.lr * 0.5 * (1.0 + math.cos(math.pi * min(max(t, 0.0), 1.0)))
 
+    def dump_rollout_group(
+        step_no: int,
+        ex: dict[str, Any],
+        prompt_ids: list[int],
+        samples: list[dict[str, Any]],
+        rewards: list[float],
+    ) -> None:
+        """Persist one rollout group; rollouts are unreproducible after the fact."""
+        rdir = os.path.join(args.out_dir, "rollouts")
+        os.makedirs(rdir, exist_ok=True)
+        lines = [f"step={step_no}\n", "[prompt]\n", tok.decode(prompt_ids) + "\n"]
+        meta = ex.get("meta") or {}
+        if meta:
+            lines.append(f"[meta] {json.dumps(meta, ensure_ascii=False)}\n")
+        for gi, (s, r) in enumerate(zip(samples, rewards, strict=True)):
+            lines.append("-" * 80 + "\n")
+            lines.append(f"[completion {gi}] reward={r:.4f}\n")
+            lines.append(completion_text(tok, s["gen_ids"]) + "\n")
+        with open(os.path.join(rdir, f"step_{step_no:06d}.txt"), "w", encoding="utf-8") as f:
+            f.writelines(lines)
+
     policy.train()
-    step = 0
+    step = start_step
     data_iter = iter(loader)
     t0 = time.time()
 
@@ -585,6 +598,7 @@ def main() -> None:
 
         agg = {"loss": 0.0, "reward": 0.0, "adv_abs": 0.0, "kl": 0.0, "clipped": 0.0, "std0": 0.0}
         n_groups = 0
+        last_group = None  # (ex, prompt_ids, samples, rewards) for --dump_rollouts_every
         for _ in range(args.groups_per_step):
             try:
                 ex = next(data_iter)[0]
@@ -608,6 +622,7 @@ def main() -> None:
             adv, rewards = score_and_advantage(
                 tok, ex, samples, reward_fn, args.adv_eps, not args.no_std_norm
             )
+            last_group = (ex, prompt_ids, samples, rewards)
             batch = build_group_batch(prompt_ids, samples, adv, args.seq_len, pad_id, device)
             if batch is None:
                 continue
@@ -662,6 +677,16 @@ def main() -> None:
         else:
             optimizer.step()
         step += 1
+
+        if (
+            args.dump_rollouts_every > 0
+            and step % args.dump_rollouts_every == 0
+            and last_group is not None
+        ):
+            try:
+                dump_rollout_group(step, *last_group)
+            except Exception as e:
+                print(f"[rollouts] dump failed: {e}")
 
         if args.log_every > 0 and step % args.log_every == 0:
             g = n_groups

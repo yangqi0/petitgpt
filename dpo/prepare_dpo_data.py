@@ -42,8 +42,10 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import random
 import re
+import sys
 from collections.abc import Callable, Iterable
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -52,18 +54,17 @@ from typing import Any
 from datasets import load_dataset
 from tokenizers import Tokenizer
 
-DEFAULT_SYSTEM = "You are a helpful assistant."
-BOS_ID = 2
-EOS_ID = 3
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if ROOT not in sys.path:
+    sys.path.insert(0, ROOT)
 
-SYS_PREFIX = "System: "
-USER_PREFIX = "User: "
-ASSIST_PREFIX = "Assistant: "
-SEP = "\n\n"
-
-
-def norm_newlines(s: str) -> str:
-    return (s or "").replace("\r\n", "\n").replace("\r", "\n")
+from src.chat_template import (  # noqa: E402
+    DEFAULT_SYSTEM,
+    clean_text_assistant,
+    encode_prompt,
+    load_chat_tokenizer,
+    norm_newlines,
+)
 
 
 def norm_for_hash(s: str) -> str:
@@ -76,49 +77,11 @@ def sha1_hex(s: str) -> str:
     return hashlib.sha1(s.encode("utf-8", errors="ignore")).hexdigest()
 
 
-def tokenizer_auto_bos_eos(tok: Tokenizer) -> tuple[bool, bool]:
-    probe = tok.encode("x").ids
-    return (bool(probe) and probe[0] == BOS_ID, bool(probe) and probe[-1] == EOS_ID)
-
-
-def encode_strip_special(tok: Tokenizer, text: str) -> list[int]:
-    ids = tok.encode(text).ids
-    if ids and ids[0] == BOS_ID:
-        ids = ids[1:]
-    if ids and ids[-1] == EOS_ID:
-        ids = ids[:-1]
-    return ids
-
-
-def prompt_segments(messages: list[dict[str, str]], default_system: str) -> list[str]:
-    """Prompt text segments (system/user/context turns through the trailing
-    'Assistant: ' prefix), mirroring dpo/dpo.py's render_prompt_segments."""
-    msgs = messages or []
-    if msgs and (msgs[0].get("role") or "").strip().lower() != "system" and default_system:
-        msgs = [{"role": "system", "content": default_system}] + msgs
-
-    segs: list[str] = []
-    start = 0
-    if msgs and (msgs[0].get("role") or "").strip().lower() == "system":
-        sys_txt = norm_newlines(msgs[0].get("content", "")).strip()
-        if sys_txt:
-            segs += [SYS_PREFIX, sys_txt, SEP]
-        start = 1
-
-    for m in msgs[start:]:
-        role = (m.get("role") or "").strip().lower()
-        txt = norm_newlines(m.get("content", ""))
-        if role != "assistant":
-            txt = txt.strip()
-        if not txt:
-            continue
-        if role == "user":
-            segs += [USER_PREFIX, txt, SEP]
-        elif role == "assistant":
-            segs += [ASSIST_PREFIX, txt, SEP]
-
-    segs.append(ASSIST_PREFIX)
-    return segs
+def render_for_hash(messages: list[dict[str, str]]) -> str:
+    """Canonical plain-text rendering used ONLY for dedup hashing."""
+    return "\n\n".join(
+        f"{(m.get('role') or '').strip().lower()}: {m.get('content', '')}" for m in messages
+    )
 
 
 def count_pair_tokens(
@@ -130,18 +93,13 @@ def count_pair_tokens(
 ) -> tuple[int, int, int]:
     """(prompt_tokens, chosen_tokens, rejected_tokens).
 
-    Counted segment-wise — each template segment encoded separately, exactly as
-    dpo/dpo.py's build_completion_example builds the training sequence. Encoding
-    the whole rendered string instead would undercount, because BPE merges
-    across segment boundaries (e.g. the trailing space of 'Assistant: ' merging
-    into the completion's first token)."""
-    has_bos, has_eos = tokenizer_auto_bos_eos(tok)
-    n_prompt = sum(
-        len(encode_strip_special(tok, s)) for s in prompt_segments(messages, default_system)
-    )
-    n_prompt += int(has_bos) + int(has_eos)
-    n_chosen = len(encode_strip_special(tok, norm_newlines(chosen)))
-    n_rejected = len(encode_strip_special(tok, norm_newlines(rejected)))
+    Exact counts for the training encoding: the prompt is
+    src/chat_template.encode_prompt (BOS + role tokens + context + assistant
+    cue) and each completion adds its content tokens + one supervised EOS,
+    exactly as dpo/dpo.py's build_completion_example builds the sequence."""
+    n_prompt = len(encode_prompt(tok, messages, default_system, mode="full_context"))
+    n_chosen = len(tok.encode(clean_text_assistant(chosen)).ids) + 1  # + EOS
+    n_rejected = len(tok.encode(clean_text_assistant(rejected)).ids) + 1  # + EOS
     return n_prompt, n_chosen, n_rejected
 
 
@@ -304,7 +262,7 @@ def main() -> None:
     ap.add_argument("--seed", type=int, default=1234)
     args = ap.parse_args()
 
-    tok = Tokenizer.from_file(args.tokenizer_path)
+    tok = load_chat_tokenizer(args.tokenizer_path)
     registry = build_registry()
 
     names = [s.strip() for s in args.sources.split(",") if s.strip()]
@@ -332,7 +290,7 @@ def main() -> None:
                     pair = passes_filters(raw_pair, tok, args)
                     if pair is None:
                         continue
-                    prompt_text = "".join(prompt_segments(pair.messages, DEFAULT_SYSTEM))
+                    prompt_text = render_for_hash(pair.messages)
                     key = sha1_hex(norm_for_hash(prompt_text[-2000:] + "\x1f" + pair.chosen[:2000]))
                     if key in seen:
                         continue

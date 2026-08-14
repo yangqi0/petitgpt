@@ -43,6 +43,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
 
+from src.chat_template import load_chat_tokenizer  # noqa: E402
+
 
 # -------------------------
 # Record conversion (pure, unit-tested)
@@ -182,7 +184,7 @@ def main() -> None:
         ap.error("provide at least one of --code_bank / --messages")
 
     os.makedirs(args.out_dir, exist_ok=True)
-    tok = Tokenizer.from_file(args.tokenizer_path)
+    tok = load_chat_tokenizer(args.tokenizer_path)
 
     records: list[dict] = []
     for path in args.code_bank:
