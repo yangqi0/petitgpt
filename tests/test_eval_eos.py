@@ -78,9 +78,7 @@ def test_teacher_forced_statistics_have_exact_counts_and_probabilities():
         math.exp(expected_overall_ce)
     )
     assert result["metrics"]["non_eos_cross_entropy"] == pytest.approx(expected_non_eos_ce)
-    assert result["metrics"]["non_eos_perplexity"] == pytest.approx(
-        math.exp(expected_non_eos_ce)
-    )
+    assert result["metrics"]["non_eos_perplexity"] == pytest.approx(math.exp(expected_non_eos_ce))
     assert result["metrics"]["eos_only_cross_entropy"] == pytest.approx(expected_ce)
     assert result["metrics"]["mean_p_eos_true_document_end"] == pytest.approx(
         expected_p[true_end].mean().item()
@@ -94,9 +92,7 @@ def test_teacher_forced_statistics_merge_is_additive_and_handles_empty_denominat
     logits, labels, loss_mask = _metric_fixture()
     first = teacher_forced_batch_statistics(logits[:1], labels[:1], loss_mask[:1])
     second = teacher_forced_batch_statistics(logits[1:], labels[1:], loss_mask[1:])
-    merged = finalize_teacher_forced_statistics(
-        merge_teacher_forced_statistics([first, second])
-    )
+    merged = finalize_teacher_forced_statistics(merge_teacher_forced_statistics([first, second]))
     whole = finalize_teacher_forced_statistics(
         teacher_forced_batch_statistics(logits, labels, loss_mask)
     )
@@ -177,20 +173,18 @@ def test_generation_summary_counts_rates_and_lengths():
 def test_generation_jsonl_requires_per_example_threshold_and_forbids_ids(tmp_path):
     good = tmp_path / "good.jsonl"
     good.write_text(
-        '\n'.join(
-            [
-                json.dumps(
-                    {"id": "base", "prompt": "A complete paragraph", "min_tokens_before_eos": 4}
-                ),
-                json.dumps(
-                    {
-                        "id": "chat",
-                        "messages": [{"role": "user", "content": "Explain gravity."}],
-                        "min_tokens_before_eos": 8,
-                    }
-                ),
-            ]
-        ),
+        "\n".join([
+            json.dumps({
+                "id": "base",
+                "prompt": "A complete paragraph",
+                "min_tokens_before_eos": 4,
+            }),
+            json.dumps({
+                "id": "chat",
+                "messages": [{"role": "user", "content": "Explain gravity."}],
+                "min_tokens_before_eos": 8,
+            }),
+        ]),
         encoding="utf-8",
     )
     cases = read_generation_cases(good, max_new_tokens=32)
@@ -202,9 +196,7 @@ def test_generation_jsonl_requires_per_example_threshold_and_forbids_ids(tmp_pat
         read_generation_cases(missing_threshold, max_new_tokens=32)
 
     injected_ids = tmp_path / "ids.jsonl"
-    injected_ids.write_text(
-        '{"prompt_ids":[2,5,6],"min_tokens_before_eos":1}\n', encoding="utf-8"
-    )
+    injected_ids.write_text('{"prompt_ids":[2,5,6],"min_tokens_before_eos":1}\n', encoding="utf-8")
     with pytest.raises(ValueError, match="forbidden"):
         read_generation_cases(injected_ids, max_new_tokens=32)
 

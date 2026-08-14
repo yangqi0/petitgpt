@@ -126,9 +126,7 @@ def assert_tokenizer_contract(tokenizer_path: str | PathLike[str]) -> None:
     if obj.get("normalizer") is not None:
         raise ValueError(f"{path} must not configure a tokenizer normalizer")
     if obj.get("post_processor") is not None:
-        raise ValueError(
-            f"{path} must not configure an automatic BOS/EOS post-processor"
-        )
+        raise ValueError(f"{path} must not configure an automatic BOS/EOS post-processor")
 
     pre = obj.get("pre_tokenizer") or {}
     if pre.get("type") != "ByteLevel" or pre.get("add_prefix_space") is not False:

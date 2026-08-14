@@ -133,9 +133,7 @@ def prompt_token_len(
     default_system: str = DEFAULT_SYSTEM,
 ) -> int:
     """Canonical prompt length including BOS, system/role tokens, and cue."""
-    ids = chat_encode_prompt(
-        tok, rec["messages"], default_system, mode="full_context"
-    )
+    ids = chat_encode_prompt(tok, rec["messages"], default_system, mode="full_context")
     return len(ids)
 
 
@@ -153,12 +151,8 @@ def filter_by_prompt_tokens(
     out: list[dict] = []
     for index, record in enumerate(records):
         try:
-            ids = chat_encode_prompt(
-                tok, record["messages"], default_system, mode="full_context"
-            )
-            kept_ids, _ = truncate_chat_sequence(
-                ids, labels=None, max_len=max_prompt_len
-            )
+            ids = chat_encode_prompt(tok, record["messages"], default_system, mode="full_context")
+            kept_ids, _ = truncate_chat_sequence(ids, labels=None, max_len=max_prompt_len)
             token_count = len(kept_ids)
             if token_count < min_tokens:
                 raise ValueError(
@@ -170,13 +164,11 @@ def filter_by_prompt_tokens(
                 )
         except (KeyError, TypeError, ValueError) as exc:
             if rejected is not None:
-                rejected.append(
-                    {
-                        "record_index": index,
-                        "error_type": type(exc).__name__,
-                        "error": str(exc),
-                    }
-                )
+                rejected.append({
+                    "record_index": index,
+                    "error_type": type(exc).__name__,
+                    "error": str(exc),
+                })
             continue
         out.append(record)
     return out
@@ -264,9 +256,7 @@ def main() -> None:
     for path in args.messages:
         n0 = len(records)
         for rec in read_jsonl(path):
-            g = messages_record_to_prompt(
-                rec, default_system=args.default_system
-            )
+            g = messages_record_to_prompt(rec, default_system=args.default_system)
             if g is not None:
                 records.append(g)
         print(f"[messages] {path}: +{len(records) - n0} prompts")
@@ -304,9 +294,7 @@ def main() -> None:
         "errors": rejected[:50],
         "errors_truncated": len(rejected) > 50,
     }
-    with open(
-        os.path.join(args.out_dir, "preflight_report.json"), "w", encoding="utf-8"
-    ) as handle:
+    with open(os.path.join(args.out_dir, "preflight_report.json"), "w", encoding="utf-8") as handle:
         json.dump(preflight_report, handle, ensure_ascii=False, indent=2)
         handle.write("\n")
     if not records:

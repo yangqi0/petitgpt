@@ -155,9 +155,7 @@ def preflight_grpo_record(
     if not isinstance(messages, list):
         raise ValueError("missing messages list")
     ids = chat_encode_prompt(tok, messages, default_system, mode="full_context")
-    kept_ids, _ = truncate_chat_sequence(
-        ids, labels=None, max_len=max_prompt_len
-    )
+    kept_ids, _ = truncate_chat_sequence(ids, labels=None, max_len=max_prompt_len)
     return {
         "encoded_prompt_tokens": len(ids),
         "retained_prompt_tokens": len(kept_ids),
@@ -732,15 +730,11 @@ def main() -> None:
             "cfg": asdict(cfg),
             "args": vars(args),
             "kind": "grpo",
-            "resume_contract": resume_contract_for_step(
-                resume_contract_base, checkpoint_step
-            ),
+            "resume_contract": resume_contract_for_step(resume_contract_base, checkpoint_step),
             "rng_state": capture_rng_state(),
             "loop_state": {},
         }
-        retained_path = os.path.join(
-            args.out_dir, f"step_{checkpoint_step:06d}.pt"
-        )
+        retained_path = os.path.join(args.out_dir, f"step_{checkpoint_step:06d}.pt")
         save_checkpoint_atomic(retained_path, ckpt)
         save_checkpoint_atomic(os.path.join(args.out_dir, "latest.pt"), ckpt)
         last_saved_step = checkpoint_step

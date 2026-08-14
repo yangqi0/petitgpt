@@ -16,11 +16,7 @@ from src.posttrain_preflight import (
 def test_jsonl_preflight_records_all_rejects_before_raising(tmp_path):
     data = tmp_path / "rows.jsonl"
     data.write_text(
-        '{"value": 2}\n'
-        "\n"
-        "not-json\n"
-        "[]\n"
-        '{"value": -1}\n',
+        '{"value": 2}\n\nnot-json\n[]\n{"value": -1}\n',
         encoding="utf-8",
     )
     report_path = tmp_path / "report.json"

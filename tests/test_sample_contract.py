@@ -11,9 +11,7 @@ from src.special_tokens import BOS_ID, EOS_ID
 def test_sampling_contract_accepts_canonical_ids(production_chat_tok, tmp_path):
     path = tmp_path / "tokenizer.json"
     production_chat_tok.save(str(path))
-    _assert_sampling_contract(
-        str(path), eos_id=EOS_ID, add_bos=True, bos_id=BOS_ID
-    )
+    _assert_sampling_contract(str(path), eos_id=EOS_ID, add_bos=True, bos_id=BOS_ID)
 
 
 @pytest.mark.parametrize(

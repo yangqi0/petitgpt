@@ -25,8 +25,7 @@ def test_default_run_uses_full_contract_and_writes_auditable_atomic_report(
     _save_tokenizer(production_chat_tok, tokenizer_path)
     corpus_path.write_text(
         "".join(
-            json.dumps({"text": f"sample {index} with unicode café"}) + "\n"
-            for index in range(12)
+            json.dumps({"text": f"sample {index} with unicode café"}) + "\n" for index in range(12)
         ),
         encoding="utf-8",
     )
@@ -39,26 +38,22 @@ def test_default_run_uses_full_contract_and_writes_auditable_atomic_report(
         real_assert(path)
 
     monkeypatch.setattr(checker, "assert_tokenizer_contract", record_contract_check)
-    report = checker.main(
-        [
-            "--tokenizer",
-            str(tokenizer_path),
-            "--jsonl",
-            str(corpus_path),
-            "--n_samples",
-            "4",
-            "--seed",
-            "17",
-            "--report_json",
-            str(report_path),
-        ]
-    )
+    report = checker.main([
+        "--tokenizer",
+        str(tokenizer_path),
+        "--jsonl",
+        str(corpus_path),
+        "--n_samples",
+        "4",
+        "--seed",
+        "17",
+        "--report_json",
+        str(report_path),
+    ])
 
     assert checked_paths == [tokenizer_path]
     assert json.loads(report_path.read_text(encoding="utf-8")) == report
-    assert report["tokenizer_sha256"] == hashlib.sha256(
-        tokenizer_path.read_bytes()
-    ).hexdigest()
+    assert report["tokenizer_sha256"] == hashlib.sha256(tokenizer_path.read_bytes()).hexdigest()
     assert report["production_ready"] is True
     assert report["sampling"]["seed"] == 17
     assert report["contract"]["production_contract_ok"] is True
@@ -90,15 +85,13 @@ def test_legacy_bypass_is_explicitly_non_production_and_reported(
         raise AssertionError("legacy bypass unexpectedly called the production check")
 
     monkeypatch.setattr(checker, "assert_tokenizer_contract", production_check_must_not_run)
-    report = checker.main(
-        [
-            "--tokenizer",
-            str(tokenizer_path),
-            "--no-strict_special_ids",
-            "--report_json",
-            str(report_path),
-        ]
-    )
+    report = checker.main([
+        "--tokenizer",
+        str(tokenizer_path),
+        "--no-strict_special_ids",
+        "--report_json",
+        str(report_path),
+    ])
 
     assert "LEGACY ONLY" in capsys.readouterr().err
     assert report["production_ready"] is False

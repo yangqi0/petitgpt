@@ -43,12 +43,8 @@ def _write_release(tmp_path: Path, tokenizer_path: Path) -> Path:
     val = root / "val"
     train.mkdir(parents=True)
     val.mkdir()
-    np.asarray([BOS_ID, 7, 8, EOS_ID, BOS_ID], dtype=np.uint16).tofile(
-        train / "shard_00000.bin"
-    )
-    np.asarray([9, 10, EOS_ID, BOS_ID, EOS_ID], dtype=np.uint16).tofile(
-        train / "shard_00001.bin"
-    )
+    np.asarray([BOS_ID, 7, 8, EOS_ID, BOS_ID], dtype=np.uint16).tofile(train / "shard_00000.bin")
+    np.asarray([9, 10, EOS_ID, BOS_ID, EOS_ID], dtype=np.uint16).tofile(train / "shard_00001.bin")
     train_records = [
         {
             "path": path.relative_to(root).as_posix(),
@@ -149,20 +145,18 @@ def test_jsonl_max_lines_reservoir_and_atomic_report(tmp_path: Path) -> None:
     )
     report_path = tmp_path / "reports" / "jsonl.json"
 
-    first = jsonl_check.main(
-        [
-            "--jsonl",
-            str(source),
-            "--max_lines",
-            "1",
-            "--sample",
-            "1",
-            "--seed",
-            "17",
-            "--out_json",
-            str(report_path),
-        ]
-    )
+    first = jsonl_check.main([
+        "--jsonl",
+        str(source),
+        "--max_lines",
+        "1",
+        "--sample",
+        "1",
+        "--seed",
+        "17",
+        "--out_json",
+        str(report_path),
+    ])
     assert first["seen_lines"] == 1
     assert first["valid"] == 1
     assert first["sample_line_numbers"] == [1]
@@ -198,18 +192,16 @@ def test_jsonl_counts_bad_records_and_literal_special_roundtrip(
             {"text": "literal <|user|> text\n    kept"},
         ],
     )
-    report = jsonl_check.main(
-        [
-            "--jsonl",
-            str(source),
-            "--tokenizer",
-            str(tokenizer_path),
-            "--sample",
-            "10",
-            "--roundtrip_samples",
-            "10",
-        ]
-    )
+    report = jsonl_check.main([
+        "--jsonl",
+        str(source),
+        "--tokenizer",
+        str(tokenizer_path),
+        "--sample",
+        "10",
+        "--roundtrip_samples",
+        "10",
+    ])
     assert report["bad_json"] == 1
     assert report["missing_field"] == 1
     assert report["non_str"] == 1
@@ -274,32 +266,28 @@ def test_shard_checker_rejects_tokenizer_and_contract_drift(
     meta_path.write_text(json.dumps(meta), encoding="utf-8")
 
     with pytest.raises(RuntimeError, match="tokenizer SHA-256"):
-        shard_check.main(
-            [
-                "--out_dir",
-                str(release),
-                "--tokenizer_path",
-                str(tokenizer_path),
-                "--split",
-                "train",
-                "--seq_len",
-                "4",
-            ]
-        )
+        shard_check.main([
+            "--out_dir",
+            str(release),
+            "--tokenizer_path",
+            str(tokenizer_path),
+            "--split",
+            "train",
+            "--seq_len",
+            "4",
+        ])
 
     meta["tokenizer_sha256"] = hashlib.sha256(tokenizer_path.read_bytes()).hexdigest()
     meta["dtype"] = "uint32"
     meta_path.write_text(json.dumps(meta), encoding="utf-8")
     with pytest.raises(RuntimeError, match="dtype"):
-        shard_check.main(
-            [
-                "--out_dir",
-                str(release),
-                "--tokenizer_path",
-                str(tokenizer_path),
-                "--split",
-                "train",
-                "--seq_len",
-                "4",
-            ]
-        )
+        shard_check.main([
+            "--out_dir",
+            str(release),
+            "--tokenizer_path",
+            str(tokenizer_path),
+            "--split",
+            "train",
+            "--seq_len",
+            "4",
+        ])

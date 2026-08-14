@@ -85,14 +85,12 @@ def test_messages_conversion_rejects_missing_user_or_illegal_roles():
     with pytest.raises(ValueError, match="at least one non-empty user"):
         messages_record_to_prompt({"messages": []})
     with pytest.raises(ValueError, match="role order"):
-        messages_record_to_prompt(
-            {
-                "messages": [
-                    {"role": "user", "content": "one"},
-                    {"role": "user", "content": "two"},
-                ]
-            }
-        )
+        messages_record_to_prompt({
+            "messages": [
+                {"role": "user", "content": "one"},
+                {"role": "user", "content": "two"},
+            ]
+        })
 
 
 def test_dedup_by_prompt():
@@ -104,9 +102,7 @@ def test_dedup_by_prompt():
 
 
 def test_prompt_token_length_uses_canonical_roles_and_system(chat_tok):
-    record = code_bank_record_to_prompt(
-        {"prompt": "short prompt", "tests": ["assert True"]}
-    )
+    record = code_bank_record_to_prompt({"prompt": "short prompt", "tests": ["assert True"]})
     canonical = chat_encode_prompt(
         chat_tok, record["messages"], default_system="", mode="full_context"
     )
@@ -115,15 +111,11 @@ def test_prompt_token_length_uses_canonical_roles_and_system(chat_tok):
 
 
 def test_token_filter_rejects_prompt_that_cannot_fit_latest_user(chat_tok):
-    record = code_bank_record_to_prompt(
-        {
-            "prompt": "latest user content must remain completely intact",
-            "tests": ["assert True"],
-        }
-    )
-    full = chat_encode_prompt(
-        chat_tok, record["messages"], default_system="", mode="full_context"
-    )
+    record = code_bank_record_to_prompt({
+        "prompt": "latest user content must remain completely intact",
+        "tests": ["assert True"],
+    })
+    full = chat_encode_prompt(chat_tok, record["messages"], default_system="", mode="full_context")
     rejected = []
     kept = filter_by_prompt_tokens(
         [record],

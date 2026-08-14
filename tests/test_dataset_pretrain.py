@@ -85,18 +85,14 @@ def test_final_eos_target_is_supervised_by_default(tmp_path):
     assert loss_mask.tolist()[-1] == 1.0
     assert ds.mask_last_label_in_loss is False
 
-    legacy = PackedBinDataset(
-        str(shard_dir), seq_len=4, mask_last_label_in_loss=True
-    )
+    legacy = PackedBinDataset(str(shard_dir), seq_len=4, mask_last_label_in_loss=True)
     _, _, legacy_mask = legacy[0]
     assert legacy_mask.tolist()[-1] == 0.0
 
 
 def test_uint16_uses_compact_int16_and_preserves_high_id_fallback(tmp_path):
     canonical_dir = _write_shards(tmp_path / "canonical", [[31996, 31997, 31998, 31999]])
-    canonical = PackedBinDataset(
-        str(canonical_dir), seq_len=3, bos_id=2, eos_id=3
-    )
+    canonical = PackedBinDataset(str(canonical_dir), seq_len=3, bos_id=2, eos_id=3)
     input_ids, labels, _ = canonical[0]
     assert input_ids.dtype == labels.dtype == torch.int16
     assert input_ids.tolist() == [31996, 31997, 31998]
@@ -129,9 +125,7 @@ def test_deterministic_mode_never_eos_resamples(tmp_path):
 
 def test_random_sampling_is_explicit_opt_in_and_samples_with_replacement(tmp_path):
     shard_dir = _write_shards(tmp_path, [list(range(80))])
-    deterministic = PackedBinDataset(
-        str(shard_dir), seq_len=4, bos_id=200, eos_id=201
-    )
+    deterministic = PackedBinDataset(str(shard_dir), seq_len=4, bos_id=200, eos_id=201)
     random_ds = PackedBinDataset(
         str(shard_dir),
         seq_len=4,
@@ -155,35 +149,23 @@ def test_random_sampling_is_explicit_opt_in_and_samples_with_replacement(tmp_pat
 
 
 def test_resumable_sampler_visits_full_permutation_before_replay():
-    sampler = ResumablePermutationSampler(
-        range(7), seed=42, start_position=0, num_samples=14
-    )
+    sampler = ResumablePermutationSampler(range(7), seed=42, start_position=0, num_samples=14)
     indices = list(sampler)
 
     assert sorted(indices[:7]) == list(range(7))
     assert sorted(indices[7:14]) == list(range(7))
     assert len(set(indices[:7])) == 7
-    assert indices == list(
-        ResumablePermutationSampler(range(7), seed=42, num_samples=14)
-    )
+    assert indices == list(ResumablePermutationSampler(range(7), seed=42, num_samples=14))
 
 
 def test_resumable_sampler_reconstructs_exact_suffix_across_epoch_boundary():
-    complete = list(
-        ResumablePermutationSampler(range(7), seed=11, num_samples=19)
-    )
-    resumed = list(
-        ResumablePermutationSampler(
-            range(7), seed=11, start_position=5, num_samples=14
-        )
-    )
+    complete = list(ResumablePermutationSampler(range(7), seed=11, num_samples=19))
+    resumed = list(ResumablePermutationSampler(range(7), seed=11, start_position=5, num_samples=14))
     assert resumed == complete[5:]
 
 
 def test_resumable_sampler_committed_state_round_trip():
-    sampler = ResumablePermutationSampler(
-        range(9), seed=8, start_position=2, num_samples=10
-    )
+    sampler = ResumablePermutationSampler(range(9), seed=8, start_position=2, num_samples=10)
     sampler.commit(5)
     assert sampler.position == 7
     assert sampler.epoch == 0
@@ -195,11 +177,7 @@ def test_resumable_sampler_committed_state_round_trip():
 
     assert restored.state_dict() == state
     assert len(restored) == 5
-    expected = list(
-        ResumablePermutationSampler(
-            range(9), seed=8, start_position=7, num_samples=5
-        )
-    )
+    expected = list(ResumablePermutationSampler(range(9), seed=8, start_position=7, num_samples=5))
     assert list(restored) == expected
     with pytest.raises(ValueError, match="exceed planned end"):
         restored.commit(6)

@@ -66,17 +66,15 @@ def test_full_contract_rejects_non_32k_vocab(chat_tok, tmp_path):
 def test_extra_registered_special_is_rejected(chat_tok, tmp_path):
     path = _save(chat_tok, tmp_path / "tokenizer.json")
     payload = json.loads(path.read_text(encoding="utf-8"))
-    payload["added_tokens"].append(
-        {
-            "id": 399,
-            "content": "<|extra|>",
-            "single_word": False,
-            "lstrip": False,
-            "rstrip": False,
-            "normalized": False,
-            "special": True,
-        }
-    )
+    payload["added_tokens"].append({
+        "id": 399,
+        "content": "<|extra|>",
+        "single_word": False,
+        "lstrip": False,
+        "rstrip": False,
+        "normalized": False,
+        "special": True,
+    })
     path.write_text(json.dumps(payload), encoding="utf-8")
 
     with pytest.raises(ValueError, match="exactly these seven"):
@@ -86,9 +84,7 @@ def test_extra_registered_special_is_rejected(chat_tok, tmp_path):
 def test_role_marker_must_be_registered_special(chat_tok, tmp_path):
     path = _save(chat_tok, tmp_path / "tokenizer.json")
     payload = json.loads(path.read_text(encoding="utf-8"))
-    role = next(
-        entry for entry in payload["added_tokens"] if entry["content"] == "<|assistant|>"
-    )
+    role = next(entry for entry in payload["added_tokens"] if entry["content"] == "<|assistant|>")
     role["special"] = False
     path.write_text(json.dumps(payload), encoding="utf-8")
 

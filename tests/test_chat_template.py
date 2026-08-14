@@ -86,9 +86,7 @@ def test_prompt_is_prefix_of_training_encoding(chat_tok):
     """THE consistency guarantee: the inference-time prompt encoding is exactly
     the training-time encoding up to (and including) the assistant cue."""
     prompt_messages = prepare_prompt_messages(MESSAGES, default_system="")
-    prompt_ids = encode_prompt(
-        chat_tok, prompt_messages, default_system="", mode="full_context"
-    )
+    prompt_ids = encode_prompt(chat_tok, prompt_messages, default_system="", mode="full_context")
     train_ids, _ = encode_chat(chat_tok, MESSAGES, default_system="")
     assert prompt_ids == train_ids[: len(prompt_ids)]
     assert prompt_ids[-1] == ASSISTANT_ID
@@ -390,9 +388,7 @@ def test_truncated_prompt_remains_a_training_prefix_for_latest_turn(chat_tok):
     max_len = prefix_end + len(prompt_ids) - users[-1]
     kept_prompt, _ = truncate_chat_sequence(prompt_ids, None, max_len)
 
-    latest_train_user = [
-        i for i, token_id in enumerate(train_ids) if token_id == USER_ID
-    ][-1]
+    latest_train_user = [i for i, token_id in enumerate(train_ids) if token_id == USER_ID][-1]
     latest_train = train_ids[:prefix_end] + train_ids[latest_train_user:]
     assert kept_prompt == latest_train[: len(kept_prompt)]
     assert kept_prompt[-1] == ASSISTANT_ID

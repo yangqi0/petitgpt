@@ -47,10 +47,7 @@ def _read_hashes(path: Path) -> frozenset[str]:
 
 
 def _all_bin_tokens(directory: Path) -> np.ndarray:
-    arrays = [
-        np.fromfile(path, dtype=np.uint16)
-        for path in sorted(directory.glob("*.bin"))
-    ]
+    arrays = [np.fromfile(path, dtype=np.uint16) for path in sorted(directory.glob("*.bin"))]
     return np.concatenate(arrays) if arrays else np.asarray([], dtype=np.uint16)
 
 
@@ -109,9 +106,7 @@ def test_two_phase_selection_is_input_order_independent(
     tmp_path: Path, production_chat_tok: Tokenizer
 ):
     texts = [f"stable reference document number {index}." for index in range(40)]
-    tokenizer_path = _save_tokenizer(
-        production_chat_tok, tmp_path / "tokenizer.json"
-    )
+    tokenizer_path = _save_tokenizer(production_chat_tok, tmp_path / "tokenizer.json")
     forward = _write_jsonl(tmp_path / "forward.jsonl", texts)
     reverse = _write_jsonl(tmp_path / "reverse.jsonl", list(reversed(texts)))
 
@@ -134,21 +129,21 @@ def test_two_phase_selection_is_input_order_independent(
         assert manifest["schema_version"] == 2
         assert manifest["selection"]["restricted_to_pre_tokenizer_reserve"] is True
         provenance = manifest["reserve_provenance"]
-        assert provenance["reserve_manifest_size_bytes"] == (
-            reserve_dir / RESERVE_MANIFEST_NAME
-        ).stat().st_size
-        assert provenance["reserve_exclusion"]["manifest_size_bytes"] == (
-            reserve_dir / EXCLUSION_MANIFEST_NAME
-        ).stat().st_size
+        assert (
+            provenance["reserve_manifest_size_bytes"]
+            == (reserve_dir / RESERVE_MANIFEST_NAME).stat().st_size
+        )
+        assert (
+            provenance["reserve_exclusion"]["manifest_size_bytes"]
+            == (reserve_dir / EXCLUSION_MANIFEST_NAME).stat().st_size
+        )
         release = validate_shard_release(final_dir / "val")
         assert release["manifest_schema_version"] == 2
         assert release["shard_file_records"]
-        outputs.append(
-            (
-                _read_hashes(final_dir / EXCLUSION_MANIFEST_NAME),
-                _all_bin_tokens(final_dir / "val"),
-            )
-        )
+        outputs.append((
+            _read_hashes(final_dir / EXCLUSION_MANIFEST_NAME),
+            _all_bin_tokens(final_dir / "val"),
+        ))
 
     assert outputs[0][0] == outputs[1][0]
     assert np.array_equal(outputs[0][1], outputs[1][1])
@@ -157,9 +152,7 @@ def test_two_phase_selection_is_input_order_independent(
 def test_seven_sources_exact_contract_and_literal_specials(
     tmp_path: Path, production_chat_tok: Tokenizer
 ):
-    tokenizer_path = _save_tokenizer(
-        production_chat_tok, tmp_path / "tokenizer.json"
-    )
+    tokenizer_path = _save_tokenizer(production_chat_tok, tmp_path / "tokenizer.json")
     source_args: list[str] = []
     for index in range(7):
         source = _write_jsonl(
@@ -215,9 +208,7 @@ def test_reserve_and_finalize_fail_fast_on_insufficient_source(
         seed=1,
         reserve_bytes_per_target_token=0.01,
     )
-    tokenizer_path = _save_tokenizer(
-        production_chat_tok, tmp_path / "tokenizer.json"
-    )
+    tokenizer_path = _save_tokenizer(production_chat_tok, tmp_path / "tokenizer.json")
     with pytest.raises(ReferenceSourceExhaustedError, match="exhausted before quota"):
         finalize_reference_validation(
             reserve_manifest_path=reserve_dir / RESERVE_MANIFEST_NAME,
@@ -228,9 +219,7 @@ def test_reserve_and_finalize_fail_fast_on_insufficient_source(
     assert not (tmp_path / "final_too_large").exists()
 
 
-def test_finalizer_rejects_noncanonical_tokenizer(
-    tmp_path: Path, production_chat_tok: Tokenizer
-):
+def test_finalizer_rejects_noncanonical_tokenizer(tmp_path: Path, production_chat_tok: Tokenizer):
     source = _write_jsonl(tmp_path / "source.jsonl", ["enough reference text"])
     reserve_dir = tmp_path / "reserve"
     reserve_reference_candidates(
@@ -259,9 +248,7 @@ def test_finalizer_rejects_noncanonical_tokenizer(
 def test_repeatable_exclusions_never_leak_into_train_or_ordinary_val(
     tmp_path: Path, production_chat_tok: Tokenizer
 ):
-    tokenizer_path = _save_tokenizer(
-        production_chat_tok, tmp_path / "tokenizer.json"
-    )
+    tokenizer_path = _save_tokenizer(production_chat_tok, tmp_path / "tokenizer.json")
     original = [f"reserved candidate {index}" for index in range(20)]
     reference_source = _write_jsonl(tmp_path / "reference.jsonl", original)
     reserve_dir = tmp_path / "reserve"
@@ -279,22 +266,18 @@ def test_repeatable_exclusions_never_leak_into_train_or_ordinary_val(
     cleaning = json.loads(reserve_exclusion.read_text(encoding="utf-8"))["cleaning"]
     second_manifest = tmp_path / "second_exclusion.json"
     second_manifest.write_text(
-        json.dumps(
-            {
-                "schema_version": 1,
-                "kind": EXCLUSION_MANIFEST_KIND,
-                "hash_algorithm": CLEANED_TEXT_HASH_ALGORITHM,
-                "cleaning": cleaning,
-                "hash_count": 1,
-                "hashes": [cleaned_text_sha256(second_text)],
-            }
-        ),
+        json.dumps({
+            "schema_version": 1,
+            "kind": EXCLUSION_MANIFEST_KIND,
+            "hash_algorithm": CLEANED_TEXT_HASH_ALGORITHM,
+            "cleaning": cleaning,
+            "hash_count": 1,
+            "hashes": [cleaned_text_sha256(second_text)],
+        }),
         encoding="utf-8",
     )
     fresh = [f"fresh train document {index}" for index in range(100)]
-    train_source = _write_jsonl(
-        tmp_path / "train.jsonl", reserved_texts + [second_text] + fresh
-    )
+    train_source = _write_jsonl(tmp_path / "train.jsonl", reserved_texts + [second_text] + fresh)
     out_dir = tmp_path / "train_shards"
     kwargs = _train_kwargs(
         train_source,
@@ -313,15 +296,11 @@ def test_repeatable_exclusions_never_leak_into_train_or_ordinary_val(
     exclusion_meta = meta["reference_validation_exclusion"]
     assert exclusion_meta["manifest_count"] == 2
     assert all(item["matched_documents"] >= 1 for item in exclusion_meta["manifests"])
-    documents = _decoded_documents(
-        production_chat_tok, _all_bin_tokens(out_dir / "train")
-    )
+    documents = _decoded_documents(production_chat_tok, _all_bin_tokens(out_dir / "train"))
     excluded_union = reserved_hashes | {cleaned_text_sha256(second_text)}
     assert documents
     assert not {cleaned_text_sha256(value) for value in documents} & excluded_union
-    val_documents = _decoded_documents(
-        production_chat_tok, _all_bin_tokens(out_dir / "val")
-    )
+    val_documents = _decoded_documents(production_chat_tok, _all_bin_tokens(out_dir / "val"))
     assert val_documents
     assert not {cleaned_text_sha256(value) for value in val_documents} & excluded_union
 
@@ -341,16 +320,14 @@ def test_tokenizer_training_excludes_reserve_and_records_release_metadata(
     }
     exclusion = tmp_path / "exclusion.json"
     exclusion.write_text(
-        json.dumps(
-            {
-                "schema_version": 1,
-                "kind": EXCLUSION_MANIFEST_KIND,
-                "hash_algorithm": CLEANED_TEXT_HASH_ALGORITHM,
-                "cleaning": cleaning,
-                "hash_count": 1,
-                "hashes": [cleaned_text_sha256(held_out)],
-            }
-        ),
+        json.dumps({
+            "schema_version": 1,
+            "kind": EXCLUSION_MANIFEST_KIND,
+            "hash_algorithm": CLEANED_TEXT_HASH_ALGORITHM,
+            "cleaning": cleaning,
+            "hash_count": 1,
+            "hashes": [cleaned_text_sha256(held_out)],
+        }),
         encoding="utf-8",
     )
     out_dir = tmp_path / "tokenizer_release"
@@ -374,9 +351,7 @@ def test_tokenizer_training_excludes_reserve_and_records_release_metadata(
     )
     train_tokenizer.main()
 
-    release = json.loads(
-        (out_dir / "tokenizer_release_manifest.json").read_text(encoding="utf-8")
-    )
+    release = json.loads((out_dir / "tokenizer_release_manifest.json").read_text(encoding="utf-8"))
     audit = release["reference_reserve_exclusion"]
     assert audit["considered_samples"] == 21
     assert audit["excluded_samples"] == 1
@@ -387,9 +362,7 @@ def test_tokenizer_training_excludes_reserve_and_records_release_metadata(
     assert release["special_token_ids"] == SPECIAL_TOKEN_IDS
     assert (out_dir / "tokenizer.json").is_file()
     assert (out_dir / MANIFEST_NAME).exists() is False
-    tokenizer_config = json.loads(
-        (out_dir / "tokenizer_config.json").read_text(encoding="utf-8")
-    )
+    tokenizer_config = json.loads((out_dir / "tokenizer_config.json").read_text(encoding="utf-8"))
     assert "chat_template" not in tokenizer_config
     assert not hasattr(train_tokenizer, "HF_CHAT_TEMPLATE")
 

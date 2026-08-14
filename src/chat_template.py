@@ -92,8 +92,8 @@ def _normalized_messages(
     """Clean and validate the canonical chat state machine.
 
     A chat has exactly one initial system turn, followed by non-empty user and
-    assistant turns in strict alternation. \`\`expected_end\`\` is \`\`"user"\`\` for
-    a generation prompt and \`\`"assistant"\`\` for a complete training sample.
+    assistant turns in strict alternation. ``expected_end`` is ``"user"`` for
+    a generation prompt and ``"assistant"`` for a complete training sample.
     No malformed turn is silently skipped.
     """
     out: list[dict[str, str]] = []
@@ -113,8 +113,7 @@ def _normalized_messages(
                 fallback = clean_text(default_system)
                 if not fallback:
                     raise ValueError(
-                        "chat requires a non-empty initial system turn or "
-                        "non-empty default_system"
+                        "chat requires a non-empty initial system turn or non-empty default_system"
                     )
                 text = fallback
             else:
@@ -141,8 +140,7 @@ def _normalized_messages(
         raise ValueError("chat requires at least one non-empty user turn")
     if expected_end is not None and out[-1]["role"] != expected_end:
         raise ValueError(
-            f"chat must end with a non-empty {expected_end} turn; "
-            f"got {out[-1]['role']!r}"
+            f"chat must end with a non-empty {expected_end} turn; got {out[-1]['role']!r}"
         )
     return out
 
@@ -154,7 +152,7 @@ def prepare_prompt_messages(
     """Explicitly turn a valid conversation/example into a USER-ending prompt.
 
     Callers sampling from a complete SFT example must opt in to removing its
-    final assistant answer. \`\`encode_prompt\`\` itself never drops turns.
+    final assistant answer. ``encode_prompt`` itself never drops turns.
     """
     normalized = _normalized_messages(messages, default_system, expected_end=None)
     if normalized[-1]["role"] == "assistant":
@@ -214,7 +212,7 @@ def encode_prompt(
     default_system: str = DEFAULT_SYSTEM,
     mode: str = "full_context",
 ) -> list[int]:
-    """Encode a generation prompt: context ending in the \`\`<|assistant|>\`\` cue.
+    """Encode a generation prompt: context ending in the ``<|assistant|>`` cue.
 
     mode:
       - "full_context": the entire validated USER-ending context (earlier
@@ -270,9 +268,9 @@ def truncate_chat_sequence(
 ) -> tuple[list[int], list[int] | None]:
     """Validate and truncate only at complete user-turn boundaries.
 
-    The mandatory prefix \`\`BOS + SYSTEM + non-empty system content\`\` is always
+    The mandatory prefix ``BOS + SYSTEM + non-empty system content`` is always
     retained. The remainder is the largest recent suffix that begins at a real
-    \`\`USER_ID\`\` marker and runs through the original sequence end. A training
+    ``USER_ID`` marker and runs through the original sequence end. A training
     sequence must end with an assistant EOS; a prompt must end with the final
     assistant cue. Literal special-token text cannot create these boundaries
     because chat tokenizers disable special-token matching for raw content.
@@ -286,23 +284,17 @@ def truncate_chat_sequence(
     if labels is not None and len(labels) != len(ids):
         raise ValueError("ids and labels must have identical lengths")
     if len(ids) < 3 or ids[0] != BOS_ID or ids[1] != SYSTEM_ID:
-        raise ValueError(
-            "chat sequence must start with BOS_ID, SYSTEM_ID, and system content"
-        )
+        raise ValueError("chat sequence must start with BOS_ID, SYSTEM_ID, and system content")
 
     forbidden_content_ids = {PAD_ID, BOS_ID, EOS_ID, SYSTEM_ID, USER_ID, ASSISTANT_ID}
     role_ids = {SYSTEM_ID, USER_ID, ASSISTANT_ID}
-    first_role = next(
-        (index for index in range(2, len(ids)) if ids[index] in role_ids), len(ids)
-    )
+    first_role = next((index for index in range(2, len(ids)) if ids[index] in role_ids), len(ids))
     if first_role == 2:
         raise ValueError("initial system content must contain at least one token")
     if any(token_id in forbidden_content_ids for token_id in ids[2:first_role]):
         raise ValueError("system content contains a structural special-token ID")
     if first_role == len(ids) or ids[first_role] != USER_ID:
-        raise ValueError(
-            "chat sequence must contain a user turn after the initial system turn"
-        )
+        raise ValueError("chat sequence must contain a user turn after the initial system turn")
 
     user_starts: list[int] = []
     cursor = first_role
@@ -357,11 +349,7 @@ def truncate_chat_sequence(
 
     prefix_end = first_role
     chosen_start = next(
-        (
-            start
-            for start in user_starts
-            if prefix_end + (len(ids) - start) <= max_len
-        ),
+        (start for start in user_starts if prefix_end + (len(ids) - start) <= max_len),
         None,
     )
     if chosen_start is None:

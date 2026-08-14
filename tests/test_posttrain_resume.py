@@ -206,11 +206,14 @@ def test_require_resume_step_rejects_bad_step_and_stage():
 def test_distill_resume_accepts_only_distill_kind():
     checkpoint = _minimal_resume_checkpoint()
     checkpoint["kind"] = "distill"
-    assert require_resume_step(
-        checkpoint,
-        stage="distill",
-        weights_only_hint="--init_from_pretrain",
-    ) == 3
+    assert (
+        require_resume_step(
+            checkpoint,
+            stage="distill",
+            weights_only_hint="--init_from_pretrain",
+        )
+        == 3
+    )
     with pytest.raises(RuntimeError, match="requires a 'sft' checkpoint"):
         require_resume_step(
             checkpoint,
