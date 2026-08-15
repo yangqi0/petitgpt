@@ -13,6 +13,7 @@ def _cfg():
         n_layers=2,
         d_model=64,
         n_heads=4,
+        n_kv_heads=2,
         d_ff=160,
         max_seq_len=64,
         tie_embeddings=True,

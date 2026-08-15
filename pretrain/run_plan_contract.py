@@ -1,0 +1,699 @@
+"""Strict launch binding between production trainers and a frozen run plan."""
+
+from __future__ import annotations
+
+import argparse
+from collections.abc import Mapping
+import hashlib
+import json
+from pathlib import Path
+from typing import Any
+
+RUN_PLAN_SCHEMA_VERSION = 3
+RUN_PLAN_STAGES = ("stage_a", "stage_b")
+STAGE_B_SELECTION_STAGES = ("stage_b", "control")
+
+
+def _mapping(value: Any, *, field: str) -> Mapping[str, Any]:
+    if not isinstance(value, dict):
+        raise RuntimeError(f"run plan {field} must be a JSON object")
+    return value
+
+
+def _integer(value: Any, *, field: str, positive: bool = False) -> int:
+    if isinstance(value, bool) or not isinstance(value, int):
+        raise RuntimeError(f"run plan {field} must be an integer, got {value!r}")
+    if value < 0 or (positive and value <= 0):
+        relation = "positive" if positive else "non-negative"
+        raise RuntimeError(f"run plan {field} must be {relation}, got {value!r}")
+    return int(value)
+
+
+def _sha256(value: Any, *, field: str) -> str:
+    if (
+        not isinstance(value, str)
+        or len(value) != 64
+        or any(char not in "0123456789abcdef" for char in value)
+    ):
+        raise RuntimeError(f"run plan {field} must be a lowercase SHA-256")
+    return value
+
+
+def _same_int(actual: Any, expected: int, *, field: str) -> int:
+    value = _integer(actual, field=field)
+    if value != int(expected):
+        raise RuntimeError(
+            f"run plan {field} disagrees with launch: plan={value}, launch={int(expected)}"
+        )
+    return value
+
+
+def _read_plan(path: str | Path) -> tuple[Path, dict[str, Any], str]:
+    candidate = Path(path).expanduser()
+    if candidate.is_symlink() or not candidate.is_file():
+        raise FileNotFoundError(f"--run_plan_json must be a regular non-symlink file: {candidate}")
+    resolved = candidate.resolve()
+    try:
+        raw = resolved.read_bytes()
+        payload = json.loads(raw)
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise RuntimeError(f"cannot read run plan {resolved}: {exc}") from exc
+    if not isinstance(payload, dict):
+        raise RuntimeError("run plan must contain a JSON object")
+    return resolved, payload, hashlib.sha256(raw).hexdigest()
+
+
+def _data_branch_immutable_sha256(plan: Mapping[str, Any]) -> str:
+    """Hash every plan field except the explicitly branchable Stage-B data identity."""
+    normalized = json.loads(json.dumps(plan, sort_keys=True))
+    inputs = _mapping(normalized.get("inputs"), field="inputs")
+    provenance = _mapping(normalized.get("release_provenance"), field="release_provenance")
+    stages = _mapping(normalized.get("stages"), field="stages")
+    source_bindings = _mapping(
+        provenance.get("source_bindings"), field="release_provenance.source_bindings"
+    )
+    selection = _mapping(provenance.get("selection"), field="release_provenance.selection")
+    marker = "<validated-stage-b-data-branch>"
+    inputs["stage_b_dir"] = marker
+    inputs["stage_b_selection_stage"] = marker
+    provenance["stage_b_selection_stage"] = marker
+    provenance["stage_b"] = marker
+    source_bindings["stage_b_selection_stage"] = marker
+    source_bindings["stage_b"] = marker
+    selection["stage_b_selection_stage"] = marker
+    stages["stage_b"] = marker
+    normalized["totals"] = marker
+    return hashlib.sha256(
+        json.dumps(normalized, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+
+
+def validate_run_plan_args(args: argparse.Namespace) -> None:
+    """Require a paired plan/stage in strict mode; allow only explicit legacy escape."""
+    plan_path = str(getattr(args, "run_plan_json", "") or "").strip()
+    stage = str(getattr(args, "run_plan_stage", "") or "").strip()
+    strict = bool(getattr(args, "strict_resume_contract", True))
+    if bool(plan_path) != bool(stage):
+        raise ValueError("--run_plan_json and --run_plan_stage must be supplied together")
+    if stage and stage not in RUN_PLAN_STAGES:
+        raise ValueError(f"--run_plan_stage must be one of {RUN_PLAN_STAGES}, got {stage!r}")
+    if strict and not plan_path:
+        raise ValueError(
+            "strict production training requires --run_plan_json and --run_plan_stage; "
+            "only --no_strict_resume_contract may run an explicitly unbound legacy/debug job"
+        )
+
+
+def load_run_plan_binding(
+    args: argparse.Namespace,
+    *,
+    train_dir: str | Path,
+    tokenizer_sha256: str,
+    val_dir: str | Path | None = None,
+) -> dict[str, Any] | None:
+    """Load and validate the immutable launch fields of a schema-v3 planner artifact."""
+    validate_run_plan_args(args)
+    plan_arg = str(getattr(args, "run_plan_json", "") or "").strip()
+    if not plan_arg:
+        return None
+
+    stage_name = str(args.run_plan_stage)
+    path, plan, plan_sha256 = _read_plan(plan_arg)
+    if plan.get("schema_version") != RUN_PLAN_SCHEMA_VERSION:
+        raise RuntimeError(
+            f"run plan schema_version must be {RUN_PLAN_SCHEMA_VERSION}, "
+            f"got {plan.get('schema_version')!r}"
+        )
+    if plan.get("plan_type") not in {
+        "deterministic_no_replacement_stage_a_b",
+        "deterministic_explicit_multi_exposure_stage_a_b",
+    }:
+        raise RuntimeError(f"unsupported run plan_type: {plan.get('plan_type')!r}")
+
+    invariants = _mapping(plan.get("invariants"), field="invariants")
+    if (
+        invariants.get("sampling_mode") != "deterministic"
+        or invariants.get("replacement") is not False
+        or invariants.get("implicit_replay") is not False
+        or invariants.get("full_production_provenance_chain") is not True
+    ):
+        raise RuntimeError("run plan does not declare strict deterministic production invariants")
+    provenance = _mapping(plan.get("release_provenance"), field="release_provenance")
+    if provenance.get("full_chain_validated") is not True:
+        raise RuntimeError("run plan release_provenance.full_chain_validated must be true")
+    shared_tokenizer_sha256 = _sha256(
+        provenance.get("shared_tokenizer_sha256"),
+        field="release_provenance.shared_tokenizer_sha256",
+    )
+    if shared_tokenizer_sha256 != tokenizer_sha256:
+        raise RuntimeError(
+            "run plan tokenizer SHA-256 disagrees with --tokenizer_path: "
+            f"plan={shared_tokenizer_sha256}, launch={tokenizer_sha256}"
+        )
+
+    inputs = _mapping(plan.get("inputs"), field="inputs")
+    stage_b_selection_stage = inputs.get("stage_b_selection_stage")
+    if stage_b_selection_stage not in STAGE_B_SELECTION_STAGES:
+        raise RuntimeError(
+            "run plan inputs.stage_b_selection_stage must be one of "
+            f"{STAGE_B_SELECTION_STAGES}, got {stage_b_selection_stage!r}"
+        )
+    if provenance.get("stage_b_selection_stage") != stage_b_selection_stage:
+        raise RuntimeError("run plan Stage-B selection cohort disagrees within provenance")
+    selection_provenance = _mapping(
+        provenance.get("selection"), field="release_provenance.selection"
+    )
+    selection_manifest_sha256 = _sha256(
+        selection_provenance.get("manifest_sha256"),
+        field="release_provenance.selection.manifest_sha256",
+    )
+    if selection_provenance.get("stage_b_selection_stage") != stage_b_selection_stage:
+        raise RuntimeError("run plan selection artifact uses a different Stage-B cohort")
+    source_bindings = _mapping(
+        provenance.get("source_bindings"), field="release_provenance.source_bindings"
+    )
+    if (
+        source_bindings.get("validated") is not True
+        or source_bindings.get("stage_b_selection_stage") != stage_b_selection_stage
+    ):
+        raise RuntimeError("run plan source bindings do not validate the selected Stage-B cohort")
+    if bool(getattr(args, "allow_data_branch", False)) and (
+        stage_name != "stage_b" or stage_b_selection_stage != "control"
+    ):
+        raise RuntimeError(
+            "--allow_data_branch is only valid for a control-cohort Stage-B invocation"
+        )
+    _same_int(inputs.get("seq_len"), int(args.seq_len), field="inputs.seq_len")
+    _same_int(inputs.get("micro_bsz"), int(args.micro_bsz), field="inputs.micro_bsz")
+    _same_int(inputs.get("grad_accum"), int(args.grad_accum), field="inputs.grad_accum")
+    _same_int(inputs.get("warmup_steps"), int(args.warmup_steps), field="inputs.warmup_steps")
+    reference_val_dir = inputs.get("reference_val_dir")
+    launch_val_dir = val_dir if val_dir is not None else getattr(args, "val_dir", None)
+    if launch_val_dir is None:
+        raise RuntimeError("launch has no --val_dir to bind to the run plan")
+    if not isinstance(reference_val_dir, str) or Path(reference_val_dir).expanduser().resolve() != (
+        Path(launch_val_dir).expanduser().resolve()
+    ):
+        raise RuntimeError(
+            "run plan inputs.reference_val_dir disagrees with --val_dir: "
+            f"plan={reference_val_dir!r}, launch={str(Path(launch_val_dir).resolve())!r}"
+        )
+    reference_provenance = _mapping(
+        provenance.get("reference_validation"),
+        field="release_provenance.reference_validation",
+    )
+    reference_manifest_sha256 = _sha256(
+        reference_provenance.get("manifest_sha256"),
+        field="release_provenance.reference_validation.manifest_sha256",
+    )
+
+    sequences_per_step = int(args.micro_bsz) * int(args.grad_accum)
+    batch = _mapping(plan.get("batch"), field="batch")
+    _same_int(
+        batch.get("sequences_per_optimizer_step"),
+        sequences_per_step,
+        field="batch.sequences_per_optimizer_step",
+    )
+    _same_int(
+        batch.get("serialized_target_positions_per_optimizer_step"),
+        sequences_per_step * int(args.seq_len),
+        field="batch.serialized_target_positions_per_optimizer_step",
+    )
+
+    boundaries = _mapping(plan.get("boundaries"), field="boundaries")
+    stage_a_start = _integer(
+        boundaries.get("stage_a_start_step"), field="boundaries.stage_a_start_step"
+    )
+    stage_a_stop = _integer(
+        boundaries.get("stage_a_stop_step"),
+        field="boundaries.stage_a_stop_step",
+        positive=True,
+    )
+    stage_b_start = _integer(
+        boundaries.get("stage_b_start_step"),
+        field="boundaries.stage_b_start_step",
+        positive=True,
+    )
+    stage_b_stop = _integer(
+        boundaries.get("stage_b_global_stop_step"),
+        field="boundaries.stage_b_global_stop_step",
+        positive=True,
+    )
+    schedule_total = _integer(
+        boundaries.get("schedule_total_steps"),
+        field="boundaries.schedule_total_steps",
+        positive=True,
+    )
+    if stage_a_start != 0 or stage_a_stop != stage_b_start or stage_b_stop != schedule_total:
+        raise RuntimeError("run plan Stage A/B boundaries are not one contiguous global timeline")
+    if stage_name == "stage_a":
+        expected_start, expected_stop = stage_a_start, stage_a_stop
+    else:
+        expected_start, expected_stop = stage_b_start, stage_b_stop
+    _same_int(
+        expected_start,
+        int(args.data_stage_start_step),
+        field=f"boundaries.{stage_name}_start",
+    )
+    _same_int(expected_stop, int(args.max_steps), field=f"boundaries.{stage_name}_stop")
+    _same_int(
+        schedule_total,
+        int(args.schedule_total_steps),
+        field="boundaries.schedule_total_steps",
+    )
+
+    milestones = _mapping(plan.get("checkpoint_milestones"), field="checkpoint_milestones")
+    if milestones.get("schema_version") != 1:
+        raise RuntimeError("run plan checkpoint_milestones.schema_version must be 1")
+    raw_save_steps = milestones.get("absolute_steps")
+    if not isinstance(raw_save_steps, list) or not raw_save_steps:
+        raise RuntimeError("run plan checkpoint_milestones.absolute_steps must be non-empty")
+    milestone_steps = [
+        _integer(value, field=f"checkpoint_milestones.absolute_steps[{index}]", positive=True)
+        for index, value in enumerate(raw_save_steps)
+    ]
+    if milestone_steps != sorted(set(milestone_steps)):
+        raise RuntimeError(
+            "run plan checkpoint_milestones.absolute_steps must be strictly increasing and unique"
+        )
+    if milestone_steps[-1] > schedule_total:
+        raise RuntimeError("run plan checkpoint milestone exceeds schedule_total_steps")
+    if milestones.get("cli_save_steps") != ",".join(str(step) for step in milestone_steps):
+        raise RuntimeError("run plan checkpoint milestone CLI serialization is inconsistent")
+    launch_save_steps = [int(step) for step in getattr(args, "save_steps", [])]
+    if launch_save_steps != milestone_steps:
+        raise RuntimeError(
+            "--save_steps must exactly match the complete run-plan checkpoint milestones: "
+            f"plan={milestone_steps}, launch={launch_save_steps}"
+        )
+    milestone_sha256 = hashlib.sha256(
+        json.dumps(milestones, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+
+    stages = _mapping(plan.get("stages"), field="stages")
+    stage_a_plan = _mapping(stages.get("stage_a"), field="stages.stage_a")
+    stage_b_plan = _mapping(stages.get("stage_b"), field="stages.stage_b")
+    stage_a_samples = _integer(
+        stage_a_plan.get("consumed_blocks"),
+        field="stages.stage_a.consumed_blocks",
+        positive=True,
+    )
+    stage_b_samples = _integer(
+        stage_b_plan.get("consumed_blocks"),
+        field="stages.stage_b.consumed_blocks",
+        positive=True,
+    )
+    if (
+        stage_a_samples != (stage_a_stop - stage_a_start) * sequences_per_step
+        or stage_b_samples != (stage_b_stop - stage_b_start) * sequences_per_step
+    ):
+        raise RuntimeError(
+            "run plan both-stage consumed blocks disagree with boundary/batch arithmetic"
+        )
+    stage = _mapping(stages.get(stage_name), field=f"stages.{stage_name}")
+    planned_steps = _integer(
+        stage.get("planned_optimizer_steps"),
+        field=f"stages.{stage_name}.planned_optimizer_steps",
+        positive=True,
+    )
+    if planned_steps != expected_stop - expected_start:
+        raise RuntimeError(
+            f"run plan {stage_name} planned steps disagree with its absolute boundaries"
+        )
+    source_dir = stage.get("source_dir")
+    if (
+        not isinstance(source_dir, str)
+        or Path(source_dir).expanduser().resolve() != Path(train_dir).expanduser().resolve()
+    ):
+        raise RuntimeError(
+            f"run plan {stage_name} source_dir disagrees with --train_dir: "
+            f"plan={source_dir!r}, launch={str(Path(train_dir).resolve())!r}"
+        )
+    expected_samples = _integer(
+        stage.get("consumed_blocks"),
+        field=f"stages.{stage_name}.consumed_blocks",
+        positive=True,
+    )
+    arithmetic_samples = planned_steps * sequences_per_step
+    if expected_samples != arithmetic_samples:
+        raise RuntimeError(
+            f"run plan {stage_name} consumed_blocks disagree with step/batch arithmetic: "
+            f"{expected_samples} != {arithmetic_samples}"
+        )
+    candidate_samples = _integer(
+        stage.get("candidate_exposure_blocks"),
+        field=f"stages.{stage_name}.candidate_exposure_blocks",
+        positive=True,
+    )
+    if expected_samples > candidate_samples:
+        raise RuntimeError(f"run plan {stage_name} consumes beyond its explicit exposure budget")
+    requested_exposures = _integer(
+        stage.get("requested_exposures"),
+        field=f"stages.{stage_name}.requested_exposures",
+        positive=True,
+    )
+    unique_blocks = _integer(
+        stage.get("unique_blocks"),
+        field=f"stages.{stage_name}.unique_blocks",
+        positive=True,
+    )
+    if candidate_samples != requested_exposures * unique_blocks:
+        raise RuntimeError(f"run plan {stage_name} explicit exposure arithmetic is inconsistent")
+    stage_a_exposures = _integer(
+        inputs.get("stage_a_exposures"), field="inputs.stage_a_exposures", positive=True
+    )
+    stage_b_exposures = _integer(
+        inputs.get("stage_b_exposures"), field="inputs.stage_b_exposures", positive=True
+    )
+    input_stage_exposures = stage_a_exposures if stage_name == "stage_a" else stage_b_exposures
+    if requested_exposures != input_stage_exposures:
+        raise RuntimeError(f"run plan {stage_name} requested exposures disagree with inputs")
+    explicit_replay = stage_a_exposures > 1 or stage_b_exposures > 1
+    if invariants.get("explicit_replay") is not explicit_replay:
+        raise RuntimeError("run plan explicit-replay invariant disagrees with its inputs")
+    expected_plan_type = (
+        "deterministic_explicit_multi_exposure_stage_a_b"
+        if explicit_replay
+        else "deterministic_no_replacement_stage_a_b"
+    )
+    if plan.get("plan_type") != expected_plan_type:
+        raise RuntimeError("run plan explicit-replay inputs disagree with plan_type")
+
+    release = _mapping(stage.get("dataset"), field=f"stages.{stage_name}.dataset")
+    release_validation = _mapping(
+        release.get("release_validation"),
+        field=f"stages.{stage_name}.dataset.release_validation",
+    )
+    expected_manifest_sha256 = _sha256(
+        release_validation.get("manifest_sha256"),
+        field=f"stages.{stage_name}.dataset.release_validation.manifest_sha256",
+    )
+    release_stage = _mapping(provenance.get(stage_name), field=f"release_provenance.{stage_name}")
+    if (
+        _sha256(
+            release_stage.get("manifest_sha256"),
+            field=f"release_provenance.{stage_name}.manifest_sha256",
+        )
+        != expected_manifest_sha256
+    ):
+        raise RuntimeError(f"run plan {stage_name} release manifest hashes disagree internally")
+
+    other_name = "stage_b" if stage_name == "stage_a" else "stage_a"
+    other_plan = stage_b_plan if other_name == "stage_b" else stage_a_plan
+    other_dataset = _mapping(other_plan.get("dataset"), field=f"stages.{other_name}.dataset")
+    other_validation = _mapping(
+        other_dataset.get("release_validation"),
+        field=f"stages.{other_name}.dataset.release_validation",
+    )
+    other_manifest_sha256 = _sha256(
+        other_validation.get("manifest_sha256"),
+        field=f"stages.{other_name}.dataset.release_validation.manifest_sha256",
+    )
+    other_release = _mapping(provenance.get(other_name), field=f"release_provenance.{other_name}")
+    other_provenance_sha256 = _sha256(
+        other_release.get("manifest_sha256"),
+        field=f"release_provenance.{other_name}.manifest_sha256",
+    )
+    if other_manifest_sha256 != other_provenance_sha256:
+        raise RuntimeError(f"run plan {other_name} release manifest hashes disagree internally")
+    stage_release_manifest_sha256 = {
+        stage_name: expected_manifest_sha256,
+        other_name: other_manifest_sha256,
+    }
+
+    schedule_name = str(args.lr_schedule)
+    if schedule_name not in {"wsd", "cosine"}:
+        raise RuntimeError(
+            "a strict run plan supports the canonical WSD schedule or an explicit cosine control"
+        )
+    wsd = _mapping(plan.get("wsd_candidate"), field="wsd_candidate")
+    _same_int(wsd.get("warmup_steps"), int(args.warmup_steps), field="wsd_candidate.warmup_steps")
+    if schedule_name == "wsd" and not bool(args.allow_schedule_branch):
+        _same_int(
+            wsd.get("decay_start_step"),
+            int(args.decay_start_step),
+            field="wsd_candidate.decay_start_step",
+        )
+        _same_int(
+            wsd.get("decay_end_step"),
+            int(args.decay_end_step),
+            field="wsd_candidate.decay_end_step",
+        )
+
+    return {
+        "schema_version": 1,
+        "status": "validated",
+        "plan_path": str(path),
+        "plan_sha256": plan_sha256,
+        "plan_schema_version": RUN_PLAN_SCHEMA_VERSION,
+        "plan_type": str(plan["plan_type"]),
+        "stage": stage_name,
+        "stage_start_step": expected_start,
+        "stage_stop_step": expected_stop,
+        "schedule_total_steps": schedule_total,
+        "expected_stage_samples": expected_samples,
+        "data_branch_immutable_sha256": _data_branch_immutable_sha256(plan),
+        "data_branch_validation": None,
+        "selection_manifest_sha256": selection_manifest_sha256,
+        "sequences_per_optimizer_step": sequences_per_step,
+        "stage_a_stop_step": stage_a_stop,
+        "stage_b_stop_step": stage_b_stop,
+        "stage_a_expected_samples": stage_a_samples,
+        "stage_b_expected_samples": stage_b_samples,
+        "stage_a_release_manifest_sha256": stage_release_manifest_sha256["stage_a"],
+        "stage_b_release_manifest_sha256": stage_release_manifest_sha256["stage_b"],
+        "stage_b_source_bindings": source_bindings["stage_b"],
+        "requested_exposures": requested_exposures,
+        "unique_blocks": unique_blocks,
+        "candidate_exposure_blocks": candidate_samples,
+        "stage_b_selection_stage": stage_b_selection_stage,
+        "stage_release_manifest_sha256": expected_manifest_sha256,
+        "reference_release_manifest_sha256": reference_manifest_sha256,
+        "tokenizer_sha256": shared_tokenizer_sha256,
+        "checkpoint_milestones_schema_version": 1,
+        "checkpoint_milestone_steps": milestone_steps,
+        "checkpoint_milestones_sha256": milestone_sha256,
+    }
+
+
+def resolve_run_plan_sample_budget(
+    binding: Mapping[str, Any] | None,
+    *,
+    stage_sample_position: int,
+    step_derived_stage_samples: int,
+) -> tuple[int, int]:
+    """Return the frozen absolute sampler end and remaining suffix."""
+    position = int(stage_sample_position)
+    step_budget = int(step_derived_stage_samples)
+    if position < 0 or step_budget <= 0:
+        raise RuntimeError("stage sampler position/budget must be non-negative/positive")
+    planned = step_budget
+    if binding is not None:
+        planned = _integer(
+            binding.get("expected_stage_samples"),
+            field="binding.expected_stage_samples",
+            positive=True,
+        )
+    if planned != step_budget:
+        raise RuntimeError(
+            "run-plan sample budget disagrees with stage step/batch arithmetic: "
+            f"plan={planned}, steps={step_budget}"
+        )
+    if position > planned:
+        raise RuntimeError(
+            "checkpoint data position exceeds the frozen stage sample budget: "
+            f"position={position}, budget={planned}"
+        )
+    return planned, planned - position
+
+
+def synchronize_validated_run_plan_binding(
+    run_contract: Mapping[str, Any],
+    launch_binding: dict[str, Any] | None,
+) -> None:
+    """Propagate validated branch lineage into the binding used by run metadata."""
+    if launch_binding is None:
+        return
+    effective = run_contract.get("run_plan")
+    if not isinstance(effective, Mapping):
+        raise RuntimeError("run contract has no effective run-plan binding")
+    launch_binding.clear()
+    launch_binding.update(effective)
+
+
+def validate_run_plan_dataset(binding: Mapping[str, Any], dataset: Any) -> None:
+    """Bind the frozen plan to the release bytes actually opened by the trainer."""
+    expected_unique = _integer(
+        binding.get("unique_blocks"), field="binding.unique_blocks", positive=True
+    )
+    if int(len(dataset)) != expected_unique:
+        raise RuntimeError(
+            "training dataset block count disagrees with run plan: "
+            f"dataset={len(dataset)}, plan={expected_unique}"
+        )
+    stats = dataset.stats()
+    release = _mapping(stats.get("release_validation"), field="dataset.release_validation")
+    current_sha256 = _sha256(
+        release.get("manifest_sha256"), field="dataset.release_validation.manifest_sha256"
+    )
+    if current_sha256 != binding.get("stage_release_manifest_sha256"):
+        raise RuntimeError(
+            "training shard release manifest disagrees with run plan: "
+            f"dataset={current_sha256}, plan={binding.get('stage_release_manifest_sha256')}"
+        )
+    if release.get("tokenizer_sha256") != binding.get("tokenizer_sha256"):
+        raise RuntimeError("training shard tokenizer SHA-256 disagrees with run plan")
+
+
+def validate_run_plan_validation_dataset(binding: Mapping[str, Any], dataset: Any) -> None:
+    """Bind the combined frozen reference-validation release opened by the trainer."""
+    stats = dataset.stats()
+    release = _mapping(stats.get("release_validation"), field="validation.release_validation")
+    if release.get("release_kind") != "reference" or release.get("split") != "val":
+        raise RuntimeError("--val_dir must be the combined frozen reference-validation split")
+    current_sha256 = _sha256(
+        release.get("manifest_sha256"), field="validation.release_validation.manifest_sha256"
+    )
+    if current_sha256 != binding.get("reference_release_manifest_sha256"):
+        raise RuntimeError(
+            "validation release manifest disagrees with run plan: "
+            f"dataset={current_sha256}, "
+            f"plan={binding.get('reference_release_manifest_sha256')}"
+        )
+    if release.get("tokenizer_sha256") != binding.get("tokenizer_sha256"):
+        raise RuntimeError("validation shard tokenizer SHA-256 disagrees with run plan")
+
+
+def validate_run_plan_resume_transition(
+    saved: Mapping[str, Any] | None,
+    current: Mapping[str, Any] | None,
+    *,
+    checkpoint_step: int,
+    allow_data_branch: bool = False,
+) -> None:
+    """Accept exact resume, same-plan handoff, or an explicitly scoped control branch."""
+    if not isinstance(saved, Mapping) or not isinstance(current, Mapping):
+        raise RuntimeError("[resume] run-plan binding is missing")
+    saved_core = dict(saved)
+    current_core = dict(current)
+    saved_branch = saved_core.pop("data_branch_validation", None)
+    current_core.pop("data_branch_validation", None)
+    if saved_core == current_core:
+        if saved_branch is not None:
+            if not isinstance(current, dict):
+                raise RuntimeError("[resume] current run-plan binding is not mutable")
+            current["data_branch_validation"] = saved_branch
+        return
+    invariant_fields = (
+        "schema_version",
+        "status",
+        "plan_path",
+        "plan_sha256",
+        "plan_schema_version",
+        "plan_type",
+        "schedule_total_steps",
+        "tokenizer_sha256",
+        "reference_release_manifest_sha256",
+        "checkpoint_milestones_schema_version",
+        "checkpoint_milestone_steps",
+        "checkpoint_milestones_sha256",
+    )
+    mismatches = [field for field in invariant_fields if saved.get(field) != current.get(field)]
+    if mismatches and not allow_data_branch:
+        raise RuntimeError(
+            "[resume] run-plan identity changed across stage boundary: " + ", ".join(mismatches)
+        )
+    if saved.get("stage") != "stage_a" or current.get("stage") != "stage_b":
+        raise RuntimeError("[resume] only an exact same stage or Stage A -> Stage B is allowed")
+    boundary = int(checkpoint_step)
+    if (
+        int(saved.get("stage_stop_step", -1)) != boundary
+        or int(current.get("stage_start_step", -1)) != boundary
+    ):
+        raise RuntimeError(
+            "[resume] Stage A -> Stage B run-plan handoff does not match checkpoint step"
+        )
+    if mismatches:
+        _record_validated_data_branch(
+            saved,
+            current,
+            checkpoint_step=boundary,
+        )
+
+
+def _record_validated_data_branch(
+    saved: Mapping[str, Any],
+    current: Mapping[str, Any],
+    *,
+    checkpoint_step: int,
+) -> None:
+    """Attach audited lineage for the sole legal premium-to-control data branch."""
+    if not isinstance(current, dict):
+        raise RuntimeError("[resume] current run-plan binding is not mutable")
+    branch_fields = (
+        "schema_version",
+        "status",
+        "plan_schema_version",
+        "plan_type",
+        "data_branch_immutable_sha256",
+        "schedule_total_steps",
+        "tokenizer_sha256",
+        "reference_release_manifest_sha256",
+        "selection_manifest_sha256",
+        "checkpoint_milestones_schema_version",
+        "checkpoint_milestone_steps",
+        "checkpoint_milestones_sha256",
+        "sequences_per_optimizer_step",
+        "stage_a_stop_step",
+        "stage_a_expected_samples",
+        "stage_a_release_manifest_sha256",
+        "stage_b_stop_step",
+        "stage_b_expected_samples",
+    )
+    branch_mismatches = [field for field in branch_fields if saved.get(field) != current.get(field)]
+    if branch_mismatches:
+        raise RuntimeError(
+            "[resume] data branch changed immutable training fields: "
+            + ", ".join(branch_mismatches)
+        )
+    if saved.get("stage_b_selection_stage") != "stage_b":
+        raise RuntimeError("[resume] data branch parent must use the premium stage_b cohort")
+    if current.get("stage_b_selection_stage") != "control":
+        raise RuntimeError("[resume] data branch target must use the control cohort")
+    if saved.get("plan_sha256") == current.get("plan_sha256"):
+        raise RuntimeError("[resume] data branch requires a distinct frozen control plan")
+    parent_stage_b_release = _sha256(
+        saved.get("stage_b_release_manifest_sha256"),
+        field="saved.stage_b_release_manifest_sha256",
+    )
+    current_stage_b_release = _sha256(
+        current.get("stage_b_release_manifest_sha256"),
+        field="current.stage_b_release_manifest_sha256",
+    )
+    if parent_stage_b_release == current_stage_b_release:
+        raise RuntimeError("[resume] data branch must bind a distinct Stage-B shard release")
+    current["data_branch_validation"] = {
+        "schema_version": 1,
+        "status": "validated",
+        "kind": "stage_b_data_control",
+        "checkpoint_step": int(checkpoint_step),
+        "parent_plan_path": saved.get("plan_path"),
+        "parent_plan_sha256": saved.get("plan_sha256"),
+        "current_plan_path": current.get("plan_path"),
+        "current_plan_sha256": current.get("plan_sha256"),
+        "parent_stage_b_selection_stage": saved.get("stage_b_selection_stage"),
+        "current_stage_b_selection_stage": current.get("stage_b_selection_stage"),
+        "parent_stage_b_release_manifest_sha256": parent_stage_b_release,
+        "current_stage_b_release_manifest_sha256": current_stage_b_release,
+        "parent_stage_b_source_bindings": saved.get("stage_b_source_bindings"),
+        "current_stage_b_source_bindings": current.get("stage_b_source_bindings"),
+        "validated_immutable_sha256": current.get("data_branch_immutable_sha256"),
+        "changed_fields": [
+            "inputs.stage_b_dir",
+            "inputs.stage_b_selection_stage",
+            "release_provenance.stage_b",
+            "release_provenance.source_bindings.stage_b",
+            "stages.stage_b.dataset_and_source",
+            "totals.stage_b_derived_accounting",
+        ],
+    }

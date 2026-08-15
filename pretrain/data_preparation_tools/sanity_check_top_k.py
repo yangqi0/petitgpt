@@ -19,6 +19,7 @@ cfg = GPTConfig(
     n_layers=12,
     d_model=768,
     n_heads=12,
+    n_kv_heads=12,  # legacy pre-GQA checkpoint: plain MHA
     d_ff=3072,
     max_seq_len=1024,
     dropout=0.0,

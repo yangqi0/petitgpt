@@ -34,7 +34,7 @@ from src.special_tokens import (
     PAD_ID,
     SYSTEM_ID,
     USER_ID,
-    assert_special_token_ids,
+    assert_tokenizer_contract,
 )
 
 DEFAULT_SYSTEM = "You are a helpful assistant."
@@ -61,7 +61,7 @@ def load_chat_tokenizer(tokenizer_path: str) -> Tokenizer:
     """Load tokenizer.json, assert the hardcoded special-token IDs, and disable
     special-token matching in raw text. Every chat-stage script should load its
     tokenizer through this."""
-    assert_special_token_ids(tokenizer_path)
+    assert_tokenizer_contract(tokenizer_path)
     return configure_chat_tokenizer(Tokenizer.from_file(tokenizer_path))
 
 
@@ -84,21 +84,82 @@ def clean_text_assistant(s: str) -> str:
 
 
 def _normalized_messages(
-    messages: list[dict[str, str]], default_system: str
+    messages: list[dict[str, str]],
+    default_system: str,
+    *,
+    expected_end: str | None,
 ) -> list[dict[str, str]]:
-    """Prepend the default system turn when missing; drop malformed/empty turns."""
-    msgs = list(messages or [])
-    if msgs and (msgs[0].get("role") or "").strip().lower() != "system" and default_system:
-        msgs = [{"role": "system", "content": default_system}] + msgs
+    """Clean and validate the canonical chat state machine.
+
+    A chat has exactly one initial system turn, followed by non-empty user and
+    assistant turns in strict alternation. ``expected_end`` is ``"user"`` for
+    a generation prompt and ``"assistant"`` for a complete training sample.
+    No malformed turn is silently skipped.
+    """
     out: list[dict[str, str]] = []
-    for m in msgs:
-        role = (m.get("role") or "").strip().lower()
-        raw = m.get("content", "")
-        txt = clean_text_assistant(raw) if role == "assistant" else clean_text(raw)
-        if role not in ("system", "user", "assistant") or not txt.strip():
-            continue
-        out.append({"role": role, "content": txt})
+    for index, message in enumerate(messages or []):
+        if not isinstance(message, dict):
+            raise ValueError(f"message {index} must be an object")
+        role_value = message.get("role")
+        role = role_value.strip().lower() if isinstance(role_value, str) else ""
+        if role not in ("system", "user", "assistant"):
+            raise ValueError(f"message {index} has invalid role {role_value!r}")
+        raw = message.get("content")
+        if not isinstance(raw, str):
+            raise ValueError(f"message {index} content must be a string")
+        text = clean_text_assistant(raw) if role == "assistant" else clean_text(raw)
+        if not text.strip():
+            if index == 0 and role == "system":
+                fallback = clean_text(default_system)
+                if not fallback:
+                    raise ValueError(
+                        "chat requires a non-empty initial system turn or non-empty default_system"
+                    )
+                text = fallback
+            else:
+                raise ValueError(f"message {index} ({role}) content must be non-empty")
+        out.append({"role": role, "content": text})
+
+    if not out or out[0]["role"] != "system":
+        fallback = clean_text(default_system)
+        if not fallback:
+            raise ValueError(
+                "chat requires a non-empty initial system turn or non-empty default_system"
+            )
+        out.insert(0, {"role": "system", "content": fallback})
+
+    for index, message in enumerate(out):
+        expected = "system" if index == 0 else ("user" if index % 2 else "assistant")
+        if message["role"] != expected:
+            raise ValueError(
+                "invalid chat role order: initial system must be followed by "
+                f"alternating user/assistant turns (index {index}: expected "
+                f"{expected!r}, got {message['role']!r})"
+            )
+    if len(out) == 1:
+        raise ValueError("chat requires at least one non-empty user turn")
+    if expected_end is not None and out[-1]["role"] != expected_end:
+        raise ValueError(
+            f"chat must end with a non-empty {expected_end} turn; got {out[-1]['role']!r}"
+        )
     return out
+
+
+def prepare_prompt_messages(
+    messages: list[dict[str, str]],
+    default_system: str = DEFAULT_SYSTEM,
+) -> list[dict[str, str]]:
+    """Explicitly turn a valid conversation/example into a USER-ending prompt.
+
+    Callers sampling from a complete SFT example must opt in to removing its
+    final assistant answer. ``encode_prompt`` itself never drops turns.
+    """
+    normalized = _normalized_messages(messages, default_system, expected_end=None)
+    if normalized[-1]["role"] == "assistant":
+        normalized = normalized[:-1]
+    if normalized[-1]["role"] != "user":
+        raise ValueError("generation prompt context must end with a user turn")
+    return normalized
 
 
 # -------------------------
@@ -107,26 +168,16 @@ def _normalized_messages(
 _ROLE_TOKEN_ID = {"system": SYSTEM_ID, "user": USER_ID, "assistant": ASSISTANT_ID}
 
 
-def encode_chat(
-    tok: Tokenizer,
-    messages: list[dict[str, str]],
-    default_system: str = DEFAULT_SYSTEM,
+def _encode_normalized_chat(
+    tok: Tokenizer, messages: list[dict[str, str]]
 ) -> tuple[list[int], list[int]]:
-    """Encode a full conversation for training.
-
-    Returns (ids, labels), same length. labels[i] == ids[i] on supervised
-    positions (every assistant turn's content + its trailing EOS) and
-    IGNORE_INDEX everywhere else (BOS, role tokens, system/user content).
-    """
-    msgs = _normalized_messages(messages, default_system)
-    if not msgs:
-        raise ValueError("missing messages")
-
     ids: list[int] = [BOS_ID]
     labels: list[int] = [IGNORE_INDEX]
-    for m in msgs:
-        role = m["role"]
-        content_ids = tok.encode(m["content"]).ids
+    for index, message in enumerate(messages):
+        role = message["role"]
+        content_ids = tok.encode(message["content"]).ids
+        if not content_ids:
+            raise ValueError(f"message {index} ({role}) must encode to at least one token")
         ids.append(_ROLE_TOKEN_ID[role])
         labels.append(IGNORE_INDEX)
         if role == "assistant":
@@ -140,43 +191,45 @@ def encode_chat(
     return ids, labels
 
 
+def encode_chat(
+    tok: Tokenizer,
+    messages: list[dict[str, str]],
+    default_system: str = DEFAULT_SYSTEM,
+) -> tuple[list[int], list[int]]:
+    """Encode a full conversation for training.
+
+    Returns (ids, labels), same length. labels[i] == ids[i] on supervised
+    positions (every assistant turn's content + its trailing EOS) and
+    IGNORE_INDEX everywhere else (BOS, role tokens, system/user content).
+    """
+    msgs = _normalized_messages(messages, default_system, expected_end="assistant")
+    return _encode_normalized_chat(tok, msgs)
+
+
 def encode_prompt(
     tok: Tokenizer,
     messages: list[dict[str, str]],
     default_system: str = DEFAULT_SYSTEM,
     mode: str = "full_context",
 ) -> list[int]:
-    """Encode a generation prompt: context ending in the `<|assistant|>` cue.
+    """Encode a generation prompt: context ending in the ``<|assistant|>`` cue.
 
     mode:
-      - "full_context": all turns up to and including the LAST user turn
-        (earlier assistant turns keep their [EOS]); trailing assistant turns
-        after the last user turn are dropped (we are generating the reply).
+      - "full_context": the entire validated USER-ending context (earlier
+        assistant turns keep their [EOS]).
       - "last_user": system turn + last user turn only.
 
     The returned ids start with BOS and end with ASSISTANT_ID, exactly matching
     the training-time prefix for an assistant turn.
     """
-    msgs = _normalized_messages(messages, default_system)
-
-    last_user = -1
-    for i in range(len(msgs) - 1, -1, -1):
-        if msgs[i]["role"] == "user":
-            last_user = i
-            break
+    msgs = _normalized_messages(messages, default_system, expected_end="user")
 
     if mode == "last_user":
-        keep = [m for m in msgs if m["role"] == "system"][:1]
-        if last_user != -1:
-            keep.append(msgs[last_user])
-        msgs = keep
-    elif mode == "full_context":
-        if last_user != -1:
-            msgs = msgs[: last_user + 1]
-    else:
+        msgs = [msgs[0], msgs[-1]]
+    elif mode != "full_context":
         raise ValueError(f"unknown prompt mode: {mode}")
 
-    ids, _ = encode_chat(tok, msgs, default_system="") if msgs else ([BOS_ID], [IGNORE_INDEX])
+    ids, _ = _encode_normalized_chat(tok, msgs)
     ids.append(ASSISTANT_ID)
     return ids
 
@@ -196,12 +249,123 @@ def encode_completion(
     """
     ids = encode_prompt(tok, messages, default_system, mode="full_context")
     labels = [IGNORE_INDEX] * len(ids)
+    if not isinstance(completion, str) or not completion.strip():
+        raise ValueError("DPO completion must be a non-empty, non-whitespace string")
     comp_ids = tok.encode(clean_text_assistant(completion)).ids
+    if not comp_ids:
+        raise ValueError("DPO completion must encode to at least one token")
     ids.extend(comp_ids)
     labels.extend(comp_ids)
     ids.append(EOS_ID)
     labels.append(EOS_ID)
     return ids, labels
+
+
+def truncate_chat_sequence(
+    ids: list[int],
+    labels: list[int] | None,
+    max_len: int,
+) -> tuple[list[int], list[int] | None]:
+    """Validate and truncate only at complete user-turn boundaries.
+
+    The mandatory prefix ``BOS + SYSTEM + non-empty system content`` is always
+    retained. The remainder is the largest recent suffix that begins at a real
+    ``USER_ID`` marker and runs through the original sequence end. A training
+    sequence must end with an assistant EOS; a prompt must end with the final
+    assistant cue. Literal special-token text cannot create these boundaries
+    because chat tokenizers disable special-token matching for raw content.
+
+    If the system prefix plus the latest complete user-led suffix cannot fit,
+    this function raises instead of cutting content, role markers, assistant
+    completions, or EOS targets.
+    """
+    if max_len <= 0:
+        raise ValueError("max_len must be positive")
+    if labels is not None and len(labels) != len(ids):
+        raise ValueError("ids and labels must have identical lengths")
+    if len(ids) < 3 or ids[0] != BOS_ID or ids[1] != SYSTEM_ID:
+        raise ValueError("chat sequence must start with BOS_ID, SYSTEM_ID, and system content")
+
+    forbidden_content_ids = {PAD_ID, BOS_ID, EOS_ID, SYSTEM_ID, USER_ID, ASSISTANT_ID}
+    role_ids = {SYSTEM_ID, USER_ID, ASSISTANT_ID}
+    first_role = next((index for index in range(2, len(ids)) if ids[index] in role_ids), len(ids))
+    if first_role == 2:
+        raise ValueError("initial system content must contain at least one token")
+    if any(token_id in forbidden_content_ids for token_id in ids[2:first_role]):
+        raise ValueError("system content contains a structural special-token ID")
+    if first_role == len(ids) or ids[first_role] != USER_ID:
+        raise ValueError("chat sequence must contain a user turn after the initial system turn")
+
+    user_starts: list[int] = []
+    cursor = first_role
+    while cursor < len(ids):
+        if ids[cursor] != USER_ID:
+            raise ValueError("chat role sequence must alternate USER and ASSISTANT")
+        user_starts.append(cursor)
+        user_content_start = cursor + 1
+        assistant_pos = next(
+            (
+                index
+                for index in range(user_content_start, len(ids))
+                if ids[index] in forbidden_content_ids
+            ),
+            len(ids),
+        )
+        if assistant_pos == user_content_start:
+            raise ValueError("user content must contain at least one token")
+        if assistant_pos == len(ids) or ids[assistant_pos] != ASSISTANT_ID:
+            raise ValueError("each user turn must be followed by an assistant turn")
+
+        assistant_content_start = assistant_pos + 1
+        if assistant_content_start == len(ids):
+            if labels is not None:
+                raise ValueError("training chat must end with assistant content and EOS")
+            cursor = len(ids)
+            break
+
+        eos_pos = next(
+            (
+                index
+                for index in range(assistant_content_start, len(ids))
+                if ids[index] in forbidden_content_ids
+            ),
+            len(ids),
+        )
+        if eos_pos == assistant_content_start:
+            raise ValueError("assistant content must contain at least one token")
+        if eos_pos == len(ids) or ids[eos_pos] != EOS_ID:
+            raise ValueError("each assistant completion must end with EOS")
+        cursor = eos_pos + 1
+        if cursor == len(ids):
+            if labels is None:
+                raise ValueError("generation prompt must end with an assistant cue")
+            break
+
+    if labels is not None:
+        if ids[-1] != EOS_ID:
+            raise ValueError("training chat must end with a supervised assistant EOS")
+        if labels[-1] != EOS_ID:
+            raise ValueError("final assistant EOS must be supervised")
+
+    prefix_end = first_role
+    chosen_start = next(
+        (start for start in user_starts if prefix_end + (len(ids) - start) <= max_len),
+        None,
+    )
+    if chosen_start is None:
+        minimum = prefix_end + (len(ids) - user_starts[-1])
+        raise ValueError(
+            "chat sequence does not fit without cutting the system prefix or latest "
+            f"user-led suffix (requires at least {minimum} tokens, max_len={max_len})"
+        )
+
+    if chosen_start == prefix_end:
+        return list(ids), list(labels) if labels is not None else None
+
+    kept_ids = ids[:prefix_end] + ids[chosen_start:]
+    if labels is None:
+        return kept_ids, None
+    return kept_ids, labels[:prefix_end] + labels[chosen_start:]
 
 
 def pad_or_truncate(
@@ -210,11 +374,10 @@ def pad_or_truncate(
     seq_len: int,
     pad_id: int = PAD_ID,
 ) -> tuple[list[int], list[int]]:
-    """Fixed-length batch shaping. Truncation keeps the TAIL so the supervised
-    assistant span (which sits at the end) survives; padding is appended with
-    IGNORE_INDEX labels."""
-    if len(ids) > seq_len:
-        return ids[-seq_len:], labels[-seq_len:]
+    """Structure-aware fixed-length shaping plus right padding."""
+    ids, maybe_labels = truncate_chat_sequence(ids, labels, seq_len)
+    assert maybe_labels is not None
+    labels = maybe_labels
     pad_n = seq_len - len(ids)
     return ids + [pad_id] * pad_n, labels + [IGNORE_INDEX] * pad_n
 
@@ -324,6 +487,8 @@ def build_example(
 
     ids, labels = encode_chat(tok, messages, default_system)
     ids, labels = pad_or_truncate(ids, labels, seq_len, pad_id)
+    if all(label == IGNORE_INDEX for label in labels):
+        raise ValueError("SFT example requires a retained non-empty assistant turn")
     return (
         torch.tensor(ids, dtype=torch.long),
         torch.tensor(labels, dtype=torch.long),

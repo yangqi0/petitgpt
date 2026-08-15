@@ -45,6 +45,7 @@ Example:
 from __future__ import annotations
 
 import argparse
+from collections.abc import Mapping
 import copy
 from dataclasses import asdict
 import json
@@ -55,6 +56,7 @@ import sys
 import time
 from typing import Any
 
+import numpy as np
 from tokenizers import Tokenizer
 import torch
 import torch.nn.functional as F
@@ -73,9 +75,26 @@ except ModuleNotFoundError:
 from src.chat_template import (  # noqa: E402
     encode_prompt as chat_encode_prompt,
     load_chat_tokenizer,
+    truncate_chat_sequence,
 )
-from src.model import GPT, GPTConfig  # noqa: E402
+from src.model import GPT, GPTConfig, gpt_config_from_checkpoint_dict  # noqa: E402
 from src.optim import build_optimizer  # noqa: E402
+from src.posttrain_preflight import (  # noqa: E402
+    require_preflight_passed,
+    run_jsonl_preflight,
+)
+from src.posttrain_resume import (  # noqa: E402
+    DeterministicEpochBatchSampler,
+    build_resume_contract_base,
+    capture_rng_state,
+    make_loader_generator,
+    require_resume_step,
+    restore_rng_state,
+    restore_training_state,
+    resume_contract_for_step,
+    validate_resume_contract,
+    validate_training_controls,
+)
 from src.special_tokens import BOS_ID, EOS_ID, PAD_ID  # noqa: E402
 from src.tracking import Tracker  # noqa: E402
 
@@ -119,9 +138,29 @@ def encode_prompt(
     if not messages:
         raise ValueError("missing messages")
     ids = chat_encode_prompt(tok, messages, default_system, mode="full_context")
-    if len(ids) > max_prompt_len:
-        ids = ids[-max_prompt_len:]  # keep the tail (most recent turn + cue)
+    ids, _ = truncate_chat_sequence(ids, labels=None, max_len=max_prompt_len)
     return ids
+
+
+def preflight_grpo_record(
+    _split: str,
+    example: dict[str, Any],
+    *,
+    tok: Tokenizer,
+    max_prompt_len: int,
+    default_system: str,
+) -> dict[str, int]:
+    """Validate a prompt with the exact production encoding and token budget."""
+    messages = example.get("messages")
+    if not isinstance(messages, list):
+        raise ValueError("missing messages list")
+    ids = chat_encode_prompt(tok, messages, default_system, mode="full_context")
+    kept_ids, _ = truncate_chat_sequence(ids, labels=None, max_len=max_prompt_len)
+    return {
+        "encoded_prompt_tokens": len(ids),
+        "retained_prompt_tokens": len(kept_ids),
+        "truncated_prompts": int(len(kept_ids) != len(ids)),
+    }
 
 
 # -------------------------
@@ -252,14 +291,21 @@ def rollout_group(
     their per-token log-probs under the sampling policy.
     """
     policy.eval()
+    if max_new_tokens <= 0:
+        raise ValueError("max_new_tokens must be positive")
+    if not prompt_ids:
+        raise ValueError("rollout prompt must not be empty")
+    remaining = seq_len - len(prompt_ids)
+    if remaining <= 0:
+        raise ValueError("rollout prompt must leave room for at least one generated token")
+    generation_steps = min(max_new_tokens, remaining)
     ids = torch.tensor(prompt_ids, device=device, dtype=torch.long)[None, :].repeat(group_size, 1)
     gen_ids: list[list[int]] = [[] for _ in range(group_size)]
     old_logps: list[list[float]] = [[] for _ in range(group_size)]
     finished = torch.zeros(group_size, dtype=torch.bool, device=device)
 
-    for _ in range(max_new_tokens):
-        window = ids[:, -seq_len:]
-        logits = policy(window)[:, -1, :]
+    for _ in range(generation_steps):
+        logits = policy(ids)[:, -1, :]
         nxt, logp = _sample_step(logits, temperature, top_p)
         active = ~finished
         for g in range(group_size):
@@ -304,8 +350,10 @@ def build_group_batch(
     old_seqs: list[list[float]] = []
     for s in samples:
         gen = s["gen_ids"]
-        full = (prompt_ids + gen)[:seq_len]
-        Lg = len(full) - Tp  # completion tokens actually kept
+        full = prompt_ids + gen
+        if len(full) > seq_len:
+            raise ValueError("rollout sample exceeds seq_len; refusing to truncate completion")
+        Lg = len(full) - Tp
         fulls.append(full)
         comp_lens.append(max(0, Lg))
         old_seqs.append(s["old_logps"][:Lg])
@@ -357,7 +405,7 @@ def build_model_from_ckpt(
     cfg_dict = dict(cfg_dict)
     cfg_dict["vocab_size"] = vocab_size
     cfg_dict["max_seq_len"] = seq_len
-    cfg = GPTConfig(**cfg_dict)
+    cfg = gpt_config_from_checkpoint_dict(cfg_dict)
     model = GPT(cfg).to(device)
 
     sd = ckpt.get("model")
@@ -365,8 +413,7 @@ def build_model_from_ckpt(
         raise RuntimeError("checkpoint missing 'model'")
     if any(k.startswith("_orig_mod.") for k in sd.keys()):
         sd = {k[len("_orig_mod.") :]: v for k, v in sd.items()}
-    missing, unexpected = model.load_state_dict(sd, strict=False)
-    print(f"    missing keys: {len(missing)}, unexpected keys: {len(unexpected)}")
+    model.load_state_dict(sd, strict=True)
     return model, cfg
 
 
@@ -385,6 +432,20 @@ def score_and_advantage(
     r = torch.tensor(rewards, dtype=torch.float32)
     adv = group_advantages(r, eps=adv_eps, normalize_std=normalize_std)
     return adv, rewards
+
+
+def validate_grpo_args(args: argparse.Namespace) -> None:
+    """Reject configurations that cannot produce meaningful optimizer steps."""
+    validate_training_controls(
+        args,
+        nonnegative_fields=("log_every", "save_every", "dump_rollouts_every"),
+    )
+    if not 0 < args.max_new_tokens < args.seq_len:
+        raise ValueError("--max_new_tokens must satisfy 0 < value < --seq_len")
+    if args.group_size < 2:
+        raise ValueError("--group_size must be at least 2")
+    if args.groups_per_step <= 0:
+        raise ValueError("--groups_per_step must be positive")
 
 
 def main() -> None:
@@ -458,23 +519,25 @@ def main() -> None:
     ap.add_argument(
         "--resume",
         default="",
-        help="Resume a GRPO run from one of ITS OWN checkpoints (e.g. <out_dir>/latest.pt): "
-        "restores policy weights, optimizer/scaler state, and the step counter. "
-        "--init_ckpt must still point at the ORIGINAL starting checkpoint — the frozen KL "
-        "reference is rebuilt from it, never from the resumed policy.",
+        help="Exact continuation from this run's own GRPO checkpoint. Requires matching "
+        "arguments, input bytes, runtime, policy/optimizer/scaler, all RNG streams, loop "
+        "state, and deterministic prompt cursor. --init_ckpt must still point at the "
+        "original starting checkpoint; use --init_ckpt without --resume for a weights-only "
+        "new run. The frozen KL reference is rebuilt from it, never from the resumed policy.",
     )
 
     args = ap.parse_args()
 
+    validate_grpo_args(args)
+
     os.makedirs(args.out_dir, exist_ok=True)
     device = "cuda" if torch.cuda.is_available() else "cpu"
     random.seed(args.seed)
+    np.random.seed(args.seed)
     torch.manual_seed(args.seed)
     if device == "cuda":
         torch.cuda.manual_seed_all(args.seed)
 
-    if args.max_new_tokens >= args.seq_len:
-        raise ValueError("--max_new_tokens must be < --seq_len")
     max_prompt_len = args.seq_len - args.max_new_tokens
 
     tok = load_chat_tokenizer(args.tokenizer_path)
@@ -484,6 +547,75 @@ def main() -> None:
     pad_id = PAD_ID
     reward_fn = get_reward_fn(args.reward)
     print(f"[*] reward: {args.reward}")
+
+    preflight_datasets = {"train": args.train_jsonl}
+    if args.val_jsonl:
+        preflight_datasets["val"] = args.val_jsonl
+    report = run_jsonl_preflight(
+        stage="grpo",
+        datasets=preflight_datasets,
+        validate_record=lambda split, record: preflight_grpo_record(
+            split,
+            record,
+            tok=tok,
+            max_prompt_len=max_prompt_len,
+            default_system=args.default_system,
+        ),
+        report_path=os.path.join(args.out_dir, "posttrain_preflight.json"),
+        metadata={
+            "seq_len": args.seq_len,
+            "max_new_tokens": args.max_new_tokens,
+            "max_prompt_len": max_prompt_len,
+            "default_system": args.default_system,
+        },
+    )
+    tracker.log(
+        "preflight",
+        0,
+        status=report["status"],
+        records=report["total_records"],
+        valid=report["total_valid"],
+        rejected=report["total_rejected"],
+    )
+    require_preflight_passed(report)
+
+    resume_checkpoint: Mapping[str, Any] | None = None
+    start_step = 0
+    if args.resume:
+        loaded_resume = load_ckpt(args.resume)
+        if not isinstance(loaded_resume, Mapping):
+            raise RuntimeError("--resume checkpoint must be a mapping")
+        resume_checkpoint = loaded_resume
+        start_step = require_resume_step(
+            resume_checkpoint,
+            stage="grpo",
+            weights_only_hint="--init_ckpt",
+        )
+
+    resume_inputs: dict[str, str] = {
+        "tokenizer": args.tokenizer_path,
+        "train_jsonl": args.train_jsonl,
+        "init_ckpt": args.init_ckpt,
+    }
+    if args.val_jsonl:
+        resume_inputs["val_jsonl"] = args.val_jsonl
+    if args.ref_ckpt:
+        resume_inputs["ref_ckpt"] = args.ref_ckpt
+    resume_contract_base = build_resume_contract_base(
+        stage="grpo",
+        args=vars(args),
+        input_paths=resume_inputs,
+        dataset_size=int(report["splits"]["train"]["records"]),
+        batch_size=1,
+        batches_per_step=args.groups_per_step,
+        seed=args.seed,
+    )
+    if resume_checkpoint is not None:
+        validate_resume_contract(
+            resume_checkpoint,
+            resume_contract_for_step(resume_contract_base, start_step),
+            weights_only_hint="--init_ckpt",
+        )
 
     print(f"[*] loading policy init from: {args.init_ckpt}")
     init_ckpt = load_ckpt(args.init_ckpt)
@@ -515,29 +647,14 @@ def main() -> None:
     autocast_dtype = torch.float16 if use_fp16 else (torch.bfloat16 if use_bf16 else None)
     scaler = torch.amp.GradScaler("cuda", enabled=use_fp16)
 
-    start_step = 0
-    if args.resume and os.path.exists(args.resume):
-        ck = load_ckpt(args.resume)
-        sd = ck.get("model")
-        if sd is None:
-            raise RuntimeError("resume ckpt missing 'model'")
-        if any(k.startswith("_orig_mod.") for k in sd.keys()):
-            sd = {k[len("_orig_mod.") :]: v for k, v in sd.items()}
-        policy.load_state_dict(sd, strict=False)
-
-        opt = ck.get("optimizer") or ck.get("optim")
-        if opt is not None:
-            try:
-                optimizer.load_state_dict(opt)
-            except ValueError as e:
-                print(
-                    f"[warn] optimizer state incompatible (ckpt saved with a different "
-                    f"--optimizer?); starting with fresh optimizer state: {e}"
-                )
-        sc = ck.get("scaler")
-        if sc is not None and use_fp16:
-            scaler.load_state_dict(sc)
-        start_step = int(ck.get("step", 0))
+    if resume_checkpoint is not None:
+        restore_training_state(
+            resume_checkpoint,
+            model=policy,
+            optimizer=optimizer,
+            scaler=scaler,
+            use_fp16=use_fp16,
+        )
         print(
             f"[*] resumed policy from: {args.resume} at step={start_step} "
             f"(KL reference stays the one built from --init_ckpt/--ref_ckpt)"
@@ -549,13 +666,19 @@ def main() -> None:
         f"[*] completions/step = group_size({args.group_size}) * groups_per_step({args.groups_per_step})"
         f" = {args.group_size * args.groups_per_step}"
     )
+    train_batch_sampler = DeterministicEpochBatchSampler(
+        len(train_ds),
+        1,
+        seed=args.seed,
+        start_batch=start_step * args.groups_per_step,
+        drop_last=True,
+    )
     loader = DataLoader(
         train_ds,
-        batch_size=1,
-        shuffle=True,
+        batch_sampler=train_batch_sampler,
         num_workers=0,
         collate_fn=collate_passthrough,
-        drop_last=True,
+        generator=make_loader_generator(args.seed, 1),
     )
 
     def get_lr(step: int) -> float:
@@ -585,8 +708,38 @@ def main() -> None:
         with open(os.path.join(rdir, f"step_{step_no:06d}.txt"), "w", encoding="utf-8") as f:
             f.writelines(lines)
 
+    if resume_checkpoint is not None:
+        loop_state = resume_checkpoint.get("loop_state")
+        if not isinstance(loop_state, Mapping):
+            raise RuntimeError("GRPO exact resume checkpoint lacks loop_state")
+        restore_rng_state(resume_checkpoint["rng_state"])
+
     policy.train()
     step = start_step
+    last_saved_step: int | None = None
+
+    def save_training_checkpoint(checkpoint_step: int) -> None:
+        nonlocal last_saved_step
+        if last_saved_step == checkpoint_step:
+            return
+        ckpt = {
+            "step": checkpoint_step,
+            "model": policy.state_dict(),
+            "optimizer": optimizer.state_dict(),
+            "scaler": scaler.state_dict() if use_fp16 else None,
+            "cfg": asdict(cfg),
+            "args": vars(args),
+            "kind": "grpo",
+            "resume_contract": resume_contract_for_step(resume_contract_base, checkpoint_step),
+            "rng_state": capture_rng_state(),
+            "loop_state": {},
+        }
+        retained_path = os.path.join(args.out_dir, f"step_{checkpoint_step:06d}.pt")
+        save_checkpoint_atomic(retained_path, ckpt)
+        save_checkpoint_atomic(os.path.join(args.out_dir, "latest.pt"), ckpt)
+        last_saved_step = checkpoint_step
+        print(f"[ckpt] saved {retained_path}")
+
     data_iter = iter(loader)
     t0 = time.time()
 
@@ -710,20 +863,10 @@ def main() -> None:
             t0 = time.time()
 
         if args.save_every > 0 and step % args.save_every == 0:
-            ckpt = {
-                "step": step,
-                "model": policy.state_dict(),
-                "optimizer": optimizer.state_dict(),
-                "scaler": scaler.state_dict() if use_fp16 else None,
-                "cfg": asdict(cfg),
-                "args": vars(args),
-                "kind": "grpo",
-            }
-            save_checkpoint_atomic(os.path.join(args.out_dir, f"step_{step:06d}.pt"), ckpt)
-            save_checkpoint_atomic(os.path.join(args.out_dir, "latest.pt"), ckpt)
-            print(f"[ckpt] saved step_{step:06d}.pt")
+            save_training_checkpoint(step)
             tracker.render()
 
+    save_training_checkpoint(step)
     tracker.render()
     print("[done]")
 

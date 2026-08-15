@@ -43,13 +43,23 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
 
-from src.chat_template import load_chat_tokenizer  # noqa: E402
+from src.chat_template import (  # noqa: E402
+    DEFAULT_SYSTEM,
+    encode_prompt as chat_encode_prompt,
+    load_chat_tokenizer,
+    prepare_prompt_messages,
+    truncate_chat_sequence,
+)
 
 
 # -------------------------
 # Record conversion (pure, unit-tested)
 # -------------------------
-def code_bank_record_to_prompt(rec: dict[str, Any], tag: str = "[Code] ") -> dict | None:
+def code_bank_record_to_prompt(
+    rec: dict[str, Any],
+    tag: str = "[Code] ",
+    default_system: str = DEFAULT_SYSTEM,
+) -> dict | None:
     """Canonical code-prompt record -> GRPO prompt with tests for `code` reward.
 
     Returns None if the record lacks a prompt or unit tests (both required for a
@@ -61,8 +71,12 @@ def code_bank_record_to_prompt(rec: dict[str, Any], tag: str = "[Code] ") -> dic
     tests = rec.get("tests") or []
     if not prompt or not tests:
         return None
+    messages = prepare_prompt_messages(
+        [{"role": "user", "content": (tag + prompt) if tag else prompt}],
+        default_system,
+    )
     out: dict[str, Any] = {
-        "messages": [{"role": "user", "content": (tag + prompt) if tag else prompt}],
+        "messages": messages,
         "tests": list(tests),
         "meta": {**(rec.get("meta") or {}), "source": "code_bank"},
     }
@@ -72,18 +86,23 @@ def code_bank_record_to_prompt(rec: dict[str, Any], tag: str = "[Code] ") -> dic
     return out
 
 
-def messages_record_to_prompt(rec: dict[str, Any]) -> dict | None:
-    """`{"messages": [...]}` record -> prompt up to and including the last user
-    turn (drops a trailing assistant answer). Carries reward-relevant fields."""
-    msgs = rec.get("messages") or []
-    last_user = max(
-        (i for i, m in enumerate(msgs) if (m.get("role") or "").strip().lower() == "user"),
-        default=-1,
-    )
-    if last_user < 0:
+def messages_record_to_prompt(
+    rec: dict[str, Any],
+    default_system: str = DEFAULT_SYSTEM,
+) -> dict | None:
+    """Convert a valid SFT record to an explicit, canonical USER-ending prompt.
+
+    A final assistant answer is removed only through the shared explicit helper;
+    malformed roles or empty content fail rather than being silently skipped.
+    """
+    messages = rec.get("messages")
+    if messages is None:
         return None
+    if not isinstance(messages, list):
+        raise ValueError("messages must be a list")
+    prompt_messages = prepare_prompt_messages(messages, default_system)
     out: dict[str, Any] = {
-        "messages": msgs[: last_user + 1],
+        "messages": prompt_messages,
         "meta": {**(rec.get("meta") or {}), "source": "messages"},
     }
     for key in ("reference", "answer", "tests", "entry_point"):
@@ -108,22 +127,50 @@ def dedup_by_prompt(records: list[dict]) -> list[dict]:
     return out
 
 
-def prompt_token_len(rec: dict[str, Any], tok: Tokenizer) -> int:
-    text = "\n".join(m.get("content", "") for m in rec["messages"])
-    return len(tok.encode(text).ids)
+def prompt_token_len(
+    rec: dict[str, Any],
+    tok: Tokenizer,
+    default_system: str = DEFAULT_SYSTEM,
+) -> int:
+    """Canonical prompt length including BOS, system/role tokens, and cue."""
+    ids = chat_encode_prompt(tok, rec["messages"], default_system, mode="full_context")
+    return len(ids)
 
 
 def filter_by_prompt_tokens(
-    records: list[dict], tok: Tokenizer, min_tokens: int, max_tokens: int
+    records: list[dict],
+    tok: Tokenizer,
+    min_tokens: int,
+    max_tokens: int,
+    *,
+    max_prompt_len: int,
+    default_system: str = DEFAULT_SYSTEM,
+    rejected: list[dict[str, Any]] | None = None,
 ) -> list[dict]:
+    """Apply the same structural encoding/truncation budget as GRPO training."""
     out: list[dict] = []
-    for r in records:
-        n = prompt_token_len(r, tok)
-        if n < min_tokens:
+    for index, record in enumerate(records):
+        try:
+            ids = chat_encode_prompt(tok, record["messages"], default_system, mode="full_context")
+            kept_ids, _ = truncate_chat_sequence(ids, labels=None, max_len=max_prompt_len)
+            token_count = len(kept_ids)
+            if token_count < min_tokens:
+                raise ValueError(
+                    f"canonical prompt has {token_count} tokens, below minimum {min_tokens}"
+                )
+            if max_tokens > 0 and token_count > max_tokens:
+                raise ValueError(
+                    f"canonical prompt has {token_count} tokens, above maximum {max_tokens}"
+                )
+        except (KeyError, TypeError, ValueError) as exc:
+            if rejected is not None:
+                rejected.append({
+                    "record_index": index,
+                    "error_type": type(exc).__name__,
+                    "error": str(exc),
+                })
             continue
-        if max_tokens > 0 and n > max_tokens:
-            continue
-        out.append(r)
+        out.append(record)
     return out
 
 
@@ -173,6 +220,9 @@ def main() -> None:
     ap.add_argument("--tokenizer_path", required=True)
     ap.add_argument("--out_dir", required=True)
     ap.add_argument("--code_tag", default="[Code] ", help="prefix prepended to code prompts")
+    ap.add_argument("--seq_len", type=int, default=1024)
+    ap.add_argument("--max_new_tokens", type=int, default=128)
+    ap.add_argument("--default_system", default=DEFAULT_SYSTEM)
     ap.add_argument("--min_prompt_tokens", type=int, default=1)
     ap.add_argument("--max_prompt_tokens", type=int, default=384, help="0 disables the upper bound")
     ap.add_argument("--limit", type=int, default=0, help="cap total prompts (0 = no cap)")
@@ -182,6 +232,13 @@ def main() -> None:
 
     if not args.code_bank and not args.messages:
         ap.error("provide at least one of --code_bank / --messages")
+    if not 0 < args.max_new_tokens < args.seq_len:
+        ap.error("--max_new_tokens must satisfy 0 < value < --seq_len")
+    if args.min_prompt_tokens < 1:
+        ap.error("--min_prompt_tokens must be positive")
+    if args.max_prompt_tokens < 0:
+        ap.error("--max_prompt_tokens must be non-negative")
+    max_prompt_len = args.seq_len - args.max_new_tokens
 
     os.makedirs(args.out_dir, exist_ok=True)
     tok = load_chat_tokenizer(args.tokenizer_path)
@@ -190,14 +247,16 @@ def main() -> None:
     for path in args.code_bank:
         n0 = len(records)
         for rec in read_jsonl(path):
-            g = code_bank_record_to_prompt(rec, tag=args.code_tag)
+            g = code_bank_record_to_prompt(
+                rec, tag=args.code_tag, default_system=args.default_system
+            )
             if g is not None:
                 records.append(g)
         print(f"[code_bank] {path}: +{len(records) - n0} prompts")
     for path in args.messages:
         n0 = len(records)
         for rec in read_jsonl(path):
-            g = messages_record_to_prompt(rec)
+            g = messages_record_to_prompt(rec, default_system=args.default_system)
             if g is not None:
                 records.append(g)
         print(f"[messages] {path}: +{len(records) - n0} prompts")
@@ -207,11 +266,39 @@ def main() -> None:
     print(f"[dedup] {before} -> {len(records)}")
 
     before = len(records)
-    records = filter_by_prompt_tokens(records, tok, args.min_prompt_tokens, args.max_prompt_tokens)
-    print(
-        f"[filter tokens in [{args.min_prompt_tokens}, {args.max_prompt_tokens or '∞'}]] "
-        f"{before} -> {len(records)}"
+    rejected: list[dict[str, Any]] = []
+    records = filter_by_prompt_tokens(
+        records,
+        tok,
+        args.min_prompt_tokens,
+        args.max_prompt_tokens,
+        max_prompt_len=max_prompt_len,
+        default_system=args.default_system,
+        rejected=rejected,
     )
+    print(
+        f"[canonical token preflight: trainer_budget={max_prompt_len}, "
+        f"filter=[{args.min_prompt_tokens}, {args.max_prompt_tokens or '∞'}]] "
+        f"{before} -> {len(records)} (rejected={len(rejected)})"
+    )
+    preflight_report = {
+        "schema_version": 1,
+        "kind": "petitgpt_grpo_prepare_preflight",
+        "status": "passed" if records else "failed",
+        "seq_len": args.seq_len,
+        "max_new_tokens": args.max_new_tokens,
+        "max_prompt_len": max_prompt_len,
+        "input_records": before,
+        "accepted_records": len(records),
+        "rejected_records": len(rejected),
+        "errors": rejected[:50],
+        "errors_truncated": len(rejected) > 50,
+    }
+    with open(os.path.join(args.out_dir, "preflight_report.json"), "w", encoding="utf-8") as handle:
+        json.dump(preflight_report, handle, ensure_ascii=False, indent=2)
+        handle.write("\n")
+    if not records:
+        raise ValueError("no GRPO prompts survived canonical token-budget preflight")
 
     if args.limit and len(records) > args.limit:
         random.Random(args.seed).shuffle(records)

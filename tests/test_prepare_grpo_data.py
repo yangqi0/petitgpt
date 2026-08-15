@@ -5,9 +5,12 @@ import pytest
 from grpo.prepare_grpo_data import (
     code_bank_record_to_prompt,
     dedup_by_prompt,
+    filter_by_prompt_tokens,
     messages_record_to_prompt,
+    prompt_token_len,
     split_train_val,
 )
+from src.chat_template import DEFAULT_SYSTEM, encode_prompt as chat_encode_prompt
 
 
 def test_code_bank_conversion_carries_tests_and_entry_point():
@@ -19,7 +22,8 @@ def test_code_bank_conversion_carries_tests_and_entry_point():
     }
     out = code_bank_record_to_prompt(rec, tag="[Code] ")
     assert out["messages"] == [
-        {"role": "user", "content": "[Code] Write a function that adds two numbers."}
+        {"role": "system", "content": DEFAULT_SYSTEM},
+        {"role": "user", "content": "[Code] Write a function that adds two numbers."},
     ]
     assert out["tests"] == ["assert add(1, 2) == 3"]
     assert out["entry_point"] == "add"
@@ -36,7 +40,7 @@ def test_code_bank_entry_point_from_meta():
     rec = {"prompt": "p", "tests": ["assert g(1)==1"], "meta": {"entry_point": "g"}}
     out = code_bank_record_to_prompt(rec, tag="")
     assert out["entry_point"] == "g"
-    assert out["messages"][0]["content"] == "p"
+    assert out["messages"][-1]["content"] == "p"
 
 
 def test_messages_conversion_drops_trailing_assistant():
@@ -66,12 +70,27 @@ def test_messages_conversion_keeps_multiturn_up_to_last_user():
         ]
     }
     out = messages_record_to_prompt(rec)
-    assert [m["content"] for m in out["messages"]] == ["q1", "a1", "q2"]
+    assert [m["content"] for m in out["messages"]] == [
+        DEFAULT_SYSTEM,
+        "q1",
+        "a1",
+        "q2",
+    ]
 
 
-def test_messages_conversion_none_without_user():
-    assert messages_record_to_prompt({"messages": [{"role": "system", "content": "s"}]}) is None
-    assert messages_record_to_prompt({"messages": []}) is None
+def test_messages_conversion_rejects_missing_user_or_illegal_roles():
+    assert messages_record_to_prompt({}) is None
+    with pytest.raises(ValueError, match="at least one non-empty user"):
+        messages_record_to_prompt({"messages": [{"role": "system", "content": "s"}]})
+    with pytest.raises(ValueError, match="at least one non-empty user"):
+        messages_record_to_prompt({"messages": []})
+    with pytest.raises(ValueError, match="role order"):
+        messages_record_to_prompt({
+            "messages": [
+                {"role": "user", "content": "one"},
+                {"role": "user", "content": "two"},
+            ]
+        })
 
 
 def test_dedup_by_prompt():
@@ -80,6 +99,36 @@ def test_dedup_by_prompt():
     c = {"messages": [{"role": "user", "content": "different"}]}
     out = dedup_by_prompt([a, b, c])
     assert len(out) == 2
+
+
+def test_prompt_token_length_uses_canonical_roles_and_system(chat_tok):
+    record = code_bank_record_to_prompt({"prompt": "short prompt", "tests": ["assert True"]})
+    canonical = chat_encode_prompt(
+        chat_tok, record["messages"], default_system="", mode="full_context"
+    )
+    assert prompt_token_len(record, chat_tok, default_system="") == len(canonical)
+    assert len(canonical) > len(chat_tok.encode("short prompt").ids)
+
+
+def test_token_filter_rejects_prompt_that_cannot_fit_latest_user(chat_tok):
+    record = code_bank_record_to_prompt({
+        "prompt": "latest user content must remain completely intact",
+        "tests": ["assert True"],
+    })
+    full = chat_encode_prompt(chat_tok, record["messages"], default_system="", mode="full_context")
+    rejected = []
+    kept = filter_by_prompt_tokens(
+        [record],
+        chat_tok,
+        min_tokens=1,
+        max_tokens=0,
+        max_prompt_len=len(full) - 1,
+        default_system="",
+        rejected=rejected,
+    )
+    assert kept == []
+    assert len(rejected) == 1
+    assert "latest user-led suffix" in rejected[0]["error"]
 
 
 def test_split_train_val_sizes_and_disjoint():

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 """
 Train a Byte-Level BPE tokenizer for LLM pretraining/SFT.
@@ -40,10 +39,15 @@ python train_tokenizer.py \
 from __future__ import annotations
 
 import argparse
+import atexit
+from collections.abc import Iterator
+import hashlib
 import json
 import os
+from pathlib import Path
+import shutil
 import sys
-from collections.abc import Iterator
+import tempfile
 from typing import Any
 
 from tokenizers import Tokenizer, pre_tokenizers
@@ -57,23 +61,17 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
 
-from src.special_tokens import SPECIAL_TOKEN_IDS, SPECIAL_TOKENS  # noqa: E402
-
-# HF-transformers-compatible rendering of src/chat_template.py's token-level
-# format (works when special tokens are encoded as specials, the HF default).
-HF_CHAT_TEMPLATE = (
-    "{{ '[BOS]' }}"
-    "{% if messages[0]['role'] != 'system' %}"
-    "{{ '<|system|>You are a helpful assistant.' }}"
-    "{% endif %}"
-    "{% for m in messages %}"
-    "{% if m['role'] == 'assistant' %}"
-    "{{ '<|assistant|>' + m['content'] + '[EOS]' }}"
-    "{% else %}"
-    "{{ '<|' + m['role'] + '|>' + m['content'] }}"
-    "{% endif %}"
-    "{% endfor %}"
-    "{% if add_generation_prompt %}{{ '<|assistant|>' }}{% endif %}"
+from pretrain.build_pretrain_shards import (  # noqa: E402
+    _write_json_atomic,
+    clean_text,
+    cleaned_text_sha256,
+    load_exclusion_hash_manifest,
+)
+from src.special_tokens import (  # noqa: E402
+    CANONICAL_VOCAB_SIZE,
+    SPECIAL_TOKEN_IDS,
+    SPECIAL_TOKENS,
+    assert_tokenizer_contract,
 )
 
 
@@ -115,15 +113,64 @@ def iter_texts(
     fields: list[str],
     messages_key: str = "messages",
     allow_messages: bool = True,
+    exclusion_hash_sets: list[frozenset[str]] | None = None,
+    exclusion_cleaning: dict[str, Any] | None = None,
+    exclusion_stats: dict[str, Any] | None = None,
 ) -> Iterator[str]:
     """
     Stream text samples from one or more JSONL files.
 
     Important: we preserve whitespace and do NOT call strip() on text fields.
     """
+    hash_sets = exclusion_hash_sets or []
+    if hash_sets and exclusion_cleaning is None:
+        raise ValueError("exclusion_cleaning is required with exclusion hash sets")
+    stats = exclusion_stats if exclusion_stats is not None else {}
+    stats.setdefault("considered_samples", 0)
+    stats.setdefault("excluded_samples", 0)
+    stats.setdefault("yielded_samples", 0)
+    stats.setdefault("matched_per_manifest", [0 for _ in hash_sets])
+
+    def should_exclude(text: str) -> bool:
+        stats["considered_samples"] += 1
+        if not hash_sets:
+            stats["yielded_samples"] += 1
+            return False
+        assert exclusion_cleaning is not None
+        required = {
+            "strip_leading_noise",
+            "normalize_quotes",
+            "underscores_policy",
+            "min_chars",
+            "min_ascii_ratio",
+        }
+        if set(exclusion_cleaning) != required:
+            raise ValueError(
+                "exclusion manifest cleaning contract has unexpected keys: "
+                f"{sorted(exclusion_cleaning)}"
+            )
+        cleaned = clean_text(
+            text,
+            strip_leading_noise=bool(exclusion_cleaning["strip_leading_noise"]),
+            normalize_quotes=bool(exclusion_cleaning["normalize_quotes"]),
+            underscores_policy=str(exclusion_cleaning["underscores_policy"]),
+            min_chars=int(exclusion_cleaning["min_chars"]),
+            min_ascii_ratio=float(exclusion_cleaning["min_ascii_ratio"]),
+        )
+        if cleaned is not None:
+            value = cleaned_text_sha256(cleaned)
+            matched = [index for index, hashes in enumerate(hash_sets) if value in hashes]
+            if matched:
+                stats["excluded_samples"] += 1
+                for index in matched:
+                    stats["matched_per_manifest"][index] += 1
+                return True
+        stats["yielded_samples"] += 1
+        return False
+
     for p in paths:
-        with open(p, "r", encoding="utf-8") as f:
-            for lineno, raw_line in enumerate(f, start=1):
+        with open(p, encoding="utf-8") as f:
+            for raw_line in f:
                 # Only remove the trailing newline(s) from the JSONL file, not leading spaces.
                 line = raw_line.rstrip("\r\n")
                 if not line:
@@ -137,7 +184,8 @@ def iter_texts(
                 if allow_messages and messages_key in obj and isinstance(obj[messages_key], list):
                     rendered = _render_messages(obj[messages_key])
                     if rendered is not None:
-                        yield rendered
+                        if not should_exclude(rendered):
+                            yield rendered
                         continue
 
                 # 2) Plain fields: concatenate in the given order
@@ -148,7 +196,9 @@ def iter_texts(
                         parts.append(v)
 
                 if parts:
-                    yield "\n".join(parts)
+                    text = "\n".join(parts)
+                    if not should_exclude(text):
+                        yield text
 
 
 def build_tokenizer(add_prefix_space: bool) -> Tokenizer:
@@ -219,9 +269,75 @@ def main() -> None:
         default=2048,
         help="Write into tokenizer_config.json (informational).",
     )
+    ap.add_argument(
+        "--legacy_allow_noncanonical_contract",
+        action="store_true",
+        help=(
+            "DEBUG/TEST ONLY: permit non-32k, prefix-space, post-processor, "
+            "non-strict IDs, or missing reference exclusions. The manifest is "
+            "marked noncanonical and production consumers reject it."
+        ),
+    )
+    ap.add_argument(
+        "--exclude_hash_manifest",
+        type=Path,
+        action="append",
+        default=[],
+        help=(
+            "Repeatable pre-tokenizer reference-reserve exclusion manifest. "
+            "Matching samples never reach BPE training."
+        ),
+    )
     args = ap.parse_args()
 
-    os.makedirs(args.out_dir, exist_ok=True)
+    contract_issues: list[str] = []
+    if int(args.vocab_size) != CANONICAL_VOCAB_SIZE:
+        contract_issues.append(
+            f"vocab_size={args.vocab_size}, expected {CANONICAL_VOCAB_SIZE}"
+        )
+    if bool(args.add_prefix_space):
+        contract_issues.append("add_prefix_space=True")
+    if bool(args.add_bos_eos_post_processor):
+        contract_issues.append("automatic BOS/EOS post-processor enabled")
+    if not bool(args.strict_special_ids):
+        contract_issues.append("strict special-token IDs disabled")
+    if not args.exclude_hash_manifest:
+        contract_issues.append("reference-reserve exclusion manifest missing")
+    if contract_issues and not args.legacy_allow_noncanonical_contract:
+        raise SystemExit(
+            "noncanonical tokenizer release refused: " + "; ".join(contract_issues)
+        )
+
+    final_out_dir = Path(args.out_dir)
+    if os.path.lexists(final_out_dir):
+        raise FileExistsError(
+            f"refusing to replace existing tokenizer output path: {final_out_dir}"
+        )
+    final_out_dir.parent.mkdir(parents=True, exist_ok=True)
+    staging_dir = Path(
+        tempfile.mkdtemp(
+            prefix=f".{final_out_dir.name}.building-",
+            dir=str(final_out_dir.parent),
+        )
+    )
+
+    def cleanup_staging() -> None:
+        shutil.rmtree(staging_dir, ignore_errors=True)
+
+    atexit.register(cleanup_staging)
+
+    exclusion_hash_sets: list[frozenset[str]] = []
+    exclusion_manifests: list[dict[str, Any]] = []
+    exclusion_cleaning: dict[str, Any] | None = None
+    for path in args.exclude_hash_manifest:
+        hashes, metadata = load_exclusion_hash_manifest(
+            path,
+            expected_cleaning=exclusion_cleaning,
+        )
+        if exclusion_cleaning is None:
+            exclusion_cleaning = metadata["cleaning"]
+        exclusion_hash_sets.append(hashes)
+        exclusion_manifests.append(metadata)
 
     tok = build_tokenizer(add_prefix_space=args.add_prefix_space)
 
@@ -234,11 +350,15 @@ def main() -> None:
     )
 
     allow_messages = not args.no_messages
+    exclusion_stats: dict[str, Any] = {}
     iterator = iter_texts(
         paths=args.data,
         fields=args.fields,
         messages_key=args.messages_key,
         allow_messages=allow_messages,
+        exclusion_hash_sets=exclusion_hash_sets,
+        exclusion_cleaning=exclusion_cleaning,
+        exclusion_stats=exclusion_stats,
     )
     tok.train_from_iterator(iterator, trainer=trainer)
 
@@ -257,10 +377,12 @@ def main() -> None:
     maybe_add_post_processor(tok, enabled=args.add_bos_eos_post_processor)
 
     # --- Save artifacts ---
-    tokenizer_path = os.path.join(args.out_dir, "tokenizer.json")
+    tokenizer_path = str(staging_dir / "tokenizer.json")
     tok.save(tokenizer_path)
+    if not contract_issues:
+        assert_tokenizer_contract(tokenizer_path)
 
-    with open(os.path.join(args.out_dir, "tokenizer_config.json"), "w", encoding="utf-8") as f:
+    with open(staging_dir / "tokenizer_config.json", "w", encoding="utf-8") as f:
         json.dump(
             {
                 "tokenizer_class": "PreTrainedTokenizerFast",
@@ -272,14 +394,13 @@ def main() -> None:
                 "unk_token": "[UNK]",
                 "pad_token": "[PAD]",
                 "additional_special_tokens": ["<|system|>", "<|user|>", "<|assistant|>"],
-                "chat_template": HF_CHAT_TEMPLATE,
             },
             f,
             ensure_ascii=False,
             indent=2,
         )
 
-    with open(os.path.join(args.out_dir, "special_tokens_map.json"), "w", encoding="utf-8") as f:
+    with open(staging_dir / "special_tokens_map.json", "w", encoding="utf-8") as f:
         json.dump(
             {
                 "bos_token": "[BOS]",
@@ -293,7 +414,64 @@ def main() -> None:
             indent=2,
         )
 
-    print("Saved tokenizer to:", args.out_dir)
+    tokenizer_sha256 = hashlib.sha256(Path(tokenizer_path).read_bytes()).hexdigest()
+    for index, metadata in enumerate(exclusion_manifests):
+        metadata["matched_samples"] = exclusion_stats["matched_per_manifest"][index]
+    release_manifest = {
+        "schema_version": 2,
+        "kind": "petitgpt_tokenizer_release",
+        "status": "complete",
+        "contract": {
+            "canonical": not contract_issues,
+            "issues": contract_issues,
+            "legacy_allow_noncanonical_contract": bool(
+                args.legacy_allow_noncanonical_contract
+            ),
+        },
+        "publication": "sibling_staging_then_atomic_rename",
+        "tokenizer_sha256": tokenizer_sha256,
+        "vocab_size": tok.get_vocab_size(),
+        "special_token_ids": tok2id,
+        "training": {
+            "data": list(args.data),
+            "fields": list(args.fields),
+            "messages_key": args.messages_key,
+            "allow_messages": allow_messages,
+            "vocab_size_target": args.vocab_size,
+            "min_frequency": args.min_freq,
+            "add_prefix_space": args.add_prefix_space,
+            "post_processor_enabled": args.add_bos_eos_post_processor,
+        },
+        "reference_reserve_exclusion": {
+            "enabled": bool(exclusion_hash_sets),
+            "hash_algorithm": (
+                exclusion_manifests[0]["hash_algorithm"]
+                if exclusion_manifests
+                else None
+            ),
+            "cleaning": exclusion_cleaning,
+            "manifest_count": len(exclusion_manifests),
+            "union_hash_count": len(set().union(*exclusion_hash_sets))
+            if exclusion_hash_sets
+            else 0,
+            "considered_samples": exclusion_stats["considered_samples"],
+            "excluded_samples": exclusion_stats["excluded_samples"],
+            "yielded_samples": exclusion_stats["yielded_samples"],
+            "manifests": exclusion_manifests,
+        },
+    }
+    _write_json_atomic(
+        staging_dir / "tokenizer_release_manifest.json", release_manifest
+    )
+
+    if os.path.lexists(final_out_dir):
+        raise FileExistsError(
+            f"output path appeared during tokenizer training: {final_out_dir}"
+        )
+    os.rename(staging_dir, final_out_dir)
+    atexit.unregister(cleanup_staging)
+
+    print("Saved tokenizer to:", final_out_dir)
     print("vocab_size =", tok.get_vocab_size())
     print("add_prefix_space =", args.add_prefix_space)
     print("post_processor(BOS/EOS) =", args.add_bos_eos_post_processor)

@@ -5,9 +5,13 @@ recompute while doing O(1)-length forwards per step, so every test here is an
 equivalence check against the plain forward. All CPU, tiny models.
 """
 
+import pytest
 import torch
 
 from src.model import GPT, GPTConfig
+
+# Every equivalence test runs for MQA (1), GQA (2) and plain MHA (4 == n_heads).
+KV_HEAD_VARIANTS = [1, 2, 4]
 
 
 def _cfg(**kw):
@@ -16,6 +20,7 @@ def _cfg(**kw):
         n_layers=3,
         d_model=48,
         n_heads=4,
+        n_kv_heads=2,
         d_ff=128,
         max_seq_len=64,
         tie_embeddings=True,
@@ -33,10 +38,11 @@ def test_plain_forward_unchanged_returns_tensor():
     assert out.shape == (2, 10, 64)
 
 
-def test_prefill_cache_matches_plain_forward():
+@pytest.mark.parametrize("n_kv_heads", KV_HEAD_VARIANTS)
+def test_prefill_cache_matches_plain_forward(n_kv_heads):
     """use_cache prefill returns the same logits as the plain forward, plus a
-    per-layer cache of the right shape."""
-    cfg = _cfg()
+    per-layer cache of the right (un-expanded n_kv_heads) shape."""
+    cfg = _cfg(n_kv_heads=n_kv_heads)
     model = GPT(cfg).eval()
     ids = torch.randint(0, cfg.vocab_size, (2, 12))
     with torch.no_grad():
@@ -45,14 +51,15 @@ def test_prefill_cache_matches_plain_forward():
     assert torch.allclose(plain, cached, atol=1e-5)
     assert len(past) == cfg.n_layers
     for k, v in past:
-        assert k.shape == (2, cfg.n_heads, 12, cfg.d_model // cfg.n_heads)
+        assert k.shape == (2, cfg.n_kv_heads, 12, cfg.d_model // cfg.n_heads)
         assert v.shape == k.shape
 
 
-def test_incremental_decode_matches_full_recompute():
+@pytest.mark.parametrize("n_kv_heads", KV_HEAD_VARIANTS)
+def test_incremental_decode_matches_full_recompute(n_kv_heads):
     """Feeding tokens one at a time through the cache must reproduce, at each
     step, the last-position logits of a full forward over the prefix."""
-    cfg = _cfg()
+    cfg = _cfg(n_kv_heads=n_kv_heads)
     model = GPT(cfg).eval()
     torch.manual_seed(0)
     full_seq = torch.randint(0, cfg.vocab_size, (1, 20))
@@ -72,9 +79,10 @@ def test_incremental_decode_matches_full_recompute():
     assert past[0][0].size(2) == full_seq.size(1)
 
 
-def test_generate_greedy_matches_naive_recompute():
+@pytest.mark.parametrize("n_kv_heads", KV_HEAD_VARIANTS)
+def test_generate_greedy_matches_naive_recompute(n_kv_heads):
     """Cached greedy generate == greedy decoding by full recompute each step."""
-    cfg = _cfg()
+    cfg = _cfg(n_kv_heads=n_kv_heads)
     model = GPT(cfg).eval()
     torch.manual_seed(1)
     prompt = torch.randint(0, cfg.vocab_size, (1, 6))
