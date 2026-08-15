@@ -265,16 +265,8 @@ def _insufficient_common_slice(
     }
 
 
-def build_python_p1_comparison(
-    config: ComparisonConfig,
-    *,
-    verified_reports: tuple[
-        tuple[Mapping[str, Any], str],
-        tuple[Mapping[str, Any], str],
-    ]
-    | None = None,
-) -> dict[str, Any]:
-    """Validate and build a comparison without publishing an artifact."""
+def compare_python_p1(config: ComparisonConfig) -> Path:
+    """Validate and compare exactly one primary and one Stack-Edu arm."""
     if not _SHA256_RE.fullmatch(config.policy_sha256):
         raise ComparisonError("policy_sha256 must be an exact lowercase SHA-256")
     if config.enforce_ignored_output:
@@ -282,14 +274,11 @@ def build_python_p1_comparison(
             _require_git_ignored(config.output_dir, label="comparison output directory")
         except AnalysisError as exc:
             raise ComparisonError(str(exc)) from exc
-    if verified_reports is None:
-        try:
-            primary, primary_sha = load_analysis_report(config.primary_report)
-            stack, stack_sha = load_analysis_report(config.stack_report)
-        except AnalysisError as exc:
-            raise ComparisonError(str(exc)) from exc
-    else:
-        (primary, primary_sha), (stack, stack_sha) = verified_reports
+    try:
+        primary, primary_sha = load_analysis_report(config.primary_report)
+        stack, stack_sha = load_analysis_report(config.stack_report)
+    except AnalysisError as exc:
+        raise ComparisonError(str(exc)) from exc
     _validate_report(
         primary,
         expected_role="primary",
@@ -491,12 +480,6 @@ def build_python_p1_comparison(
             "individual_identity_hashes": 0,
         },
     }
-    return report
-
-
-def compare_python_p1(config: ComparisonConfig) -> Path:
-    """Validate, compare, and publish exactly one report for each P1 arm."""
-    report = build_python_p1_comparison(config)
     return _publish_addressed_json(config.output_dir, "python-p1-comparison", report)
 
 
