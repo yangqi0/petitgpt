@@ -76,6 +76,7 @@ def tiny_cfg() -> GPTConfig:
         n_layers=3,
         d_model=64,
         n_heads=4,
+        n_kv_heads=2,  # GQA, like the canonical config
         d_ff=160,
         max_seq_len=64,
         dropout=0.0,

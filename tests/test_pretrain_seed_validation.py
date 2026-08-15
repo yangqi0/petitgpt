@@ -125,7 +125,7 @@ def test_strict_run_contract_records_all_seed_and_validation_controls(module, mo
         args,
         {"vocab_size": 32_000},
         "tokenizer-sha256",
-        parameter_count={"status": "passed", "actual_total": 133_128_960},
+        parameter_count={"status": "passed", "actual_total": 124_635_456},
     )
 
     assert contract["model_seed"] == 7
@@ -138,7 +138,7 @@ def test_strict_run_contract_records_all_seed_and_validation_controls(module, mo
     assert contract["rng_consumers"]["add_bos_to_prompts"] is True
     assert contract["parameter_count"] == {
         "status": "passed",
-        "actual_total": 133_128_960,
+        "actual_total": 124_635_456,
     }
 
 

@@ -67,7 +67,7 @@ from src.chat_template import (  # noqa: E402
     pad_or_truncate,
     truncate_chat_sequence,
 )
-from src.model import GPT, GPTConfig  # noqa: E402
+from src.model import GPT, GPTConfig, gpt_config_from_checkpoint_dict  # noqa: E402
 from src.optim import build_optimizer  # noqa: E402
 from src.posttrain_preflight import (  # noqa: E402
     require_preflight_passed,
@@ -312,7 +312,7 @@ def build_model_from_ckpt(ckpt: dict[str, Any], vocab_size: int, seq_len: int, d
     cfg_dict = dict(cfg_dict)
     cfg_dict["vocab_size"] = vocab_size
     cfg_dict["max_seq_len"] = seq_len
-    cfg = GPTConfig(**cfg_dict)
+    cfg = gpt_config_from_checkpoint_dict(cfg_dict)
     model = GPT(cfg).to(device)
 
     sd = ckpt.get("model")

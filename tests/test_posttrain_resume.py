@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import copy
-from dataclasses import asdict
+from dataclasses import asdict, replace
 from pathlib import Path
 import random
 from types import SimpleNamespace
@@ -391,6 +391,32 @@ def test_posttrain_initialization_rejects_partial_model_state(builder, tiny_cfg)
             seq_len=tiny_cfg.max_seq_len,
             device="cpu",
         )
+
+
+@pytest.mark.parametrize(
+    "builder",
+    [build_dpo_model_from_ckpt, build_grpo_model_from_ckpt],
+)
+def test_posttrain_initialization_accepts_pre_gqa_checkpoint_config(builder, tiny_cfg):
+    """Pre-GQA checkpoints carry no n_kv_heads in their serialized config; the
+    rebuild path must default to plain MHA (n_kv_heads == n_heads) and load the
+    legacy fused-QKV weights bit-exactly."""
+    cfg = replace(tiny_cfg, n_kv_heads=tiny_cfg.n_heads)
+    source = GPT(cfg).eval()
+    legacy_cfg_dict = asdict(cfg)
+    del legacy_cfg_dict["n_kv_heads"]
+    checkpoint = {"cfg": legacy_cfg_dict, "model": source.state_dict()}
+    rebuilt, rebuilt_cfg = builder(
+        checkpoint,
+        vocab_size=cfg.vocab_size,
+        seq_len=cfg.max_seq_len,
+        device="cpu",
+    )
+    assert rebuilt_cfg.n_kv_heads == cfg.n_heads
+    assert rebuilt.blocks[0].attn.qkv.weight.shape == (3 * cfg.d_model, cfg.d_model)
+    ids = torch.randint(0, cfg.vocab_size, (2, 8))
+    with torch.no_grad():
+        assert torch.allclose(rebuilt.eval()(ids), source(ids), atol=1e-6)
 
 
 def test_posttrain_entrypoints_have_no_legacy_resume_fallback():

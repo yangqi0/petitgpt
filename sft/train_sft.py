@@ -47,7 +47,7 @@ from src.chat_template import (  # noqa: E402
     prepare_prompt_messages,
     truncate_chat_sequence,
 )
-from src.model import GPT, GPTConfig  # noqa: E402
+from src.model import GPT, GPTConfig, gpt_config_from_checkpoint_dict  # noqa: E402
 from src.optim import build_optimizer  # noqa: E402
 from src.posttrain_preflight import (  # noqa: E402
     require_preflight_passed,
@@ -308,10 +308,11 @@ def build_arg_parser() -> argparse.ArgumentParser:
     )
     ap.add_argument("--default_system", default="You are a helpful assistant.")
 
-    ap.add_argument("--n_layers", type=int, default=16)
-    ap.add_argument("--d_model", type=int, default=768)
-    ap.add_argument("--n_heads", type=int, default=12)
-    ap.add_argument("--d_ff", type=int, default=1920)
+    ap.add_argument("--n_layers", type=int, default=30)
+    ap.add_argument("--d_model", type=int, default=576)
+    ap.add_argument("--n_heads", type=int, default=9)
+    ap.add_argument("--n_kv_heads", type=int, default=3)
+    ap.add_argument("--d_ff", type=int, default=1536)
     ap.add_argument("--dropout", type=float, default=0.0)
     ap.add_argument("--tie_embeddings", action="store_true")
 
@@ -529,7 +530,7 @@ def main(
         cfg_dict = dict(cfg_dict)
         cfg_dict["vocab_size"] = vocab_size
         cfg_dict["max_seq_len"] = args.seq_len
-        cfg = GPTConfig(**cfg_dict)
+        cfg = gpt_config_from_checkpoint_dict(cfg_dict)
         model = GPT(cfg).to(device)
 
         sd = ck.get("model")
@@ -546,6 +547,7 @@ def main(
             n_layers=args.n_layers,
             d_model=args.d_model,
             n_heads=args.n_heads,
+            n_kv_heads=args.n_kv_heads,
             d_ff=args.d_ff,
             max_seq_len=args.seq_len,
             dropout=args.dropout,

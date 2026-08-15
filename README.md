@@ -12,7 +12,7 @@ The project covers:
 - DPO (Direct Preference Optimization) post-training,
 - GRPO (Group Relative Policy Optimization) online RL post-training.
 
-The canonical 32k-vocabulary dense model has exactly **133,128,960 parameters** (about **133M**). The entire training process is designed for a single RTX 4090 GPU. A **Mixture-of-Experts (MoE)** variant (`src/model_moe.py`) and a **Muon** optimizer (`src/optim.py`, now the default) have also been added — see [Section 3](#3-model-overview).
+The canonical 32k-vocabulary dense model has exactly **124,635,456 parameters** (about **125M**; the MobileLLM/SmolLM2-style deep-thin GQA shape adopted 2026-08-15 — the historical runs described below used the earlier 16-layer/768-dim MHA config with 133,128,960 parameters). The entire training process is designed for a single RTX 4090 GPU. A **Mixture-of-Experts (MoE)** variant (`src/model_moe.py`) and a **Muon** optimizer (`src/optim.py`, now the default) have also been added — see [Section 3](#3-model-overview).
 
 ---
 
@@ -54,15 +54,13 @@ The project has completed several major stages:
 
 ## 3. Model Overview
 
-The main model is a GPT-style decoder-only Transformer with 133,128,960 parameters in the canonical configuration.
-
-A typical configuration used in the project is close to:
+The main model is a GPT-style decoder-only Transformer with 124,635,456 parameters in the canonical configuration (since 2026-08-15; the historical runs in this README used the earlier 16L × 768d × 12h MHA config with 133,128,960 parameters):
 
 ```text
-n_layers   = 16
-d_model    = 768
-n_heads    = 12
-d_ff       = 1920
+n_layers   = 30
+d_model    = 576
+n_heads    = 9   (3 KV heads, GQA)
+d_ff       = 1536
 seq_len    = 2048
 vocab_size = 32000
 RoPE       = enabled
@@ -75,7 +73,7 @@ The tokenizer is a 32k BPE tokenizer stored at:
 tokenizer/tokenizer.json
 ```
 
-The architecture is a LLaMA-style modernized GPT: pre-norm with RMSNorm, RoPE, SwiGLU MLPs, fused QKV projection using `F.scaled_dot_product_attention`, tied input/output embeddings, and GPT-2 depth-scaled residual initialization. See `src/model.py`.
+The architecture is a LLaMA-style modernized GPT: pre-norm with RMSNorm, RoPE, SwiGLU MLPs, fused QKV projection with grouped-query attention using `F.scaled_dot_product_attention`, tied input/output embeddings, and GPT-2 depth-scaled residual initialization. See `src/model.py`.
 
 ### 3.1 Mixture-of-Experts variant
 

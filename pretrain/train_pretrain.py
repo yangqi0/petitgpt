@@ -1250,10 +1250,11 @@ def parse_args() -> argparse.Namespace:
     # Model
     ap.add_argument("--vocab_size", type=int, default=32000)
     ap.add_argument("--seq_len", type=int, default=2048)
-    ap.add_argument("--layers", type=int, default=16)
-    ap.add_argument("--d_model", type=int, default=768)
-    ap.add_argument("--n_heads", type=int, default=12)
-    ap.add_argument("--d_ff", type=int, default=1920)
+    ap.add_argument("--layers", type=int, default=30)
+    ap.add_argument("--d_model", type=int, default=576)
+    ap.add_argument("--n_heads", type=int, default=9)
+    ap.add_argument("--n_kv_heads", type=int, default=3)
+    ap.add_argument("--d_ff", type=int, default=1536)
     ap.add_argument("--dropout", type=float, default=0.0)
 
     # Special tokens
@@ -1495,6 +1496,7 @@ def main() -> None:
         n_layers=int(args.layers),
         d_model=int(args.d_model),
         n_heads=int(args.n_heads),
+        n_kv_heads=int(args.n_kv_heads),
         d_ff=int(args.d_ff),
         max_seq_len=int(args.seq_len),
         dropout=float(args.dropout),

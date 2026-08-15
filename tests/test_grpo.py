@@ -32,6 +32,7 @@ def _tiny_model():
         n_layers=2,
         d_model=32,
         n_heads=4,
+        n_kv_heads=2,
         d_ff=80,
         max_seq_len=64,
         tie_embeddings=True,

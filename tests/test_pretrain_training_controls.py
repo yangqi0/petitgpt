@@ -78,9 +78,9 @@ def test_parameter_count_audit_locks_canonical_and_allows_explicit_experiments(m
     audit = module.audit_gpt_parameter_count(canonical_model, canonical_cfg)
 
     assert audit["status"] == "passed"
-    assert audit["actual_total"] == 133_128_960
-    assert audit["derived_expected_total"] == 133_128_960
-    assert audit["canonical_expected_total"] == 133_128_960
+    assert audit["actual_total"] == 124_635_456
+    assert audit["derived_expected_total"] == 124_635_456
+    assert audit["canonical_expected_total"] == 124_635_456
     assert audit["canonical_parameterization"] is True
     assert audit["canonical_match"] is True
 
@@ -95,6 +95,7 @@ def test_parameter_count_audit_locks_canonical_and_allows_explicit_experiments(m
         n_layers=2,
         d_model=128,
         n_heads=4,
+        n_kv_heads=2,
         d_ff=320,
     )
     with torch.device("meta"):

@@ -169,7 +169,7 @@ def _load_ckpt_and_build_model(
     - ckpt["model"]   (state_dict)
     Also tries a few common fallbacks.
     """
-    from src.model import GPT, GPTConfig  # local import
+    from src.model import GPT, gpt_config_from_checkpoint_dict  # local import
 
     ckpt = torch.load(ckpt_path, map_location="cpu")
     if not isinstance(ckpt, dict):
@@ -189,7 +189,7 @@ def _load_ckpt_and_build_model(
         keys = sorted(list(ckpt.keys()))
         raise KeyError(f"Cannot find config in ckpt. Available keys: {keys}")
 
-    cfg = GPTConfig(**cfg_dict)
+    cfg = gpt_config_from_checkpoint_dict(cfg_dict)
     model = GPT(cfg)
 
     sd = None

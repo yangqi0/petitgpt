@@ -11,10 +11,11 @@ import torch.nn.functional as F
 @dataclass
 class GPTConfig:
     vocab_size: int = 32000
-    n_layers: int = 16
-    d_model: int = 768
-    n_heads: int = 12
-    d_ff: int = 1920  # SwiGLU: ~2.5x d_model (matches the trained 135M-class config)
+    n_layers: int = 30
+    d_model: int = 576
+    n_heads: int = 9
+    n_kv_heads: int = 3  # GQA KV heads; == n_heads is plain MHA (pre-GQA checkpoints)
+    d_ff: int = 1536  # SwiGLU: ~2.67x d_model (MobileLLM/SmolLM2-135M deep-thin shape)
     max_seq_len: int = 2048
     dropout: float = 0.0
     tie_embeddings: bool = True
@@ -24,13 +25,14 @@ class GPTConfig:
     rope_pct: float = 1.0  # fraction of head_dim to rotate (1.0 = full head_dim)
 
 
-CANONICAL_DENSE_PARAMETER_COUNT = 133_128_960
+CANONICAL_DENSE_PARAMETER_COUNT = 124_635_456
 _CANONICAL_PARAMETERIZATION = {
     "vocab_size": 32_000,
-    "n_layers": 16,
-    "d_model": 768,
-    "n_heads": 12,
-    "d_ff": 1_920,
+    "n_layers": 30,
+    "d_model": 576,
+    "n_heads": 9,
+    "n_kv_heads": 3,
+    "d_ff": 1_536,
     "tie_embeddings": True,
 }
 
@@ -42,6 +44,7 @@ def expected_gpt_parameter_count(cfg: GPTConfig) -> int:
         "n_layers": cfg.n_layers,
         "d_model": cfg.d_model,
         "n_heads": cfg.n_heads,
+        "n_kv_heads": cfg.n_kv_heads,
         "d_ff": cfg.d_ff,
     }
     for name, value in integer_fields.items():
@@ -49,10 +52,15 @@ def expected_gpt_parameter_count(cfg: GPTConfig) -> int:
             raise ValueError(f"GPTConfig.{name} must be a positive integer")
     if cfg.d_model % cfg.n_heads:
         raise ValueError("GPTConfig.d_model must be divisible by n_heads")
+    if cfg.n_heads % cfg.n_kv_heads:
+        raise ValueError("GPTConfig.n_heads must be divisible by n_kv_heads")
 
+    head_dim = cfg.d_model // cfg.n_heads
+    kv_dim = cfg.n_kv_heads * head_dim
     token_matrices = 1 if cfg.tie_embeddings else 2
     embeddings = token_matrices * cfg.vocab_size * cfg.d_model
-    attention = 4 * cfg.d_model * cfg.d_model
+    # q + output projections are d_model x d_model; k and v are d_model x kv_dim (GQA)
+    attention = 2 * cfg.d_model * cfg.d_model + 2 * cfg.d_model * kv_dim
     swiglu = 3 * cfg.d_model * cfg.d_ff
     block_norms = 2 * cfg.d_model
     final_norm = cfg.d_model
@@ -92,6 +100,17 @@ def audit_gpt_parameter_count(model: nn.Module, cfg: GPTConfig) -> dict[str, int
         "canonical_expected_total": CANONICAL_DENSE_PARAMETER_COUNT,
         "canonical_match": canonical and actual == CANONICAL_DENSE_PARAMETER_COUNT,
     }
+
+
+def gpt_config_from_checkpoint_dict(cfg_dict: dict) -> GPTConfig:
+    """Rebuild a GPTConfig from a checkpoint's serialized config dict.
+
+    Pre-GQA checkpoints carry no n_kv_heads; absence means plain MHA
+    (n_kv_heads == n_heads), whose fused-QKV weight layout is unchanged.
+    """
+    cfg_dict = dict(cfg_dict)
+    cfg_dict.setdefault("n_kv_heads", cfg_dict["n_heads"])
+    return GPTConfig(**cfg_dict)
 
 
 class RMSNorm(nn.Module):
@@ -199,11 +218,14 @@ class CausalSelfAttention(nn.Module):
     def __init__(self, cfg: GPTConfig):
         super().__init__()
         assert cfg.d_model % cfg.n_heads == 0
+        assert cfg.n_heads % cfg.n_kv_heads == 0
         self.cfg = cfg
         self.head_dim = cfg.d_model // cfg.n_heads
+        self.kv_dim = cfg.n_kv_heads * self.head_dim
 
-        # QKV fused: one matmul instead of three
-        self.qkv = nn.Linear(cfg.d_model, 3 * cfg.d_model, bias=False)
+        # QKV fused: one matmul instead of three. K/V carry n_kv_heads (GQA);
+        # n_kv_heads == n_heads is plain MHA with the historical 3*d_model layout.
+        self.qkv = nn.Linear(cfg.d_model, cfg.d_model + 2 * self.kv_dim, bias=False)
         # residual branch output projection
         self.proj = nn.Linear(cfg.d_model, cfg.d_model, bias=False)
         self.drop = nn.Dropout(cfg.dropout)
@@ -239,21 +261,30 @@ class CausalSelfAttention(nn.Module):
                 f"cache length {past_len + T} exceeds max_seq_len={self.cfg.max_seq_len}"
             )
 
-        qkv = self.qkv(x)  # [B, T, 3C]
-        q, k, v = qkv.chunk(3, dim=-1)
+        qkv = self.qkv(x)  # [B, T, C + 2*kv_dim]
+        q, k, v = qkv.split([C, self.kv_dim, self.kv_dim], dim=-1)
 
         q = q.view(B, T, self.cfg.n_heads, self.head_dim).transpose(1, 2)  # [B,nH,T,Hd]
-        k = k.view(B, T, self.cfg.n_heads, self.head_dim).transpose(1, 2)
-        v = v.view(B, T, self.cfg.n_heads, self.head_dim).transpose(1, 2)
+        k = k.view(B, T, self.cfg.n_kv_heads, self.head_dim).transpose(1, 2)  # [B,nKV,T,Hd]
+        v = v.view(B, T, self.cfg.n_kv_heads, self.head_dim).transpose(1, 2)
 
         # RoPE rotates only the new tokens, at their absolute positions.
         q, k = self.rope(q, k, seq_len=T, offset=past_len)
 
-        # Prepend cached keys/values (already rotated when they were new).
+        # Prepend cached keys/values (already rotated when they were new). The
+        # cache stays un-expanded at n_kv_heads so its memory reflects GQA.
         if past_kv is not None:
             k = torch.cat([past_kv[0], k], dim=2)
             v = torch.cat([past_kv[1], v], dim=2)
         present = (k, v) if use_cache else None
+
+        # Expand grouped KV heads to the full head count for attention. KV head g
+        # serves query heads [g*rep, (g+1)*rep) — repeat_interleave matches SDPA's
+        # enable_gqa grouping (torch >= 2.5), which can replace this someday.
+        if self.cfg.n_kv_heads != self.cfg.n_heads:
+            rep = self.cfg.n_heads // self.cfg.n_kv_heads
+            k = k.repeat_interleave(rep, dim=1)
+            v = v.repeat_interleave(rep, dim=1)
 
         dropout_p = float(self.cfg.dropout) if (self.training and self.cfg.dropout > 0) else 0.0
 
