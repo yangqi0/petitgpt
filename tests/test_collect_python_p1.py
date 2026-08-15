@@ -304,6 +304,57 @@ def test_source_errors_expose_only_categories_and_numeric_positions():
     assert "DO_NOT_EXPOSE_SYNTAX_SOURCE" not in serialized
 
 
+def test_syntax_error_positions_accept_only_python_minus_one_offset_sentinel():
+    evidence = {
+        "category": "IndentationError",
+        "line": 2,
+        "offset": 4,
+        "end_line": 2,
+        "end_offset": 7,
+    }
+    p1._validate_source_error_evidence(evidence, syntax=True)
+
+    for field in ("offset", "end_offset"):
+        sentinel = {**evidence, field: -1}
+        p1._validate_source_error_evidence(sentinel, syntax=True)
+
+    p1._validate_source_error_evidence(
+        {
+            "category": "ValueError",
+            "line": None,
+            "offset": None,
+            "end_line": None,
+            "end_offset": None,
+        },
+        syntax=True,
+    )
+
+    for field in ("line", "end_line"):
+        for invalid in (0, -1):
+            with pytest.raises(CollectionError, match="below 1"):
+                p1._validate_source_error_evidence(
+                    {**evidence, field: invalid},
+                    syntax=True,
+                )
+
+    for field in ("offset", "end_offset"):
+        with pytest.raises(CollectionError, match="must be -1 or a positive integer"):
+            p1._validate_source_error_evidence(
+                {**evidence, field: 0},
+                syntax=True,
+            )
+        with pytest.raises(CollectionError, match="below -1"):
+            p1._validate_source_error_evidence(
+                {**evidence, field: -2},
+                syntax=True,
+            )
+        with pytest.raises(CollectionError, match="must be an integer"):
+            p1._validate_source_error_evidence(
+                {**evidence, field: -1.0},
+                syntax=True,
+            )
+
+
 def test_latency_evidence_is_integer_and_accumulation_order_independent():
     seconds = [1.0, *([1e-9] * 10_000)]
     forward_float = 0.0

@@ -1875,9 +1875,17 @@ def _validate_source_error_evidence(value: Any, *, syntax: bool) -> None:
             raise CollectionError("replay manifest syntax evidence has unexpected fields")
         if value["category"] not in {"SyntaxError", "IndentationError", "TabError", "ValueError"}:
             raise CollectionError("replay manifest syntax category is invalid")
-        for field in ("line", "offset", "end_line", "end_offset"):
+        for field in ("line", "end_line"):
             if value[field] is not None:
                 _strict_int(value[field], f"syntax {field}", minimum=1)
+        for field in ("offset", "end_offset"):
+            if value[field] is None:
+                continue
+            offset = _strict_int(value[field], f"syntax {field}", minimum=-1)
+            if offset == 0:
+                raise CollectionError(
+                    f"replay manifest syntax {field} must be -1 or a positive integer"
+                )
     else:
         if set(value) != {"category", "start", "end"}:
             raise CollectionError("replay manifest decode evidence has unexpected fields")
