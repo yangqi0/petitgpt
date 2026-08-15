@@ -24,15 +24,10 @@ from pretrain.manual_review_io import (
 
 
 def test_terminal_sanitizer_preserves_text_tab_newline_and_escapes_cc_cf():
-    source = (
-        "print('héllo')\t# ok\n"
-        "\x00\x1b\r\x7f\u200d\u202e\U000e0001\u2028\u2029\ue000終"
-    )
+    source = "print('héllo')\t# ok\n\x00\x1b\r\x7f\u200d\u202e\U000e0001\u2028\u2029\ue000終"
     sanitized = sanitize_terminal_text(source)
     assert sanitized == (
-        "print('héllo')\t# ok\n"
-        "U+0000U+001BU+000DU+007FU+200DU+202EU+E0001"
-        "U+2028U+2029U+E000終"
+        "print('héllo')\t# ok\nU+0000U+001BU+000DU+007FU+200DU+202EU+E0001U+2028U+2029U+E000終"
     )
     assert "\x00" not in sanitized
     assert "\x1b" not in sanitized

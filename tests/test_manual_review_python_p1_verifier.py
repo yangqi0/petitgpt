@@ -24,6 +24,16 @@ from pretrain.manual_review_python_p1 import (
     ManualReviewError,
 )
 
+# DECISIONS D-036 closed the Python P1 track and marked manual-review-v2
+# UNEXECUTED_ARCHIVED: it never read a real cache, and the verifier must not be
+# run or extended further. These tests are kept as historical evidence of the
+# design but no longer gate CI. Do not "fix" the verifier to re-enable them --
+# reopening the track requires a new decision entry first.
+pytestmark = pytest.mark.skip(
+    reason="manual-review-v2 is UNEXECUTED_ARCHIVED per DECISIONS D-036; "
+    "the verifier must not be run or extended"
+)
+
 _TEST_BOOTSTRAP_RESAMPLES = 8
 
 
