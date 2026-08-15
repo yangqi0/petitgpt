@@ -131,6 +131,11 @@ petitgpt/
 ├── configs/                   # declarative SFT mix configs (sft_mix_*.yaml)
 ├── pretrain/                  # source inspection, shard building, training, evaluation
 │   ├── inspect_python_sources.py  # bounded, revision-pinned inspection; not a corpus downloader
+│   ├── python_source_adapters.py  # normalized schemas for matched Python-source arms
+│   ├── collect_python_p1.py       # bounded, policy-bound collection + offline cache replay
+│   ├── python_quality.py          # redacted aggregate Python quality/funnel statistics
+│   ├── analyze_python_p1.py       # offline, redacted per-arm analysis
+│   ├── compare_python_p1.py       # matched aggregate comparison; never auto-selects a source
 │   ├── build_pretrain_shards.py
 │   ├── train_pretrain_with_bench.py
 │   ├── eval_bench_v5.py
@@ -163,6 +168,12 @@ petitgpt/
 ├── outputs/                   # checkpoints (local only, gitignored)
 └── README.md
 ```
+
+### 4.1 Bounded Python-source inspection
+
+Before any bulk Python corpus build, the retraining workflow runs a matched P1 inspection of the pinned `smollm-corpus/python-edu` and `stack-edu/Python` snapshots. Both arms share one policy, deterministic 500-row metadata sampling and 300 distinct content selections. Collection, offline replay, analysis and comparison are separate commands; private cache/evidence directories must be Git-ignored, reports expose no source characters, and every command must receive the separately frozen `<FROZEN_POLICY_SHA256>` rather than trusting a mutable policy path.
+
+The comparison is deliberately limited to `SOURCE_COMPARISON_NOT_FINAL_TOKEN_APPROVAL`. It checks acquisition fidelity, Python structure, duplication/concentration, provenance-field coverage and pre-tokenizer yield sensitivity, but it does not choose a source, grant legal clearance or establish the final token quota. In particular, automated license fields are metadata coverage rather than permission. The current [Stack-Edu dataset card](https://huggingface.co/datasets/HuggingFaceTB/stack-edu), [The Stack v2 terms](https://huggingface.co/datasets/bigcode/the-stack-v2), removal/opt-out obligations, per-file licenses/attribution and the approved acquisition path remain independent production blockers until explicitly reviewed and frozen.
 
 ---
 
