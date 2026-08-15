@@ -31,6 +31,7 @@ if str(PROJECT_ROOT) not in sys.path:
 from pretrain.collect_python_p1 import (  # noqa: E402
     CollectionError,
     _load_cache_entry,
+    _manifest_contract as _collector_manifest_contract,
     cache_origin_contract,
 )
 from pretrain.python_quality import (  # noqa: E402
@@ -402,6 +403,35 @@ def _score(row: Mapping[str, Any]) -> float | None:
     return result
 
 
+def _validate_entry_latency_evidence(
+    entry: Mapping[str, Any], *, ordinal: int, fetch_attempts: int
+) -> None:
+    if any(
+        field in entry for field in ("fetch_attempt_latencies_seconds", "fetch_latency_seconds")
+    ):
+        raise AnalysisError(f"selected blob {ordinal} contains legacy seconds timing evidence")
+    latencies = entry.get("fetch_attempt_latencies_nanoseconds")
+    if not isinstance(latencies, list) or len(latencies) != fetch_attempts:
+        raise AnalysisError(
+            f"selected blob {ordinal} has malformed integer-nanosecond attempt timing evidence"
+        )
+    validated = [
+        _require_int(
+            latency,
+            label=f"selected[{ordinal}].fetch_attempt_latencies_nanoseconds",
+            minimum=0,
+        )
+        for latency in latencies
+    ]
+    total = _require_int(
+        entry.get("fetch_latency_nanoseconds"),
+        label=f"selected[{ordinal}].fetch_latency_nanoseconds",
+        minimum=0,
+    )
+    if total != sum(validated):
+        raise AnalysisError(f"selected blob {ordinal} timing evidence does not sum exactly")
+
+
 def _deterministic_windows(*, total_rows: int) -> list[dict[str, int]]:
     if total_rows < METADATA_ROWS:
         raise AnalysisError("sampling total cannot satisfy the fixed 500-row contract")
@@ -446,26 +476,21 @@ def _validate_collection_contract(
     backend_accounting = manifest.get("backend_accounting")
     if (
         not isinstance(backend_accounting, Mapping)
+        or not isinstance(backend_accounting.get("hf"), Mapping)
         or not isinstance(backend_accounting.get("swh"), Mapping)
         or backend_accounting["swh"].get("cache_origin_verified") is not True
     ):
         raise AnalysisError("collection backend accounting lacks verified cache-origin evidence")
-    expected_contract = {
-        "metadata_rows": METADATA_ROWS,
-        "windows": WINDOWS,
-        "rows_per_window": ROWS_PER_WINDOW,
-        "selected_distinct_blobs": SELECTED_BLOBS,
-        "seed": COLLECTION_SEED,
-        "selection_gates": [
-            "length_bytes<=100000",
-            "distinct_blob_id",
-            "stable_hash_rank",
-        ],
-        "explicitly_not_selection_gates": ["score", "minimum_size", "repository_cap"],
-        "no_backfill_after_content_selection": True,
-        "source_code_exposed_in_manifest": False,
-    }
-    if manifest.get("contract") != expected_contract:
+    for backend in ("hf", "swh"):
+        accounting = backend_accounting[backend]
+        if "total_latency_seconds" in accounting:
+            raise AnalysisError("collection backend accounting contains legacy seconds timing")
+        _require_int(
+            accounting.get("total_latency_nanoseconds"),
+            label=f"backend_accounting.{backend}.total_latency_nanoseconds",
+            minimum=0,
+        )
+    if manifest.get("contract") != _collector_manifest_contract():
         raise AnalysisError("collection manifest contract drifted from fixed P1")
     collection_policy = policy["collection"]
     if (
@@ -655,6 +680,11 @@ def _verify_and_analyze_selected(
                 label=f"selected[{ordinal}].fetch_attempts",
                 minimum=1,
             )
+            _validate_entry_latency_evidence(
+                entry,
+                ordinal=ordinal,
+                fetch_attempts=fetch_attempts,
+            )
             processed.append({
                 "metadata": metadata,
                 "fetch_success": False,
@@ -675,6 +705,11 @@ def _verify_and_analyze_selected(
             entry.get("fetch_attempts"),
             label=f"selected[{ordinal}].fetch_attempts",
             minimum=0,
+        )
+        _validate_entry_latency_evidence(
+            entry,
+            ordinal=ordinal,
+            fetch_attempts=fetch_attempts,
         )
         cache_origin_verified = entry.get("cache_origin_verified")
         if cache_origin_verified is not (fetch_attempts == 0):

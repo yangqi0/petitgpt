@@ -175,8 +175,8 @@ def _write_collection(
                 "fetch_outcome": "failed",
                 "error_category": "not_found",
                 "fetch_attempts": 1,
-                "fetch_attempt_latencies_seconds": [0.001],
-                "fetch_latency_seconds": 0.001,
+                "fetch_attempt_latencies_nanoseconds": [1_000_000],
+                "fetch_latency_nanoseconds": 1_000_000,
                 "fidelity_outcome": "not_available",
                 "decode_outcome": "not_attempted",
             })
@@ -220,8 +220,8 @@ def _write_collection(
             "selection_rank_sha256": selection_rank,
             "fetch_outcome": "success",
             "fetch_attempts": 1,
-            "fetch_attempt_latencies_seconds": [0.001],
-            "fetch_latency_seconds": 0.001,
+            "fetch_attempt_latencies_nanoseconds": [1_000_000],
+            "fetch_latency_nanoseconds": 1_000_000,
             "error_category": None,
             "raw_sha256": raw_sha,
             "raw_bytes": len(raw),
@@ -255,7 +255,13 @@ def _write_collection(
         "kind": "petitgpt_python_p1_collection",
         "decision_scope": "SOURCE_COMPARISON_NOT_FINAL_TOKEN_APPROVAL",
         "backend_provenance": PRODUCTION_BACKEND_CONTRACT,
-        "backend_accounting": {"swh": {"cache_origin_verified": True}},
+        "backend_accounting": {
+            "hf": {"total_latency_nanoseconds": 51_000_000},
+            "swh": {
+                "cache_origin_verified": True,
+                "total_latency_nanoseconds": 300_000_000,
+            },
+        },
         "cache_origin_contract": PRODUCTION_CACHE_ORIGIN_CONTRACT,
         "policy_binding": {
             "path": "policy.json",
@@ -273,25 +279,7 @@ def _write_collection(
                 arm["expected_revision"],
             ],
         },
-        "contract": {
-            "metadata_rows": 500,
-            "windows": 50,
-            "rows_per_window": 10,
-            "selected_distinct_blobs": 300,
-            "seed": 20_250_814,
-            "selection_gates": [
-                "length_bytes<=100000",
-                "distinct_blob_id",
-                "stable_hash_rank",
-            ],
-            "explicitly_not_selection_gates": [
-                "score",
-                "minimum_size",
-                "repository_cap",
-            ],
-            "no_backfill_after_content_selection": True,
-            "source_code_exposed_in_manifest": False,
-        },
+        "contract": collector._manifest_contract(),
         "input": {
             "adapter": adapter,
             "dataset": arm["dataset"],
@@ -493,6 +481,22 @@ def test_analyzer_rejects_manifest_cache_and_policy_tamper_before_publication(
             )
         )
 
+    contract_drift = json.loads(json.dumps(manifest_value))
+    contract_drift["contract"]["timing_evidence"]["unit"] = "seconds"
+    contract_drift_path = _write_addressed_manifest(tmp_path / "contract-drift", contract_drift)
+    with pytest.raises(AnalysisError, match="manifest contract drifted"):
+        analyze_python_p1(
+            AnalysisConfig(
+                collection_manifest=contract_drift_path,
+                policy_path=policy_path,
+                policy_sha256=policy_sha,
+                cache_dir=cache,
+                output_dir=tmp_path / "contract-drift-output",
+                expected_arm="primary",
+                enforce_ignored_paths=False,
+            )
+        )
+
     origin_drift = json.loads(json.dumps(manifest_value))
     origin_drift["cache_origin_contract"]["production"] = False
     origin_drift_path = _write_addressed_manifest(tmp_path / "origin-drift", origin_drift)
@@ -527,6 +531,25 @@ def test_analyzer_rejects_manifest_cache_and_policy_tamper_before_publication(
             )
         )
 
+    accounting_latency_drift = json.loads(json.dumps(manifest_value))
+    del accounting_latency_drift["backend_accounting"]["hf"]["total_latency_nanoseconds"]
+    accounting_latency_drift["backend_accounting"]["hf"]["total_latency_seconds"] = 0.051
+    accounting_latency_path = _write_addressed_manifest(
+        tmp_path / "accounting-latency-drift", accounting_latency_drift
+    )
+    with pytest.raises(AnalysisError, match="legacy seconds timing"):
+        analyze_python_p1(
+            AnalysisConfig(
+                collection_manifest=accounting_latency_path,
+                policy_path=policy_path,
+                policy_sha256=policy_sha,
+                cache_dir=cache,
+                output_dir=tmp_path / "accounting-latency-output",
+                expected_arm="primary",
+                enforce_ignored_paths=False,
+            )
+        )
+
     cache_hit_drift = json.loads(json.dumps(manifest_value))
     successful_entry = next(
         entry for entry in cache_hit_drift["selected_blobs"] if entry["fetch_outcome"] == "success"
@@ -541,6 +564,55 @@ def test_analyzer_rejects_manifest_cache_and_policy_tamper_before_publication(
                 policy_sha256=policy_sha,
                 cache_dir=cache,
                 output_dir=tmp_path / "cache-hit-drift-output",
+                expected_arm="primary",
+                enforce_ignored_paths=False,
+            )
+        )
+
+    entry_latency_drift = json.loads(json.dumps(manifest_value))
+    timed_entry = next(
+        entry
+        for entry in entry_latency_drift["selected_blobs"]
+        if entry["fetch_outcome"] == "success"
+    )
+    del timed_entry["fetch_attempt_latencies_nanoseconds"]
+    del timed_entry["fetch_latency_nanoseconds"]
+    timed_entry["fetch_attempt_latencies_seconds"] = [0.001]
+    timed_entry["fetch_latency_seconds"] = 0.001
+    entry_latency_path = _write_addressed_manifest(
+        tmp_path / "entry-latency-drift", entry_latency_drift
+    )
+    with pytest.raises(AnalysisError, match="legacy seconds timing evidence"):
+        analyze_python_p1(
+            AnalysisConfig(
+                collection_manifest=entry_latency_path,
+                policy_path=policy_path,
+                policy_sha256=policy_sha,
+                cache_dir=cache,
+                output_dir=tmp_path / "entry-latency-output",
+                expected_arm="primary",
+                enforce_ignored_paths=False,
+            )
+        )
+
+    float_latency_drift = json.loads(json.dumps(manifest_value))
+    float_entry = next(
+        entry
+        for entry in float_latency_drift["selected_blobs"]
+        if entry["fetch_outcome"] == "success"
+    )
+    float_entry["fetch_latency_nanoseconds"] = 1_000_000.0
+    float_latency_path = _write_addressed_manifest(
+        tmp_path / "float-latency-drift", float_latency_drift
+    )
+    with pytest.raises(AnalysisError, match="fetch_latency_nanoseconds must be an integer"):
+        analyze_python_p1(
+            AnalysisConfig(
+                collection_manifest=float_latency_path,
+                policy_path=policy_path,
+                policy_sha256=policy_sha,
+                cache_dir=cache,
+                output_dir=tmp_path / "float-latency-output",
                 expected_arm="primary",
                 enforce_ignored_paths=False,
             )
