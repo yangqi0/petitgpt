@@ -631,6 +631,7 @@ def _verify_and_analyze_selected(
     *,
     eligible: Sequence[Mapping[str, Any]],
     cache_dir: Path,
+    verified_cache_entries: Mapping[str, tuple[bytes, str, str]] | None = None,
 ) -> list[dict[str, Any]]:
     if len(eligible) < SELECTED_BLOBS:
         raise AnalysisError("collection metadata cannot support 300 selected blobs")
@@ -725,22 +726,29 @@ def _verify_and_analyze_selected(
         if raw_bytes > SELECTION_MAX_BYTES:
             raise AnalysisError(f"selected blob {ordinal} violates raw-object size contract")
         raw_path = _cache_object_path(cache_dir, entry.get("cache_object"), raw_sha256)
-        try:
-            indexed = _load_cache_entry(
-                cache_dir,
-                blob_id,
-                expected_origin=PRODUCTION_CACHE_ORIGIN_CONTRACT,
-            )
-        except CollectionError as exc:
-            raise AnalysisError(
-                f"production cache index verification failed at selected blob {ordinal}"
-            ) from exc
+        if verified_cache_entries is None:
+            try:
+                indexed = _load_cache_entry(
+                    cache_dir,
+                    blob_id,
+                    expected_origin=PRODUCTION_CACHE_ORIGIN_CONTRACT,
+                )
+            except CollectionError as exc:
+                raise AnalysisError(
+                    f"production cache index verification failed at selected blob {ordinal}"
+                ) from exc
+        else:
+            indexed = verified_cache_entries.get(blob_id)
         if indexed is None:
             raise AnalysisError(f"missing production cache index at selected blob {ordinal}")
         indexed_raw, indexed_sha256, indexed_object = indexed
         if indexed_sha256 != raw_sha256 or indexed_object != entry.get("cache_object"):
             raise AnalysisError(f"cache index disagrees with manifest at selected blob {ordinal}")
-        raw = _read_regular_file(raw_path, label=f"private raw object {ordinal}")
+        raw = (
+            _read_regular_file(raw_path, label=f"private raw object {ordinal}")
+            if verified_cache_entries is None
+            else indexed_raw
+        )
         if raw != indexed_raw:
             raise AnalysisError(f"cache index raw object drift at selected blob {ordinal}")
         actual_sha = hashlib.sha256(raw).hexdigest()
@@ -1302,11 +1310,30 @@ def _two_stage_yield(
     }
 
 
-def analyze_python_p1(config: AnalysisConfig) -> Path:
-    """Verify and analyze one P1 arm without any network-capable dependency."""
+def build_python_p1_analysis(
+    config: AnalysisConfig,
+    *,
+    verified_cache_entries: Mapping[str, tuple[bytes, str, str]] | None = None,
+    verified_policy: tuple[Mapping[str, Any], str] | None = None,
+    verified_manifest: tuple[Mapping[str, Any], str] | None = None,
+    verified_records_out: list[dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    """Verify one P1 arm and build its report without publishing an artifact."""
     _validate_private_paths(config)
-    policy, policy_sha256 = _load_policy(config.policy_path, config.policy_sha256)
-    manifest, manifest_sha256 = _load_collection(config.collection_manifest)
+    if verified_policy is None:
+        policy, policy_sha256 = _load_policy(config.policy_path, config.policy_sha256)
+    else:
+        policy_value, policy_sha256 = verified_policy
+        policy = dict(policy_value)
+        if policy_sha256 != config.policy_sha256 or policy != p1_policy_template():
+            raise AnalysisError("verified policy does not match the frozen P1 contract")
+    if verified_manifest is None:
+        manifest, manifest_sha256 = _load_collection(config.collection_manifest)
+    else:
+        manifest_value, manifest_sha256 = verified_manifest
+        manifest = dict(manifest_value)
+        if manifest.get("kind") != COLLECTION_KIND or manifest.get("schema_version") != 1:
+            raise AnalysisError("unsupported verified collection manifest kind/version")
     metadata, selected, total_rows = _validate_collection_contract(
         manifest,
         expected_arm=config.expected_arm,
@@ -1318,6 +1345,7 @@ def analyze_python_p1(config: AnalysisConfig) -> Path:
         selected,
         eligible=eligible,
         cache_dir=config.cache_dir,
+        verified_cache_entries=verified_cache_entries,
     )
     decoded_analyses = [item["analysis"] for item in processed if item["analysis"] is not None]
     assert all(isinstance(analysis, dict) for analysis in decoded_analyses)
@@ -1497,6 +1525,14 @@ def analyze_python_p1(config: AnalysisConfig) -> Path:
             "P1 cannot establish final-tokenizer yield or post-dedup/decontamination supply.",
         ],
     }
+    if verified_records_out is not None:
+        verified_records_out.extend(processed)
+    return report
+
+
+def analyze_python_p1(config: AnalysisConfig) -> Path:
+    """Verify, analyze, and publish one P1 arm without network access."""
+    report = build_python_p1_analysis(config)
     return _publish_addressed_json(config.output_dir, "python-p1-analysis", report)
 
 
