@@ -62,6 +62,8 @@ HTTP_TIMEOUT_SECONDS = 30.0
 MAX_ATTEMPTS_PER_CALL = 4
 MAX_TOTAL_RETRIES = 50
 MAX_WALL_SECONDS = 30 * 60
+LATENCY_NANOSECONDS_PER_SECOND = 1_000_000_000
+MAX_SINGLE_LATENCY_NANOSECONDS = MAX_WALL_SECONDS * LATENCY_NANOSECONDS_PER_SECOND
 EXPECTED_HF_LOGICAL_CALLS = 51
 _MANIFEST_KIND = "petitgpt_python_p1_collection"
 _MANIFEST_VERSION = 1
@@ -144,6 +146,42 @@ class BlobFetchIssue(RuntimeError):
         self.transient = transient
 
 
+def _latency_nanoseconds(value: Any, *, label: str) -> int:
+    """Quantize one measured duration before it enters immutable evidence."""
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        raise CollectionError(f"{label} latency must be a finite nonnegative number")
+    seconds = float(value)
+    if not math.isfinite(seconds) or seconds < 0:
+        raise CollectionError(f"{label} latency must be a finite nonnegative number")
+    numerator, denominator = seconds.as_integer_ratio()
+    quotient, remainder = divmod(
+        numerator * LATENCY_NANOSECONDS_PER_SECOND,
+        denominator,
+    )
+    doubled_remainder = remainder * 2
+    if doubled_remainder > denominator or (doubled_remainder == denominator and quotient % 2 == 1):
+        quotient += 1
+    nanoseconds = quotient
+    if nanoseconds > MAX_SINGLE_LATENCY_NANOSECONDS:
+        raise CollectionError(f"{label} latency exceeds the P1 wall-clock bound")
+    return nanoseconds
+
+
+def _sum_latency_nanoseconds(values: Sequence[Any], *, label: str) -> int:
+    """Validate and exactly accumulate already-quantized duration evidence."""
+    total = 0
+    for ordinal, value in enumerate(values):
+        if (
+            isinstance(value, bool)
+            or not isinstance(value, int)
+            or value < 0
+            or value > MAX_SINGLE_LATENCY_NANOSECONDS
+        ):
+            raise CollectionError(f"{label} latency {ordinal} is not canonical nanoseconds")
+        total += value
+    return total
+
+
 @dataclass(frozen=True)
 class P1Config:
     expected_revision: str
@@ -196,9 +234,12 @@ class NetworkBudget:
         self.check()
 
     @property
-    def elapsed_seconds(self) -> float:
+    def elapsed_nanoseconds(self) -> int:
         self.check()
-        return float(self.clock()) - self.started
+        return _latency_nanoseconds(
+            float(self.clock()) - self.started,
+            label="collection elapsed",
+        )
 
 
 class BudgetedTransport:
@@ -256,6 +297,11 @@ def _manifest_contract() -> dict[str, Any]:
         "explicitly_not_selection_gates": ["score", "minimum_size", "repository_cap"],
         "no_backfill_after_content_selection": True,
         "source_code_exposed_in_manifest": False,
+        "timing_evidence": {
+            "unit": "integer_nanoseconds",
+            "quantization": "binary64_exact_ratio_round_half_even_per_measurement_v1",
+            "accumulation": "exact_integer_sum",
+        },
     }
 
 
@@ -1001,7 +1047,7 @@ def _fetch_failure_entry(
     *,
     issue: BlobFetchIssue,
     attempts: int,
-    attempt_latencies: Sequence[float],
+    attempt_latencies_nanoseconds: Sequence[int],
 ) -> dict[str, Any]:
     category = issue.category
     if issue.transient and attempts == MAX_ATTEMPTS_PER_CALL:
@@ -1012,8 +1058,11 @@ def _fetch_failure_entry(
         "fetch_outcome": "failed",
         "error_category": category,
         "fetch_attempts": attempts,
-        "fetch_attempt_latencies_seconds": list(attempt_latencies),
-        "fetch_latency_seconds": sum(attempt_latencies),
+        "fetch_attempt_latencies_nanoseconds": list(attempt_latencies_nanoseconds),
+        "fetch_latency_nanoseconds": _sum_latency_nanoseconds(
+            attempt_latencies_nanoseconds,
+            label="SWH fetch failure",
+        ),
         "cache_hit": False,
         "fidelity_outcome": "not_available",
         "decode_outcome": "not_attempted",
@@ -1037,7 +1086,7 @@ def _fetch_selected(
     )
     cache_hit = cached is not None
     attempts = 0
-    attempt_latencies: list[float] = []
+    attempt_latencies_nanoseconds: list[int] = []
     if cached is None:
         raw: bytes | None = None
         for attempt in range(1, MAX_ATTEMPTS_PER_CALL + 1):
@@ -1047,10 +1096,11 @@ def _fetch_selected(
             try:
                 raw = fetcher(blob_id)
             except Exception as exc:
-                latency = float(budget.clock()) - started
-                if not math.isfinite(latency) or latency < 0:
-                    raise CollectionError("invalid SWH fetch latency") from exc
-                attempt_latencies.append(latency)
+                latency_nanoseconds = _latency_nanoseconds(
+                    float(budget.clock()) - started,
+                    label="SWH failed fetch",
+                )
+                attempt_latencies_nanoseconds.append(latency_nanoseconds)
                 issue = _blob_issue(exc)
                 if issue is None:
                     raise CollectionError(
@@ -1061,14 +1111,15 @@ def _fetch_selected(
                         row,
                         issue=issue,
                         attempts=attempt,
-                        attempt_latencies=attempt_latencies,
+                        attempt_latencies_nanoseconds=attempt_latencies_nanoseconds,
                     )
                 budget.retry(backend="swh", operation=f"SWH blob {blob_id}")
             else:
-                latency = float(budget.clock()) - started
-                if not math.isfinite(latency) or latency < 0:
-                    raise CollectionError("invalid SWH fetch latency")
-                attempt_latencies.append(latency)
+                latency_nanoseconds = _latency_nanoseconds(
+                    float(budget.clock()) - started,
+                    label="SWH successful fetch",
+                )
+                attempt_latencies_nanoseconds.append(latency_nanoseconds)
                 break
         if raw is None:
             raise AssertionError("bounded blob loop exited without result")
@@ -1084,7 +1135,7 @@ def _fetch_selected(
                 row,
                 issue=issue,
                 attempts=attempts,
-                attempt_latencies=attempt_latencies,
+                attempt_latencies_nanoseconds=attempt_latencies_nanoseconds,
             )
         raw_sha256, relative_path = _store_cache_entry(
             config,
@@ -1101,8 +1152,11 @@ def _fetch_selected(
         "fetch_outcome": "success",
         "error_category": None,
         "fetch_attempts": attempts,
-        "fetch_attempt_latencies_seconds": list(attempt_latencies),
-        "fetch_latency_seconds": sum(attempt_latencies),
+        "fetch_attempt_latencies_nanoseconds": list(attempt_latencies_nanoseconds),
+        "fetch_latency_nanoseconds": _sum_latency_nanoseconds(
+            attempt_latencies_nanoseconds,
+            label="SWH fetch success",
+        ),
         "raw_sha256": raw_sha256,
         "raw_bytes": len(raw),
         "cache_object": relative_path,
@@ -1207,13 +1261,52 @@ def _content_summary(entries: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
     }
 
 
+def _normalized_hf_evidence(client: DatasetServerClient) -> dict[str, Any]:
+    def normalize(record: Mapping[str, Any], *, label: str) -> dict[str, Any]:
+        if (
+            "request_latency_seconds" not in record
+            or "request_latency_nanoseconds" in record
+            or "backoff_before_next_attempt_seconds" not in record
+            or "backoff_before_next_attempt_nanoseconds" in record
+        ):
+            raise CollectionError(f"{label} has noncanonical latency evidence")
+        normalized = dict(record)
+        seconds = normalized.pop("request_latency_seconds")
+        normalized["request_latency_nanoseconds"] = _latency_nanoseconds(
+            seconds,
+            label=label,
+        )
+        backoff_seconds = normalized.pop("backoff_before_next_attempt_seconds")
+        normalized["backoff_before_next_attempt_nanoseconds"] = (
+            None
+            if backoff_seconds is None
+            else _latency_nanoseconds(backoff_seconds, label=f"{label} backoff")
+        )
+        return normalized
+
+    return {
+        "logical_calls": client._request_ordinal,
+        "responses": [
+            normalize(response, label=f"HF response {ordinal}")
+            for ordinal, response in enumerate(client.responses, start=1)
+        ],
+        "attempts": [
+            normalize(attempt, label=f"HF attempt {ordinal}")
+            for ordinal, attempt in enumerate(client.attempts, start=1)
+        ],
+    }
+
+
 def _backend_accounting(
-    client: DatasetServerClient,
+    hf_evidence: Mapping[str, Any],
     entries: Sequence[Mapping[str, Any]],
     budget: NetworkBudget,
 ) -> dict[str, Any]:
-    hf_attempts = len(client.attempts)
-    hf_retries = hf_attempts - client._request_ordinal
+    hf_logical_calls = int(hf_evidence["logical_calls"])
+    hf_attempt_evidence = hf_evidence["attempts"]
+    hf_response_evidence = hf_evidence["responses"]
+    hf_attempts = len(hf_attempt_evidence)
+    hf_retries = hf_attempts - hf_logical_calls
     if hf_retries < 0:
         raise CollectionError("HF attempt accounting underflow")
     swh_attempts = sum(int(entry["fetch_attempts"]) for entry in entries)
@@ -1226,14 +1319,17 @@ def _backend_accounting(
         raise CollectionError("global retry accounting drift")
     return {
         "hf": {
-            "logical_calls": client._request_ordinal,
+            "logical_calls": hf_logical_calls,
             "attempts": hf_attempts,
             "retries": hf_retries,
-            "total_latency_seconds": sum(
-                float(attempt["request_latency_seconds"]) for attempt in client.attempts
+            "total_latency_nanoseconds": _sum_latency_nanoseconds(
+                [attempt["request_latency_nanoseconds"] for attempt in hf_attempt_evidence],
+                label="HF total",
             ),
             "final_outcomes": dict(
-                sorted(Counter(str(response["outcome"]) for response in client.responses).items())
+                sorted(
+                    Counter(str(response["outcome"]) for response in hf_response_evidence).items()
+                )
             ),
         },
         "swh": {
@@ -1247,8 +1343,9 @@ def _backend_accounting(
             ),
             "attempts": swh_attempts,
             "retries": swh_retries,
-            "total_latency_seconds": sum(
-                float(entry["fetch_latency_seconds"]) for entry in entries
+            "total_latency_nanoseconds": _sum_latency_nanoseconds(
+                [entry["fetch_latency_nanoseconds"] for entry in entries],
+                label="SWH total",
             ),
             "final_error_counts": dict(
                 sorted(
@@ -1378,7 +1475,8 @@ def _online_collect(
     immutable_entries = [
         {key: value for key, value in entry.items() if key != "cache_hit"} for entry in entries
     ]
-    backend_accounting = _backend_accounting(client, entries, budget)
+    hf_evidence = _normalized_hf_evidence(client)
+    backend_accounting = _backend_accounting(hf_evidence, entries, budget)
     schema_evidence = {
         "upstream_features": features,
         "upstream_fields": sorted(raw_fields),
@@ -1406,11 +1504,7 @@ def _online_collect(
         "backend_provenance": backend_provenance,
         "cache_origin_contract": cache_origin,
         "backend_accounting": backend_accounting,
-        "hf_evidence": {
-            "logical_calls": client._request_ordinal,
-            "responses": client.responses,
-            "attempts": client.attempts,
-        },
+        "hf_evidence": hf_evidence,
     }
     report = {
         "schema_version": 1,
@@ -1432,7 +1526,7 @@ def _online_collect(
             "hf_logical_calls": client._request_ordinal,
             "swh_selected_objects": len(entries),
             "total_retries": budget.retries,
-            "elapsed_seconds": budget.elapsed_seconds,
+            "elapsed_nanoseconds": budget.elapsed_nanoseconds,
             "storage_before_publish": storage_before_publish,
         },
     }
@@ -1642,18 +1736,18 @@ def _validate_hf_evidence(
         "outcome",
         "transient",
         "retry_scheduled",
-        "backoff_before_next_attempt_seconds",
+        "backoff_before_next_attempt_nanoseconds",
         "http_status",
         "body_bytes",
         "body_sha256",
-        "request_latency_seconds",
+        "request_latency_nanoseconds",
         "x_revision",
         "revision_verified",
         "exception_type",
         "error",
     }
     cursor = 0
-    total_latency = 0.0
+    attempt_latencies_nanoseconds: list[int] = []
     for ordinal, (response, (endpoint, parameters)) in enumerate(
         zip(responses, expected_calls, strict=True),
         start=1,
@@ -1674,7 +1768,7 @@ def _validate_hf_evidence(
             or response["outcome"] != "success"
             or response["transient"] is not False
             or response["retry_scheduled"] is not False
-            or response["backoff_before_next_attempt_seconds"] is not None
+            or response["backoff_before_next_attempt_nanoseconds"] is not None
             or response["http_status"] != 200
             or response["x_revision"] != config.expected_revision
             or response["revision_verified"] is not True
@@ -1688,14 +1782,12 @@ def _validate_hf_evidence(
             or _SHA256_RE.fullmatch(response["body_sha256"]) is None
         ):
             raise CollectionError("replay manifest HF response digest is invalid")
-        latency = response["request_latency_seconds"]
-        if (
-            isinstance(latency, bool)
-            or not isinstance(latency, (int, float))
-            or not math.isfinite(float(latency))
-            or float(latency) < 0
-        ):
-            raise CollectionError("replay manifest HF response latency is invalid")
+        _strict_int(
+            response["request_latency_nanoseconds"],
+            f"HF response {ordinal} latency nanoseconds",
+            minimum=0,
+            maximum=MAX_SINGLE_LATENCY_NANOSECONDS,
+        )
         group: list[dict[str, Any]] = []
         while (
             cursor < len(attempts)
@@ -1717,20 +1809,31 @@ def _validate_hf_evidence(
                 or attempt["max_attempts"] != MAX_ATTEMPTS_PER_CALL
             ):
                 raise CollectionError("replay manifest HF attempt identity drifted")
-            attempt_latency = attempt["request_latency_seconds"]
+            attempt_latency = _strict_int(
+                attempt["request_latency_nanoseconds"],
+                f"HF attempt {ordinal}.{attempt_number} latency nanoseconds",
+                minimum=0,
+                maximum=MAX_SINGLE_LATENCY_NANOSECONDS,
+            )
+            attempt_latencies_nanoseconds.append(attempt_latency)
+            retry_expected = attempt_number < final_attempt
+            expected_backoff = (
+                _latency_nanoseconds(
+                    min(0.5 * (2 ** (attempt_number - 1)), 4.0),
+                    label="expected HF retry backoff",
+                )
+                if retry_expected
+                else None
+            )
             if (
-                isinstance(attempt_latency, bool)
-                or not isinstance(attempt_latency, (int, float))
-                or not math.isfinite(float(attempt_latency))
-                or float(attempt_latency) < 0
-            ):
-                raise CollectionError("replay manifest HF attempt latency is invalid")
-            total_latency += float(attempt_latency)
-            if attempt_number < final_attempt and (
-                attempt["transient"] is not True
-                or attempt["retry_scheduled"] is not True
-                or attempt["outcome"]
-                not in {"transient_http_status", "transient_network_exception"}
+                attempt["backoff_before_next_attempt_nanoseconds"] != expected_backoff
+                or retry_expected
+                and (
+                    attempt["transient"] is not True
+                    or attempt["retry_scheduled"] is not True
+                    or attempt["outcome"]
+                    not in {"transient_http_status", "transient_network_exception"}
+                )
             ):
                 raise CollectionError("replay manifest HF retry evidence is invalid")
     if cursor != len(attempts):
@@ -1739,7 +1842,10 @@ def _validate_hf_evidence(
         "logical_calls": EXPECTED_HF_LOGICAL_CALLS,
         "attempts": len(attempts),
         "retries": len(attempts) - EXPECTED_HF_LOGICAL_CALLS,
-        "total_latency_seconds": total_latency,
+        "total_latency_nanoseconds": _sum_latency_nanoseconds(
+            attempt_latencies_nanoseconds,
+            label="replay HF total",
+        ),
         "final_outcomes": {"success": EXPECTED_HF_LOGICAL_CALLS},
     }
 
@@ -1849,8 +1955,8 @@ def _validate_selected_entry(
         "fetch_outcome",
         "error_category",
         "fetch_attempts",
-        "fetch_attempt_latencies_seconds",
-        "fetch_latency_seconds",
+        "fetch_attempt_latencies_nanoseconds",
+        "fetch_latency_nanoseconds",
         "fidelity_outcome",
         "decode_outcome",
     }
@@ -1865,28 +1971,20 @@ def _validate_selected_entry(
         minimum=0,
         maximum=MAX_ATTEMPTS_PER_CALL,
     )
-    latencies = entry.get("fetch_attempt_latencies_seconds")
+    latencies = entry.get("fetch_attempt_latencies_nanoseconds")
     if not isinstance(latencies, list) or len(latencies) != attempts:
         raise CollectionError("replay manifest SWH attempt latency count drifted")
-    for latency in latencies:
-        if (
-            isinstance(latency, bool)
-            or not isinstance(latency, (int, float))
-            or not math.isfinite(float(latency))
-            or float(latency) < 0
-        ):
-            raise CollectionError("replay manifest SWH latency is invalid")
-    total_latency = entry.get("fetch_latency_seconds")
-    if (
-        isinstance(total_latency, bool)
-        or not isinstance(total_latency, (int, float))
-        or not math.isclose(
-            float(total_latency),
-            sum(float(latency) for latency in latencies),
-            rel_tol=0,
-            abs_tol=1e-12,
-        )
-    ):
+    expected_total_latency = _sum_latency_nanoseconds(
+        latencies,
+        label="replay SWH attempt",
+    )
+    total_latency = _strict_int(
+        entry.get("fetch_latency_nanoseconds"),
+        "SWH fetch latency nanoseconds",
+        minimum=0,
+        maximum=MAX_ATTEMPTS_PER_CALL * MAX_SINGLE_LATENCY_NANOSECONDS,
+    )
+    if total_latency != expected_total_latency:
         raise CollectionError("replay manifest SWH total latency drifted")
     if entry.get("fetch_outcome") == "failed":
         if set(entry) != common_fields:
@@ -2040,8 +2138,9 @@ def _validate_replay_manifest(
         ),
         "attempts": swh_attempts,
         "retries": swh_retries,
-        "total_latency_seconds": sum(
-            float(entry["fetch_latency_seconds"]) for entry in validated_entries
+        "total_latency_nanoseconds": _sum_latency_nanoseconds(
+            [entry["fetch_latency_nanoseconds"] for entry in validated_entries],
+            label="replay SWH total",
         ),
         "final_error_counts": dict(
             sorted(
@@ -2142,7 +2241,7 @@ def _offline_replay(
         "verified_blobs": verified_blobs,
         "recorded_fetch_failures": len(replayed) - verified_blobs,
         "content": _content_summary(replayed),
-        "elapsed_seconds": budget.elapsed_seconds,
+        "elapsed_nanoseconds": budget.elapsed_nanoseconds,
     }
 
 

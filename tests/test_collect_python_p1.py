@@ -304,6 +304,39 @@ def test_source_errors_expose_only_categories_and_numeric_positions():
     assert "DO_NOT_EXPOSE_SYNTAX_SOURCE" not in serialized
 
 
+def test_latency_evidence_is_integer_and_accumulation_order_independent():
+    seconds = [1.0, *([1e-9] * 10_000)]
+    forward_float = 0.0
+    for value in seconds:
+        forward_float += value
+    reverse_float = 0.0
+    for value in reversed(seconds):
+        reverse_float += value
+    builtin_float = sum(seconds)
+    assert len({builtin_float, forward_float, reverse_float}) > 1
+
+    nanoseconds = [
+        p1._latency_nanoseconds(value, label=f"regression {ordinal}")
+        for ordinal, value in enumerate(seconds)
+    ]
+    expected = 1_000_010_000
+    assert (
+        p1._sum_latency_nanoseconds(
+            nanoseconds,
+            label="online accounting",
+        )
+        == expected
+    )
+    assert (
+        p1._sum_latency_nanoseconds(
+            list(reversed(nanoseconds)),
+            label="replay accounting",
+        )
+        == expected
+    )
+    assert all(isinstance(value, int) and not isinstance(value, bool) for value in nanoseconds)
+
+
 def test_selection_uses_only_max_length_distinct_id_and_stable_rank():
     rows = [
         {
@@ -360,6 +393,11 @@ def test_online_collection_is_exact_content_addressed_and_offline_replayable(
     assert manifest["policy_binding"]["expected_sha256"] == policy_sha256
     assert manifest["backend_provenance"]["production"] is False
     assert manifest["backend_provenance"]["test_only"] is True
+    assert manifest["contract"]["timing_evidence"] == {
+        "unit": "integer_nanoseconds",
+        "quantization": "binary64_exact_ratio_round_half_even_per_measurement_v1",
+        "accumulation": "exact_integer_sum",
+    }
     assert manifest["backend_provenance"]["mode"] == "test_only_injected"
     assert manifest["backend_provenance"]["hf"]["transport"] == "injected_callable"
     assert manifest["backend_provenance"]["swh"]["fetcher"] == "injected_callable"
@@ -374,9 +412,37 @@ def test_online_collection_is_exact_content_addressed_and_offline_replayable(
     assert manifest["backend_accounting"]["hf"]["logical_calls"] == 51
     assert manifest["backend_accounting"]["hf"]["attempts"] == 51
     assert manifest["backend_accounting"]["hf"]["retries"] == 0
+    assert manifest["backend_accounting"]["hf"]["total_latency_nanoseconds"] == 51_000_000
+    assert all(
+        isinstance(attempt["request_latency_nanoseconds"], int)
+        for attempt in manifest["hf_evidence"]["attempts"]
+    )
+    assert all(
+        "request_latency_seconds" not in attempt
+        and "backoff_before_next_attempt_seconds" not in attempt
+        and (
+            attempt["backoff_before_next_attempt_nanoseconds"] is None
+            or isinstance(attempt["backoff_before_next_attempt_nanoseconds"], int)
+        )
+        for attempt in manifest["hf_evidence"]["attempts"]
+    )
     assert manifest["backend_accounting"]["swh"]["attempts"] == 300
     assert manifest["backend_accounting"]["swh"]["retries"] == 0
     assert manifest["backend_accounting"]["swh"]["cache_origin_verified"] is True
+    assert isinstance(
+        manifest["backend_accounting"]["swh"]["total_latency_nanoseconds"],
+        int,
+    )
+    assert isinstance(report["resources"]["elapsed_nanoseconds"], int)
+    assert all(
+        isinstance(entry["fetch_latency_nanoseconds"], int)
+        and all(
+            isinstance(latency, int) for latency in entry["fetch_attempt_latencies_nanoseconds"]
+        )
+        and "fetch_latency_seconds" not in entry
+        and "fetch_attempt_latencies_seconds" not in entry
+        for entry in manifest["selected_blobs"]
+    )
 
     assert len(manifest["metadata_rows"]) == METADATA_ROWS
     assert len(manifest["sampling"]["windows"]) == 50
@@ -429,6 +495,7 @@ def test_online_collection_is_exact_content_addressed_and_offline_replayable(
     assert replay_report["verified_blobs"] == 300
     assert replay_report["cache_origin_verified"] is True
     assert replay_report["cache_origin_contract"] == manifest["cache_origin_contract"]
+    assert isinstance(replay_report["elapsed_nanoseconds"], int)
 
     mutation_dir = tmp_path / "mutated-manifests"
     mutation_dir.mkdir()
@@ -457,6 +524,14 @@ def test_online_collection_is_exact_content_addressed_and_offline_replayable(
         bad_cache_hit_evidence,
         "cache-origin verification evidence drifted",
     ))
+
+    bad_swh_latency = copy.deepcopy(manifest)
+    bad_swh_latency["selected_blobs"][0]["fetch_latency_nanoseconds"] += 1
+    mutations.append(("swh-latency", bad_swh_latency, "SWH total latency drifted"))
+
+    bad_hf_latency = copy.deepcopy(manifest)
+    bad_hf_latency["hf_evidence"]["responses"][0]["request_latency_nanoseconds"] = 0.5
+    mutations.append(("hf-latency", bad_hf_latency, "must be an integer"))
 
     bad_metadata_count = copy.deepcopy(manifest)
     bad_metadata_count["metadata_rows"].pop()
