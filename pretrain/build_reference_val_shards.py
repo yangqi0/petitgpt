@@ -18,9 +18,12 @@ byte size, token count, and SHA-256.
 from __future__ import annotations
 
 import argparse
+import array
+import contextlib
 from dataclasses import dataclass
 import hashlib
 import heapq
+import itertools
 import json
 import math
 import os
@@ -60,6 +63,7 @@ MANIFEST_NAME = "manifest.json"
 EXCLUSION_MANIFEST_NAME = "exclusion_hash_manifest.json"
 RESERVE_MANIFEST_NAME = "reserve_manifest.json"
 RESERVE_MANIFEST_KIND = "petitgpt_reference_validation_reserve"
+ELIGIBILITY_MANIFEST_KIND = "petitgpt_reference_reserve_eligibility"
 _SAFE_NAME_RE = re.compile(r"[^A-Za-z0-9_.-]")
 _SPECIAL_IDS = frozenset(SPECIAL_TOKEN_IDS.values())
 
@@ -70,9 +74,22 @@ class ReferenceSourceExhaustedError(RuntimeError):
 
 @dataclass(frozen=True)
 class ReferenceSource:
-    path: Path
+    """One reference family.
+
+    ``paths`` may name more than one release. A family whose eligible population spans several
+    frozen releases (the structured/tutorial family spans cosmopedia_v2 and finephrase_tutorial)
+    is ranked as ONE pool over the union, so no per-release quota is implied. Selection depends
+    only on the cleaned-content hash, so the order of ``paths`` cannot affect membership.
+    """
+
+    paths: tuple[Path, ...]
     target_serialized_tokens: int
     output_name: str
+
+    @property
+    def path(self) -> Path:
+        """First release path; kept for messages and single-release sources."""
+        return self.paths[0]
 
 
 @dataclass(frozen=True)
@@ -98,6 +115,84 @@ class ReserveCandidate:
     cleaned_utf8_bytes: int
 
 
+def load_reserve_eligibility(
+    manifest_path: Path,
+) -> tuple[dict[str, frozenset[int]], dict[str, Any]]:
+    """Load the per-release logical-eligibility filter and verify every bound identity.
+
+    The reserve builder predates D2 near-duplicate dedup and D3 benchmark decontamination, and the
+    candidate releases are never physically rewritten, so a release still contains rows those
+    stages logically removed. This manifest carries, per release, the 0-based physical row indices
+    to skip, each in an ascending ``uint32`` file bound by SHA-256.
+
+    Fails closed on a missing file, a hash mismatch, a non-ascending index list, or an index that
+    is out of range for the recorded row count. A reserve built from a tampered or stale filter
+    must not be publishable.
+    """
+    payload = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if not isinstance(payload, dict) or payload.get("kind") != ELIGIBILITY_MANIFEST_KIND:
+        raise ValueError(
+            f"not a reference-reserve eligibility manifest: {manifest_path}"
+        )
+    raw_files = payload.get("files")
+    if not isinstance(raw_files, dict) or not raw_files:
+        raise ValueError("eligibility manifest.files must be a non-empty object")
+
+    excluded: dict[str, frozenset[int]] = {}
+    for resolved_path, entry in raw_files.items():
+        if not isinstance(entry, dict):
+            raise ValueError(f"invalid eligibility entry for {resolved_path!r}")
+        name = entry.get("excluded_row_indices_file")
+        if not isinstance(name, str) or Path(name).name != name:
+            raise ValueError(f"unsafe eligibility index filename for {resolved_path!r}")
+        index_path = manifest_path.parent / name
+        raw = index_path.read_bytes()
+        digest = hashlib.sha256(raw).hexdigest()
+        if digest != entry.get("excluded_row_indices_sha256"):
+            raise ValueError(
+                f"eligibility index SHA-256 mismatch for {resolved_path!r}: {index_path}"
+            )
+        rows = array.array("I")
+        rows.frombytes(raw)
+        if sys.byteorder != "little":  # pragma: no cover - project runs little-endian
+            rows.byteswap()
+        values = list(rows)
+        if any(b <= a for a, b in zip(values, values[1:], strict=False)):
+            raise ValueError(
+                f"eligibility index must be strictly ascending: {resolved_path!r}"
+            )
+        declared = int(entry.get("excluded_rows", -1))
+        if declared != len(values):
+            raise ValueError(
+                f"eligibility index count disagrees with manifest for {resolved_path!r}"
+            )
+        total_rows = int(entry.get("total_rows", 0))
+        if total_rows <= 0 or (values and values[-1] >= total_rows):
+            raise ValueError(
+                f"eligibility index out of range for {resolved_path!r}"
+            )
+        excluded[str(resolved_path)] = frozenset(values)
+
+    provenance = {
+        "manifest_path": str(manifest_path),
+        "manifest_sha256": hashlib.sha256(manifest_path.read_bytes()).hexdigest(),
+        "kind": ELIGIBILITY_MANIFEST_KIND,
+        "schema_version": payload.get("schema_version"),
+        "upstream": payload.get("provenance"),
+        "files": {
+            key: {
+                "release_key": value.get("release_key"),
+                "total_rows": value.get("total_rows"),
+                "excluded_rows": value.get("excluded_rows"),
+                "eligible_rows": value.get("eligible_rows"),
+                "excluded_row_indices_sha256": value.get("excluded_row_indices_sha256"),
+            }
+            for key, value in raw_files.items()
+        },
+    }
+    return excluded, provenance
+
+
 def _selection_rank(clean_hash: str, seed: int) -> tuple[int, str]:
     digest = hashlib.blake2b(digest_size=16, person=b"PetitGPT-ref-v1")
     digest.update(str(int(seed)).encode("ascii"))
@@ -107,54 +202,65 @@ def _selection_rank(clean_hash: str, seed: int) -> tuple[int, str]:
     return int.from_bytes(raw, "big", signed=False), raw.hex()
 
 
-def _safe_source_names(paths: list[Path]) -> dict[str, str]:
-    resolved = [str(path.resolve()) for path in paths]
-    if len(set(resolved)) != len(resolved):
+def _safe_source_names(path_groups: list[tuple[Path, ...]]) -> dict[str, str]:
+    """Derive one unique output name per reference family (a family may span several paths)."""
+    flat = [path for group in path_groups for path in group]
+    resolved_flat = [str(path.resolve()) for path in flat]
+    if len(set(resolved_flat)) != len(resolved_flat):
         raise ValueError("duplicate --source paths are not allowed")
 
-    bases = [(_SAFE_NAME_RE.sub("_", path.stem) or "source") for path in paths]
+    bases = [(_SAFE_NAME_RE.sub("_", group[0].stem) or "source") for group in path_groups]
     base_counts = {base: bases.count(base) for base in set(bases)}
     result: dict[str, str] = {}
-    for path, resolved_path, base in zip(paths, resolved, bases, strict=True):
+    for group, base in zip(path_groups, bases, strict=True):
         name = base
         if base_counts[base] > 1:
-            suffix = hashlib.sha256(resolved_path.encode("utf-8")).hexdigest()[:10]
+            joined = "\0".join(str(path.resolve()) for path in group)
+            suffix = hashlib.sha256(joined.encode("utf-8")).hexdigest()[:10]
             name = f"{base}_{suffix}"
-        result[str(path)] = name
+        result[_group_key(group)] = name
     if len(set(result.values())) != len(result):
         raise AssertionError("failed to derive unique source output names")
     return result
 
 
+def _group_key(group: tuple[Path, ...]) -> str:
+    return ",".join(str(path) for path in group)
+
+
 def parse_reference_sources(source_args: list[str]) -> list[ReferenceSource]:
     """Parse repeatable ``path:target_serialized_tokens`` source arguments."""
-    parsed: list[tuple[Path, int]] = []
+    parsed: list[tuple[tuple[Path, ...], int]] = []
     for value in source_args:
         if ":" not in value:
             raise ValueError(
-                "--source must be path:target_serialized_tokens, "
+                "--source must be path[,path...]:target_serialized_tokens, "
                 f"got {value!r}"
             )
-        raw_path, raw_target = value.rsplit(":", 1)
-        path = Path(raw_path.strip())
+        raw_paths, raw_target = value.rsplit(":", 1)
+        group = tuple(
+            Path(part.strip()) for part in raw_paths.split(",") if part.strip()
+        )
+        if not group:
+            raise ValueError(f"--source has no path: {value!r}")
         try:
             target = int(raw_target.strip())
         except ValueError as exc:
             raise ValueError(f"invalid serialized-token target in --source {value!r}") from exc
         if target <= 0:
             raise ValueError(f"reference source target must be > 0, got {target}")
-        parsed.append((path, target))
+        parsed.append((group, target))
 
     if not parsed:
         raise ValueError("at least one --source is required")
-    names = _safe_source_names([path for path, _ in parsed])
+    names = _safe_source_names([group for group, _ in parsed])
     return [
         ReferenceSource(
-            path=path,
+            paths=group,
             target_serialized_tokens=target,
-            output_name=names[str(path)],
+            output_name=names[_group_key(group)],
         )
-        for path, target in parsed
+        for group, target in parsed
     ]
 
 
@@ -172,7 +278,37 @@ def _empty_scan_stats() -> dict[str, int]:
         "eligible_documents": 0,
         "duplicate_selected_candidates": 0,
         "not_in_reserved_pool": 0,
+        "excluded_ineligible_rows": 0,
     }
+
+
+def _iter_eligible_lines(
+    source: ReferenceSource,
+    stats: dict[str, int],
+    excluded_rows_by_path: dict[str, frozenset[int]] | None,
+):
+    """Yield the lines of every release in this family, skipping logically ineligible rows.
+
+    ``excluded_rows_by_path`` maps a resolved release path to the 0-based physical row indices
+    upstream stages have logically removed (D2 near-duplicate drops, D3 benchmark contamination).
+    Those rows are skipped BEFORE cleaning, hashing and ranking, so what gets ranked is the
+    eligible population. Filtering after ranking would yield a different reserve and could
+    underfill the byte capacity, so this ordering is load-bearing.
+
+    A family may span several releases; they are streamed as one pool, and because selection
+    depends only on the cleaned-content hash, the order of the releases cannot change membership.
+    """
+    for source_path in source.paths:
+        excluded = (excluded_rows_by_path or {}).get(
+            str(source_path.resolve()), frozenset()
+        )
+        with open(source_path, encoding="utf-8") as handle:
+            for row_index, line in enumerate(handle):
+                stats["lines"] += 1
+                if row_index in excluded:
+                    stats["excluded_ineligible_rows"] += 1
+                    continue
+                yield line
 
 
 def _reserve_source(
@@ -185,78 +321,78 @@ def _reserve_source(
     underscores_policy: str,
     min_chars: int,
     min_ascii_ratio: float,
+    excluded_rows_by_path: dict[str, frozenset[int]] | None = None,
 ) -> tuple[list[ReserveCandidate], dict[str, int]]:
     """Select a tokenizer-independent, stable, deliberately oversized pool."""
-    if not source.path.is_file():
-        raise FileNotFoundError(
-            f"reference source does not exist or is not a file: {source.path}"
-        )
+    for path in source.paths:
+        if not path.is_file():
+            raise FileNotFoundError(
+                f"reference source does not exist or is not a file: {path}"
+            )
 
     heap: list[tuple[int, int, ReserveCandidate]] = []
     selected_hashes: set[str] = set()
     selected_bytes = 0
     stats = _empty_scan_stats()
-    with open(source.path, encoding="utf-8") as f:
-        for line in f:
-            stats["lines"] += 1
-            if not line.strip():
-                stats["blank_lines"] += 1
-                continue
-            try:
-                obj = json.loads(line)
-            except json.JSONDecodeError:
-                stats["malformed_json"] += 1
-                continue
-            if not isinstance(obj, dict):
-                stats["non_object"] += 1
-                continue
-            raw_text = obj.get("text")
-            if not isinstance(raw_text, str):
-                stats["missing_or_non_string_text"] += 1
-                continue
-            if not raw_text:
-                stats["empty_text"] += 1
-                continue
-            cleaned = clean_text(
-                raw_text,
-                strip_leading_noise=strip_leading_noise,
-                normalize_quotes=normalize_quotes,
-                underscores_policy=underscores_policy,
-                min_chars=0,
-                min_ascii_ratio=0.0,
-            )
-            if cleaned is None:
-                stats["dropped_empty_after_cleaning"] += 1
-                continue
-            if min_chars > 0 and len(cleaned) < min_chars:
-                stats["dropped_short"] += 1
-                continue
-            if min_ascii_ratio > 0.0 and ascii_ratio(cleaned) < min_ascii_ratio:
-                stats["dropped_ascii"] += 1
-                continue
+    for line in _iter_eligible_lines(source, stats, excluded_rows_by_path):
+        if not line.strip():
+            stats["blank_lines"] += 1
+            continue
+        try:
+            obj = json.loads(line)
+        except json.JSONDecodeError:
+            stats["malformed_json"] += 1
+            continue
+        if not isinstance(obj, dict):
+            stats["non_object"] += 1
+            continue
+        raw_text = obj.get("text")
+        if not isinstance(raw_text, str):
+            stats["missing_or_non_string_text"] += 1
+            continue
+        if not raw_text:
+            stats["empty_text"] += 1
+            continue
+        cleaned = clean_text(
+            raw_text,
+            strip_leading_noise=strip_leading_noise,
+            normalize_quotes=normalize_quotes,
+            underscores_policy=underscores_policy,
+            min_chars=0,
+            min_ascii_ratio=0.0,
+        )
+        if cleaned is None:
+            stats["dropped_empty_after_cleaning"] += 1
+            continue
+        if min_chars > 0 and len(cleaned) < min_chars:
+            stats["dropped_short"] += 1
+            continue
+        if min_ascii_ratio > 0.0 and ascii_ratio(cleaned) < min_ascii_ratio:
+            stats["dropped_ascii"] += 1
+            continue
 
-            stats["eligible_documents"] += 1
-            clean_hash = cleaned_text_sha256(cleaned)
-            if clean_hash in selected_hashes:
-                stats["duplicate_selected_candidates"] += 1
-                continue
-            rank, rank_hex = _selection_rank(clean_hash, seed)
-            candidate = ReserveCandidate(
-                selection_rank=rank,
-                selection_rank_hex=rank_hex,
-                cleaned_text_sha256=clean_hash,
-                cleaned_utf8_bytes=len(cleaned.encode("utf-8")),
-            )
-            heapq.heappush(heap, (-rank, -int(clean_hash, 16), candidate))
-            selected_hashes.add(clean_hash)
-            selected_bytes += candidate.cleaned_utf8_bytes
-            while len(heap) > 1:
-                worst = heap[0][2]
-                if selected_bytes - worst.cleaned_utf8_bytes < target_cleaned_utf8_bytes:
-                    break
-                _, _, removed = heapq.heappop(heap)
-                selected_hashes.remove(removed.cleaned_text_sha256)
-                selected_bytes -= removed.cleaned_utf8_bytes
+        stats["eligible_documents"] += 1
+        clean_hash = cleaned_text_sha256(cleaned)
+        if clean_hash in selected_hashes:
+            stats["duplicate_selected_candidates"] += 1
+            continue
+        rank, rank_hex = _selection_rank(clean_hash, seed)
+        candidate = ReserveCandidate(
+            selection_rank=rank,
+            selection_rank_hex=rank_hex,
+            cleaned_text_sha256=clean_hash,
+            cleaned_utf8_bytes=len(cleaned.encode("utf-8")),
+        )
+        heapq.heappush(heap, (-rank, -int(clean_hash, 16), candidate))
+        selected_hashes.add(clean_hash)
+        selected_bytes += candidate.cleaned_utf8_bytes
+        while len(heap) > 1:
+            worst = heap[0][2]
+            if selected_bytes - worst.cleaned_utf8_bytes < target_cleaned_utf8_bytes:
+                break
+            _, _, removed = heapq.heappop(heap)
+            selected_hashes.remove(removed.cleaned_text_sha256)
+            selected_bytes -= removed.cleaned_utf8_bytes
 
     if selected_bytes < target_cleaned_utf8_bytes:
         raise ReferenceSourceExhaustedError(
@@ -280,6 +416,8 @@ def reserve_reference_candidates(
     underscores_policy: str = "keep",
     min_chars: int = 0,
     min_ascii_ratio: float = 0.0,
+    excluded_rows_by_path: dict[str, frozenset[int]] | None = None,
+    eligibility_provenance: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Reserve candidates before tokenizer training and publish their hashes."""
     if not sources:
@@ -295,7 +433,9 @@ def reserve_reference_candidates(
     if min_chars < 0 or not 0.0 <= min_ascii_ratio <= 1.0:
         raise ValueError("invalid reference cleaning filter values")
 
-    source_paths = [str(source.path.resolve()) for source in sources]
+    source_paths = [
+        str(path.resolve()) for source in sources for path in source.paths
+    ]
     if len(set(source_paths)) != len(source_paths):
         raise ValueError("duplicate reference source paths are not allowed")
     active_cleaning = cleaning_contract(
@@ -329,14 +469,16 @@ def reserve_reference_candidates(
             underscores_policy=underscores_policy,
             min_chars=min_chars,
             min_ascii_ratio=min_ascii_ratio,
+            excluded_rows_by_path=excluded_rows_by_path,
         )
         for item in selected:
             all_hash_sources.setdefault(item.cleaned_text_sha256, set()).add(output_name)
         realized_bytes = sum(item.cleaned_utf8_bytes for item in selected)
         source_meta[output_name] = {
-            "path": str(source.path),
-            "resolved_path": str(source.path.resolve()),
-            "source_fingerprint": file_fingerprint(source.path),
+            "paths": [str(path) for path in source.paths],
+            "resolved_paths": [str(path.resolve()) for path in source.paths],
+            "source_fingerprints": [file_fingerprint(path) for path in source.paths],
+            "release_count": len(source.paths),
             "final_target_serialized_tokens": source.target_serialized_tokens,
             "reserve_target_cleaned_utf8_bytes": byte_target,
             "reserve_realized_cleaned_utf8_bytes": realized_bytes,
@@ -368,6 +510,17 @@ def reserve_reference_candidates(
             "input_order_independent": True,
         },
         "cleaning": active_cleaning,
+        "eligibility": {
+            "applied": excluded_rows_by_path is not None,
+            "filter_order": (
+                "logical eligibility filter is applied to physical rows BEFORE cleaning, "
+                "hashing and stable ranking"
+            ),
+            "excluded_rows_total": sum(
+                len(rows) for rows in (excluded_rows_by_path or {}).values()
+            ),
+            "provenance": eligibility_provenance,
+        },
         "sources": source_meta,
         "outputs": {"exclusion_hash_manifest": EXCLUSION_MANIFEST_NAME},
         "unique_reserved_hashes": len(hashes),
@@ -415,10 +568,11 @@ def _select_source(
     allowed_hashes: frozenset[str] | None = None,
 ) -> tuple[list[Candidate], dict[str, int]]:
     """Return the stable-hash prefix sufficient for one source quota."""
-    if not source.path.is_file():
-        raise FileNotFoundError(
-            f"reference source does not exist or is not a file: {source.path}"
-        )
+    for path in source.paths:
+        if not path.is_file():
+            raise FileNotFoundError(
+                f"reference source does not exist or is not a file: {path}"
+            )
 
     # Python's heap is a min-heap. Negative keys put the worst retained rank at
     # heap[0], allowing it to be evicted once all better candidates meet quota.
@@ -428,8 +582,11 @@ def _select_source(
     stats = _empty_scan_stats()
     found_allowed_hashes: set[str] = set()
 
-    with open(source.path, encoding="utf-8") as f:
-        for line in f:
+    with contextlib.ExitStack() as stack:
+        handles = [
+            stack.enter_context(open(path, encoding="utf-8")) for path in source.paths
+        ]
+        for line in itertools.chain.from_iterable(handles):
             stats["lines"] += 1
             if not line.strip():
                 stats["blank_lines"] += 1
@@ -710,12 +867,17 @@ def load_reference_reserve(
         item = raw_sources[output_name]
         if not isinstance(item, dict):
             raise ValueError(f"invalid reserve source entry: {output_name!r}")
-        raw_resolved_path = item.get("resolved_path")
-        if not isinstance(raw_resolved_path, str) or not raw_resolved_path:
-            raise ValueError(f"reserve source resolved path is missing: {output_name!r}")
-        path = Path(raw_resolved_path)
-        if not path.is_absolute():
-            raise ValueError(f"reserve source path is not absolute: {output_name!r}")
+        raw_resolved_paths = item.get("resolved_paths")
+        if not isinstance(raw_resolved_paths, list) or not raw_resolved_paths:
+            raise ValueError(f"reserve source resolved paths are missing: {output_name!r}")
+        group: list[Path] = []
+        for raw_resolved_path in raw_resolved_paths:
+            if not isinstance(raw_resolved_path, str) or not raw_resolved_path:
+                raise ValueError(f"reserve source resolved path is missing: {output_name!r}")
+            candidate_path = Path(raw_resolved_path)
+            if not candidate_path.is_absolute():
+                raise ValueError(f"reserve source path is not absolute: {output_name!r}")
+            group.append(candidate_path)
         target = int(item.get("final_target_serialized_tokens", 0))
         if target <= 0:
             raise ValueError(f"invalid reserve path/target for {output_name!r}")
@@ -737,7 +899,7 @@ def load_reference_reserve(
             raise ValueError(f"duplicate reserved hashes for {output_name!r}")
         sources.append(
             ReferenceSource(
-                path=path,
+                paths=tuple(group),
                 target_serialized_tokens=target,
                 output_name=output_name,
             )
@@ -802,7 +964,9 @@ def build_reference_validation(
     if not 0.0 <= min_ascii_ratio <= 1.0:
         raise ValueError("min_ascii_ratio must be in [0,1]")
 
-    source_paths = [str(source.path.resolve()) for source in sources]
+    source_paths = [
+        str(path.resolve()) for source in sources for path in source.paths
+    ]
     if len(set(source_paths)) != len(source_paths):
         raise ValueError("duplicate reference source paths are not allowed")
     output_names = [source.output_name for source in sources]
@@ -899,9 +1063,9 @@ def build_reference_validation(
                 raise AssertionError(f"per-source shard accounting mismatch: {output_name}")
             per_source_shard_files[output_name] = writer.files
             per_source_output[output_name] = {
-                "path": str(source.path),
-                "resolved_path": str(source.path.resolve()),
-                "source_fingerprint": file_fingerprint(source.path),
+                "paths": [str(path) for path in source.paths],
+                "resolved_paths": [str(path.resolve()) for path in source.paths],
+                "source_fingerprints": [file_fingerprint(path) for path in source.paths],
                 "target_serialized_tokens": source.target_serialized_tokens,
                 "realized": {
                     "documents": len(candidates),
@@ -1101,6 +1265,24 @@ def main() -> None:
             "increase this and repeat reserve before training the tokenizer."
         ),
     )
+    reserve_parser.add_argument(
+        "--eligibility_manifest",
+        type=Path,
+        default=None,
+        help=(
+            "Reference-reserve eligibility manifest naming, per release, the physical rows that "
+            "D2/D3 logically removed. Required in production: the candidate releases are never "
+            "rewritten, so without it the reserve would rank ineligible documents."
+        ),
+    )
+    reserve_parser.add_argument(
+        "--allow_unfiltered_sources",
+        action="store_true",
+        help=(
+            "Debug/legacy escape hatch: rank every physical row with no logical-eligibility "
+            "filter. Never a production setting."
+        ),
+    )
     _add_cleaning_args(reserve_parser)
 
     finalize_parser = subparsers.add_parser(
@@ -1115,10 +1297,41 @@ def main() -> None:
     try:
         if args.command == "reserve":
             sources = parse_reference_sources(args.source)
+            if args.eligibility_manifest is None and not args.allow_unfiltered_sources:
+                raise ValueError(
+                    "--eligibility_manifest is required: candidate releases still physically "
+                    "contain rows that D2/D3 logically removed, so an unfiltered reserve would "
+                    "rank ineligible documents. Pass --allow_unfiltered_sources only for "
+                    "debug/legacy runs."
+                )
+            excluded_rows_by_path = None
+            eligibility_provenance = None
+            if args.eligibility_manifest is not None:
+                if args.allow_unfiltered_sources:
+                    raise ValueError(
+                        "--eligibility_manifest and --allow_unfiltered_sources are mutually "
+                        "exclusive"
+                    )
+                excluded_rows_by_path, eligibility_provenance = load_reserve_eligibility(
+                    args.eligibility_manifest
+                )
+                missing = [
+                    str(path.resolve())
+                    for source in sources
+                    for path in source.paths
+                    if str(path.resolve()) not in excluded_rows_by_path
+                ]
+                if missing:
+                    raise ValueError(
+                        "eligibility manifest does not cover every --source release; "
+                        f"missing: {sorted(missing)}"
+                    )
             manifest = reserve_reference_candidates(
                 sources=sources,
                 out_dir=args.out_dir,
                 seed=args.seed,
+                excluded_rows_by_path=excluded_rows_by_path,
+                eligibility_provenance=eligibility_provenance,
                 reserve_bytes_per_target_token=args.reserve_bytes_per_target_token,
                 strip_leading_noise=args.strip_leading_noise,
                 normalize_quotes=args.normalize_quotes,
