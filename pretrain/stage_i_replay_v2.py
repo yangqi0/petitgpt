@@ -36,6 +36,41 @@ SELECTION_DOMAIN = b"PetitGPT-pretrain-selection-v1\0"
 FINGERPRINT_DOMAIN = b"PetitGPT-stage-i-selection-fingerprint-v1\0"
 NODE_RESULT_SCHEMA = "petitgpt-stage-i-node-result-v2"
 REPRESENTATIVE_RULE = "selector-v1 min(raw_sha256, input_record_sha256)"
+NODE_RESULT_FIELDS = frozenset({
+    "canonical_schema_version",
+    "source_id",
+    "stage",
+    "target_serialized_tokens",
+    "branch",
+    "selection_mode",
+    "pre_exclusion_unique_identities",
+    "g2_excluded_identities",
+    "prior_commit_excluded_identities",
+    "exclusions_by_owner",
+    "post_exclusion_candidate_identities",
+    "post_exclusion_candidate_serialized_tokens",
+    "selected_identities",
+    "selected_serialized_tokens",
+    "crossing_identity",
+    "crossing_document_serialized_tokens",
+    "actual_overshoot_tokens",
+    "residual_identities",
+    "residual_serialized_tokens",
+    "selection_fingerprint",
+    "feasible",
+    "boundary_evidence",
+})
+BOUNDARY_EVIDENCE_FIELDS = (
+    "representative_rule",
+    "crossing_selection_rank",
+    "crossing_score_bits_hex",
+    "crossing_score_hex",
+    "next_unselected_identity",
+    "next_unselected_serialized_tokens",
+    "next_unselected_selection_rank",
+    "next_unselected_score_bits_hex",
+    "next_unselected_score_hex",
+)
 _HEX64 = frozenset("0123456789abcdef")
 _UINT64_LIMIT = 1 << 64
 
@@ -238,22 +273,9 @@ class NodeResult:
         }
 
 
-_BOUNDARY_FIELDS = (
-    "representative_rule",
-    "crossing_selection_rank",
-    "crossing_score_bits_hex",
-    "crossing_score_hex",
-    "next_unselected_identity",
-    "next_unselected_serialized_tokens",
-    "next_unselected_selection_rank",
-    "next_unselected_score_bits_hex",
-    "next_unselected_score_hex",
-)
-
-
 def _canonical_boundary_evidence(evidence: dict[str, Any]) -> dict[str, Any]:
     """Explicit projection of the rank-boundary evidence; unknown keys never reach output."""
-    return {name: evidence.get(name) for name in _BOUNDARY_FIELDS}
+    return {name: evidence.get(name) for name in BOUNDARY_EVIDENCE_FIELDS}
 
 
 def _representatives(records: Iterable[CandidateRecord]) -> dict[str, CandidateRecord]:
@@ -521,9 +543,11 @@ def ownership_matrix(results: list[NodeResult]) -> dict[str, dict[str, int]]:
 
 
 __all__ = [
+    "BOUNDARY_EVIDENCE_FIELDS",
     "CandidateRecord",
     "GraphError",
     "NODE_RESULT_SCHEMA",
+    "NODE_RESULT_FIELDS",
     "NodeResult",
     "REPRESENTATIVE_RULE",
     "ReplayError",

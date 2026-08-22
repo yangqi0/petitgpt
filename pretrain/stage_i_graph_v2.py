@@ -20,6 +20,7 @@ Two properties are load-bearing here and are enforced rather than assumed:
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 import contextlib
 from dataclasses import dataclass
 import fcntl
@@ -28,6 +29,7 @@ import json
 import os
 from pathlib import Path
 import stat
+from types import MappingProxyType
 from typing import Any
 
 import numpy as np
@@ -112,6 +114,15 @@ def canonical_json_bytes(value: Any) -> bytes:
         )
         + "\n"
     ).encode("utf-8")
+
+
+def _freeze_json(value: Any) -> Any:
+    """Recursively freeze parsed JSON used by the authorized execution model."""
+    if type(value) is dict:
+        return MappingProxyType({key: _freeze_json(child) for key, child in value.items()})
+    if type(value) is list:
+        return tuple(_freeze_json(child) for child in value)
+    return value
 
 
 # --------------------------------------------------------------------------- typed accessors
@@ -258,10 +269,11 @@ def open_authoritative(path: Path, *, buffering: int = -1):
         )
         yield stream, identity
         after = os.fstat(stream.fileno())
-        if (after.st_dev, after.st_ino, after.st_size) != (
+        if (after.st_dev, after.st_ino, after.st_size, after.st_mtime_ns) != (
             identity.st_dev,
             identity.st_ino,
             identity.st_size,
+            identity.st_mtime_ns,
         ):
             raise GraphError(f"{path}: opened object changed while it was being read")
     finally:
@@ -326,9 +338,9 @@ class InputBinding:
     total_physical_rows: int
     excluded_rows: int
     expected_eligible_rows: int
-    schema_accessor: dict[str, Any]
+    schema_accessor: Mapping[str, Any]
     text_field: str
-    cleaning_contract: dict[str, Any]
+    cleaning_contract: Mapping[str, Any]
 
 
 @dataclass(frozen=True)
@@ -340,9 +352,9 @@ class Node:
     target_serialized_tokens: int
     input_binding_ids: tuple[str, ...]
     selection_mode: str
-    candidate_predicate: dict[str, Any]
-    branch_primary: dict[str, Any] | None
-    branch_fallback: dict[str, Any] | None
+    candidate_predicate: Mapping[str, Any]
+    branch_primary: Mapping[str, Any] | None
+    branch_fallback: Mapping[str, Any] | None
 
     @property
     def priority_key(self) -> tuple[int, str]:
@@ -353,13 +365,13 @@ class Node:
 class SourceGraph:
     seed: int
     nodes: tuple[Node, ...]
-    bindings: dict[str, InputBinding]
-    bound_authorities: dict[str, str]
-    raw: dict[str, Any]
+    bindings: Mapping[str, InputBinding]
+    bound_authorities: Mapping[str, str]
+    raw: Mapping[str, Any]
     graph_sha256: str
     graph_bytes: bytes = b""
-    eligibility_rows: dict[str, np.ndarray] | None = None
-    binding_identities: dict[str, FileIdentity] | None = None
+    eligibility_rows: Mapping[str, np.ndarray] | None = None
+    binding_identities: Mapping[str, FileIdentity] | None = None
 
     def validated_eligibility_rows(self, binding_id: str) -> np.ndarray:
         """The exact row set validated on the descriptor it was hashed from."""
@@ -369,6 +381,15 @@ class SourceGraph:
                 "verify_hashes=True before scanning"
             )
         return self.eligibility_rows[binding_id]
+
+    def validated_binding_identity(self, binding_id: str) -> FileIdentity:
+        """The opened documents object validated with the binding's authority hashes."""
+        if self.binding_identities is None or binding_id not in self.binding_identities:
+            raise GraphError(
+                f"{binding_id}: documents identity was never validated; load the graph with "
+                "verify_hashes=True before scanning"
+            )
+        return self.binding_identities[binding_id]
 
 
 # --------------------------------------------------------------------------- schema fragments
@@ -534,12 +555,12 @@ def _validate_binding(raw: Any, key: str) -> InputBinding:
         total_physical_rows=total,
         excluded_rows=excluded,
         expected_eligible_rows=eligible,
-        schema_accessor=_parse_schema_accessor(
-            raw["schema_accessor"], where=f"{where}.schema_accessor"
+        schema_accessor=_freeze_json(
+            _parse_schema_accessor(raw["schema_accessor"], where=f"{where}.schema_accessor")
         ),
         text_field=_req_str(raw, "text_field", where),
-        cleaning_contract=_parse_cleaning_contract(
-            raw["cleaning_contract"], where=f"{where}.cleaning_contract"
+        cleaning_contract=_freeze_json(
+            _parse_cleaning_contract(raw["cleaning_contract"], where=f"{where}.cleaning_contract")
         ),
     )
     return binding
@@ -582,6 +603,7 @@ def validate_eligibility_index(binding: InputBinding) -> np.ndarray:
         f"{ELIGIBILITY_INDEX_WIDTH}",
     )
     rows = np.frombuffer(payload, dtype=ELIGIBILITY_INDEX_DTYPE)
+    rows.setflags(write=False)
     _require(
         len(rows) == binding.excluded_rows, f"{where}: eligibility index element count mismatch"
     )
@@ -895,11 +917,13 @@ def load_source_graph(
                 target_serialized_tokens=target,
                 input_binding_ids=tuple(ids),
                 selection_mode=mode,
-                candidate_predicate=_parse_predicate(
-                    raw_node["candidate_predicate"], where=f"{where}.candidate_predicate"
+                candidate_predicate=_freeze_json(
+                    _parse_predicate(
+                        raw_node["candidate_predicate"], where=f"{where}.candidate_predicate"
+                    )
                 ),
-                branch_primary=primary,
-                branch_fallback=fallback,
+                branch_primary=_freeze_json(primary) if primary is not None else None,
+                branch_fallback=_freeze_json(fallback) if fallback is not None else None,
             )
         )
     _require(nodes, "source graph: no nodes")
@@ -913,13 +937,13 @@ def load_source_graph(
     return SourceGraph(
         seed=seed,
         nodes=tuple(ordered),
-        bindings=bindings,
-        bound_authorities=dict(raw["bound_authorities"]),
-        raw=raw,
+        bindings=MappingProxyType(dict(bindings)),
+        bound_authorities=MappingProxyType(dict(raw["bound_authorities"])),
+        raw=_freeze_json(raw),
         graph_sha256=graph_sha256,
         graph_bytes=raw_bytes,
-        eligibility_rows=eligibility_rows if verify_hashes else None,
-        binding_identities=identities if verify_hashes else None,
+        eligibility_rows=MappingProxyType(dict(eligibility_rows)) if verify_hashes else None,
+        binding_identities=MappingProxyType(dict(identities)) if verify_hashes else None,
     )
 
 

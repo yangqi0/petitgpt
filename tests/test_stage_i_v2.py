@@ -12,6 +12,7 @@ test asserts only that a source string is absent when the property can be exerci
 
 from __future__ import annotations
 
+import contextlib
 import dataclasses
 import hashlib
 import itertools
@@ -85,6 +86,16 @@ REJECTED_H_V1_SHA = "8308b479bde26a5f97e29bb766ed0ab37efb7e83a33f76eab453a421a6e
 SEED = 5088999448999271579
 FP_DOMAIN = b"PetitGPT-stage-i-selection-fingerprint-v1\0"
 TUTORIAL_BINDING = "ib_structured_tutorial"
+
+
+def _runtime_head() -> str:
+    result = subprocess.run(
+        ["git", "-C", str(ROOT), "rev-parse", "HEAD"],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    return result.stdout.strip()
 
 
 # ---------------------------------------------------------------- independent oracles
@@ -379,7 +390,7 @@ def test_owner_graph_structured_tutorial_is_one_logical_node():
     assert block["sub_targets"] is None
     owning = [n for n in graph.nodes if set(n.input_binding_ids) & set(block["input_binding_ids"])]
     assert [n.source_id for n in owning] == ["b_structured_tutorial"]
-    assert list(owning[0].input_binding_ids) == block["input_binding_ids"]
+    assert list(owning[0].input_binding_ids) == list(block["input_binding_ids"])
 
 
 def test_owner_graph_h_boundary_is_index_only():
@@ -1108,7 +1119,7 @@ def _authorized(tmp_path: Path, monkeypatch=None) -> AuthorizedRunContext:
         graph_path=GRAPH,
         graph=load_source_graph(GRAPH, verify_hashes=False),
         repo_root=ROOT,
-        implementation_commit="0" * 40,
+        implementation_commit=_runtime_head(),
     )
     path = tmp_path / "plan.json"
     path.write_bytes(canonical_json_bytes(plan))
@@ -1120,13 +1131,19 @@ def _fake_census(context: AuthorizedRunContext) -> dict:
     nodes = []
     for graph_node in context.graph.nodes:
         target = graph_node.target_serialized_tokens
+        if graph_node.selection_mode == "BRANCH_DEPENDENT":
+            branch = "PRIMARY_GE4"
+            mode = graph_node.branch_primary["selection_mode"]
+        else:
+            branch = "ORDINARY"
+            mode = graph_node.selection_mode
         nodes.append({
             "canonical_schema_version": NODE_RESULT_SCHEMA,
             "source_id": graph_node.source_id,
             "stage": graph_node.stage,
             "target_serialized_tokens": target,
-            "branch": "ORDINARY",
-            "selection_mode": "SEEDED_HASH",
+            "branch": branch,
+            "selection_mode": mode,
             "pre_exclusion_unique_identities": 1,
             "g2_excluded_identities": 0,
             "prior_commit_excluded_identities": 0,
@@ -1142,7 +1159,17 @@ def _fake_census(context: AuthorizedRunContext) -> dict:
             "residual_serialized_tokens": 0,
             "selection_fingerprint": "b" * 64,
             "feasible": True,
-            "boundary_evidence": {},
+            "boundary_evidence": {
+                "representative_rule": "selector-v1 min(raw_sha256, input_record_sha256)",
+                "crossing_selection_rank": "c" * 64,
+                "crossing_score_bits_hex": None,
+                "crossing_score_hex": None,
+                "next_unselected_identity": None,
+                "next_unselected_serialized_tokens": None,
+                "next_unselected_selection_rank": None,
+                "next_unselected_score_bits_hex": None,
+                "next_unselected_score_hex": None,
+            },
         })
     counters = {}
     for key, binding in sorted(context.graph.bindings.items()):
@@ -1204,12 +1231,12 @@ def test_h04_valid_complete_run_publishes_and_reloads(tmp_path: Path):
 @pytest.mark.parametrize(
     "mutation,match",
     [
-        ({"status": "INCOMPLETE"}, "status is"),
+        ({"status": "INCOMPLETE"}, "wrong status"),
         ({"schema_version": "wrong"}, "wrong schema_version"),
         ({"output_label": "AUTHORITATIVE"}, "wrong output_label"),
         ({"resume_supported": True}, "resume must be disabled"),
-        ({"graph_sha256": "0" * 64}, "graph SHA disagreement"),
-        ({"authorization": {}}, "authorization block"),
+        ({"graph_sha256": "0" * 64}, "graph SHA disagree"),
+        ({"authorization": {}}, "missing required keys"),
         ({"nodes": []}, "non-empty array"),
         ({"hard_stop_required": True}, "hard_stop_required disagrees"),
         ({"extra_field": 1}, "unknown keys"),
@@ -1226,12 +1253,120 @@ def test_h04_invalid_result_can_never_receive_complete(tmp_path: Path, mutation,
     assert list(out.iterdir()) == []
 
 
+def test_h04_complete_nested_unknown_field_is_rejected(tmp_path: Path):
+    context = _authorized(tmp_path)
+    census = _fake_census(context)
+    census["nodes"][0]["boundary_evidence"]["unexpected"] = 1
+    with pytest.raises(CensusError, match="unknown keys"):
+        publish_atomic(context, census, tmp_path / "out")
+    assert not (tmp_path / "out").exists()
+
+
+def test_h04_complete_nested_missing_field_is_rejected(tmp_path: Path):
+    context = _authorized(tmp_path)
+    census = _fake_census(context)
+    del census["nodes"][0]["boundary_evidence"]["representative_rule"]
+    with pytest.raises(CensusError, match="missing required keys"):
+        publish_atomic(context, census, tmp_path / "out")
+    assert not (tmp_path / "out").exists()
+
+
+def test_h04_complete_nested_wrong_primitive_type_is_rejected(tmp_path: Path):
+    context = _authorized(tmp_path)
+    census = _fake_census(context)
+    first_binding = next(iter(census["binding_counters"]))
+    census["binding_counters"][first_binding]["eligible_rows"] = "0"
+    with pytest.raises(CensusError, match="must be an exact integer"):
+        publish_atomic(context, census, tmp_path / "out")
+    assert not (tmp_path / "out").exists()
+
+
+def test_h04_publisher_and_consumer_share_the_nested_contract(tmp_path: Path):
+    context = _authorized(tmp_path)
+    malformed = _fake_census(context)
+    malformed["nodes"][0]["boundary_evidence"]["unexpected"] = 1
+    with pytest.raises(CensusError, match="unknown keys"):
+        publish_atomic(context, malformed, tmp_path / "publisher-out")
+
+    final = publish_atomic(context, _fake_census(context), tmp_path / "consumer-out")
+    census_path = final / "census.json"
+    marker_path = final / "COMPLETE"
+    stored = json.loads(census_path.read_text())
+    stored["nodes"][0]["boundary_evidence"]["unexpected"] = 1
+    payload = canonical_json_bytes(stored)
+    marker = json.loads(marker_path.read_text())
+    marker["census_sha256"] = hashlib.sha256(payload).hexdigest()
+    census_path.write_bytes(payload)
+    marker_path.write_bytes(canonical_json_bytes(marker))
+
+    with pytest.raises(CensusError, match="unknown keys"):
+        load_published_run(final)
+
+
+@pytest.mark.parametrize(
+    "path,value",
+    [
+        (("reference_exclusion_identities",), True),
+        (("totals", "physical_rows"), 1.0),
+        (("nodes", 0, "selected_identities"), "1"),
+    ],
+)
+def test_h04_exact_primitive_types_are_recursive(tmp_path: Path, path, value):
+    context = _authorized(tmp_path)
+    census = _fake_census(context)
+    target = census
+    for component in path[:-1]:
+        target = target[component]
+    target[path[-1]] = value
+    with pytest.raises(CensusError, match="exact integer"):
+        validate_complete_census(census, context)
+
+
+def test_h04_ownership_matrix_rejects_bool_as_an_integer(tmp_path: Path):
+    context = _authorized(tmp_path)
+    census = _fake_census(context)
+    owner = census["nodes"][0]["source_id"]
+    node_result = census["nodes"][1]
+    source = node_result["source_id"]
+    node_result["pre_exclusion_unique_identities"] = 2
+    node_result["prior_commit_excluded_identities"] = 1
+    node_result["exclusions_by_owner"] = {owner: 1}
+    census["ownership_matrix"] = {source: {owner: True}}
+
+    with pytest.raises(CensusError, match="must be an exact integer"):
+        validate_complete_census(census)
+
+
+def test_h04_consumer_rejects_noncanonical_node_order(tmp_path: Path):
+    context = _authorized(tmp_path)
+    census = _fake_census(context)
+    census["nodes"][0], census["nodes"][1] = census["nodes"][1], census["nodes"][0]
+
+    with pytest.raises(CensusError, match="canonical execution order"):
+        validate_complete_census(census)
+
+
+def test_h05_authorization_execution_state_is_immutable(tmp_path: Path):
+    context = _authorized(tmp_path)
+    with pytest.raises(TypeError):
+        context.graph.bindings["ib_pes2o"] = context.graph.bindings["ib_pes2o"]
+    with pytest.raises(TypeError):
+        context.graph.binding_identities["ib_pes2o"] = context.graph.binding_identities["ib_pes2o"]
+    with pytest.raises(TypeError):
+        context.authority_sha256["tokenizer"] = "0" * 64
+    with pytest.raises(TypeError):
+        context.plan["authorities"]["tokenizer"]["sha256"] = "0" * 64
+    rows = next(rows for rows in context.graph.eligibility_rows.values() if len(rows))
+    with pytest.raises(ValueError, match="read-only"):
+        rows[0] = rows[0]
+
+
 def test_h04_internally_inconsistent_accounting_is_refused(tmp_path: Path):
     context = _authorized(tmp_path)
     census = _fake_census(context)
     census["nodes"][0]["residual_identities"] = 7
     out = tmp_path / "out"
-    with pytest.raises(CensusError, match="residual identities do not close"):
+    with pytest.raises(CensusError, match="residual_identities and residual_serialized_tokens"):
         publish_atomic(context, census, out)
     assert not out.exists() or list(out.iterdir()) == []
 
@@ -1520,6 +1655,43 @@ def test_h05_mutated_documents_detected_by_the_streaming_digest(tmp_path: Path):
         scan_binding(binding, str(TOKENIZER), _empty_rows())
 
 
+def test_h05_same_size_documents_replacement_blocks_complete_publication(tmp_path: Path):
+    owner_graph = load_source_graph(GRAPH, verify_hashes=False)
+    graph_path = mini_graph(
+        tmp_path / "small",
+        [node("b_x", "stage_b", 1, ["ib_x"])],
+        bound_authorities=dict(owner_graph.bound_authorities),
+    )
+    graph = load_source_graph(graph_path, verify_hashes=False)
+    plan = generate_candidate_plan(
+        graph_path=graph_path,
+        graph=graph,
+        repo_root=ROOT,
+        implementation_commit=_runtime_head(),
+    )
+    plan_path = tmp_path / "small-plan.json"
+    plan_path.write_bytes(canonical_json_bytes(plan))
+    context = authorize_run(
+        plan_path=plan_path,
+        expected_plan_sha256=file_sha256(plan_path),
+        repo_root=ROOT,
+    )
+    census = build_census(context)
+
+    documents_path = context.graph.bindings["ib_x"].documents_path
+    original = documents_path.read_bytes()
+    replacement_bytes = original.replace(b'"x"', b'"y"')
+    assert replacement_bytes != original and len(replacement_bytes) == len(original)
+    replacement = tmp_path / "replacement.jsonl"
+    replacement.write_bytes(replacement_bytes)
+    os.replace(replacement, documents_path)
+
+    out = tmp_path / "out"
+    with pytest.raises(AuthorizationError, match="documents identity changed"):
+        publish_atomic(context, census, out)
+    assert not out.exists()
+
+
 def test_h05_documents_size_drift_is_detected_at_graph_load(tmp_path: Path):
     binding = _binding_with_index(tmp_path, pack([0]), total=1)
     binding["documents_size_bytes"] = 999999
@@ -1527,53 +1699,77 @@ def test_h05_documents_size_drift_is_detected_at_graph_load(tmp_path: Path):
         load_source_graph(_graph_with_binding(tmp_path, binding), verify_hashes=True)
 
 
-def test_h05_authority_revalidation_catches_post_authorisation_drift(tmp_path: Path):
+def test_h05_authority_revalidation_catches_post_authorisation_drift(tmp_path: Path, monkeypatch):
     """Every authority is re-derived immediately before publication."""
     context = _authorized(tmp_path)
-    tampered = dataclasses.replace(
-        context, authority_sha256={**context.authority_sha256, "tokenizer": "0" * 64}
-    )
-    census = _fake_census(tampered)
-    validate_complete_census(census, tampered)  # the census itself is internally consistent
+    census = _fake_census(context)
+    from pretrain import h_census_v2
+
+    real_file_sha256 = h_census_v2.file_sha256
+
+    def drifted_file_sha256(path):
+        if Path(path) == context.tokenizer_path:
+            return "0" * 64
+        return real_file_sha256(path)
+
+    monkeypatch.setattr(h_census_v2, "file_sha256", drifted_file_sha256)
     with pytest.raises(AuthorizationError, match="authority 'tokenizer' changed"):
-        publish_atomic(tampered, census, tmp_path / "out")
+        publish_atomic(context, census, tmp_path / "out")
 
 
-def test_h05_binding_manifests_and_indexes_are_rebound_before_publication(tmp_path: Path):
+def test_h05_binding_manifests_and_indexes_are_rebound_before_publication(
+    tmp_path: Path, monkeypatch
+):
     """The review's case: a release manifest changed after graph validation went undetected."""
     context = _authorized(tmp_path)
     census = _fake_census(context)
     binding = context.graph.bindings["ib_pes2o"]
+    from pretrain import h_census_v2
 
     manifest_path = binding.release_manifest_path
     original = manifest_path.read_bytes()
-    tampered = dataclasses.replace(binding, release_manifest_sha256="0" * 64)
-    poisoned = dict(context.graph.bindings)
-    poisoned["ib_pes2o"] = tampered
-    drifted = dataclasses.replace(
-        context, graph=dataclasses.replace(context.graph, bindings=poisoned)
-    )
-    with pytest.raises(AuthorizationError, match="release manifest changed after authorisation"):
-        publish_atomic(drifted, _fake_census(drifted), tmp_path / "out_a")
+    real_file_sha256 = h_census_v2.file_sha256
+
+    def mismatched_at(target):
+        def digest(path):
+            if Path(path) == target:
+                return "0" * 64
+            return real_file_sha256(path)
+
+        return digest
+
+    with monkeypatch.context() as patch:
+        patch.setattr(h_census_v2, "file_sha256", mismatched_at(manifest_path))
+        with pytest.raises(
+            AuthorizationError, match="release manifest changed after authorisation"
+        ):
+            publish_atomic(context, census, tmp_path / "out_a")
     assert manifest_path.read_bytes() == original  # nothing was written to the real release
 
-    index_tampered = dataclasses.replace(binding, eligibility_index_sha256="0" * 64)
-    poisoned = dict(context.graph.bindings)
-    poisoned["ib_pes2o"] = index_tampered
-    drifted = dataclasses.replace(
-        context, graph=dataclasses.replace(context.graph, bindings=poisoned)
-    )
-    with pytest.raises(AuthorizationError, match="eligibility index changed after authorisation"):
-        publish_atomic(drifted, _fake_census(drifted), tmp_path / "out_b")
+    with monkeypatch.context() as patch:
+        patch.setattr(
+            h_census_v2,
+            "file_sha256",
+            mismatched_at(binding.eligibility_index_path),
+        )
+        with pytest.raises(
+            AuthorizationError, match="eligibility index changed after authorisation"
+        ):
+            publish_atomic(context, census, tmp_path / "out_b")
 
-    size_tampered = dataclasses.replace(binding, documents_size_bytes=1)
-    poisoned = dict(context.graph.bindings)
-    poisoned["ib_pes2o"] = size_tampered
-    drifted = dataclasses.replace(
-        context, graph=dataclasses.replace(context.graph, bindings=poisoned)
-    )
-    with pytest.raises(AuthorizationError, match="documents size changed after authorisation"):
-        publish_atomic(drifted, _fake_census(drifted), tmp_path / "out_c")
+    real_open = h_census_v2.open_authoritative
+
+    @contextlib.contextmanager
+    def size_drift(path, *, buffering=-1):
+        with real_open(path, buffering=buffering) as (stream, identity):
+            if Path(path) == binding.documents_path:
+                identity = dataclasses.replace(identity, st_size=1)
+            yield stream, identity
+
+    with monkeypatch.context() as patch:
+        patch.setattr(h_census_v2, "open_authoritative", size_drift)
+        with pytest.raises(AuthorizationError, match="documents size changed after authorisation"):
+            publish_atomic(context, census, tmp_path / "out_c")
     assert census["status"] == "COMPLETE"
 
 
@@ -1582,7 +1778,7 @@ def test_h05_graph_bytes_changing_after_authorisation_is_detected(tmp_path: Path
         graph_path=GRAPH,
         graph=load_source_graph(GRAPH, verify_hashes=False),
         repo_root=ROOT,
-        implementation_commit="0" * 40,
+        implementation_commit=_runtime_head(),
     )
     copied_graph = tmp_path / "graph_copy.json"
     copied_graph.write_bytes(GRAPH.read_bytes())
@@ -1602,7 +1798,7 @@ def test_h05_plan_bytes_changing_after_authorisation_is_detected(tmp_path: Path)
         graph_path=GRAPH,
         graph=load_source_graph(GRAPH, verify_hashes=False),
         repo_root=ROOT,
-        implementation_commit="0" * 40,
+        implementation_commit=_runtime_head(),
     )
     path.write_bytes(canonical_json_bytes(plan))
     context = authorize_run(plan_path=path, expected_plan_sha256=file_sha256(path), repo_root=ROOT)
@@ -1656,7 +1852,7 @@ def test_h06_self_labelled_authorized_plan_is_refused(tmp_path: Path):
         graph_path=GRAPH,
         graph=load_source_graph(GRAPH, verify_hashes=False),
         repo_root=ROOT,
-        implementation_commit="0" * 40,
+        implementation_commit=_runtime_head(),
     )
     plan["authorization_status"] = "AUTHORIZED"
     path = tmp_path / "plan.json"
@@ -1670,7 +1866,7 @@ def test_h06_one_byte_plan_mutation_is_refused(tmp_path: Path):
         graph_path=GRAPH,
         graph=load_source_graph(GRAPH, verify_hashes=False),
         repo_root=ROOT,
-        implementation_commit="0" * 40,
+        implementation_commit=_runtime_head(),
     )
     path = tmp_path / "plan.json"
     payload = canonical_json_bytes(plan)
@@ -1687,7 +1883,7 @@ def test_h06_regenerated_but_unauthorized_plan_is_refused(tmp_path: Path):
     """An internally consistent plan the owner never approved must not pass."""
     graph = load_source_graph(GRAPH, verify_hashes=False)
     approved = generate_candidate_plan(
-        graph_path=GRAPH, graph=graph, repo_root=ROOT, implementation_commit="0" * 40
+        graph_path=GRAPH, graph=graph, repo_root=ROOT, implementation_commit=_runtime_head()
     )
     approved_path = tmp_path / "approved.json"
     approved_path.write_bytes(canonical_json_bytes(approved))
@@ -1709,7 +1905,7 @@ def test_h06_hashed_bytes_and_parsed_bytes_are_the_same_bytes(tmp_path: Path):
         graph_path=GRAPH,
         graph=load_source_graph(GRAPH, verify_hashes=False),
         repo_root=ROOT,
-        implementation_commit="0" * 40,
+        implementation_commit=_runtime_head(),
     )
     path = tmp_path / "plan.json"
     path.write_bytes(canonical_json_bytes(plan))
@@ -1737,7 +1933,7 @@ def test_h06_graph_mutation_is_refused(tmp_path: Path):
         graph_path=GRAPH,
         graph=load_source_graph(GRAPH, verify_hashes=False),
         repo_root=ROOT,
-        implementation_commit="0" * 40,
+        implementation_commit=_runtime_head(),
     )
     plan["graph_sha256"] = "0" * 64
     path = tmp_path / "plan.json"
@@ -1755,7 +1951,7 @@ def test_h06_alternate_graph_path_is_refused(tmp_path: Path):
     other_path = tmp_path / "other_graph.json"
     other_path.write_bytes(canonical_json_bytes(other))
     plan = generate_candidate_plan(
-        graph_path=GRAPH, graph=graph, repo_root=ROOT, implementation_commit="0" * 40
+        graph_path=GRAPH, graph=graph, repo_root=ROOT, implementation_commit=_runtime_head()
     )
     plan["graph_path"] = str(other_path)
     path = tmp_path / "plan.json"
@@ -1769,7 +1965,7 @@ def test_h06_implementation_mutation_is_refused(tmp_path: Path):
         graph_path=GRAPH,
         graph=load_source_graph(GRAPH, verify_hashes=False),
         repo_root=ROOT,
-        implementation_commit="0" * 40,
+        implementation_commit=_runtime_head(),
     )
     plan["implementation_files"] = {name: "0" * 64 for name in plan["implementation_files"]}
     path = tmp_path / "plan.json"
@@ -1783,7 +1979,7 @@ def test_h06_implementation_bundle_digest_is_checked_independently(tmp_path: Pat
         graph_path=GRAPH,
         graph=load_source_graph(GRAPH, verify_hashes=False),
         repo_root=ROOT,
-        implementation_commit="0" * 40,
+        implementation_commit=_runtime_head(),
     )
     plan["implementation_bundle_sha256"] = "0" * 64
     path = tmp_path / "plan.json"
@@ -1798,7 +1994,7 @@ def test_h06_authority_mutation_is_refused(tmp_path: Path, authority):
         graph_path=GRAPH,
         graph=load_source_graph(GRAPH, verify_hashes=False),
         repo_root=ROOT,
-        implementation_commit="0" * 40,
+        implementation_commit=_runtime_head(),
     )
     plan["authorities"][authority]["sha256"] = "0" * 64
     path = tmp_path / "plan.json"
@@ -1815,7 +2011,7 @@ def test_h06_authority_pointed_at_other_bytes_is_refused(tmp_path: Path):
         graph_path=GRAPH,
         graph=load_source_graph(GRAPH, verify_hashes=False),
         repo_root=ROOT,
-        implementation_commit="0" * 40,
+        implementation_commit=_runtime_head(),
     )
     plan["authorities"]["tokenizer"] = {
         "path": str(decoy),
@@ -1834,7 +2030,7 @@ def test_h06_binding_and_node_mutations_are_refused(tmp_path: Path):
         graph_path=GRAPH,
         graph=load_source_graph(GRAPH, verify_hashes=False),
         repo_root=ROOT,
-        implementation_commit="0" * 40,
+        implementation_commit=_runtime_head(),
     )
     for mutate, match in (
         (
@@ -1871,6 +2067,48 @@ def test_h06_direct_python_api_cannot_bypass_authorisation(tmp_path: Path):
         build_census({"graph": "anything"})
     with pytest.raises(AuthorizationError, match="requires an AuthorizedRunContext"):
         publish_atomic("not-a-context", {}, tmp_path)
+
+
+def test_h06_manually_constructed_context_has_no_authorization_provenance(tmp_path: Path):
+    genuine = _authorized(tmp_path)
+    manual = AuthorizedRunContext(
+        repo_root=genuine.repo_root,
+        plan_path=genuine.plan_path,
+        plan_sha256=genuine.plan_sha256,
+        plan=genuine.plan,
+        graph=genuine.graph,
+        graph_sha256=genuine.graph_sha256,
+        bundle_sha256=genuine.bundle_sha256,
+        bundle_files=genuine.bundle_files,
+        authority_paths=genuine.authority_paths,
+        authority_sha256=genuine.authority_sha256,
+        implementation_commit=genuine.implementation_commit,
+        identity=genuine.identity,
+    )
+    census = _fake_census(manual)
+    with pytest.raises(AuthorizationError, match="produced by authorize_run"):
+        manual.revalidate()
+    with pytest.raises(AuthorizationError, match="produced by authorize_run"):
+        validate_complete_census(census, manual)
+    with pytest.raises(AuthorizationError, match="produced by authorize_run"):
+        build_census(manual)
+    with pytest.raises(AuthorizationError, match="produced by authorize_run"):
+        publish_atomic(manual, census, tmp_path / "manual-out")
+
+
+def test_h06_dataclass_copy_loses_authorization_provenance(tmp_path: Path):
+    genuine = _authorized(tmp_path)
+    copied = dataclasses.replace(genuine)
+    with pytest.raises(AuthorizationError, match="produced by authorize_run"):
+        publish_atomic(copied, _fake_census(copied), tmp_path / "out")
+
+
+def test_h06_authorize_run_context_provenance_is_accepted(tmp_path: Path):
+    genuine = _authorized(tmp_path)
+    census = _fake_census(genuine)
+    validate_complete_census(census, genuine)
+    final = publish_atomic(genuine, census, tmp_path / "out")
+    assert load_published_run(final, expected_run_identity=genuine.identity) == census
 
 
 def test_h06_authorised_context_is_reproducible_and_complete(tmp_path: Path):
@@ -1917,7 +2155,7 @@ def test_m01_plan_with_duplicate_keys_rejected(tmp_path: Path):
         graph_path=GRAPH,
         graph=load_source_graph(GRAPH, verify_hashes=False),
         repo_root=ROOT,
-        implementation_commit="0" * 40,
+        implementation_commit=_runtime_head(),
     )
     path = tmp_path / "plan.json"
     text = canonical_json_bytes(plan).decode()
@@ -2208,11 +2446,15 @@ def test_m02_run_identity_binds_plan_graph_and_implementation():
 def test_m02_different_plan_yields_a_different_final_directory(tmp_path: Path):
     graph = load_source_graph(GRAPH, verify_hashes=False)
     finals = []
-    for commit in ("0" * 40, "1" * 40):
+    for suffix in ("first", "second"):
         plan = generate_candidate_plan(
-            graph_path=GRAPH, graph=graph, repo_root=ROOT, implementation_commit=commit
+            graph_path=GRAPH,
+            graph=graph,
+            repo_root=ROOT,
+            implementation_commit=_runtime_head(),
         )
-        path = tmp_path / f"plan-{commit[0]}.json"
+        plan["authorization_note"] += f" Fixture variant: {suffix}."
+        path = tmp_path / f"plan-{suffix}.json"
         path.write_bytes(canonical_json_bytes(plan))
         context = authorize_run(
             plan_path=path, expected_plan_sha256=file_sha256(path), repo_root=ROOT
@@ -2248,6 +2490,72 @@ def test_m02_published_run_is_bound_to_its_identity(tmp_path: Path):
     final.rename(renamed)
     with pytest.raises(CensusError, match="does not match its own run identity"):
         load_published_run(renamed)
+
+
+def test_m02_runtime_head_must_match_candidate_plan_commit(tmp_path: Path):
+    graph = load_source_graph(GRAPH, verify_hashes=False)
+    mismatched = "0" * 40 if _runtime_head() != "0" * 40 else "1" * 40
+    plan = generate_candidate_plan(
+        graph_path=GRAPH,
+        graph=graph,
+        repo_root=ROOT,
+        implementation_commit=mismatched,
+    )
+    path = tmp_path / "wrong-commit-plan.json"
+    path.write_bytes(canonical_json_bytes(plan))
+    with pytest.raises(AuthorizationError, match="does not match runtime repository HEAD"):
+        authorize_run(plan_path=path, expected_plan_sha256=file_sha256(path), repo_root=ROOT)
+
+
+def test_m02_runtime_head_is_rechecked_before_publication(tmp_path: Path, monkeypatch):
+    context = _authorized(tmp_path)
+    census = _fake_census(context)
+    changed = "f" * 40 if context.implementation_commit != "f" * 40 else "e" * 40
+    from pretrain import h_census_v2
+
+    monkeypatch.setattr(h_census_v2, "_git_head", lambda _repo_root: changed)
+    with pytest.raises(AuthorizationError, match="HEAD changed after authorisation"):
+        publish_atomic(context, census, tmp_path / "out")
+    assert not (tmp_path / "out").exists()
+
+
+def test_m02_consumer_rejects_internally_inconsistent_run_identity(tmp_path: Path):
+    context = _authorized(tmp_path)
+    final = publish_atomic(context, _fake_census(context), tmp_path / "out")
+    census_path = final / "census.json"
+    marker_path = final / "COMPLETE"
+    census = json.loads(census_path.read_text())
+    marker = json.loads(marker_path.read_text())
+    forged_identity = "d" * 64
+    census["authorization"]["run_identity"] = forged_identity
+    payload = canonical_json_bytes(census)
+    marker["run_identity"] = forged_identity
+    marker["census_sha256"] = hashlib.sha256(payload).hexdigest()
+    census_path.write_bytes(payload)
+    marker_path.write_bytes(canonical_json_bytes(marker))
+    renamed = final.parent / f"run-{forged_identity[:32]}"
+    final.rename(renamed)
+
+    with pytest.raises(CensusError, match="run identity is internally inconsistent"):
+        load_published_run(renamed)
+
+
+def test_m02_consumer_recomputes_implementation_bundle(tmp_path: Path):
+    context = _authorized(tmp_path)
+    final = publish_atomic(context, _fake_census(context), tmp_path / "out")
+    census_path = final / "census.json"
+    marker_path = final / "COMPLETE"
+    census = json.loads(census_path.read_text())
+    marker = json.loads(marker_path.read_text())
+    census["authorization"]["implementation_bundle_sha256"] = "e" * 64
+    payload = canonical_json_bytes(census)
+    marker["implementation_bundle_sha256"] = "e" * 64
+    marker["census_sha256"] = hashlib.sha256(payload).hexdigest()
+    census_path.write_bytes(payload)
+    marker_path.write_bytes(canonical_json_bytes(marker))
+
+    with pytest.raises(CensusError, match="bundle digest is internally inconsistent"):
+        load_published_run(final)
 
 
 # ---------------------------------------------------------------- M-03 canonical projection
@@ -2609,9 +2917,10 @@ def test_m04_g2_exclusion_matches_the_real_selector(tmp_path: Path):
 def test_m04_candidate_plan_is_reproducible_byte_for_byte(tmp_path: Path):
     """The tracked generator alone must produce the sealed plan bytes; nothing added by hand."""
     graph = load_source_graph(GRAPH, verify_hashes=False)
+    commit = _runtime_head()
     first = canonical_json_bytes(
         generate_candidate_plan(
-            graph_path=GRAPH, graph=graph, repo_root=ROOT, implementation_commit="abc123"
+            graph_path=GRAPH, graph=graph, repo_root=ROOT, implementation_commit=commit
         )
     )
     second = canonical_json_bytes(
@@ -2619,12 +2928,14 @@ def test_m04_candidate_plan_is_reproducible_byte_for_byte(tmp_path: Path):
             graph_path=GRAPH,
             graph=load_source_graph(GRAPH, verify_hashes=False),
             repo_root=ROOT,
-            implementation_commit="abc123",
+            implementation_commit=commit,
         )
     )
     assert first == second
     plan = json.loads(first)
-    assert plan["implementation_commit"] == "abc123"
+    assert plan["implementation_commit"] == commit
+    assert plan["schema_version"] == PLAN_SCHEMA == "petitgpt-h-candidate-plan-v4"
+    assert plan["authorization_status"] == "NOT_AUTHORIZED"
     assert sorted(plan) == sorted([
         "schema_version",
         "authorization_status",
@@ -2654,7 +2965,7 @@ def test_m04_generated_plan_authorises_without_manual_editing(tmp_path: Path):
         graph_path=GRAPH,
         graph=load_source_graph(GRAPH, verify_hashes=False),
         repo_root=ROOT,
-        implementation_commit="0" * 40,
+        implementation_commit=_runtime_head(),
     )
     path.write_bytes(canonical_json_bytes(plan))
     context = authorize_run(plan_path=path, expected_plan_sha256=file_sha256(path), repo_root=ROOT)
@@ -2784,7 +3095,28 @@ def test_h_publishes_no_physical_candidate_views(tmp_path: Path):
     final = publish_atomic(context, _fake_census(context), tmp_path / "out")
     assert sorted(p.name for p in final.iterdir()) == ["COMPLETE", "census.json"]
     census = json.loads((final / "census.json").read_text())
-    assert "documents" not in json.dumps(census).lower().split("documents_sha256")[0][-200:] or True
+
+    published_keys = set()
+
+    def collect_keys(value):
+        if isinstance(value, dict):
+            for key, nested in value.items():
+                published_keys.add(key)
+                collect_keys(nested)
+        elif isinstance(value, list):
+            for nested in value:
+                collect_keys(nested)
+
+    collect_keys(census)
+    assert published_keys.isdisjoint({
+        "candidate_records",
+        "documents",
+        "document_paths",
+        "records",
+        "rows",
+        "selected_documents",
+        "text",
+    })
     assert context.plan["h_publishes_physical_views"] is False
 
 

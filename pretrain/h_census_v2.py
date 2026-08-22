@@ -23,6 +23,7 @@ a canonical directory, a COMPLETE marker or a production final name.
 from __future__ import annotations
 
 import argparse
+from collections.abc import Mapping
 from dataclasses import dataclass, field
 import hashlib
 import json
@@ -32,6 +33,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+from types import MappingProxyType
 from typing import Any
 
 ROOT = str(Path(__file__).resolve().parents[1])
@@ -56,6 +58,9 @@ from pretrain.select_pretrain_documents import (  # noqa: E402
 )
 from pretrain.stage_i_graph_v2 import (  # noqa: E402
     BOUND_AUTHORITY_KEYS,
+    BRANCH_DEPENDENT,
+    STAGE_PRIORITY,
+    FileIdentity,
     GraphError,
     InputBinding,
     SourceGraph,
@@ -67,9 +72,13 @@ from pretrain.stage_i_graph_v2 import (  # noqa: E402
     strict_json_object,
 )
 from pretrain.stage_i_replay_v2 import (  # noqa: E402
+    BOUNDARY_EVIDENCE_FIELDS,
+    NODE_RESULT_FIELDS,
     NODE_RESULT_SCHEMA,
+    REPRESENTATIVE_RULE,
     CandidateRecord,
     ReplayError,
+    bits_to_score,
     ownership_matrix,
     replay,
     representative_key,
@@ -78,7 +87,7 @@ from pretrain.stage_i_replay_v2 import (  # noqa: E402
 from src.special_tokens import BOS_ID, EOS_ID, SPECIAL_TOKEN_IDS  # noqa: E402
 
 CENSUS_SCHEMA = "petitgpt-h-census-v2"
-PLAN_SCHEMA = "petitgpt-h-candidate-plan-v3"
+PLAN_SCHEMA = "petitgpt-h-candidate-plan-v4"
 RUN_IDENTITY_SCHEMA = "petitgpt-h-run-identity-v1"
 BUNDLE_SCHEMA = "petitgpt-h-implementation-bundle-v1"
 OUTPUT_LABEL = "NON_AUTHORITATIVE_FEASIBILITY_REPLAY"
@@ -124,6 +133,59 @@ DEFAULT_AUTHORITY_PATHS = {
     "tokenizer": "runs/g_production_2026-08-21/release/tokenizer.json",
 }
 
+_HEX = frozenset("0123456789abcdef")
+_CENSUS_FIELDS = frozenset({
+    "authorization",
+    "binding_counters",
+    "bound_authorities",
+    "graph_sha256",
+    "hard_stop_required",
+    "nodes",
+    "output_label",
+    "ownership_matrix",
+    "reference_exclusion_identities",
+    "resume_supported",
+    "schema_version",
+    "seed",
+    "status",
+    "totals",
+})
+_AUTHORIZATION_FIELDS = frozenset({
+    "run_identity",
+    "candidate_plan_sha256",
+    "owner_graph_sha256",
+    "implementation_bundle_sha256",
+    "implementation_files",
+    "authority_sha256",
+    "census_schema_version",
+    "node_result_schema_version",
+    "plan_schema_version",
+    "authorization_status",
+})
+_COUNTER_FIELDS = frozenset({
+    "physical_rows",
+    "d2_d3_excluded_rows",
+    "empty_or_non_string_text",
+    "empty_after_cleaning",
+    "eligible_rows",
+})
+_TOTAL_FIELDS = frozenset({
+    "eligible_rows",
+    "physical_rows",
+    "selected_serialized_tokens",
+    "selected_identities",
+})
+_MARKER_FIELDS = frozenset({
+    "marker",
+    "run_identity",
+    "candidate_plan_sha256",
+    "owner_graph_sha256",
+    "implementation_bundle_sha256",
+    "census_sha256",
+    "census_schema_version",
+})
+_AUTHORIZED_PROVENANCE = object()
+
 
 class CensusError(RuntimeError):
     """Fail-closed census condition. Nothing is published when this is raised."""
@@ -136,6 +198,59 @@ class AuthorizationError(CensusError):
 def _require(condition: bool, message: str) -> None:
     if not condition:
         raise CensusError(message)
+
+
+def _closed_object(value: Any, fields: frozenset[str], where: str) -> dict[str, Any]:
+    _require(type(value) is dict, f"{where}: must be an object")
+    _require(all(type(key) is str for key in value), f"{where}: keys must be strings")
+    unknown = sorted(set(value) - fields)
+    missing = sorted(fields - set(value))
+    _require(not unknown, f"{where}: unknown keys {unknown}")
+    _require(not missing, f"{where}: missing required keys {missing}")
+    return value
+
+
+def _exact_int(value: Any, where: str, *, minimum: int = 0) -> int:
+    _require(type(value) is int, f"{where}: must be an exact integer")
+    _require(value >= minimum, f"{where}: must be at least {minimum}")
+    return value
+
+
+def _exact_str(value: Any, where: str, *, nonempty: bool = True) -> str:
+    _require(type(value) is str, f"{where}: must be a string")
+    _require(not nonempty or bool(value), f"{where}: must not be empty")
+    return value
+
+
+def _hex_string(value: Any, length: int, where: str) -> str:
+    value = _exact_str(value, where)
+    _require(
+        len(value) == length and not (set(value) - _HEX),
+        f"{where}: must be a lowercase {length}-character hex string",
+    )
+    return value
+
+
+def _optional_hex(value: Any, length: int, where: str) -> str | None:
+    if value is None:
+        return None
+    return _hex_string(value, length, where)
+
+
+def _resolve_repo_path(repo_root: Path, value: str) -> Path:
+    path = Path(value)
+    if not path.is_absolute():
+        path = repo_root / path
+    return path
+
+
+def _freeze_context_value(value: Any) -> Any:
+    """Copy and recursively freeze JSON-derived authorization state."""
+    if type(value) is dict:
+        return MappingProxyType({key: _freeze_context_value(child) for key, child in value.items()})
+    if type(value) is list:
+        return tuple(_freeze_context_value(child) for child in value)
+    return value
 
 
 # --------------------------------------------------------------------- implementation identity
@@ -219,7 +334,11 @@ def read_score(row: dict[str, Any], accessor: dict[str, Any], which: str) -> Any
 
 
 def scan_binding(
-    binding: InputBinding, tokenizer_path: str, excluded_rows: Any
+    binding: InputBinding,
+    tokenizer_path: str,
+    excluded_rows: Any,
+    *,
+    expected_documents_identity: FileIdentity | None = None,
 ) -> tuple[list[CandidateRecord], dict[str, int]]:
     """Stream one frozen release once and emit its eligible candidate metadata records.
 
@@ -246,7 +365,15 @@ def scan_binding(
     }
     digest = hashlib.sha256()
 
-    with open_authoritative(binding.documents_path, buffering=8 * 1024 * 1024) as (handle, _id):
+    with open_authoritative(binding.documents_path, buffering=8 * 1024 * 1024) as (
+        handle,
+        opened_identity,
+    ):
+        if (
+            expected_documents_identity is not None
+            and opened_identity != expected_documents_identity
+        ):
+            raise CensusError(f"{binding.input_binding_id}: documents identity changed before scan")
         for row_index, raw in enumerate(handle):
             digest.update(raw)
             counters["physical_rows"] += 1
@@ -340,7 +467,11 @@ def load_reference_exclusion(path: Path, *, expected_sha256: str | None = None) 
 
 
 def census_body(
-    graph: SourceGraph, tokenizer_path: str, reference_exclusion: set[str]
+    graph: SourceGraph,
+    tokenizer_path: str,
+    reference_exclusion: set[str],
+    *,
+    expected_binding_identities: Mapping[str, FileIdentity] | None = None,
 ) -> dict[str, Any]:
     """Run the metadata census and feasibility replay. Publishes nothing and authorises nothing.
 
@@ -350,11 +481,21 @@ def census_body(
     """
     by_binding: dict[str, list[CandidateRecord]] = {}
     counters: dict[str, dict[str, int]] = {}
+    identities = (
+        graph.binding_identities
+        if expected_binding_identities is None
+        else expected_binding_identities
+    )
+    if identities is None or set(identities) != set(graph.bindings):
+        raise CensusError(
+            "documents identities must cover exactly the validated input bindings before scan"
+        )
     for binding_id in sorted(graph.bindings):
         records, stats = scan_binding(
             graph.bindings[binding_id],
             tokenizer_path,
             graph.validated_eligibility_rows(binding_id),
+            expected_documents_identity=identities[binding_id],
         )
         by_binding[binding_id] = records
         counters[binding_id] = stats
@@ -396,14 +537,20 @@ class AuthorizedRunContext:
     repo_root: Path
     plan_path: Path
     plan_sha256: str
-    plan: dict[str, Any]
+    plan: Mapping[str, Any]
     graph: SourceGraph
     graph_sha256: str
     bundle_sha256: str
-    bundle_files: dict[str, str]
-    authority_paths: dict[str, Path]
-    authority_sha256: dict[str, str]
+    bundle_files: Mapping[str, str]
+    authority_paths: Mapping[str, Path]
+    authority_sha256: Mapping[str, str]
+    implementation_commit: str
     identity: str = field(default="")
+    _provenance: object | None = field(default=None, init=False, repr=False, compare=False)
+    _plan_snapshot: bytes = field(default=b"", init=False, repr=False, compare=False)
+    _binding_identity_snapshot: tuple[tuple[str, FileIdentity], ...] = field(
+        default=(), init=False, repr=False, compare=False
+    )
 
     @property
     def tokenizer_path(self) -> Path:
@@ -429,33 +576,128 @@ class AuthorizedRunContext:
 
     def revalidate(self) -> None:
         """Re-derive every authority digest from disk; used immediately before publication."""
-        _, plan_digest = read_authoritative_bytes(self.plan_path, max_bytes=1 << 31)
+        _require_authorized_context(self, "revalidation")
+        plan_payload, plan_digest = read_authoritative_bytes(self.plan_path, max_bytes=1 << 31)
         if plan_digest != self.plan_sha256:
             raise AuthorizationError("plan bytes changed after authorisation")
-        _, graph_digest = read_authoritative_bytes(Path(self.plan["graph_path"]), max_bytes=1 << 31)
+        current_plan = _parse_plan(plan_payload, self.plan_path)
+        if canonical_json_bytes(current_plan) != self._plan_snapshot:
+            raise AuthorizationError("parsed plan changed after authorisation")
+        if current_plan["implementation_commit"] != self.implementation_commit:
+            raise AuthorizationError("plan implementation commit changed after authorisation")
+        runtime_commit = _git_head(self.repo_root)
+        if runtime_commit != self.implementation_commit:
+            raise AuthorizationError(
+                "runtime repository HEAD changed after authorisation: "
+                f"expected {self.implementation_commit}, got {runtime_commit}"
+            )
+
+        graph_path = _resolve_repo_path(self.repo_root, current_plan["graph_path"])
+        _, graph_digest = read_authoritative_bytes(graph_path, max_bytes=1 << 31)
         if graph_digest != self.graph_sha256:
             raise AuthorizationError("owner graph bytes changed after authorisation")
+        if (
+            self.graph.graph_sha256 != self.graph_sha256
+            or current_plan["graph_sha256"] != self.graph_sha256
+            or current_plan["seed"] != self.graph.seed
+            or current_plan["bound_authorities"]
+            != dict(sorted(self.graph.bound_authorities.items()))
+        ):
+            raise AuthorizationError("in-memory owner graph disagrees with the approved plan")
+        expected_bindings = {
+            key: _plan_binding_projection(binding)
+            for key, binding in sorted(self.graph.bindings.items())
+        }
+        if current_plan["input_bindings"] != expected_bindings:
+            raise AuthorizationError("in-memory input bindings disagree with the approved plan")
+        if current_plan["nodes"] != _plan_node_projection(self.graph) or current_plan[
+            "node_order"
+        ] != [node.source_id for node in self.graph.nodes]:
+            raise AuthorizationError("in-memory node graph disagrees with the approved plan")
+
+        frozen_bundle_files = dict(self.bundle_files)
+        if (
+            current_plan["implementation_files"] != frozen_bundle_files
+            or current_plan["implementation_bundle_sha256"] != self.bundle_sha256
+            or implementation_bundle_sha256(frozen_bundle_files) != self.bundle_sha256
+        ):
+            raise AuthorizationError("implementation snapshot disagrees with the approved plan")
         current = implementation_files(self.repo_root)
-        if current != self.bundle_files:
+        if current != frozen_bundle_files:
             raise AuthorizationError("implementation bytes changed after authorisation")
-        for name, path in sorted(self.authority_paths.items()):
-            if file_sha256(path) != self.authority_sha256[name]:
+
+        declared_authorities = current_plan["authorities"]
+        expected_authority_paths: dict[str, Path] = {}
+        expected_authority_sha256: dict[str, str] = {}
+        for name in sorted(AUTHORITY_KEYS):
+            entry = declared_authorities[name]
+            expected_authority_paths[name] = _resolve_repo_path(self.repo_root, entry["path"])
+            expected_authority_sha256[name] = entry["sha256"]
+        if expected_authority_paths != dict(
+            self.authority_paths
+        ) or expected_authority_sha256 != dict(self.authority_sha256):
+            raise AuthorizationError("authority snapshot disagrees with the approved plan")
+        for name, path in sorted(expected_authority_paths.items()):
+            if file_sha256(path) != expected_authority_sha256[name]:
                 raise AuthorizationError(f"authority {name!r} changed after authorisation")
-        # Rebind every per-binding authority too. The release manifests and eligibility indexes are
-        # small, so re-deriving them here costs nothing and closes the window between the scan and
-        # the publication. The 151.6 GB document corpus is deliberately not re-hashed: the
-        # authoritative scan already hashed it on the descriptor it consumed, and re-reading it
-        # from the path afterwards would be the very hash-then-reopen pattern this removes. What is
-        # rechecked is that each documents file is still the same opened object at the same size.
-        for key in sorted(self.graph.bindings):
+
+        expected_identities = dict(self._binding_identity_snapshot)
+        if (
+            self.graph.binding_identities is None
+            or set(expected_identities) != set(self.graph.bindings)
+            or dict(self.graph.binding_identities) != expected_identities
+        ):
+            raise AuthorizationError(
+                "documents identities do not cover exactly the authorized input bindings"
+            )
+        # The 151.6 GB corpus is not re-hashed. The graph captured full descriptor identities while
+        # validating each binding, the scan consumed those same identities, and this final check
+        # proves that every path still names that validated object before publication.
+        for key, expected_identity in sorted(expected_identities.items()):
             binding = self.graph.bindings[key]
             with open_authoritative(binding.documents_path) as (_stream, identity):
-                if identity.st_size != binding.documents_size_bytes:
-                    raise AuthorizationError(f"{key}: documents size changed after authorisation")
+                pass
+            if identity.st_size != binding.documents_size_bytes:
+                raise AuthorizationError(f"{key}: documents size changed after authorisation")
+            if identity != expected_identity:
+                raise AuthorizationError(f"{key}: documents identity changed after authorisation")
             if file_sha256(binding.release_manifest_path) != binding.release_manifest_sha256:
                 raise AuthorizationError(f"{key}: release manifest changed after authorisation")
             if file_sha256(binding.eligibility_index_path) != binding.eligibility_index_sha256:
                 raise AuthorizationError(f"{key}: eligibility index changed after authorisation")
+
+
+def _require_authorized_context(context: Any, operation: str) -> AuthorizedRunContext:
+    if (
+        type(context) is not AuthorizedRunContext
+        or context._provenance is not _AUTHORIZED_PROVENANCE
+        or not context._plan_snapshot
+        or not context._binding_identity_snapshot
+    ):
+        raise AuthorizationError(
+            f"{operation} requires an AuthorizedRunContext produced by authorize_run"
+        )
+    return context
+
+
+def _make_authorized_context(**values: Any) -> AuthorizedRunContext:
+    graph = values["graph"]
+    if graph.binding_identities is None or set(graph.binding_identities) != set(graph.bindings):
+        raise AuthorizationError(
+            "authorization did not validate identities for exactly every input binding"
+        )
+    plan_snapshot = canonical_json_bytes(values["plan"])
+    identity_snapshot = tuple(sorted(graph.binding_identities.items()))
+    frozen_values = dict(values)
+    frozen_values["plan"] = _freeze_context_value(dict(values["plan"]))
+    frozen_values["bundle_files"] = MappingProxyType(dict(values["bundle_files"]))
+    frozen_values["authority_paths"] = MappingProxyType(dict(values["authority_paths"]))
+    frozen_values["authority_sha256"] = MappingProxyType(dict(values["authority_sha256"]))
+    context = AuthorizedRunContext(**frozen_values)
+    object.__setattr__(context, "_provenance", _AUTHORIZED_PROVENANCE)
+    object.__setattr__(context, "_plan_snapshot", plan_snapshot)
+    object.__setattr__(context, "_binding_identity_snapshot", identity_snapshot)
+    return context
 
 
 def _plan_binding_projection(binding: InputBinding) -> dict[str, Any]:
@@ -556,6 +798,11 @@ def _parse_plan(payload: bytes, plan_path: Path) -> dict[str, Any]:
     for key in ("nodes", "node_order"):
         if not isinstance(plan[key], list):
             raise AuthorizationError(f"candidate plan: {key} must be an array")
+    commit = plan["implementation_commit"]
+    if len(commit) != 40 or set(commit) - _HEX:
+        raise AuthorizationError(
+            "candidate plan: implementation_commit must be a lowercase 40-character Git SHA"
+        )
     return plan
 
 
@@ -592,7 +839,14 @@ def authorize_run(
         )
     plan = _parse_plan(payload, plan_path)
 
-    graph_path = Path(plan["graph_path"])
+    runtime_commit = _git_head(repo_root)
+    if runtime_commit != plan["implementation_commit"]:
+        raise AuthorizationError(
+            "candidate plan implementation_commit does not match runtime repository HEAD: "
+            f"expected {plan['implementation_commit']}, got {runtime_commit}"
+        )
+
+    graph_path = _resolve_repo_path(repo_root, plan["graph_path"])
     graph = load_source_graph(
         graph_path, verify_hashes=True, expected_graph_sha256=plan["graph_sha256"]
     )
@@ -653,7 +907,7 @@ def authorize_run(
     identity = run_identity(
         plan_sha256=actual, graph_sha256=graph.graph_sha256, bundle_sha256=bundle_sha
     )
-    return AuthorizedRunContext(
+    return _make_authorized_context(
         repo_root=repo_root,
         plan_path=plan_path,
         plan_sha256=actual,
@@ -664,19 +918,25 @@ def authorize_run(
         bundle_files=bundle_files,
         authority_paths=authority_paths,
         authority_sha256=authority_sha256,
+        implementation_commit=runtime_commit,
         identity=identity,
     )
 
 
 def build_census(context: AuthorizedRunContext) -> dict[str, Any]:
     """Run the authorised census and stamp it with the run identity it belongs to."""
-    if not isinstance(context, AuthorizedRunContext):
-        raise AuthorizationError("build_census requires an AuthorizedRunContext")
+    _require_authorized_context(context, "build_census")
+    context.revalidate()
     exclusion = load_reference_exclusion(
         context.reference_exclusion_path,
         expected_sha256=context.authority_sha256["reference_exclusion"],
     )
-    body = census_body(context.graph, str(context.tokenizer_path), exclusion)
+    body = census_body(
+        context.graph,
+        str(context.tokenizer_path),
+        exclusion,
+        expected_binding_identities=dict(context._binding_identity_snapshot),
+    )
     body["status"] = "COMPLETE"
     body["authorization"] = context.as_canonical()
     return body
@@ -685,73 +945,403 @@ def build_census(context: AuthorizedRunContext) -> dict[str, Any]:
 # --------------------------------------------------------------------- validation & publication
 
 
-def validate_complete_census(census: Any, context: AuthorizedRunContext) -> None:
-    """Everything that must hold before the word COMPLETE may be written anywhere.
-
-    A result that is incomplete, malformed, mis-schemaed or internally inconsistent fails here,
-    before any staging file exists, so no partial artefact can be labelled complete.
-    """
-    if not isinstance(census, dict):
-        raise CensusError("census must be an object")
-    required = {
-        "authorization",
-        "binding_counters",
-        "bound_authorities",
-        "graph_sha256",
-        "hard_stop_required",
-        "nodes",
-        "output_label",
-        "ownership_matrix",
-        "reference_exclusion_identities",
-        "resume_supported",
-        "schema_version",
-        "seed",
-        "status",
-        "totals",
-    }
-    unknown = sorted(set(census) - required)
-    _require(not unknown, f"census: unknown keys {unknown}")
-    missing = sorted(required - set(census))
-    _require(not missing, f"census: missing required keys {missing}")
-    _require(census["schema_version"] == CENSUS_SCHEMA, "census: wrong schema_version")
-    _require(census["status"] == "COMPLETE", f"census: status is {census['status']!r}")
-    _require(census["output_label"] == OUTPUT_LABEL, "census: wrong output_label")
-    _require(census["resume_supported"] is False, "census: resume must be disabled")
-    _require(census["graph_sha256"] == context.graph_sha256, "census: graph SHA disagreement")
-    _require(census["seed"] == context.graph.seed, "census: seed disagreement")
-    _require(
-        census["authorization"] == context.as_canonical(),
-        "census: authorization block does not match the authorised run context",
-    )
-    _require(isinstance(census["hard_stop_required"], bool), "census: hard_stop_required not bool")
-
-    nodes = census["nodes"]
-    _require(isinstance(nodes, list) and nodes, "census: nodes must be a non-empty array")
-    expected_order = [node.source_id for node in context.graph.nodes]
-    _require(
-        [n.get("source_id") for n in nodes] == expected_order,
-        "census: node results do not cover the graph's nodes in execution order",
-    )
-    targets = {node.source_id: node.target_serialized_tokens for node in context.graph.nodes}
-    for node in nodes:
-        _validate_node_result(node, targets)
-
-    counters = census["binding_counters"]
-    _require(isinstance(counters, dict), "census: binding_counters must be an object")
-    _require(
-        sorted(counters) == sorted(context.graph.bindings),
-        "census: binding counters do not cover exactly the graph's bindings",
-    )
-    for key, stats in sorted(counters.items()):
-        binding = context.graph.bindings[key]
+def _validate_score_evidence(bits_hex: Any, score_hex: Any, where: str, *, required: bool) -> None:
+    if bits_hex is None or score_hex is None:
         _require(
-            stats["physical_rows"] == binding.total_physical_rows,
-            f"census: {key} physical row count is not final",
+            bits_hex is None and score_hex is None,
+            f"{where}: score bits and score hex must be jointly present or absent",
+        )
+        _require(not required, f"{where}: exact-score evidence is required")
+        return
+    bits = _hex_string(bits_hex, 16, f"{where}.score_bits_hex")
+    score = _exact_str(score_hex, f"{where}.score_hex")
+    try:
+        decoded = bits_to_score(int(bits, 16))
+    except ReplayError as exc:
+        raise CensusError(f"{where}: invalid binary64 score evidence: {exc}") from exc
+    _require(decoded.hex() == score, f"{where}: score hex does not match the exact binary64 bits")
+
+
+def _validate_contract_node(
+    node: Any,
+    *,
+    graph_node: Any | None,
+    earlier_sources: set[str],
+) -> None:
+    obj = _closed_object(node, NODE_RESULT_FIELDS, "census.node")
+    _require(
+        _exact_str(obj["canonical_schema_version"], "census.node.canonical_schema_version")
+        == NODE_RESULT_SCHEMA,
+        "census: node result carries the wrong canonical schema version",
+    )
+    source_id = _exact_str(obj["source_id"], "census.node.source_id")
+    stage = _exact_str(obj["stage"], f"census: {source_id}.stage")
+    _require(stage in {"stage_a", "stage_b"}, f"census: {source_id}.stage is invalid")
+    branch = _exact_str(obj["branch"], f"census: {source_id}.branch")
+    _require(
+        branch in {"ORDINARY", "PRIMARY_GE4", "FALLBACK_RANKED_GE3"},
+        f"census: {source_id}.branch is invalid",
+    )
+    mode = _exact_str(obj["selection_mode"], f"census: {source_id}.selection_mode")
+    _require(
+        mode in {"SEEDED_HASH", "EXACT_SCORE_DESC_SHA_ASC"},
+        f"census: {source_id}.selection_mode is invalid",
+    )
+    target = _exact_int(
+        obj["target_serialized_tokens"],
+        f"census: {source_id}.target_serialized_tokens",
+        minimum=1,
+    )
+
+    if graph_node is not None:
+        _require(source_id == graph_node.source_id, "census: node order disagrees with graph")
+        _require(stage == graph_node.stage, f"census: {source_id} stage disagrees with graph")
+        _require(
+            target == graph_node.target_serialized_tokens,
+            f"census: {source_id} target disagrees with the frozen graph",
+        )
+        if graph_node.selection_mode == BRANCH_DEPENDENT:
+            _require(
+                branch in {"PRIMARY_GE4", "FALLBACK_RANKED_GE3"},
+                f"census: {source_id} must report the selected graph branch",
+            )
+            branch_spec = (
+                graph_node.branch_primary if branch == "PRIMARY_GE4" else graph_node.branch_fallback
+            )
+            _require(
+                mode == branch_spec["selection_mode"],
+                f"census: {source_id} mode disagrees with its selected graph branch",
+            )
+        else:
+            _require(branch == "ORDINARY", f"census: {source_id} has an invalid ordinary branch")
+            _require(
+                mode == graph_node.selection_mode,
+                f"census: {source_id} mode disagrees with graph",
+            )
+
+    integer_fields = (
+        "pre_exclusion_unique_identities",
+        "g2_excluded_identities",
+        "prior_commit_excluded_identities",
+        "post_exclusion_candidate_identities",
+        "post_exclusion_candidate_serialized_tokens",
+        "selected_identities",
+        "selected_serialized_tokens",
+        "actual_overshoot_tokens",
+        "residual_identities",
+        "residual_serialized_tokens",
+    )
+    for key in integer_fields:
+        _exact_int(obj[key], f"census: {source_id}.{key}")
+
+    _hex_string(obj["selection_fingerprint"], 64, f"census: {source_id}.selection_fingerprint")
+    crossing_identity = _optional_hex(
+        obj["crossing_identity"], 64, f"census: {source_id}.crossing_identity"
+    )
+    crossing_tokens = obj["crossing_document_serialized_tokens"]
+    if crossing_tokens is not None:
+        _exact_int(
+            crossing_tokens,
+            f"census: {source_id}.crossing_document_serialized_tokens",
+            minimum=1,
+        )
+    _require(type(obj["feasible"]) is bool, f"census: {source_id}.feasible must be a boolean")
+
+    exclusions = obj["exclusions_by_owner"]
+    _require(type(exclusions) is dict, f"census: {source_id}.exclusions_by_owner must be an object")
+    _require(
+        all(type(owner) is str and owner for owner in exclusions),
+        f"census: {source_id}.exclusions_by_owner keys must be non-empty strings",
+    )
+    for owner, count in exclusions.items():
+        _exact_int(count, f"census: {source_id}.exclusions_by_owner.{owner}", minimum=1)
+        _require(
+            owner in earlier_sources,
+            f"census: {source_id} claims an exclusion owned by a non-earlier node {owner!r}",
+        )
+
+    _require(
+        obj["prior_commit_excluded_identities"] == sum(exclusions.values()),
+        f"census: {source_id} ownership exclusions do not sum to the reported total",
+    )
+    _require(
+        obj["pre_exclusion_unique_identities"]
+        == obj["g2_excluded_identities"]
+        + obj["prior_commit_excluded_identities"]
+        + obj["post_exclusion_candidate_identities"],
+        f"census: {source_id} candidate accounting does not close",
+    )
+    _require(
+        obj["selected_identities"] <= obj["post_exclusion_candidate_identities"],
+        f"census: {source_id} selected identities exceed candidates",
+    )
+    _require(
+        obj["selected_serialized_tokens"] <= obj["post_exclusion_candidate_serialized_tokens"],
+        f"census: {source_id} selected tokens exceed candidates",
+    )
+    for count_key, mass_key in (
+        ("post_exclusion_candidate_identities", "post_exclusion_candidate_serialized_tokens"),
+        ("selected_identities", "selected_serialized_tokens"),
+        ("residual_identities", "residual_serialized_tokens"),
+    ):
+        _require(
+            (obj[count_key] == 0) == (obj[mass_key] == 0),
+            f"census: {source_id} {count_key} and {mass_key} disagree on empty population",
+        )
+    _require(
+        obj["residual_identities"]
+        == obj["post_exclusion_candidate_identities"] - obj["selected_identities"],
+        f"census: {source_id} residual identities do not close",
+    )
+    _require(
+        obj["residual_serialized_tokens"]
+        == obj["post_exclusion_candidate_serialized_tokens"] - obj["selected_serialized_tokens"],
+        f"census: {source_id} residual tokens do not close",
+    )
+    feasible = obj["feasible"]
+    _require(
+        feasible == (obj["selected_serialized_tokens"] >= target),
+        f"census: {source_id} feasibility disagrees with its selected mass",
+    )
+    expected_overshoot = obj["selected_serialized_tokens"] - target if feasible else 0
+    _require(
+        obj["actual_overshoot_tokens"] == expected_overshoot,
+        f"census: {source_id} overshoot is not the measured value",
+    )
+    if feasible:
+        _require(
+            crossing_identity is not None and crossing_tokens is not None,
+            f"census: {source_id} is feasible but reports no crossing document",
         )
         _require(
-            stats["d2_d3_excluded_rows"] == binding.excluded_rows,
-            f"census: {key} eligibility exclusions are not fully consumed",
+            crossing_tokens <= obj["selected_serialized_tokens"],
+            f"census: {source_id} crossing mass is outside its selected mass",
         )
+        _require(
+            obj["actual_overshoot_tokens"] < crossing_tokens,
+            f"census: {source_id} overshoot is not bounded by the whole crossing document",
+        )
+    else:
+        _require(
+            crossing_identity is None and crossing_tokens is None,
+            f"census: {source_id} is infeasible but reports a crossing document",
+        )
+        _require(
+            obj["selected_identities"] == obj["post_exclusion_candidate_identities"]
+            and obj["selected_serialized_tokens"]
+            == obj["post_exclusion_candidate_serialized_tokens"],
+            f"census: {source_id} infeasible selection did not exhaust its candidates",
+        )
+
+    evidence = _closed_object(
+        obj["boundary_evidence"],
+        frozenset(BOUNDARY_EVIDENCE_FIELDS),
+        f"census: {source_id}.boundary_evidence",
+    )
+    _require(
+        _exact_str(
+            evidence["representative_rule"],
+            f"census: {source_id}.boundary_evidence.representative_rule",
+        )
+        == REPRESENTATIVE_RULE,
+        f"census: {source_id} boundary representative rule is invalid",
+    )
+    crossing_rank = _optional_hex(
+        evidence["crossing_selection_rank"],
+        64,
+        f"census: {source_id}.boundary_evidence.crossing_selection_rank",
+    )
+    if not feasible:
+        _require(crossing_rank is None, f"census: {source_id} has crossing rank without crossing")
+    elif mode == "SEEDED_HASH":
+        _require(crossing_rank is not None, f"census: {source_id} is missing crossing rank")
+    else:
+        _require(crossing_rank is None, f"census: {source_id} exact-score crossing has hash rank")
+    _validate_score_evidence(
+        evidence["crossing_score_bits_hex"],
+        evidence["crossing_score_hex"],
+        f"census: {source_id}.boundary_evidence.crossing",
+        required=feasible and mode == "EXACT_SCORE_DESC_SHA_ASC",
+    )
+    if not feasible:
+        _require(
+            evidence["crossing_score_bits_hex"] is None and evidence["crossing_score_hex"] is None,
+            f"census: {source_id} has crossing score without crossing",
+        )
+
+    next_identity = _optional_hex(
+        evidence["next_unselected_identity"],
+        64,
+        f"census: {source_id}.boundary_evidence.next_unselected_identity",
+    )
+    next_tokens = evidence["next_unselected_serialized_tokens"]
+    next_rank = _optional_hex(
+        evidence["next_unselected_selection_rank"],
+        64,
+        f"census: {source_id}.boundary_evidence.next_unselected_selection_rank",
+    )
+    has_next = obj["residual_identities"] > 0
+    if has_next:
+        _require(next_identity is not None, f"census: {source_id} is missing next identity")
+        _exact_int(
+            next_tokens,
+            f"census: {source_id}.boundary_evidence.next_unselected_serialized_tokens",
+            minimum=1,
+        )
+        _require(
+            next_tokens <= obj["residual_serialized_tokens"],
+            f"census: {source_id} next document exceeds residual mass",
+        )
+        if mode == "SEEDED_HASH":
+            _require(next_rank is not None, f"census: {source_id} is missing next hash rank")
+        else:
+            _require(next_rank is None, f"census: {source_id} exact-score next item has hash rank")
+    else:
+        _require(
+            next_identity is None and next_tokens is None and next_rank is None,
+            f"census: {source_id} has next-unselected evidence without residual candidates",
+        )
+    _validate_score_evidence(
+        evidence["next_unselected_score_bits_hex"],
+        evidence["next_unselected_score_hex"],
+        f"census: {source_id}.boundary_evidence.next_unselected",
+        required=has_next and mode == "EXACT_SCORE_DESC_SHA_ASC",
+    )
+    if not has_next:
+        _require(
+            evidence["next_unselected_score_bits_hex"] is None
+            and evidence["next_unselected_score_hex"] is None,
+            f"census: {source_id} has next score without a residual candidate",
+        )
+
+
+def _validate_complete_contract(census: Any, context: AuthorizedRunContext | None = None) -> None:
+    if context is not None:
+        _require_authorized_context(context, "census validation")
+    obj = _closed_object(census, _CENSUS_FIELDS, "census")
+    _require(
+        _exact_str(obj["schema_version"], "census.schema_version") == CENSUS_SCHEMA,
+        "census: wrong schema_version",
+    )
+    _require(_exact_str(obj["status"], "census.status") == "COMPLETE", "census: wrong status")
+    _require(
+        _exact_str(obj["output_label"], "census.output_label") == OUTPUT_LABEL,
+        "census: wrong output_label",
+    )
+    _require(obj["resume_supported"] is False, "census: resume must be disabled")
+    graph_sha = _hex_string(obj["graph_sha256"], 64, "census.graph_sha256")
+    _exact_int(obj["seed"], "census.seed")
+    _exact_int(
+        obj["reference_exclusion_identities"],
+        "census.reference_exclusion_identities",
+    )
+    _require(
+        type(obj["hard_stop_required"]) is bool,
+        "census: hard_stop_required must be a boolean",
+    )
+
+    authorization = _closed_object(
+        obj["authorization"], _AUTHORIZATION_FIELDS, "census.authorization"
+    )
+    for key in (
+        "run_identity",
+        "candidate_plan_sha256",
+        "owner_graph_sha256",
+        "implementation_bundle_sha256",
+    ):
+        _hex_string(authorization[key], 64, f"census.authorization.{key}")
+    _require(
+        graph_sha == authorization["owner_graph_sha256"],
+        "census: graph SHA disagrees with authorization",
+    )
+    files = _closed_object(
+        authorization["implementation_files"],
+        frozenset(IMPLEMENTATION_BUNDLE_FILES),
+        "census.authorization.implementation_files",
+    )
+    for relative, digest in files.items():
+        _hex_string(digest, 64, f"census.authorization.implementation_files.{relative}")
+    _require(
+        implementation_bundle_sha256(files) == authorization["implementation_bundle_sha256"],
+        "census: implementation bundle digest is internally inconsistent",
+    )
+    authority_sha = _closed_object(
+        authorization["authority_sha256"],
+        frozenset(AUTHORITY_KEYS),
+        "census.authorization.authority_sha256",
+    )
+    for name, digest in authority_sha.items():
+        _hex_string(digest, 64, f"census.authorization.authority_sha256.{name}")
+    _require(
+        _exact_str(
+            authorization["census_schema_version"],
+            "census.authorization.census_schema_version",
+        )
+        == CENSUS_SCHEMA,
+        "census: authorization census schema mismatch",
+    )
+    _require(
+        _exact_str(
+            authorization["node_result_schema_version"],
+            "census.authorization.node_result_schema_version",
+        )
+        == NODE_RESULT_SCHEMA,
+        "census: authorization node schema mismatch",
+    )
+    _require(
+        _exact_str(
+            authorization["plan_schema_version"],
+            "census.authorization.plan_schema_version",
+        )
+        == PLAN_SCHEMA,
+        "census: authorization plan schema mismatch",
+    )
+    _require(
+        _exact_str(
+            authorization["authorization_status"],
+            "census.authorization.authorization_status",
+        )
+        == "OWNER_SUPPLIED_EXPECTED_PLAN_SHA256",
+        "census: invalid authorization status",
+    )
+    expected_identity = run_identity(
+        plan_sha256=authorization["candidate_plan_sha256"],
+        graph_sha256=authorization["owner_graph_sha256"],
+        bundle_sha256=authorization["implementation_bundle_sha256"],
+        census_schema=authorization["census_schema_version"],
+    )
+    _require(
+        authorization["run_identity"] == expected_identity,
+        "census: authoritative run identity is internally inconsistent",
+    )
+
+    bound = _closed_object(
+        obj["bound_authorities"],
+        frozenset(BOUND_AUTHORITY_KEYS),
+        "census.bound_authorities",
+    )
+    for key, digest in bound.items():
+        _hex_string(digest, 64, f"census.bound_authorities.{key}")
+    for name, bound_key in AUTHORITY_KEYS.items():
+        _require(
+            bound[bound_key] == authority_sha[name],
+            f"census: bound authority {bound_key} disagrees with authorization",
+        )
+
+    counters = obj["binding_counters"]
+    _require(
+        type(counters) is dict and counters, "census: binding_counters must be a non-empty object"
+    )
+    _require(
+        all(type(binding_id) is str and binding_id for binding_id in counters),
+        "census: binding counter keys must be non-empty strings",
+    )
+    for binding_id, stats_value in counters.items():
+        stats = _closed_object(
+            stats_value, _COUNTER_FIELDS, f"census.binding_counters.{binding_id}"
+        )
+        for key in _COUNTER_FIELDS:
+            _exact_int(stats[key], f"census.binding_counters.{binding_id}.{key}")
         accounted = (
             stats["d2_d3_excluded_rows"]
             + stats["empty_or_non_string_text"]
@@ -760,34 +1350,120 @@ def validate_complete_census(census: Any, context: AuthorizedRunContext) -> None
         )
         _require(
             accounted == stats["physical_rows"],
-            f"census: {key} row dispositions do not account for every physical row",
+            f"census: {binding_id} row dispositions do not account for every physical row",
         )
 
-    totals = census["totals"]
+    nodes = obj["nodes"]
+    _require(type(nodes) is list and nodes, "census: nodes must be a non-empty array")
+    if context is not None:
+        _require(graph_sha == context.graph_sha256, "census: graph SHA disagreement")
+        _require(obj["seed"] == context.graph.seed, "census: seed disagreement")
+        _require(
+            authorization == context.as_canonical(),
+            "census: authorization block does not match the authorised run context",
+        )
+        _require(
+            bound == context.graph.bound_authorities,
+            "census: bound authorities disagree with the authorised graph",
+        )
+        _require(
+            set(counters) == set(context.graph.bindings),
+            "census: binding counters do not cover exactly the graph's bindings",
+        )
+        _require(
+            len(nodes) == len(context.graph.nodes),
+            "census: node results do not cover the graph's nodes",
+        )
+        graph_nodes: list[Any | None] = list(context.graph.nodes)
+    else:
+        graph_nodes = [None] * len(nodes)
+
+    earlier_sources: set[str] = set()
+    for index, (node, graph_node) in enumerate(zip(nodes, graph_nodes, strict=True)):
+        source = node.get("source_id") if type(node) is dict else None
+        _require(
+            type(source) is str and source not in earlier_sources,
+            f"census: node {index} source_id must be a unique string",
+        )
+        _validate_contract_node(
+            node,
+            graph_node=graph_node,
+            earlier_sources=earlier_sources,
+        )
+        earlier_sources.add(source)
+    execution_order = [(STAGE_PRIORITY[node["stage"]], node["source_id"]) for node in nodes]
     _require(
-        totals["physical_rows"] == sum(c["physical_rows"] for c in counters.values()),
+        execution_order == sorted(execution_order),
+        "census: nodes are not in canonical execution order",
+    )
+
+    if context is not None:
+        for binding_id, stats in counters.items():
+            binding = context.graph.bindings[binding_id]
+            _require(
+                stats["physical_rows"] == binding.total_physical_rows,
+                f"census: {binding_id} physical row count is not final",
+            )
+            _require(
+                stats["d2_d3_excluded_rows"] == binding.excluded_rows,
+                f"census: {binding_id} eligibility exclusions are not fully consumed",
+            )
+
+    ownership = obj["ownership_matrix"]
+    _require(type(ownership) is dict, "census: ownership_matrix must be an object")
+    _require(
+        all(type(source) is str and source for source in ownership),
+        "census: ownership_matrix keys must be non-empty strings",
+    )
+    for source, owners in ownership.items():
+        _require(
+            type(owners) is dict,
+            f"census: ownership_matrix.{source} must be an object",
+        )
+        _require(
+            all(type(owner) is str and owner for owner in owners),
+            f"census: ownership_matrix.{source} keys must be non-empty strings",
+        )
+        for owner, count in owners.items():
+            _exact_int(count, f"census: ownership_matrix.{source}.{owner}", minimum=1)
+    expected_ownership = {
+        node["source_id"]: node["exclusions_by_owner"]
+        for node in nodes
+        if node["exclusions_by_owner"]
+    }
+    _require(
+        ownership == expected_ownership,
+        "census: ownership_matrix disagrees with node ownership exclusions",
+    )
+
+    totals = _closed_object(obj["totals"], _TOTAL_FIELDS, "census.totals")
+    for key in _TOTAL_FIELDS:
+        _exact_int(totals[key], f"census.totals.{key}")
+    _require(
+        totals["physical_rows"] == sum(stats["physical_rows"] for stats in counters.values()),
         "census: totals.physical_rows disagrees with the per-binding counters",
     )
     _require(
-        totals["eligible_rows"] == sum(c["eligible_rows"] for c in counters.values()),
+        totals["eligible_rows"] == sum(stats["eligible_rows"] for stats in counters.values()),
         "census: totals.eligible_rows disagrees with the per-binding counters",
     )
     _require(
-        totals["selected_identities"] == sum(n["selected_identities"] for n in nodes),
+        totals["selected_identities"] == sum(node["selected_identities"] for node in nodes),
         "census: totals.selected_identities disagrees with the node results",
     )
     _require(
-        totals["selected_serialized_tokens"] == sum(n["selected_serialized_tokens"] for n in nodes),
+        totals["selected_serialized_tokens"]
+        == sum(node["selected_serialized_tokens"] for node in nodes),
         "census: totals.selected_serialized_tokens disagrees with the node results",
     )
     _require(
-        census["hard_stop_required"] == any(not n["feasible"] for n in nodes),
+        obj["hard_stop_required"] == any(not node["feasible"] for node in nodes),
         "census: hard_stop_required disagrees with the node feasibility states",
     )
 
     try:
-        encoded = canonical_json_bytes(census)
-    except ValueError as exc:
+        encoded = canonical_json_bytes(obj)
+    except (TypeError, ValueError) as exc:
         raise CensusError(f"census is not canonically serialisable: {exc}") from exc
     _require(
         canonical_json_bytes(json.loads(encoded.decode("utf-8"))) == encoded,
@@ -795,83 +1471,54 @@ def validate_complete_census(census: Any, context: AuthorizedRunContext) -> None
     )
 
 
-def _validate_node_result(node: Any, targets: dict[str, int]) -> None:
-    _require(isinstance(node, dict), "census: node result must be an object")
+def validate_complete_census(census: Any, context: AuthorizedRunContext | None = None) -> None:
+    """Everything that must hold before the word COMPLETE may be written anywhere.
+
+    A result that is incomplete, malformed, mis-schemaed or internally inconsistent fails here,
+    before any staging file exists, so no partial artefact can be labelled complete.
+    """
+    _validate_complete_contract(census, context)
+
+
+def _complete_marker(census: dict[str, Any], census_sha256: str) -> dict[str, Any]:
+    authorization = census["authorization"]
+    return {
+        "marker": COMPLETE_MARKER,
+        "run_identity": authorization["run_identity"],
+        "candidate_plan_sha256": authorization["candidate_plan_sha256"],
+        "owner_graph_sha256": authorization["owner_graph_sha256"],
+        "implementation_bundle_sha256": authorization["implementation_bundle_sha256"],
+        "census_sha256": census_sha256,
+        "census_schema_version": CENSUS_SCHEMA,
+    }
+
+
+def _validate_complete_marker(marker: Any, census: dict[str, Any], census_sha256: str) -> None:
+    obj = _closed_object(marker, _MARKER_FIELDS, "COMPLETE marker")
     _require(
-        node.get("canonical_schema_version") == NODE_RESULT_SCHEMA,
-        "census: node result carries the wrong canonical schema version",
-    )
-    source_id = node["source_id"]
-    target = targets[source_id]
-    _require(
-        node["target_serialized_tokens"] == target,
-        f"census: {source_id} target disagrees with the frozen graph",
+        _exact_str(obj["marker"], "COMPLETE marker.marker") == COMPLETE_MARKER,
+        "COMPLETE marker: wrong marker literal",
     )
     for key in (
-        "pre_exclusion_unique_identities",
-        "g2_excluded_identities",
-        "prior_commit_excluded_identities",
-        "post_exclusion_candidate_identities",
-        "post_exclusion_candidate_serialized_tokens",
-        "selected_identities",
-        "selected_serialized_tokens",
-        "residual_identities",
-        "residual_serialized_tokens",
-        "actual_overshoot_tokens",
+        "run_identity",
+        "candidate_plan_sha256",
+        "owner_graph_sha256",
+        "implementation_bundle_sha256",
+        "census_sha256",
     ):
-        value = node[key]
-        _require(
-            isinstance(value, int) and not isinstance(value, bool) and value >= 0,
-            f"census: {source_id}.{key} must be a non-negative exact integer",
+        _hex_string(obj[key], 64, f"COMPLETE marker.{key}")
+    _require(
+        _exact_str(
+            obj["census_schema_version"],
+            "COMPLETE marker.census_schema_version",
         )
-    _require(isinstance(node["feasible"], bool), f"census: {source_id}.feasible must be a boolean")
-    _require(
-        node["prior_commit_excluded_identities"] == sum(node["exclusions_by_owner"].values()),
-        f"census: {source_id} ownership exclusions do not sum to the reported total",
+        == CENSUS_SCHEMA,
+        "COMPLETE marker: census schema mismatch",
     )
     _require(
-        node["pre_exclusion_unique_identities"]
-        == node["g2_excluded_identities"]
-        + node["prior_commit_excluded_identities"]
-        + node["post_exclusion_candidate_identities"],
-        f"census: {source_id} candidate accounting does not close",
+        obj == _complete_marker(census, census_sha256),
+        "COMPLETE marker and census disagree",
     )
-    _require(
-        node["residual_identities"]
-        == node["post_exclusion_candidate_identities"] - node["selected_identities"],
-        f"census: {source_id} residual identities do not close",
-    )
-    _require(
-        node["residual_serialized_tokens"]
-        == node["post_exclusion_candidate_serialized_tokens"] - node["selected_serialized_tokens"],
-        f"census: {source_id} residual tokens do not close",
-    )
-    _require(
-        node["feasible"] == (node["selected_serialized_tokens"] >= target),
-        f"census: {source_id} feasibility disagrees with its selected mass",
-    )
-    expected_overshoot = node["selected_serialized_tokens"] - target if node["feasible"] else 0
-    _require(
-        node["actual_overshoot_tokens"] == expected_overshoot,
-        f"census: {source_id} overshoot is not the measured value",
-    )
-    if node["feasible"]:
-        _require(
-            isinstance(node["crossing_identity"], str),
-            f"census: {source_id} is feasible but reports no crossing document",
-        )
-        _require(
-            0 < node["crossing_document_serialized_tokens"] <= node["selected_serialized_tokens"],
-            f"census: {source_id} crossing mass is outside its selected mass",
-        )
-    else:
-        _require(
-            node["crossing_identity"] is None
-            and node["crossing_document_serialized_tokens"] is None,
-            f"census: {source_id} is infeasible but reports a crossing document",
-        )
-    evidence = node["boundary_evidence"]
-    _require(isinstance(evidence, dict), f"census: {source_id} boundary evidence must be an object")
 
 
 def final_run_dir(out_dir: Path, context: AuthorizedRunContext) -> Path:
@@ -891,9 +1538,13 @@ def publish_atomic(context: AuthorizedRunContext, census: dict[str, Any], out_di
     already contains a complete, self-consistent run. A failure at any point removes the staging
     tree and leaves any previous state untouched.
     """
-    if not isinstance(context, AuthorizedRunContext):
-        raise AuthorizationError("publication requires an AuthorizedRunContext")
+    _require_authorized_context(context, "publication")
+
+    # Finalize every hash-bearing byte before the last identity check. Nothing has been written
+    # yet, so a revalidation failure cannot leave observable output.
     validate_complete_census(census, context)
+    payload = canonical_json_bytes(census)
+    marker = canonical_json_bytes(_complete_marker(census, hashlib.sha256(payload).hexdigest()))
     context.revalidate()
 
     final = final_run_dir(out_dir, context)
@@ -906,16 +1557,6 @@ def publish_atomic(context: AuthorizedRunContext, census: dict[str, Any], out_di
             f"stale staging directories for this run identity must be removed first: {stale}"
         )
 
-    payload = canonical_json_bytes(census)
-    marker = canonical_json_bytes({
-        "marker": COMPLETE_MARKER,
-        "run_identity": context.identity,
-        "candidate_plan_sha256": context.plan_sha256,
-        "owner_graph_sha256": context.graph_sha256,
-        "implementation_bundle_sha256": context.bundle_sha256,
-        "census_sha256": hashlib.sha256(payload).hexdigest(),
-        "census_schema_version": CENSUS_SCHEMA,
-    })
     staging = Path(tempfile.mkdtemp(prefix=_staging_prefix(context), dir=str(out_dir)))
     try:
         _write_durable(staging / CENSUS_FILENAME, payload)
@@ -959,28 +1600,26 @@ def load_published_run(final: Path, *, expected_run_identity: str | None = None)
     payload, census_digest = read_authoritative_bytes(census_path, max_bytes=1 << 31)
     marker_bytes, _ = read_authoritative_bytes(marker_path, max_bytes=1 << 20)
     marker = strict_json_object(marker_bytes, where=f"{final}/{COMPLETE_MARKER}")
-    if marker.get("marker") != COMPLETE_MARKER:
-        raise CensusError(f"{final}: malformed COMPLETE marker")
     if marker.get("census_sha256") != census_digest:
         raise CensusError(f"{final}: COMPLETE marker does not describe the published census")
     census = strict_json_object(payload, where=f"{final}/{CENSUS_FILENAME}")
-    if census.get("schema_version") != CENSUS_SCHEMA or census.get("status") != "COMPLETE":
-        raise CensusError(f"{final}: published census is not a COMPLETE {CENSUS_SCHEMA}")
-    authorization = census.get("authorization")
-    if not isinstance(authorization, dict):
-        raise CensusError(f"{final}: published census carries no run identity")
-    for key in (
-        "run_identity",
-        "candidate_plan_sha256",
-        "owner_graph_sha256",
-        "implementation_bundle_sha256",
-    ):
-        if marker.get(key) != authorization.get(key):
-            raise CensusError(f"{final}: COMPLETE marker and census disagree on {key}")
+    _require(
+        canonical_json_bytes(census) == payload,
+        f"{final}: census bytes are not canonical",
+    )
+    _require(
+        canonical_json_bytes(marker) == marker_bytes,
+        f"{final}: COMPLETE marker bytes are not canonical",
+    )
+    validate_complete_census(census)
+    _validate_complete_marker(marker, census, census_digest)
+    authorization = census["authorization"]
     if final.name != f"run-{authorization['run_identity'][:32]}":
         raise CensusError(f"{final}: directory name does not match its own run identity")
-    if expected_run_identity is not None and authorization["run_identity"] != expected_run_identity:
-        raise CensusError(f"{final}: run identity is not the expected one")
+    if expected_run_identity is not None:
+        _hex_string(expected_run_identity, 64, "expected_run_identity")
+        if authorization["run_identity"] != expected_run_identity:
+            raise CensusError(f"{final}: run identity is not the expected one")
     return census
 
 
@@ -1001,6 +1640,13 @@ def generate_candidate_plan(
     plan is reproducible byte-for-byte from this generator and nothing has to be added by hand.
     """
     paths = dict(authority_paths or DEFAULT_AUTHORITY_PATHS)
+    if (
+        type(implementation_commit) is not str
+        or len(implementation_commit) != 40
+        or set(implementation_commit) - _HEX
+    ):
+        raise CensusError("implementation_commit must be a lowercase 40-character Git SHA")
+
     if sorted(paths) != sorted(AUTHORITY_KEYS):
         raise CensusError(f"authority paths must be exactly {sorted(AUTHORITY_KEYS)}")
     authorities: dict[str, Any] = {}
@@ -1056,7 +1702,12 @@ def _git_head(repo_root: Path) -> str:
     )
     if result.returncode != 0:
         raise CensusError(f"cannot determine implementation commit: {result.stderr.strip()}")
-    return result.stdout.strip()
+    commit = result.stdout.strip()
+    if len(commit) != 40 or set(commit) - _HEX:
+        raise CensusError(
+            f"runtime repository HEAD is not a lowercase 40-character Git SHA: {commit!r}"
+        )
+    return commit
 
 
 # --------------------------------------------------------------------- CLI
