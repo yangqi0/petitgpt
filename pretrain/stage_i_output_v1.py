@@ -24,7 +24,7 @@ the rank order so the frozen selection sequence and its fingerprint remain recon
 
 from __future__ import annotations
 
-from collections.abc import Iterable, Mapping
+from collections.abc import Iterable, Iterator, Mapping, Sequence
 import hashlib
 import os
 from pathlib import Path
@@ -32,10 +32,16 @@ import shutil
 import tempfile
 from typing import Any
 
+from pretrain.stage_i_audit_v1 import (
+    DEFAULT_READ_WINDOW_BYTES,
+    DEFAULT_SORT_CHUNK_LINES,
+    RealizationAudit,
+    ShardReader,
+    audit_realization,
+)
 from pretrain.stage_i_graph_v2 import (
     STAGE_PRIORITY,
     canonical_json_bytes,
-    open_authoritative,
     read_authoritative_bytes,
     strict_json_object,
 )
@@ -218,6 +224,7 @@ _MANIFEST_FIELDS = frozenset({
     "bindings",
     "environment",
     "h_binding",
+    "stage_i_run",
 })
 _SHARD_FIELDS = frozenset({"name", "records", "bytes", "sha256"})
 _TOTALS_FIELDS = frozenset({
@@ -245,7 +252,56 @@ _MARKER_FIELDS = frozenset({
     "record_schema_version",
     "manifest_schema_version",
     "h_run_identity",
+    "stage_i_run_identity",
 })
+
+# Closed, versioned field list for the published Stage-I run identity. Deliberately explicit: an
+# open-ended dictionary digest would change meaning whenever a key was added, and would let two
+# runs differing in an unlisted field claim the same identity.
+_STAGE_I_RUN_FIELDS = frozenset({
+    "run_identity",
+    "candidate_i_plan_sha256",
+    "implementation_commit",
+    "implementation_bundle_sha256",
+    "plan_schema_version",
+    "output_schema_version",
+    "manifest_schema_version",
+    "shard_policy_version",
+    "records_per_shard",
+    "h_run_identity",
+    "h_complete_sha256",
+    "h_census_sha256",
+    "h_predictions_sha256",
+    "owner_graph_sha256",
+})
+STAGE_I_RUN_IDENTITY_SCHEMA = "petitgpt-stage-i-run-identity-v1"
+
+
+def recompute_stage_i_run_identity(stage_i_run: Mapping[str, Any]) -> str:
+    """Recompute the published run identity from its own explicit fields.
+
+    Defined here as well as in the driver so the consumer can verify the identity without
+    importing the producer: a run that claims an identity its own fields do not generate is
+    rejected, so a producer cannot certify some other internally-consistent run as equivalent to
+    the externally authorized one.
+    """
+    payload = {
+        "schema_version": STAGE_I_RUN_IDENTITY_SCHEMA,
+        "candidate_plan_sha256": stage_i_run["candidate_i_plan_sha256"],
+        "implementation_commit": stage_i_run["implementation_commit"],
+        "implementation_bundle_sha256": stage_i_run["implementation_bundle_sha256"],
+        "plan_schema_version": stage_i_run["plan_schema_version"],
+        "output_schema_version": stage_i_run["output_schema_version"],
+        "manifest_schema_version": stage_i_run["manifest_schema_version"],
+        "shard_policy_version": stage_i_run["shard_policy_version"],
+        "records_per_shard": stage_i_run["records_per_shard"],
+        "h_run_identity": stage_i_run["h_run_identity"],
+        "h_complete_sha256": stage_i_run["h_complete_sha256"],
+        "h_census_sha256": stage_i_run["h_census_sha256"],
+        "h_predictions_sha256": stage_i_run["h_predictions_sha256"],
+        "owner_graph_sha256": stage_i_run["owner_graph_sha256"],
+    }
+    return hashlib.sha256(canonical_json_bytes(payload)).hexdigest()
 
 
 def _closed(obj: Any, fields: frozenset[str], where: str) -> dict[str, Any]:
@@ -408,12 +464,59 @@ def validate_manifest(manifest: Any) -> dict[str, Any]:
         "h_run_identity",
         "h_census_sha256",
         "h_predictions_sha256",
+        "h_complete_sha256",
         "h_candidate_plan_sha256",
         "h_implementation_bundle_sha256",
         "owner_graph_sha256",
     ):
         _require(key in h_binding, f"manifest.h_binding is missing {key!r}")
         _hex64(h_binding[key], f"manifest.h_binding.{key}")
+
+    stage_i_run = _closed(obj["stage_i_run"], _STAGE_I_RUN_FIELDS, "manifest.stage_i_run")
+    for key in (
+        "run_identity",
+        "candidate_i_plan_sha256",
+        "implementation_bundle_sha256",
+        "h_run_identity",
+        "h_complete_sha256",
+        "h_census_sha256",
+        "h_predictions_sha256",
+        "owner_graph_sha256",
+    ):
+        _hex64(stage_i_run[key], f"manifest.stage_i_run.{key}")
+    _exact_str(stage_i_run["implementation_commit"], "manifest.stage_i_run.implementation_commit")
+    _require(
+        _exact_str(
+            stage_i_run["output_schema_version"], "manifest.stage_i_run.output_schema_version"
+        )
+        == RECORD_SCHEMA
+        and _exact_str(
+            stage_i_run["manifest_schema_version"], "manifest.stage_i_run.manifest_schema_version"
+        )
+        == MANIFEST_SCHEMA
+        and _exact_str(
+            stage_i_run["shard_policy_version"], "manifest.stage_i_run.shard_policy_version"
+        )
+        == SHARD_POLICY_VERSION,
+        "manifest.stage_i_run schema/policy versions disagree with this implementation",
+    )
+    _exact_str(stage_i_run["plan_schema_version"], "manifest.stage_i_run.plan_schema_version")
+    _require(
+        _exact_int(stage_i_run["records_per_shard"], "manifest.stage_i_run.records_per_shard")
+        == RECORDS_PER_SHARD,
+        "manifest.stage_i_run.records_per_shard disagrees with the declared policy",
+    )
+    _require(
+        recompute_stage_i_run_identity(stage_i_run) == stage_i_run["run_identity"],
+        "manifest.stage_i_run.run_identity is not generated by its own bound fields",
+    )
+    _require(
+        obj["h_binding"]["h_run_identity"] == stage_i_run["h_run_identity"]
+        and obj["h_binding"]["h_complete_sha256"] == stage_i_run["h_complete_sha256"]
+        and obj["h_binding"]["h_census_sha256"] == stage_i_run["h_census_sha256"]
+        and obj["h_binding"]["h_predictions_sha256"] == stage_i_run["h_predictions_sha256"],
+        "manifest.h_binding disagrees with manifest.stage_i_run",
+    )
 
     encoded = canonical_json_bytes(obj)
     _require(
@@ -433,6 +536,7 @@ def _complete_marker(manifest: Mapping[str, Any], manifest_sha256: str) -> dict[
         "record_schema_version": RECORD_SCHEMA,
         "manifest_schema_version": MANIFEST_SCHEMA,
         "h_run_identity": manifest["h_binding"]["h_run_identity"],
+        "stage_i_run_identity": manifest["stage_i_run"]["run_identity"],
     }
 
 
@@ -446,6 +550,7 @@ def _validate_complete_marker(
     )
     _hex64(obj["manifest_sha256"], "COMPLETE marker.manifest_sha256")
     _hex64(obj["h_run_identity"], "COMPLETE marker.h_run_identity")
+    _hex64(obj["stage_i_run_identity"], "COMPLETE marker.stage_i_run_identity")
     _require(
         obj == _complete_marker(manifest, manifest_sha256),
         "COMPLETE marker and manifest disagree",
@@ -473,6 +578,12 @@ def write_shards(staging: Path, records: Iterable[Mapping[str, Any]]) -> list[di
     The caller owns the ordering contract; this only enforces that what it receives is already
     sorted, because silently re-sorting here would hide an upstream ordering defect behind a
     correct-looking output.
+
+    Global cleaned-identity uniqueness is deliberately NOT checked here any more. It used to be an
+    in-memory set, which is ~13.8M entries at production scale; the streaming realization audit
+    now establishes it from the staged bytes in bounded memory, which is both cheaper and a
+    stronger statement -- it holds for the files that will actually be published, not merely for
+    the objects that passed through this function.
     """
     documents_dir = staging / DOCUMENTS_DIRNAME
     documents_dir.mkdir(parents=True, exist_ok=False)
@@ -481,7 +592,6 @@ def write_shards(staging: Path, records: Iterable[Mapping[str, Any]]) -> list[di
     buffer: list[bytes] = []
     count = 0
     previous_key: tuple[int, str, str, int] | None = None
-    seen_identities: set[str] = set()
 
     def flush() -> None:
         if not buffer:
@@ -505,12 +615,6 @@ def write_shards(staging: Path, records: Iterable[Mapping[str, Any]]) -> list[di
             "records reached the writer out of canonical physical order",
         )
         previous_key = key
-        identity = record["cleaned_text_sha256"]
-        _require(
-            identity not in seen_identities,
-            f"duplicate cleaned identity {identity} reached the realization output",
-        )
-        seen_identities.add(identity)
         buffer.append(canonical_json_bytes(record))
         count += 1
         if count == RECORDS_PER_SHARD:
@@ -522,46 +626,151 @@ def write_shards(staging: Path, records: Iterable[Mapping[str, Any]]) -> list[di
     return shards
 
 
-def publish_atomic(
-    out_dir: Path, run_name: str, manifest: Mapping[str, Any], records: Iterable[Mapping[str, Any]]
-) -> Path:
-    """Stage, verify the staged bytes, mark COMPLETE last, then rename atomically.
+def reconcile_manifest_with_audit(manifest: Mapping[str, Any], audit: RealizationAudit) -> None:
+    """The manifest must restate the physical realization exactly, field for field.
 
-    Ordering is the whole point. Shards are written and re-read before the manifest is finalised;
-    COMPLETE is written only once everything it attests to already exists on disk; and the
-    directory becomes discoverable under its final name only when it is already complete and
-    self-consistent. Any failure removes the staging tree and leaves prior state untouched.
+    This is the repair for the reviewed defect where COMPLETE could be published with manifest
+    token totals that disagreed with the records on disk. Every number below is compared against
+    one the audit derived by streaming the actual bytes, so a caller-supplied total that is merely
+    internally consistent is no longer sufficient.
+    """
+    totals = manifest["totals"]
+    for field_name, actual in (
+        ("records", audit.records),
+        ("content_tokens", audit.content_tokens),
+        ("serialized_tokens", audit.serialized_tokens),
+        ("shards", audit.shards),
+        ("unique_cleaned_identities", audit.unique_cleaned_identities),
+    ):
+        _require(
+            totals[field_name] == actual,
+            f"manifest.totals.{field_name} is {totals[field_name]} but the staged records "
+            f"actually contain {actual}",
+        )
+
+    declared = manifest["shards"]
+    _require(
+        len(declared) == len(audit.per_shard),
+        f"manifest declares {len(declared)} shards but {len(audit.per_shard)} were audited",
+    )
+    for index, (claimed, actual) in enumerate(zip(declared, audit.per_shard, strict=True)):
+        for field_name in ("name", "records", "bytes", "sha256"):
+            _require(
+                claimed[field_name] == actual[field_name],
+                f"manifest.shards[{index}].{field_name} is {claimed[field_name]!r} but the "
+                f"physical shard has {actual[field_name]!r}",
+            )
+
+    audited = {node.source_id: node for node in audit.nodes}
+    for entry in manifest["nodes"]:
+        source_id = entry["source_id"]
+        if entry["selected_identities"] == 0:
+            _require(
+                source_id not in audited,
+                f"manifest node {source_id} claims no selected identities but records exist",
+            )
+            continue
+        _require(source_id in audited, f"manifest node {source_id} has no physical records")
+        node = audited[source_id]
+        _require(
+            entry["stage"] == node.stage,
+            f"manifest node {source_id} stage disagrees with its physical records",
+        )
+        _require(
+            entry["selected_identities"] == node.records,
+            f"manifest node {source_id} claims {entry['selected_identities']} identities but "
+            f"{node.records} records were audited",
+        )
+        _require(
+            entry["selected_serialized_tokens"] == node.serialized_tokens,
+            f"manifest node {source_id} claims {entry['selected_serialized_tokens']} serialized "
+            f"tokens but the records sum to {node.serialized_tokens}",
+        )
+        _require(
+            entry["selection_fingerprint"] == node.selection_fingerprint,
+            f"manifest node {source_id} fingerprint disagrees with the fingerprint reconstructed "
+            "from its physical records in selection order",
+        )
+    unknown = sorted(set(audited) - {e["source_id"] for e in manifest["nodes"]})
+    _require(not unknown, f"physical records exist for undeclared node(s): {unknown}")
+
+
+def audit_staged_realization(
+    root: Path,
+    shard_names: Sequence[str],
+    work_dir: Path,
+    *,
+    read_window_bytes: int = DEFAULT_READ_WINDOW_BYTES,
+    sort_chunk_lines: int = DEFAULT_SORT_CHUNK_LINES,
+) -> RealizationAudit:
+    """Run the shared streaming audit over a staged or published documents directory."""
+    return audit_realization(
+        root / DOCUMENTS_DIRNAME,
+        shard_names,
+        work_dir,
+        validate_record=validate_record,
+        parse_record=lambda line: strict_json_object(line, where=str(root)),
+        read_window_bytes=read_window_bytes,
+        sort_chunk_lines=sort_chunk_lines,
+    )
+
+
+def publish_atomic(
+    out_dir: Path,
+    run_name: str,
+    manifest: Mapping[str, Any],
+    records: Iterable[Mapping[str, Any]],
+    *,
+    read_window_bytes: int = DEFAULT_READ_WINDOW_BYTES,
+    sort_chunk_lines: int = DEFAULT_SORT_CHUNK_LINES,
+) -> Path:
+    """Stage, audit the physical bytes, reconcile, mark COMPLETE last, then rename atomically.
+
+    Ordering is the whole point and it is now:
+
+        write staging data -> finalize shards -> audit the actual staged realization ->
+        reconcile the manifest against that audit -> validate the manifest ->
+        write the manifest -> write COMPLETE -> fsync -> atomic rename
+
+    Nothing is certified from an in-memory object. The audit re-reads every staged byte in bounded
+    memory and the manifest must agree with it exactly, so a realization whose totals do not
+    describe its own records cannot become discoverable. Any failure removes both the staging tree
+    and the audit scratch space and leaves prior state untouched.
     """
     final = out_dir / run_name
     _require(
         not final.exists(), f"realization directory already exists, refusing to overwrite: {final}"
     )
     out_dir.mkdir(parents=True, exist_ok=True)
-    stale = sorted(out_dir.glob(f".{run_name}.staging-*"))
-    _require(not stale, f"stale staging directories must be removed first: {stale}")
+    stale = sorted(out_dir.glob(f".{run_name}.staging-*")) + sorted(
+        out_dir.glob(f".{run_name}.audit-*")
+    )
+    _require(not stale, f"stale staging/audit directories must be removed first: {stale}")
 
     staging = Path(tempfile.mkdtemp(prefix=f".{run_name}.staging-", dir=str(out_dir)))
+    # Audit scratch lives OUTSIDE the staging tree so it can never be renamed into the published
+    # result, and it is removed on every exit path.
+    audit_dir = Path(tempfile.mkdtemp(prefix=f".{run_name}.audit-", dir=str(out_dir)))
     try:
         shards = write_shards(staging, records)
 
-        # The shard list is only knowable after the records have been written, so the publisher
-        # owns both it and the shard count that must agree with it. Copy `totals` rather than
-        # mutating it: the caller's manifest is its own object and must not be edited in place.
+        # The shard list and count are only knowable after the records have been written, so the
+        # publisher owns them. Copy `totals` rather than mutating it: the caller's manifest is its
+        # own object and must not be edited in place.
         complete = dict(manifest)
         complete["shards"] = shards
         complete["totals"] = dict(manifest["totals"])
         complete["totals"]["shards"] = len(shards)
-        validate_manifest(complete)
 
-        # Re-read every staged shard from disk and compare with what the manifest claims, so a
-        # short write or a filesystem-level corruption cannot be certified by an in-memory digest.
-        for index, entry in enumerate(shards):
-            path = staging / DOCUMENTS_DIRNAME / entry["name"]
-            payload, digest = read_authoritative_bytes(path, max_bytes=1 << 31)
-            _require(
-                digest == entry["sha256"] and len(payload) == entry["bytes"],
-                f"staged shard {index} does not match its manifest entry",
-            )
+        audit = audit_staged_realization(
+            staging,
+            [entry["name"] for entry in shards],
+            audit_dir,
+            read_window_bytes=read_window_bytes,
+            sort_chunk_lines=sort_chunk_lines,
+        )
+        reconcile_manifest_with_audit(complete, audit)
+        validate_manifest(complete)
 
         manifest_bytes = canonical_json_bytes(complete)
         _write_durable(staging / MANIFEST_FILENAME, manifest_bytes)
@@ -580,14 +789,36 @@ def publish_atomic(
     except BaseException:
         shutil.rmtree(staging, ignore_errors=True)
         raise
+    finally:
+        shutil.rmtree(audit_dir, ignore_errors=True)
     return final
 
 
 # --------------------------------------------------------------------- strict consumer
 
 
-def load_published_realization(final: Path) -> dict[str, Any]:
-    """Refuse anything that is not a complete, self-consistent published realization."""
+def load_published_realization(
+    final: Path,
+    *,
+    work_dir: Path | None = None,
+    read_window_bytes: int = DEFAULT_READ_WINDOW_BYTES,
+    sort_chunk_lines: int = DEFAULT_SORT_CHUNK_LINES,
+) -> dict[str, Any]:
+    """Refuse anything that is not a complete, self-consistent, physically verified realization.
+
+    The reviewed defect was that a realization could be loaded and fully iterated without any
+    physical invariant being enforced. This now runs the SAME streaming audit the publisher ran,
+    over the published bytes, and requires the manifest to restate it exactly. Because publisher
+    and consumer share one implementation, their two interpretations cannot drift apart.
+
+    Everything is derived in bounded memory: records stream a line at a time, and the global
+    questions (identity uniqueness, per-node ordinal contiguity, per-node fingerprints) go through
+    a deterministic disk-backed sort. Nothing here scales with the size of the realization, so a
+    56 GB production result validates on the same footprint as a three-record fixture.
+
+    Scratch space is created under ``work_dir`` (a system temp directory by default), is never
+    written inside the published result, and is removed on every exit path.
+    """
     _require(final.is_dir(), f"{final}: not a published realization directory")
     marker_path = final / COMPLETE_MARKER
     manifest_path = final / MANIFEST_FILENAME
@@ -617,30 +848,58 @@ def load_published_realization(final: Path) -> dict[str, Any]:
         present == sorted(expected),
         f"{final}: documents directory contents disagree with the manifest shard list",
     )
-    for entry in manifest["shards"]:
-        with open_authoritative(documents_dir / entry["name"]) as (_stream, identity):
-            _require(
-                identity.st_size == entry["bytes"],
-                f"{final}: shard {entry['name']} size disagrees with the manifest",
-            )
+
+    owned_scratch = work_dir is None
+    scratch = (
+        Path(tempfile.mkdtemp(prefix="stage-i-consumer-audit-")) if owned_scratch else work_dir
+    )
+    try:
+        audit = audit_staged_realization(
+            final,
+            expected,
+            scratch,
+            read_window_bytes=read_window_bytes,
+            sort_chunk_lines=sort_chunk_lines,
+        )
+        reconcile_manifest_with_audit(manifest, audit)
+    finally:
+        if owned_scratch:
+            shutil.rmtree(scratch, ignore_errors=True)
     return manifest
 
 
-def iter_records(final: Path, manifest: Mapping[str, Any]) -> Iterable[dict[str, Any]]:
-    """Stream every published record in canonical physical order, validating as it goes."""
+def iter_records(
+    final: Path,
+    manifest: Mapping[str, Any],
+    *,
+    read_window_bytes: int = DEFAULT_READ_WINDOW_BYTES,
+) -> Iterator[dict[str, Any]]:
+    """Stream every published record in canonical physical order, validating as it goes.
+
+    Bounded: one line at a time, with each shard's digest recomputed from the bytes consumed and
+    compared with the manifest at the end of that shard. This does not re-run the full audit --
+    ``load_published_realization`` already did -- it is the ordinary reading path.
+    """
     documents_dir = final / DOCUMENTS_DIRNAME
     for entry in manifest["shards"]:
-        payload, digest = read_authoritative_bytes(documents_dir / entry["name"], max_bytes=1 << 31)
+        reader = ShardReader(documents_dir / entry["name"], read_window_bytes=read_window_bytes)
+        seen = 0
+        for line in reader:
+            record = validate_record(strict_json_object(line, where=f"{final}/{entry['name']}"))
+            _require(
+                canonical_json_bytes(record) == line + b"\n",
+                f"{final}: shard {entry['name']} record {seen} is not canonical",
+            )
+            seen += 1
+            yield record
         _require(
-            digest == entry["sha256"],
+            reader.sha256 == entry["sha256"],
             f"{final}: shard {entry['name']} SHA-256 disagrees with the manifest",
         )
-        lines = payload.split(b"\n")
         _require(
-            lines and lines[-1] == b"", f"{final}: shard {entry['name']} is not newline-terminated"
+            reader.bytes_read == entry["bytes"] and seen == entry["records"],
+            f"{final}: shard {entry['name']} size/record count disagrees with the manifest",
         )
-        for line in lines[:-1]:
-            yield validate_record(strict_json_object(line, where=f"{final}/{entry['name']}"))
 
 
 __all__ = [
@@ -655,7 +914,10 @@ __all__ = [
     "OutputError",
     "build_record",
     "iter_records",
+    "audit_staged_realization",
     "load_published_realization",
+    "recompute_stage_i_run_identity",
+    "reconcile_manifest_with_audit",
     "plan_shards",
     "publish_atomic",
     "record_sort_key",

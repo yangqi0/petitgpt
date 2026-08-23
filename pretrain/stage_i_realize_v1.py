@@ -33,12 +33,14 @@ from __future__ import annotations
 
 import argparse
 from collections.abc import Iterator, Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import hashlib
 from pathlib import Path
 import platform
+import shutil
 import subprocess
 import sys
+import tempfile
 from typing import Any
 
 ROOT = str(Path(__file__).resolve().parents[1])
@@ -58,6 +60,12 @@ from pretrain.h_census_v2 import load_published_run  # noqa: E402
 from pretrain.select_pretrain_documents import (  # noqa: E402
     SELECTION_METADATA_FIELD,
     _canonical_json_bytes,
+)
+from pretrain.stage_i_audit_v1 import (  # noqa: E402
+    DEFAULT_READ_WINDOW_BYTES,
+    DEFAULT_SORT_CHUNK_LINES,
+    AuditError,
+    stream_lines,
 )
 from pretrain.stage_i_graph_v2 import (  # noqa: E402
     STAGE_PRIORITY,
@@ -100,7 +108,11 @@ BUNDLE_SCHEMA = "petitgpt-i-implementation-bundle-v1"
 REALIZATION_LABEL = "AUTHORITATIVE_STAGE_I_REALIZATION"
 RESUME_SUPPORTED = False
 
+# Every module whose bytes can change a Stage-I result. The audit module is here because it
+# decides whether a realization may be published at all and what the consumer will accept; leaving
+# it out would mean a change to that logic did not invalidate an authorized plan.
 IMPLEMENTATION_BUNDLE_FILES = (
+    "pretrain/stage_i_audit_v1.py",
     "pretrain/stage_i_output_v1.py",
     "pretrain/stage_i_realize_v1.py",
     "pretrain/stage_i_select_v1.py",
@@ -113,6 +125,12 @@ REQUIRED_TOKENIZERS_VERSION = "0.22.2"
 ACCEPTED_H_RUN_DIR = "runs/h_production_v2_2026-08-23"
 ACCEPTED_H_RUN_IDENTITY = "63f5ef84ab56c6da7f76ecfb9e9196a3e98a791d607224c83a9c183c32be111a"
 ACCEPTED_H_PREDICTIONS_SHA256 = "fff205494b1379eaf0e77a5d58591c085af2764712a024ed25c3767c10382f87"
+# The exact accepted Stage-H COMPLETE bytes. Binding the digest rather than the marker's name
+# is what makes "this Stage-I run descends from that Stage-H result" a checkable claim; the
+# reviewed plan recorded only the literal string "COMPLETE", which any directory could satisfy.
+ACCEPTED_H_COMPLETE_SHA256 = "b4d340afde8db55830115d4e7ba21757215122518567be4dad352c5adb28881f"
+
+STAGE_I_RUN_IDENTITY_SCHEMA = "petitgpt-stage-i-run-identity-v1"
 
 # The six dimensions the frozen H/I contract requires, plus every other field Stage H publishes.
 # Comparing the full projection rather than only the six is free and strictly stronger.
@@ -251,6 +269,7 @@ class AcceptedH:
     predictions: Mapping[str, Any]
     census_sha256: str
     predictions_sha256: str
+    complete_sha256: str
     run_identity: str
 
     def node(self, source_id: str) -> Mapping[str, Any]:
@@ -296,6 +315,8 @@ def load_accepted_h(
     *,
     expected_run_identity: str = ACCEPTED_H_RUN_IDENTITY,
     expected_predictions_sha256: str = ACCEPTED_H_PREDICTIONS_SHA256,
+    expected_complete_sha256: str = ACCEPTED_H_COMPLETE_SHA256,
+    expected_census_sha256: str | None = None,
 ) -> AcceptedH:
     """Bind the accepted Stage-H result: census first, projection second, agreement last."""
     verify_h_evidence_manifest(run_dir)
@@ -309,6 +330,21 @@ def load_accepted_h(
     )
     census = load_published_run(published[0], expected_run_identity=expected_run_identity)
     census_sha256 = file_sha256(published[0] / "census.json")
+    if expected_census_sha256 is not None:
+        _require(
+            census_sha256 == expected_census_sha256,
+            f"accepted H census SHA-256 {census_sha256} is not the bound {expected_census_sha256}",
+        )
+
+    # Bind the exact COMPLETE bytes, not merely the marker's name. The reviewed plan recorded the
+    # literal string "COMPLETE", which says nothing about which run finished: any directory with a
+    # file of that name would have satisfied it.
+    complete_sha256 = file_sha256(published[0] / "COMPLETE")
+    _require(
+        complete_sha256 == expected_complete_sha256,
+        f"accepted H COMPLETE SHA-256 {complete_sha256} is not the bound "
+        f"{expected_complete_sha256}",
+    )
 
     predictions_path = run_dir / "evidence" / "H_PREDICTIONS.json"
     payload, predictions_sha256 = read_authoritative_bytes(predictions_path, max_bytes=1 << 28)
@@ -366,6 +402,7 @@ def load_accepted_h(
         predictions=predictions,
         census_sha256=census_sha256,
         predictions_sha256=predictions_sha256,
+        complete_sha256=complete_sha256,
         run_identity=expected_run_identity,
     )
 
@@ -786,14 +823,21 @@ def iter_records_in_physical_order(
     tokenizer_path: str,
     selections: list[NodeSelection],
     work_dir: Path,
+    *,
+    read_window_bytes: int = DEFAULT_READ_WINDOW_BYTES,
 ) -> Iterator[dict[str, Any]]:
     """Pass 2 end to end, emitting records in the frozen physical layout order.
 
     Each bound release is read exactly once. Because one binding can feed several nodes, records
     are spooled per ``(stage_priority, source_id, input_binding_id)`` group as they are produced,
     and the groups are then streamed back in canonical order. That keeps the total to one full
-    corpus pass while still emitting a globally ordered stream, and it never holds more than one
-    record in memory at a time.
+    corpus pass while still emitting a globally ordered stream.
+
+    Both halves are bounded. Writing holds one record; replay reads each spool through a fixed
+    window and holds one framed line plus a partial tail. The reviewed defect was here: replay
+    used to pull an entire ``(stage, source, binding)`` spool into memory with a single read
+    capped at 16 GiB, which is not an implementation for a source the size of FineWeb Stage A --
+    that one spool alone is tens of gigabytes. Memory now depends on the window, not on the spool.
     """
     targets = build_materialization_targets(selections)
     work_dir.mkdir(parents=True, exist_ok=True)
@@ -819,12 +863,12 @@ def iter_records_in_physical_order(
             handle.close()
         handles.clear()
 
+        # Streaming replay. There is deliberately no whole-spool read here; `stream_lines`
+        # advances through the file in fixed windows and never materialises it.
         for key in sorted(paths):
-            payload, _ = read_authoritative_bytes(paths[key], max_bytes=1 << 34)
-            lines = payload.split(b"\n")
-            _require(lines and lines[-1] == b"", f"spool {paths[key]} is not newline-terminated")
-            for line in lines[:-1]:
-                yield strict_json_object(line, where=str(paths[key]))
+            path = paths[key]
+            for line in stream_lines(path, read_window_bytes=read_window_bytes):
+                yield strict_json_object(line, where=str(path))
     finally:
         for handle in handles.values():
             handle.close()
@@ -833,12 +877,23 @@ def iter_records_in_physical_order(
 
 
 def build_manifest(
-    graph: SourceGraph,
     selections: list[NodeSelection],
-    accepted: AcceptedH,
-    environment: Environment,
+    context: AuthorizedIContext,
 ) -> dict[str, Any]:
-    """The manifest minus its shard list, which only the publisher can fill in."""
+    """The manifest minus its shard list, which only the publisher can fill in.
+
+    The graph is taken from the authorized context rather than passed in separately. An earlier
+    signature accepted both, which meant a caller could describe a realization with one graph while
+    the run identity had been computed from another -- the same substitution class this repair
+    exists to close.
+
+    The totals here are what the selection ledger believes. They are NOT taken on trust: the
+    publisher audits the staged records and refuses to publish unless every number below equals
+    one derived from the bytes on disk.
+    """
+    _require_authorized(context, "manifest construction")
+    accepted = context.accepted
+    graph = context.graph
     total_records = sum(s.selected_identities for s in selections)
     return {
         "schema_version": MANIFEST_SCHEMA,
@@ -852,7 +907,7 @@ def build_manifest(
             "serialized_tokens": sum(s.selected_serialized_tokens for s in selections),
             "unique_cleaned_identities": total_records,
             # Filled in by the publisher, which is the only thing that knows how many shards the
-            # declared policy actually produced; validate_manifest then requires the two to agree.
+            # declared policy actually produced; the audit then requires the two to agree.
             "shards": 0,
         },
         "nodes": [
@@ -875,11 +930,28 @@ def build_manifest(
             binding_id: graph.bindings[binding_id].documents_sha256
             for binding_id in sorted(graph.bindings)
         },
-        "environment": environment.as_canonical(),
+        "environment": context.environment.as_canonical(),
+        "stage_i_run": {
+            "run_identity": context.run_identity,
+            "candidate_i_plan_sha256": context.plan_sha256,
+            "implementation_commit": context.implementation_commit,
+            "implementation_bundle_sha256": context.bundle_sha256,
+            "plan_schema_version": PLAN_SCHEMA,
+            "output_schema_version": RECORD_SCHEMA,
+            "manifest_schema_version": MANIFEST_SCHEMA,
+            "shard_policy_version": SHARD_POLICY_VERSION,
+            "records_per_shard": RECORDS_PER_SHARD,
+            "h_run_identity": accepted.run_identity,
+            "h_complete_sha256": accepted.complete_sha256,
+            "h_census_sha256": accepted.census_sha256,
+            "h_predictions_sha256": accepted.predictions_sha256,
+            "owner_graph_sha256": graph.graph_sha256,
+        },
         "h_binding": {
             "h_run_identity": accepted.run_identity,
             "h_census_sha256": accepted.census_sha256,
             "h_predictions_sha256": accepted.predictions_sha256,
+            "h_complete_sha256": accepted.complete_sha256,
             "h_candidate_plan_sha256": accepted.census["authorization"]["candidate_plan_sha256"],
             "h_implementation_bundle_sha256": accepted.census["authorization"][
                 "implementation_bundle_sha256"
@@ -962,11 +1034,13 @@ def generate_candidate_plan(
             "run_identity": accepted.run_identity,
             "census_sha256": accepted.census_sha256,
             "predictions_sha256": accepted.predictions_sha256,
+            # The exact COMPLETE bytes, not the marker's name. Recording only the literal
+            # "COMPLETE" said nothing about which Stage-H run finished.
+            "complete_sha256": accepted.complete_sha256,
             "candidate_plan_sha256": accepted.census["authorization"]["candidate_plan_sha256"],
             "implementation_bundle_sha256": accepted.census["authorization"][
                 "implementation_bundle_sha256"
             ],
-            "complete_marker": "COMPLETE",
         },
         "graph_path": str(_authority_relative(repo_root, graph_path)),
         "graph_sha256": graph.graph_sha256,
@@ -1053,12 +1127,156 @@ _AUTHORITY_PATHS = {
 # --------------------------------------------------------------------- authoritative run
 
 
-def authorize_plan(plan_path: Path, expected_plan_sha256: str, repo_root: Path) -> dict[str, Any]:
+def stage_i_run_identity(
+    *,
+    candidate_plan_sha256: str,
+    implementation_commit: str,
+    implementation_bundle_sha256: str,
+    plan_schema_version: str,
+    output_schema_version: str,
+    manifest_schema_version: str,
+    shard_policy_version: str,
+    records_per_shard: int,
+    h_run_identity: str,
+    h_complete_sha256: str,
+    h_census_sha256: str,
+    h_predictions_sha256: str,
+    owner_graph_sha256: str,
+) -> str:
+    """The published run's name, over an explicit, versioned, closed field list.
+
+    Written out field by field rather than hashing an open-ended dictionary: a dict digest would
+    silently change meaning the day someone adds a key, and would let two runs that differ in an
+    unlisted field claim the same identity. A change to any field below is a different run, always.
+    """
+    payload = {
+        "schema_version": STAGE_I_RUN_IDENTITY_SCHEMA,
+        "candidate_plan_sha256": candidate_plan_sha256,
+        "implementation_commit": implementation_commit,
+        "implementation_bundle_sha256": implementation_bundle_sha256,
+        "plan_schema_version": plan_schema_version,
+        "output_schema_version": output_schema_version,
+        "manifest_schema_version": manifest_schema_version,
+        "shard_policy_version": shard_policy_version,
+        "records_per_shard": records_per_shard,
+        "h_run_identity": h_run_identity,
+        "h_complete_sha256": h_complete_sha256,
+        "h_census_sha256": h_census_sha256,
+        "h_predictions_sha256": h_predictions_sha256,
+        "owner_graph_sha256": owner_graph_sha256,
+    }
+    return hashlib.sha256(canonical_json_bytes(payload)).hexdigest()
+
+
+# Only `authorize_plan` may stamp this. It is module-private and is never exported, so a caller
+# cannot construct or copy a context that carries it.
+class _AuthorizationSeal:
+    __slots__ = ()
+
+
+_SEAL = _AuthorizationSeal()
+
+
+@dataclass(frozen=True)
+class AuthorizedIContext:
+    """The single capability that can run and publish an authoritative Stage-I realization.
+
+    Holding one is proof that an owner-supplied digest matched the plan bytes, that those exact
+    bytes parsed under the closed plan schema, and that every field in them agreed with the frozen
+    graph, the bound authorities, the input bindings, the accepted Stage-H result and this
+    implementation's own bytes.
+
+    The reviewed defect was that authorization returned a plain parsed plan which the driver then
+    discarded, loading the graph and the accepted H run from CLI arguments instead -- so the
+    authorized plan did not actually govern execution. Everything the run needs now lives on this
+    object and is derived from the plan, and `realize_and_publish` accepts nothing else.
+    """
+
+    repo_root: Path
+    plan_path: Path
+    plan_sha256: str
+    plan: Mapping[str, Any]
+    graph: SourceGraph
+    graph_path: Path
+    accepted: AcceptedH
+    environment: Environment
+    bundle_sha256: str
+    bundle_files: Mapping[str, str]
+    implementation_commit: str
+    tokenizer_path: Path
+    reference_exclusion_path: Path
+    run_identity: str
+    _provenance: object | None = field(default=None, init=False, repr=False, compare=False)
+    _plan_snapshot: bytes = field(default=b"", init=False, repr=False, compare=False)
+
+    @property
+    def run_name(self) -> str:
+        return f"run-{self.run_identity[:32]}"
+
+    def revalidate(self) -> None:
+        """Re-derive the load-bearing digests from disk immediately before publication."""
+        _require_authorized(self, "revalidation")
+        payload, digest = read_authoritative_bytes(self.plan_path, max_bytes=1 << 28)
+        _require(digest == self.plan_sha256, "candidate plan bytes changed after authorization")
+        _require(payload == self._plan_snapshot, "candidate plan changed after authorization")
+        runtime_commit = _git_head(self.repo_root)
+        _require(
+            runtime_commit == self.implementation_commit,
+            f"runtime repository HEAD changed after authorization: expected "
+            f"{self.implementation_commit}, got {runtime_commit}",
+        )
+        _require(
+            implementation_bundle_sha256(implementation_files(self.repo_root))
+            == self.bundle_sha256,
+            "Stage-I implementation bundle changed after authorization",
+        )
+        _require(
+            file_sha256(self.graph_path) == self.graph.graph_sha256,
+            "owner graph bytes changed after authorization",
+        )
+        _require(
+            file_sha256(
+                self.accepted.run_dir
+                / "census"
+                / f"run-{self.accepted.run_identity[:32]}"
+                / "COMPLETE"
+            )
+            == self.accepted.complete_sha256,
+            "accepted Stage-H COMPLETE bytes changed after authorization",
+        )
+
+
+def _require_authorized(context: Any, where: str) -> None:
+    if not isinstance(context, AuthorizedIContext) or context._provenance is not _SEAL:
+        raise RealizationError(
+            f"{where} requires an authorized Stage-I context produced by authorize_plan; a "
+            "manually constructed or copied context is not an authorization"
+        )
+
+
+def _resolve_repo_path(repo_root: Path, relative: str) -> Path:
+    """Resolve a plan-declared path strictly inside the repository."""
+    candidate = (repo_root / relative).resolve()
+    root = repo_root.resolve()
+    _require(
+        candidate == root or root in candidate.parents,
+        f"plan path {relative!r} escapes the repository root",
+    )
+    return candidate
+
+
+def authorize_plan(
+    plan_path: Path,
+    expected_plan_sha256: str,
+    repo_root: Path,
+    *,
+    require_executable: bool = True,
+) -> AuthorizedIContext:
     """Authorization is a capability, not a comparison.
 
     The owner supplies the expected digest out of band; it is checked against the plan bytes, and
-    those same bytes are then parsed and compared with this implementation. A plan cannot
-    authorise itself, and an authorization for one plan cannot be reused for another.
+    those same bytes then drive every load. A plan cannot authorise itself, an authorization for
+    one plan cannot be reused for another, and nothing load-bearing is taken from a CLI argument.
     """
     payload, digest = read_authoritative_bytes(plan_path, max_bytes=1 << 28)
     _require(
@@ -1075,9 +1293,12 @@ def authorize_plan(plan_path: Path, expected_plan_sha256: str, repo_root: Path) 
         "candidate plan bytes must not carry an owner authorization",
     )
     _require(plan.get("resume_supported") is False, "candidate plan must not enable resume")
+
+    # --- this implementation ------------------------------------------------------------
     files = implementation_files(repo_root)
+    bundle = implementation_bundle_sha256(files)
     _require(
-        plan.get("implementation_bundle_sha256") == implementation_bundle_sha256(files),
+        plan.get("implementation_bundle_sha256") == bundle,
         "candidate plan was generated against a different Stage-I implementation bundle",
     )
     _require(
@@ -1090,40 +1311,185 @@ def authorize_plan(plan_path: Path, expected_plan_sha256: str, repo_root: Path) 
         f"runtime repository HEAD {runtime_commit} is not the plan's implementation commit "
         f"{plan.get('implementation_commit')}",
     )
-    return plan
+    _require(
+        plan.get("output_schema_version") == RECORD_SCHEMA
+        and plan.get("manifest_schema_version") == MANIFEST_SCHEMA,
+        "candidate plan schema versions disagree with this implementation",
+    )
+    shard_policy = plan.get("shard_policy") or {}
+    _require(
+        shard_policy.get("version") == SHARD_POLICY_VERSION
+        and shard_policy.get("records_per_shard") == RECORDS_PER_SHARD,
+        "candidate plan shard policy disagrees with this implementation",
+    )
+
+    # --- environment --------------------------------------------------------------------
+    contract = plan.get("environment_contract") or {}
+    environment = current_environment()
+    verify_environment(environment, require_executable=require_executable)
+    _require(
+        contract.get("python_version") == REQUIRED_PYTHON_VERSION
+        and contract.get("tokenizers_version") == REQUIRED_TOKENIZERS_VERSION
+        and contract.get("python_executable") == REQUIRED_PYTHON_EXECUTABLE,
+        "candidate plan environment contract disagrees with this implementation",
+    )
+
+    # --- the graph named by the PLAN, not by a CLI argument -----------------------------
+    graph_path = _resolve_repo_path(repo_root, plan["graph_path"])
+    graph = load_source_graph(graph_path, verify_hashes=True)
+    _require(
+        graph.graph_sha256 == plan["graph_sha256"],
+        f"owner graph SHA-256 {graph.graph_sha256} is not the plan's {plan['graph_sha256']}",
+    )
+    _require(graph.seed == plan["seed"], "owner graph seed disagrees with the plan")
+    _require(
+        dict(graph.bound_authorities) == dict(plan["bound_authorities"]),
+        "owner graph bound authorities disagree with the plan",
+    )
+
+    # --- every authority, re-hashed from disk -------------------------------------------
+    for name, entry in sorted(plan["authorities"].items()):
+        path = _resolve_repo_path(repo_root, entry["path"])
+        _require(path.is_file(), f"plan authority {name} is missing at {entry['path']}")
+        actual = file_sha256(path)
+        _require(
+            actual == entry["sha256"],
+            f"plan authority {name} is {actual} on disk but the plan binds {entry['sha256']}",
+        )
+
+    # --- every input binding, against the graph and against disk ------------------------
+    _require(
+        set(plan["input_bindings"]) == set(graph.bindings),
+        "plan input bindings do not cover exactly the graph's bindings",
+    )
+    for binding_id, bound in sorted(plan["input_bindings"].items()):
+        binding = graph.bindings[binding_id]
+        for field_name, actual in (
+            ("documents_sha256", binding.documents_sha256),
+            ("documents_size_bytes", binding.documents_size_bytes),
+            ("eligibility_index_sha256", binding.eligibility_index_sha256),
+            ("release_manifest_sha256", binding.release_manifest_sha256),
+            ("total_physical_rows", binding.total_physical_rows),
+            ("expected_eligible_rows", binding.expected_eligible_rows),
+        ):
+            _require(
+                bound[field_name] == actual,
+                f"plan binding {binding_id}.{field_name} disagrees with the frozen graph",
+            )
+        verify_binding_inputs(binding)
+
+    # --- every node, target and the execution order -------------------------------------
+    _require(
+        plan["node_order"] == [n.source_id for n in graph.nodes],
+        "plan node order disagrees with the frozen graph execution order",
+    )
+    _require(
+        len(plan["nodes"]) == len(graph.nodes),
+        "plan node count disagrees with the frozen graph",
+    )
+    for bound, node in zip(plan["nodes"], graph.nodes, strict=True):
+        _require(
+            bound["source_id"] == node.source_id
+            and bound["stage"] == node.stage
+            and bound["stage_priority"] == node.stage_priority
+            and bound["target_serialized_tokens"] == node.target_serialized_tokens
+            and bound["selection_mode"] == node.selection_mode
+            and list(bound["input_binding_ids"]) == list(node.input_binding_ids),
+            f"plan node {bound['source_id']} disagrees with the frozen graph",
+        )
+
+    # --- the accepted Stage-H result named by the PLAN ----------------------------------
+    accepted_spec = plan["accepted_h"]
+    h_run_dir = _resolve_repo_path(repo_root, accepted_spec["run_dir"])
+    accepted = load_accepted_h(
+        h_run_dir,
+        expected_run_identity=accepted_spec["run_identity"],
+        expected_predictions_sha256=accepted_spec["predictions_sha256"],
+        expected_complete_sha256=accepted_spec["complete_sha256"],
+        expected_census_sha256=accepted_spec["census_sha256"],
+    )
+    _require(
+        accepted.census["authorization"]["candidate_plan_sha256"]
+        == accepted_spec["candidate_plan_sha256"],
+        "accepted Stage-H candidate plan SHA disagrees with the Stage-I plan",
+    )
+    _require(
+        accepted.census["authorization"]["implementation_bundle_sha256"]
+        == accepted_spec["implementation_bundle_sha256"],
+        "accepted Stage-H implementation bundle disagrees with the Stage-I plan",
+    )
+    _require(
+        accepted.census["graph_sha256"] == plan["graph_sha256"],
+        "accepted Stage-H ran against a different owner graph than the Stage-I plan binds",
+    )
+
+    identity = stage_i_run_identity(
+        candidate_plan_sha256=digest,
+        implementation_commit=runtime_commit,
+        implementation_bundle_sha256=bundle,
+        plan_schema_version=PLAN_SCHEMA,
+        output_schema_version=RECORD_SCHEMA,
+        manifest_schema_version=MANIFEST_SCHEMA,
+        shard_policy_version=SHARD_POLICY_VERSION,
+        records_per_shard=RECORDS_PER_SHARD,
+        h_run_identity=accepted.run_identity,
+        h_complete_sha256=accepted.complete_sha256,
+        h_census_sha256=accepted.census_sha256,
+        h_predictions_sha256=accepted.predictions_sha256,
+        owner_graph_sha256=graph.graph_sha256,
+    )
+
+    context = AuthorizedIContext(
+        repo_root=repo_root,
+        plan_path=plan_path,
+        plan_sha256=digest,
+        plan=plan,
+        graph=graph,
+        graph_path=graph_path,
+        accepted=accepted,
+        environment=environment,
+        bundle_sha256=bundle,
+        bundle_files=dict(sorted(files.items())),
+        implementation_commit=runtime_commit,
+        tokenizer_path=_resolve_repo_path(repo_root, plan["authorities"]["tokenizer"]["path"]),
+        reference_exclusion_path=_resolve_repo_path(
+            repo_root, plan["authorities"]["reference_exclusion"]["path"]
+        ),
+        run_identity=identity,
+    )
+    object.__setattr__(context, "_provenance", _SEAL)
+    object.__setattr__(context, "_plan_snapshot", payload)
+    return context
 
 
 def realize_and_publish(
+    context: AuthorizedIContext,
     *,
-    repo_root: Path,
-    graph_path: Path,
-    h_run_dir: Path,
     out_dir: Path,
-    run_name: str,
     work_dir: Path,
-    expected_plan_sha256: str,
-    plan_path: Path,
-    require_executable: bool = True,
+    read_window_bytes: int = DEFAULT_READ_WINDOW_BYTES,
+    sort_chunk_lines: int = DEFAULT_SORT_CHUNK_LINES,
 ) -> tuple[Path, dict[str, Any]]:
     """The authoritative Stage-I run: derive, prove equal to H, then and only then materialize.
 
-    The ordering is the contract. Environment and inputs are validated before a byte of corpus is
-    read; the whole selection is derived and compared against the accepted Stage-H prediction
-    before a byte of output is written; and publication is atomic with COMPLETE written last. A
-    disagreement at the gate raises, and nothing has been materialized to clean up.
+    Every load-bearing input comes from ``context``, which only ``authorize_plan`` can produce. No
+    graph, accepted-H run, authority, binding, node set or shard policy can be substituted by a
+    caller: the CLI supplies a plan digest and an output directory and nothing else that decides
+    what gets built.
+
+    The ordering is the contract. The environment, the plan and every input are validated before a
+    byte of corpus is read; the whole selection is derived and proved equal to the accepted Stage-H
+    prediction before a byte of output is written; the staged bytes are then audited and reconciled
+    before COMPLETE exists. A disagreement at any gate raises with nothing published.
     """
-    environment = current_environment()
-    verify_environment(environment, require_executable=require_executable)
-    authorize_plan(plan_path, expected_plan_sha256, repo_root)
+    _require_authorized(context, "realization")
+    context.revalidate()
 
-    graph = load_source_graph(graph_path, verify_hashes=True)
-    for binding_id in sorted(graph.bindings):
-        verify_binding_inputs(graph.bindings[binding_id])
-
-    accepted = load_accepted_h(h_run_dir)
-    tokenizer_path = str(repo_root / _AUTHORITY_PATHS["tokenizer"])
+    graph = context.graph
+    accepted = context.accepted
+    tokenizer_path = str(context.tokenizer_path)
     reference_exclusion = load_reference_exclusion(
-        repo_root / _AUTHORITY_PATHS["reference_exclusion"],
+        context.reference_exclusion_path,
         expected_sha256=graph.bound_authorities["g2_exclusion_manifest_sha256"],
     )
 
@@ -1131,11 +1497,25 @@ def realize_and_publish(
     comparison = compare_with_h(selections, accepted)
     require_h_i_equality(comparison)
 
-    manifest = build_manifest(graph, selections, accepted, environment)
-    records = iter_records_in_physical_order(graph, tokenizer_path, selections, work_dir)
-    final = publish_atomic(out_dir, run_name, manifest, records)
+    manifest = build_manifest(selections, context)
+    records = iter_records_in_physical_order(
+        graph, tokenizer_path, selections, work_dir, read_window_bytes=read_window_bytes
+    )
+    # Revalidate one last time: everything the manifest attests to has now been derived, and
+    # nothing has been written, so a late change to the plan or the implementation still costs
+    # nothing to reject.
+    context.revalidate()
+    final = publish_atomic(
+        out_dir,
+        context.run_name,
+        manifest,
+        records,
+        read_window_bytes=read_window_bytes,
+        sort_chunk_lines=sort_chunk_lines,
+    )
 
     return final, {
+        "run_identity": context.run_identity,
         "comparison": comparison,
         "binding_counters": counters,
         "selections": [s.comparable() for s in selections],
@@ -1175,15 +1555,21 @@ def main(argv: list[str] | None = None) -> int:
     env_parser = sub.add_parser("verify-environment", help="check the frozen interpreter contract")
     env_parser.add_argument("--require-executable", action="store_true")
 
+    # The authoritative inputs are the plan, its owner-supplied digest, and where to write. The
+    # graph, the accepted Stage-H run, every authority, every binding, the node set, the shard
+    # policy and the run name all come from the authorized plan; there is deliberately no flag
+    # that could substitute any of them.
     run_parser = sub.add_parser("run", help="run the authorized Stage-I realization and publish it")
     run_parser.add_argument("--plan", type=Path, required=True)
     run_parser.add_argument("--expected-plan-sha256", type=str, required=True)
-    run_parser.add_argument("--graph", type=Path, required=True)
-    run_parser.add_argument("--h-run-dir", type=Path, default=Path(ACCEPTED_H_RUN_DIR))
     run_parser.add_argument("--out-dir", type=Path, required=True)
-    run_parser.add_argument("--run-name", type=str, required=True)
-    run_parser.add_argument("--work-dir", type=Path, required=True)
     run_parser.add_argument("--repo-root", type=Path, default=Path(ROOT))
+    run_parser.add_argument(
+        "--work-dir",
+        type=Path,
+        default=None,
+        help="scratch space for spools and audit sorts; defaults to a temp dir under --out-dir",
+    )
 
     args = parser.parse_args(raw_argv)
 
@@ -1194,16 +1580,20 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     if args.command == "run":
-        final, _summary = realize_and_publish(
-            repo_root=args.repo_root.resolve(),
-            graph_path=args.graph,
-            h_run_dir=args.h_run_dir,
-            out_dir=args.out_dir,
-            run_name=args.run_name,
-            work_dir=args.work_dir,
-            expected_plan_sha256=args.expected_plan_sha256,
-            plan_path=args.plan,
+        repo_root = args.repo_root.resolve()
+        context = authorize_plan(args.plan, args.expected_plan_sha256, repo_root)
+        args.out_dir.mkdir(parents=True, exist_ok=True)
+        owned = args.work_dir is None
+        work_dir = (
+            Path(tempfile.mkdtemp(prefix=f".{context.run_name}.work-", dir=str(args.out_dir)))
+            if owned
+            else args.work_dir
         )
+        try:
+            final, _summary = realize_and_publish(context, out_dir=args.out_dir, work_dir=work_dir)
+        finally:
+            if owned:
+                shutil.rmtree(work_dir, ignore_errors=True)
         print(f"published {final}")
         return 0
 
@@ -1229,6 +1619,7 @@ def main(argv: list[str] | None = None) -> int:
 
 
 __all__ = [
+    "ACCEPTED_H_COMPLETE_SHA256",
     "ACCEPTED_H_PREDICTIONS_SHA256",
     "ACCEPTED_H_RUN_DIR",
     "ACCEPTED_H_RUN_IDENTITY",
@@ -1240,6 +1631,7 @@ __all__ = [
     "REQUIRED_PYTHON_VERSION",
     "REQUIRED_TOKENIZERS_VERSION",
     "AcceptedH",
+    "AuthorizedIContext",
     "authorize_plan",
     "Environment",
     "RealizationError",
@@ -1258,6 +1650,7 @@ __all__ = [
     "load_reference_exclusion",
     "materialize_binding",
     "realize_and_publish",
+    "stage_i_run_identity",
     "require_h_i_equality",
     "scan_binding_candidates",
     "verify_environment",
@@ -1268,6 +1661,13 @@ __all__ = [
 if __name__ == "__main__":
     try:
         raise SystemExit(main())
-    except (RealizationError, SelectionError, OutputError, GraphError, StrictJSONError) as exc:
+    except (
+        RealizationError,
+        SelectionError,
+        OutputError,
+        AuditError,
+        GraphError,
+        StrictJSONError,
+    ) as exc:
         print(f"FAIL-CLOSED: {exc}", file=sys.stderr)
         raise SystemExit(2) from exc
