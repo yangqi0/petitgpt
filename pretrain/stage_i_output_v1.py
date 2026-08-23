@@ -225,6 +225,7 @@ _MANIFEST_FIELDS = frozenset({
     "environment",
     "h_binding",
     "stage_i_run",
+    "node_binding_projection",
 })
 _SHARD_FIELDS = frozenset({"name", "records", "bytes", "sha256"})
 _TOTALS_FIELDS = frozenset({
@@ -243,8 +244,10 @@ _NODE_FIELDS = frozenset({
     "selected_identities",
     "selected_serialized_tokens",
     "selection_fingerprint",
+    "selection_sequence_commitment",
     "crossing_identity",
     "actual_overshoot_tokens",
+    "input_binding_ids",
 })
 _MARKER_FIELDS = frozenset({
     "marker",
@@ -273,8 +276,25 @@ _STAGE_I_RUN_FIELDS = frozenset({
     "h_census_sha256",
     "h_predictions_sha256",
     "owner_graph_sha256",
+    "node_binding_projection_sha256",
 })
-STAGE_I_RUN_IDENTITY_SCHEMA = "petitgpt-stage-i-run-identity-v1"
+STAGE_I_RUN_IDENTITY_SCHEMA = "petitgpt-stage-i-run-identity-v2"
+
+
+def node_binding_projection_sha256(projection: Mapping[str, Sequence[str]]) -> str:
+    """Digest over the closed node -> authorized-binding projection.
+
+    Derived from the owner-authorized plan, never from whichever bindings happen to appear in the
+    output, and folded into the run identity so a manifest cannot quietly widen it.
+    """
+    payload = {
+        "schema_version": NODE_BINDING_PROJECTION_SCHEMA,
+        "projection": {k: sorted(v) for k, v in sorted(projection.items())},
+    }
+    return hashlib.sha256(canonical_json_bytes(payload)).hexdigest()
+
+
+NODE_BINDING_PROJECTION_SCHEMA = "petitgpt-stage-i-node-binding-projection-v1"
 
 
 def recompute_stage_i_run_identity(stage_i_run: Mapping[str, Any]) -> str:
@@ -300,6 +320,7 @@ def recompute_stage_i_run_identity(stage_i_run: Mapping[str, Any]) -> str:
         "h_census_sha256": stage_i_run["h_census_sha256"],
         "h_predictions_sha256": stage_i_run["h_predictions_sha256"],
         "owner_graph_sha256": stage_i_run["owner_graph_sha256"],
+        "node_binding_projection_sha256": stage_i_run["node_binding_projection_sha256"],
     }
     return hashlib.sha256(canonical_json_bytes(payload)).hexdigest()
 
@@ -417,6 +438,21 @@ def validate_manifest(manifest: Any) -> dict[str, Any]:
             minimum=0,
         )
         _hex64(entry["selection_fingerprint"], f"manifest.nodes[{index}].selection_fingerprint")
+        _hex64(
+            entry["selection_sequence_commitment"],
+            f"manifest.nodes[{index}].selection_sequence_commitment",
+        )
+        declared = entry["input_binding_ids"]
+        _require(
+            type(declared) is list and declared,
+            f"manifest.nodes[{index}].input_binding_ids must be a non-empty list",
+        )
+        for binding_id in declared:
+            _exact_str(binding_id, f"manifest.nodes[{index}].input_binding_ids[]")
+        _require(
+            declared == sorted(set(declared)),
+            f"manifest.nodes[{index}].input_binding_ids must be sorted and unique",
+        )
         _exact_int(
             entry["actual_overshoot_tokens"],
             f"manifest.nodes[{index}].actual_overshoot_tokens",
@@ -472,6 +508,36 @@ def validate_manifest(manifest: Any) -> dict[str, Any]:
         _require(key in h_binding, f"manifest.h_binding is missing {key!r}")
         _hex64(h_binding[key], f"manifest.h_binding.{key}")
 
+    projection = obj["node_binding_projection"]
+    _require(
+        type(projection) is dict and projection,
+        "manifest.node_binding_projection must be a non-empty object",
+    )
+    declared_nodes = {entry["source_id"] for entry in nodes}
+    for source_id, bindings in projection.items():
+        _exact_str(source_id, "manifest.node_binding_projection key")
+        _require(
+            type(bindings) is list and bindings,
+            f"manifest.node_binding_projection[{source_id!r}] must be a non-empty list",
+        )
+        for binding_id in bindings:
+            _exact_str(binding_id, f"manifest.node_binding_projection[{source_id!r}][]")
+        _require(
+            bindings == sorted(set(bindings)),
+            f"manifest.node_binding_projection[{source_id!r}] must be sorted and unique",
+        )
+    _require(
+        set(projection) == declared_nodes,
+        "manifest.node_binding_projection must cover exactly the declared nodes",
+    )
+    for entry in nodes:
+        allowed = projection[entry["source_id"]]
+        _require(
+            set(entry["input_binding_ids"]) <= set(allowed),
+            f"manifest node {entry['source_id']} draws from a binding outside its authorized "
+            "projection",
+        )
+
     stage_i_run = _closed(obj["stage_i_run"], _STAGE_I_RUN_FIELDS, "manifest.stage_i_run")
     for key in (
         "run_identity",
@@ -482,8 +548,14 @@ def validate_manifest(manifest: Any) -> dict[str, Any]:
         "h_census_sha256",
         "h_predictions_sha256",
         "owner_graph_sha256",
+        "node_binding_projection_sha256",
     ):
         _hex64(stage_i_run[key], f"manifest.stage_i_run.{key}")
+    _require(
+        node_binding_projection_sha256(projection) == stage_i_run["node_binding_projection_sha256"],
+        "manifest.stage_i_run.node_binding_projection_sha256 does not describe "
+        "manifest.node_binding_projection",
+    )
     _exact_str(stage_i_run["implementation_commit"], "manifest.stage_i_run.implementation_commit")
     _require(
         _exact_str(
@@ -689,7 +761,22 @@ def reconcile_manifest_with_audit(manifest: Mapping[str, Any], audit: Realizatio
         _require(
             entry["selection_fingerprint"] == node.selection_fingerprint,
             f"manifest node {source_id} fingerprint disagrees with the fingerprint reconstructed "
-            "from its physical records in selection order",
+            "from its physical records",
+        )
+        # R2-A: the order-sensitive commitment. The expected value comes from Pass-1 selection,
+        # the actual from an external sort over the published ordinals, so permuting which identity
+        # sits at which ordinal is caught even though the domain stays contiguous and the frozen
+        # set fingerprint is unchanged.
+        _require(
+            entry["selection_sequence_commitment"] == node.selection_sequence_commitment,
+            f"manifest node {source_id} selection-sequence commitment disagrees with the sequence "
+            "reconstructed from its physical records; the ordinal-to-identity mapping differs",
+        )
+        _require(
+            list(node.input_binding_ids) == sorted(set(entry["input_binding_ids"])),
+            f"manifest node {source_id} declares input bindings "
+            f"{sorted(set(entry['input_binding_ids']))} but its physical records use "
+            f"{list(node.input_binding_ids)}",
         )
     unknown = sorted(set(audited) - {e["source_id"] for e in manifest["nodes"]})
     _require(not unknown, f"physical records exist for undeclared node(s): {unknown}")
@@ -699,6 +786,7 @@ def audit_staged_realization(
     root: Path,
     shard_names: Sequence[str],
     work_dir: Path,
+    node_binding_projection: Mapping[str, Sequence[str]],
     *,
     read_window_bytes: int = DEFAULT_READ_WINDOW_BYTES,
     sort_chunk_lines: int = DEFAULT_SORT_CHUNK_LINES,
@@ -710,6 +798,7 @@ def audit_staged_realization(
         work_dir,
         validate_record=validate_record,
         parse_record=lambda line: strict_json_object(line, where=str(root)),
+        node_binding_projection=node_binding_projection,
         read_window_bytes=read_window_bytes,
         sort_chunk_lines=sort_chunk_lines,
     )
@@ -766,6 +855,7 @@ def publish_atomic(
             staging,
             [entry["name"] for entry in shards],
             audit_dir,
+            complete["node_binding_projection"],
             read_window_bytes=read_window_bytes,
             sort_chunk_lines=sort_chunk_lines,
         )
@@ -858,6 +948,7 @@ def load_published_realization(
             final,
             expected,
             scratch,
+            manifest["node_binding_projection"],
             read_window_bytes=read_window_bytes,
             sort_chunk_lines=sort_chunk_lines,
         )
@@ -916,6 +1007,8 @@ __all__ = [
     "iter_records",
     "audit_staged_realization",
     "load_published_realization",
+    "NODE_BINDING_PROJECTION_SCHEMA",
+    "node_binding_projection_sha256",
     "recompute_stage_i_run_identity",
     "reconcile_manifest_with_audit",
     "plan_shards",

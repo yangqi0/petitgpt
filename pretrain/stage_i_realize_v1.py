@@ -33,7 +33,7 @@ from __future__ import annotations
 
 import argparse
 from collections.abc import Iterator, Mapping
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 import hashlib
 from pathlib import Path
 import platform
@@ -42,6 +42,7 @@ import subprocess
 import sys
 import tempfile
 from typing import Any
+import weakref
 
 ROOT = str(Path(__file__).resolve().parents[1])
 if ROOT not in sys.path:
@@ -64,7 +65,9 @@ from pretrain.select_pretrain_documents import (  # noqa: E402
 from pretrain.stage_i_audit_v1 import (  # noqa: E402
     DEFAULT_READ_WINDOW_BYTES,
     DEFAULT_SORT_CHUNK_LINES,
+    SELECTION_SEQUENCE_SCHEMA,
     AuditError,
+    selection_sequence_commitment,
     stream_lines,
 )
 from pretrain.stage_i_graph_v2 import (  # noqa: E402
@@ -87,6 +90,7 @@ from pretrain.stage_i_output_v1 import (  # noqa: E402
     SHARD_POLICY_VERSION,
     OutputError,
     build_record,
+    node_binding_projection_sha256,
     publish_atomic,
 )
 from pretrain.stage_i_select_v1 import (  # noqa: E402
@@ -103,7 +107,83 @@ from pretrain.stage_i_select_v1 import (  # noqa: E402
 )
 from src.special_tokens import BOS_ID, EOS_ID, SPECIAL_TOKEN_IDS  # noqa: E402
 
-PLAN_SCHEMA = "petitgpt-i-candidate-plan-v1"
+PLAN_SCHEMA = "petitgpt-i-candidate-plan-v2"
+
+# Closed plan schema. R1 validated only the fields it happened to read, so a rehashed plan could
+# drop `hq_policy`, drop `selection_rules`, or carry unknown keys and still authorize. Every level
+# below is exact: unknown rejected, missing rejected, types checked.
+_PLAN_TOP_FIELDS = frozenset({
+    "schema_version",
+    "authorization_status",
+    "authorization_note",
+    "realization_label",
+    "resume_supported",
+    "implementation_commit",
+    "implementation_files",
+    "implementation_bundle_sha256",
+    "output_schema_version",
+    "manifest_schema_version",
+    "shard_policy",
+    "selection_rules",
+    "accepted_h",
+    "graph_path",
+    "graph_sha256",
+    "seed",
+    "authorities",
+    "bound_authorities",
+    "input_bindings",
+    "node_order",
+    "nodes",
+    "node_binding_projection",
+    "environment_contract",
+})
+_PLAN_SHARD_POLICY_FIELDS = frozenset({"version", "records_per_shard", "rule"})
+_PLAN_SELECTION_RULES_FIELDS = frozenset({"representative_rule", "physical_locator_rule"})
+_PLAN_ACCEPTED_H_FIELDS = frozenset({
+    "run_dir",
+    "run_identity",
+    "census_sha256",
+    "predictions_sha256",
+    "complete_sha256",
+    "candidate_plan_sha256",
+    "implementation_bundle_sha256",
+})
+_PLAN_AUTHORITY_FIELDS = frozenset({"path", "sha256"})
+_PLAN_BINDING_FIELDS = frozenset({
+    "documents_sha256",
+    "documents_size_bytes",
+    "eligibility_index_sha256",
+    "release_manifest_sha256",
+    "total_physical_rows",
+    "expected_eligible_rows",
+})
+_PLAN_NODE_FIELDS = frozenset({
+    "source_id",
+    "stage",
+    "stage_priority",
+    "target_serialized_tokens",
+    "selection_mode",
+    "input_binding_ids",
+})
+_PLAN_ENVIRONMENT_FIELDS = frozenset({
+    "python_executable",
+    "python_version",
+    "tokenizers_version",
+    "observed_at_generation",
+})
+
+# The exact authority set this Stage-I schema requires. Closed on purpose: R1 verified whichever
+# entries were present, so removing one was invisible.
+REQUIRED_AUTHORITIES = frozenset({
+    "d2_d3_eligibility_manifest",
+    "g2_release_manifest",
+    "g_release_manifest",
+    "hq_policy",
+    "reference_exclusion",
+    "selector_v1",
+    "stage_e_allocation",
+    "tokenizer",
+})
 BUNDLE_SCHEMA = "petitgpt-i-implementation-bundle-v1"
 REALIZATION_LABEL = "AUTHORITATIVE_STAGE_I_REALIZATION"
 RESUME_SUPPORTED = False
@@ -130,7 +210,8 @@ ACCEPTED_H_PREDICTIONS_SHA256 = "fff205494b1379eaf0e77a5d58591c085af2764712a024e
 # reviewed plan recorded only the literal string "COMPLETE", which any directory could satisfy.
 ACCEPTED_H_COMPLETE_SHA256 = "b4d340afde8db55830115d4e7ba21757215122518567be4dad352c5adb28881f"
 
-STAGE_I_RUN_IDENTITY_SCHEMA = "petitgpt-stage-i-run-identity-v1"
+STAGE_I_RUN_IDENTITY_SCHEMA = "petitgpt-stage-i-run-identity-v2"
+CANONICAL_STATE_SCHEMA = "petitgpt-stage-i-canonical-state-v1"
 
 # The six dimensions the frozen H/I contract requires, plus every other field Stage H publishes.
 # Comparing the full projection rather than only the six is free and strictly stronger.
@@ -920,11 +1001,24 @@ def build_manifest(
                 "selected_identities": s.selected_identities,
                 "selected_serialized_tokens": s.selected_serialized_tokens,
                 "selection_fingerprint": s.selection_fingerprint,
+                # R2-A: the expected order-sensitive commitment, computed from the Pass-1
+                # selection sequence -- before anything is materialized, and not from the physical
+                # records the audit will later check against it.
+                "selection_sequence_commitment": selection_sequence_commitment(
+                    source_id=s.source_id,
+                    stage=s.stage,
+                    pairs=((d.selection_ordinal_within_node, d.cleaned_sha256) for d in s.selected),
+                ),
+                "input_binding_ids": sorted({d.input_binding_id for d in s.selected}),
                 "crossing_identity": s.crossing_identity,
                 "actual_overshoot_tokens": s.actual_overshoot_tokens,
             }
             for s in selections
         ],
+        "node_binding_projection": {
+            source_id: list(allowed)
+            for source_id, allowed in sorted(context.node_binding_projection.items())
+        },
         "ownership_matrix": ownership_matrix_v1(selections),
         "bindings": {
             binding_id: graph.bindings[binding_id].documents_sha256
@@ -946,6 +1040,9 @@ def build_manifest(
             "h_census_sha256": accepted.census_sha256,
             "h_predictions_sha256": accepted.predictions_sha256,
             "owner_graph_sha256": graph.graph_sha256,
+            "node_binding_projection_sha256": node_binding_projection_sha256(
+                context.node_binding_projection
+            ),
         },
         "h_binding": {
             "h_run_identity": accepted.run_identity,
@@ -1059,6 +1156,12 @@ def generate_candidate_plan(
             for binding_id in sorted(graph.bindings)
         },
         "node_order": [node.source_id for node in graph.nodes],
+        # R2-B: the closed node -> authorized-binding projection, taken from the frozen owner
+        # graph. Bound here so the audit has an authority to check records against, rather than
+        # inferring what is allowed from whatever the output happens to contain.
+        "node_binding_projection": {
+            node.source_id: sorted(set(node.input_binding_ids)) for node in graph.nodes
+        },
         "nodes": [
             {
                 "source_id": node.source_id,
@@ -1129,6 +1232,7 @@ _AUTHORITY_PATHS = {
 
 def stage_i_run_identity(
     *,
+    node_binding_projection_sha256: str,
     candidate_plan_sha256: str,
     implementation_commit: str,
     implementation_bundle_sha256: str,
@@ -1164,32 +1268,41 @@ def stage_i_run_identity(
         "h_census_sha256": h_census_sha256,
         "h_predictions_sha256": h_predictions_sha256,
         "owner_graph_sha256": owner_graph_sha256,
+        "node_binding_projection_sha256": node_binding_projection_sha256,
     }
     return hashlib.sha256(canonical_json_bytes(payload)).hexdigest()
 
 
-# Only `authorize_plan` may stamp this. It is module-private and is never exported, so a caller
-# cannot construct or copy a context that carries it.
-class _AuthorizationSeal:
-    __slots__ = ()
+# Exact-instance authority registry. R1 stored a sentinel in a context field, which meant
+# `copy.copy` carried it and anything that could import the sentinel could stamp a lookalike.
+# Authority now lives here, keyed by object identity, alongside the canonical state digest that
+# instance was authorized for -- so there is no field on the object that granting authority
+# depends on, and no importable constant that confers it.
+_AUTHORIZED: dict[int, tuple[weakref.ref, str]] = {}
 
 
-_SEAL = _AuthorizationSeal()
+def _register_authorized(context: AuthorizedIContext, state_digest: str) -> None:
+    key = id(context)
+
+    def _drop(_ref: Any, key: int = key) -> None:
+        _AUTHORIZED.pop(key, None)
+
+    _AUTHORIZED[key] = (weakref.ref(context, _drop), state_digest)
 
 
 @dataclass(frozen=True)
 class AuthorizedIContext:
     """The single capability that can run and publish an authoritative Stage-I realization.
 
-    Holding one is proof that an owner-supplied digest matched the plan bytes, that those exact
-    bytes parsed under the closed plan schema, and that every field in them agreed with the frozen
-    graph, the bound authorities, the input bindings, the accepted Stage-H result and this
-    implementation's own bytes.
+    Authority is the *exact instance* returned by a successful ``authorize_plan``. It is recorded
+    in a module-private registry keyed by object identity, so a manually built lookalike, a
+    restamped object or a copy is not this instance and cannot act as one. Copying is refused
+    outright rather than silently producing a powerless twin.
 
-    The reviewed defect was that authorization returned a plain parsed plan which the driver then
-    discarded, loading the graph and the accepted H run from CLI arguments instead -- so the
-    authorized plan did not actually govern execution. Everything the run needs now lives on this
-    object and is derived from the plan, and `realize_and_publish` accepts nothing else.
+    The canonical state this instance was authorized for is digested at authorization time and the
+    digest is held in the registry, not on the object. ``revalidate`` recomputes that digest from
+    the object's current fields and from a fresh derivation off disk, so swapping ``graph`` or
+    ``accepted`` in memory, or changing a bound artifact on disk, both fail.
     """
 
     repo_root: Path
@@ -1205,53 +1318,243 @@ class AuthorizedIContext:
     implementation_commit: str
     tokenizer_path: Path
     reference_exclusion_path: Path
+    node_binding_projection: Mapping[str, tuple[str, ...]]
     run_identity: str
-    _provenance: object | None = field(default=None, init=False, repr=False, compare=False)
-    _plan_snapshot: bytes = field(default=b"", init=False, repr=False, compare=False)
+
+    def __copy__(self) -> None:
+        raise RealizationError(
+            "an AuthorizedIContext must not be copied; authority is the exact authorized instance"
+        )
+
+    def __deepcopy__(self, memo: Any) -> None:
+        raise RealizationError(
+            "an AuthorizedIContext must not be copied; authority is the exact authorized instance"
+        )
+
+    def __reduce__(self) -> None:
+        raise RealizationError("an AuthorizedIContext must not be pickled or reconstructed")
 
     @property
     def run_name(self) -> str:
         return f"run-{self.run_identity[:32]}"
 
     def revalidate(self) -> None:
-        """Re-derive the load-bearing digests from disk immediately before publication."""
-        _require_authorized(self, "revalidation")
-        payload, digest = read_authoritative_bytes(self.plan_path, max_bytes=1 << 28)
-        _require(digest == self.plan_sha256, "candidate plan bytes changed after authorization")
-        _require(payload == self._plan_snapshot, "candidate plan changed after authorization")
-        runtime_commit = _git_head(self.repo_root)
+        """Prove the authorized state is still exactly what was authorized, in memory and on disk.
+
+        Three separate things are checked, because R1 only did the third and Codex walked through
+        the gap: the instance is the registered authority; the object's *current* fields still
+        digest to the state it was authorized for (catching an in-memory graph or H substitution);
+        and a fresh derivation from the plan bytes and bound artifacts digests to the same value
+        (catching a change on disk).
+        """
+        expected = _require_authorized(self, "revalidation")
         _require(
-            runtime_commit == self.implementation_commit,
-            f"runtime repository HEAD changed after authorization: expected "
-            f"{self.implementation_commit}, got {runtime_commit}",
+            _canonical_state_digest(self) == expected,
+            "authorized Stage-I state was substituted after authorization: the context's current "
+            "graph/H/authority projection no longer matches what was authorized",
         )
+        fresh = _derive_canonical_state(self.repo_root, self.plan_path, self.plan_sha256)
         _require(
-            implementation_bundle_sha256(implementation_files(self.repo_root))
-            == self.bundle_sha256,
-            "Stage-I implementation bundle changed after authorization",
-        )
-        _require(
-            file_sha256(self.graph_path) == self.graph.graph_sha256,
-            "owner graph bytes changed after authorization",
-        )
-        _require(
-            file_sha256(
-                self.accepted.run_dir
-                / "census"
-                / f"run-{self.accepted.run_identity[:32]}"
-                / "COMPLETE"
-            )
-            == self.accepted.complete_sha256,
-            "accepted Stage-H COMPLETE bytes changed after authorization",
+            fresh == expected,
+            "the plan bytes or a bound artifact changed after authorization",
         )
 
 
-def _require_authorized(context: Any, where: str) -> None:
-    if not isinstance(context, AuthorizedIContext) or context._provenance is not _SEAL:
+def _canonical_state_digest(context: AuthorizedIContext) -> str:
+    """Digest over every load-bearing projection an authorized run depends on.
+
+    Written out explicitly rather than hashing the object, so adding a field is a deliberate act
+    and a substituted nested object cannot hide behind an unhashed attribute.
+    """
+    graph = context.graph
+    accepted = context.accepted
+    payload = {
+        "schema_version": CANONICAL_STATE_SCHEMA,
+        "plan_sha256": context.plan_sha256,
+        "implementation_commit": context.implementation_commit,
+        "implementation_bundle_sha256": context.bundle_sha256,
+        "implementation_files": dict(sorted(context.bundle_files.items())),
+        "graph_sha256": graph.graph_sha256,
+        "graph_seed": graph.seed,
+        "graph_bound_authorities": dict(sorted(graph.bound_authorities.items())),
+        "graph_nodes": [
+            {
+                "source_id": node.source_id,
+                "stage": node.stage,
+                "stage_priority": node.stage_priority,
+                "target_serialized_tokens": node.target_serialized_tokens,
+                "selection_mode": node.selection_mode,
+                "input_binding_ids": list(node.input_binding_ids),
+            }
+            for node in graph.nodes
+        ],
+        "graph_bindings": {
+            binding_id: {
+                "documents_sha256": graph.bindings[binding_id].documents_sha256,
+                "documents_size_bytes": graph.bindings[binding_id].documents_size_bytes,
+                "eligibility_index_sha256": graph.bindings[binding_id].eligibility_index_sha256,
+                "release_manifest_sha256": graph.bindings[binding_id].release_manifest_sha256,
+                "total_physical_rows": graph.bindings[binding_id].total_physical_rows,
+                "expected_eligible_rows": graph.bindings[binding_id].expected_eligible_rows,
+            }
+            for binding_id in sorted(graph.bindings)
+        },
+        "h_run_identity": accepted.run_identity,
+        "h_census_sha256": accepted.census_sha256,
+        "h_predictions_sha256": accepted.predictions_sha256,
+        "h_complete_sha256": accepted.complete_sha256,
+        "h_candidate_plan_sha256": accepted.census["authorization"]["candidate_plan_sha256"],
+        "h_bundle_sha256": accepted.census["authorization"]["implementation_bundle_sha256"],
+        "h_graph_sha256": accepted.census["graph_sha256"],
+        "authorities": {
+            name: entry["sha256"] for name, entry in sorted(context.plan["authorities"].items())
+        },
+        "node_binding_projection": {
+            source_id: list(bindings)
+            for source_id, bindings in sorted(context.node_binding_projection.items())
+        },
+        "plan_schema_version": PLAN_SCHEMA,
+        "output_schema_version": RECORD_SCHEMA,
+        "manifest_schema_version": MANIFEST_SCHEMA,
+        "shard_policy_version": SHARD_POLICY_VERSION,
+        "records_per_shard": RECORDS_PER_SHARD,
+        "environment": context.environment.as_canonical(),
+        "run_identity": context.run_identity,
+    }
+    return hashlib.sha256(canonical_json_bytes(payload)).hexdigest()
+
+
+def _require_authorized(context: Any, where: str) -> str:
+    """Return the registered state digest, or refuse. Identity is the capability."""
+    if not isinstance(context, AuthorizedIContext):
+        raise RealizationError(f"{where} requires an authorized Stage-I context")
+    entry = _AUTHORIZED.get(id(context))
+    if entry is None or entry[0]() is not context:
         raise RealizationError(
-            f"{where} requires an authorized Stage-I context produced by authorize_plan; a "
-            "manually constructed or copied context is not an authorization"
+            f"{where} requires the exact Stage-I context instance returned by authorize_plan; a "
+            "manually constructed, restamped, copied or replaced context is not an authorization"
         )
+    return entry[1]
+
+
+def _closed_plan(obj: Any, fields: frozenset[str], where: str) -> dict[str, Any]:
+    _require(type(obj) is dict, f"candidate plan: {where} must be a JSON object")
+    present = frozenset(obj)
+    unknown = sorted(present - fields)
+    missing = sorted(fields - present)
+    _require(not unknown, f"candidate plan: {where} carries unknown field(s): {unknown}")
+    _require(not missing, f"candidate plan: {where} is missing field(s): {missing}")
+    return obj
+
+
+def validate_plan_schema(plan: Any) -> dict[str, Any]:
+    """Closed-schema validation of the candidate plan, at every level."""
+    obj = _closed_plan(plan, _PLAN_TOP_FIELDS, "top level")
+    _require(
+        obj["schema_version"] == PLAN_SCHEMA,
+        f"candidate plan schema {obj['schema_version']!r} is not {PLAN_SCHEMA}",
+    )
+    _require(
+        obj["authorization_status"] == "NOT_AUTHORIZED",
+        "candidate plan bytes must not carry an owner authorization",
+    )
+    _require(obj["resume_supported"] is False, "candidate plan must not enable resume")
+    _require(
+        obj["realization_label"] == REALIZATION_LABEL,
+        "candidate plan carries the wrong realization label",
+    )
+    for key in ("authorization_note", "graph_path", "implementation_commit"):
+        _require(type(obj[key]) is str and obj[key], f"candidate plan: {key} must be a string")
+    _require(type(obj["seed"]) is int, "candidate plan: seed must be an exact integer")
+    for key in ("graph_sha256", "implementation_bundle_sha256"):
+        _require(
+            type(obj[key]) is str and len(obj[key]) == 64,
+            f"candidate plan: {key} must be a 64-hex digest",
+        )
+
+    _closed_plan(obj["shard_policy"], _PLAN_SHARD_POLICY_FIELDS, "shard_policy")
+    _closed_plan(obj["selection_rules"], _PLAN_SELECTION_RULES_FIELDS, "selection_rules")
+    accepted = _closed_plan(obj["accepted_h"], _PLAN_ACCEPTED_H_FIELDS, "accepted_h")
+    for key in (
+        "run_identity",
+        "census_sha256",
+        "predictions_sha256",
+        "complete_sha256",
+        "candidate_plan_sha256",
+        "implementation_bundle_sha256",
+    ):
+        _require(
+            type(accepted[key]) is str and len(accepted[key]) == 64,
+            f"candidate plan: accepted_h.{key} must be a 64-hex digest",
+        )
+
+    authorities = obj["authorities"]
+    _require(type(authorities) is dict, "candidate plan: authorities must be an object")
+    _require(
+        frozenset(authorities) == REQUIRED_AUTHORITIES,
+        "candidate plan authority set is not the exact required set; "
+        f"missing={sorted(REQUIRED_AUTHORITIES - frozenset(authorities))} "
+        f"unexpected={sorted(frozenset(authorities) - REQUIRED_AUTHORITIES)}",
+    )
+    for name, entry in sorted(authorities.items()):
+        spec = _closed_plan(entry, _PLAN_AUTHORITY_FIELDS, f"authorities.{name}")
+        _require(
+            type(spec["path"]) is str and spec["path"],
+            f"candidate plan: authorities.{name}.path must be a string",
+        )
+        _require(
+            type(spec["sha256"]) is str and len(spec["sha256"]) == 64,
+            f"candidate plan: authorities.{name}.sha256 must be a 64-hex digest",
+        )
+
+    bindings = obj["input_bindings"]
+    _require(
+        type(bindings) is dict and bindings, "candidate plan: input_bindings must be an object"
+    )
+    for binding_id, entry in sorted(bindings.items()):
+        _closed_plan(entry, _PLAN_BINDING_FIELDS, f"input_bindings.{binding_id}")
+
+    nodes = obj["nodes"]
+    _require(type(nodes) is list and nodes, "candidate plan: nodes must be a non-empty list")
+    for index, entry in enumerate(nodes):
+        _closed_plan(entry, _PLAN_NODE_FIELDS, f"nodes[{index}]")
+
+    projection = obj["node_binding_projection"]
+    _require(
+        type(projection) is dict and projection,
+        "candidate plan: node_binding_projection must be a non-empty object",
+    )
+    for source_id, allowed in sorted(projection.items()):
+        _require(
+            type(allowed) is list and allowed and allowed == sorted(set(allowed)),
+            f"candidate plan: node_binding_projection[{source_id!r}] must be a sorted unique "
+            "non-empty list",
+        )
+    _require(
+        set(projection) == {entry["source_id"] for entry in nodes},
+        "candidate plan: node_binding_projection must cover exactly the declared nodes",
+    )
+    for entry in nodes:
+        _require(
+            projection[entry["source_id"]] == sorted(set(entry["input_binding_ids"])),
+            f"candidate plan: node_binding_projection[{entry['source_id']!r}] disagrees with that "
+            "node's declared input_binding_ids",
+        )
+
+    _closed_plan(obj["environment_contract"], _PLAN_ENVIRONMENT_FIELDS, "environment_contract")
+    _require(
+        type(obj["node_order"]) is list and obj["node_order"],
+        "candidate plan: node_order must be a non-empty list",
+    )
+    _require(
+        type(obj["implementation_files"]) is dict and obj["implementation_files"],
+        "candidate plan: implementation_files must be a non-empty object",
+    )
+    _require(
+        type(obj["bound_authorities"]) is dict and obj["bound_authorities"],
+        "candidate plan: bound_authorities must be a non-empty object",
+    )
+    return obj
 
 
 def _resolve_repo_path(repo_root: Path, relative: str) -> Path:
@@ -1283,16 +1586,7 @@ def authorize_plan(
         digest == expected_plan_sha256,
         f"candidate plan SHA-256 {digest} is not the owner-supplied {expected_plan_sha256}",
     )
-    plan = strict_json_object(payload, where=str(plan_path))
-    _require(
-        plan.get("schema_version") == PLAN_SCHEMA,
-        f"candidate plan schema {plan.get('schema_version')!r} is not {PLAN_SCHEMA}",
-    )
-    _require(
-        plan.get("authorization_status") == "NOT_AUTHORIZED",
-        "candidate plan bytes must not carry an owner authorization",
-    )
-    _require(plan.get("resume_supported") is False, "candidate plan must not enable resume")
+    plan = validate_plan_schema(strict_json_object(payload, where=str(plan_path)))
 
     # --- this implementation ------------------------------------------------------------
     files = implementation_files(repo_root)
@@ -1423,6 +1717,16 @@ def authorize_plan(
         "accepted Stage-H ran against a different owner graph than the Stage-I plan binds",
     )
 
+    projection = {
+        source_id: tuple(sorted(set(allowed)))
+        for source_id, allowed in plan["node_binding_projection"].items()
+    }
+    _require(
+        {source_id: list(allowed) for source_id, allowed in sorted(projection.items())}
+        == {node.source_id: sorted(set(node.input_binding_ids)) for node in graph.nodes},
+        "plan node/binding projection disagrees with the frozen owner graph",
+    )
+
     identity = stage_i_run_identity(
         candidate_plan_sha256=digest,
         implementation_commit=runtime_commit,
@@ -1437,6 +1741,7 @@ def authorize_plan(
         h_census_sha256=accepted.census_sha256,
         h_predictions_sha256=accepted.predictions_sha256,
         owner_graph_sha256=graph.graph_sha256,
+        node_binding_projection_sha256=node_binding_projection_sha256(projection),
     )
 
     context = AuthorizedIContext(
@@ -1455,11 +1760,25 @@ def authorize_plan(
         reference_exclusion_path=_resolve_repo_path(
             repo_root, plan["authorities"]["reference_exclusion"]["path"]
         ),
+        node_binding_projection=projection,
         run_identity=identity,
     )
-    object.__setattr__(context, "_provenance", _SEAL)
-    object.__setattr__(context, "_plan_snapshot", payload)
+    _register_authorized(context, _canonical_state_digest(context))
     return context
+
+
+def _derive_canonical_state(repo_root: Path, plan_path: Path, expected_sha256: str) -> str:
+    """Re-authorize from the plan bytes and digest the result, without minting a new authority.
+
+    ``revalidate`` compares this against the digest recorded at authorization, so a change to the
+    plan or to any bound artifact on disk is detected. It deliberately reuses the full
+    authorization path rather than a cheaper subset: a partial re-check is exactly how R1's
+    revalidate missed graph and H substitution.
+    """
+    fresh = authorize_plan(plan_path, expected_sha256, repo_root, require_executable=False)
+    digest = _canonical_state_digest(fresh)
+    _AUTHORIZED.pop(id(fresh), None)
+    return digest
 
 
 def realize_and_publish(
@@ -1650,7 +1969,9 @@ __all__ = [
     "load_reference_exclusion",
     "materialize_binding",
     "realize_and_publish",
+    "SELECTION_SEQUENCE_SCHEMA",
     "stage_i_run_identity",
+    "validate_plan_schema",
     "require_h_i_equality",
     "scan_binding_candidates",
     "verify_environment",

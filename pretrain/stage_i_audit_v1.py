@@ -26,7 +26,7 @@ Two design constraints shape everything here:
 
 from __future__ import annotations
 
-from collections.abc import Callable, Iterator, Mapping, Sequence
+from collections.abc import Callable, Iterable, Iterator, Mapping, Sequence
 from dataclasses import dataclass, field
 import hashlib
 import heapq
@@ -35,9 +35,17 @@ from pathlib import Path
 from typing import Any
 
 from pretrain.stage_i_graph_v2 import STAGE_PRIORITY, canonical_json_bytes, open_authoritative
-from pretrain.stage_i_select_v1 import selection_fingerprint_v1
 
 AUDIT_SCHEMA = "petitgpt-stage-i-realization-audit-v1"
+
+# The frozen selection fingerprint's domain, restated here so the streaming reproduction is
+# byte-identical. stage_i_select_v1.py is NOT modified: this module reproduces its output.
+SELECTION_FINGERPRINT_DOMAIN = b"PetitGPT-stage-i-selection-fingerprint-v1\0"
+
+# The NEW order-sensitive commitment. Explicit and versioned, and deliberately a separate value
+# from the frozen fingerprint rather than a redefinition of it.
+SELECTION_SEQUENCE_SCHEMA = "petitgpt-stage-i-selection-sequence-v1"
+SELECTION_SEQUENCE_DOMAIN = b"PetitGPT-stage-i-selection-sequence-v1\0"
 
 # Bounded working state for the external sort. Deliberately small enough that the audit's peak
 # memory is a property of this constant rather than of the realization's size.
@@ -46,6 +54,20 @@ DEFAULT_SORT_CHUNK_LINES = 200_000
 # Bounded read window for streaming a shard. Exposed so a regression can force many small reads
 # over a spool/shard larger than the window and prove the path never slurps a whole file.
 DEFAULT_READ_WINDOW_BYTES = 1 << 20
+
+# Bounded external-merge fan-in. The merge proceeds in generations so the number of simultaneously
+# open runs -- and therefore file descriptors and heap entries -- is fixed regardless of how many
+# spill runs the input produced.
+MAX_MERGE_FANIN = 8
+
+
+def _split_key(line: str, key_arity: int) -> tuple[str, ...]:
+    return tuple(line.rstrip("\n").split("\t")[:key_arity])
+
+
+def _split_row(line: str, key_arity: int) -> tuple[tuple[str, ...], str]:
+    parts = line.rstrip("\n").split("\t")
+    return tuple(parts[:key_arity]), "\t".join(parts[key_arity:])
 
 
 class AuditError(RuntimeError):
@@ -194,18 +216,51 @@ class ExternalSorter:
         self._runs.append(path)
         self._buffer.clear()
 
+    def _merge_runs(self, runs: list[Path], key_arity: int, generation: int) -> list[Path]:
+        """One deterministic merge generation over at most ``MAX_MERGE_FANIN`` runs at a time."""
+        merged: list[Path] = []
+        for group_index in range(0, len(runs), MAX_MERGE_FANIN):
+            group = runs[group_index : group_index + MAX_MERGE_FANIN]
+            if len(group) == 1:
+                merged.append(group[0])
+                continue
+            out = self.work_dir / f"merge-{generation:03d}-{len(merged):06d}.tsv"
+            handles = [open(path, encoding="utf-8") for path in group]
+            try:
+                with open(out, "w", encoding="utf-8") as sink:
+                    for line in heapq.merge(*handles, key=lambda ln: _split_key(ln, key_arity)):
+                        sink.write(line)
+                    sink.flush()
+                    os.fsync(sink.fileno())
+            finally:
+                for handle in handles:
+                    handle.close()
+            for path in group:
+                path.unlink(missing_ok=True)
+            merged.append(out)
+        return merged
+
     def sorted_items(self, key_arity: int) -> Iterator[tuple[tuple[str, ...], str]]:
-        """Merge every run in sorted order, holding one line per run at a time."""
+        """Merge every run in sorted order with a bounded number of open files.
+
+        R1 opened every spill run simultaneously, so file descriptors and merge buffers scaled
+        with the number of runs, which itself scales with the data. Merging in generations of at
+        most ``MAX_MERGE_FANIN`` keeps the open-file count and the heap fixed no matter how many
+        runs the input produced.
+        """
         self._spill()
-        handles = [open(path, encoding="utf-8") for path in self._runs]
+        runs = list(self._runs)
+        generation = 0
+        while len(runs) > MAX_MERGE_FANIN:
+            runs = self._merge_runs(runs, key_arity, generation)
+            generation += 1
+        self._runs = list(runs)
+        if not runs:
+            return
+        handles = [open(path, encoding="utf-8") for path in runs]
         try:
-
-            def rows(handle):
-                for line in handle:
-                    parts = line.rstrip("\n").split("\t")
-                    yield tuple(parts[:key_arity]), "\t".join(parts[key_arity:])
-
-            yield from heapq.merge(*(rows(h) for h in handles))
+            for line in heapq.merge(*handles, key=lambda ln: _split_key(ln, key_arity)):
+                yield _split_row(line, key_arity)
         finally:
             for handle in handles:
                 handle.close()
@@ -244,7 +299,9 @@ class NodeAudit:
     content_tokens: int
     serialized_tokens: int
     selection_fingerprint: str
+    selection_sequence_commitment: str
     selection_ordinal_count: int
+    input_binding_ids: tuple[str, ...]
 
     def as_canonical(self) -> dict[str, Any]:
         return {
@@ -254,7 +311,9 @@ class NodeAudit:
             "content_tokens": self.content_tokens,
             "serialized_tokens": self.serialized_tokens,
             "selection_fingerprint": self.selection_fingerprint,
+            "selection_sequence_commitment": self.selection_sequence_commitment,
             "selection_ordinal_count": self.selection_ordinal_count,
+            "input_binding_ids": list(self.input_binding_ids),
         }
 
 
@@ -303,6 +362,7 @@ def audit_realization(
     *,
     validate_record: Callable[[Any], Mapping[str, Any]],
     parse_record: Callable[[bytes], Mapping[str, Any]],
+    node_binding_projection: Mapping[str, Sequence[str]],
     read_window_bytes: int = DEFAULT_READ_WINDOW_BYTES,
     sort_chunk_lines: int = DEFAULT_SORT_CHUNK_LINES,
 ) -> RealizationAudit:
@@ -335,6 +395,11 @@ def audit_realization(
         node_content: dict[str, int] = {}
         node_serialized: dict[str, int] = {}
         node_stage: dict[str, str] = {}
+        node_bindings: dict[str, set[str]] = {}
+        authorized_bindings = {
+            source_id: frozenset(bindings)
+            for source_id, bindings in node_binding_projection.items()
+        }
         previous_key: tuple[int, str, str, int] | None = None
 
         for name in shard_names:
@@ -373,6 +438,23 @@ def audit_realization(
                     known == stage,
                     f"node {source_id} appears under two stages: {known!r} and {stage!r}",
                 )
+                # R2-B: the node must be authorized and the binding must be authorized FOR THAT
+                # NODE. R1 used input_binding_id only as a sort key, so a record naming a binding
+                # nobody declared, or a real binding attached to the wrong node, went straight
+                # through the publisher and the consumer.
+                allowed = authorized_bindings.get(source_id)
+                _require(
+                    allowed is not None,
+                    f"record names node {source_id!r}, which is not in the authorized "
+                    "node/binding projection",
+                )
+                _require(
+                    record["input_binding_id"] in allowed,
+                    f"node {source_id} is not authorized to draw from input binding "
+                    f"{record['input_binding_id']!r}; authorized: {sorted(allowed)}",
+                )
+                node_bindings.setdefault(source_id, set()).add(record["input_binding_id"])
+
                 identity = record["cleaned_text_sha256"]
                 ordinal = record["selection_ordinal_within_node"]
 
@@ -401,19 +483,15 @@ def audit_realization(
             })
 
         unique = _check_global_identity_uniqueness(identity_sorter)
-        ordinal_counts = _check_selection_ordinals(ordinal_sorter)
-        fingerprints = _node_fingerprints(fingerprint_sorter)
+        # One sorted pass now yields BOTH the contiguity check and the order-sensitive commitment,
+        # because the ordinal sorter carries the identity that sat at each ordinal.
+        sequences = _selection_sequences(ordinal_sorter, node_stage)
+        fingerprints = _node_fingerprints(fingerprint_sorter, node_records)
 
         _require(
-            set(ordinal_counts) == set(node_records) == set(fingerprints),
+            set(sequences) == set(node_records) == set(fingerprints),
             "internal: node sets disagree between the streaming pass and the sorted passes",
         )
-        for source_id, count in node_records.items():
-            _require(
-                ordinal_counts[source_id] == count,
-                f"node {source_id}: selection ordinal count {ordinal_counts[source_id]} does not "
-                f"match its {count} physical records",
-            )
 
         nodes = tuple(
             NodeAudit(
@@ -423,7 +501,9 @@ def audit_realization(
                 content_tokens=node_content[source_id],
                 serialized_tokens=node_serialized[source_id],
                 selection_fingerprint=fingerprints[source_id],
-                selection_ordinal_count=ordinal_counts[source_id],
+                selection_sequence_commitment=sequences[source_id],
+                selection_ordinal_count=node_records[source_id],
+                input_binding_ids=tuple(sorted(node_bindings.get(source_id, ()))),
             )
             for source_id in sorted(node_records, key=lambda s: (STAGE_PRIORITY[node_stage[s]], s))
         )
@@ -458,48 +538,142 @@ def _check_global_identity_uniqueness(sorter: ExternalSorter) -> int:
     return unique
 
 
-def _check_selection_ordinals(sorter: ExternalSorter) -> dict[str, int]:
-    """Per node the ordinals must be exactly 0..n-1: no gap, no duplicate, no extra."""
-    counts: dict[str, int] = {}
-    current: str | None = None
-    expected = 0
-    for (source_id, padded), _identity in sorter.sorted_items(2):
-        ordinal = int(padded)
-        if source_id != current:
-            if current is not None:
-                counts[current] = expected
-            current = source_id
-            expected = 0
-        if ordinal != expected:
-            raise AuditError(
-                f"node {source_id}: selection_ordinal_within_node is not the contiguous domain; "
-                f"expected {expected} but found {ordinal}"
-            )
-        expected += 1
-    if current is not None:
-        counts[current] = expected
-    return counts
+class StreamingNodeFingerprint:
+    """Reproduce ``selection_fingerprint_v1`` byte-for-byte from a sorted stream.
 
+    The frozen definition is
+    ``sha256(DOMAIN || count_be64 || concat(bytes.fromhex(id) for id in sorted(ids)))``.
+    The count comes first, which is why R1 buffered the whole list: it did not know the count until
+    it had them all. But the streaming pass already counts each node's records, so the count can be
+    supplied up front and the identities fed in as they arrive from the external sort.
 
-def _node_fingerprints(sorter: ExternalSorter) -> dict[str, str]:
-    """Recompute each node's fingerprint from its identities, streaming and in sorted order.
-
-    ``selection_fingerprint_v1`` hashes the sorted identity set, so feeding identities that are
-    already sorted reproduces it exactly without ever holding a node's identity list.
+    This changes nothing about the fingerprint's value or meaning -- it is the same bytes in the
+    same order -- only about how much memory it takes to compute. The equivalence is pinned
+    directly against ``selection_fingerprint_v1`` in the regressions.
     """
+
+    def __init__(self, count: int) -> None:
+        _require(count >= 0, "fingerprint count must not be negative")
+        self._expected = count
+        self._seen = 0
+        self._previous: str | None = None
+        self._digest = hashlib.sha256(SELECTION_FINGERPRINT_DOMAIN)
+        self._digest.update(count.to_bytes(8, "big"))
+
+    def update(self, identity: str) -> None:
+        _require(
+            self._previous is None or identity >= self._previous,
+            "streaming fingerprint requires identities in ascending order",
+        )
+        self._previous = identity
+        self._seen += 1
+        _require(self._seen <= self._expected, "more identities than the declared count")
+        self._digest.update(bytes.fromhex(identity))
+
+    def hexdigest(self) -> str:
+        _require(
+            self._seen == self._expected,
+            f"streaming fingerprint saw {self._seen} identities, expected {self._expected}",
+        )
+        return self._digest.hexdigest()
+
+
+class StreamingSequenceCommitment:
+    """Order-sensitive commitment to a node's exact ``ordinal -> identity`` sequence.
+
+    R1 checked only that a node's ordinals formed the contiguous domain, and the frozen selection
+    fingerprint hashes a *sorted set*, so permuting which identity sits at which ordinal changed
+    nothing either check could see. Codex published `[1, 0, 2, 3]` through both.
+
+    This is the missing commitment, added alongside the frozen fingerprint rather than replacing
+    it: the fingerprint still answers "which identities were selected", and this answers "in
+    exactly what order". Each pair is folded in as it arrives, so it is order-sensitive by
+    construction and costs one hash object per node.
+    """
+
+    def __init__(self, *, source_id: str, stage: str) -> None:
+        self._count = 0
+        self._expected_ordinal = 0
+        self._digest = hashlib.sha256(SELECTION_SEQUENCE_DOMAIN)
+        self._digest.update(SELECTION_SEQUENCE_SCHEMA.encode("ascii"))
+        self._digest.update(b"\0")
+        self._digest.update(source_id.encode("utf-8"))
+        self._digest.update(b"\0")
+        self._digest.update(stage.encode("utf-8"))
+        self._digest.update(b"\0")
+
+    def update(self, ordinal: int, identity: str) -> None:
+        _require(
+            ordinal == self._expected_ordinal,
+            f"selection sequence is not contiguous: expected ordinal {self._expected_ordinal}, "
+            f"found {ordinal}",
+        )
+        self._expected_ordinal += 1
+        self._count += 1
+        self._digest.update(ordinal.to_bytes(8, "big"))
+        self._digest.update(bytes.fromhex(identity))
+
+    def hexdigest(self) -> str:
+        # The count is folded in last so the digest also commits to the sequence's length; a
+        # truncated or extended sequence cannot collide with a correct one.
+        final = self._digest.copy()
+        final.update(b"\0")
+        final.update(self._count.to_bytes(8, "big"))
+        return final.hexdigest()
+
+    @property
+    def count(self) -> int:
+        return self._count
+
+
+def selection_sequence_commitment(
+    *, source_id: str, stage: str, pairs: Iterable[tuple[int, str]]
+) -> str:
+    """Convenience wrapper: the commitment over an in-order ``(ordinal, identity)`` sequence.
+
+    Used by Stage-I Pass 1 to state the expected sequence *before* anything is materialized, so
+    the value the audit must reproduce does not come from the physical records it is checking.
+    """
+    commitment = StreamingSequenceCommitment(source_id=source_id, stage=stage)
+    for ordinal, identity in pairs:
+        commitment.update(ordinal, identity)
+    return commitment.hexdigest()
+
+
+def _node_fingerprints(sorter: ExternalSorter, counts: Mapping[str, int]) -> dict[str, str]:
+    """Recompute each node's frozen fingerprint from a sorted stream, holding no identity list."""
     fingerprints: dict[str, str] = {}
     current: str | None = None
-    identities: list[str] = []
+    streaming: StreamingNodeFingerprint | None = None
     for (source_id, identity), _rest in sorter.sorted_items(2):
         if source_id != current:
-            if current is not None:
-                fingerprints[current] = selection_fingerprint_v1(identities)
+            if current is not None and streaming is not None:
+                fingerprints[current] = streaming.hexdigest()
             current = source_id
-            identities = []
-        identities.append(identity)
-    if current is not None:
-        fingerprints[current] = selection_fingerprint_v1(identities)
+            _require(source_id in counts, f"fingerprint stream saw unknown node {source_id!r}")
+            streaming = StreamingNodeFingerprint(counts[source_id])
+        streaming.update(identity)
+    if current is not None and streaming is not None:
+        fingerprints[current] = streaming.hexdigest()
     return fingerprints
+
+
+def _selection_sequences(sorter: ExternalSorter, stages: Mapping[str, str]) -> dict[str, str]:
+    """Reconstruct each node's order-sensitive sequence commitment from the sorted ordinals."""
+    commitments: dict[str, str] = {}
+    current: str | None = None
+    builder: StreamingSequenceCommitment | None = None
+    for (source_id, padded), identity in sorter.sorted_items(2):
+        if source_id != current:
+            if current is not None and builder is not None:
+                commitments[current] = builder.hexdigest()
+            current = source_id
+            _require(source_id in stages, f"sequence stream saw unknown node {source_id!r}")
+            builder = StreamingSequenceCommitment(source_id=source_id, stage=stages[source_id])
+        builder.update(int(padded), identity)
+    if current is not None and builder is not None:
+        commitments[current] = builder.hexdigest()
+    return commitments
 
 
 __all__ = [
@@ -510,7 +684,13 @@ __all__ = [
     "ExternalSorter",
     "NodeAudit",
     "RealizationAudit",
+    "MAX_MERGE_FANIN",
+    "SELECTION_SEQUENCE_DOMAIN",
+    "SELECTION_SEQUENCE_SCHEMA",
+    "StreamingNodeFingerprint",
+    "StreamingSequenceCommitment",
     "audit_realization",
+    "selection_sequence_commitment",
     "stream_lines",
     "ShardReader",
 ]
