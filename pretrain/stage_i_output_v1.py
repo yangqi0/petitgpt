@@ -1014,6 +1014,40 @@ def require_manifest_shape(manifest: Any) -> dict[str, Any]:
     return obj
 
 
+def validate_shard_list(manifest: Mapping[str, Any]) -> int:
+    """The shard list's structure, in isolation. Returns the declared record total.
+
+    R5-C: the strict consumer needs exactly this much of the manifest -- and no more -- to locate
+    and read the physical shards. Splitting it out lets the consumer establish where the data is,
+    audit it, and reconcile the physical facts BEFORE any high-level identity question is asked,
+    so a realization whose totals do not describe its own records fails on that rather than on
+    whichever downstream check happened to run first.
+    """
+    shards = manifest["shards"]
+    _require(type(shards) is list, "manifest.shards must be a list")
+    total_records = 0
+    for index, shard in enumerate(shards):
+        entry = _closed(shard, _SHARD_FIELDS, f"manifest.shards[{index}]")
+        _require(
+            _exact_str(entry["name"], f"manifest.shards[{index}].name") == shard_name(index),
+            f"manifest.shards[{index}] is not in canonical shard order",
+        )
+        records = _exact_int(entry["records"], f"manifest.shards[{index}].records", minimum=1)
+        _exact_int(entry["bytes"], f"manifest.shards[{index}].bytes", minimum=1)
+        _hex64(entry["sha256"], f"manifest.shards[{index}].sha256")
+        _require(
+            records <= RECORDS_PER_SHARD,
+            f"manifest.shards[{index}] exceeds the declared records_per_shard",
+        )
+        if index < len(shards) - 1:
+            _require(
+                records == RECORDS_PER_SHARD,
+                f"manifest.shards[{index}] is short but is not the final shard",
+            )
+        total_records += records
+    return total_records
+
+
 def validate_manifest(manifest: Any) -> dict[str, Any]:
     """Everything about the manifest that must hold before COMPLETE may be written."""
     obj = require_manifest_shape(manifest)
@@ -1036,28 +1070,8 @@ def validate_manifest(manifest: Any) -> dict[str, Any]:
         "manifest records_per_shard disagrees with the declared policy",
     )
 
+    total_records = validate_shard_list(obj)
     shards = obj["shards"]
-    _require(type(shards) is list, "manifest.shards must be a list")
-    total_records = 0
-    for index, shard in enumerate(shards):
-        entry = _closed(shard, _SHARD_FIELDS, f"manifest.shards[{index}]")
-        _require(
-            _exact_str(entry["name"], f"manifest.shards[{index}].name") == shard_name(index),
-            f"manifest.shards[{index}] is not in canonical shard order",
-        )
-        records = _exact_int(entry["records"], f"manifest.shards[{index}].records", minimum=1)
-        _exact_int(entry["bytes"], f"manifest.shards[{index}].bytes", minimum=1)
-        _hex64(entry["sha256"], f"manifest.shards[{index}].sha256")
-        _require(
-            records <= RECORDS_PER_SHARD,
-            f"manifest.shards[{index}] exceeds the declared records_per_shard",
-        )
-        if index < len(shards) - 1:
-            _require(
-                records == RECORDS_PER_SHARD,
-                f"manifest.shards[{index}] is short but is not the final shard",
-            )
-        total_records += records
 
     totals = _closed(obj["totals"], _TOTALS_FIELDS, "manifest.totals")
     for key in _TOTALS_FIELDS:
@@ -1865,7 +1879,11 @@ def load_published_realization(
         canonical_json_bytes(marker) == marker_bytes,
         f"{final}: COMPLETE marker bytes are not canonical",
     )
-    validate_manifest(manifest)
+    # R5-C: only enough structure to locate and read the physical data. Full manifest validation
+    # -- which recomputes the published run identity -- runs after the physical facts have been
+    # reconciled, so a false total is reported as a false total.
+    require_manifest_shape(manifest)
+    validate_shard_list(manifest)
     _validate_complete_marker(marker, manifest, manifest_digest)
 
     documents_dir = final / DOCUMENTS_DIRNAME
@@ -1890,10 +1908,13 @@ def load_published_realization(
             read_window_bytes=read_window_bytes,
             sort_chunk_lines=sort_chunk_lines,
         )
+        # Physical reconciliation first (it is physical-first internally too), then the Layer-2
+        # comparisons, and only then the manifest's own full validation and run identity.
         reconcile_manifest_with_audit(manifest, audit, expected)
     finally:
         if owned_scratch:
             shutil.rmtree(scratch, ignore_errors=True)
+    validate_manifest(manifest)
     return manifest
 
 
@@ -1974,6 +1995,7 @@ __all__ = [
     "trusted_expected_result",
     "validate_manifest",
     "validate_pass1_result",
+    "validate_shard_list",
     "validate_record",
     "write_shards",
 ]

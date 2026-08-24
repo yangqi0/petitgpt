@@ -54,6 +54,17 @@ BOUND_AUTHORITY_KEYS = frozenset({
 })
 ELIGIBILITY_INDEX_DTYPE = "<u4"
 ELIGIBILITY_INDEX_WIDTH = 4
+
+# R5-A: the base a graph-declared resource path is located against. The owner graph stores some
+# resource paths absolute and some relative -- all eight `release_manifest_path` values are
+# relative. A relative value used to be interpreted by whatever the process happened to have as
+# its current working directory, which made the CWD an unstated, unbound resource-location base:
+# a directory whose relative layout shadowed the graph's could be read instead of the repository.
+#
+# The base is the repository the executing Stage-I installation belongs to. This module lives at
+# <root>/pretrain/stage_i_graph_v2.py, so the root is its resolved parent's parent -- the same
+# derivation the Stage-I driver uses for its own canonical root.
+CANONICAL_REPO_ROOT = Path(__file__).resolve().parents[1]
 _HEX64 = frozenset("0123456789abcdef")
 
 
@@ -202,6 +213,22 @@ def _req_list(obj: dict[str, Any], key: str, where: str, *, nonempty: bool = Tru
     _require(isinstance(value, list), f"{where}.{key}: must be a JSON array")
     _require(not nonempty or value, f"{where}.{key}: must not be empty")
     return value
+
+
+def canonical_resource_path(value: str | Path) -> Path:
+    """Locate a graph-declared resource. One rule, used everywhere such a path is consumed.
+
+    A relative value is repository-root relative, never relative to the process CWD. Every value,
+    relative or absolute, is then put through ``Path.resolve()`` -- the repository's single
+    canonical path rule -- so equivalent spellings and symlinks cannot drift into two identities.
+
+    This changes where a relative path *points*, not what the frozen graph *says*: the graph's
+    bytes, its node semantics, its selection rules and its binding membership are untouched.
+    """
+    path = Path(value)
+    if not path.is_absolute():
+        path = CANONICAL_REPO_ROOT / path
+    return path.resolve()
 
 
 def derive_seed(domain_utf8: str) -> int:
@@ -545,12 +572,16 @@ def _validate_binding(raw: Any, key: str) -> InputBinding:
     binding = InputBinding(
         input_binding_id=key,
         release_key=_req_str(raw, "release_key", where),
-        documents_path=Path(_req_str(raw, "documents_path", where)),
+        documents_path=canonical_resource_path(_req_str(raw, "documents_path", where)),
         documents_sha256=_req_hex64(raw, "documents_sha256", where),
         documents_size_bytes=_req_int(raw, "documents_size_bytes", where, minimum=0),
-        release_manifest_path=Path(_req_str(raw, "release_manifest_path", where)),
+        release_manifest_path=canonical_resource_path(
+            _req_str(raw, "release_manifest_path", where)
+        ),
         release_manifest_sha256=_req_hex64(raw, "release_manifest_sha256", where),
-        eligibility_index_path=Path(_req_str(raw, "eligibility_index_path", where)),
+        eligibility_index_path=canonical_resource_path(
+            _req_str(raw, "eligibility_index_path", where)
+        ),
         eligibility_index_sha256=_req_hex64(raw, "eligibility_index_sha256", where),
         total_physical_rows=total,
         excluded_rows=excluded,
@@ -970,6 +1001,8 @@ __all__ = [
     "sha256_stream",
     "strict_json_loads",
     "strict_json_object",
+    "canonical_resource_path",
+    "CANONICAL_REPO_ROOT",
     "validate_eligibility_index",
     "verify_binding_inputs",
 ]

@@ -134,7 +134,10 @@ from pretrain.stage_i_select_v1 import (  # noqa: E402
 )
 from src.special_tokens import BOS_ID, EOS_ID, SPECIAL_TOKEN_IDS  # noqa: E402
 
-PLAN_SCHEMA = "petitgpt-i-candidate-plan-v3"
+# R5-B: v4 binds the accepted-H evidence-manifest identity. Owner authorization is ultimately
+# over the exact candidate-plan SHA, so the H evidence scope has to be part of that exact plan
+# identity or it is not authorized at all.
+PLAN_SCHEMA = "petitgpt-i-candidate-plan-v4"
 
 # Closed plan schema. R1 validated only the fields it happened to read, so a rehashed plan could
 # drop `hq_policy`, drop `selection_rules`, or carry unknown keys and still authorize. R2 closed
@@ -181,6 +184,10 @@ _PLAN_ACCEPTED_H_FIELDS = frozenset({
     "complete_sha256",
     "candidate_plan_sha256",
     "implementation_bundle_sha256",
+    "evidence_manifest_sha256",
+    "evidence_manifest_identity",
+    "evidence_manifest_schema",
+    "evidence_entry_count",
 })
 _PLAN_AUTHORITY_FIELDS = frozenset({"path", "sha256"})
 _PLAN_BINDING_FIELDS = frozenset({
@@ -265,11 +272,14 @@ ACCEPTED_H_COMPLETE_SHA256 = "b4d340afde8db55830115d4e7ba21757215122518567be4dad
 # fields reactively as gaps were found; v2 is generated from the exact authorized plan bytes and
 # the exact plan-bound artifacts, and covers every field consumed by Pass-1 selection, the H/I
 # gate, locator/binding resolution, materialization, manifest construction and publication.
-# R4-C: v3 adds the canonical executing repository root and the fully resolved absolute location
+# R4-C: v3 added the canonical executing repository root and the fully resolved absolute location
 # of every repository-bound resource, alongside the content digests v2 already carried. Path
 # identity and content identity are both load-bearing: byte-identical hard links under a different
 # root must not produce the same authorized state.
-CANONICAL_STATE_SCHEMA = "petitgpt-stage-i-canonical-state-v3"
+# R5-B: v4 adds the accepted-H evidence-manifest projection -- the file's own digest, its exact
+# entry set and the closed identity over both. R5-A also moves every relative graph resource path
+# in this projection to its repository-root-resolved location, which is a serialized change.
+CANONICAL_STATE_SCHEMA = "petitgpt-stage-i-canonical-state-v4"
 
 # The six dimensions the frozen H/I contract requires, plus every other field Stage H publishes.
 # Comparing the full projection rather than only the six is free and strictly stronger.
@@ -421,6 +431,11 @@ class AcceptedH:
     predictions_path: Path = Path()
     complete_path: Path = Path()
     evidence_manifest_path: Path = Path()
+    # R5-B: the evidence manifest's own bytes, its exact entry set, and the closed identity over
+    # both. R4 verified this file and then forgot everything it said.
+    evidence_manifest_sha256: str = ""
+    evidence_entries: tuple[tuple[str, str], ...] = ()
+    evidence_identity: str = ""
 
     def node(self, source_id: str) -> Mapping[str, Any]:
         for node in self.census["nodes"]:
@@ -433,22 +448,114 @@ class AcceptedH:
         return self.census["ownership_matrix"]
 
 
-def verify_h_evidence_manifest(run_dir: Path) -> dict[str, str]:
-    """Re-verify every file listed in the accepted H run's own SHA256SUMS."""
-    manifest_path = run_dir / "SHA256SUMS"
+H_EVIDENCE_MANIFEST_SCHEMA = "petitgpt-stage-i-h-evidence-manifest-v1"
+H_EVIDENCE_MANIFEST_FILENAME = "SHA256SUMS"
+# The accepted Stage-H artifacts whose digests the Stage-I contract pins independently. The
+# evidence manifest must agree with all three; if it did not, two documents would be claiming
+# different things about the same bytes.
+_H_EVIDENCE_REQUIRED_ENTRIES = ("census.json", "COMPLETE", "evidence/H_PREDICTIONS.json")
+
+
+@dataclass(frozen=True)
+class HEvidenceManifest:
+    """The accepted Stage-H run's own SHA256SUMS, as a bound identity rather than a side effect.
+
+    R5-B: R4 read this file, verified whichever entries it happened to list, and then discarded
+    the parsed set. Codex reduced it from sixteen entries to one; every remaining check still
+    passed and the accepted-H identity did not move, because neither the file's own bytes nor its
+    entry set nor its validation *scope* was part of any validated state.
+
+    All three are now bound: the file digest, the exact entry set, and the closure rule that the
+    entry set enumerates the run.
+    """
+
+    path: Path
+    file_sha256: str
+    entries: tuple[tuple[str, str], ...]
+    identity: str
+
+    def digest_of(self, relative: str) -> str | None:
+        for name, digest in self.entries:
+            if name == relative:
+                return digest
+        return None
+
+    def as_canonical(self) -> dict[str, Any]:
+        return {
+            "schema_version": H_EVIDENCE_MANIFEST_SCHEMA,
+            "manifest_file_sha256": self.file_sha256,
+            "entry_count": len(self.entries),
+            "entries": [[name, digest] for name, digest in self.entries],
+            "identity": self.identity,
+        }
+
+
+def h_evidence_manifest_identity(*, file_sha256: str, entries: Sequence[tuple[str, str]]) -> str:
+    """Closed, versioned identity of the accepted-H evidence manifest.
+
+    Commits to the file's own bytes, to the exact number of entries, and to every
+    (relative path, digest) pair in canonical order. Removing an entry, adding one, renaming one
+    or changing one digest all move this value.
+    """
+    payload = {
+        "schema_version": H_EVIDENCE_MANIFEST_SCHEMA,
+        "manifest_file_sha256": file_sha256,
+        "entry_count": len(entries),
+        "entries": [[name, digest] for name, digest in sorted(entries)],
+    }
+    return hashlib.sha256(canonical_json_bytes(payload)).hexdigest()
+
+
+def verify_h_evidence_manifest(run_dir: Path) -> HEvidenceManifest:
+    """Re-verify the accepted H run's SHA256SUMS, and bind what it says as well as what it proves.
+
+    Three things are established here, not one:
+
+    * every listed file exists under the run and hashes to its listed digest -- what R4 did;
+    * the entry set *enumerates the run*: it lists exactly the files present, so a manifest that
+      simply says less cannot pass by having nothing left to disagree with;
+    * the file's own bytes and its exact entry set become an identity the caller keeps.
+    """
+    manifest_path = (run_dir / H_EVIDENCE_MANIFEST_FILENAME).resolve()
     _require(manifest_path.is_file(), f"{manifest_path}: accepted H evidence manifest is missing")
-    payload, _ = read_authoritative_bytes(manifest_path, max_bytes=1 << 24)
+    payload, file_digest = read_authoritative_bytes(manifest_path, max_bytes=1 << 24)
+
     entries: dict[str, str] = {}
     for line in payload.decode("utf-8").splitlines():
         if not line.strip():
             continue
-        digest, _, relative = line.partition("  ")
+        digest, separator, relative = line.partition("  ")
         _require(
-            len(digest) == 64 and relative,
+            separator == "  " and len(digest) == 64 and set(digest) <= _HEX64_ALPHABET,
             f"{manifest_path}: malformed manifest line {line!r}",
+        )
+        _require(relative, f"{manifest_path}: manifest line names no file: {line!r}")
+        _require(
+            relative not in entries,
+            f"{manifest_path}: duplicate evidence entry {relative!r}",
         )
         entries[relative] = digest
     _require(bool(entries), f"{manifest_path}: evidence manifest is empty")
+
+    # Closure: the entry set must be exactly the run's files, minus the manifest itself. R4's
+    # "verify whatever is listed" loop is vacuously satisfiable by listing less; this is not.
+    present = {
+        str(path.relative_to(run_dir))
+        for path in run_dir.rglob("*")
+        if path.is_file() and path.name != H_EVIDENCE_MANIFEST_FILENAME
+    }
+    missing = sorted(present - set(entries))
+    extra = sorted(set(entries) - present)
+    _require(
+        not missing,
+        f"{manifest_path}: evidence manifest does not enumerate the accepted H run; "
+        f"unlisted file(s): {missing}",
+    )
+    _require(
+        not extra,
+        f"{manifest_path}: evidence manifest lists file(s) that are not in the run: {extra}",
+    )
+
     for relative, expected in sorted(entries.items()):
         path = run_dir / relative
         _require(path.is_file(), f"accepted H evidence file missing: {relative}")
@@ -457,7 +564,14 @@ def verify_h_evidence_manifest(run_dir: Path) -> dict[str, str]:
             actual == expected,
             f"accepted H evidence file {relative} changed: {actual} != {expected}",
         )
-    return entries
+
+    ordered = tuple(sorted(entries.items()))
+    return HEvidenceManifest(
+        path=manifest_path,
+        file_sha256=file_digest,
+        entries=ordered,
+        identity=h_evidence_manifest_identity(file_sha256=file_digest, entries=ordered),
+    )
 
 
 def load_accepted_h(
@@ -469,7 +583,7 @@ def load_accepted_h(
     expected_census_sha256: str | None = None,
 ) -> AcceptedH:
     """Bind the accepted Stage-H result: census first, projection second, agreement last."""
-    verify_h_evidence_manifest(run_dir)
+    evidence = verify_h_evidence_manifest(run_dir)
 
     census_root = run_dir / "census"
     _require(census_root.is_dir(), f"{census_root}: accepted H census directory is missing")
@@ -546,6 +660,26 @@ def load_accepted_h(
         "H_PREDICTIONS.json execution order disagrees with the canonical census",
     )
 
+    # R5-B: the evidence manifest and the independently pinned artifacts must be one story. If
+    # the manifest disagreed with the digests Stage-I binds directly, two documents would be
+    # making different claims about the same bytes.
+    published_relative = published[0].relative_to(run_dir)
+    for relative, pinned in (
+        (str(published_relative / "census.json"), census_sha256),
+        (str(published_relative / "COMPLETE"), complete_sha256),
+        ("evidence/H_PREDICTIONS.json", predictions_sha256),
+    ):
+        listed = evidence.digest_of(relative)
+        _require(
+            listed is not None,
+            f"accepted H evidence manifest does not list the load-bearing artifact {relative!r}",
+        )
+        _require(
+            listed == pinned,
+            f"accepted H evidence manifest records {relative} as {listed} but the artifact is "
+            f"{pinned}",
+        )
+
     return AcceptedH(
         run_dir=run_dir.resolve(),
         census=census,
@@ -558,7 +692,10 @@ def load_accepted_h(
         census_path=(published[0] / "census.json").resolve(),
         predictions_path=predictions_path.resolve(),
         complete_path=(published[0] / "COMPLETE").resolve(),
-        evidence_manifest_path=(run_dir / "SHA256SUMS").resolve(),
+        evidence_manifest_path=evidence.path,
+        evidence_manifest_sha256=evidence.file_sha256,
+        evidence_entries=evidence.entries,
+        evidence_identity=evidence.identity,
     )
 
 
@@ -1269,6 +1406,12 @@ def generate_candidate_plan(
             "implementation_bundle_sha256": accepted.census["authorization"][
                 "implementation_bundle_sha256"
             ],
+            # R5-B: the accepted-H evidence manifest, bound by its own bytes and by the closed
+            # identity over its exact entry set.
+            "evidence_manifest_schema": H_EVIDENCE_MANIFEST_SCHEMA,
+            "evidence_manifest_sha256": accepted.evidence_manifest_sha256,
+            "evidence_manifest_identity": accepted.evidence_identity,
+            "evidence_entry_count": len(accepted.evidence_entries),
         },
         "graph_path": str(_authority_relative(repo_root, graph_path)),
         "graph_sha256": graph.graph_sha256,
@@ -1511,7 +1654,8 @@ def _authorized_state_payload(
       node and binding structures including branch policy, thresholds, predicates, ranking
       semantics, cleaning contracts, schema accessors and every resource path;
     * the accepted Stage-H state -- run identity, the three bound digests, the complete canonical
-      census and predictions documents, and the H/I gate values named explicitly;
+      census and predictions documents, the evidence-manifest identity and its exact entry set,
+      and the H/I gate values named explicitly;
     * every canonical path string, so an equivalent-but-different location is a different state;
     * the canonical executing repository root and the fully resolved absolute location of every
       repository-bound resource, so byte-identical copies under a different root are a different
@@ -1624,6 +1768,16 @@ def _authorized_state_payload(
             ).hexdigest(),
             "census": _thaw(accepted.census),
             "predictions": _thaw(accepted.predictions),
+            # R5-B: the evidence manifest as a bound projection, not a side effect. Removing an
+            # entry, adding one, renaming one or changing one digest all move this.
+            "evidence_manifest": {
+                "schema_version": H_EVIDENCE_MANIFEST_SCHEMA,
+                "path": str(accepted.evidence_manifest_path),
+                "file_sha256": accepted.evidence_manifest_sha256,
+                "identity": accepted.evidence_identity,
+                "entry_count": len(accepted.evidence_entries),
+                "entries": [[name, digest] for name, digest in accepted.evidence_entries],
+            },
             "gate_projection": [
                 {
                     "source_id": node["source_id"],
@@ -1694,6 +1848,7 @@ def _authorized_state_payload(
             "pass1_result_schema": PASS1_RESULT_SCHEMA,
             "sequence_commitment_schema": SELECTION_SEQUENCE_SCHEMA,
             "sequence_commitment_map_schema": SELECTION_SEQUENCE_MAP_SCHEMA,
+            "h_evidence_manifest_schema": H_EVIDENCE_MANIFEST_SCHEMA,
             "node_binding_projection_schema": NODE_BINDING_PROJECTION_SCHEMA,
             "representative_rule": REPRESENTATIVE_RULE,
             "physical_locator_rule": PHYSICAL_LOCATOR_RULE,
@@ -1876,8 +2031,16 @@ def validate_plan_schema(plan: Any) -> dict[str, Any]:
         "complete_sha256",
         "candidate_plan_sha256",
         "implementation_bundle_sha256",
+        "evidence_manifest_sha256",
+        "evidence_manifest_identity",
     ):
         _plan_hex64(accepted, key, "accepted_h")
+    _require(
+        _plan_str(accepted, "evidence_manifest_schema", "accepted_h") == H_EVIDENCE_MANIFEST_SCHEMA,
+        "candidate plan names a different accepted-H evidence-manifest schema than this "
+        "implementation can read",
+    )
+    _plan_int(accepted, "evidence_entry_count", "accepted_h", minimum=1)
     _canonical_relative_path(accepted["run_dir"], "accepted_h.run_dir")
     _require(
         accepted["run_dir"] == ACCEPTED_H_RUN_DIR,
@@ -2194,6 +2357,23 @@ def _derive_authorized_state(
     _require(
         accepted.census["graph_sha256"] == plan["graph_sha256"],
         "accepted Stage-H ran against a different owner graph than the Stage-I plan binds",
+    )
+    # R5-B: the evidence manifest freshly read, hashed, parsed and closed above must be the one
+    # the plan binds -- bytes, entry set and count.
+    _require(
+        accepted.evidence_manifest_sha256 == accepted_spec["evidence_manifest_sha256"],
+        f"accepted Stage-H evidence manifest is {accepted.evidence_manifest_sha256} on disk but "
+        f"the Stage-I plan binds {accepted_spec['evidence_manifest_sha256']}",
+    )
+    _require(
+        accepted.evidence_identity == accepted_spec["evidence_manifest_identity"],
+        f"accepted Stage-H evidence-manifest identity is {accepted.evidence_identity} but the "
+        f"Stage-I plan binds {accepted_spec['evidence_manifest_identity']}",
+    )
+    _require(
+        len(accepted.evidence_entries) == accepted_spec["evidence_entry_count"],
+        f"accepted Stage-H evidence manifest lists {len(accepted.evidence_entries)} entries but "
+        f"the Stage-I plan binds {accepted_spec['evidence_entry_count']}",
     )
 
     # --- R3-B: the trusted node -> allowed-binding authority ----------------------------
@@ -2781,6 +2961,7 @@ __all__ = [
     "BUNDLE_SCHEMA",
     "H_I_REQUIRED_DIMENSIONS",
     "IMPLEMENTATION_BUNDLE_FILES",
+    "H_EVIDENCE_MANIFEST_SCHEMA",
     "PASS1_RESULT_SCHEMA",
     "PLAN_SCHEMA",
     "REQUIRED_PYTHON_EXECUTABLE",
@@ -2789,6 +2970,8 @@ __all__ = [
     "SHARD_POLICY_RULE",
     "AcceptedH",
     "AuthorizedIContext",
+    "HEvidenceManifest",
+    "h_evidence_manifest_identity",
     "CanonicalAuthorizedState",
     "authorization_block",
     "authorize_plan",

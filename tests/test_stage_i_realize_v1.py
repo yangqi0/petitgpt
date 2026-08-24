@@ -10,8 +10,10 @@ from __future__ import annotations
 
 import ast
 from collections.abc import Mapping
+import contextlib
 import hashlib
 import json
+import os
 from pathlib import Path
 import struct
 
@@ -3117,7 +3119,7 @@ def test_r2_d_required_authority_set_is_closed_and_exact(live_plan_path):
     plan = json.loads(live_plan_path.read_text())
     assert frozenset(plan["authorities"]) == REQUIRED_AUTHORITIES
     assert "hq_policy" in REQUIRED_AUTHORITIES
-    assert plan["schema_version"] == "petitgpt-i-candidate-plan-v3"
+    assert plan["schema_version"] == "petitgpt-i-candidate-plan-v4"
 
 
 # ---- R2-E: bounded audit memory --------------------------------------------------
@@ -3877,7 +3879,7 @@ def test_r3_e_plan_schema_is_versioned_and_exact(live_plan_path):
     """R3-E. v3 closes values as well as keys, with exact types and frozen literals."""
     from pretrain.stage_i_realize_v1 import validate_plan_schema
 
-    assert PLAN_SCHEMA == "petitgpt-i-candidate-plan-v3"
+    assert PLAN_SCHEMA == "petitgpt-i-candidate-plan-v4"
     plan = json.loads(live_plan_path.read_text())
     assert validate_plan_schema(json.loads(json.dumps(plan)))
 
@@ -4497,7 +4499,13 @@ def test_r4_d_consumer_rejects_a_fully_resealed_provenance_change(tmp_path: Path
             obj["bindings"] = {"ib_x": "0" * 64}
 
     _fully_reseal(final, lambda lines: b"".join(line + b"\n" for line in lines), falsify)
-    with pytest.raises(OutputError, match="frozen Stage-I environment|trusted input-binding"):
+    # R5-C moved full manifest validation after reconciliation, so the trusted Layer-2 comparison
+    # is what fires now rather than the static frozen-value check. Both are correct refusals; the
+    # trusted one is the stronger statement.
+    with pytest.raises(
+        OutputError,
+        match=("trusted post-Pass-1 result binds|trusted input-binding|frozen Stage-I environment"),
+    ):
         load_published_realization(final, expected=expected)
 
 
@@ -4705,3 +4713,526 @@ def _selections_for(state):
             )
         )
     return selections
+
+
+# ================================================================================
+# R5 REPAIR REGRESSIONS — one per Codex R4 re-review finding
+# ================================================================================
+
+
+@contextlib.contextmanager
+def _in_directory(path: Path):
+    """Run a block with the process CWD somewhere else, and always put it back."""
+    here = Path.cwd()
+    os.chdir(path)
+    try:
+        yield path
+    finally:
+        os.chdir(here)
+
+
+def _release_manifest_relatives() -> list[str]:
+    """The eight relative release_manifest_path values the frozen owner graph declares."""
+    graph = json.loads(GRAPH.read_text())
+    values = sorted(b["release_manifest_path"] for b in graph["input_bindings"].values())
+    assert len(values) == 8
+    assert all(not Path(v).is_absolute() for v in values), "fixture assumes relative values"
+    return values
+
+
+def _shadow_tree(root: Path) -> Path:
+    """A directory whose relative layout shadows every graph release_manifest_path.
+
+    The files are hard links to the genuine ones, so they are byte-identical and every content
+    digest matches. Only their location differs -- which is exactly the thing that must decide.
+    """
+    for relative in _release_manifest_relatives():
+        target = root / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        if not target.exists():
+            os.link(ROOT / relative, target)
+    return root
+
+
+@pytest.fixture
+def shadow_cwd():
+    """A shadow tree on the repository's own filesystem, so hard links are possible."""
+    import shutil
+    import tempfile
+
+    staging = Path(tempfile.mkdtemp(dir=str(ROOT), prefix=".pytest-shadow-cwd-"))
+    try:
+        yield _shadow_tree(staging / "alt")
+    finally:
+        shutil.rmtree(staging, ignore_errors=True)
+
+
+# ---- R5-A: the process CWD is not a resource-location base ----------------------
+
+
+def test_r5_a_relative_graph_paths_resolve_against_the_repository_not_the_cwd(shadow_cwd):
+    """R5-A. All eight release manifests are relative; they must locate under the repository.
+
+    Codex authorized from a directory whose relative layout shadowed the graph's and observed
+    every one of the eight release manifests read from there instead. The CWD was an unstated,
+    unbound resource-location base.
+    """
+    from pretrain.stage_i_graph_v2 import CANONICAL_REPO_ROOT, canonical_resource_path
+
+    assert CANONICAL_REPO_ROOT == ROOT.resolve()
+    with _in_directory(shadow_cwd):
+        graph = load_source_graph(GRAPH, verify_hashes=True)
+        for binding_id, binding in sorted(graph.bindings.items()):
+            resolved = binding.release_manifest_path
+            assert resolved.is_absolute(), binding_id
+            assert str(resolved).startswith(str(ROOT)), (
+                f"{binding_id} release manifest resolved outside the repository: {resolved}"
+            )
+            assert not str(resolved).startswith(str(shadow_cwd)), (
+                f"{binding_id} release manifest was read from the process CWD: {resolved}"
+            )
+    # The helper itself is the single rule, and it ignores the CWD entirely.
+    with _in_directory(shadow_cwd):
+        assert canonical_resource_path("runs/x/y.json") == ROOT / "runs/x/y.json"
+        assert canonical_resource_path("/tmp/absolute.json") == Path("/tmp/absolute.json")
+
+
+def test_r5_a_no_graph_resource_path_is_built_from_a_raw_relative_value():
+    """Structural: every graph resource path goes through the one canonical helper.
+
+    A single surviving `Path(relative_value)` would restore CWD-dependent behaviour for whichever
+    resource it built, so this is checked over the parsed source rather than by sampling.
+    """
+    tree = ast.parse((ROOT / "pretrain/stage_i_graph_v2.py").read_text())
+    binding = next(
+        node
+        for node in ast.walk(tree)
+        if isinstance(node, ast.FunctionDef) and node.name == "_validate_binding"
+    )
+    for field in ("documents_path", "release_manifest_path", "eligibility_index_path"):
+        keyword = next(
+            kw
+            for node in ast.walk(binding)
+            if isinstance(node, ast.Call)
+            for kw in node.keywords
+            if kw.arg == field
+        )
+        call = keyword.value
+        assert isinstance(call, ast.Call), f"{field} is not built by a call"
+        name = getattr(call.func, "id", None) or getattr(call.func, "attr", None)
+        assert name == "canonical_resource_path", (
+            f"{field} is built with {name}(), not the canonical resolver"
+        )
+
+
+def test_r5_a_authorization_and_revalidation_are_cwd_invariant(live_plan_path, shadow_cwd):
+    """R5-A. Same canonical state from the repository, from a shadow tree, from anywhere.
+
+    This is the invariant, and it is stronger than detecting a later CWD change: changing
+    ``os.getcwd()`` must not change any resolved Stage-I resource path, so revalidation from a
+    different directory simply succeeds.
+    """
+    digest = sha256_file(live_plan_path)
+    with _in_directory(ROOT):
+        context = authorize_plan(live_plan_path, digest)
+        from_repo = context.revalidate()
+    with _in_directory(shadow_cwd):
+        # The very same context, revalidated from the shadow tree.
+        from_alt = context.revalidate()
+        fresh = authorize_plan(live_plan_path, digest).revalidate()
+
+    assert from_repo.state_sha256 == from_alt.state_sha256 == fresh.state_sha256
+    for state in (from_alt, fresh):
+        assert dict(state.resolved_paths["input_release_manifests"]) == dict(
+            from_repo.resolved_paths["input_release_manifests"]
+        )
+    for value in from_alt.resolved_paths["input_release_manifests"].values():
+        assert str(value).startswith(str(ROOT))
+        assert not str(value).startswith(str(shadow_cwd))
+
+
+def test_r5_a_every_resolved_stage_i_path_is_cwd_invariant(live_plan_path, shadow_cwd):
+    """No resolved Stage-I resource path may move when the process CWD moves."""
+    digest = sha256_file(live_plan_path)
+    with _in_directory(ROOT):
+        baseline = _payload_of(authorize_plan(live_plan_path, digest).revalidate())
+    with _in_directory(shadow_cwd):
+        shifted = _payload_of(authorize_plan(live_plan_path, digest).revalidate())
+    assert baseline["resolved_paths"] == shifted["resolved_paths"]
+    assert baseline["paths"] == shifted["paths"]
+    assert baseline["graph"]["bindings"] == shifted["graph"]["bindings"]
+
+
+def test_r5_a_candidate_plan_generation_is_cwd_independent(accepted_h, shadow_cwd):
+    """The plan's bytes must not depend on where the generator was invoked from."""
+    with _in_directory(ROOT):
+        first = canonical_json_bytes(_plan(accepted_h))
+    with _in_directory(shadow_cwd):
+        second = canonical_json_bytes(_plan(accepted_h))
+    assert first == second
+    assert hashlib.sha256(first).hexdigest() == hashlib.sha256(second).hexdigest()
+
+
+# ---- R5-B: the accepted-H evidence manifest is a bound input --------------------
+
+
+@pytest.fixture
+def h_run_copy():
+    """A hard-linked copy of the accepted H run whose SHA256SUMS can be rewritten."""
+    import shutil
+    import tempfile
+
+    staging = Path(tempfile.mkdtemp(dir=str(ROOT), prefix=".pytest-h-run-"))
+
+    def build(mutate=None) -> Path:
+        target = Path(tempfile.mkdtemp(dir=str(staging))) / "h"
+        for child in sorted(H_RUN_DIR.rglob("*")):
+            if not child.is_file() or child.name == "SHA256SUMS":
+                continue
+            dest = target / child.relative_to(H_RUN_DIR)
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            os.link(child, dest)
+        lines = (H_RUN_DIR / "SHA256SUMS").read_text().splitlines()
+        if mutate is not None:
+            lines = mutate(list(lines))
+        (target / "SHA256SUMS").write_text("\n".join(lines) + "\n")
+        return target
+
+    try:
+        yield build
+    finally:
+        shutil.rmtree(staging, ignore_errors=True)
+
+
+def test_r5_b_evidence_manifest_identity_is_bound(accepted_h):
+    """R5-B. The manifest's bytes, its exact entry set and its closure are all bound."""
+    from pretrain.stage_i_realize_v1 import (
+        H_EVIDENCE_MANIFEST_SCHEMA,
+        h_evidence_manifest_identity,
+        verify_h_evidence_manifest,
+    )
+
+    evidence = verify_h_evidence_manifest(H_RUN_DIR)
+    assert evidence.file_sha256 == sha256_file(H_RUN_DIR / "SHA256SUMS")
+    assert len(evidence.entries) == 16
+    assert evidence.entries == tuple(sorted(evidence.entries))
+    # The identity is generated by its own bound fields, via a separately written expectation.
+    payload = {
+        "schema_version": H_EVIDENCE_MANIFEST_SCHEMA,
+        "manifest_file_sha256": evidence.file_sha256,
+        "entry_count": len(evidence.entries),
+        "entries": [[name, digest] for name, digest in sorted(evidence.entries)],
+    }
+    assert evidence.identity == hashlib.sha256(canonical_json_bytes(payload)).hexdigest()
+    assert evidence.identity == h_evidence_manifest_identity(
+        file_sha256=evidence.file_sha256, entries=evidence.entries
+    )
+
+    # The accepted-H record keeps it, and it agrees with the independently pinned artifacts.
+    assert accepted_h.evidence_identity == evidence.identity
+    assert accepted_h.evidence_manifest_sha256 == evidence.file_sha256
+    assert accepted_h.evidence_entries == evidence.entries
+    assert evidence.digest_of("evidence/H_PREDICTIONS.json") == accepted_h.predictions_sha256
+    published = accepted_h.published_dir.relative_to(accepted_h.run_dir)
+    assert evidence.digest_of(str(published / "COMPLETE")) == ACCEPTED_H_COMPLETE_SHA256
+    assert evidence.digest_of(str(published / "census.json")) == accepted_h.census_sha256
+
+
+def test_r5_b_entry_set_enumerates_the_run(accepted_h):
+    """The closure rule: the manifest lists exactly the run's files, minus itself."""
+    present = {
+        str(path.relative_to(H_RUN_DIR))
+        for path in H_RUN_DIR.rglob("*")
+        if path.is_file() and path.name != "SHA256SUMS"
+    }
+    assert {name for name, _digest in accepted_h.evidence_entries} == present
+
+
+@pytest.mark.parametrize(
+    "label,mutate,match",
+    [
+        (
+            "reduced_16_to_1",
+            lambda lines: lines[:1],
+            "does not enumerate the accepted H run",
+        ),
+        (
+            "entry_removed",
+            lambda lines: [ln for ln in lines if not ln.endswith("  NOTES.md")],
+            r"unlisted file\(s\): \['NOTES.md'\]",
+        ),
+        (
+            "entry_added",
+            lambda lines: [*lines, f"{'0' * 64}  evidence/NOT_A_REAL_FILE.txt"],
+            "lists file",
+        ),
+        (
+            "entry_digest_changed",
+            lambda lines: [
+                (f"{'1' * 64}  NOTES.md" if ln.endswith("  NOTES.md") else ln) for ln in lines
+            ],
+            "NOTES.md changed",
+        ),
+        (
+            "entry_path_renamed",
+            lambda lines: [
+                (ln.replace("  NOTES.md", "  RENAMED.md") if ln.endswith("  NOTES.md") else ln)
+                for ln in lines
+            ],
+            r"unlisted file\(s\): \['NOTES.md'\]|lists file",
+        ),
+        (
+            "entry_duplicated",
+            lambda lines: [*lines, lines[0]],
+            "duplicate evidence entry",
+        ),
+        (
+            "manifest_emptied",
+            lambda lines: [],
+            "evidence manifest is empty",
+        ),
+    ],
+)
+def test_r5_b_mutated_evidence_manifest_is_rejected(h_run_copy, label, mutate, match):
+    """R5-B. Every shape of evidence-manifest tampering Codex named, plus the near neighbours."""
+    directory = h_run_copy(mutate)
+    with pytest.raises(RealizationError, match=match):
+        load_accepted_h(directory)
+
+
+def test_r5_b_evidence_manifest_bytes_alone_move_the_identity(h_run_copy, accepted_h):
+    """SHA256SUMS bytes changed while every referenced artifact is untouched.
+
+    Reordering the lines leaves the entry set identical and every artifact byte-for-byte as it
+    was, but the file itself is different -- and the file is a bound input, so the identity moves.
+    """
+    from pretrain.stage_i_realize_v1 import verify_h_evidence_manifest
+
+    directory = h_run_copy(lambda lines: list(reversed(lines)))
+    reordered = verify_h_evidence_manifest(directory)
+    assert reordered.file_sha256 != accepted_h.evidence_manifest_sha256
+    assert reordered.entries == accepted_h.evidence_entries  # same set, same digests
+    assert reordered.identity != accepted_h.evidence_identity
+
+
+def test_r5_b_candidate_plan_binds_the_evidence_manifest(live_plan_path, accepted_h):
+    """The plan the owner authorizes carries the evidence scope, so authorization covers it."""
+    from pretrain.stage_i_realize_v1 import H_EVIDENCE_MANIFEST_SCHEMA
+
+    plan = json.loads(live_plan_path.read_text())
+    block = plan["accepted_h"]
+    assert block["evidence_manifest_schema"] == H_EVIDENCE_MANIFEST_SCHEMA
+    assert block["evidence_manifest_sha256"] == accepted_h.evidence_manifest_sha256
+    assert block["evidence_manifest_identity"] == accepted_h.evidence_identity
+    assert block["evidence_entry_count"] == len(accepted_h.evidence_entries)
+
+
+@pytest.mark.parametrize(
+    "mutation,match",
+    [
+        (
+            lambda p: p["accepted_h"].__setitem__("evidence_manifest_sha256", "0" * 64),
+            "evidence manifest is .* on disk but the Stage-I plan binds",
+        ),
+        (
+            lambda p: p["accepted_h"].__setitem__("evidence_manifest_identity", "0" * 64),
+            "evidence-manifest identity is .* but the Stage-I plan binds",
+        ),
+        (
+            lambda p: p["accepted_h"].__setitem__("evidence_entry_count", 1),
+            "evidence manifest lists 16 entries but the Stage-I plan binds 1",
+        ),
+        (
+            lambda p: p["accepted_h"].__setitem__("evidence_manifest_schema", "nope"),
+            "different accepted-H evidence-manifest schema",
+        ),
+        (lambda p: p["accepted_h"].pop("evidence_manifest_identity"), "accepted_h is missing"),
+    ],
+)
+def test_r5_b_plan_evidence_binding_is_checked_at_authorization(
+    live_plan_path, tmp_path, mutation, match
+):
+    """A plan whose evidence binding disagrees with the run on disk cannot authorize."""
+    path, digest = _mutated_plan(live_plan_path, tmp_path, mutation)
+    with pytest.raises(RealizationError, match=match):
+        authorize_plan(path, digest)
+
+
+def test_r5_b_evidence_identity_is_bound_into_the_canonical_state(authorized_state):
+    """The canonical state carries the projection, and every part of it is load-bearing."""
+    payload = _payload_of(authorized_state)
+    evidence = payload["accepted_h"]["evidence_manifest"]
+    assert evidence["identity"] == authorized_state.accepted.evidence_identity
+    assert evidence["entry_count"] == 16
+    assert len(evidence["entries"]) == 16
+
+    reference = hashlib.sha256(canonical_json_bytes(payload)).hexdigest()
+    assert reference == authorized_state.state_sha256
+    for path in (
+        ["accepted_h", "evidence_manifest", "identity"],
+        ["accepted_h", "evidence_manifest", "file_sha256"],
+        ["accepted_h", "evidence_manifest", "entry_count"],
+        ["accepted_h", "evidence_manifest", "path"],
+    ):
+        mutated = json.loads(json.dumps(payload))
+        cursor = mutated
+        for key in path[:-1]:
+            cursor = cursor[key]
+        cursor[path[-1]] = 1 if path[-1] == "entry_count" else "changed"
+        assert hashlib.sha256(canonical_json_bytes(mutated)).hexdigest() != reference, path
+    # Removing a single entry from the projection moves it too.
+    mutated = json.loads(json.dumps(payload))
+    mutated["accepted_h"]["evidence_manifest"]["entries"].pop()
+    assert hashlib.sha256(canonical_json_bytes(mutated)).hexdigest() != reference
+
+
+def test_r5_b_evidence_identity_reaches_publication_transitively(authorized_state):
+    """R5-B. The chain from the evidence manifest to the published run identity, link by link.
+
+    No new Layer-2 or run-identity field is needed: `authorized_state_sha256` already commits to
+    the whole canonical state, and it is already inside the authorization block that the
+    post-Pass-1 result and the published run identity both bind. This proves that rather than
+    assuming it.
+    """
+    gate = dict.fromkeys(_FIXTURE_GATE, True)
+    selections = _selections_for(authorized_state)
+    pass1 = build_pass1_result(selections, authorized_state, gate)
+    expected = _expected_for(pass1)
+
+    # link 1: evidence identity -> canonical state digest
+    payload = _payload_of(authorized_state)
+    assert (
+        payload["accepted_h"]["evidence_manifest"]["identity"]
+        == authorized_state.accepted.evidence_identity
+    )
+    assert hashlib.sha256(canonical_json_bytes(payload)).hexdigest() == (
+        authorized_state.state_sha256
+    )
+
+    # link 2: canonical state digest -> Layer-2 authorization block
+    assert pass1["authorization"]["authorized_state_sha256"] == authorized_state.state_sha256
+    assert expected.authorization["authorized_state_sha256"] == authorized_state.state_sha256
+
+    # link 3: Layer-2 -> published run identity
+    moved = {**dict(expected.authorization), "authorized_state_sha256": "0" * 64}
+    assert (
+        stage_i_published_run_identity(
+            moved,
+            post_pass1_result_identity_sha256=expected.result_identity_sha256,
+            selection_sequence_commitment_map_sha256=(
+                expected.selection_sequence_commitment_map_sha256
+            ),
+        )
+        != expected.stage_i_run_identity
+    )
+
+
+# ---- R5-C: the strict consumer reconciles physical facts first ------------------
+
+
+def test_r5_c_strict_consumer_reports_physical_mismatch_before_identity(tmp_path: Path):
+    """R5-C. A false total plus an invalid run identity must surface the false total.
+
+    The shared reconciler was already physical-first; the consumer was not, because it ran full
+    manifest validation -- which recomputes the published run identity -- before the audit.
+    """
+    manifest, records, expected = _publishable(tmp_path, count=3)
+    final = publish_atomic(tmp_path / "out", "run-x", manifest, records, expected=expected)
+    load_published_realization(final, expected=expected)  # valid before tampering
+
+    def falsify(obj):
+        obj["totals"]["serialized_tokens"] = 22
+        obj["nodes"][0]["selected_serialized_tokens"] = 22
+        obj["stage_i_run"] = {**obj["stage_i_run"], "run_identity": "0" * 64}
+
+    _fully_reseal(final, lambda lines: b"".join(line + b"\n" for line in lines), falsify)
+    with pytest.raises(OutputError, match="serialized_tokens is 22 but the staged records"):
+        load_published_realization(final, expected=expected)
+
+
+def _reseal_preserving_fault(final: Path, mutate) -> None:
+    """Reseal the marker around a deliberately faulty manifest, leaving the fault in place.
+
+    ``_fully_reseal`` regenerates the run identity from the manifest's own fields, which would
+    quietly repair an injected identity fault. Here the mutation is applied last and only the
+    COMPLETE marker is brought back into agreement.
+    """
+    manifest = json.loads((final / MANIFEST_FILENAME).read_text())
+    mutate(manifest)
+    manifest_bytes = canonical_json_bytes(manifest)
+    (final / MANIFEST_FILENAME).write_bytes(manifest_bytes)
+    (final / COMPLETE_MARKER).write_bytes(
+        canonical_json_bytes({
+            "marker": "COMPLETE",
+            "manifest_sha256": hashlib.sha256(manifest_bytes).hexdigest(),
+            "record_schema_version": RECORD_SCHEMA,
+            "manifest_schema_version": MANIFEST_SCHEMA,
+            "h_run_identity": manifest["h_binding"]["h_run_identity"],
+            "stage_i_run_identity": manifest["stage_i_run"]["run_identity"],
+        })
+    )
+
+
+def test_r5_c_strict_consumer_still_reports_a_lone_identity_fault(tmp_path: Path):
+    """A physically honest realization with a bad identity must still fail on the identity."""
+    manifest, records, expected = _publishable(tmp_path, count=3)
+    final = publish_atomic(tmp_path / "out", "run-x", manifest, records, expected=expected)
+    load_published_realization(final, expected=expected)  # valid before tampering
+
+    _reseal_preserving_fault(
+        final,
+        lambda obj: obj.__setitem__(
+            "stage_i_run", {**obj["stage_i_run"], "run_identity": "0" * 64}
+        ),
+    )
+    with pytest.raises(OutputError, match="run identity|run_identity"):
+        load_published_realization(final, expected=expected)
+
+
+def test_r5_c_strict_consumer_keeps_malformed_structure_controlled(tmp_path: Path):
+    """Structural failures stay controlled where the physical audit cannot safely begin."""
+    manifest, records, expected = _publishable(tmp_path, count=3)
+    final = publish_atomic(tmp_path / "out", "run-x", manifest, records, expected=expected)
+
+    pristine = (final / MANIFEST_FILENAME).read_bytes()
+    for mutation, match in (
+        (lambda obj: obj.pop("shards"), r"missing field\(s\)"),
+        (lambda obj: obj.__setitem__("shards", None), "must be a JSON array"),
+        (lambda obj: obj.__setitem__("stage_i_run", None), "must be a JSON object"),
+        (
+            lambda obj: obj["shards"][0].__setitem__("name", "documents-99999.jsonl"),
+            "canonical shard order",
+        ),
+        (lambda obj: obj["shards"][0].__setitem__("records", 0), "must be >= 1"),
+    ):
+        # Each case starts from the pristine manifest; otherwise the mutations accumulate and a
+        # later case fails on an earlier one's damage.
+        payload = json.loads(pristine)
+        mutation(payload)
+        (final / MANIFEST_FILENAME).write_bytes(canonical_json_bytes(payload))
+        with pytest.raises(OutputError, match=match):
+            load_published_realization(final, expected=expected)
+    (final / MANIFEST_FILENAME).write_bytes(pristine)
+
+
+def test_r5_c_consumer_orders_structure_then_physical_then_identity():
+    """Structural: the order is part of the contract, not an accident of call sites."""
+    function = _function_source("pretrain/stage_i_output_v1.py", "load_published_realization")
+    calls = _call_lines_by_name(function)
+    first = {}
+    for line, name in sorted(calls):
+        first.setdefault(name, line)
+    for name in (
+        "require_manifest_shape",
+        "validate_shard_list",
+        "audit_staged_realization",
+        "reconcile_manifest_with_audit",
+        "validate_manifest",
+    ):
+        assert name in first, f"the consumer does not call {name}"
+    assert first["require_manifest_shape"] < first["validate_shard_list"]
+    assert first["validate_shard_list"] < first["audit_staged_realization"]
+    assert first["audit_staged_realization"] < first["reconcile_manifest_with_audit"]
+    assert first["reconcile_manifest_with_audit"] < first["validate_manifest"], (
+        "full manifest validation (which recomputes the run identity) must follow reconciliation"
+    )
