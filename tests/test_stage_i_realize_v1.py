@@ -9,6 +9,7 @@ deterministic and would pass with ``f`` entirely wrong.
 from __future__ import annotations
 
 import ast
+from collections.abc import Mapping
 import hashlib
 import json
 from pathlib import Path
@@ -31,6 +32,7 @@ from pretrain.stage_i_graph_v2 import (
 from pretrain.stage_i_output_v1 import (
     COMPLETE_MARKER,
     DOCUMENTS_DIRNAME,
+    FROZEN_ENVIRONMENT,
     MANIFEST_FILENAME,
     MANIFEST_SCHEMA,
     PASS1_RESULT_SCHEMA,
@@ -39,7 +41,9 @@ from pretrain.stage_i_output_v1 import (
     SHARD_POLICY_VERSION,
     OutputError,
     TrustedExpectedResult,
+    binding_document_digests_sha256,
     build_record,
+    environment_sha256,
     iter_records,
     load_published_realization,
     load_trusted_expected_result,
@@ -47,6 +51,7 @@ from pretrain.stage_i_output_v1 import (
     plan_shards,
     publish_atomic,
     recompute_stage_i_run_identity,
+    reconcile_manifest_with_audit,
     record_sort_key,
     selection_sequence_commitment_map_sha256,
     stage_i_published_run_identity,
@@ -58,6 +63,7 @@ from pretrain.stage_i_output_v1 import (
 from pretrain.stage_i_realize_v1 import (
     ACCEPTED_H_COMPLETE_SHA256,
     ACCEPTED_H_RUN_DIR,
+    CANONICAL_REPO_ROOT,
     IMPLEMENTATION_BUNDLE_FILES,
     PLAN_SCHEMA,
     REQUIRED_PYTHON_EXECUTABLE,
@@ -80,6 +86,7 @@ from pretrain.stage_i_realize_v1 import (
     load_accepted_h,
     materialize_binding,
     require_h_i_equality,
+    resolve_authorized_state,
     scan_binding_candidates,
     verify_environment,
 )
@@ -1106,7 +1113,14 @@ _FIXTURE_AUTHORIZATION = {
     "h_predictions_sha256": "9" * 64,
     "owner_graph_sha256": "c" * 64,
     "node_binding_projection_sha256": node_binding_projection_sha256({"b_x": ["ib_x"]}),
+    "environment_sha256": environment_sha256(FROZEN_ENVIRONMENT),
+    "binding_document_digests_sha256": binding_document_digests_sha256({"ib_x": "6" * 64}),
 }
+
+# R4-D: the trusted environment and the trusted input-binding document digests the fixture's
+# Layer-2 expectation commits to, before any of its Layer-3 bytes exist.
+_FIXTURE_ENVIRONMENT = dict(FROZEN_ENVIRONMENT)
+_FIXTURE_BINDING_DIGESTS = {"ib_x": "6" * 64}
 
 _FIXTURE_H_BINDING = {
     "h_run_identity": "7" * 64,
@@ -1129,11 +1143,25 @@ _FIXTURE_GATE = {
 }
 
 
-def _pass1_for(nodes: list[dict], projection: dict, totals: dict, **over) -> dict:
+def _pass1_for(
+    nodes: list[dict],
+    projection: dict,
+    totals: dict,
+    *,
+    environment: dict | None = None,
+    binding_digests: dict | None = None,
+    **over,
+) -> dict:
     """A post-Pass-1 expected result for a synthetic fixture, built the way Pass 1 builds one."""
     commitments = {n["source_id"]: n["selection_sequence_commitment"] for n in nodes}
+    environment = dict(_FIXTURE_ENVIRONMENT if environment is None else environment)
+    binding_digests = dict(_FIXTURE_BINDING_DIGESTS if binding_digests is None else binding_digests)
     authorization = dict(_FIXTURE_AUTHORIZATION)
     authorization["node_binding_projection_sha256"] = node_binding_projection_sha256(projection)
+    authorization["environment_sha256"] = environment_sha256(environment)
+    authorization["binding_document_digests_sha256"] = binding_document_digests_sha256(
+        binding_digests
+    )
     pass1 = {
         "schema_version": PASS1_RESULT_SCHEMA,
         "authorization": authorization,
@@ -1143,9 +1171,9 @@ def _pass1_for(nodes: list[dict], projection: dict, totals: dict, **over) -> dic
             commitments
         ),
         "node_binding_projection": projection,
-        "authorized_input_binding_ids": sorted({
-            b for allowed in projection.values() for b in allowed
-        }),
+        "authorized_input_binding_ids": sorted(binding_digests),
+        "environment": environment,
+        "binding_document_digests": binding_digests,
         "nodes": nodes,
         "totals": totals,
         "ownership_matrix": {},
@@ -2027,17 +2055,21 @@ def test_r1_c3_per_node_totals_and_fingerprints_are_reconciled(tmp_path: Path):
     """
     manifest, records, expected = _publishable(tmp_path, count=3)
 
+    # R4-E: physical reconciliation runs first, so a node whose declared numbers contradict its
+    # own records fails on that concrete mismatch rather than on a downstream identity check.
     tokens = json.loads(json.dumps(manifest))
     tokens["nodes"][0]["selected_serialized_tokens"] = 20
-    with pytest.raises(OutputError, match="trusted post-Pass-1 result committed to 21"):
+    with pytest.raises(OutputError, match="but the records sum to 21"):
         publish_atomic(tmp_path / "out1", "run-x", tokens, list(records), expected=expected)
 
     fingerprint = json.loads(json.dumps(manifest))
     fingerprint["nodes"][0]["selection_fingerprint"] = "0" * 64
-    with pytest.raises(OutputError, match="trusted post-Pass-1 result committed to"):
+    with pytest.raises(OutputError, match="fingerprint disagrees"):
         publish_atomic(tmp_path / "out2", "run-x", fingerprint, list(records), expected=expected)
 
     # Now make the expectation agree with the lie. The physical reconstruction still refuses.
+    # And a manifest that is physically honest but whose expectation lies is refused on the
+    # Layer-2 comparison, which is what runs once the physical facts have checked out.
     node = dict(manifest["nodes"][0])
     node["selection_fingerprint"] = "0" * 64
     lying = _expected_for(
@@ -2047,9 +2079,10 @@ def test_r1_c3_per_node_totals_and_fingerprints_are_reconciled(tmp_path: Path):
             {k: v for k, v in manifest["totals"].items() if k != "shards"},
         )
     )
-    fingerprint["stage_i_run"] = _stage_i_run_block(lying)
-    with pytest.raises(OutputError, match="fingerprint disagrees"):
-        publish_atomic(tmp_path / "out3", "run-x", fingerprint, list(records), expected=lying)
+    honest = json.loads(json.dumps(manifest))
+    honest["stage_i_run"] = _stage_i_run_block(lying)
+    with pytest.raises(OutputError, match="trusted post-Pass-1 result committed to"):
+        publish_atomic(tmp_path / "out3", "run-x", honest, list(records), expected=lying)
 
 
 def test_r1_c3b_per_node_token_totals_are_reconciled_against_the_records(tmp_path: Path):
@@ -2102,7 +2135,15 @@ def test_r1_c3b_per_node_token_totals_are_reconciled_against_the_records(tmp_pat
         "serialized_tokens": 42,
         "unique_cleaned_identities": 6,
     }
-    expected = _expected_for(_pass1_for([dict(n) for n in nodes], projection, dict(totals)))
+    binding_digests = {"ib_b_p": "6" * 64, "ib_b_q": "7" * 64}
+    expected = _expected_for(
+        _pass1_for(
+            [dict(n) for n in nodes],
+            projection,
+            dict(totals),
+            binding_digests=binding_digests,
+        )
+    )
     manifest = {
         "schema_version": MANIFEST_SCHEMA,
         "record_schema_version": RECORD_SCHEMA,
@@ -2113,7 +2154,7 @@ def test_r1_c3b_per_node_token_totals_are_reconciled_against_the_records(tmp_pat
         "nodes": [dict(n) for n in nodes],
         "node_binding_projection": projection,
         "ownership_matrix": {},
-        "bindings": {"ib_b_p": "6" * 64, "ib_b_q": "7" * 64},
+        "bindings": dict(binding_digests),
         "environment": {
             "python_executable": REQUIRED_PYTHON_EXECUTABLE,
             "python_version": REQUIRED_PYTHON_VERSION,
@@ -2662,6 +2703,8 @@ def test_r1_t2_run_identity_changes_with_every_bound_field():
         h_predictions_sha256="6" * 64,
         owner_graph_sha256="7" * 64,
         node_binding_projection_sha256="8" * 64,
+        environment_sha256="d" * 64,
+        binding_document_digests_sha256="e" * 64,
     )
     downstream = dict(
         post_pass1_result_identity_sha256="b" * 64,
@@ -3368,10 +3411,13 @@ def test_r3_a_expected_result_is_frozen_before_any_materialization(tmp_path: Pat
     from pretrain.stage_i_realize_v1 import _freeze_pass1_result
 
     payload = {"schema_version": PASS1_RESULT_SCHEMA}
-    first = _freeze_pass1_result(tmp_path, payload, None)
+    first, installed_digest = _freeze_pass1_result(tmp_path, payload, None)
     assert first.parent == tmp_path
     assert first.read_bytes() == canonical_json_bytes(payload)
-    with pytest.raises(RealizationError, match="refusing to overwrite"):
+    # R4-A: the returned identity is the INSTALLED object's, re-read from disk.
+    assert installed_digest == hashlib.sha256(canonical_json_bytes(payload)).hexdigest()
+    assert installed_digest == sha256_file(first)
+    with pytest.raises(RealizationError, match="refusing to replace"):
         _freeze_pass1_result(tmp_path, payload, first)
 
 
@@ -3533,7 +3579,6 @@ def test_r3_b_fully_resealed_projection_change_is_rejected(tmp_path: Path, rebin
 
 def test_r3_b_binding_authorized_globally_but_for_another_node_is_rejected(tmp_path: Path):
     """A real binding attached to a node that was never authorized to draw from it."""
-    projection = {"b_x": ["ib_x"], "b_y": ["ib_y"]}
     node = {
         "source_id": "b_x",
         "stage": "stage_b",
@@ -3557,10 +3602,8 @@ def test_r3_b_binding_authorized_globally_but_for_another_node_is_rejected(tmp_p
             "serialized_tokens": 21,
             "unique_cleaned_identities": 3,
         },
+        binding_digests={"ib_x": "6" * 64, "ib_y": "7" * 64},
     )
-    pass1["authorized_input_binding_ids"] = sorted({
-        b for allowed in projection.values() for b in allowed
-    })
     with pytest.raises(OutputError, match="outside its authorized projection"):
         validate_pass1_result(pass1)
 
@@ -3918,3 +3961,747 @@ def test_r3_published_identity_binds_plan_state_and_expected_result(tmp_path: Pa
         assert key in block, f"the published identity does not bind {key}"
     assert recompute_stage_i_run_identity(block) == expected.stage_i_run_identity
     assert block["post_pass1_result_identity_sha256"] == expected.result_identity_sha256
+
+
+# ================================================================================
+# R4 REPAIR REGRESSIONS — one per Codex R3 re-review finding
+# ================================================================================
+
+
+# ---- R4-A: atomic, durable, no-replace Layer-2 freeze ---------------------------
+
+
+def test_r4_a_concurrent_writers_cannot_both_install_the_layer_2_object(tmp_path: Path):
+    """R4-A. The exact Codex race: two writers, one destination, deterministic interleaving.
+
+    R3 asked ``path.exists()`` and then opened the destination truncating. Codex ran two writers
+    that both saw an absent file; both wrote, both reported success, and the second silently
+    replaced the first's frozen Layer-2 object -- the one thing a freeze exists to prevent.
+
+    The barrier here sits exactly where the check-then-act window used to be, and thread A is
+    then allowed to run to completion -- including its read-back -- before B writes at all. That
+    is the interleaving that reproduced the defect. With an atomic no-replace install there is no
+    window to lose: exactly one payload becomes the installed object, and the loser is refused.
+    """
+    import threading
+
+    import pretrain.stage_i_realize_v1 as module
+    from pretrain.stage_i_realize_v1 import _freeze_pass1_result
+
+    destination = tmp_path / "pass1_result-raced.json"
+    original = module._write_durable
+    reached = threading.Barrier(2)
+    a_finished = threading.Event()
+    local = threading.local()
+
+    def barriered(path, payload):
+        reached.wait(timeout=30)
+        if getattr(local, "label", None) == "B":
+            a_finished.wait(timeout=30)
+        return original(path, payload)
+
+    outcomes: dict[str, tuple[str, str]] = {}
+
+    def run(label: str, marker: str):
+        local.label = label
+        payload = {"schema_version": PASS1_RESULT_SCHEMA, "probe": marker}
+        try:
+            _, digest = _freeze_pass1_result(tmp_path, payload, destination)
+            outcomes[label] = ("SUCCESS", digest)
+        except BaseException as exc:  # noqa: BLE001 - both classes are meaningful here
+            outcomes[label] = ("FAILED", f"{type(exc).__name__}: {exc}")
+        finally:
+            if label == "A":
+                a_finished.set()
+
+    module._write_durable = barriered
+    try:
+        threads = [
+            threading.Thread(target=run, args=("A", "payload-a")),
+            threading.Thread(target=run, args=("B", "payload-b")),
+        ]
+        for thread in threads:
+            thread.start()
+        for thread in threads:
+            thread.join(timeout=60)
+    finally:
+        module._write_durable = original
+        a_finished.set()
+
+    successes = [label for label, (status, _) in outcomes.items() if status == "SUCCESS"]
+    assert len(successes) == 1, f"both writers installed a Layer-2 object: {outcomes}"
+    losers = [label for label in outcomes if label not in successes]
+    assert losers, "the race produced no loser; the fixture did not race"
+    assert "refusing to replace" in outcomes[losers[0]][1], outcomes[losers[0]][1]
+
+    # The installed bytes are exactly the winner's, and the digest it was handed is theirs.
+    winner = successes[0]
+    marker = "payload-a" if winner == "A" else "payload-b"
+    installed = json.loads(destination.read_text())
+    assert installed["probe"] == marker
+    assert outcomes[winner][1] == sha256_file(destination)
+    assert (
+        outcomes[winner][1]
+        == hashlib.sha256(
+            canonical_json_bytes({"schema_version": PASS1_RESULT_SCHEMA, "probe": marker})
+        ).hexdigest()
+    )
+
+    # No temp artifact survived, in either direction.
+    assert sorted(p.name for p in tmp_path.iterdir()) == [destination.name]
+
+
+def test_r4_a_preexisting_destination_is_never_replaced(tmp_path: Path):
+    """A Layer-2 object already at the destination survives, byte for byte."""
+    from pretrain.stage_i_realize_v1 import _freeze_pass1_result
+
+    destination = tmp_path / "pass1_result-existing.json"
+    destination.write_bytes(b"ORIGINAL-LAYER-2-OBJECT\n")
+    before = sha256_file(destination)
+    with pytest.raises(RealizationError, match="refusing to replace"):
+        _freeze_pass1_result(tmp_path, {"schema_version": PASS1_RESULT_SCHEMA}, destination)
+    assert sha256_file(destination) == before
+    assert destination.read_bytes() == b"ORIGINAL-LAYER-2-OBJECT\n"
+    assert sorted(p.name for p in tmp_path.iterdir()) == [destination.name]
+
+
+def test_r4_a_install_uses_an_atomic_no_replace_primitive(tmp_path: Path):
+    """Structural + behavioural: the install is `os.link`, and it really is no-replace here.
+
+    ``os.replace`` is deliberately absent from this path -- it replaces by definition. The
+    no-replace property is the kernel's, so it is asserted against the actual filesystem the
+    frozen environment runs on rather than assumed.
+    """
+    import os
+
+    from pretrain.stage_i_realize_v1 import _install_no_replace
+
+    function = _function_source("pretrain/stage_i_realize_v1.py", "_install_no_replace")
+    linked = [
+        node
+        for node in ast.walk(function)
+        if isinstance(node, ast.Attribute) and node.attr in {"link", "replace", "rename"}
+    ]
+    assert [node.attr for node in linked] == ["link"], (
+        "installation must use os.link; os.replace/os.rename replace an existing destination"
+    )
+    freeze = _function_source("pretrain/stage_i_realize_v1.py", "_freeze_pass1_result")
+    assert not [
+        node
+        for node in ast.walk(freeze)
+        if isinstance(node, ast.Attribute) and node.attr in {"replace", "rename"}
+    ], "the freeze must not fall back to a replacing primitive"
+    # ...and no check-then-act existence test survives in the freeze.
+    assert not [
+        node
+        for node in ast.walk(freeze)
+        if isinstance(node, ast.Attribute) and node.attr == "exists"
+    ], "an exists() pre-check reintroduces the TOCTOU window"
+
+    source, destination = tmp_path / "a.tmp", tmp_path / "dest"
+    source.write_bytes(b"first")
+    _install_no_replace(source, destination)
+    assert destination.read_bytes() == b"first"
+    other = tmp_path / "b.tmp"
+    other.write_bytes(b"second")
+    with pytest.raises(RealizationError, match="refusing to replace"):
+        _install_no_replace(other, destination)
+    assert destination.read_bytes() == b"first"
+    with pytest.raises(FileExistsError):
+        os.link(other, destination)
+
+
+def test_r4_a_freeze_flushes_and_fsyncs_the_file_and_the_directory(tmp_path: Path):
+    """Durability: the payload is fsynced before install, and the directory after it."""
+    import os
+
+    import pretrain.stage_i_realize_v1 as module
+    from pretrain.stage_i_realize_v1 import _freeze_pass1_result
+
+    synced: list[str] = []
+    original = os.fsync
+
+    def record(fd):
+        try:
+            synced.append("dir" if os.path.isdir(f"/proc/self/fd/{fd}") else "file")
+        except OSError:  # pragma: no cover - defensive
+            synced.append("unknown")
+        return original(fd)
+
+    monkey = module.os
+    monkey.fsync = record
+    try:
+        path, _digest = _freeze_pass1_result(
+            tmp_path, {"schema_version": PASS1_RESULT_SCHEMA}, None
+        )
+    finally:
+        monkey.fsync = original
+    assert "file" in synced, "the Layer-2 payload was not fsynced before installation"
+    assert "dir" in synced, "the containing directory was not fsynced after installation"
+    assert synced.index("file") < synced.index("dir"), (
+        "the directory must be fsynced after the file, not before"
+    )
+    assert path.is_file()
+
+
+# ---- R4-B: the frozen executable is not negotiable ------------------------------
+
+
+def test_r4_b_no_public_executable_bypass_exists():
+    """R4-B. Codex passed ``require_executable=False`` and authorized under a foreign interpreter."""
+    import inspect
+
+    import pretrain.stage_i_realize_v1 as module
+
+    for name in ("authorize_plan", "verify_environment", "_derive_authorized_state"):
+        parameters = inspect.signature(getattr(module, name)).parameters
+        assert "require_executable" not in parameters, (
+            f"{name} still exposes a caller-controlled executable relaxation: {list(parameters)}"
+        )
+    # Nothing anywhere in the module may still thread that keyword through.
+    source = (ROOT / "pretrain/stage_i_realize_v1.py").read_text()
+    tree = ast.parse(source)
+    keywords = [
+        node
+        for node in ast.walk(tree)
+        if isinstance(node, ast.keyword) and node.arg == "require_executable"
+    ]
+    assert not keywords, "a call still passes require_executable"
+    # The CLI cannot ask for it either.
+    assert "--require-executable" not in source
+
+
+def test_r4_b_wrong_executable_fails_through_the_default_path(live_plan_path, monkeypatch):
+    """The default path -- the only path -- refuses a foreign interpreter."""
+    import pretrain.stage_i_realize_v1 as module
+
+    monkeypatch.setattr(
+        module,
+        "current_environment",
+        lambda: Environment(
+            python_executable="/definitely/not/the/frozen/python",
+            python_version=REQUIRED_PYTHON_VERSION,
+            tokenizers_version=REQUIRED_TOKENIZERS_VERSION,
+        ),
+    )
+    with pytest.raises(RealizationError, match="python executable .* is not the frozen"):
+        authorize_plan(live_plan_path, sha256_file(live_plan_path))
+    with pytest.raises(RealizationError, match="python executable .* is not the frozen"):
+        module.verify_environment(module.current_environment())
+
+
+def test_r4_b_runtime_rederivation_rechecks_the_executable(live_plan_path, monkeypatch):
+    """A context authorized under the frozen interpreter must not revalidate under another."""
+    import pretrain.stage_i_realize_v1 as module
+
+    context = authorize_plan(live_plan_path, sha256_file(live_plan_path))
+    context.revalidate()
+    monkeypatch.setattr(
+        module,
+        "current_environment",
+        lambda: Environment(
+            python_executable="/definitely/not/the/frozen/python",
+            python_version=REQUIRED_PYTHON_VERSION,
+            tokenizers_version=REQUIRED_TOKENIZERS_VERSION,
+        ),
+    )
+    with pytest.raises(RealizationError, match="python executable .* is not the frozen"):
+        context.revalidate()
+    with pytest.raises(RealizationError, match="python executable .* is not the frozen"):
+        resolve_authorized_state(context, "test")
+
+
+def test_r4_b_relaxing_the_environment_cannot_mint_registry_authority(live_plan_path, monkeypatch):
+    """Even with the check monkeypatched away in-process, no relaxed instance is an authority.
+
+    This is the strongest form of the requirement: a test that neutralises ``verify_environment``
+    entirely still cannot obtain a context that the registry recognises through any public route
+    other than a genuine ``authorize_plan``, and ``verify_environment`` itself mints nothing.
+    """
+    import pretrain.stage_i_realize_v1 as module
+
+    monkeypatch.setattr(module, "verify_environment", lambda environment: None)
+    monkeypatch.setattr(
+        module,
+        "current_environment",
+        lambda: Environment(
+            python_executable="/definitely/not/the/frozen/python",
+            python_version=REQUIRED_PYTHON_VERSION,
+            tokenizers_version=REQUIRED_TOKENIZERS_VERSION,
+        ),
+    )
+    # A relaxed derivation produces a plain state object, never a registry entry.
+    state = module._derive_authorized_state(live_plan_path, sha256_file(live_plan_path))
+    assert isinstance(state, module.CanonicalAuthorizedState)
+    assert not isinstance(state, AuthorizedIContext)
+    with pytest.raises(RealizationError, match="requires an authorized Stage-I context"):
+        module._require_authorized(state, "test")
+    # And the relaxed environment is recorded in the state, so it cannot masquerade as frozen.
+    assert state.environment.python_executable == "/definitely/not/the/frozen/python"
+
+
+# ---- R4-C: the authority base is the executing installation ---------------------
+
+
+def test_r4_c_canonical_root_is_derived_from_the_executing_module():
+
+    assert CANONICAL_REPO_ROOT == ROOT.resolve()
+    assert CANONICAL_REPO_ROOT == Path(ROOT / "pretrain/stage_i_realize_v1.py").resolve().parents[1]
+
+
+def test_r4_c_a_caller_cannot_relocate_the_authority_base(live_plan_path, tmp_path):
+    """R4-C. Codex authorized against an alternate root of hard links to identical resources."""
+    digest = sha256_file(live_plan_path)
+    # Omitting the root, or naming the real one, both work.
+    assert authorize_plan(live_plan_path, digest) is not None
+    assert authorize_plan(live_plan_path, digest, ROOT) is not None
+    for other in (tmp_path, Path("/tmp"), ROOT / "pretrain"):
+        with pytest.raises(RealizationError, match="not the executing Stage-I installation root"):
+            authorize_plan(live_plan_path, digest, other)
+
+
+def test_r4_c_alternate_hardlinked_root_cannot_authorize(accepted_h):
+    """The full Codex reproduction: byte-identical hard links under a different root.
+
+    Every content digest matches, because the files are literally the same inodes. What differs is
+    where they live -- and that is now load-bearing, so the alternate root is refused before any
+    comparable authorized state exists.
+    """
+    import os
+    import shutil
+    import tempfile
+
+    # Hard links require the same filesystem as the repository, so the alternate root is staged
+    # beside it rather than under the system temp directory.
+    staging = Path(tempfile.mkdtemp(dir=str(ROOT), prefix=".pytest-alt-root-"))
+    try:
+        alt_root = staging / "alt"
+        for relative in [
+            *IMPLEMENTATION_BUNDLE_FILES,
+            "runs/h_tooling_repair_v2_2026-08-21/policy/stage_i_source_graph_v1.json",
+        ]:
+            source = ROOT / relative
+            target = alt_root / relative
+            target.parent.mkdir(parents=True, exist_ok=True)
+            os.link(source, target)
+        # The links really are the same bytes, so nothing content-addressed distinguishes them.
+        for relative in IMPLEMENTATION_BUNDLE_FILES:
+            assert sha256_file(alt_root / relative) == sha256_file(ROOT / relative)
+            assert (alt_root / relative).stat().st_ino == (ROOT / relative).stat().st_ino
+
+        plan = _plan(accepted_h, commit=_head_commit())
+        path = staging / "alt_plan.json"
+        path.write_bytes(canonical_json_bytes(plan))
+        with pytest.raises(RealizationError, match="not the executing Stage-I installation root"):
+            authorize_plan(path, sha256_file(path), alt_root)
+        # ...and the same plan bytes under the real root are refused on their own terms, so the
+        # rejection above is about WHERE it was authorized from, not about the plan.
+        with pytest.raises(RealizationError):
+            authorize_plan(path, "0" * 64)
+    finally:
+        shutil.rmtree(staging, ignore_errors=True)
+
+
+@pytest.mark.parametrize(
+    "path_of,value",
+    [
+        (lambda p: ["resolved_paths", "repository_root"], "/somewhere/else"),
+        (lambda p: ["resolved_paths", "owner_graph"], "/somewhere/else/graph.json"),
+        (lambda p: ["resolved_paths", "candidate_plan"], "/somewhere/else/plan.json"),
+        (lambda p: ["resolved_paths", "tokenizer"], "/somewhere/else/tokenizer.json"),
+        (lambda p: ["resolved_paths", "reference_exclusion"], "/somewhere/else/excl.json"),
+        (lambda p: ["resolved_paths", "accepted_h_run_dir"], "/somewhere/else/h"),
+        (lambda p: ["resolved_paths", "accepted_h_census"], "/somewhere/else/census.json"),
+        (lambda p: ["resolved_paths", "accepted_h_predictions"], "/somewhere/else/pred.json"),
+        (lambda p: ["resolved_paths", "accepted_h_complete"], "/somewhere/else/COMPLETE"),
+        (
+            lambda p: ["resolved_paths", "accepted_h_evidence_manifest"],
+            "/somewhere/else/SHA256SUMS",
+        ),
+        (lambda p: ["resolved_paths", "authorities", "hq_policy"], "/somewhere/else/policy.json"),
+        (
+            lambda p: ["resolved_paths", "implementation_files", "pretrain/stage_i_select_v1.py"],
+            "/somewhere/else/select.py",
+        ),
+        (
+            lambda p: [
+                "resolved_paths",
+                "input_documents",
+                sorted(p["resolved_paths"]["input_documents"])[0],
+            ],
+            "/somewhere/else/documents.jsonl",
+        ),
+        (
+            lambda p: [
+                "resolved_paths",
+                "input_release_manifests",
+                sorted(p["resolved_paths"]["input_release_manifests"])[0],
+            ],
+            "/somewhere/else/manifest.json",
+        ),
+        (
+            lambda p: [
+                "resolved_paths",
+                "input_eligibility_indexes",
+                sorted(p["resolved_paths"]["input_eligibility_indexes"])[0],
+            ],
+            "/somewhere/else/index.bin",
+        ),
+    ],
+)
+def test_r4_c_every_resolved_path_is_bound_into_the_authorized_state(
+    authorized_state, path_of, value
+):
+    """R4-C. Path identity is as load-bearing as content identity, resource by resource."""
+    payload = _payload_of(authorized_state)
+    reference = hashlib.sha256(canonical_json_bytes(payload)).hexdigest()
+    assert reference == authorized_state.state_sha256
+
+    path = path_of(payload)
+    cursor = payload
+    for key in path[:-1]:
+        cursor = cursor[key]
+    assert cursor[path[-1]] != value
+    assert str(cursor[path[-1]]).startswith("/"), "resolved paths must be absolute"
+    cursor[path[-1]] = value
+    assert hashlib.sha256(canonical_json_bytes(payload)).hexdigest() != reference, (
+        f"{path} is not bound into the canonical authorized state"
+    )
+
+
+def test_r4_c_resolved_paths_agree_with_the_state_and_are_canonical(authorized_state):
+    resolved = authorized_state.resolved_paths
+    assert resolved["repository_root"] == str(ROOT.resolve())
+    assert resolved["tokenizer"] == str(authorized_state.tokenizer_path)
+    assert resolved["reference_exclusion"] == str(authorized_state.reference_exclusion_path)
+    assert resolved["owner_graph"] == str(authorized_state.graph_path)
+    assert resolved["accepted_h_run_dir"] == str(authorized_state.h_run_dir)
+    assert resolved["accepted_h_census"] == str(authorized_state.accepted.census_path)
+    assert resolved["accepted_h_predictions"] == str(authorized_state.accepted.predictions_path)
+    assert resolved["accepted_h_complete"] == str(authorized_state.accepted.complete_path)
+    # One canonical rule, applied everywhere: fully resolved, absolute, no relative segments.
+
+    def walk(value):
+        if isinstance(value, str):
+            yield value
+        elif isinstance(value, Mapping):
+            for child in value.values():
+                yield from walk(child)
+
+    for spelling in walk(resolved):
+        assert spelling.startswith("/"), spelling
+        assert str(Path(spelling).resolve()) == spelling, spelling
+    assert set(authorized_state.binding_document_digests) == set(authorized_state.graph.bindings)
+
+
+# ---- R4-D: Layer-3 environment and binding digests must be trusted --------------
+
+
+def test_r4_d_layer2_carries_the_trusted_environment_and_binding_digests(authorized_state):
+    """The expectations come from canonical Layer-1 state, never from the manifest."""
+    gate = dict.fromkeys(_FIXTURE_GATE, True)
+    selections = _selections_for(authorized_state)
+    pass1 = build_pass1_result(selections, authorized_state, gate)
+    assert pass1["environment"] == dict(authorized_state.environment.as_canonical())
+    assert pass1["binding_document_digests"] == {
+        binding_id: authorized_state.graph.bindings[binding_id].documents_sha256
+        for binding_id in authorized_state.graph.bindings
+    }
+    assert pass1["authorization"]["environment_sha256"] == environment_sha256(pass1["environment"])
+    assert pass1["authorization"]["binding_document_digests_sha256"] == (
+        binding_document_digests_sha256(pass1["binding_document_digests"])
+    )
+    expected = _expected_for(pass1)
+    assert dict(expected.environment) == dict(FROZEN_ENVIRONMENT)
+    assert expected.environment_sha256 == pass1["authorization"]["environment_sha256"]
+
+
+@pytest.mark.parametrize(
+    "mutation,match",
+    [
+        (
+            lambda m: m.__setitem__(
+                "environment",
+                {
+                    "python_executable": "/usr/bin/python3",
+                    "python_version": REQUIRED_PYTHON_VERSION,
+                    "tokenizers_version": REQUIRED_TOKENIZERS_VERSION,
+                },
+            ),
+            "python_executable",
+        ),
+        (
+            lambda m: m["environment"].__setitem__("python_version", "3.13.9"),
+            "python_version",
+        ),
+        (
+            lambda m: m["environment"].__setitem__("tokenizers_version", "0.99.0"),
+            "tokenizers_version",
+        ),
+        (
+            lambda m: m["environment"].__setitem__("unknown_environment_field", "accepted"),
+            "carries unknown field",
+        ),
+        (lambda m: m["environment"].pop("python_executable"), "is missing field"),
+        (lambda m: m.__setitem__("environment", {}), "is missing field"),
+    ],
+)
+def test_r4_d_false_layer3_environment_is_rejected(tmp_path: Path, mutation, match):
+    """R4-D. Codex changed the manifest's environment and resealed everything else."""
+    manifest, records, expected = _publishable(tmp_path, count=3)
+    mutation(manifest)
+    with pytest.raises(OutputError, match=match):
+        publish_atomic(tmp_path / "out", "run-x", manifest, records, expected=expected)
+    assert not (tmp_path / "out" / "run-x").exists()
+
+
+@pytest.mark.parametrize(
+    "mutation,match",
+    [
+        (lambda m: m.__setitem__("bindings", {"ib_x": "0" * 64}), "trusted input-binding"),
+        (
+            lambda m: m.__setitem__("bindings", {"ib_x": "6" * 64, "ib_extra": "7" * 64}),
+            "the plan never authorized|trusted input-binding",
+        ),
+        (lambda m: m.__setitem__("bindings", {"ib_other": "6" * 64}), "never authorized"),
+    ],
+)
+def test_r4_d_false_layer3_binding_digests_are_rejected(tmp_path: Path, mutation, match):
+    """R4-D. Codex replaced a binding release digest with zeros and resealed the rest."""
+    manifest, records, expected = _publishable(tmp_path, count=3)
+    mutation(manifest)
+    with pytest.raises(OutputError, match=match):
+        publish_atomic(tmp_path / "out", "run-x", manifest, records, expected=expected)
+
+
+@pytest.mark.parametrize("what", ["environment", "bindings"])
+def test_r4_d_consumer_rejects_a_fully_resealed_provenance_change(tmp_path: Path, what):
+    """The strict consumer must refuse the same thing, on a completely resealed publication.
+
+    Every unrelated Layer-3 digest -- shard, manifest, COMPLETE, run identity -- is regenerated,
+    so the fixture reaches the trusted-provenance comparison rather than a generic check. The
+    Layer-1/Layer-2 expectation supplied out of band is held fixed throughout.
+    """
+    manifest, records, expected = _publishable(tmp_path, count=4)
+    final = publish_atomic(tmp_path / "out", "run-x", manifest, records, expected=expected)
+    load_published_realization(final, expected=expected)  # valid before tampering
+
+    def falsify(obj):
+        if what == "environment":
+            obj["environment"] = {
+                "python_executable": "/usr/bin/python3",
+                "python_version": "3.13.9",
+                "tokenizers_version": "0.99.0",
+            }
+        else:
+            obj["bindings"] = {"ib_x": "0" * 64}
+
+    _fully_reseal(final, lambda lines: b"".join(line + b"\n" for line in lines), falsify)
+    with pytest.raises(OutputError, match="frozen Stage-I environment|trusted input-binding"):
+        load_published_realization(final, expected=expected)
+
+
+def test_r4_d_published_identity_binds_environment_and_binding_digests(tmp_path: Path):
+    """Both new anchors participate in the published run identity."""
+    manifest, _records, expected = _publishable(tmp_path, count=3)
+    block = manifest["stage_i_run"]
+    assert block["environment_sha256"] == expected.environment_sha256
+    assert block["binding_document_digests_sha256"] == expected.binding_document_digests_sha256
+    assert recompute_stage_i_run_identity(block) == expected.stage_i_run_identity
+    for key in ("environment_sha256", "binding_document_digests_sha256"):
+        altered = {**dict(expected.authorization), key: "0" * 64}
+        assert (
+            stage_i_published_run_identity(
+                altered,
+                post_pass1_result_identity_sha256=expected.result_identity_sha256,
+                selection_sequence_commitment_map_sha256=(
+                    expected.selection_sequence_commitment_map_sha256
+                ),
+            )
+            != expected.stage_i_run_identity
+        )
+
+
+def test_r4_d_reconciliation_never_takes_the_manifest_as_its_own_expectation():
+    """Structural: the environment and binding comparisons read `expected`, not the manifest."""
+    for name in ("_reconcile_environment", "_reconcile_binding_digests"):
+        function = _function_source("pretrain/stage_i_output_v1.py", name)
+        attributes = {
+            node.attr
+            for node in ast.walk(function)
+            if isinstance(node, ast.Attribute) and getattr(node.value, "id", None) == "expected"
+        }
+        assert attributes, f"{name} does not consult the trusted expectation at all"
+
+
+# ---- R4-E: physical facts are reconciled first ----------------------------------
+
+
+def test_r4_e_physical_mismatch_is_reported_before_identity(tmp_path: Path):
+    """R4-E. A false total plus an invalid identity must fail on the false total.
+
+    Codex found the combined fixture failing on the run identity, which hides the concrete,
+    diagnosable defect behind a downstream one. Both faults are present here; the physical one is
+    the one that must surface.
+    """
+    manifest, records, expected = _publishable(tmp_path, count=3)
+    manifest["totals"]["serialized_tokens"] = 22
+    manifest["nodes"][0]["selected_serialized_tokens"] = 22
+    manifest["stage_i_run"] = {**manifest["stage_i_run"], "run_identity": "0" * 64}
+    with pytest.raises(OutputError, match="serialized_tokens is 22 but the staged records"):
+        publish_atomic(tmp_path / "out", "run-x", manifest, records, expected=expected)
+    assert not (tmp_path / "out" / "run-x").exists()
+
+    # The isolated identity fault is still rejected on its own terms.
+    clean, records2, expected2 = _publishable(tmp_path, count=3)
+    clean["stage_i_run"] = {**clean["stage_i_run"], "run_identity": "0" * 64}
+    with pytest.raises(OutputError, match="run identity"):
+        publish_atomic(tmp_path / "out2", "run-x", clean, records2, expected=expected2)
+
+
+def test_r4_e_reconciliation_runs_physical_checks_before_layer_2_checks():
+    """Structural: the order is part of the contract, not an accident of call sites."""
+    function = _function_source("pretrain/stage_i_output_v1.py", "reconcile_manifest_with_audit")
+    order = [
+        line
+        for line in _call_lines_by_name(function)
+        if line[1]
+        in {
+            "_reconcile_physical",
+            "_reconcile_run_identity",
+            "_reconcile_projection",
+            "_reconcile_environment",
+            "_reconcile_binding_digests",
+            "_reconcile_expected_result",
+        }
+    ]
+    names = [name for _line, name in sorted(order)]
+    assert names[0] == "_reconcile_physical", f"physical reconciliation must run first, got {names}"
+    assert set(names[1:]) == {
+        "_reconcile_run_identity",
+        "_reconcile_projection",
+        "_reconcile_environment",
+        "_reconcile_binding_digests",
+        "_reconcile_expected_result",
+    }
+
+
+# ---- R4-F: the manifest's shape is closed before anything indexes it -------------
+
+
+@pytest.mark.parametrize(
+    "mutation,match",
+    [
+        (lambda m: m.pop("stage_i_run"), r"missing field\(s\): \['stage_i_run'\]"),
+        (lambda m: m.__setitem__("stage_i_run", ["not", "an", "object"]), "must be a JSON object"),
+        (lambda m: m.__setitem__("stage_i_run", None), "must be a JSON object"),
+        (lambda m: m.__setitem__("stage_i_run", "text"), "must be a JSON object"),
+        (lambda m: m.pop("environment"), r"missing field\(s\): \['environment'\]"),
+        (lambda m: m.__setitem__("environment", []), "must be a JSON object"),
+        (lambda m: m.pop("bindings"), r"missing field\(s\): \['bindings'\]"),
+        (lambda m: m.__setitem__("totals", None), "must be a JSON object"),
+        (lambda m: m.__setitem__("nodes", {}), "must be a JSON array"),
+        (lambda m: m.__setitem__("shards", None), "must be a JSON array"),
+        (lambda m: m.__setitem__("surprise", 1), "unknown field"),
+    ],
+)
+def test_r4_f_malformed_manifest_shape_fails_closed(tmp_path: Path, mutation, match):
+    """R4-F. An absent or mistyped block is a controlled refusal, never a raw KeyError."""
+    manifest, _records, expected = _publishable(tmp_path, count=3)
+    mutation(manifest)
+    audit = _StubAudit()
+    with pytest.raises(OutputError, match=match):
+        reconcile_manifest_with_audit(manifest, audit, expected)
+    with pytest.raises(OutputError, match=match):
+        validate_manifest(manifest)
+
+
+def test_r4_f_no_raw_keyerror_escapes_reconciliation(tmp_path: Path):
+    """Every top-level manifest field can go missing without an uncontrolled exception."""
+    manifest, _records, expected = _publishable(tmp_path, count=3)
+    audit = _StubAudit()
+    for field in sorted(manifest):
+        broken = json.loads(json.dumps(manifest))
+        broken.pop(field)
+        with pytest.raises(OutputError):
+            reconcile_manifest_with_audit(broken, audit, expected)
+
+
+class _StubAudit:
+    """Just enough audit surface for shape checks to be the thing that fires."""
+
+    schema_version = "stub"
+    records = 3
+    content_tokens = 15
+    serialized_tokens = 21
+    shards = 1
+    unique_cleaned_identities = 3
+    per_shard = ()
+    nodes = ()
+
+
+def _head_commit() -> str:
+    import subprocess
+
+    return subprocess.run(
+        ["git", "-C", str(ROOT), "rev-parse", "HEAD"],
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout.strip()
+
+
+def _call_lines_by_name(function: ast.AST) -> list[tuple[int, str]]:
+    found = []
+    for node in ast.walk(function):
+        if isinstance(node, ast.Call):
+            func = node.func
+            name = func.attr if isinstance(func, ast.Attribute) else getattr(func, "id", None)
+            if name:
+                found.append((node.lineno, name))
+    return found
+
+
+def _selections_for(state):
+    """One selected document per graph node, enough to build a real Pass-1 result."""
+    selections = []
+    for index, node_spec in enumerate(state.graph.nodes):
+        identity = hashlib.sha256(f"r4-{node_spec.source_id}".encode()).hexdigest()
+        document = SelectedDocument(
+            cleaned_sha256=identity,
+            selection_ordinal_within_node=0,
+            input_binding_id=node_spec.input_binding_ids[0],
+            stable_input_record_ordinal=index,
+            raw_sha256=hashlib.sha256(f"raw-{node_spec.source_id}".encode()).hexdigest(),
+            input_record_sha256=hashlib.sha256(f"row-{node_spec.source_id}".encode()).hexdigest(),
+            canonical_fingerprint=hashlib.sha256(f"fp-{node_spec.source_id}".encode()).hexdigest(),
+            content_token_count=5,
+            serialized_token_count=7,
+        )
+        selections.append(
+            NodeSelection(
+                source_id=node_spec.source_id,
+                stage=node_spec.stage,
+                target_serialized_tokens=node_spec.target_serialized_tokens,
+                branch="ORDINARY",
+                selection_mode="SEEDED_HASH",
+                pre_exclusion_unique_identities=1,
+                g2_excluded_identities=0,
+                prior_commit_excluded_identities=0,
+                exclusions_by_owner={},
+                post_exclusion_candidate_identities=1,
+                post_exclusion_candidate_serialized_tokens=7,
+                selected_identities=1,
+                selected_serialized_tokens=7,
+                crossing_identity=None,
+                crossing_document_serialized_tokens=None,
+                actual_overshoot_tokens=0,
+                residual_identities=0,
+                residual_serialized_tokens=0,
+                selection_fingerprint=oracle_fingerprint([identity]),
+                feasible=True,
+                boundary_evidence={},
+                selected=(document,),
+            )
+        )
+    return selections

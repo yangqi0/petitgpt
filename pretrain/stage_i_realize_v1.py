@@ -35,6 +35,7 @@ import argparse
 from collections.abc import Iterator, Mapping, Sequence
 from dataclasses import dataclass
 import hashlib
+import os
 from pathlib import Path, PurePosixPath
 import platform
 import shutil
@@ -48,6 +49,14 @@ import weakref
 ROOT = str(Path(__file__).resolve().parents[1])
 if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
+
+# R4-C: the canonical repository root is derived from the executing Stage-I installation, not
+# from anything a caller supplies. This module lives at <root>/pretrain/stage_i_realize_v1.py, so
+# the root is its resolved parent's parent. `resolve()` is the single canonical rule applied to
+# every repository-bound path in this module: symlinks are followed exactly once, to their real
+# location, so two spellings of the same file cannot drift into two identities -- and two
+# byte-identical copies under different roots cannot collapse into one.
+CANONICAL_REPO_ROOT = Path(__file__).resolve().parents[1]
 
 from pretrain.build_pretrain_shards import (  # noqa: E402
     clean_text,
@@ -88,6 +97,9 @@ from pretrain.stage_i_graph_v2 import (  # noqa: E402
     verify_binding_inputs,
 )
 from pretrain.stage_i_output_v1 import (  # noqa: E402
+    FROZEN_PYTHON_EXECUTABLE,
+    FROZEN_PYTHON_VERSION,
+    FROZEN_TOKENIZERS_VERSION,
     MANIFEST_SCHEMA,
     NODE_BINDING_PROJECTION_SCHEMA,
     PASS1_RESULT_SCHEMA,
@@ -98,7 +110,9 @@ from pretrain.stage_i_output_v1 import (  # noqa: E402
     STAGE_I_RUN_IDENTITY_SCHEMA,
     OutputError,
     TrustedExpectedResult,
+    binding_document_digests_sha256,
     build_record,
+    environment_sha256,
     load_published_realization,
     load_trusted_expected_result,
     node_binding_projection_sha256,
@@ -232,9 +246,12 @@ IMPLEMENTATION_BUNDLE_FILES = (
     "pretrain/stage_i_select_v1.py",
 )
 
-REQUIRED_PYTHON_EXECUTABLE = "/workspace/petitgpt/.venv/bin/python"
-REQUIRED_PYTHON_VERSION = "3.10.12"
-REQUIRED_TOKENIZERS_VERSION = "0.22.2"
+# The frozen environment contract is defined in the output module so the published manifest's
+# environment block can be closed against exact values without inverting the dependency order.
+# These names stay here because the plan, the CLI and the contract tests are written against them.
+REQUIRED_PYTHON_EXECUTABLE = FROZEN_PYTHON_EXECUTABLE
+REQUIRED_PYTHON_VERSION = FROZEN_PYTHON_VERSION
+REQUIRED_TOKENIZERS_VERSION = FROZEN_TOKENIZERS_VERSION
 
 ACCEPTED_H_RUN_DIR = "runs/h_production_v2_2026-08-23"
 ACCEPTED_H_RUN_IDENTITY = "63f5ef84ab56c6da7f76ecfb9e9196a3e98a791d607224c83a9c183c32be111a"
@@ -248,7 +265,11 @@ ACCEPTED_H_COMPLETE_SHA256 = "b4d340afde8db55830115d4e7ba21757215122518567be4dad
 # fields reactively as gaps were found; v2 is generated from the exact authorized plan bytes and
 # the exact plan-bound artifacts, and covers every field consumed by Pass-1 selection, the H/I
 # gate, locator/binding resolution, materialization, manifest construction and publication.
-CANONICAL_STATE_SCHEMA = "petitgpt-stage-i-canonical-state-v2"
+# R4-C: v3 adds the canonical executing repository root and the fully resolved absolute location
+# of every repository-bound resource, alongside the content digests v2 already carried. Path
+# identity and content identity are both load-bearing: byte-identical hard links under a different
+# root must not produce the same authorized state.
+CANONICAL_STATE_SCHEMA = "petitgpt-stage-i-canonical-state-v3"
 
 # The six dimensions the frozen H/I contract requires, plus every other field Stage H publishes.
 # Comparing the full projection rather than only the six is free and strictly stronger.
@@ -317,13 +338,18 @@ def current_environment() -> Environment:
     )
 
 
-def verify_environment(environment: Environment, *, require_executable: bool = True) -> None:
+def verify_environment(environment: Environment) -> None:
     """Stop before any corpus processing if the interpreter is not the frozen one.
 
     The tokenizers version is the load-bearing check: serialized token counts are a function of
     the tokenizer library, so running Stage I under a different build would silently produce token
     totals that cannot equal Stage H's and would only surface as a comparison failure after a
     multi-hour scan. Failing here costs seconds instead.
+
+    R4-B: there is deliberately no parameter here. R3 accepted ``require_executable=False`` from
+    any caller of ``authorize_plan``, and runtime revalidation passed it unconditionally, so the
+    frozen-executable check was one keyword away from being off on every load-bearing boundary.
+    All three fields are checked, always, on every authorization and every rederivation.
     """
     _require(
         environment.tokenizers_version == REQUIRED_TOKENIZERS_VERSION,
@@ -335,12 +361,11 @@ def verify_environment(environment: Environment, *, require_executable: bool = T
         environment.python_version == REQUIRED_PYTHON_VERSION,
         f"python {environment.python_version} is not the frozen {REQUIRED_PYTHON_VERSION}",
     )
-    if require_executable:
-        _require(
-            environment.python_executable == REQUIRED_PYTHON_EXECUTABLE,
-            f"python executable {environment.python_executable} is not the frozen "
-            f"{REQUIRED_PYTHON_EXECUTABLE}",
-        )
+    _require(
+        environment.python_executable == REQUIRED_PYTHON_EXECUTABLE,
+        f"python executable {environment.python_executable} is not the frozen "
+        f"{REQUIRED_PYTHON_EXECUTABLE}",
+    )
 
 
 # --------------------------------------------------------------------- accepted H binding
@@ -389,6 +414,13 @@ class AcceptedH:
     predictions_sha256: str
     complete_sha256: str
     run_identity: str
+    # R4-C: where each bound artifact actually lives, fully resolved. Content identity alone let
+    # a hard-linked copy under another root claim the same authority.
+    published_dir: Path = Path()
+    census_path: Path = Path()
+    predictions_path: Path = Path()
+    complete_path: Path = Path()
+    evidence_manifest_path: Path = Path()
 
     def node(self, source_id: str) -> Mapping[str, Any]:
         for node in self.census["nodes"]:
@@ -515,13 +547,18 @@ def load_accepted_h(
     )
 
     return AcceptedH(
-        run_dir=run_dir,
+        run_dir=run_dir.resolve(),
         census=census,
         predictions=predictions,
         census_sha256=census_sha256,
         predictions_sha256=predictions_sha256,
         complete_sha256=complete_sha256,
         run_identity=expected_run_identity,
+        published_dir=published[0].resolve(),
+        census_path=(published[0] / "census.json").resolve(),
+        predictions_path=predictions_path.resolve(),
+        complete_path=(published[0] / "COMPLETE").resolve(),
+        evidence_manifest_path=(run_dir / "SHA256SUMS").resolve(),
     )
 
 
@@ -1075,6 +1112,10 @@ def build_pass1_result(
             for source_id, allowed in sorted(state.node_binding_projection.items())
         },
         "authorized_input_binding_ids": list(state.authorized_input_binding_ids),
+        # R4-D: trusted environment and trusted binding -> document digest projection, both
+        # derived from Layer-1 canonical state and frozen here before any byte is written.
+        "environment": dict(state.environment.as_canonical()),
+        "binding_document_digests": dict(state.binding_document_digests),
         "nodes": nodes,
         "totals": {
             "records": sum(s.selected_identities for s in selections),
@@ -1345,6 +1386,13 @@ def authorization_block(state: CanonicalAuthorizedState) -> dict[str, Any]:
         "node_binding_projection_sha256": node_binding_projection_sha256(
             state.node_binding_projection
         ),
+        # R4-D: the environment the run was authorized under, and the exact release digest of
+        # every authorized input binding. Both come from canonical Layer-1 state, so a published
+        # manifest cannot report provenance the authorized run never had.
+        "environment_sha256": environment_sha256(state.environment.as_canonical()),
+        "binding_document_digests_sha256": binding_document_digests_sha256(
+            state.binding_document_digests
+        ),
     }
 
 
@@ -1425,6 +1473,8 @@ class CanonicalAuthorizedState:
     authority_sha256: Mapping[str, str]
     node_binding_projection: Mapping[str, tuple[str, ...]]
     authorized_input_binding_ids: tuple[str, ...]
+    binding_document_digests: Mapping[str, str]
+    resolved_paths: Mapping[str, Any]
     canonical_payload: Mapping[str, Any]
     state_sha256: str
 
@@ -1446,6 +1496,7 @@ def _authorized_state_payload(
     tokenizer_path: str,
     reference_exclusion_path: str,
     node_binding_projection: Mapping[str, Sequence[str]],
+    resolved: Mapping[str, Any],
 ) -> dict[str, Any]:
     """The ONE closed canonical projection. Complete by construction, not by accretion.
 
@@ -1462,6 +1513,9 @@ def _authorized_state_payload(
     * the accepted Stage-H state -- run identity, the three bound digests, the complete canonical
       census and predictions documents, and the H/I gate values named explicitly;
     * every canonical path string, so an equivalent-but-different location is a different state;
+    * the canonical executing repository root and the fully resolved absolute location of every
+      repository-bound resource, so byte-identical copies under a different root are a different
+      state (R4-C);
     * the environment, the implementation bundle, and every schema/policy literal this
       implementation will stamp into the published result.
 
@@ -1660,6 +1714,8 @@ def _authorized_state_payload(
             source_id: list(allowed)
             for source_id, allowed in sorted(node_binding_projection.items())
         },
+        # --- R4-C: where all of this actually lives ---------------------------------------
+        "resolved_paths": dict(resolved),
     }
 
 
@@ -1983,12 +2039,30 @@ def _resolve_repo_path(repo_root: Path, relative: str) -> Path:
 # ------------------------------------------------------------------ derivation of the state
 
 
+def _require_canonical_repo_root(repo_root: Path | None) -> Path:
+    """R4-C: the authority base is the executing installation. A caller may confirm it, not move it.
+
+    Codex built an alternate root of hard links to byte-identical resources and authorized against
+    it; every content digest matched, so the canonical state was identical and the run would have
+    executed out of a directory nobody authorized. The root is now derived from this module's own
+    resolved location, and a caller-supplied value is accepted only when it names that same root.
+    """
+    if repo_root is None:
+        return CANONICAL_REPO_ROOT
+    resolved = Path(repo_root).resolve()
+    _require(
+        resolved == CANONICAL_REPO_ROOT,
+        f"repository root {resolved} is not the executing Stage-I installation root "
+        f"{CANONICAL_REPO_ROOT}; the authority base is the installation that is running, and a "
+        "caller cannot relocate it",
+    )
+    return CANONICAL_REPO_ROOT
+
+
 def _derive_authorized_state(
     plan_path: Path,
     expected_plan_sha256: str,
-    repo_root: Path,
-    *,
-    require_executable: bool,
+    repo_root: Path | None = None,
 ) -> CanonicalAuthorizedState:
     """Read the plan bytes, prove every bound artifact, and build the complete canonical state.
 
@@ -1997,6 +2071,8 @@ def _derive_authorized_state(
     partial re-checks of each other -- which is exactly how R1's and R2's revalidation missed
     graph, H and path substitution.
     """
+    repo_root = _require_canonical_repo_root(repo_root)
+    plan_path = Path(plan_path).resolve()
     payload, digest = read_authoritative_bytes(plan_path, max_bytes=1 << 28)
     _require(
         digest == expected_plan_sha256,
@@ -2024,7 +2100,7 @@ def _derive_authorized_state(
 
     # --- environment --------------------------------------------------------------------
     environment = current_environment()
-    verify_environment(environment, require_executable=require_executable)
+    verify_environment(environment)
 
     # --- the graph named by the PLAN, not by a CLI argument -----------------------------
     graph_path = _resolve_repo_path(repo_root, plan["graph_path"])
@@ -2145,6 +2221,43 @@ def _derive_authorized_state(
     frozen_accepted = _frozen_accepted(accepted)
     tokenizer_path = plan["authorities"]["tokenizer"]["path"]
     reference_path = plan["authorities"]["reference_exclusion"]["path"]
+
+    # --- R4-C: the fully resolved location of every repository-bound resource -------------
+    # One canonical rule: `Path.resolve()`. Applied to the root, to every plan-declared path, to
+    # every accepted-H artifact and to every input-binding file, so path identity is as
+    # load-bearing as content identity and cannot be satisfied by a copy somewhere else.
+    resolved_paths = {
+        "repository_root": str(repo_root),
+        "candidate_plan": str(plan_path),
+        "owner_graph": str(graph_path),
+        "tokenizer": str(_resolve_repo_path(repo_root, tokenizer_path)),
+        "reference_exclusion": str(_resolve_repo_path(repo_root, reference_path)),
+        "accepted_h_run_dir": str(accepted.run_dir),
+        "accepted_h_published_dir": str(accepted.published_dir),
+        "accepted_h_census": str(accepted.census_path),
+        "accepted_h_predictions": str(accepted.predictions_path),
+        "accepted_h_complete": str(accepted.complete_path),
+        "accepted_h_evidence_manifest": str(accepted.evidence_manifest_path),
+        "authorities": {
+            name: str(_resolve_repo_path(repo_root, relative))
+            for name, relative in sorted(authority_paths.items())
+        },
+        "implementation_files": {
+            member: str((repo_root / member).resolve()) for member in sorted(files)
+        },
+        "input_documents": {
+            binding_id: str(binding.documents_path.resolve())
+            for binding_id, binding in sorted(graph.bindings.items())
+        },
+        "input_release_manifests": {
+            binding_id: str(binding.release_manifest_path.resolve())
+            for binding_id, binding in sorted(graph.bindings.items())
+        },
+        "input_eligibility_indexes": {
+            binding_id: str(binding.eligibility_index_path.resolve())
+            for binding_id, binding in sorted(graph.bindings.items())
+        },
+    }
     payload_projection = _authorized_state_payload(
         plan_sha256=digest,
         plan=plan,
@@ -2161,6 +2274,7 @@ def _derive_authorized_state(
         tokenizer_path=tokenizer_path,
         reference_exclusion_path=reference_path,
         node_binding_projection=projection,
+        resolved=resolved_paths,
     )
     state_sha256 = hashlib.sha256(canonical_json_bytes(payload_projection)).hexdigest()
 
@@ -2183,6 +2297,11 @@ def _derive_authorized_state(
         authority_sha256=MappingProxyType(dict(sorted(authority_sha256.items()))),
         node_binding_projection=MappingProxyType(dict(sorted(projection.items()))),
         authorized_input_binding_ids=authorized_bindings,
+        binding_document_digests=MappingProxyType({
+            binding_id: graph.bindings[binding_id].documents_sha256
+            for binding_id in authorized_bindings
+        }),
+        resolved_paths=_deep_freeze(resolved_paths),
         canonical_payload=_deep_freeze(payload_projection),
         state_sha256=state_sha256,
     )
@@ -2291,11 +2410,10 @@ def _build_authorization_subsystem():
     def resolve_authorized_state(context: Any, where: str) -> CanonicalAuthorizedState:
         """Fresh derivation from the authorization-time plan bytes, proved equal to authorized."""
         authorized = require_authorized(context, where)
+        # R4-C/R4-B: re-derived from the executing installation, with the full environment
+        # contract -- including the exact frozen executable -- checked again from scratch.
         fresh = _derive_authorized_state(
-            authorized.plan_path,
-            authorized.plan_sha256,
-            authorized.repo_root,
-            require_executable=False,
+            authorized.plan_path, authorized.plan_sha256, authorized.repo_root
         )
         _require(
             fresh.state_sha256 == authorized.state_sha256,
@@ -2308,9 +2426,7 @@ def _build_authorization_subsystem():
     def authorize_plan(
         plan_path: Path,
         expected_plan_sha256: str,
-        repo_root: Path,
-        *,
-        require_executable: bool = True,
+        repo_root: Path | None = None,
     ) -> AuthorizedIContext:
         """Authorization is a capability, not a comparison.
 
@@ -2319,10 +2435,12 @@ def _build_authorization_subsystem():
         authorization for one plan cannot be reused for another, and nothing load-bearing is taken
         from a CLI argument. This is the only operation in the program that can add an entry to
         the authority registry.
+
+        R4-B/R4-C: there is no ``require_executable`` keyword and no way to relocate the authority
+        base. ``repo_root`` is optional and, when given, is only accepted if it names the
+        executing Stage-I installation root.
         """
-        state = _derive_authorized_state(
-            plan_path, expected_plan_sha256, repo_root, require_executable=require_executable
-        )
+        state = _derive_authorized_state(plan_path, expected_plan_sha256, repo_root)
         context = object.__new__(AuthorizedIContext)
         key = id(context)
 
@@ -2351,34 +2469,72 @@ def revalidate_authorized(context: Any) -> CanonicalAuthorizedState:
 PASS1_RESULT_PREFIX = "pass1_result"
 
 
-def _freeze_pass1_result(out_dir: Path, pass1: Mapping[str, Any], explicit: Path | None) -> Path:
-    """Write the post-Pass-1 expected result durably, outside the realization, before Pass 2.
+def _install_no_replace(temp: Path, destination: Path) -> None:
+    """Install ``temp`` at ``destination`` atomically, never replacing an existing object.
+
+    ``os.link`` is the primitive because its no-replace semantics are the kernel's, not ours: the
+    destination is created or the call fails with ``EEXIST``, with no window between the two and
+    no path on which an existing file is touched. ``os.replace`` is deliberately not used -- it
+    replaces by definition, which is precisely what a freeze must never do.
+
+    R4-A: R3 asked ``path.exists()`` and then opened the destination truncating. Two writers both
+    saw an absent file, both wrote, and the second silently replaced the first's frozen Layer-2
+    object while both reported success. There is no check-then-act here to lose.
+    """
+    try:
+        os.link(temp, destination)
+    except FileExistsError as exc:
+        raise RealizationError(
+            f"post-Pass-1 expected result already exists, refusing to replace: {destination}"
+        ) from exc
+    except OSError as exc:
+        raise RealizationError(
+            f"cannot install the post-Pass-1 expected result at {destination}: {exc}"
+        ) from exc
+
+
+def _freeze_pass1_result(
+    out_dir: Path, pass1: Mapping[str, Any], explicit: Path | None
+) -> tuple[Path, str]:
+    """Freeze the post-Pass-1 expected result durably, outside the realization, before Pass 2.
 
     Placed as a sibling of the run directory rather than inside it: an expectation that lives in
-    the tree it is meant to constrain is not an expectation. Refuses to overwrite, so the frozen
-    digest for a given expectation can never be quietly replaced by a later one.
+    the tree it is meant to constrain is not an expectation.
+
+    The sequence is: write a uniquely named sibling temp file on the same directory (so the
+    install is a same-filesystem operation), flush and fsync it, install it atomically with
+    no-replace semantics, fsync the directory so the name survives a crash, then read the
+    INSTALLED object back and hash it. The returned digest is the installed object's, not the
+    in-memory payload's, so everything downstream is named after bytes that are actually on disk.
     """
     payload = canonical_json_bytes(pass1)
     digest = hashlib.sha256(payload).hexdigest()
     path = explicit if explicit is not None else out_dir / f"{PASS1_RESULT_PREFIX}-{digest}.json"
-    _require(
-        not path.exists(),
-        f"post-Pass-1 expected result already exists, refusing to overwrite: {path}",
-    )
     path.parent.mkdir(parents=True, exist_ok=True)
-    _write_durable(path, payload)
+
+    handle, temp_name = tempfile.mkstemp(
+        dir=str(path.parent), prefix=f".{PASS1_RESULT_PREFIX}-", suffix=".tmp"
+    )
+    os.close(handle)
+    temp = Path(temp_name)
+    try:
+        _write_durable(temp, payload)
+        _install_no_replace(temp, path)
+    finally:
+        # The hard link keeps the inode alive; unlinking the temp name is pure cleanup and is
+        # safe on every exit path, including the one where installation lost the race.
+        temp.unlink(missing_ok=True)
     _fsync_directory(path.parent)
-    written, written_digest = read_authoritative_bytes(path, max_bytes=1 << 30)
+
+    installed, installed_digest = read_authoritative_bytes(path, max_bytes=1 << 30)
     _require(
-        written == payload and written_digest == digest,
+        installed == payload and installed_digest == digest,
         f"{path}: the frozen post-Pass-1 result does not read back as it was written",
     )
-    return path
+    return path, installed_digest
 
 
 def _fsync_directory(path: Path) -> None:
-    import os
-
     descriptor = os.open(path, os.O_RDONLY)
     try:
         os.fsync(descriptor)
@@ -2426,8 +2582,9 @@ def realize_and_publish(
     # --- layer 2 is created here, and its digest is fixed before a single record exists ----
     pass1 = build_pass1_result(selections, state, comparison)
     out_dir.mkdir(parents=True, exist_ok=True)
-    frozen_path = _freeze_pass1_result(out_dir, pass1, pass1_result_path)
-    pass1_sha256 = hashlib.sha256(canonical_json_bytes(pass1)).hexdigest()
+    # R4-A: the identity everything downstream is named after comes from re-reading the object
+    # that was actually installed, not from the payload that was handed to the installer.
+    frozen_path, pass1_sha256 = _freeze_pass1_result(out_dir, pass1, pass1_result_path)
     expected = trusted_expected_result(pass1, expected_sha256=pass1_sha256)
     run_name = f"run-{expected.stage_i_run_identity[:32]}"
 
@@ -2474,8 +2631,6 @@ def realize_and_publish(
 
 
 def _write_durable(path: Path, payload: bytes) -> None:
-    import os
-
     with open(path, "wb") as handle:
         handle.write(payload)
         handle.flush()
@@ -2500,8 +2655,7 @@ def main(argv: list[str] | None = None) -> int:
     plan_parser.add_argument("--repo-root", type=Path, default=Path(ROOT))
     plan_parser.add_argument("--implementation-commit", type=str, default=None)
 
-    env_parser = sub.add_parser("verify-environment", help="check the frozen interpreter contract")
-    env_parser.add_argument("--require-executable", action="store_true")
+    sub.add_parser("verify-environment", help="check the frozen interpreter contract")
 
     # The authoritative inputs are the plan, its owner-supplied digest, and where to write. The
     # graph, the accepted Stage-H run, every authority, every binding, the node set, the shard
@@ -2543,7 +2697,7 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.command == "verify-environment":
         environment = current_environment()
-        verify_environment(environment, require_executable=args.require_executable)
+        verify_environment(environment)
         print(canonical_json_bytes(environment.as_canonical()).decode("utf-8"), end="")
         return 0
 

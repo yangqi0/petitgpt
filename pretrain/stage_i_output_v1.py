@@ -61,6 +61,22 @@ DOCUMENTS_DIRNAME = "documents"
 SHARD_POLICY_VERSION = "petitgpt-stage-i-shard-policy-v1"
 RECORDS_PER_SHARD = 50_000
 
+# R4-D: the frozen Stage-H/I execution environment. Defined here rather than in the driver so the
+# published manifest's environment block can be closed against exact values without the output
+# contract importing the module that consumes it. The driver re-exports these names.
+FROZEN_PYTHON_EXECUTABLE = "/workspace/petitgpt/.venv/bin/python"
+FROZEN_PYTHON_VERSION = "3.10.12"
+FROZEN_TOKENIZERS_VERSION = "0.22.2"
+ENVIRONMENT_FIELDS = ("python_executable", "python_version", "tokenizers_version")
+FROZEN_ENVIRONMENT: Mapping[str, str] = MappingProxyType({
+    "python_executable": FROZEN_PYTHON_EXECUTABLE,
+    "python_version": FROZEN_PYTHON_VERSION,
+    "tokenizers_version": FROZEN_TOKENIZERS_VERSION,
+})
+_ENVIRONMENT_FIELD_SET = frozenset(ENVIRONMENT_FIELDS)
+ENVIRONMENT_SCHEMA = "petitgpt-stage-i-environment-v1"
+BINDING_DOCUMENT_DIGESTS_SCHEMA = "petitgpt-stage-i-binding-document-digests-v1"
+
 RECORD_FIELDS = (
     "schema_version",
     "stage",
@@ -289,12 +305,17 @@ _STAGE_I_RUN_FIELDS = frozenset({
     "h_predictions_sha256",
     "owner_graph_sha256",
     "node_binding_projection_sha256",
+    "environment_sha256",
+    "binding_document_digests_sha256",
     "post_pass1_result_identity_schema",
     "post_pass1_result_identity_sha256",
     "selection_sequence_commitment_version",
     "selection_sequence_commitment_map_sha256",
 })
-STAGE_I_RUN_IDENTITY_SCHEMA = "petitgpt-stage-i-run-identity-v3"
+# R4-D: v4 adds the trusted environment digest and the trusted binding-document-digest projection
+# to the published identity, so a manifest cannot report false canonical provenance under a name
+# the authorized run generated.
+STAGE_I_RUN_IDENTITY_SCHEMA = "petitgpt-stage-i-run-identity-v4"
 
 # The Layer-1 anchors every layer below restates. Held in one place so the post-Pass-1 result, the
 # published run identity and the manifest cannot drift into three slightly different opinions of
@@ -315,6 +336,8 @@ _AUTHORIZATION_FIELDS = frozenset({
     "h_predictions_sha256",
     "owner_graph_sha256",
     "node_binding_projection_sha256",
+    "environment_sha256",
+    "binding_document_digests_sha256",
 })
 _AUTHORIZATION_HEX_FIELDS = (
     "candidate_i_plan_sha256",
@@ -326,6 +349,8 @@ _AUTHORIZATION_HEX_FIELDS = (
     "h_predictions_sha256",
     "owner_graph_sha256",
     "node_binding_projection_sha256",
+    "environment_sha256",
+    "binding_document_digests_sha256",
 )
 
 
@@ -344,7 +369,38 @@ def node_binding_projection_sha256(projection: Mapping[str, Sequence[str]]) -> s
 
 NODE_BINDING_PROJECTION_SCHEMA = "petitgpt-stage-i-node-binding-projection-v1"
 SELECTION_SEQUENCE_MAP_SCHEMA = "petitgpt-stage-i-selection-sequence-map-v1"
-PASS1_RESULT_SCHEMA = "petitgpt-stage-i-pass1-result-v1"
+# R4-D: v2 adds the trusted environment projection and the trusted binding-document-digest
+# projection. The serialized semantics changed, so the version changed with them.
+PASS1_RESULT_SCHEMA = "petitgpt-stage-i-pass1-result-v2"
+
+
+def environment_sha256(environment: Mapping[str, str]) -> str:
+    """Closed, versioned identity of the execution environment a run was authorized under.
+
+    R4-D: the manifest recorded an environment block that nothing checked, so a published result
+    could claim a different interpreter, Python or tokenizers build than the one that produced it.
+    This digest is derived from canonical Layer-1 state, carried by the post-Pass-1 result and
+    folded into the published run identity.
+    """
+    payload = {
+        "schema_version": ENVIRONMENT_SCHEMA,
+        "environment": {key: environment[key] for key in ENVIRONMENT_FIELDS},
+    }
+    return hashlib.sha256(canonical_json_bytes(payload)).hexdigest()
+
+
+def binding_document_digests_sha256(digests: Mapping[str, str]) -> str:
+    """Closed, versioned identity of the input-binding -> document-digest projection.
+
+    R4-D: the manifest's ``bindings`` map was an unchecked observation, so a release digest could
+    be replaced with zeros and still publish. This commits to the exact map the authorized owner
+    graph binds.
+    """
+    payload = {
+        "schema_version": BINDING_DOCUMENT_DIGESTS_SCHEMA,
+        "digests": dict(sorted(digests.items())),
+    }
+    return hashlib.sha256(canonical_json_bytes(payload)).hexdigest()
 
 
 def selection_sequence_commitment_map_sha256(commitments: Mapping[str, str]) -> str:
@@ -388,6 +444,8 @@ def _run_identity_payload(
         "h_predictions_sha256": authorization["h_predictions_sha256"],
         "owner_graph_sha256": authorization["owner_graph_sha256"],
         "node_binding_projection_sha256": authorization["node_binding_projection_sha256"],
+        "environment_sha256": authorization["environment_sha256"],
+        "binding_document_digests_sha256": authorization["binding_document_digests_sha256"],
         "post_pass1_result_identity_schema": post_pass1_result_identity_schema,
         "post_pass1_result_identity_sha256": post_pass1_result_identity_sha256,
         "selection_sequence_commitment_version": selection_sequence_commitment_version,
@@ -444,6 +502,8 @@ def recompute_stage_i_run_identity(stage_i_run: Mapping[str, Any]) -> str:
 _PASS1_TOP_FIELDS = frozenset({
     "schema_version",
     "authorization",
+    "environment",
+    "binding_document_digests",
     "selection_sequence_commitment_version",
     "selection_sequence_commitments",
     "selection_sequence_commitment_map_sha256",
@@ -534,6 +594,10 @@ class TrustedExpectedResult:
     node_binding_projection: Mapping[str, tuple[str, ...]]
     node_binding_projection_sha256: str
     authorized_input_binding_ids: tuple[str, ...]
+    environment: Mapping[str, str]
+    environment_sha256: str
+    binding_document_digests: Mapping[str, str]
+    binding_document_digests_sha256: str
     nodes: tuple[TrustedExpectedNode, ...]
     totals: Mapping[str, int]
     ownership_matrix: Mapping[str, Mapping[str, int]]
@@ -588,6 +652,36 @@ def validate_pass1_result(payload: Any) -> dict[str, Any]:
         "pass-1 result was written against a different selection-sequence commitment version",
     )
 
+    # R4-D: the trusted environment. Closed on shape AND on the frozen values, so a Layer-2
+    # artifact cannot legitimise a run under a different interpreter or tokenizers build.
+    environment = _closed(obj["environment"], _ENVIRONMENT_FIELD_SET, "pass-1 result.environment")
+    for key in ENVIRONMENT_FIELDS:
+        _require(
+            _exact_str(environment[key], f"pass-1 result.environment.{key}")
+            == FROZEN_ENVIRONMENT[key],
+            f"pass-1 result.environment.{key} is {environment[key]!r} but the frozen Stage-I "
+            f"environment requires {FROZEN_ENVIRONMENT[key]!r}",
+        )
+    _require(
+        environment_sha256(environment) == authorization["environment_sha256"],
+        "pass-1 result.environment does not generate its bound environment digest",
+    )
+
+    # R4-D: the trusted input-binding -> document-digest projection.
+    binding_digests = obj["binding_document_digests"]
+    _require(
+        type(binding_digests) is dict and binding_digests,
+        "pass-1 result.binding_document_digests must be a non-empty object",
+    )
+    for binding_id, digest in sorted(binding_digests.items()):
+        _exact_str(binding_id, "pass-1 result.binding_document_digests key")
+        _hex64(digest, f"pass-1 result.binding_document_digests[{binding_id!r}]")
+    _require(
+        binding_document_digests_sha256(binding_digests)
+        == authorization["binding_document_digests_sha256"],
+        "pass-1 result.binding_document_digests does not generate its bound projection digest",
+    )
+
     projection = obj["node_binding_projection"]
     _require(
         type(projection) is dict and projection,
@@ -623,6 +717,12 @@ def validate_pass1_result(payload: Any) -> dict[str, Any]:
     _require(
         not unknown,
         f"pass-1 result projects binding(s) outside the plan-authorized global set: {unknown}",
+    )
+    _require(
+        set(binding_digests) == set(authorized_bindings),
+        "pass-1 result.binding_document_digests must cover exactly the plan-authorized global "
+        f"input-binding set; digests={sorted(binding_digests)} "
+        f"authorized={sorted(authorized_bindings)}",
     )
 
     commitments = obj["selection_sequence_commitments"]
@@ -824,6 +924,12 @@ def trusted_expected_result(
         }),
         node_binding_projection_sha256=authorization["node_binding_projection_sha256"],
         authorized_input_binding_ids=tuple(obj["authorized_input_binding_ids"]),
+        environment=MappingProxyType({key: obj["environment"][key] for key in ENVIRONMENT_FIELDS}),
+        environment_sha256=authorization["environment_sha256"],
+        binding_document_digests=MappingProxyType(
+            dict(sorted(obj["binding_document_digests"].items()))
+        ),
+        binding_document_digests_sha256=authorization["binding_document_digests_sha256"],
         nodes=tuple(
             TrustedExpectedNode(
                 source_id=entry["source_id"],
@@ -878,9 +984,39 @@ def _closed(obj: Any, fields: frozenset[str], where: str) -> dict[str, Any]:
     return obj
 
 
+def require_manifest_shape(manifest: Any) -> dict[str, Any]:
+    """Close the manifest's top-level shape before anything indexes into it.
+
+    R4-F: reconciliation reached ``manifest["stage_i_run"]`` directly, so a manifest with the
+    whole block absent raised a bare ``KeyError`` instead of a controlled fail-closed refusal.
+    Every entry point that touches manifest fields goes through here first.
+
+    Container types are pinned here as well, so every later index or iteration is safe no matter
+    which check happens to run first -- a wrong-typed block fails on being wrong-typed rather than
+    on whatever downstream expression happened to trip over it.
+    """
+    obj = _closed(manifest, _MANIFEST_FIELDS, "manifest")
+    for field_name, kind in (
+        ("shards", list),
+        ("nodes", list),
+        ("totals", dict),
+        ("ownership_matrix", dict),
+        ("bindings", dict),
+        ("environment", dict),
+        ("h_binding", dict),
+        ("stage_i_run", dict),
+        ("node_binding_projection", dict),
+    ):
+        _require(
+            type(obj[field_name]) is kind,
+            f"manifest.{field_name} must be a JSON {'array' if kind is list else 'object'}",
+        )
+    return obj
+
+
 def validate_manifest(manifest: Any) -> dict[str, Any]:
     """Everything about the manifest that must hold before COMPLETE may be written."""
-    obj = _closed(manifest, _MANIFEST_FIELDS, "manifest")
+    obj = require_manifest_shape(manifest)
     _require(
         _exact_str(obj["schema_version"], "manifest.schema_version") == MANIFEST_SCHEMA,
         "manifest carries the wrong schema version",
@@ -1031,11 +1167,16 @@ def validate_manifest(manifest: Any) -> dict[str, Any]:
         _exact_str(binding_id, "manifest.bindings key")
         _hex64(digest, f"manifest.bindings[{binding_id!r}]")
 
-    environment = obj["environment"]
-    _require(type(environment) is dict, "manifest.environment must be a JSON object")
-    for key in ("python_version", "tokenizers_version", "python_executable"):
-        _require(key in environment, f"manifest.environment is missing {key!r}")
-        _exact_str(environment[key], f"manifest.environment.{key}")
+    # R4-D: closed on all three axes. R3 required the three keys to be present and stringly
+    # typed and checked nothing else, so an unknown key rode along and a false interpreter,
+    # Python version or tokenizers build published unchallenged.
+    environment = _closed(obj["environment"], _ENVIRONMENT_FIELD_SET, "manifest.environment")
+    for key in ENVIRONMENT_FIELDS:
+        _require(
+            _exact_str(environment[key], f"manifest.environment.{key}") == FROZEN_ENVIRONMENT[key],
+            f"manifest.environment.{key} is {environment[key]!r} but the frozen Stage-I "
+            f"environment requires {FROZEN_ENVIRONMENT[key]!r}",
+        )
 
     h_binding = _closed(obj["h_binding"], _H_BINDING_FIELDS, "manifest.h_binding")
     for key in sorted(_H_BINDING_FIELDS):
@@ -1254,7 +1395,7 @@ def reconcile_manifest_with_audit(
     audit: RealizationAudit,
     expected: TrustedExpectedResult,
 ) -> None:
-    """Three-way equality: trusted expectation == manifest == the bytes actually on disk.
+    """Three-way equality: the bytes on disk == the manifest == the trusted expectation.
 
     R2 compared the manifest against the audit only. Both are Layer 3, so a fully resealed
     publication -- records rewritten, the manifest's own expected sequence and projection restated
@@ -1262,13 +1403,27 @@ def reconcile_manifest_with_audit(
     missing party is ``expected``: the post-Pass-1 result, built from the selection ledger and
     frozen to disk before a single output byte existed.
 
-    So every load-bearing claim is now checked twice, against two sources that cannot both be
-    edited by whoever rewrote the output: once against the expectation that predates the bytes,
-    and once against the bytes themselves.
+    R4-E fixes the ORDER. Physical facts are reconciled first, so a result whose totals do not
+    describe its own records fails on that -- the concrete, diagnosable defect -- rather than on
+    whichever higher-level identity check happened to run earlier. Only once the realization has
+    been proved to describe itself are the Layer-2 questions asked: is this the authorized run,
+    under the authorized environment, over the authorized inputs, with the committed selection?
     """
-    _reconcile_run_identity(manifest, expected)
-    _reconcile_projection(manifest, expected)
+    obj = require_manifest_shape(manifest)
 
+    # --- Layer 3 against the bytes it claims to describe --------------------------------
+    _reconcile_physical(obj, audit)
+
+    # --- Layer 3 against the expectation that predates it -------------------------------
+    _reconcile_run_identity(obj, expected)
+    _reconcile_projection(obj, expected)
+    _reconcile_environment(obj, expected)
+    _reconcile_binding_digests(obj, expected)
+    _reconcile_expected_result(obj, audit, expected)
+
+
+def _reconcile_physical(manifest: Mapping[str, Any], audit: RealizationAudit) -> None:
+    """Everything the manifest claims about itself, against the records actually staged."""
     totals = manifest["totals"]
     for field_name, actual in (
         ("records", audit.records),
@@ -1282,23 +1437,6 @@ def reconcile_manifest_with_audit(
             f"manifest.totals.{field_name} is {totals[field_name]} but the staged records "
             f"actually contain {actual}",
         )
-    for field_name in (
-        "records",
-        "content_tokens",
-        "serialized_tokens",
-        "unique_cleaned_identities",
-    ):
-        _require(
-            totals[field_name] == expected.totals[field_name],
-            f"manifest.totals.{field_name} is {totals[field_name]} but the trusted post-Pass-1 "
-            f"result committed to {expected.totals[field_name]}",
-        )
-
-    _require(
-        dict(manifest["ownership_matrix"])
-        == {consumer: dict(owners) for consumer, owners in expected.ownership_matrix.items()},
-        "manifest.ownership_matrix disagrees with the trusted post-Pass-1 result",
-    )
 
     declared = manifest["shards"]
     _require(
@@ -1314,38 +1452,8 @@ def reconcile_manifest_with_audit(
             )
 
     audited = {node.source_id: node for node in audit.nodes}
-    _require(
-        {entry["source_id"] for entry in manifest["nodes"]}
-        == {node.source_id for node in expected.nodes},
-        "manifest declares a different node set than the trusted post-Pass-1 result",
-    )
     for entry in manifest["nodes"]:
         source_id = entry["source_id"]
-        commitment = expected.node(source_id)
-        # Layer 2 vs Layer 3 (the manifest's claims), before the physical bytes are consulted.
-        for field_name, trusted in (
-            ("stage", commitment.stage),
-            ("target_serialized_tokens", commitment.target_serialized_tokens),
-            ("branch", commitment.branch),
-            ("selection_mode", commitment.selection_mode),
-            ("selected_identities", commitment.selected_identities),
-            ("selected_serialized_tokens", commitment.selected_serialized_tokens),
-            ("selection_fingerprint", commitment.selection_fingerprint),
-            ("selection_sequence_commitment", commitment.selection_sequence_commitment),
-            ("crossing_identity", commitment.crossing_identity),
-            ("actual_overshoot_tokens", commitment.actual_overshoot_tokens),
-        ):
-            _require(
-                entry[field_name] == trusted,
-                f"manifest node {source_id}.{field_name} is {entry[field_name]!r} but the trusted "
-                f"post-Pass-1 result committed to {trusted!r}",
-            )
-        _require(
-            tuple(entry["input_binding_ids"]) == commitment.input_binding_ids,
-            f"manifest node {source_id} declares input bindings {entry['input_binding_ids']} but "
-            f"the trusted post-Pass-1 result committed to {list(commitment.input_binding_ids)}",
-        )
-
         if entry["selected_identities"] == 0:
             _require(
                 source_id not in audited,
@@ -1373,16 +1481,6 @@ def reconcile_manifest_with_audit(
             f"manifest node {source_id} fingerprint disagrees with the fingerprint reconstructed "
             "from its physical records",
         )
-        # R3-A: the order-sensitive commitment. The expected value is the one frozen before
-        # materialization; the actual comes from an external sort over the published ordinals. A
-        # reseal can restate the manifest, but it cannot restate an artifact that already exists
-        # outside the realization and whose digest names the run.
-        _require(
-            commitment.selection_sequence_commitment == node.selection_sequence_commitment,
-            f"manifest node {source_id} selection-sequence commitment disagrees with the sequence "
-            "reconstructed from its physical records; the ordinal-to-identity mapping differs "
-            "from the trusted post-Pass-1 expectation",
-        )
         _require(
             list(node.input_binding_ids) == sorted(set(entry["input_binding_ids"])),
             f"manifest node {source_id} declares input bindings "
@@ -1393,10 +1491,127 @@ def reconcile_manifest_with_audit(
     _require(not unknown, f"physical records exist for undeclared node(s): {unknown}")
 
 
+def _reconcile_expected_result(
+    manifest: Mapping[str, Any], audit: RealizationAudit, expected: TrustedExpectedResult
+) -> None:
+    """The realization must be the one Pass 1 committed to, node for node and token for token."""
+    totals = manifest["totals"]
+    for field_name in (
+        "records",
+        "content_tokens",
+        "serialized_tokens",
+        "unique_cleaned_identities",
+    ):
+        _require(
+            totals[field_name] == expected.totals[field_name],
+            f"manifest.totals.{field_name} is {totals[field_name]} but the trusted post-Pass-1 "
+            f"result committed to {expected.totals[field_name]}",
+        )
+
+    _require(
+        dict(manifest["ownership_matrix"])
+        == {consumer: dict(owners) for consumer, owners in expected.ownership_matrix.items()},
+        "manifest.ownership_matrix disagrees with the trusted post-Pass-1 result",
+    )
+
+    audited = {node.source_id: node for node in audit.nodes}
+    _require(
+        {entry["source_id"] for entry in manifest["nodes"]}
+        == {node.source_id for node in expected.nodes},
+        "manifest declares a different node set than the trusted post-Pass-1 result",
+    )
+    for entry in manifest["nodes"]:
+        source_id = entry["source_id"]
+        commitment = expected.node(source_id)
+        for field_name, trusted in (
+            ("stage", commitment.stage),
+            ("target_serialized_tokens", commitment.target_serialized_tokens),
+            ("branch", commitment.branch),
+            ("selection_mode", commitment.selection_mode),
+            ("selected_identities", commitment.selected_identities),
+            ("selected_serialized_tokens", commitment.selected_serialized_tokens),
+            ("selection_fingerprint", commitment.selection_fingerprint),
+            ("selection_sequence_commitment", commitment.selection_sequence_commitment),
+            ("crossing_identity", commitment.crossing_identity),
+            ("actual_overshoot_tokens", commitment.actual_overshoot_tokens),
+        ):
+            _require(
+                entry[field_name] == trusted,
+                f"manifest node {source_id}.{field_name} is {entry[field_name]!r} but the trusted "
+                f"post-Pass-1 result committed to {trusted!r}",
+            )
+        _require(
+            tuple(entry["input_binding_ids"]) == commitment.input_binding_ids,
+            f"manifest node {source_id} declares input bindings {entry['input_binding_ids']} but "
+            f"the trusted post-Pass-1 result committed to {list(commitment.input_binding_ids)}",
+        )
+        if source_id not in audited:
+            continue
+        # R3-A: the order-sensitive commitment. The expected value is the one frozen before
+        # materialization; the actual comes from an external sort over the published ordinals. A
+        # reseal can restate the manifest, but it cannot restate an artifact that already exists
+        # outside the realization and whose digest names the run.
+        _require(
+            commitment.selection_sequence_commitment
+            == audited[source_id].selection_sequence_commitment,
+            f"manifest node {source_id} selection-sequence commitment disagrees with the sequence "
+            "reconstructed from its physical records; the ordinal-to-identity mapping differs "
+            "from the trusted post-Pass-1 expectation",
+        )
+
+
+def _reconcile_environment(manifest: Mapping[str, Any], expected: TrustedExpectedResult) -> None:
+    """R4-D: the environment a run reports must be the one it was authorized under.
+
+    The manifest's own environment block is an observation. The expectation comes from canonical
+    Layer-1 state via the frozen post-Pass-1 result, so a resealed publication cannot claim a
+    different interpreter, Python build or tokenizers version -- the two things it would have to
+    edit are on opposite sides of the freeze.
+    """
+    declared = _closed(manifest["environment"], _ENVIRONMENT_FIELD_SET, "manifest.environment")
+    for key in ENVIRONMENT_FIELDS:
+        _require(
+            declared[key] == expected.environment[key],
+            f"manifest.environment.{key} is {declared[key]!r} but the trusted post-Pass-1 result "
+            f"binds {expected.environment[key]!r}",
+        )
+    _require(
+        environment_sha256(declared) == expected.environment_sha256,
+        "manifest.environment does not generate the trusted environment digest",
+    )
+    _require(
+        manifest["stage_i_run"]["environment_sha256"] == expected.environment_sha256,
+        "manifest.stage_i_run.environment_sha256 disagrees with the trusted post-Pass-1 result",
+    )
+
+
+def _reconcile_binding_digests(
+    manifest: Mapping[str, Any], expected: TrustedExpectedResult
+) -> None:
+    """R4-D: the input-binding release digests a run reports must be the authorized ones."""
+    declared = manifest["bindings"]
+    trusted = dict(expected.binding_document_digests)
+    _require(
+        dict(declared) == trusted,
+        "manifest.bindings disagrees with the trusted input-binding document digests; "
+        f"manifest={dict(sorted(declared.items()))} trusted={dict(sorted(trusted.items()))}",
+    )
+    _require(
+        binding_document_digests_sha256(declared) == expected.binding_document_digests_sha256,
+        "manifest.bindings does not generate the trusted binding-document-digest projection",
+    )
+    _require(
+        manifest["stage_i_run"]["binding_document_digests_sha256"]
+        == expected.binding_document_digests_sha256,
+        "manifest.stage_i_run.binding_document_digests_sha256 disagrees with the trusted "
+        "post-Pass-1 result",
+    )
+
+
 def _reconcile_run_identity(manifest: Mapping[str, Any], expected: TrustedExpectedResult) -> None:
     """The published run must be the authorized one, named by the frozen Layer-2 expectation."""
-    # Shape first: reconciliation runs before full manifest validation on the publisher path, so
-    # a manifest missing one of these fields must fail closed here rather than raise KeyError.
+    # The manifest's top-level shape was closed by `require_manifest_shape`; this closes the run
+    # block itself, so a missing or mistyped field here is a controlled refusal, never a KeyError.
     stage_i_run = _closed(manifest["stage_i_run"], _STAGE_I_RUN_FIELDS, "manifest.stage_i_run")
     _require(
         stage_i_run["post_pass1_result_identity_schema"] == expected.result_identity_schema,
@@ -1740,6 +1955,16 @@ __all__ = [
     "node_binding_projection_sha256",
     "recompute_stage_i_run_identity",
     "reconcile_manifest_with_audit",
+    "require_manifest_shape",
+    "environment_sha256",
+    "binding_document_digests_sha256",
+    "ENVIRONMENT_FIELDS",
+    "ENVIRONMENT_SCHEMA",
+    "BINDING_DOCUMENT_DIGESTS_SCHEMA",
+    "FROZEN_ENVIRONMENT",
+    "FROZEN_PYTHON_EXECUTABLE",
+    "FROZEN_PYTHON_VERSION",
+    "FROZEN_TOKENIZERS_VERSION",
     "plan_shards",
     "publish_atomic",
     "record_sort_key",
