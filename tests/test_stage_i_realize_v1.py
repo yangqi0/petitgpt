@@ -22,40 +22,57 @@ from pretrain.select_pretrain_documents import (
     selection_rank as v1_selection_rank,
 )
 from pretrain.stage_i_audit_v1 import AuditError
-from pretrain.stage_i_graph_v2 import canonical_json_bytes, load_source_graph, sha256_file
+from pretrain.stage_i_graph_v2 import (
+    GraphError,
+    canonical_json_bytes,
+    load_source_graph,
+    sha256_file,
+)
 from pretrain.stage_i_output_v1 import (
     COMPLETE_MARKER,
     DOCUMENTS_DIRNAME,
     MANIFEST_FILENAME,
     MANIFEST_SCHEMA,
+    PASS1_RESULT_SCHEMA,
     RECORD_SCHEMA,
     RECORDS_PER_SHARD,
     SHARD_POLICY_VERSION,
     OutputError,
+    TrustedExpectedResult,
     build_record,
     iter_records,
     load_published_realization,
+    load_trusted_expected_result,
     node_binding_projection_sha256,
     plan_shards,
     publish_atomic,
     recompute_stage_i_run_identity,
     record_sort_key,
+    selection_sequence_commitment_map_sha256,
+    stage_i_published_run_identity,
+    trusted_expected_result,
     validate_manifest,
+    validate_pass1_result,
     validate_record,
 )
 from pretrain.stage_i_realize_v1 import (
     ACCEPTED_H_COMPLETE_SHA256,
+    ACCEPTED_H_RUN_DIR,
     IMPLEMENTATION_BUNDLE_FILES,
     PLAN_SCHEMA,
+    REQUIRED_PYTHON_EXECUTABLE,
     REQUIRED_PYTHON_VERSION,
     REQUIRED_TOKENIZERS_VERSION,
+    SHARD_POLICY_RULE,
     AcceptedH,
     AuthorizedIContext,
     Environment,
     RealizationError,
+    authorization_block,
     authorize_plan,
     build_manifest,
     build_materialization_targets,
+    build_pass1_result,
     compare_with_h,
     generate_candidate_plan,
     implementation_bundle_sha256,
@@ -64,7 +81,6 @@ from pretrain.stage_i_realize_v1 import (
     materialize_binding,
     require_h_i_equality,
     scan_binding_candidates,
-    stage_i_run_identity,
     verify_environment,
 )
 from pretrain.stage_i_select_v1 import (
@@ -971,11 +987,11 @@ def test_21_duplicate_cleaned_identity_cannot_reach_the_output(tmp_path: Path):
     be published. The audit derives it from the staged shards in bounded memory instead, so this
     test asserts the stronger property: a duplicate cannot survive publication.
     """
-    manifest, records = _publishable(tmp_path, count=2)
+    manifest, records, expected = _publishable(tmp_path, count=2)
     twin = dict(records[1])
     twin["cleaned_text_sha256"] = records[0]["cleaned_text_sha256"]
     with pytest.raises(AuditError, match="appears more than once"):
-        publish_atomic(tmp_path / "out", "run-dup", manifest, [records[0], twin])
+        publish_atomic(tmp_path / "out", "run-dup", manifest, [records[0], twin], expected=expected)
     assert not (tmp_path / "out" / "run-dup").exists()
 
 
@@ -1072,7 +1088,88 @@ def test_22b_serialized_token_count_must_include_both_boundary_tokens():
         _record(content_token_count=5, serialized_token_count=6)
 
 
+SEQ_SCHEMA = "petitgpt-stage-i-selection-sequence-v1"
+
+_FIXTURE_AUTHORIZATION = {
+    "candidate_i_plan_sha256": "e" * 64,
+    "authorized_state_sha256": "2" * 64,
+    "implementation_commit": "f" * 40,
+    "implementation_bundle_sha256": "1" * 64,
+    "plan_schema_version": PLAN_SCHEMA,
+    "output_schema_version": RECORD_SCHEMA,
+    "manifest_schema_version": MANIFEST_SCHEMA,
+    "shard_policy_version": SHARD_POLICY_VERSION,
+    "records_per_shard": RECORDS_PER_SHARD,
+    "h_run_identity": "7" * 64,
+    "h_complete_sha256": "d" * 64,
+    "h_census_sha256": "8" * 64,
+    "h_predictions_sha256": "9" * 64,
+    "owner_graph_sha256": "c" * 64,
+    "node_binding_projection_sha256": node_binding_projection_sha256({"b_x": ["ib_x"]}),
+}
+
+_FIXTURE_H_BINDING = {
+    "h_run_identity": "7" * 64,
+    "h_census_sha256": "8" * 64,
+    "h_predictions_sha256": "9" * 64,
+    "h_complete_sha256": "d" * 64,
+    "h_candidate_plan_sha256": "a" * 64,
+    "h_implementation_bundle_sha256": "b" * 64,
+    "owner_graph_sha256": "c" * 64,
+}
+
+_FIXTURE_GATE = {
+    "ALL_H_I_BRANCHES_MATCH": True,
+    "ALL_H_I_SELECTED_TOKEN_COUNTS_MATCH": True,
+    "ALL_H_I_FINGERPRINTS_MATCH": True,
+    "ALL_H_I_CROSSING_IDENTITIES_MATCH": True,
+    "ALL_H_I_OVERSHOOTS_MATCH": True,
+    "OWNERSHIP_MATRIX_MATCH": True,
+    "ALL_NODES_MATCH": True,
+}
+
+
+def _pass1_for(nodes: list[dict], projection: dict, totals: dict, **over) -> dict:
+    """A post-Pass-1 expected result for a synthetic fixture, built the way Pass 1 builds one."""
+    commitments = {n["source_id"]: n["selection_sequence_commitment"] for n in nodes}
+    authorization = dict(_FIXTURE_AUTHORIZATION)
+    authorization["node_binding_projection_sha256"] = node_binding_projection_sha256(projection)
+    pass1 = {
+        "schema_version": PASS1_RESULT_SCHEMA,
+        "authorization": authorization,
+        "selection_sequence_commitment_version": SEQ_SCHEMA,
+        "selection_sequence_commitments": commitments,
+        "selection_sequence_commitment_map_sha256": selection_sequence_commitment_map_sha256(
+            commitments
+        ),
+        "node_binding_projection": projection,
+        "authorized_input_binding_ids": sorted({
+            b for allowed in projection.values() for b in allowed
+        }),
+        "nodes": nodes,
+        "totals": totals,
+        "ownership_matrix": {},
+        "h_i_gate": dict(_FIXTURE_GATE),
+        "h_binding": dict(_FIXTURE_H_BINDING),
+    }
+    pass1.update(over)
+    return pass1
+
+
+def _expected_for(pass1: dict) -> TrustedExpectedResult:
+    return trusted_expected_result(
+        pass1, expected_sha256=hashlib.sha256(canonical_json_bytes(pass1)).hexdigest()
+    )
+
+
 def _publishable(tmp_path: Path, count: int = 3):
+    """A publishable realization plus the Layer-2 expectation frozen before it existed.
+
+    The expectation is derived from the records this fixture is about to emit, exactly as Pass 1
+    derives it from its selection ledger -- and then held fixed. Tests that tamper with the
+    published bytes reload with this same pre-tamper expectation, which is the whole point: the
+    trusted value must not travel with the thing it constrains.
+    """
     records = [
         _record(
             stable_input_record_ordinal=i,
@@ -1085,86 +1182,68 @@ def _publishable(tmp_path: Path, count: int = 3):
         )
         for i in range(count)
     ]
+    projection = {"b_x": ["ib_x"]}
+    node = {
+        "source_id": "b_x",
+        "stage": "stage_b",
+        "target_serialized_tokens": 10,
+        "branch": "ORDINARY",
+        "selection_mode": "SEEDED_HASH",
+        "selected_identities": count,
+        "selected_serialized_tokens": 7 * count,
+        # Computed with the longhand oracle from the records this fixture actually emits.
+        # A placeholder is no longer acceptable: publication now reconciles the manifest
+        # against a fingerprint reconstructed from the staged bytes.
+        "selection_fingerprint": oracle_fingerprint([r["cleaned_text_sha256"] for r in records]),
+        "selection_sequence_commitment": oracle_sequence_commitment(
+            "b_x",
+            "stage_b",
+            [(r["selection_ordinal_within_node"], r["cleaned_text_sha256"]) for r in records],
+        ),
+        "crossing_identity": None,
+        "actual_overshoot_tokens": 0,
+        "input_binding_ids": ["ib_x"],
+    }
+    totals = {
+        "records": count,
+        "content_tokens": 5 * count,
+        "serialized_tokens": 7 * count,
+        "unique_cleaned_identities": count,
+    }
+    pass1 = _pass1_for([dict(node)], projection, dict(totals))
+    expected = _expected_for(pass1)
     manifest = {
         "schema_version": MANIFEST_SCHEMA,
         "record_schema_version": RECORD_SCHEMA,
         "shard_policy_version": SHARD_POLICY_VERSION,
         "records_per_shard": RECORDS_PER_SHARD,
         "shards": [],
-        "totals": {
-            "records": count,
-            "content_tokens": 5 * count,
-            "serialized_tokens": 7 * count,
-            "unique_cleaned_identities": count,
-            "shards": 1,
-        },
-        "nodes": [
-            {
-                "source_id": "b_x",
-                "stage": "stage_b",
-                "target_serialized_tokens": 10,
-                "branch": "ORDINARY",
-                "selection_mode": "SEEDED_HASH",
-                "selected_identities": count,
-                "selected_serialized_tokens": 7 * count,
-                # Computed with the longhand oracle from the records this fixture actually emits.
-                # A placeholder is no longer acceptable: publication now reconciles the manifest
-                # against a fingerprint reconstructed from the staged bytes.
-                "selection_fingerprint": oracle_fingerprint([
-                    r["cleaned_text_sha256"] for r in records
-                ]),
-                "selection_sequence_commitment": oracle_sequence_commitment(
-                    "b_x",
-                    "stage_b",
-                    [
-                        (r["selection_ordinal_within_node"], r["cleaned_text_sha256"])
-                        for r in records
-                    ],
-                ),
-                "input_binding_ids": ["ib_x"],
-                "crossing_identity": None,
-                "actual_overshoot_tokens": 0,
-            }
-        ],
-        "node_binding_projection": {"b_x": ["ib_x"]},
+        "totals": {**totals, "shards": 1},
+        "nodes": [dict(node)],
+        "node_binding_projection": projection,
         "ownership_matrix": {},
         "bindings": {"ib_x": "6" * 64},
         "environment": {
-            "python_executable": "/workspace/petitgpt/.venv/bin/python",
+            "python_executable": REQUIRED_PYTHON_EXECUTABLE,
             "python_version": REQUIRED_PYTHON_VERSION,
             "tokenizers_version": REQUIRED_TOKENIZERS_VERSION,
         },
-        "h_binding": {
-            "h_run_identity": "7" * 64,
-            "h_census_sha256": "8" * 64,
-            "h_predictions_sha256": "9" * 64,
-            "h_complete_sha256": "d" * 64,
-            "h_candidate_plan_sha256": "a" * 64,
-            "h_implementation_bundle_sha256": "b" * 64,
-            "owner_graph_sha256": "c" * 64,
-        },
-        "stage_i_run": _stage_i_run_block(),
+        "h_binding": dict(_FIXTURE_H_BINDING),
+        "stage_i_run": _stage_i_run_block(expected),
     }
-    return manifest, records
+    return manifest, records, expected
 
 
-def _stage_i_run_block(**over) -> dict:
-    """A valid published-run identity block whose run_identity is generated by its own fields."""
+def _stage_i_run_block(expected: TrustedExpectedResult, **over) -> dict:
+    """The published-run identity block generated by the trusted expectation's own fields."""
     block = {
-        "candidate_i_plan_sha256": "e" * 64,
-        "implementation_commit": "f" * 40,
-        "implementation_bundle_sha256": "1" * 64,
-        "plan_schema_version": PLAN_SCHEMA,
-        "output_schema_version": RECORD_SCHEMA,
-        "manifest_schema_version": MANIFEST_SCHEMA,
-        "shard_policy_version": SHARD_POLICY_VERSION,
-        "records_per_shard": RECORDS_PER_SHARD,
-        "h_run_identity": "7" * 64,
-        "h_complete_sha256": "d" * 64,
-        "h_census_sha256": "8" * 64,
-        "h_predictions_sha256": "9" * 64,
-        "owner_graph_sha256": "c" * 64,
-        "node_binding_projection_sha256": node_binding_projection_sha256({"b_x": ["ib_x"]}),
+        **dict(expected.authorization),
+        "post_pass1_result_identity_schema": expected.result_identity_schema,
+        "post_pass1_result_identity_sha256": expected.result_identity_sha256,
+        "selection_sequence_commitment_version": expected.selection_sequence_commitment_version,
+        "selection_sequence_commitment_map_sha256": (
+            expected.selection_sequence_commitment_map_sha256
+        ),
     }
     block.update(over)
     block["run_identity"] = recompute_stage_i_run_identity(block)
@@ -1173,7 +1252,7 @@ def _stage_i_run_block(**over) -> dict:
 
 def test_23_partial_failure_leaves_no_complete_result(tmp_path: Path):
     """Requirement 23. A run that dies mid-write must leave nothing discoverable."""
-    manifest, records = _publishable(tmp_path)
+    manifest, records, expected = _publishable(tmp_path)
 
     def exploding():
         yield records[0]
@@ -1181,18 +1260,18 @@ def test_23_partial_failure_leaves_no_complete_result(tmp_path: Path):
 
     out_dir = tmp_path / "out"
     with pytest.raises(RuntimeError, match="simulated mid-write failure"):
-        publish_atomic(out_dir, "run-x", manifest, exploding())
+        publish_atomic(out_dir, "run-x", manifest, exploding(), expected=expected)
     assert not (out_dir / "run-x").exists()
     assert list(out_dir.glob("*")) == [], "a staging directory survived the failure"
 
 
 def test_23b_successful_publication_is_atomic_and_complete(tmp_path: Path):
-    manifest, records = _publishable(tmp_path)
-    final = publish_atomic(tmp_path / "out", "run-x", manifest, records)
+    manifest, records, expected = _publishable(tmp_path)
+    final = publish_atomic(tmp_path / "out", "run-x", manifest, records, expected=expected)
     assert (final / COMPLETE_MARKER).is_file()
     assert (final / MANIFEST_FILENAME).is_file()
     assert (final / DOCUMENTS_DIRNAME).is_dir()
-    loaded = load_published_realization(final)
+    loaded = load_published_realization(final, expected=expected)
     assert loaded["totals"]["records"] == 3
     assert [r["cleaned_text_sha256"] for r in iter_records(final, loaded)] == [
         hashlib.sha256(f"id-{i}".encode()).hexdigest() for i in range(3)
@@ -1200,24 +1279,24 @@ def test_23b_successful_publication_is_atomic_and_complete(tmp_path: Path):
 
 
 def test_23c_publication_refuses_to_overwrite_an_existing_result(tmp_path: Path):
-    manifest, records = _publishable(tmp_path)
-    publish_atomic(tmp_path / "out", "run-x", manifest, records)
-    _, again = _publishable(tmp_path)
+    manifest, records, expected = _publishable(tmp_path)
+    publish_atomic(tmp_path / "out", "run-x", manifest, records, expected=expected)
+    _, again, _ = _publishable(tmp_path)
     with pytest.raises(OutputError, match="refusing to overwrite"):
-        publish_atomic(tmp_path / "out", "run-x", manifest, again)
+        publish_atomic(tmp_path / "out", "run-x", manifest, again, expected=expected)
 
 
 def test_24_strict_consumer_rejects_an_inconsistent_result(tmp_path: Path):
     """Requirement 24. Missing marker, tampered manifest, tampered shard and drifted totals."""
-    manifest, records = _publishable(tmp_path)
-    final = publish_atomic(tmp_path / "out", "run-x", manifest, records)
-    load_published_realization(final)
+    manifest, records, expected = _publishable(tmp_path)
+    final = publish_atomic(tmp_path / "out", "run-x", manifest, records, expected=expected)
+    load_published_realization(final, expected=expected)
 
     # 1. no COMPLETE marker at all
     marker = (final / COMPLETE_MARKER).read_bytes()
     (final / COMPLETE_MARKER).unlink()
     with pytest.raises(OutputError, match="no COMPLETE marker"):
-        load_published_realization(final)
+        load_published_realization(final, expected=expected)
     (final / COMPLETE_MARKER).write_bytes(marker)
 
     # 2. manifest edited after the fact, so the marker no longer describes it
@@ -1225,12 +1304,14 @@ def test_24_strict_consumer_rejects_an_inconsistent_result(tmp_path: Path):
     payload["totals"]["records"] = 99
     (final / MANIFEST_FILENAME).write_bytes(canonical_json_bytes(payload))
     with pytest.raises(OutputError):
-        load_published_realization(final)
+        load_published_realization(final, expected=expected)
 
     # 3. shard bytes changed underneath a valid manifest
-    fresh_manifest, fresh_records = _publishable(tmp_path)
-    other = publish_atomic(tmp_path / "out2", "run-y", fresh_manifest, fresh_records)
-    loaded = load_published_realization(other)
+    fresh_manifest, fresh_records, fresh_expected = _publishable(tmp_path)
+    other = publish_atomic(
+        tmp_path / "out2", "run-y", fresh_manifest, fresh_records, expected=expected
+    )
+    loaded = load_published_realization(other, expected=expected)
     shard = other / DOCUMENTS_DIRNAME / loaded["shards"][0]["name"]
     corrupted = shard.read_bytes().replace(b"document 0", b"document Z")
     shard.write_bytes(corrupted)
@@ -1239,7 +1320,7 @@ def test_24_strict_consumer_rejects_an_inconsistent_result(tmp_path: Path):
 
 
 def test_24b_manifest_totals_must_reconcile_with_nodes_and_shards(tmp_path: Path):
-    manifest, _ = _publishable(tmp_path)
+    manifest, _, expected = _publishable(tmp_path)
     manifest["shards"] = [
         {"name": "documents-00000.jsonl", "records": 3, "bytes": 10, "sha256": "d" * 64}
     ]
@@ -1621,13 +1702,14 @@ def test_30_physical_order_and_selection_ordinal_reconstruction(tmp_path: Path):
 
 
 def test_30b_manifest_reflects_the_realized_selection(authorized):
-    """The published manifest must restate the ledger and bind the authorized run identity.
+    """The published manifest must restate the ledger and bind the trusted expected result.
 
-    Selections are built directly for the context's own graph nodes: `build_manifest` now takes
-    its graph from the authorized context, so feeding it a synthetic graph is no longer possible
-    -- which is the point of that change.
+    Selections are built for the freshly re-derived authorized state's own graph nodes:
+    `build_manifest` takes its graph from that state, never from a caller-supplied object, so
+    feeding it a synthetic graph is not possible -- which is the point of that change.
     """
-    graph = authorized.graph
+    state = authorized.revalidate()
+    graph = state.graph
     selections = []
     for index, node_spec in enumerate(graph.nodes):
         identity = hashlib.sha256(f"n-{node_spec.source_id}".encode()).hexdigest()
@@ -1669,19 +1751,47 @@ def test_30b_manifest_reflects_the_realized_selection(authorized):
             )
         )
 
-    manifest = build_manifest(selections, authorized)
+    gate = dict.fromkeys(_FIXTURE_GATE, True)
+    pass1 = build_pass1_result(selections, state, gate)
+    expected = _expected_for(pass1)
+    manifest = build_manifest(selections, state, expected)
     assert manifest["totals"]["records"] == len(selections)
     assert manifest["totals"]["serialized_tokens"] == 7 * len(selections)
     assert manifest["nodes"][0]["selection_fingerprint"] == selections[0].selection_fingerprint
 
-    # The identity block must be generated by its own fields and match the authorized context.
+    # The identity block must be generated by its own fields and by the trusted expectation.
     block = manifest["stage_i_run"]
-    assert block["run_identity"] == authorized.run_identity
-    assert recompute_stage_i_run_identity(block) == authorized.run_identity
+    assert block["run_identity"] == expected.stage_i_run_identity
+    assert recompute_stage_i_run_identity(block) == expected.stage_i_run_identity
     assert block["h_complete_sha256"] == ACCEPTED_H_COMPLETE_SHA256
     assert block["candidate_i_plan_sha256"] == authorized.plan_sha256
-    assert block["owner_graph_sha256"] == authorized.graph.graph_sha256
+    assert block["owner_graph_sha256"] == state.graph.graph_sha256
+    assert block["authorized_state_sha256"] == authorized.authorized_state_sha256
+    assert block["post_pass1_result_identity_schema"] == PASS1_RESULT_SCHEMA
+    assert block["post_pass1_result_identity_sha256"] == expected.result_identity_sha256
     assert manifest["h_binding"]["h_complete_sha256"] == ACCEPTED_H_COMPLETE_SHA256
+
+    # R3-A: the published run identity is downstream of the post-Pass-1 result and of the
+    # sequence-commitment map. Changing either changes the name of the run, so a resealed result
+    # cannot restate the expectation and keep its identity.
+    assert (
+        stage_i_published_run_identity(
+            expected.authorization,
+            post_pass1_result_identity_sha256="0" * 64,
+            selection_sequence_commitment_map_sha256=(
+                expected.selection_sequence_commitment_map_sha256
+            ),
+        )
+        != expected.stage_i_run_identity
+    )
+    assert (
+        stage_i_published_run_identity(
+            expected.authorization,
+            post_pass1_result_identity_sha256=expected.result_identity_sha256,
+            selection_sequence_commitment_map_sha256="0" * 64,
+        )
+        != expected.stage_i_run_identity
+    )
 
 
 def test_30d_publishing_the_spooled_stream_round_trips(tmp_path: Path):
@@ -1695,11 +1805,11 @@ def test_30d_publishing_the_spooled_stream_round_trips(tmp_path: Path):
         binding, str(TOKENIZER), graph.validated_eligibility_rows("ib_x")
     )
     selections = realize_selection(graph, with_candidates(graph, {"ib_x": candidates}), set())
-    manifest = _manifest_for(selections)
+    manifest, expected = _manifest_for(selections)
     stream = iter_records_in_physical_order(graph, str(TOKENIZER), selections, tmp_path / "work")
-    final = publish_atomic(tmp_path / "out", "run-i", manifest, stream)
+    final = publish_atomic(tmp_path / "out", "run-i", manifest, stream, expected=expected)
 
-    loaded = load_published_realization(final)
+    loaded = load_published_realization(final, expected=expected)
     published = list(iter_records(final, loaded))
     assert loaded["totals"]["records"] == len(published)
     assert loaded["totals"]["serialized_tokens"] == sum(
@@ -1711,68 +1821,69 @@ def test_30d_publishing_the_spooled_stream_round_trips(tmp_path: Path):
     }
 
 
-def _manifest_for(selections) -> dict:
-    """A valid manifest describing exactly these selections, built without build_manifest.
+def _manifest_for(selections) -> tuple[dict, TrustedExpectedResult]:
+    """A valid manifest and its Layer-2 expectation, both built without build_manifest.
 
     Written out here so a publication test is not checking the production manifest builder
-    against the production publisher; the fixture states independently what the realization is.
+    against the production publisher; the fixture states independently what the realization is,
+    and states the expectation the publisher must prove it equal to.
     """
     total = sum(s.selected_identities for s in selections)
-    return {
+    nodes = [
+        {
+            "source_id": s.source_id,
+            "stage": s.stage,
+            "target_serialized_tokens": s.target_serialized_tokens,
+            "branch": s.branch,
+            "selection_mode": s.selection_mode,
+            "selected_identities": s.selected_identities,
+            "selected_serialized_tokens": s.selected_serialized_tokens,
+            "selection_fingerprint": oracle_fingerprint([d.cleaned_sha256 for d in s.selected]),
+            "selection_sequence_commitment": oracle_sequence_commitment(
+                s.source_id,
+                s.stage,
+                [(d.selection_ordinal_within_node, d.cleaned_sha256) for d in s.selected],
+            ),
+            "crossing_identity": s.crossing_identity,
+            "actual_overshoot_tokens": s.actual_overshoot_tokens,
+            "input_binding_ids": sorted({d.input_binding_id for d in s.selected}),
+        }
+        for s in selections
+    ]
+    projection = {s.source_id: sorted({d.input_binding_id for d in s.selected}) for s in selections}
+    totals = {
+        "records": total,
+        "content_tokens": sum(d.content_token_count for s in selections for d in s.selected),
+        "serialized_tokens": sum(s.selected_serialized_tokens for s in selections),
+        "unique_cleaned_identities": total,
+    }
+    pass1 = _pass1_for(
+        [dict(n) for n in nodes],
+        dict(projection),
+        dict(totals),
+        ownership_matrix=ownership_matrix_v1(selections),
+    )
+    expected = _expected_for(pass1)
+    manifest = {
         "schema_version": MANIFEST_SCHEMA,
         "record_schema_version": RECORD_SCHEMA,
         "shard_policy_version": SHARD_POLICY_VERSION,
         "records_per_shard": RECORDS_PER_SHARD,
         "shards": [],
-        "totals": {
-            "records": total,
-            "content_tokens": sum(d.content_token_count for s in selections for d in s.selected),
-            "serialized_tokens": sum(s.selected_serialized_tokens for s in selections),
-            "unique_cleaned_identities": total,
-            "shards": 0,
-        },
-        "nodes": [
-            {
-                "source_id": s.source_id,
-                "stage": s.stage,
-                "target_serialized_tokens": s.target_serialized_tokens,
-                "branch": s.branch,
-                "selection_mode": s.selection_mode,
-                "selected_identities": s.selected_identities,
-                "selected_serialized_tokens": s.selected_serialized_tokens,
-                "selection_fingerprint": oracle_fingerprint([d.cleaned_sha256 for d in s.selected]),
-                "selection_sequence_commitment": oracle_sequence_commitment(
-                    s.source_id,
-                    s.stage,
-                    [(d.selection_ordinal_within_node, d.cleaned_sha256) for d in s.selected],
-                ),
-                "input_binding_ids": sorted({d.input_binding_id for d in s.selected}),
-                "crossing_identity": s.crossing_identity,
-                "actual_overshoot_tokens": s.actual_overshoot_tokens,
-            }
-            for s in selections
-        ],
-        "node_binding_projection": {
-            s.source_id: sorted({d.input_binding_id for d in s.selected}) for s in selections
-        },
+        "totals": {**totals, "shards": 0},
+        "nodes": [dict(n) for n in nodes],
+        "node_binding_projection": projection,
         "ownership_matrix": ownership_matrix_v1(selections),
         "bindings": {"ib_x": "6" * 64},
         "environment": {
-            "python_executable": "/workspace/petitgpt/.venv/bin/python",
+            "python_executable": REQUIRED_PYTHON_EXECUTABLE,
             "python_version": REQUIRED_PYTHON_VERSION,
             "tokenizers_version": REQUIRED_TOKENIZERS_VERSION,
         },
-        "h_binding": {
-            "h_run_identity": "7" * 64,
-            "h_census_sha256": "8" * 64,
-            "h_predictions_sha256": "9" * 64,
-            "h_complete_sha256": "d" * 64,
-            "h_candidate_plan_sha256": "a" * 64,
-            "h_implementation_bundle_sha256": "b" * 64,
-            "owner_graph_sha256": "c" * 64,
-        },
-        "stage_i_run": _stage_i_run_block(),
+        "h_binding": dict(_FIXTURE_H_BINDING),
+        "stage_i_run": _stage_i_run_block(expected),
     }
+    return manifest, expected
 
 
 # ================================================================================
@@ -1877,14 +1988,14 @@ def test_r1_a2_spool_larger_than_window_round_trips_through_the_driver(tmp_path:
 
 def test_r1_c_publication_refused_when_manifest_totals_exceed_actual_records(tmp_path: Path):
     """C. The exact reviewed case: manifest claims 22 serialized tokens, records sum to 21."""
-    manifest, records = _publishable(tmp_path, count=3)
+    manifest, records, expected = _publishable(tmp_path, count=3)
     # Three records at 7 serialized tokens each = 21 actual.
     assert sum(r["serialized_token_count"] for r in records) == 21
     manifest["totals"]["serialized_tokens"] = 22
     manifest["nodes"][0]["selected_serialized_tokens"] = 22
 
     with pytest.raises(OutputError, match="but the staged records actually contain 21"):
-        publish_atomic(tmp_path / "out", "run-x", manifest, records)
+        publish_atomic(tmp_path / "out", "run-x", manifest, records, expected=expected)
     assert not (tmp_path / "out" / "run-x").exists()
     assert list((tmp_path / "out").glob("*")) == [], "staging or audit scratch survived the failure"
 
@@ -1900,44 +2011,138 @@ def test_r1_c_publication_refused_when_manifest_totals_exceed_actual_records(tmp
 def test_r1_c2_every_total_is_reconciled_against_the_physical_records(
     tmp_path: Path, field, value, match
 ):
-    manifest, records = _publishable(tmp_path, count=3)
+    manifest, records, expected = _publishable(tmp_path, count=3)
     manifest["totals"][field] = value
     with pytest.raises(OutputError, match=match):
-        publish_atomic(tmp_path / "out", "run-x", manifest, records)
+        publish_atomic(tmp_path / "out", "run-x", manifest, records, expected=expected)
     assert not (tmp_path / "out" / "run-x").exists()
 
 
 def test_r1_c3_per_node_totals_and_fingerprints_are_reconciled(tmp_path: Path):
-    """A node whose declared token total or fingerprint disagrees with its records is refused."""
-    manifest, records = _publishable(tmp_path, count=3)
-    # Totals stay truthful so the PER-NODE reconciliation is the check that fires, not the
-    # global one; otherwise this would re-prove test_r1_c rather than the node path.
+    """A node whose declared token total or fingerprint disagrees is refused -- twice over.
+
+    Both layers are exercised: a manifest that contradicts the trusted post-Pass-1 result is
+    refused on that ground (R3-A), and a manifest that agrees with a *wrong* expectation is still
+    refused because neither describes the bytes on disk.
+    """
+    manifest, records, expected = _publishable(tmp_path, count=3)
+
     tokens = json.loads(json.dumps(manifest))
     tokens["nodes"][0]["selected_serialized_tokens"] = 20
-    with pytest.raises(OutputError, match="but the records sum to 21"):
-        publish_atomic(tmp_path / "out1", "run-x", tokens, list(records))
+    with pytest.raises(OutputError, match="trusted post-Pass-1 result committed to 21"):
+        publish_atomic(tmp_path / "out1", "run-x", tokens, list(records), expected=expected)
 
     fingerprint = json.loads(json.dumps(manifest))
     fingerprint["nodes"][0]["selection_fingerprint"] = "0" * 64
+    with pytest.raises(OutputError, match="trusted post-Pass-1 result committed to"):
+        publish_atomic(tmp_path / "out2", "run-x", fingerprint, list(records), expected=expected)
+
+    # Now make the expectation agree with the lie. The physical reconstruction still refuses.
+    node = dict(manifest["nodes"][0])
+    node["selection_fingerprint"] = "0" * 64
+    lying = _expected_for(
+        _pass1_for(
+            [dict(node)],
+            {"b_x": ["ib_x"]},
+            {k: v for k, v in manifest["totals"].items() if k != "shards"},
+        )
+    )
+    fingerprint["stage_i_run"] = _stage_i_run_block(lying)
     with pytest.raises(OutputError, match="fingerprint disagrees"):
-        publish_atomic(tmp_path / "out2", "run-x", fingerprint, list(records))
+        publish_atomic(tmp_path / "out3", "run-x", fingerprint, list(records), expected=lying)
+
+
+def test_r1_c3b_per_node_token_totals_are_reconciled_against_the_records(tmp_path: Path):
+    """The per-node physical token reconciliation, on a fixture where totals stay truthful.
+
+    With a single node the global total already catches a wrong per-node count, so the per-node
+    path needs two nodes: one understated and one overstated by the same amount, leaving the
+    realization total honest and the node numbers both wrong.
+    """
+    records = []
+    nodes = []
+    projection = {}
+    for source_id, claimed in (("b_p", 20), ("b_q", 22)):
+        identities = [hashlib.sha256(f"{source_id}-{i}".encode()).hexdigest() for i in range(3)]
+        for index, identity in enumerate(identities):
+            records.append(
+                _record(
+                    source_id=source_id,
+                    input_binding_id=f"ib_{source_id}",
+                    stable_input_record_ordinal=index,
+                    selection_ordinal_within_node=index,
+                    cleaned_text_sha256=identity,
+                    raw_sha256=hashlib.sha256(f"r-{identity}".encode()).hexdigest(),
+                    input_record_sha256=hashlib.sha256(f"w-{identity}".encode()).hexdigest(),
+                    canonical_fingerprint=hashlib.sha256(f"f-{identity}".encode()).hexdigest(),
+                    training_text=f"{source_id} {index}",
+                )
+            )
+        projection[source_id] = [f"ib_{source_id}"]
+        nodes.append({
+            "source_id": source_id,
+            "stage": "stage_b",
+            "target_serialized_tokens": 30,
+            "branch": "ORDINARY",
+            "selection_mode": "SEEDED_HASH",
+            "selected_identities": 3,
+            # Wrong per node, right in aggregate: 20 + 22 == 42 == 6 records x 7 tokens.
+            "selected_serialized_tokens": claimed,
+            "selection_fingerprint": oracle_fingerprint(identities),
+            "selection_sequence_commitment": oracle_sequence_commitment(
+                source_id, "stage_b", list(enumerate(identities))
+            ),
+            "crossing_identity": None,
+            "actual_overshoot_tokens": 0,
+            "input_binding_ids": [f"ib_{source_id}"],
+        })
+    totals = {
+        "records": 6,
+        "content_tokens": 30,
+        "serialized_tokens": 42,
+        "unique_cleaned_identities": 6,
+    }
+    expected = _expected_for(_pass1_for([dict(n) for n in nodes], projection, dict(totals)))
+    manifest = {
+        "schema_version": MANIFEST_SCHEMA,
+        "record_schema_version": RECORD_SCHEMA,
+        "shard_policy_version": SHARD_POLICY_VERSION,
+        "records_per_shard": RECORDS_PER_SHARD,
+        "shards": [],
+        "totals": {**totals, "shards": 0},
+        "nodes": [dict(n) for n in nodes],
+        "node_binding_projection": projection,
+        "ownership_matrix": {},
+        "bindings": {"ib_b_p": "6" * 64, "ib_b_q": "7" * 64},
+        "environment": {
+            "python_executable": REQUIRED_PYTHON_EXECUTABLE,
+            "python_version": REQUIRED_PYTHON_VERSION,
+            "tokenizers_version": REQUIRED_TOKENIZERS_VERSION,
+        },
+        "h_binding": dict(_FIXTURE_H_BINDING),
+        "stage_i_run": _stage_i_run_block(expected),
+    }
+    with pytest.raises(OutputError, match="but the records sum to 21"):
+        publish_atomic(tmp_path / "out", "run-x", manifest, records, expected=expected)
 
 
 # ---- D-J: the strict consumer must enforce physical invariants ------------------
 
 
-def _corrupt_published(tmp_path: Path, name: str, mutate) -> Path:
+def _corrupt_published(tmp_path: Path, name: str, mutate) -> tuple[Path, TrustedExpectedResult]:
     """Publish a valid realization, then rewrite one shard through `mutate`.
 
     The manifest is left describing the original, which is exactly the situation a consumer must
-    detect: bytes on disk that no longer match what the result claims about itself.
+    detect: bytes on disk that no longer match what the result claims about itself. The trusted
+    expectation is returned alongside, captured before the tampering, because that is how a real
+    consumer gets one: from the frozen post-Pass-1 artifact, not from the result it is checking.
     """
-    manifest, records = _publishable(tmp_path, count=4)
-    final = publish_atomic(tmp_path / name, "run-x", manifest, records)
+    manifest, records, expected = _publishable(tmp_path, count=4)
+    final = publish_atomic(tmp_path / name, "run-x", manifest, records, expected=expected)
     shard = final / DOCUMENTS_DIRNAME / "documents-00000.jsonl"
     lines = shard.read_bytes().split(b"\n")[:-1]
     shard.write_bytes(mutate(lines))
-    return final
+    return final, expected
 
 
 def test_r1_d_consumer_rejects_reordered_selection_ordinals(tmp_path: Path):
@@ -1958,11 +2163,11 @@ def test_r1_d_consumer_rejects_reordered_selection_ordinals(tmp_path: Path):
             + b"\n"
         )
 
-    final = _corrupt_published(tmp_path, "out", swap)
+    final, expected = _corrupt_published(tmp_path, "out", swap)
     # A permutation keeps the domain contiguous, so it must be caught by the fingerprint, which is
     # what actually pins the selected sequence.
     with pytest.raises(OutputError, match="fingerprint disagrees|SHA-256|shards"):
-        load_published_realization(final)
+        load_published_realization(final, expected=expected)
 
 
 def test_r1_d2_consumer_rejects_a_gap_in_selection_ordinals(tmp_path: Path):
@@ -1973,26 +2178,26 @@ def test_r1_d2_consumer_rejects_a_gap_in_selection_ordinals(tmp_path: Path):
         first["selection_ordinal_within_node"] = 99
         return canonical_json_bytes(first) + b"\n".join(lines[1:]) + b"\n"
 
-    final = _corrupt_published(tmp_path, "out", punch)
+    final, expected = _corrupt_published(tmp_path, "out", punch)
     manifest = json.loads((final / MANIFEST_FILENAME).read_text())
     shard = final / DOCUMENTS_DIRNAME / "documents-00000.jsonl"
     manifest["shards"][0]["sha256"] = hashlib.sha256(shard.read_bytes()).hexdigest()
     manifest["shards"][0]["bytes"] = shard.stat().st_size
     (final / MANIFEST_FILENAME).write_bytes(canonical_json_bytes(manifest))
     with pytest.raises(OutputError, match="COMPLETE marker|not the contiguous domain"):
-        load_published_realization(final)
+        load_published_realization(final, expected=expected)
 
 
 def test_r1_e_consumer_rejects_false_manifest_totals(tmp_path: Path):
     """E. A published manifest whose totals do not describe its records must not load."""
-    manifest, records = _publishable(tmp_path, count=3)
-    final = publish_atomic(tmp_path / "out", "run-x", manifest, records)
+    manifest, records, expected = _publishable(tmp_path, count=3)
+    final = publish_atomic(tmp_path / "out", "run-x", manifest, records, expected=expected)
     payload = json.loads((final / MANIFEST_FILENAME).read_text())
     payload["totals"]["serialized_tokens"] = 22
     payload["nodes"][0]["selected_serialized_tokens"] = 22
     (final / MANIFEST_FILENAME).write_bytes(canonical_json_bytes(payload))
     with pytest.raises(OutputError):
-        load_published_realization(final)
+        load_published_realization(final, expected=expected)
 
 
 def test_r1_f_consumer_rejects_duplicate_cleaned_identities(tmp_path: Path):
@@ -2009,14 +2214,14 @@ def test_r1_f_consumer_rejects_duplicate_cleaned_identities(tmp_path: Path):
             + b"\n"
         )
 
-    final = _corrupt_published(tmp_path, "out", duplicate)
+    final, expected = _corrupt_published(tmp_path, "out", duplicate)
     manifest = json.loads((final / MANIFEST_FILENAME).read_text())
     shard = final / DOCUMENTS_DIRNAME / "documents-00000.jsonl"
     manifest["shards"][0]["sha256"] = hashlib.sha256(shard.read_bytes()).hexdigest()
     manifest["shards"][0]["bytes"] = shard.stat().st_size
     (final / MANIFEST_FILENAME).write_bytes(canonical_json_bytes(manifest))
     with pytest.raises((OutputError, AuditError), match="COMPLETE marker|appears more than once"):
-        load_published_realization(final)
+        load_published_realization(final, expected=expected)
 
 
 def test_r1_g_consumer_rejects_noncanonical_record_bytes(tmp_path: Path):
@@ -2028,14 +2233,14 @@ def test_r1_g_consumer_rejects_noncanonical_record_bytes(tmp_path: Path):
         noncanonical = json.dumps(first, sort_keys=True, separators=(", ", ": ")).encode()
         return noncanonical + b"\n" + b"\n".join(lines[1:]) + b"\n"
 
-    final = _corrupt_published(tmp_path, "out", spacer)
+    final, expected = _corrupt_published(tmp_path, "out", spacer)
     manifest = json.loads((final / MANIFEST_FILENAME).read_text())
     shard = final / DOCUMENTS_DIRNAME / "documents-00000.jsonl"
     manifest["shards"][0]["sha256"] = hashlib.sha256(shard.read_bytes()).hexdigest()
     manifest["shards"][0]["bytes"] = shard.stat().st_size
     (final / MANIFEST_FILENAME).write_bytes(canonical_json_bytes(manifest))
     with pytest.raises((OutputError, AuditError), match="COMPLETE marker|not canonical"):
-        load_published_realization(final)
+        load_published_realization(final, expected=expected)
 
 
 def test_r1_h_consumer_rejects_wrong_physical_order(tmp_path: Path):
@@ -2044,14 +2249,14 @@ def test_r1_h_consumer_rejects_wrong_physical_order(tmp_path: Path):
     def reverse_two(lines):
         return b"\n".join([lines[1], lines[0]] + list(lines[2:])) + b"\n"
 
-    final = _corrupt_published(tmp_path, "out", reverse_two)
+    final, expected = _corrupt_published(tmp_path, "out", reverse_two)
     manifest = json.loads((final / MANIFEST_FILENAME).read_text())
     shard = final / DOCUMENTS_DIRNAME / "documents-00000.jsonl"
     manifest["shards"][0]["sha256"] = hashlib.sha256(shard.read_bytes()).hexdigest()
     manifest["shards"][0]["bytes"] = shard.stat().st_size
     (final / MANIFEST_FILENAME).write_bytes(canonical_json_bytes(manifest))
     with pytest.raises((OutputError, AuditError), match="COMPLETE marker|physical order"):
-        load_published_realization(final)
+        load_published_realization(final, expected=expected)
 
 
 def test_r1_i_consumer_rejects_missing_and_extra_records(tmp_path: Path):
@@ -2060,9 +2265,9 @@ def test_r1_i_consumer_rejects_missing_and_extra_records(tmp_path: Path):
     def drop(lines):
         return b"\n".join(lines[1:]) + b"\n"
 
-    final = _corrupt_published(tmp_path, "missing", drop)
+    final, expected = _corrupt_published(tmp_path, "missing", drop)
     with pytest.raises((OutputError, AuditError)):
-        load_published_realization(final)
+        load_published_realization(final, expected=expected)
 
     def add(lines):
         extra = json.loads(lines[-1])
@@ -2071,47 +2276,53 @@ def test_r1_i_consumer_rejects_missing_and_extra_records(tmp_path: Path):
         extra["selection_ordinal_within_node"] += 1000
         return b"\n".join(lines) + b"\n" + canonical_json_bytes(extra)
 
-    final2 = _corrupt_published(tmp_path, "extra", add)
+    final2, expected2 = _corrupt_published(tmp_path, "extra", add)
     with pytest.raises((OutputError, AuditError)):
-        load_published_realization(final2)
+        load_published_realization(final2, expected=expected2)
 
 
 def test_r1_j_consumer_reconstructs_and_verifies_per_node_fingerprints(tmp_path: Path):
     """J. The node fingerprint is recomputed from the published records, via a longhand oracle."""
-    manifest, records = _publishable(tmp_path, count=5)
-    expected = oracle_fingerprint([r["cleaned_text_sha256"] for r in records])
-    manifest["nodes"][0]["selection_fingerprint"] = expected
-    final = publish_atomic(tmp_path / "out", "run-x", manifest, records)
+    manifest, records, expected = _publishable(tmp_path, count=5)
+    fingerprint = oracle_fingerprint([r["cleaned_text_sha256"] for r in records])
+    assert manifest["nodes"][0]["selection_fingerprint"] == fingerprint
+    final = publish_atomic(tmp_path / "out", "run-x", manifest, records, expected=expected)
 
-    loaded = load_published_realization(final)
-    assert loaded["nodes"][0]["selection_fingerprint"] == expected
+    loaded = load_published_realization(final, expected=expected)
+    assert loaded["nodes"][0]["selection_fingerprint"] == fingerprint
 
     # And a manifest claiming any other fingerprint must not load.
     payload = json.loads((final / MANIFEST_FILENAME).read_text())
     payload["nodes"][0]["selection_fingerprint"] = "0" * 64
     (final / MANIFEST_FILENAME).write_bytes(canonical_json_bytes(payload))
     with pytest.raises(OutputError):
-        load_published_realization(final)
+        load_published_realization(final, expected=expected)
 
 
 def test_r1_u_strict_consumer_validates_a_genuine_multi_shard_publication(tmp_path: Path):
     """U. End to end over more than one shard, with every physical invariant enforced."""
     count = RECORDS_PER_SHARD + 7
-    manifest, _ = _publishable(tmp_path, count=1)
-    manifest["totals"].update({
+    manifest, _, _ = _publishable(tmp_path, count=1)
+    identities = [hashlib.sha256(f"u-{i}".encode()).hexdigest() for i in range(count)]
+    totals = {
         "records": count,
         "content_tokens": 5 * count,
         "serialized_tokens": 7 * count,
         "unique_cleaned_identities": count,
-        "shards": 0,
+    }
+    node = dict(manifest["nodes"][0])
+    node.update({
+        "selected_identities": count,
+        "selected_serialized_tokens": 7 * count,
+        "selection_fingerprint": oracle_fingerprint(identities),
+        "selection_sequence_commitment": oracle_sequence_commitment(
+            "b_x", "stage_b", [(i, identities[i]) for i in range(count)]
+        ),
     })
-    manifest["nodes"][0]["selected_identities"] = count
-    manifest["nodes"][0]["selected_serialized_tokens"] = 7 * count
-    identities = [hashlib.sha256(f"u-{i}".encode()).hexdigest() for i in range(count)]
-    manifest["nodes"][0]["selection_fingerprint"] = oracle_fingerprint(identities)
-    manifest["nodes"][0]["selection_sequence_commitment"] = oracle_sequence_commitment(
-        "b_x", "stage_b", [(i, identities[i]) for i in range(count)]
-    )
+    expected = _expected_for(_pass1_for([dict(node)], {"b_x": ["ib_x"]}, dict(totals)))
+    manifest["totals"] = {**totals, "shards": 0}
+    manifest["nodes"] = [node]
+    manifest["stage_i_run"] = _stage_i_run_block(expected)
 
     def gen():
         for i in range(count):
@@ -2125,8 +2336,8 @@ def test_r1_u_strict_consumer_validates_a_genuine_multi_shard_publication(tmp_pa
                 training_text=f"doc {i}",
             )
 
-    final = publish_atomic(tmp_path / "out", "run-multi", manifest, gen())
-    loaded = load_published_realization(final)
+    final = publish_atomic(tmp_path / "out", "run-multi", manifest, gen(), expected=expected)
+    loaded = load_published_realization(final, expected=expected)
     assert loaded["totals"]["shards"] == 2 == len(loaded["shards"])
     assert loaded["shards"][0]["records"] == RECORDS_PER_SHARD
     assert loaded["shards"][1]["records"] == 7
@@ -2143,49 +2354,89 @@ def test_r1_u_strict_consumer_validates_a_genuine_multi_shard_publication(tmp_pa
 
 
 def test_r1_k_authorize_plan_positive_path_yields_a_sealed_context(authorized, live_plan_path):
-    """K. The exact positive path: a real plan, its true digest, a usable context."""
+    """K. The exact positive path: a real plan, its true digest, a usable capability."""
     assert isinstance(authorized, AuthorizedIContext)
     assert authorized.plan_sha256 == sha256_file(live_plan_path)
-    assert authorized.plan["authorization_status"] == "NOT_AUTHORIZED"
-    # Everything load-bearing came from the plan, not from an argument.
-    assert authorized.graph.graph_sha256 == authorized.plan["graph_sha256"]
-    assert authorized.accepted.run_identity == authorized.plan["accepted_h"]["run_identity"]
-    assert authorized.accepted.complete_sha256 == ACCEPTED_H_COMPLETE_SHA256
-    assert authorized.tokenizer_path.name == "tokenizer.json"
-    assert authorized.run_name.startswith("run-")
 
-    # The identity is generated by its own bound fields, via a separately written expectation.
-    expected = stage_i_run_identity(
-        candidate_plan_sha256=authorized.plan_sha256,
-        implementation_commit=authorized.implementation_commit,
-        implementation_bundle_sha256=authorized.bundle_sha256,
-        plan_schema_version=PLAN_SCHEMA,
-        output_schema_version=RECORD_SCHEMA,
-        manifest_schema_version=MANIFEST_SCHEMA,
-        shard_policy_version=SHARD_POLICY_VERSION,
-        records_per_shard=RECORDS_PER_SHARD,
-        h_run_identity=authorized.accepted.run_identity,
-        h_complete_sha256=authorized.accepted.complete_sha256,
-        h_census_sha256=authorized.accepted.census_sha256,
-        h_predictions_sha256=authorized.accepted.predictions_sha256,
-        owner_graph_sha256=authorized.graph.graph_sha256,
-        node_binding_projection_sha256=node_binding_projection_sha256(
-            authorized.node_binding_projection
-        ),
+    # R3-C/D: the handle carries no load-bearing state at all. Everything comes from a fresh
+    # re-derivation off the authorization-time plan bytes.
+    state = authorized.revalidate()
+    assert state.plan["authorization_status"] == "NOT_AUTHORIZED"
+    assert state.graph.graph_sha256 == state.plan["graph_sha256"]
+    assert state.accepted.run_identity == state.plan["accepted_h"]["run_identity"]
+    assert state.accepted.complete_sha256 == ACCEPTED_H_COMPLETE_SHA256
+    assert state.tokenizer_path.name == "tokenizer.json"
+    assert state.state_sha256 == authorized.authorized_state_sha256
+
+    # The Layer-1 anchors are generated by the state's own bound fields.
+    block = authorization_block(state)
+    assert block["candidate_i_plan_sha256"] == authorized.plan_sha256
+    assert block["authorized_state_sha256"] == state.state_sha256
+    assert block["owner_graph_sha256"] == state.graph.graph_sha256
+    assert block["h_complete_sha256"] == ACCEPTED_H_COMPLETE_SHA256
+    assert block["node_binding_projection_sha256"] == node_binding_projection_sha256(
+        state.node_binding_projection
     )
-    assert authorized.run_identity == expected
-    authorized.revalidate()
+
+    # Re-deriving twice must land on exactly the same canonical state.
+    assert authorized.revalidate().state_sha256 == state.state_sha256
+
+
+def test_r3_c_no_module_scope_registration_or_minting_api_exists(authorized):
+    """R3-C. Codex promoted a hand-built lookalike with the module-visible registration helper.
+
+    The reproduction was::
+
+        manual = <field-for-field lookalike>
+        _register_authorized(manual, _canonical_state_digest(manual))
+
+    after which the manual object was accepted as an authorization. The repair is not a rename:
+    the registry, its record type and the only operation that can write to it live inside a
+    closure, and nothing that escapes the module can add an entry. This asserts the route is gone
+    AND that no other module-scope callable can grant authority.
+    """
+    import inspect
+
+    import pretrain.stage_i_realize_v1 as module
+
+    for name in ("_AUTHORIZED", "_register_authorized", "_canonical_state_digest", "_SEAL"):
+        assert not hasattr(module, name), f"module-scope authority route {name!r} is back"
+
+    # Nothing at module scope may be a registration/minting API by any spelling.
+    banned = ("register", "mint", "seal", "stamp", "grant")
+    offenders = [
+        name
+        for name in dir(module)
+        if callable(getattr(module, name, None))
+        and name != "authorize_plan"
+        and any(word in name.lower() for word in banned)
+    ]
+    assert not offenders, f"module scope exposes a registration-shaped API: {offenders}"
+
+    # authorize_plan is the sole mint, and it takes the exact plan path and owner-held digest.
+    parameters = list(inspect.signature(module.authorize_plan).parameters)
+    assert parameters[:3] == ["plan_path", "expected_plan_sha256", "repo_root"]
+
+    # A hand-built lookalike cannot be constructed, cannot be given a field, and is not authority.
+    with pytest.raises(RealizationError, match="cannot be constructed"):
+        AuthorizedIContext()
+    manual = object.__new__(AuthorizedIContext)
+    with pytest.raises(AttributeError):
+        object.__setattr__(manual, "authorized", True)
+    with pytest.raises(RealizationError, match="exact Stage-I context instance"):
+        module._require_authorized(manual, "test")
+    with pytest.raises(RealizationError, match="exact Stage-I context instance"):
+        module.resolve_authorized_state(manual, "test")
+    with pytest.raises(RealizationError, match="exact Stage-I context instance"):
+        module.revalidate_authorized(manual)
+
+    # ...and the genuine instance still works, or every negative above proves nothing.
+    module._require_authorized(authorized, "test")
 
 
 def test_r1_k2_only_the_exact_authorized_instance_is_an_authorization(authorized, tmp_path):
-    """R2-C. Authority is the exact registered instance, not a value carried in a field.
-
-    R1 stored a sentinel on the context, so `copy.copy` carried it and anything that could import
-    the sentinel could stamp a lookalike. Codex walked through both. Authority now lives in a
-    module-private registry keyed by object identity, so there is nothing to copy or restamp.
-    """
+    """R2-C/R3-C. Authority is the exact registered instance, not a value carried in a field."""
     import copy
-    import dataclasses
 
     from pretrain.stage_i_realize_v1 import _require_authorized, realize_and_publish
 
@@ -2194,60 +2445,52 @@ def test_r1_k2_only_the_exact_authorized_instance_is_an_authorization(authorized
         copy.copy(authorized)
     with pytest.raises(RealizationError, match="must not be copied"):
         copy.deepcopy(authorized)
+    with pytest.raises(RealizationError, match="must not be pickled"):
+        authorized.__reduce__()
 
-    with pytest.raises(RealizationError, match="exact Stage-I context instance"):
-        _require_authorized(dataclasses.replace(authorized), "test")
-
-    # A field-for-field lookalike, built without going through authorize_plan.
     lookalike = object.__new__(AuthorizedIContext)
-    for field in dataclasses.fields(authorized):
-        object.__setattr__(lookalike, field.name, getattr(authorized, field.name))
     with pytest.raises(RealizationError, match="exact Stage-I context instance"):
         _require_authorized(lookalike, "test")
     with pytest.raises(RealizationError, match="exact Stage-I context instance"):
         realize_and_publish(lookalike, out_dir=tmp_path / "o", work_dir=tmp_path / "w")
 
-    # There is no import-visible constant that confers authority any more.
-    import pretrain.stage_i_realize_v1 as module
+    # A subclass is a different instance too, isinstance notwithstanding.
+    class Pretender(AuthorizedIContext):
+        __slots__ = ()
 
-    assert not hasattr(module, "_SEAL"), "an importable authority sentinel is back"
-    assert not any(f.name == "_provenance" for f in dataclasses.fields(authorized))
+    with pytest.raises(RealizationError, match="exact Stage-I context instance"):
+        _require_authorized(object.__new__(Pretender), "test")
 
-    # ...and the genuine instance still works, or every negative above proves nothing.
     _require_authorized(authorized, "test")
 
 
-def test_r2_c_revalidate_detects_in_memory_substitution(live_plan_path, tmp_path):
-    """R2-C/D. revalidate must catch a swapped graph or accepted-H, not just the plan bytes.
+def test_r3_c_context_handle_exposes_no_load_bearing_state(authorized):
+    """R3-D. There is no mutable graph/H/plan/path on the handle to substitute in the first place.
 
-    Uses its own context so the module-scoped `authorized` fixture is not mutated for other tests.
+    Codex's R2 mutations all began ``object.__setattr__(context, "graph", ...)`` or
+    ``context.accepted.census[...] = ...``. The handle now has empty ``__slots__``, so it has no
+    ``__dict__`` and no data attribute to reach for.
     """
-    import dataclasses
-
-    context = authorize_plan(live_plan_path, sha256_file(live_plan_path), ROOT)
-    context.revalidate()
-
-    reversed_nodes = dataclasses.replace(context.graph, nodes=tuple(reversed(context.graph.nodes)))
-    object.__setattr__(context, "graph", reversed_nodes)
-    with pytest.raises(RealizationError, match="substituted after authorization"):
-        context.revalidate()
-
-    context2 = authorize_plan(live_plan_path, sha256_file(live_plan_path), ROOT)
-    object.__setattr__(
-        context2, "accepted", dataclasses.replace(context2.accepted, census_sha256="0" * 64)
-    )
-    with pytest.raises(RealizationError, match="substituted after authorization"):
-        context2.revalidate()
-
-    context3 = authorize_plan(live_plan_path, sha256_file(live_plan_path), ROOT)
-    object.__setattr__(context3, "run_identity", "0" * 64)
-    with pytest.raises(RealizationError, match="substituted after authorization"):
-        context3.revalidate()
-
-    context4 = authorize_plan(live_plan_path, sha256_file(live_plan_path), ROOT)
-    object.__setattr__(context4, "node_binding_projection", {"b_bogus": ("ib_bogus",)})
-    with pytest.raises(RealizationError, match="substituted after authorization"):
-        context4.revalidate()
+    for attribute in (
+        "graph",
+        "accepted",
+        "plan",
+        "authorities",
+        "tokenizer_path",
+        "reference_exclusion_path",
+        "node_binding_projection",
+        "environment",
+        "bundle_files",
+        "run_identity",
+        "__dict__",
+    ):
+        assert not hasattr(authorized, attribute), (
+            f"the context still exposes load-bearing state as {attribute!r}"
+        )
+    assert AuthorizedIContext.__slots__ == ("__weakref__",)
+    for attribute in ("graph", "accepted", "plan", "run_identity"):
+        with pytest.raises(AttributeError):
+            object.__setattr__(authorized, attribute, None)
 
 
 def test_r2_c_plan_bytes_changing_after_authorization_is_detected(live_plan_path, tmp_path):
@@ -2272,7 +2515,7 @@ def test_r1_l_wrong_externally_supplied_plan_sha_is_rejected(live_plan_path):
 @pytest.mark.parametrize(
     "mutation,match",
     [
-        (lambda p: p.__setitem__("graph_sha256", "0" * 64), "owner graph SHA-256"),
+        (lambda p: p.__setitem__("graph_sha256", "0" * 64), "SHA-256 mismatch"),
         (lambda p: p.__setitem__("seed", 1), "seed disagrees"),
         (
             lambda p: p["bound_authorities"].__setitem__("tokenizer_sha256", "0" * 64),
@@ -2281,6 +2524,14 @@ def test_r1_l_wrong_externally_supplied_plan_sha_is_rejected(live_plan_path):
         (
             lambda p: p["authorities"]["tokenizer"].__setitem__("sha256", "0" * 64),
             "plan authority tokenizer",
+        ),
+        (
+            lambda p: p["authorities"]["tokenizer"].__setitem__("path", "runs/elsewhere/tok.json"),
+            "frozen canonical location",
+        ),
+        (
+            lambda p: p["accepted_h"].__setitem__("run_dir", "runs/some_other_h_run"),
+            "frozen accepted Stage-H run directory",
         ),
         (
             lambda p: p["input_bindings"]["ib_dclm_edu"].__setitem__("documents_sha256", "0" * 64),
@@ -2297,7 +2548,7 @@ def test_r1_l_wrong_externally_supplied_plan_sha_is_rejected(live_plan_path):
         ),
         (
             lambda p: p["accepted_h"].__setitem__("complete_sha256", "0" * 64),
-            "COMPLETE SHA-256",
+            "exact accepted Stage-H COMPLETE bytes",
         ),
         (
             lambda p: p["accepted_h"].__setitem__("predictions_sha256", "0" * 64),
@@ -2313,11 +2564,23 @@ def test_r1_l_wrong_externally_supplied_plan_sha_is_rejected(live_plan_path):
         ),
         (
             lambda p: p["shard_policy"].__setitem__("records_per_shard", 7),
-            "shard policy disagrees",
+            "shard policy record count disagrees",
         ),
         (
             lambda p: p["shard_policy"].__setitem__("version", "nope"),
-            "shard policy disagrees",
+            "shard policy version disagrees",
+        ),
+        (
+            lambda p: p["shard_policy"].__setitem__("rule", "records, whatever"),
+            "not the frozen shard rule literal",
+        ),
+        (
+            lambda p: p["selection_rules"].__setitem__("representative_rule", "min(a, b)"),
+            "not the frozen selector-v1 literal",
+        ),
+        (
+            lambda p: p["selection_rules"].__setitem__("physical_locator_rule", "first one"),
+            "physical locator rule is not the frozen literal",
         ),
         (
             lambda p: p.__setitem__("output_schema_version", "nope"),
@@ -2355,15 +2618,17 @@ def test_r1_mnopqrs_plan_mismatches_are_all_rejected(live_plan_path, tmp_path, m
     binding checks fire rather than merely re-proving the digest check from test L.
     """
     path, digest = _mutated_plan(live_plan_path, tmp_path, mutation)
-    with pytest.raises(RealizationError, match=match):
+    # GraphError is included because the owner graph is now loaded *bound* to the plan's declared
+    # digest, so a mutated graph_sha256 is refused by the loader before any of it is parsed.
+    with pytest.raises((RealizationError, GraphError), match=match):
         authorize_plan(path, digest, ROOT)
 
 
 def test_r1_t_published_run_identity_must_be_generated_by_its_own_fields(tmp_path: Path):
     """T. A result claiming an identity its own bound fields do not generate must not load."""
-    manifest, records = _publishable(tmp_path, count=3)
-    final = publish_atomic(tmp_path / "out", "run-x", manifest, records)
-    loaded = load_published_realization(final)
+    manifest, records, expected = _publishable(tmp_path, count=3)
+    final = publish_atomic(tmp_path / "out", "run-x", manifest, records, expected=expected)
+    loaded = load_published_realization(final, expected=expected)
     block = loaded["stage_i_run"]
     assert recompute_stage_i_run_identity(block) == block["run_identity"]
 
@@ -2371,13 +2636,19 @@ def test_r1_t_published_run_identity_must_be_generated_by_its_own_fields(tmp_pat
     payload["stage_i_run"]["h_complete_sha256"] = "0" * 64
     (final / MANIFEST_FILENAME).write_bytes(canonical_json_bytes(payload))
     with pytest.raises(OutputError):
-        load_published_realization(final)
+        load_published_realization(final, expected=expected)
 
 
 def test_r1_t2_run_identity_changes_with_every_bound_field():
-    """Each field genuinely participates: flipping any one must move the identity."""
-    base = dict(
-        candidate_plan_sha256="1" * 64,
+    """Each field genuinely participates: flipping any one must move the identity.
+
+    R3-A extends the identity with the authorization-time canonical state digest and the
+    post-Pass-1 result, so those are exercised here too. Without that, a resealed realization
+    could carry a different expectation under the same name.
+    """
+    authorization = dict(
+        candidate_i_plan_sha256="1" * 64,
+        authorized_state_sha256="9" * 64,
         implementation_commit="a" * 40,
         implementation_bundle_sha256="2" * 64,
         plan_schema_version=PLAN_SCHEMA,
@@ -2392,15 +2663,27 @@ def test_r1_t2_run_identity_changes_with_every_bound_field():
         owner_graph_sha256="7" * 64,
         node_binding_projection_sha256="8" * 64,
     )
-    reference = stage_i_run_identity(**base)
+    downstream = dict(
+        post_pass1_result_identity_sha256="b" * 64,
+        selection_sequence_commitment_map_sha256="c" * 64,
+        post_pass1_result_identity_schema=PASS1_RESULT_SCHEMA,
+        selection_sequence_commitment_version=SEQ_SCHEMA,
+    )
+    reference = stage_i_published_run_identity(authorization, **downstream)
     seen = {reference}
-    for key, value in base.items():
-        altered = dict(base)
+    for key, value in authorization.items():
+        altered = dict(authorization)
         altered[key] = 99 if isinstance(value, int) else "z" * len(str(value))
-        identity = stage_i_run_identity(**altered)
+        identity = stage_i_published_run_identity(altered, **downstream)
         assert identity != reference, f"{key} does not participate in the run identity"
         seen.add(identity)
-    assert len(seen) == len(base) + 1
+    for key, value in downstream.items():
+        altered = dict(downstream)
+        altered[key] = "z" * len(value)
+        identity = stage_i_published_run_identity(authorization, **altered)
+        assert identity != reference, f"{key} does not participate in the run identity"
+        seen.add(identity)
+    assert len(seen) == len(authorization) + len(downstream) + 1
 
 
 def test_r1_v_implementation_bundle_covers_every_stage_i_production_module():
@@ -2468,9 +2751,9 @@ def test_r2_a_self_consistent_ordinal_swap_is_rejected(tmp_path: Path):
     digest and total is resealed. The ONLY thing that differs is which identity sits at which
     ordinal -- and that is precisely what the new order-sensitive commitment binds.
     """
-    manifest, records = _publishable(tmp_path, count=4)
-    final = publish_atomic(tmp_path / "out", "run-x", manifest, records)
-    load_published_realization(final)  # valid before tampering
+    manifest, records, expected = _publishable(tmp_path, count=4)
+    final = publish_atomic(tmp_path / "out", "run-x", manifest, records, expected=expected)
+    load_published_realization(final, expected=expected)  # valid before tampering
 
     def swap(lines):
         first = json.loads(lines[0])
@@ -2488,13 +2771,13 @@ def test_r2_a_self_consistent_ordinal_swap_is_rejected(tmp_path: Path):
 
     _reseal(final, swap)
     with pytest.raises(OutputError, match="selection-sequence commitment disagrees"):
-        load_published_realization(final)
+        load_published_realization(final, expected=expected)
 
 
 def test_r2_a_identity_moved_to_another_ordinal_is_rejected(tmp_path: Path):
     """A contiguous domain with the wrong sequence must still fail."""
-    manifest, records = _publishable(tmp_path, count=4)
-    final = publish_atomic(tmp_path / "out", "run-x", manifest, records)
+    manifest, records, expected = _publishable(tmp_path, count=4)
+    final = publish_atomic(tmp_path / "out", "run-x", manifest, records, expected=expected)
 
     def rotate(lines):
         parsed = [json.loads(line) for line in lines]
@@ -2505,7 +2788,7 @@ def test_r2_a_identity_moved_to_another_ordinal_is_rejected(tmp_path: Path):
 
     _reseal(final, rotate)
     with pytest.raises(OutputError, match="selection-sequence commitment disagrees"):
-        load_published_realization(final)
+        load_published_realization(final, expected=expected)
 
 
 @pytest.mark.parametrize(
@@ -2517,8 +2800,8 @@ def test_r2_a_identity_moved_to_another_ordinal_is_rejected(tmp_path: Path):
     ],
 )
 def test_r2_a_ordinal_domain_violations_are_rejected(tmp_path: Path, mutation, match):
-    manifest, records = _publishable(tmp_path, count=4)
-    final = publish_atomic(tmp_path / "out", "run-x", manifest, records)
+    manifest, records, expected = _publishable(tmp_path, count=4)
+    final = publish_atomic(tmp_path / "out", "run-x", manifest, records, expected=expected)
 
     def mutate(lines):
         parsed = [json.loads(line) for line in lines]
@@ -2532,7 +2815,7 @@ def test_r2_a_ordinal_domain_violations_are_rejected(tmp_path: Path, mutation, m
 
     _reseal(final, mutate)
     with pytest.raises((OutputError, AuditError), match=match):
-        load_published_realization(final)
+        load_published_realization(final, expected=expected)
 
 
 def test_r2_a_sequence_commitment_is_order_sensitive_and_versioned():
@@ -2578,18 +2861,18 @@ def test_r2_a_sequence_commitment_is_order_sensitive_and_versioned():
 
 def test_r2_b_undeclared_input_binding_is_rejected(tmp_path: Path):
     """R2-B. Codex published and consumed `ib_not_declared` while the manifest declared `ib_x`."""
-    manifest, records = _publishable(tmp_path, count=3)
+    manifest, records, expected = _publishable(tmp_path, count=3)
     tampered = [dict(r) for r in records]
     tampered[0]["input_binding_id"] = "ib_not_declared"
     with pytest.raises(AuditError, match="not authorized to draw from input binding"):
-        publish_atomic(tmp_path / "out", "run-x", manifest, tampered)
+        publish_atomic(tmp_path / "out", "run-x", manifest, tampered, expected=expected)
     assert not (tmp_path / "out" / "run-x").exists()
 
 
 def test_r2_b_undeclared_binding_is_rejected_by_the_consumer_too(tmp_path: Path):
     """The same record must not survive on the read side either, fully resealed."""
-    manifest, records = _publishable(tmp_path, count=3)
-    final = publish_atomic(tmp_path / "out", "run-x", manifest, records)
+    manifest, records, expected = _publishable(tmp_path, count=3)
+    final = publish_atomic(tmp_path / "out", "run-x", manifest, records, expected=expected)
 
     def swap_binding(lines):
         parsed = [json.loads(line) for line in lines]
@@ -2598,12 +2881,12 @@ def test_r2_b_undeclared_binding_is_rejected_by_the_consumer_too(tmp_path: Path)
 
     _reseal(final, swap_binding)
     with pytest.raises((OutputError, AuditError), match="not authorized|physical order"):
-        load_published_realization(final)
+        load_published_realization(final, expected=expected)
 
 
 def test_r2_b_authorized_binding_attached_to_the_wrong_node_is_rejected(tmp_path: Path):
     """A globally-declared binding used by a node it is not authorized for."""
-    manifest, records = _publishable(tmp_path, count=3)
+    manifest, records, expected = _publishable(tmp_path, count=3)
     manifest["node_binding_projection"] = {"b_x": ["ib_x"], "b_other": ["ib_other"]}
     manifest["nodes"].append({
         "source_id": "b_other",
@@ -2620,50 +2903,69 @@ def test_r2_b_authorized_binding_attached_to_the_wrong_node_is_rejected(tmp_path
         "actual_overshoot_tokens": 0,
     })
     manifest["stage_i_run"] = _stage_i_run_block(
+        expected,
         node_binding_projection_sha256=node_binding_projection_sha256({
             "b_x": ["ib_x"],
             "b_other": ["ib_other"],
-        })
+        }),
     )
     tampered = [dict(r) for r in records]
     tampered[0]["input_binding_id"] = "ib_other"  # authorized, but not for b_x
     with pytest.raises(AuditError, match="not authorized to draw from input binding"):
-        publish_atomic(tmp_path / "out", "run-x", manifest, tampered)
+        publish_atomic(tmp_path / "out", "run-x", manifest, tampered, expected=expected)
 
 
 def test_r2_b_manifest_projection_must_match_the_run_identity_digest(tmp_path: Path):
-    """A widened projection changes its digest, which the run identity binds."""
-    manifest, records = _publishable(tmp_path, count=3)
-    manifest["node_binding_projection"] = {"b_x": ["ib_extra", "ib_x"]}
+    """A widened projection is refused against the trusted authority, and against its digest."""
+    manifest, records, expected = _publishable(tmp_path, count=3)
+    widened = json.loads(json.dumps(manifest))
+    widened["node_binding_projection"] = {"b_x": ["ib_extra", "ib_x"]}
+    with pytest.raises(OutputError, match="disagrees with the trusted node/binding authority"):
+        publish_atomic(tmp_path / "out", "run-x", widened, list(records), expected=expected)
+
+    # And the manifest's own projection digest must still describe its own projection, so a
+    # widened projection cannot pass even the self-consistency check it carries.
+    final = publish_atomic(tmp_path / "ok", "run-x", manifest, list(records), expected=expected)
+    published = json.loads((final / MANIFEST_FILENAME).read_text())
+    published["node_binding_projection"] = {"b_x": ["ib_extra", "ib_x"]}
     with pytest.raises(OutputError, match="node_binding_projection_sha256 does not describe"):
-        publish_atomic(tmp_path / "out", "run-x", manifest, records)
+        validate_manifest(published)
 
 
 def test_r2_b_projection_must_cover_exactly_the_declared_nodes(tmp_path: Path):
-    manifest, records = _publishable(tmp_path, count=3)
+    manifest, records, expected = _publishable(tmp_path, count=3)
     manifest["node_binding_projection"] = {"b_other": ["ib_x"]}
     manifest["stage_i_run"] = _stage_i_run_block(
-        node_binding_projection_sha256=node_binding_projection_sha256({"b_other": ["ib_x"]})
+        expected,
+        node_binding_projection_sha256=node_binding_projection_sha256({"b_other": ["ib_x"]}),
     )
-    # The streaming audit reaches the record first and rejects the unknown node; if it did not,
-    # validate_manifest's coverage check would. Either is a correct refusal.
+    # The manifest's projection now contradicts the trusted authority, which is checked before
+    # any of the manifest's self-consistency claims; if it did not fire, the streaming audit
+    # would reject the record's unknown node. Either is a correct refusal.
     with pytest.raises(
         (OutputError, AuditError),
-        match="not in the authorized node/binding projection|must cover exactly the declared nodes",
+        match=(
+            "trusted post-Pass-1 result binds|not in the authorized node/binding projection"
+            "|must cover exactly the declared nodes"
+        ),
     ):
-        publish_atomic(tmp_path / "out", "run-x", manifest, records)
+        publish_atomic(tmp_path / "out", "run-x", manifest, records, expected=expected)
 
 
 def test_r2_b_plan_projection_is_derived_from_the_frozen_graph(authorized):
     """The authorized projection must be exactly the graph's node -> binding relation."""
+    state = authorized.revalidate()
     from_graph = {
-        node.source_id: tuple(sorted(set(node.input_binding_ids)))
-        for node in authorized.graph.nodes
+        node.source_id: tuple(sorted(set(node.input_binding_ids))) for node in state.graph.nodes
     }
-    assert dict(authorized.node_binding_projection) == from_graph
-    assert authorized.plan["node_binding_projection"] == {
-        source_id: list(bindings) for source_id, bindings in sorted(from_graph.items())
-    }
+    assert dict(state.node_binding_projection) == from_graph
+    # The authorized plan is held deeply immutable, so its JSON arrays are tuples.
+    assert dict(state.plan["node_binding_projection"]) == from_graph
+    # R3-B: every projected binding must be a plan-authorized global input binding.
+    assert set(state.authorized_input_binding_ids) == set(state.graph.bindings)
+    assert {b for allowed in from_graph.values() for b in allowed} <= set(
+        state.authorized_input_binding_ids
+    )
     # structured_tutorial is the union node; it must carry both of its frozen bindings.
     assert len(from_graph["b_structured_tutorial"]) == 2
 
@@ -2692,7 +2994,43 @@ def test_r2_b_plan_projection_is_derived_from_the_frozen_graph(authorized):
         (lambda p: p["authorities"]["tokenizer"].pop("path"), "authorities.tokenizer is missing"),
         (
             lambda p: p["authorities"]["tokenizer"].__setitem__("path", "README.md"),
-            "plan authority tokenizer",
+            "frozen canonical location",
+        ),
+        (
+            lambda p: p["shard_policy"].__setitem__("rule", 50000),
+            "shard_policy.rule must be an exact string",
+        ),
+        (
+            lambda p: p["selection_rules"].__setitem__("representative_rule", 1),
+            "selection_rules.representative_rule must be an exact string",
+        ),
+        (
+            lambda p: p["environment_contract"]["observed_at_generation"].__setitem__(
+                "unknown_nested_field", "accepted"
+            ),
+            "observed_at_generation carries unknown",
+        ),
+        (
+            lambda p: p["environment_contract"]["observed_at_generation"].pop("python_version"),
+            "observed_at_generation is missing",
+        ),
+        (
+            lambda p: p["input_bindings"]["ib_dclm_edu"].__setitem__(
+                "total_physical_rows", "3545224"
+            ),
+            "total_physical_rows must be an exact integer",
+        ),
+        (
+            lambda p: p.__setitem__("seed", "5088999448999271579"),
+            "seed must be an exact integer",
+        ),
+        (
+            lambda p: p["bound_authorities"].pop("tokenizer_sha256"),
+            "not the exact frozen graph authority key set",
+        ),
+        (
+            lambda p: p["implementation_files"].__setitem__("pretrain/other.py", "0" * 64),
+            "not the exact Stage-I bundle member list",
         ),
         (
             lambda p: p["authorities"]["hq_policy"].__setitem__("sha256", "0" * 64),
@@ -2705,8 +3043,12 @@ def test_r2_b_plan_projection_is_derived_from_the_frozen_graph(authorized):
             "input_bindings.ib_dclm_edu carries unknown",
         ),
         (
-            lambda p: p["node_binding_projection"].__setitem__("b_dclm_edu", ["ib_wrong"]),
+            lambda p: p["node_binding_projection"].__setitem__("b_dclm_edu", ["ib_finewiki_en"]),
             "disagrees with that node",
+        ),
+        (
+            lambda p: p["node_binding_projection"].__setitem__("b_dclm_edu", ["ib_wrong"]),
+            "outside the plan-authorized global input-binding set",
         ),
         (
             lambda p: p["environment_contract"].pop("tokenizers_version"),
@@ -2732,7 +3074,7 @@ def test_r2_d_required_authority_set_is_closed_and_exact(live_plan_path):
     plan = json.loads(live_plan_path.read_text())
     assert frozenset(plan["authorities"]) == REQUIRED_AUTHORITIES
     assert "hq_policy" in REQUIRED_AUTHORITIES
-    assert plan["schema_version"] == "petitgpt-i-candidate-plan-v2"
+    assert plan["schema_version"] == "petitgpt-i-candidate-plan-v3"
 
 
 # ---- R2-E: bounded audit memory --------------------------------------------------
@@ -2857,10 +3199,722 @@ def test_r2_e_external_merge_uses_bounded_fanin(tmp_path: Path):
 
 def test_r2_e_audit_result_is_correct_under_many_spill_generations(tmp_path: Path):
     """A tiny sort chunk forces multipass merging; the audit result must be unchanged."""
-    manifest, records = _publishable(tmp_path, count=40)
-    final = publish_atomic(tmp_path / "out", "run-x", manifest, records, sort_chunk_lines=3)
-    loaded = load_published_realization(final, sort_chunk_lines=3)
+    manifest, records, expected = _publishable(tmp_path, count=40)
+    final = publish_atomic(
+        tmp_path / "out", "run-x", manifest, records, sort_chunk_lines=3, expected=expected
+    )
+    loaded = load_published_realization(final, sort_chunk_lines=3, expected=expected)
     assert loaded["totals"]["records"] == 40
     assert loaded["nodes"][0]["selection_fingerprint"] == oracle_fingerprint([
         r["cleaned_text_sha256"] for r in records
     ])
+
+
+# ================================================================================
+# R3 REPAIR REGRESSIONS — one per Codex R2 re-review finding
+# ================================================================================
+
+
+def _fully_reseal(final: Path, mutate_lines, mutate_manifest=None) -> Path:
+    """Rewrite shard 0, then reseal EVERY digest, total, identity and marker field.
+
+    Stronger than ``_reseal``: this also regenerates the manifest's own sequence-commitment map
+    digest and the published run identity, so a fixture cannot fail on a leftover
+    self-inconsistency instead of on the invariant under test.
+    """
+    shard = final / DOCUMENTS_DIRNAME / "documents-00000.jsonl"
+    lines = shard.read_bytes().split(b"\n")[:-1]
+    shard.write_bytes(mutate_lines(lines))
+    payload = shard.read_bytes()
+
+    manifest = json.loads((final / MANIFEST_FILENAME).read_text())
+    manifest["shards"][0]["sha256"] = hashlib.sha256(payload).hexdigest()
+    manifest["shards"][0]["bytes"] = len(payload)
+    manifest["shards"][0]["records"] = payload.count(b"\n")
+    if mutate_manifest is not None:
+        mutate_manifest(manifest)
+    run_block = dict(manifest["stage_i_run"])
+    run_block["selection_sequence_commitment_map_sha256"] = (
+        selection_sequence_commitment_map_sha256({
+            entry["source_id"]: entry["selection_sequence_commitment"]
+            for entry in manifest["nodes"]
+        })
+    )
+    run_block["node_binding_projection_sha256"] = node_binding_projection_sha256(
+        manifest["node_binding_projection"]
+    )
+    run_block.pop("run_identity", None)
+    run_block["run_identity"] = recompute_stage_i_run_identity(run_block)
+    manifest["stage_i_run"] = run_block
+
+    manifest_bytes = canonical_json_bytes(manifest)
+    (final / MANIFEST_FILENAME).write_bytes(manifest_bytes)
+    (final / COMPLETE_MARKER).write_bytes(
+        canonical_json_bytes({
+            "marker": "COMPLETE",
+            "manifest_sha256": hashlib.sha256(manifest_bytes).hexdigest(),
+            "record_schema_version": RECORD_SCHEMA,
+            "manifest_schema_version": MANIFEST_SCHEMA,
+            "h_run_identity": manifest["h_binding"]["h_run_identity"],
+            "stage_i_run_identity": manifest["stage_i_run"]["run_identity"],
+        })
+    )
+    return final
+
+
+def _function_source(module_relative: str, name: str):
+    tree = ast.parse((ROOT / module_relative).read_text())
+    return next(
+        node
+        for node in ast.walk(tree)
+        if isinstance(node, ast.FunctionDef | ast.AsyncFunctionDef) and node.name == name
+    )
+
+
+def _call_lines(function: ast.AST, name: str) -> list[int]:
+    lines = []
+    for node in ast.walk(function):
+        if isinstance(node, ast.Call):
+            func = node.func
+            target = func.attr if isinstance(func, ast.Attribute) else getattr(func, "id", None)
+            if target == name:
+                lines.append(node.lineno)
+    return sorted(lines)
+
+
+# ---- R3-A: the trusted post-Pass-1 expected result ------------------------------
+
+
+def test_r3_a_fully_resealed_sequence_change_is_rejected(tmp_path: Path):
+    """R3-A. The exact Codex R2 case, with nothing left inconsistent to trip over.
+
+    Codex showed that a fully resealed physical result could permute the ordinal -> identity
+    sequence, restate the manifest's own expected commitment to describe the permutation, reseal
+    every digest and the COMPLETE marker, and still be accepted -- because the audit's expected
+    value came from the same document it was checking.
+
+    Here the reseal is complete: shard bytes, shard digest, byte count, the manifest's per-node
+    commitment, the commitment-map digest and the published run identity are all regenerated. The
+    only thing held fixed is the trusted post-Pass-1 result, which was frozen before the bytes
+    existed and lives outside the realization. That is what refuses it.
+    """
+    manifest, records, expected = _publishable(tmp_path, count=4)
+    final = publish_atomic(tmp_path / "out", "run-x", manifest, records, expected=expected)
+    load_published_realization(final, expected=expected)  # valid before tampering
+
+    identities = [hashlib.sha256(f"id-{i}".encode()).hexdigest() for i in range(4)]
+    permuted = [(0, identities[1]), (1, identities[0]), (2, identities[2]), (3, identities[3])]
+
+    def swap(lines):
+        first, second = json.loads(lines[0]), json.loads(lines[1])
+        first["selection_ordinal_within_node"], second["selection_ordinal_within_node"] = (
+            second["selection_ordinal_within_node"],
+            first["selection_ordinal_within_node"],
+        )
+        return (
+            canonical_json_bytes(first)
+            + canonical_json_bytes(second)
+            + b"\n".join(lines[2:])
+            + b"\n"
+        )
+
+    def restate(obj):
+        obj["nodes"][0]["selection_sequence_commitment"] = oracle_sequence_commitment(
+            "b_x", "stage_b", permuted
+        )
+
+    _fully_reseal(final, swap, restate)
+    with pytest.raises(OutputError, match="disagrees with the trusted post-Pass-1 expectation"):
+        load_published_realization(final, expected=expected)
+
+
+def test_r3_a_resealed_sequence_without_restating_the_map_is_rejected(tmp_path: Path):
+    """The other half of the same door: restate the node but not the map digest."""
+    manifest, records, expected = _publishable(tmp_path, count=4)
+    final = publish_atomic(tmp_path / "out", "run-x", manifest, records, expected=expected)
+
+    def rotate(lines):
+        parsed = [json.loads(line) for line in lines]
+        ordinals = [r["selection_ordinal_within_node"] for r in parsed]
+        for record, ordinal in zip(parsed, ordinals[1:] + ordinals[:1], strict=True):
+            record["selection_ordinal_within_node"] = ordinal
+        return b"".join(canonical_json_bytes(r) for r in parsed)
+
+    _reseal(final, rotate)
+    with pytest.raises(OutputError, match="selection-sequence commitment"):
+        load_published_realization(final, expected=expected)
+
+
+def test_r3_a_expected_result_is_frozen_before_any_materialization(tmp_path: Path):
+    """Layer 2 must exist, and its digest must be fixed, before Pass 2 writes anything.
+
+    Structural because the real thing needs the 151 GB corpus: the driver must freeze the
+    post-Pass-1 result before it builds the record stream or calls the publisher, and must never
+    reach for the run name before that.
+    """
+    function = _function_source("pretrain/stage_i_realize_v1.py", "realize_and_publish")
+    freeze = _call_lines(function, "_freeze_pass1_result")
+    build = _call_lines(function, "build_pass1_result")
+    records = _call_lines(function, "iter_records_in_physical_order")
+    publish = _call_lines(function, "publish_atomic")
+    trusted = _call_lines(function, "trusted_expected_result")
+    assert build and freeze and records and publish and trusted
+    assert max(build) < min(freeze), "the expected result is built before it is frozen"
+    assert max(freeze) < min(records), "Pass 2 must not start before the expectation is frozen"
+    assert max(freeze) < min(publish), "publication must not precede the frozen expectation"
+    assert max(trusted) < min(records)
+
+    # And freezing refuses to overwrite, so a later run cannot replace a frozen expectation.
+    from pretrain.stage_i_realize_v1 import _freeze_pass1_result
+
+    payload = {"schema_version": PASS1_RESULT_SCHEMA}
+    first = _freeze_pass1_result(tmp_path, payload, None)
+    assert first.parent == tmp_path
+    assert first.read_bytes() == canonical_json_bytes(payload)
+    with pytest.raises(RealizationError, match="refusing to overwrite"):
+        _freeze_pass1_result(tmp_path, payload, first)
+
+
+def test_r3_a_expected_result_never_comes_from_the_published_realization():
+    """The consumer must not be able to discover its own expectation. Structural and by signature."""
+    import inspect
+
+    from pretrain import stage_i_output_v1 as module
+
+    for name in ("publish_atomic", "load_published_realization"):
+        parameter = inspect.signature(getattr(module, name)).parameters["expected"]
+        assert parameter.default is inspect.Parameter.empty, (
+            f"{name} must require a trusted expected result, not default one into existence"
+        )
+    with pytest.raises(TypeError):
+        module.load_published_realization(Path("/nonexistent"))
+
+    # The audit's expectation must be the trusted projection, never the manifest's own copy.
+    for name in ("publish_atomic", "load_published_realization"):
+        function = _function_source("pretrain/stage_i_output_v1.py", name)
+        calls = [
+            node
+            for node in ast.walk(function)
+            if isinstance(node, ast.Call)
+            and getattr(node.func, "id", None) == "audit_staged_realization"
+        ]
+        assert len(calls) == 1, f"{name} must run exactly one audit"
+        projection = calls[0].args[3]
+        assert isinstance(projection, ast.Attribute), (
+            f"{name} passes {ast.dump(projection)} as the audit's authority"
+        )
+        assert projection.attr == "node_binding_projection"
+        assert getattr(projection.value, "id", None) == "expected", (
+            f"{name} must hand the audit the TRUSTED projection, not the manifest's own"
+        )
+
+
+def test_r3_a_trusted_expected_result_requires_an_externally_supplied_digest(tmp_path: Path):
+    """An artifact that certifies itself is not an expectation."""
+    manifest, records, expected = _publishable(tmp_path, count=3)
+    pass1 = _pass1_for(
+        [dict(manifest["nodes"][0])],
+        {"b_x": ["ib_x"]},
+        {k: v for k, v in manifest["totals"].items() if k != "shards"},
+    )
+    true_digest = hashlib.sha256(canonical_json_bytes(pass1)).hexdigest()
+    assert trusted_expected_result(pass1, expected_sha256=true_digest).result_identity_sha256 == (
+        true_digest
+    )
+    with pytest.raises(OutputError, match="is not the supplied"):
+        trusted_expected_result(pass1, expected_sha256="0" * 64)
+
+    path = tmp_path / "pass1.json"
+    path.write_bytes(canonical_json_bytes(pass1))
+    assert load_trusted_expected_result(path, expected_sha256=true_digest)
+    with pytest.raises(OutputError, match="is not the supplied"):
+        load_trusted_expected_result(path, expected_sha256="1" * 64)
+
+
+def test_r3_a_manifest_naming_another_expected_result_is_rejected(tmp_path: Path):
+    """A realization may not point at an expectation other than the one it is checked against."""
+    manifest, records, expected = _publishable(tmp_path, count=3)
+    manifest["stage_i_run"] = _stage_i_run_block(
+        expected, post_pass1_result_identity_sha256="0" * 64
+    )
+    with pytest.raises(OutputError, match="trusted expectation supplied out of band"):
+        publish_atomic(tmp_path / "out", "run-x", manifest, records, expected=expected)
+
+
+@pytest.mark.parametrize(
+    "mutation,match",
+    [
+        (lambda r: r.__setitem__("surprise", 1), "carries unknown field"),
+        (lambda r: r.pop("h_i_gate"), "is missing field"),
+        (lambda r: r["h_i_gate"].__setitem__("ALL_NODES_MATCH", False), "never passed the H/I"),
+        (
+            lambda r: r["authorization"].__setitem__("records_per_shard", 7),
+            "records_per_shard disagrees",
+        ),
+        (
+            lambda r: r["authorization"].__setitem__("surprise", 1),
+            "pass-1 authorization carries unknown",
+        ),
+        (
+            lambda r: r.__setitem__("selection_sequence_commitment_version", "nope"),
+            "different selection-sequence commitment version",
+        ),
+        (
+            lambda r: r["selection_sequence_commitments"].__setitem__("b_x", "9" * 64),
+            "does not describe its own map|disagrees with the committed map",
+        ),
+        (
+            lambda r: r.__setitem__("node_binding_projection", {"b_x": ["ib_extra", "ib_x"]}),
+            "does not generate its bound projection digest",
+        ),
+        (
+            lambda r: r.__setitem__("authorized_input_binding_ids", ["ib_other"]),
+            "outside the plan-authorized global set",
+        ),
+        (lambda r: r["totals"].__setitem__("records", 99), "disagrees with the per-node"),
+        (lambda r: r["nodes"][0].__setitem__("branch", "NOPE"), "branch is invalid"),
+        (
+            lambda r: r.__setitem__("schema_version", "petitgpt-stage-i-pass1-result-v0"),
+            "wrong sch",
+        ),
+    ],
+)
+def test_r3_a_pass1_result_schema_is_closed(tmp_path: Path, mutation, match):
+    """The Layer-2 artifact is closed at every level, exactly like the plan and the manifest."""
+    manifest, _records, _expected = _publishable(tmp_path, count=3)
+    pass1 = _pass1_for(
+        [dict(manifest["nodes"][0])],
+        {"b_x": ["ib_x"]},
+        {k: v for k, v in manifest["totals"].items() if k != "shards"},
+    )
+    validate_pass1_result(json.loads(json.dumps(pass1)))  # the unmutated fixture is valid
+    mutated = json.loads(json.dumps(pass1))
+    mutation(mutated)
+    with pytest.raises(OutputError, match=match):
+        validate_pass1_result(mutated)
+
+
+# ---- R3-B: trusted node -> binding authority ------------------------------------
+
+
+@pytest.mark.parametrize("rebind_manifest", [True, False])
+def test_r3_b_fully_resealed_projection_change_is_rejected(tmp_path: Path, rebind_manifest):
+    """R3-B. The exact Codex R2 case: records moved to an undeclared binding, everything resealed.
+
+    Codex changed every record's ``input_binding_id`` to ``ib_not_declared``, changed the
+    manifest's ``node_binding_projection`` to match, recomputed the projection digest and the
+    published run identity, and kept the original candidate-plan SHA. Publisher and consumer both
+    accepted, because the audit's notion of "authorized" was the manifest's own projection.
+
+    Both spellings are exercised: with the manifest restated to match the records, and without.
+    The trusted plan/context projection is held fixed throughout.
+    """
+    manifest, records, expected = _publishable(tmp_path, count=4)
+    final = publish_atomic(tmp_path / "out", "run-x", manifest, records, expected=expected)
+
+    def rebind(lines):
+        parsed = [json.loads(line) for line in lines]
+        for record in parsed:
+            record["input_binding_id"] = "ib_not_declared"
+        return b"".join(canonical_json_bytes(r) for r in parsed)
+
+    def restate(obj):
+        obj["node_binding_projection"] = {"b_x": ["ib_not_declared"]}
+        obj["nodes"][0]["input_binding_ids"] = ["ib_not_declared"]
+        obj["bindings"] = {"ib_not_declared": "6" * 64}
+
+    _fully_reseal(final, rebind, restate if rebind_manifest else None)
+    with pytest.raises(
+        (OutputError, AuditError),
+        match="not authorized to draw from input binding|trusted node/binding authority",
+    ):
+        load_published_realization(final, expected=expected)
+
+
+def test_r3_b_binding_authorized_globally_but_for_another_node_is_rejected(tmp_path: Path):
+    """A real binding attached to a node that was never authorized to draw from it."""
+    projection = {"b_x": ["ib_x"], "b_y": ["ib_y"]}
+    node = {
+        "source_id": "b_x",
+        "stage": "stage_b",
+        "target_serialized_tokens": 10,
+        "branch": "ORDINARY",
+        "selection_mode": "SEEDED_HASH",
+        "selected_identities": 3,
+        "selected_serialized_tokens": 21,
+        "selection_fingerprint": "0" * 64,
+        "selection_sequence_commitment": "0" * 64,
+        "crossing_identity": None,
+        "actual_overshoot_tokens": 0,
+        "input_binding_ids": ["ib_y"],  # globally real, but not authorized for b_x
+    }
+    pass1 = _pass1_for(
+        [dict(node)],
+        {"b_x": ["ib_x"]},
+        {
+            "records": 3,
+            "content_tokens": 15,
+            "serialized_tokens": 21,
+            "unique_cleaned_identities": 3,
+        },
+    )
+    pass1["authorized_input_binding_ids"] = sorted({
+        b for allowed in projection.values() for b in allowed
+    })
+    with pytest.raises(OutputError, match="outside its authorized projection"):
+        validate_pass1_result(pass1)
+
+
+def test_r3_b_manifest_may_not_declare_a_binding_the_plan_never_authorized(tmp_path: Path):
+    """R3-B global reconciliation: manifest binding declarations vs the plan-authorized set."""
+    manifest, records, expected = _publishable(tmp_path, count=3)
+    manifest["bindings"] = {"ib_x": "6" * 64, "ib_smuggled": "7" * 64}
+    with pytest.raises(OutputError, match="binding\\(s\\) the plan never authorized"):
+        publish_atomic(tmp_path / "out", "run-x", manifest, records, expected=expected)
+
+
+def test_r3_b_manifest_omitting_an_in_use_binding_is_rejected(tmp_path: Path):
+    manifest, records, expected = _publishable(tmp_path, count=3)
+    manifest["bindings"] = {"ib_unused": "6" * 64}
+    with pytest.raises(OutputError, match="the plan never authorized|omits the release digest"):
+        publish_atomic(tmp_path / "out", "run-x", manifest, records, expected=expected)
+
+
+def test_r3_b_changed_projection_digest_and_identity_do_not_help(tmp_path: Path):
+    """Recomputing the projection digest and the run identity cannot manufacture authority."""
+    manifest, records, expected = _publishable(tmp_path, count=3)
+    widened = {"b_x": ["ib_extra", "ib_x"]}
+    manifest["node_binding_projection"] = widened
+    manifest["stage_i_run"] = _stage_i_run_block(
+        expected, node_binding_projection_sha256=node_binding_projection_sha256(widened)
+    )
+    with pytest.raises(OutputError, match="trusted post-Pass-1 result binds"):
+        publish_atomic(tmp_path / "out", "run-x", manifest, records, expected=expected)
+
+
+# ---- R3-D: complete, immutable canonical authorized state -----------------------
+
+
+def _payload_of(state) -> dict:
+    from pretrain.stage_i_realize_v1 import _thaw
+
+    return json.loads(canonical_json_bytes(_thaw(state.canonical_payload)))
+
+
+def _mutate_path(payload: dict, path: list, value):
+    cursor = payload
+    for key in path[:-1]:
+        cursor = cursor[key]
+    cursor[path[-1]] = value
+
+
+@pytest.fixture(scope="module")
+def authorized_state(authorized):
+    return authorized.revalidate()
+
+
+def test_r3_d_canonical_payload_is_the_state_digest(authorized, authorized_state):
+    """The digest must be over the whole projection, computed the same way a reviewer would."""
+    payload = _payload_of(authorized_state)
+    assert (
+        hashlib.sha256(canonical_json_bytes(payload)).hexdigest()
+        == authorized_state.state_sha256
+        == authorized.authorized_state_sha256
+    )
+
+
+@pytest.mark.parametrize(
+    "label,path_of,value",
+    [
+        (
+            "branch_threshold_4_to_5",
+            lambda p: [
+                "graph",
+                "nodes",
+                next(i for i, n in enumerate(p["graph"]["nodes"]) if n["branch_primary"]),
+                "branch_primary",
+                "candidate_predicate",
+                "value",
+            ],
+            5,
+        ),
+        ("h_census_value", lambda p: ["accepted_h", "census", "nodes", 0, "branch"], "NOPE"),
+        (
+            "h_census_selected_tokens",
+            lambda p: ["accepted_h", "gate_projection", 0, "selected_serialized_tokens"],
+            1,
+        ),
+        (
+            "h_prediction",
+            lambda p: [
+                "accepted_h",
+                "predictions",
+                "predictions",
+                sorted(p["accepted_h"]["predictions"]["predictions"])[0],
+                "predicted_branch",
+            ],
+            "NOPE",
+        ),
+        (
+            "input_document_path",
+            lambda p: ["paths", "input_documents", sorted(p["paths"]["input_documents"])[0]],
+            "/tmp/not-the-frozen-corpus.jsonl",
+        ),
+        (
+            "input_document_path_in_graph",
+            lambda p: [
+                "graph",
+                "bindings",
+                sorted(p["graph"]["bindings"])[0],
+                "documents_path",
+            ],
+            "/tmp/not-the-frozen-corpus.jsonl",
+        ),
+        ("tokenizer_path", lambda p: ["paths", "tokenizer"], "runs/elsewhere/tokenizer.json"),
+        (
+            "reference_path",
+            lambda p: ["paths", "reference_exclusion"],
+            "runs/elsewhere/exclusion.json",
+        ),
+        (
+            "authority_path",
+            lambda p: ["paths", "authorities", "hq_policy"],
+            "runs/elsewhere/policy.json",
+        ),
+        ("authority_digest", lambda p: ["authority_sha256", "tokenizer"], "0" * 64),
+        ("graph_seed", lambda p: ["graph", "seed"], 1),
+        (
+            "cleaning_contract",
+            lambda p: [
+                "graph",
+                "bindings",
+                sorted(p["graph"]["bindings"])[0],
+                "cleaning_contract",
+                "min_chars",
+            ],
+            9999,
+        ),
+        (
+            "schema_accessor",
+            lambda p: [
+                "graph",
+                "bindings",
+                sorted(p["graph"]["bindings"])[0],
+                "schema_accessor",
+                "accessor_id",
+            ],
+            "not-the-accessor",
+        ),
+        ("ownership_matrix", lambda p: ["accepted_h", "ownership_matrix"], {}),
+        ("node_binding_projection", lambda p: ["node_binding_projection"], {"b_x": ["ib_x"]}),
+        ("shard_rule_literal", lambda p: ["contract_literals", "shard_policy_rule"], "anything"),
+        ("plan_digest", lambda p: ["plan", "sha256"], "0" * 64),
+    ],
+)
+def test_r3_d_canonical_state_covers_every_codex_mutation(authorized_state, label, path_of, value):
+    """R3-D. Every value Codex mutated past R2's revalidation is inside the closed projection.
+
+    R2's projection named fields reactively, so a nested graph branch threshold, an H census
+    value, an H prediction, an input-document path, the tokenizer and reference paths and an
+    authority path were all invisible to it and every one of those substitutions revalidated.
+    Changing any of them must now change the authorized-state digest -- which is what
+    ``resolve_authorized_state`` compares before every load-bearing use.
+    """
+    payload = _payload_of(authorized_state)
+    reference = hashlib.sha256(canonical_json_bytes(payload)).hexdigest()
+    assert reference == authorized_state.state_sha256
+
+    path = path_of(payload)
+    cursor = payload
+    for key in path[:-1]:
+        cursor = cursor[key]
+    assert cursor[path[-1]] != value, f"{label}: the fixture value is already the mutation"
+    _mutate_path(payload, path, value)
+    assert hashlib.sha256(canonical_json_bytes(payload)).hexdigest() != reference, (
+        f"{label} is not covered by the canonical authorized-state projection"
+    )
+
+
+@pytest.mark.parametrize(
+    "label,mutate",
+    [
+        ("h_census_node", lambda s: s.accepted.census["nodes"][0].__setitem__("branch", "X")),
+        ("h_census_totals", lambda s: s.accepted.census["totals"].__setitem__("x", 1)),
+        ("h_predictions", lambda s: s.accepted.predictions.__setitem__("x", 1)),
+        ("graph_raw_nested", lambda s: s.graph.raw["nodes"][0].__setitem__("stage", "X")),
+        ("graph_bindings", lambda s: s.graph.bindings.__setitem__("z", None)),
+        ("graph_bound_authorities", lambda s: s.graph.bound_authorities.__setitem__("z", "0")),
+        (
+            "branch_predicate",
+            lambda s: (
+                next(n for n in s.graph.nodes if n.branch_primary)
+                .branch_primary["candidate_predicate"]
+                .__setitem__("value", 5)
+            ),
+        ),
+        ("plan_authorities", lambda s: s.plan["authorities"]["tokenizer"].__setitem__("path", "x")),
+        ("plan_top_level", lambda s: s.plan.__setitem__("seed", 1)),
+        ("node_binding_projection", lambda s: s.node_binding_projection.__setitem__("z", ())),
+        ("authority_paths", lambda s: s.authority_paths.__setitem__("z", "x")),
+        ("bundle_files", lambda s: s.bundle_files.__setitem__("z", "0" * 64)),
+        ("canonical_payload", lambda s: s.canonical_payload.__setitem__("z", 1)),
+    ],
+)
+def test_r3_d_authorized_state_is_deeply_immutable(authorized_state, label, mutate):
+    """R3-D. Nested lists and dicts must not remain mutation surfaces."""
+    with pytest.raises((TypeError, AttributeError)):
+        mutate(authorized_state)
+
+
+def test_r3_d_authorized_state_fields_cannot_be_reassigned(authorized_state):
+    import dataclasses
+
+    for field in ("graph", "accepted", "plan", "state_sha256", "tokenizer_path"):
+        with pytest.raises(dataclasses.FrozenInstanceError):
+            setattr(authorized_state, field, None)
+
+
+def test_r3_d_runtime_rederives_state_and_never_reads_it_off_the_handle():
+    """R3-D. Load-bearing truth is re-derived, not read off a long-lived caller-reachable object."""
+    function = _function_source("pretrain/stage_i_realize_v1.py", "realize_and_publish")
+    assert _call_lines(function, "resolve_authorized_state"), (
+        "realize_and_publish must resolve the authorized state through the registry"
+    )
+    forbidden = {
+        "graph",
+        "accepted",
+        "plan",
+        "authorities",
+        "tokenizer_path",
+        "reference_exclusion_path",
+        "node_binding_projection",
+        "bundle_files",
+        "environment",
+        "run_identity",
+        "run_name",
+    }
+    offenders = sorted(
+        node.attr
+        for node in ast.walk(function)
+        if isinstance(node, ast.Attribute)
+        and getattr(node.value, "id", None) == "context"
+        and node.attr in forbidden
+    )
+    assert not offenders, (
+        f"realize_and_publish reads load-bearing state off the handle: {offenders}"
+    )
+
+    # The re-derivation is the full authorization path, not a cheaper subset.
+    derive = _function_source("pretrain/stage_i_realize_v1.py", "_derive_authorized_state")
+    for required in (
+        "validate_plan_schema",
+        "implementation_files",
+        "load_source_graph",
+        "verify_binding_inputs",
+        "load_accepted_h",
+        "verify_environment",
+        "_authorized_state_payload",
+    ):
+        assert _call_lines(derive, required), f"re-derivation skips {required}"
+
+
+def test_r3_d_a_second_authorization_of_the_same_plan_agrees(live_plan_path):
+    """Two independent authorizations of identical bytes must land on the same canonical state."""
+    first = authorize_plan(live_plan_path, sha256_file(live_plan_path), ROOT)
+    second = authorize_plan(live_plan_path, sha256_file(live_plan_path), ROOT)
+    assert first is not second
+    assert first.authorized_state_sha256 == second.authorized_state_sha256
+    assert first.revalidate().state_sha256 == second.revalidate().state_sha256
+
+
+# ---- R3-E: fully closed candidate-plan schema -----------------------------------
+
+
+def test_r3_e_plan_schema_is_versioned_and_exact(live_plan_path):
+    """R3-E. v3 closes values as well as keys, with exact types and frozen literals."""
+    from pretrain.stage_i_realize_v1 import validate_plan_schema
+
+    assert PLAN_SCHEMA == "petitgpt-i-candidate-plan-v3"
+    plan = json.loads(live_plan_path.read_text())
+    assert validate_plan_schema(json.loads(json.dumps(plan)))
+
+    # `type(x) is int` rather than isinstance: a bool is not an integer here.
+    for key, value in (("seed", True), ("resume_supported", 0)):
+        mutated = json.loads(json.dumps(plan))
+        mutated[key] = value
+        with pytest.raises(RealizationError):
+            validate_plan_schema(mutated)
+
+    # The frozen structured rules are literals, not "some JSON value".
+    assert plan["shard_policy"]["rule"] == SHARD_POLICY_RULE
+    assert plan["accepted_h"]["run_dir"] == ACCEPTED_H_RUN_DIR
+    assert plan["accepted_h"]["complete_sha256"] == ACCEPTED_H_COMPLETE_SHA256
+
+
+@pytest.mark.parametrize(
+    "path",
+    [
+        "./runs/g_production_2026-08-21/release/tokenizer.json",
+        "runs/g_production_2026-08-21/release/../release/tokenizer.json",
+        "/workspace/petitgpt/runs/g_production_2026-08-21/release/tokenizer.json",
+        "runs/g_production_2026-08-21//release/tokenizer.json",
+        "runs/g_production_2026-08-21/release/tokenizer.json/",
+    ],
+)
+def test_r3_e_equivalent_but_noncanonical_authority_paths_do_not_authorize(live_plan_path, path):
+    """R3-E. The same bytes under a different spelling is not the frozen canonical mapping."""
+    from pretrain.stage_i_realize_v1 import validate_plan_schema
+
+    plan = json.loads(live_plan_path.read_text())
+    canonical = plan["authorities"]["tokenizer"]["path"]
+    assert path != canonical
+    plan["authorities"]["tokenizer"]["path"] = path
+    with pytest.raises(
+        RealizationError,
+        match="canonical|repository-relative|forward slashes|path segments",
+    ):
+        validate_plan_schema(plan)
+
+
+def test_r3_e_authority_mapping_is_name_to_path_to_digest(live_plan_path):
+    """Every required authority is pinned to one canonical location and one digest."""
+    from pretrain.stage_i_realize_v1 import _AUTHORITY_PATHS, REQUIRED_AUTHORITIES
+
+    plan = json.loads(live_plan_path.read_text())
+    assert frozenset(_AUTHORITY_PATHS) == REQUIRED_AUTHORITIES
+    for name, entry in plan["authorities"].items():
+        assert entry["path"] == _AUTHORITY_PATHS[name]
+        assert sha256_file(ROOT / entry["path"]) == entry["sha256"]
+
+
+# ---- R3: the published identity binds every layer -------------------------------
+
+
+def test_r3_published_identity_binds_plan_state_and_expected_result(tmp_path: Path):
+    """The closed published identity must bind Layer 1 and Layer 2, and nothing may be missing."""
+    manifest, _records, expected = _publishable(tmp_path, count=3)
+    block = manifest["stage_i_run"]
+    for key in (
+        "candidate_i_plan_sha256",
+        "authorized_state_sha256",
+        "implementation_commit",
+        "implementation_bundle_sha256",
+        "plan_schema_version",
+        "output_schema_version",
+        "manifest_schema_version",
+        "shard_policy_version",
+        "records_per_shard",
+        "h_run_identity",
+        "h_complete_sha256",
+        "h_census_sha256",
+        "h_predictions_sha256",
+        "owner_graph_sha256",
+        "node_binding_projection_sha256",
+        "post_pass1_result_identity_schema",
+        "post_pass1_result_identity_sha256",
+        "selection_sequence_commitment_version",
+        "selection_sequence_commitment_map_sha256",
+    ):
+        assert key in block, f"the published identity does not bind {key}"
+    assert recompute_stage_i_run_identity(block) == expected.stage_i_run_identity
+    assert block["post_pass1_result_identity_sha256"] == expected.result_identity_sha256

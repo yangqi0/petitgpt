@@ -25,16 +25,19 @@ the rank order so the frozen selection sequence and its fingerprint remain recon
 from __future__ import annotations
 
 from collections.abc import Iterable, Iterator, Mapping, Sequence
+from dataclasses import dataclass
 import hashlib
 import os
 from pathlib import Path
 import shutil
 import tempfile
+from types import MappingProxyType
 from typing import Any
 
 from pretrain.stage_i_audit_v1 import (
     DEFAULT_READ_WINDOW_BYTES,
     DEFAULT_SORT_CHUNK_LINES,
+    SELECTION_SEQUENCE_SCHEMA,
     RealizationAudit,
     ShardReader,
     audit_realization,
@@ -261,9 +264,44 @@ _MARKER_FIELDS = frozenset({
 # Closed, versioned field list for the published Stage-I run identity. Deliberately explicit: an
 # open-ended dictionary digest would change meaning whenever a key was added, and would let two
 # runs differing in an unlisted field claim the same identity.
+# Closed, versioned field list for the published Stage-I run identity. Deliberately explicit: an
+# open-ended dictionary digest would change meaning whenever a key was added, and would let two
+# runs differing in an unlisted field claim the same identity.
+#
+# R3-A: the v3 identity additionally binds the authorization-time canonical state digest (Layer 1)
+# and the post-Pass-1 expected-result identity (Layer 2). A published realization can therefore no
+# longer be resealed into describing a different selection while keeping its name: the name is
+# downstream of an expectation that was frozen to disk before the first output byte existed.
 _STAGE_I_RUN_FIELDS = frozenset({
     "run_identity",
     "candidate_i_plan_sha256",
+    "authorized_state_sha256",
+    "implementation_commit",
+    "implementation_bundle_sha256",
+    "plan_schema_version",
+    "output_schema_version",
+    "manifest_schema_version",
+    "shard_policy_version",
+    "records_per_shard",
+    "h_run_identity",
+    "h_complete_sha256",
+    "h_census_sha256",
+    "h_predictions_sha256",
+    "owner_graph_sha256",
+    "node_binding_projection_sha256",
+    "post_pass1_result_identity_schema",
+    "post_pass1_result_identity_sha256",
+    "selection_sequence_commitment_version",
+    "selection_sequence_commitment_map_sha256",
+})
+STAGE_I_RUN_IDENTITY_SCHEMA = "petitgpt-stage-i-run-identity-v3"
+
+# The Layer-1 anchors every layer below restates. Held in one place so the post-Pass-1 result, the
+# published run identity and the manifest cannot drift into three slightly different opinions of
+# what the authorized run was.
+_AUTHORIZATION_FIELDS = frozenset({
+    "candidate_i_plan_sha256",
+    "authorized_state_sha256",
     "implementation_commit",
     "implementation_bundle_sha256",
     "plan_schema_version",
@@ -278,7 +316,17 @@ _STAGE_I_RUN_FIELDS = frozenset({
     "owner_graph_sha256",
     "node_binding_projection_sha256",
 })
-STAGE_I_RUN_IDENTITY_SCHEMA = "petitgpt-stage-i-run-identity-v2"
+_AUTHORIZATION_HEX_FIELDS = (
+    "candidate_i_plan_sha256",
+    "authorized_state_sha256",
+    "implementation_bundle_sha256",
+    "h_run_identity",
+    "h_complete_sha256",
+    "h_census_sha256",
+    "h_predictions_sha256",
+    "owner_graph_sha256",
+    "node_binding_projection_sha256",
+)
 
 
 def node_binding_projection_sha256(projection: Mapping[str, Sequence[str]]) -> str:
@@ -295,6 +343,80 @@ def node_binding_projection_sha256(projection: Mapping[str, Sequence[str]]) -> s
 
 
 NODE_BINDING_PROJECTION_SCHEMA = "petitgpt-stage-i-node-binding-projection-v1"
+SELECTION_SEQUENCE_MAP_SCHEMA = "petitgpt-stage-i-selection-sequence-map-v1"
+PASS1_RESULT_SCHEMA = "petitgpt-stage-i-pass1-result-v1"
+
+
+def selection_sequence_commitment_map_sha256(commitments: Mapping[str, str]) -> str:
+    """Closed canonical identity of the per-node ordinal -> identity sequence commitments.
+
+    R2 committed to each node's sequence but published the expectation only inside the manifest,
+    so a full reseal could restate it. This digest is folded into the published run identity via
+    the post-Pass-1 result, which is frozen before materialization, so the map cannot be restated
+    after the fact without changing the name of the run.
+    """
+    payload = {
+        "schema_version": SELECTION_SEQUENCE_MAP_SCHEMA,
+        "commitment_version": SELECTION_SEQUENCE_SCHEMA,
+        "commitments": dict(sorted(commitments.items())),
+    }
+    return hashlib.sha256(canonical_json_bytes(payload)).hexdigest()
+
+
+def _run_identity_payload(
+    authorization: Mapping[str, Any],
+    *,
+    post_pass1_result_identity_schema: str,
+    post_pass1_result_identity_sha256: str,
+    selection_sequence_commitment_version: str,
+    selection_sequence_commitment_map_sha256: str,
+) -> dict[str, Any]:
+    return {
+        "schema_version": STAGE_I_RUN_IDENTITY_SCHEMA,
+        "candidate_plan_sha256": authorization["candidate_i_plan_sha256"],
+        "authorized_state_sha256": authorization["authorized_state_sha256"],
+        "implementation_commit": authorization["implementation_commit"],
+        "implementation_bundle_sha256": authorization["implementation_bundle_sha256"],
+        "plan_schema_version": authorization["plan_schema_version"],
+        "output_schema_version": authorization["output_schema_version"],
+        "manifest_schema_version": authorization["manifest_schema_version"],
+        "shard_policy_version": authorization["shard_policy_version"],
+        "records_per_shard": authorization["records_per_shard"],
+        "h_run_identity": authorization["h_run_identity"],
+        "h_complete_sha256": authorization["h_complete_sha256"],
+        "h_census_sha256": authorization["h_census_sha256"],
+        "h_predictions_sha256": authorization["h_predictions_sha256"],
+        "owner_graph_sha256": authorization["owner_graph_sha256"],
+        "node_binding_projection_sha256": authorization["node_binding_projection_sha256"],
+        "post_pass1_result_identity_schema": post_pass1_result_identity_schema,
+        "post_pass1_result_identity_sha256": post_pass1_result_identity_sha256,
+        "selection_sequence_commitment_version": selection_sequence_commitment_version,
+        "selection_sequence_commitment_map_sha256": selection_sequence_commitment_map_sha256,
+    }
+
+
+def stage_i_published_run_identity(
+    authorization: Mapping[str, Any],
+    *,
+    post_pass1_result_identity_sha256: str,
+    selection_sequence_commitment_map_sha256: str,
+    post_pass1_result_identity_schema: str = PASS1_RESULT_SCHEMA,
+    selection_sequence_commitment_version: str = SELECTION_SEQUENCE_SCHEMA,
+) -> str:
+    """The published run's name: Layer-1 authorization plus the Layer-2 expected result.
+
+    Ordering matters and is not circular: the post-Pass-1 result binds the Layer-1 anchors, this
+    identity binds the post-Pass-1 result, and the manifest binds this identity. Nothing upstream
+    ever quotes anything downstream of it.
+    """
+    payload = _run_identity_payload(
+        authorization,
+        post_pass1_result_identity_schema=post_pass1_result_identity_schema,
+        post_pass1_result_identity_sha256=post_pass1_result_identity_sha256,
+        selection_sequence_commitment_version=selection_sequence_commitment_version,
+        selection_sequence_commitment_map_sha256=selection_sequence_commitment_map_sha256,
+    )
+    return hashlib.sha256(canonical_json_bytes(payload)).hexdigest()
 
 
 def recompute_stage_i_run_identity(stage_i_run: Mapping[str, Any]) -> str:
@@ -302,27 +424,448 @@ def recompute_stage_i_run_identity(stage_i_run: Mapping[str, Any]) -> str:
 
     Defined here as well as in the driver so the consumer can verify the identity without
     importing the producer: a run that claims an identity its own fields do not generate is
-    rejected, so a producer cannot certify some other internally-consistent run as equivalent to
-    the externally authorized one.
+    rejected. This is an internal-consistency check only -- it proves the manifest did not
+    contradict itself, never that it describes the authorized run. That second question is
+    answered by comparing against the trusted post-Pass-1 expected result.
     """
-    payload = {
-        "schema_version": STAGE_I_RUN_IDENTITY_SCHEMA,
-        "candidate_plan_sha256": stage_i_run["candidate_i_plan_sha256"],
-        "implementation_commit": stage_i_run["implementation_commit"],
-        "implementation_bundle_sha256": stage_i_run["implementation_bundle_sha256"],
-        "plan_schema_version": stage_i_run["plan_schema_version"],
-        "output_schema_version": stage_i_run["output_schema_version"],
-        "manifest_schema_version": stage_i_run["manifest_schema_version"],
-        "shard_policy_version": stage_i_run["shard_policy_version"],
-        "records_per_shard": stage_i_run["records_per_shard"],
-        "h_run_identity": stage_i_run["h_run_identity"],
-        "h_complete_sha256": stage_i_run["h_complete_sha256"],
-        "h_census_sha256": stage_i_run["h_census_sha256"],
-        "h_predictions_sha256": stage_i_run["h_predictions_sha256"],
-        "owner_graph_sha256": stage_i_run["owner_graph_sha256"],
-        "node_binding_projection_sha256": stage_i_run["node_binding_projection_sha256"],
-    }
-    return hashlib.sha256(canonical_json_bytes(payload)).hexdigest()
+    return stage_i_published_run_identity(
+        stage_i_run,
+        post_pass1_result_identity_schema=stage_i_run["post_pass1_result_identity_schema"],
+        post_pass1_result_identity_sha256=stage_i_run["post_pass1_result_identity_sha256"],
+        selection_sequence_commitment_version=stage_i_run["selection_sequence_commitment_version"],
+        selection_sequence_commitment_map_sha256=stage_i_run[
+            "selection_sequence_commitment_map_sha256"
+        ],
+    )
+
+
+# ------------------------------------------------- Layer 2: the post-Pass-1 expected result
+
+_PASS1_TOP_FIELDS = frozenset({
+    "schema_version",
+    "authorization",
+    "selection_sequence_commitment_version",
+    "selection_sequence_commitments",
+    "selection_sequence_commitment_map_sha256",
+    "node_binding_projection",
+    "authorized_input_binding_ids",
+    "nodes",
+    "totals",
+    "ownership_matrix",
+    "h_i_gate",
+    "h_binding",
+})
+_PASS1_NODE_FIELDS = frozenset({
+    "source_id",
+    "stage",
+    "target_serialized_tokens",
+    "branch",
+    "selection_mode",
+    "selected_identities",
+    "selected_serialized_tokens",
+    "selection_fingerprint",
+    "selection_sequence_commitment",
+    "crossing_identity",
+    "actual_overshoot_tokens",
+    "input_binding_ids",
+})
+_PASS1_TOTALS_FIELDS = frozenset({
+    "records",
+    "content_tokens",
+    "serialized_tokens",
+    "unique_cleaned_identities",
+})
+_PASS1_GATE_FIELDS = frozenset({
+    "ALL_H_I_BRANCHES_MATCH",
+    "ALL_H_I_SELECTED_TOKEN_COUNTS_MATCH",
+    "ALL_H_I_FINGERPRINTS_MATCH",
+    "ALL_H_I_CROSSING_IDENTITIES_MATCH",
+    "ALL_H_I_OVERSHOOTS_MATCH",
+    "OWNERSHIP_MATRIX_MATCH",
+    "ALL_NODES_MATCH",
+})
+_H_BINDING_FIELDS = frozenset({
+    "h_run_identity",
+    "h_census_sha256",
+    "h_predictions_sha256",
+    "h_complete_sha256",
+    "h_candidate_plan_sha256",
+    "h_implementation_bundle_sha256",
+    "owner_graph_sha256",
+})
+
+
+@dataclass(frozen=True)
+class TrustedExpectedNode:
+    """What Pass 1 committed one node to be, before any of it existed on disk."""
+
+    source_id: str
+    stage: str
+    target_serialized_tokens: int
+    branch: str
+    selection_mode: str
+    selected_identities: int
+    selected_serialized_tokens: int
+    selection_fingerprint: str
+    selection_sequence_commitment: str
+    crossing_identity: str | None
+    actual_overshoot_tokens: int
+    input_binding_ids: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class TrustedExpectedResult:
+    """Layer 2. The expectation a physical realization must prove itself equal to.
+
+    This is deliberately a separate object from the manifest and is never constructed from one.
+    The publisher receives it from the driver, which built it from the Pass-1 selection ledger and
+    froze it to disk before materialization; the strict consumer receives it from its caller, who
+    supplies the frozen artifact and its owner-held digest. Layer 3 may prove equality to this. It
+    may not define it.
+    """
+
+    result_identity_schema: str
+    result_identity_sha256: str
+    authorization: Mapping[str, Any]
+    stage_i_run_identity: str
+    selection_sequence_commitment_version: str
+    selection_sequence_commitments: Mapping[str, str]
+    selection_sequence_commitment_map_sha256: str
+    node_binding_projection: Mapping[str, tuple[str, ...]]
+    node_binding_projection_sha256: str
+    authorized_input_binding_ids: tuple[str, ...]
+    nodes: tuple[TrustedExpectedNode, ...]
+    totals: Mapping[str, int]
+    ownership_matrix: Mapping[str, Mapping[str, int]]
+    h_binding: Mapping[str, str]
+
+    def node(self, source_id: str) -> TrustedExpectedNode:
+        for entry in self.nodes:
+            if entry.source_id == source_id:
+                return entry
+        raise OutputError(f"trusted expected result has no node {source_id!r}")
+
+
+def validate_pass1_result(payload: Any) -> dict[str, Any]:
+    """Closed-schema validation of the post-Pass-1 expected result, at every level."""
+    obj = _closed(payload, _PASS1_TOP_FIELDS, "pass-1 result")
+    _require(
+        _exact_str(obj["schema_version"], "pass-1 result.schema_version") == PASS1_RESULT_SCHEMA,
+        f"pass-1 result carries the wrong schema version; expected {PASS1_RESULT_SCHEMA}",
+    )
+    authorization = _closed(obj["authorization"], _AUTHORIZATION_FIELDS, "pass-1 authorization")
+    for key in _AUTHORIZATION_HEX_FIELDS:
+        _hex64(authorization[key], f"pass-1 authorization.{key}")
+    _exact_str(authorization["implementation_commit"], "pass-1 authorization.implementation_commit")
+    for key in (
+        "plan_schema_version",
+        "output_schema_version",
+        "manifest_schema_version",
+        "shard_policy_version",
+    ):
+        _require(
+            bool(_exact_str(authorization[key], f"pass-1 authorization.{key}")),
+            f"pass-1 authorization.{key} must be a non-empty string",
+        )
+    _require(
+        authorization["output_schema_version"] == RECORD_SCHEMA
+        and authorization["manifest_schema_version"] == MANIFEST_SCHEMA
+        and authorization["shard_policy_version"] == SHARD_POLICY_VERSION,
+        "pass-1 authorization schema/policy versions disagree with this implementation",
+    )
+    _require(
+        _exact_int(authorization["records_per_shard"], "pass-1 authorization.records_per_shard")
+        == RECORDS_PER_SHARD,
+        "pass-1 authorization.records_per_shard disagrees with the declared policy",
+    )
+
+    _require(
+        _exact_str(
+            obj["selection_sequence_commitment_version"],
+            "pass-1 result.selection_sequence_commitment_version",
+        )
+        == SELECTION_SEQUENCE_SCHEMA,
+        "pass-1 result was written against a different selection-sequence commitment version",
+    )
+
+    projection = obj["node_binding_projection"]
+    _require(
+        type(projection) is dict and projection,
+        "pass-1 result.node_binding_projection must be a non-empty object",
+    )
+    for source_id, allowed in sorted(projection.items()):
+        _exact_str(source_id, "pass-1 result.node_binding_projection key")
+        _require(
+            type(allowed) is list and allowed and allowed == sorted(set(allowed)),
+            f"pass-1 result.node_binding_projection[{source_id!r}] must be a sorted unique "
+            "non-empty list",
+        )
+        for binding_id in allowed:
+            _exact_str(binding_id, f"pass-1 result.node_binding_projection[{source_id!r}][]")
+    _require(
+        node_binding_projection_sha256(projection)
+        == authorization["node_binding_projection_sha256"],
+        "pass-1 result.node_binding_projection does not generate its bound projection digest",
+    )
+
+    authorized_bindings = obj["authorized_input_binding_ids"]
+    _require(
+        type(authorized_bindings) is list
+        and authorized_bindings
+        and authorized_bindings == sorted(set(authorized_bindings)),
+        "pass-1 result.authorized_input_binding_ids must be a sorted unique non-empty list",
+    )
+    for binding_id in authorized_bindings:
+        _exact_str(binding_id, "pass-1 result.authorized_input_binding_ids[]")
+    unknown = sorted(
+        {b for allowed in projection.values() for b in allowed} - set(authorized_bindings)
+    )
+    _require(
+        not unknown,
+        f"pass-1 result projects binding(s) outside the plan-authorized global set: {unknown}",
+    )
+
+    commitments = obj["selection_sequence_commitments"]
+    _require(
+        type(commitments) is dict and commitments,
+        "pass-1 result.selection_sequence_commitments must be a non-empty object",
+    )
+    for source_id, value in sorted(commitments.items()):
+        _exact_str(source_id, "pass-1 result.selection_sequence_commitments key")
+        _hex64(value, f"pass-1 result.selection_sequence_commitments[{source_id!r}]")
+    _require(
+        selection_sequence_commitment_map_sha256(commitments)
+        == _hex64(
+            obj["selection_sequence_commitment_map_sha256"],
+            "pass-1 result.selection_sequence_commitment_map_sha256",
+        ),
+        "pass-1 result.selection_sequence_commitment_map_sha256 does not describe its own map",
+    )
+
+    nodes = obj["nodes"]
+    _require(type(nodes) is list and nodes, "pass-1 result.nodes must be a non-empty list")
+    seen: set[str] = set()
+    previous_key: tuple[int, str] | None = None
+    node_records = 0
+    node_tokens = 0
+    for index, node in enumerate(nodes):
+        entry = _closed(node, _PASS1_NODE_FIELDS, f"pass-1 result.nodes[{index}]")
+        source_id = _exact_str(entry["source_id"], f"pass-1 result.nodes[{index}].source_id")
+        _require(source_id not in seen, f"pass-1 result.nodes: duplicate source_id {source_id!r}")
+        seen.add(source_id)
+        stage = _exact_str(entry["stage"], f"pass-1 result.nodes[{index}].stage")
+        _require(stage in STAGE_PRIORITY, f"pass-1 result.nodes[{index}].stage is not a stage")
+        key = (STAGE_PRIORITY[stage], source_id)
+        _require(
+            previous_key is None or key > previous_key,
+            "pass-1 result.nodes must follow the frozen ascending (stage_priority, source_id) "
+            "order",
+        )
+        previous_key = key
+        _exact_int(
+            entry["target_serialized_tokens"],
+            f"pass-1 result.nodes[{index}].target_serialized_tokens",
+            minimum=1,
+        )
+        _require(
+            _exact_str(entry["branch"], f"pass-1 result.nodes[{index}].branch")
+            in {"ORDINARY", "PRIMARY_GE4", "FALLBACK_RANKED_GE3"},
+            f"pass-1 result.nodes[{index}].branch is invalid",
+        )
+        _require(
+            _exact_str(entry["selection_mode"], f"pass-1 result.nodes[{index}].selection_mode")
+            in {"SEEDED_HASH", "EXACT_SCORE_DESC_SHA_ASC"},
+            f"pass-1 result.nodes[{index}].selection_mode is invalid",
+        )
+        node_records += _exact_int(
+            entry["selected_identities"],
+            f"pass-1 result.nodes[{index}].selected_identities",
+            minimum=0,
+        )
+        node_tokens += _exact_int(
+            entry["selected_serialized_tokens"],
+            f"pass-1 result.nodes[{index}].selected_serialized_tokens",
+            minimum=0,
+        )
+        _hex64(
+            entry["selection_fingerprint"], f"pass-1 result.nodes[{index}].selection_fingerprint"
+        )
+        _hex64(
+            entry["selection_sequence_commitment"],
+            f"pass-1 result.nodes[{index}].selection_sequence_commitment",
+        )
+        _require(
+            commitments.get(source_id) == entry["selection_sequence_commitment"],
+            f"pass-1 result.nodes[{index}] sequence commitment disagrees with the committed map",
+        )
+        _exact_int(
+            entry["actual_overshoot_tokens"],
+            f"pass-1 result.nodes[{index}].actual_overshoot_tokens",
+            minimum=0,
+        )
+        crossing = entry["crossing_identity"]
+        if crossing is not None:
+            _hex64(crossing, f"pass-1 result.nodes[{index}].crossing_identity")
+        declared = entry["input_binding_ids"]
+        _require(
+            type(declared) is list and declared and declared == sorted(set(declared)),
+            f"pass-1 result.nodes[{index}].input_binding_ids must be sorted, unique, non-empty",
+        )
+        allowed = projection.get(source_id)
+        _require(
+            allowed is not None,
+            f"pass-1 result.nodes[{index}] is outside the authorized node/binding projection",
+        )
+        _require(
+            set(declared) <= set(allowed),
+            f"pass-1 result.nodes[{index}] draws from a binding outside its authorized projection",
+        )
+    _require(
+        set(commitments) == seen,
+        "pass-1 result.selection_sequence_commitments must cover exactly the declared nodes",
+    )
+    _require(
+        set(projection) == seen,
+        "pass-1 result.node_binding_projection must cover exactly the declared nodes",
+    )
+
+    totals = _closed(obj["totals"], _PASS1_TOTALS_FIELDS, "pass-1 result.totals")
+    for key in sorted(_PASS1_TOTALS_FIELDS):
+        _exact_int(totals[key], f"pass-1 result.totals.{key}", minimum=0)
+    _require(
+        totals["records"] == node_records,
+        "pass-1 result.totals.records disagrees with the per-node selected identity counts",
+    )
+    _require(
+        totals["serialized_tokens"] == node_tokens,
+        "pass-1 result.totals.serialized_tokens disagrees with the per-node token counts",
+    )
+    _require(
+        totals["unique_cleaned_identities"] == totals["records"],
+        "pass-1 result.totals: every selected identity must be distinct",
+    )
+
+    gate = _closed(obj["h_i_gate"], _PASS1_GATE_FIELDS, "pass-1 result.h_i_gate")
+    for key in sorted(_PASS1_GATE_FIELDS):
+        _require(
+            gate[key] is True,
+            f"pass-1 result.h_i_gate.{key} is not True; this result never passed the H/I gate",
+        )
+
+    h_binding = _closed(obj["h_binding"], _H_BINDING_FIELDS, "pass-1 result.h_binding")
+    for key in sorted(_H_BINDING_FIELDS):
+        _hex64(h_binding[key], f"pass-1 result.h_binding.{key}")
+    _require(
+        h_binding["h_run_identity"] == authorization["h_run_identity"]
+        and h_binding["h_census_sha256"] == authorization["h_census_sha256"]
+        and h_binding["h_predictions_sha256"] == authorization["h_predictions_sha256"]
+        and h_binding["h_complete_sha256"] == authorization["h_complete_sha256"]
+        and h_binding["owner_graph_sha256"] == authorization["owner_graph_sha256"],
+        "pass-1 result.h_binding disagrees with its own authorization block",
+    )
+
+    ownership = obj["ownership_matrix"]
+    _require(type(ownership) is dict, "pass-1 result.ownership_matrix must be a JSON object")
+    for consumer, owners in ownership.items():
+        _exact_str(consumer, "pass-1 result.ownership_matrix key")
+        _require(
+            type(owners) is dict and owners,
+            f"pass-1 result.ownership_matrix[{consumer!r}] must be a non-empty object",
+        )
+        for owner, count in owners.items():
+            _exact_str(owner, "pass-1 result.ownership_matrix owner key")
+            _exact_int(count, f"pass-1 result.ownership_matrix[{consumer!r}][{owner!r}]", minimum=1)
+
+    encoded = canonical_json_bytes(obj)
+    _require(
+        canonical_json_bytes(strict_json_object(encoded)) == encoded,
+        "pass-1 result canonical serialisation is not a fixed point",
+    )
+    return obj
+
+
+def trusted_expected_result(
+    pass1: Mapping[str, Any], *, expected_sha256: str
+) -> TrustedExpectedResult:
+    """Turn a validated post-Pass-1 artifact plus its owner-held digest into the Layer-2 truth.
+
+    ``expected_sha256`` is supplied from outside the artifact. Reading the file and trusting the
+    digest it happens to hash to would make the artifact self-certifying, which is the same defect
+    one layer up: an expectation must be pinned by something that did not travel with it.
+    """
+    obj = validate_pass1_result(pass1)
+    _hex64(expected_sha256, "trusted expected result digest")
+    actual = hashlib.sha256(canonical_json_bytes(obj)).hexdigest()
+    _require(
+        actual == expected_sha256,
+        f"post-Pass-1 result digest {actual} is not the supplied {expected_sha256}",
+    )
+    authorization = MappingProxyType(dict(obj["authorization"]))
+    identity = stage_i_published_run_identity(
+        authorization,
+        post_pass1_result_identity_sha256=actual,
+        selection_sequence_commitment_map_sha256=obj["selection_sequence_commitment_map_sha256"],
+        post_pass1_result_identity_schema=obj["schema_version"],
+        selection_sequence_commitment_version=obj["selection_sequence_commitment_version"],
+    )
+    return TrustedExpectedResult(
+        result_identity_schema=obj["schema_version"],
+        result_identity_sha256=actual,
+        authorization=authorization,
+        stage_i_run_identity=identity,
+        selection_sequence_commitment_version=obj["selection_sequence_commitment_version"],
+        selection_sequence_commitments=MappingProxyType(
+            dict(sorted(obj["selection_sequence_commitments"].items()))
+        ),
+        selection_sequence_commitment_map_sha256=obj["selection_sequence_commitment_map_sha256"],
+        node_binding_projection=MappingProxyType({
+            source_id: tuple(allowed)
+            for source_id, allowed in sorted(obj["node_binding_projection"].items())
+        }),
+        node_binding_projection_sha256=authorization["node_binding_projection_sha256"],
+        authorized_input_binding_ids=tuple(obj["authorized_input_binding_ids"]),
+        nodes=tuple(
+            TrustedExpectedNode(
+                source_id=entry["source_id"],
+                stage=entry["stage"],
+                target_serialized_tokens=entry["target_serialized_tokens"],
+                branch=entry["branch"],
+                selection_mode=entry["selection_mode"],
+                selected_identities=entry["selected_identities"],
+                selected_serialized_tokens=entry["selected_serialized_tokens"],
+                selection_fingerprint=entry["selection_fingerprint"],
+                selection_sequence_commitment=entry["selection_sequence_commitment"],
+                crossing_identity=entry["crossing_identity"],
+                actual_overshoot_tokens=entry["actual_overshoot_tokens"],
+                input_binding_ids=tuple(entry["input_binding_ids"]),
+            )
+            for entry in obj["nodes"]
+        ),
+        totals=MappingProxyType(dict(obj["totals"])),
+        ownership_matrix=MappingProxyType({
+            consumer: MappingProxyType(dict(owners))
+            for consumer, owners in sorted(obj["ownership_matrix"].items())
+        }),
+        h_binding=MappingProxyType(dict(obj["h_binding"])),
+    )
+
+
+def load_trusted_expected_result(path: Path, *, expected_sha256: str) -> TrustedExpectedResult:
+    """Load the frozen post-Pass-1 artifact from outside the published realization.
+
+    The strict consumer takes its expectation from here, never from the manifest it is checking.
+    """
+    payload, digest = read_authoritative_bytes(path, max_bytes=1 << 30)
+    _require(
+        digest == expected_sha256,
+        f"{path}: post-Pass-1 result SHA-256 {digest} is not the supplied {expected_sha256}",
+    )
+    obj = strict_json_object(payload, where=str(path))
+    _require(
+        canonical_json_bytes(obj) == payload,
+        f"{path}: post-Pass-1 result bytes are not canonical",
+    )
+    return trusted_expected_result(obj, expected_sha256=expected_sha256)
 
 
 def _closed(obj: Any, fields: frozenset[str], where: str) -> dict[str, Any]:
@@ -494,18 +1037,8 @@ def validate_manifest(manifest: Any) -> dict[str, Any]:
         _require(key in environment, f"manifest.environment is missing {key!r}")
         _exact_str(environment[key], f"manifest.environment.{key}")
 
-    h_binding = obj["h_binding"]
-    _require(type(h_binding) is dict, "manifest.h_binding must be a JSON object")
-    for key in (
-        "h_run_identity",
-        "h_census_sha256",
-        "h_predictions_sha256",
-        "h_complete_sha256",
-        "h_candidate_plan_sha256",
-        "h_implementation_bundle_sha256",
-        "owner_graph_sha256",
-    ):
-        _require(key in h_binding, f"manifest.h_binding is missing {key!r}")
+    h_binding = _closed(obj["h_binding"], _H_BINDING_FIELDS, "manifest.h_binding")
+    for key in sorted(_H_BINDING_FIELDS):
         _hex64(h_binding[key], f"manifest.h_binding.{key}")
 
     projection = obj["node_binding_projection"]
@@ -539,18 +1072,36 @@ def validate_manifest(manifest: Any) -> dict[str, Any]:
         )
 
     stage_i_run = _closed(obj["stage_i_run"], _STAGE_I_RUN_FIELDS, "manifest.stage_i_run")
-    for key in (
-        "run_identity",
-        "candidate_i_plan_sha256",
-        "implementation_bundle_sha256",
-        "h_run_identity",
-        "h_complete_sha256",
-        "h_census_sha256",
-        "h_predictions_sha256",
-        "owner_graph_sha256",
-        "node_binding_projection_sha256",
-    ):
+    for key in ("run_identity", "post_pass1_result_identity_sha256", *_AUTHORIZATION_HEX_FIELDS):
         _hex64(stage_i_run[key], f"manifest.stage_i_run.{key}")
+    _require(
+        _exact_str(
+            stage_i_run["post_pass1_result_identity_schema"],
+            "manifest.stage_i_run.post_pass1_result_identity_schema",
+        )
+        == PASS1_RESULT_SCHEMA,
+        "manifest.stage_i_run names a post-Pass-1 result schema this implementation cannot read",
+    )
+    _require(
+        _exact_str(
+            stage_i_run["selection_sequence_commitment_version"],
+            "manifest.stage_i_run.selection_sequence_commitment_version",
+        )
+        == SELECTION_SEQUENCE_SCHEMA,
+        "manifest.stage_i_run names a different selection-sequence commitment version",
+    )
+    _hex64(
+        stage_i_run["selection_sequence_commitment_map_sha256"],
+        "manifest.stage_i_run.selection_sequence_commitment_map_sha256",
+    )
+    _require(
+        selection_sequence_commitment_map_sha256({
+            entry["source_id"]: entry["selection_sequence_commitment"] for entry in nodes
+        })
+        == stage_i_run["selection_sequence_commitment_map_sha256"],
+        "manifest.stage_i_run.selection_sequence_commitment_map_sha256 does not describe the "
+        "per-node commitments the manifest itself declares",
+    )
     _require(
         node_binding_projection_sha256(projection) == stage_i_run["node_binding_projection_sha256"],
         "manifest.stage_i_run.node_binding_projection_sha256 does not describe "
@@ -698,14 +1249,26 @@ def write_shards(staging: Path, records: Iterable[Mapping[str, Any]]) -> list[di
     return shards
 
 
-def reconcile_manifest_with_audit(manifest: Mapping[str, Any], audit: RealizationAudit) -> None:
-    """The manifest must restate the physical realization exactly, field for field.
+def reconcile_manifest_with_audit(
+    manifest: Mapping[str, Any],
+    audit: RealizationAudit,
+    expected: TrustedExpectedResult,
+) -> None:
+    """Three-way equality: trusted expectation == manifest == the bytes actually on disk.
 
-    This is the repair for the reviewed defect where COMPLETE could be published with manifest
-    token totals that disagreed with the records on disk. Every number below is compared against
-    one the audit derived by streaming the actual bytes, so a caller-supplied total that is merely
-    internally consistent is no longer sufficient.
+    R2 compared the manifest against the audit only. Both are Layer 3, so a fully resealed
+    publication -- records rewritten, the manifest's own expected sequence and projection restated
+    to match, every digest and total recomputed -- was internally consistent and passed. The
+    missing party is ``expected``: the post-Pass-1 result, built from the selection ledger and
+    frozen to disk before a single output byte existed.
+
+    So every load-bearing claim is now checked twice, against two sources that cannot both be
+    edited by whoever rewrote the output: once against the expectation that predates the bytes,
+    and once against the bytes themselves.
     """
+    _reconcile_run_identity(manifest, expected)
+    _reconcile_projection(manifest, expected)
+
     totals = manifest["totals"]
     for field_name, actual in (
         ("records", audit.records),
@@ -719,6 +1282,23 @@ def reconcile_manifest_with_audit(manifest: Mapping[str, Any], audit: Realizatio
             f"manifest.totals.{field_name} is {totals[field_name]} but the staged records "
             f"actually contain {actual}",
         )
+    for field_name in (
+        "records",
+        "content_tokens",
+        "serialized_tokens",
+        "unique_cleaned_identities",
+    ):
+        _require(
+            totals[field_name] == expected.totals[field_name],
+            f"manifest.totals.{field_name} is {totals[field_name]} but the trusted post-Pass-1 "
+            f"result committed to {expected.totals[field_name]}",
+        )
+
+    _require(
+        dict(manifest["ownership_matrix"])
+        == {consumer: dict(owners) for consumer, owners in expected.ownership_matrix.items()},
+        "manifest.ownership_matrix disagrees with the trusted post-Pass-1 result",
+    )
 
     declared = manifest["shards"]
     _require(
@@ -734,8 +1314,38 @@ def reconcile_manifest_with_audit(manifest: Mapping[str, Any], audit: Realizatio
             )
 
     audited = {node.source_id: node for node in audit.nodes}
+    _require(
+        {entry["source_id"] for entry in manifest["nodes"]}
+        == {node.source_id for node in expected.nodes},
+        "manifest declares a different node set than the trusted post-Pass-1 result",
+    )
     for entry in manifest["nodes"]:
         source_id = entry["source_id"]
+        commitment = expected.node(source_id)
+        # Layer 2 vs Layer 3 (the manifest's claims), before the physical bytes are consulted.
+        for field_name, trusted in (
+            ("stage", commitment.stage),
+            ("target_serialized_tokens", commitment.target_serialized_tokens),
+            ("branch", commitment.branch),
+            ("selection_mode", commitment.selection_mode),
+            ("selected_identities", commitment.selected_identities),
+            ("selected_serialized_tokens", commitment.selected_serialized_tokens),
+            ("selection_fingerprint", commitment.selection_fingerprint),
+            ("selection_sequence_commitment", commitment.selection_sequence_commitment),
+            ("crossing_identity", commitment.crossing_identity),
+            ("actual_overshoot_tokens", commitment.actual_overshoot_tokens),
+        ):
+            _require(
+                entry[field_name] == trusted,
+                f"manifest node {source_id}.{field_name} is {entry[field_name]!r} but the trusted "
+                f"post-Pass-1 result committed to {trusted!r}",
+            )
+        _require(
+            tuple(entry["input_binding_ids"]) == commitment.input_binding_ids,
+            f"manifest node {source_id} declares input bindings {entry['input_binding_ids']} but "
+            f"the trusted post-Pass-1 result committed to {list(commitment.input_binding_ids)}",
+        )
+
         if entry["selected_identities"] == 0:
             _require(
                 source_id not in audited,
@@ -763,14 +1373,15 @@ def reconcile_manifest_with_audit(manifest: Mapping[str, Any], audit: Realizatio
             f"manifest node {source_id} fingerprint disagrees with the fingerprint reconstructed "
             "from its physical records",
         )
-        # R2-A: the order-sensitive commitment. The expected value comes from Pass-1 selection,
-        # the actual from an external sort over the published ordinals, so permuting which identity
-        # sits at which ordinal is caught even though the domain stays contiguous and the frozen
-        # set fingerprint is unchanged.
+        # R3-A: the order-sensitive commitment. The expected value is the one frozen before
+        # materialization; the actual comes from an external sort over the published ordinals. A
+        # reseal can restate the manifest, but it cannot restate an artifact that already exists
+        # outside the realization and whose digest names the run.
         _require(
-            entry["selection_sequence_commitment"] == node.selection_sequence_commitment,
+            commitment.selection_sequence_commitment == node.selection_sequence_commitment,
             f"manifest node {source_id} selection-sequence commitment disagrees with the sequence "
-            "reconstructed from its physical records; the ordinal-to-identity mapping differs",
+            "reconstructed from its physical records; the ordinal-to-identity mapping differs "
+            "from the trusted post-Pass-1 expectation",
         )
         _require(
             list(node.input_binding_ids) == sorted(set(entry["input_binding_ids"])),
@@ -780,6 +1391,93 @@ def reconcile_manifest_with_audit(manifest: Mapping[str, Any], audit: Realizatio
         )
     unknown = sorted(set(audited) - {e["source_id"] for e in manifest["nodes"]})
     _require(not unknown, f"physical records exist for undeclared node(s): {unknown}")
+
+
+def _reconcile_run_identity(manifest: Mapping[str, Any], expected: TrustedExpectedResult) -> None:
+    """The published run must be the authorized one, named by the frozen Layer-2 expectation."""
+    # Shape first: reconciliation runs before full manifest validation on the publisher path, so
+    # a manifest missing one of these fields must fail closed here rather than raise KeyError.
+    stage_i_run = _closed(manifest["stage_i_run"], _STAGE_I_RUN_FIELDS, "manifest.stage_i_run")
+    _require(
+        stage_i_run["post_pass1_result_identity_schema"] == expected.result_identity_schema,
+        "manifest names a different post-Pass-1 result schema than the trusted expectation",
+    )
+    _require(
+        stage_i_run["post_pass1_result_identity_sha256"] == expected.result_identity_sha256,
+        "manifest binds post-Pass-1 result "
+        f"{stage_i_run['post_pass1_result_identity_sha256']} but the trusted expectation supplied "
+        f"out of band is {expected.result_identity_sha256}",
+    )
+    _require(
+        stage_i_run["selection_sequence_commitment_version"]
+        == expected.selection_sequence_commitment_version,
+        "manifest names a different selection-sequence commitment version than the trusted "
+        "expectation",
+    )
+    _require(
+        stage_i_run["selection_sequence_commitment_map_sha256"]
+        == expected.selection_sequence_commitment_map_sha256,
+        "manifest's selection-sequence commitment map digest disagrees with the trusted "
+        "post-Pass-1 expectation",
+    )
+    for key in sorted(_AUTHORIZATION_FIELDS):
+        _require(
+            stage_i_run[key] == expected.authorization[key],
+            f"manifest.stage_i_run.{key} is {stage_i_run[key]!r} but the trusted post-Pass-1 "
+            f"result binds {expected.authorization[key]!r}",
+        )
+    _require(
+        stage_i_run["run_identity"] == expected.stage_i_run_identity,
+        f"manifest claims run identity {stage_i_run['run_identity']} but the trusted expectation "
+        f"generates {expected.stage_i_run_identity}",
+    )
+    _require(
+        dict(manifest["h_binding"]) == dict(expected.h_binding),
+        "manifest.h_binding disagrees with the trusted post-Pass-1 result",
+    )
+
+
+def _reconcile_projection(manifest: Mapping[str, Any], expected: TrustedExpectedResult) -> None:
+    """R3-B: node -> allowed-binding authority comes from Layer 1/2, never from the manifest.
+
+    Four things must agree, and the manifest is only one of them: the trusted projection carried
+    by the expectation, the projection the manifest records as an observation, the plan-authorized
+    global binding set, and (through the audit, which is handed the trusted projection) every
+    physical record's membership.
+    """
+    declared = {
+        source_id: tuple(bindings)
+        for source_id, bindings in manifest["node_binding_projection"].items()
+    }
+    trusted = dict(expected.node_binding_projection)
+    _require(
+        declared == trusted,
+        "manifest.node_binding_projection disagrees with the trusted node/binding authority; "
+        f"manifest={ {k: list(v) for k, v in sorted(declared.items())} } "
+        f"trusted={ {k: list(v) for k, v in sorted(trusted.items())} }",
+    )
+    _require(
+        manifest["stage_i_run"]["node_binding_projection_sha256"]
+        == expected.node_binding_projection_sha256,
+        "manifest's node/binding projection digest disagrees with the trusted authority",
+    )
+    authorized = set(expected.authorized_input_binding_ids)
+    projected = {binding for allowed in trusted.values() for binding in allowed}
+    outside = sorted(projected - authorized)
+    _require(
+        not outside,
+        f"trusted projection names binding(s) outside the plan-authorized global set: {outside}",
+    )
+    undeclared = sorted(set(manifest["bindings"]) - authorized)
+    _require(
+        not undeclared,
+        f"manifest declares input binding(s) the plan never authorized: {undeclared}",
+    )
+    missing = sorted(projected - set(manifest["bindings"]))
+    _require(
+        not missing,
+        f"manifest omits the release digest for authorized binding(s) in use: {missing}",
+    )
 
 
 def audit_staged_realization(
@@ -810,6 +1508,7 @@ def publish_atomic(
     manifest: Mapping[str, Any],
     records: Iterable[Mapping[str, Any]],
     *,
+    expected: TrustedExpectedResult,
     read_window_bytes: int = DEFAULT_READ_WINDOW_BYTES,
     sort_chunk_lines: int = DEFAULT_SORT_CHUNK_LINES,
 ) -> Path:
@@ -825,7 +1524,16 @@ def publish_atomic(
     memory and the manifest must agree with it exactly, so a realization whose totals do not
     describe its own records cannot become discoverable. Any failure removes both the staging tree
     and the audit scratch space and leaves prior state untouched.
+
+    ``expected`` is the trusted post-Pass-1 result, passed in separately from the manifest and
+    never derived from it. It supplies the node/binding authority the audit checks records
+    against, and the per-node sequence commitments the reconciliation requires -- so neither the
+    manifest nor the records can supply their own expected values.
     """
+    _require(
+        isinstance(expected, TrustedExpectedResult),
+        "publication requires a trusted post-Pass-1 expected result, not a manifest-derived value",
+    )
     final = out_dir / run_name
     _require(
         not final.exists(), f"realization directory already exists, refusing to overwrite: {final}"
@@ -851,15 +1559,18 @@ def publish_atomic(
         complete["totals"] = dict(manifest["totals"])
         complete["totals"]["shards"] = len(shards)
 
+        # R3-B: the audit's expectation is the trusted projection, not the one the manifest
+        # carries. Handing a document its own expected value back is exactly the defect this
+        # repair exists to close.
         audit = audit_staged_realization(
             staging,
             [entry["name"] for entry in shards],
             audit_dir,
-            complete["node_binding_projection"],
+            expected.node_binding_projection,
             read_window_bytes=read_window_bytes,
             sort_chunk_lines=sort_chunk_lines,
         )
-        reconcile_manifest_with_audit(complete, audit)
+        reconcile_manifest_with_audit(complete, audit, expected)
         validate_manifest(complete)
 
         manifest_bytes = canonical_json_bytes(complete)
@@ -890,6 +1601,7 @@ def publish_atomic(
 def load_published_realization(
     final: Path,
     *,
+    expected: TrustedExpectedResult,
     work_dir: Path | None = None,
     read_window_bytes: int = DEFAULT_READ_WINDOW_BYTES,
     sort_chunk_lines: int = DEFAULT_SORT_CHUNK_LINES,
@@ -908,7 +1620,18 @@ def load_published_realization(
 
     Scratch space is created under ``work_dir`` (a system temp directory by default), is never
     written inside the published result, and is removed on every exit path.
+
+    ``expected`` is mandatory and must come from outside the realization -- the frozen post-Pass-1
+    artifact plus the digest its owner holds, or registry-owned authorized execution state. The
+    reviewed defect was that the consumer discovered its own expectation by reading the manifest,
+    the COMPLETE marker and the published run identity, all three of which belong to the thing
+    being checked.
     """
+    _require(
+        isinstance(expected, TrustedExpectedResult),
+        "the strict consumer requires a trusted post-Pass-1 expected result supplied from outside "
+        "the published realization; a manifest-derived expectation is not an expectation",
+    )
     _require(final.is_dir(), f"{final}: not a published realization directory")
     marker_path = final / COMPLETE_MARKER
     manifest_path = final / MANIFEST_FILENAME
@@ -933,9 +1656,9 @@ def load_published_realization(
     documents_dir = final / DOCUMENTS_DIRNAME
     _require(documents_dir.is_dir(), f"{final}: no documents directory")
     present = sorted(p.name for p in documents_dir.iterdir())
-    expected = [entry["name"] for entry in manifest["shards"]]
+    shard_names = [entry["name"] for entry in manifest["shards"]]
     _require(
-        present == sorted(expected),
+        present == sorted(shard_names),
         f"{final}: documents directory contents disagree with the manifest shard list",
     )
 
@@ -946,13 +1669,13 @@ def load_published_realization(
     try:
         audit = audit_staged_realization(
             final,
-            expected,
+            shard_names,
             scratch,
-            manifest["node_binding_projection"],
+            expected.node_binding_projection,
             read_window_bytes=read_window_bytes,
             sort_chunk_lines=sort_chunk_lines,
         )
-        reconcile_manifest_with_audit(manifest, audit)
+        reconcile_manifest_with_audit(manifest, audit, expected)
     finally:
         if owned_scratch:
             shutil.rmtree(scratch, ignore_errors=True)
@@ -998,15 +1721,21 @@ __all__ = [
     "DOCUMENTS_DIRNAME",
     "MANIFEST_FILENAME",
     "MANIFEST_SCHEMA",
+    "PASS1_RESULT_SCHEMA",
     "RECORDS_PER_SHARD",
     "RECORD_FIELDS",
     "RECORD_SCHEMA",
+    "SELECTION_SEQUENCE_MAP_SCHEMA",
     "SHARD_POLICY_VERSION",
+    "STAGE_I_RUN_IDENTITY_SCHEMA",
     "OutputError",
+    "TrustedExpectedNode",
+    "TrustedExpectedResult",
     "build_record",
     "iter_records",
     "audit_staged_realization",
     "load_published_realization",
+    "load_trusted_expected_result",
     "NODE_BINDING_PROJECTION_SCHEMA",
     "node_binding_projection_sha256",
     "recompute_stage_i_run_identity",
@@ -1014,8 +1743,12 @@ __all__ = [
     "plan_shards",
     "publish_atomic",
     "record_sort_key",
+    "selection_sequence_commitment_map_sha256",
     "shard_name",
+    "stage_i_published_run_identity",
+    "trusted_expected_result",
     "validate_manifest",
+    "validate_pass1_result",
     "validate_record",
     "write_shards",
 ]
