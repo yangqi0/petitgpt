@@ -243,14 +243,56 @@ BUNDLE_SCHEMA = "petitgpt-i-implementation-bundle-v1"
 REALIZATION_LABEL = "AUTHORITATIVE_STAGE_I_REALIZATION"
 RESUME_SUPPORTED = False
 
-# Every module whose bytes can change a Stage-I result. The audit module is here because it
-# decides whether a realization may be published at all and what the consumer will accept; leaving
-# it out would mean a change to that logic did not invalidate an authorized plan.
-IMPLEMENTATION_BUNDLE_FILES = (
+# The Stage-I production entry points. Everything reachable from these by a local import is
+# load-bearing, because its bytes execute inside a production run.
+STAGE_I_PRODUCTION_ROOTS = (
     "pretrain/stage_i_audit_v1.py",
     "pretrain/stage_i_output_v1.py",
     "pretrain/stage_i_realize_v1.py",
     "pretrain/stage_i_select_v1.py",
+)
+
+# Every module whose bytes can change a Stage-I result: the transitive local-import closure of
+# STAGE_I_PRODUCTION_ROOTS, minus the members bound independently below.
+#
+# R6-A: this list previously named only the four `stage_i_*_v1.py` roots, so the plan bound the
+# entry points but none of their dependencies. Codex changed load-bearing logic in
+# `stage_i_graph_v2.py` -- which decides stage priority, resource location and canonical JSON --
+# while the candidate-plan SHA, the bundle SHA, git HEAD and the canonical-state SHA all stayed
+# put, and authorization plus every runtime revalidation still succeeded. Four more modules had
+# the same hole. Membership is now derived from what the production path actually imports, and
+# `tests/test_stage_i_realize_v1.py` re-derives that closure from the source and compares it,
+# so adding a dependency without binding its bytes is a test failure rather than a silent gap.
+IMPLEMENTATION_BUNDLE_FILES = (
+    "pretrain/build_pretrain_shards.py",
+    "pretrain/h_census_v2.py",
+    "pretrain/stage_i_audit_v1.py",
+    "pretrain/stage_i_graph_v2.py",
+    "pretrain/stage_i_output_v1.py",
+    "pretrain/stage_i_realize_v1.py",
+    "pretrain/stage_i_replay_v2.py",
+    "pretrain/stage_i_select_v1.py",
+    # `src` is a regular package, so this file executes on `import src.special_tokens`. It is
+    # empty today; it is bound because it is a place where code CAN run, not because it does.
+    "src/__init__.py",
+    "src/special_tokens.py",
+)
+
+# The one closure member deliberately NOT in the bundle, because the plan already binds its exact
+# bytes through a stronger authority. `selector_v1` is re-hashed from disk at authorization and at
+# every revalidation and compared with BOTH the plan's `authorities` block and the accepted
+# Stage-H census's own authority digest -- so Stage I must run the same selector bytes Stage H
+# ran, which bundle membership alone would not say. Duplicating it here would add a second,
+# weaker statement about the same file. There is deliberately no third category: every member of
+# IMPLEMENTATION_DEPENDENCY_CLOSURE is either bundled or listed here.
+INDEPENDENTLY_BOUND_IMPLEMENTATION_FILES = MappingProxyType({
+    "pretrain/select_pretrain_documents.py": "selector_v1",
+})
+
+# The complete reviewed closure. Every local Python file whose executable code can materially
+# affect a Stage-I production run, and nothing else.
+IMPLEMENTATION_DEPENDENCY_CLOSURE = tuple(
+    sorted({*IMPLEMENTATION_BUNDLE_FILES, *INDEPENDENTLY_BOUND_IMPLEMENTATION_FILES})
 )
 
 # The frozen environment contract is defined in the output module so the published manifest's
@@ -307,6 +349,14 @@ def file_sha256(path: Path) -> str:
 
 
 def implementation_files(repo_root: Path) -> dict[str, str]:
+    """Hash every bundle member from the executing installation, right now.
+
+    The member list is an explicit tuple, so the file set does not depend on the process working
+    directory, on filesystem iteration order, or on a filename convention that a new module might
+    or might not follow. Each call reads the bytes again: this is the runtime rehash, and it is
+    what makes a dirty worktree edit visible to a fixed candidate plan even though `git rev-parse
+    HEAD` has not moved. Git state is provenance metadata here, never the byte check.
+    """
     digests: dict[str, str] = {}
     for relative in IMPLEMENTATION_BUNDLE_FILES:
         path = repo_root / relative
@@ -316,7 +366,12 @@ def implementation_files(repo_root: Path) -> dict[str, str]:
 
 
 def implementation_bundle_sha256(files: Mapping[str, str]) -> str:
-    """One digest over the exact member list and their digests."""
+    """One digest over the exact member list and their digests.
+
+    The payload is the sorted mapping itself, so the digest binds repository-relative PATH as
+    well as content: moving identical bytes to a different member name moves this value, and a
+    member that disappears cannot be compensated for by another that arrives.
+    """
     payload = {"schema_version": BUNDLE_SCHEMA, "files": dict(sorted(files.items()))}
     return hashlib.sha256(canonical_json_bytes(payload)).hexdigest()
 
@@ -539,10 +594,18 @@ def verify_h_evidence_manifest(run_dir: Path) -> HEvidenceManifest:
 
     # Closure: the entry set must be exactly the run's files, minus the manifest itself. R4's
     # "verify whatever is listed" loop is vacuously satisfiable by listing less; this is not.
+    #
+    # R6-B: the exclusion is the canonical run-relative path of the root manifest, not a basename.
+    # Filtering on `path.name` excused every file called SHA256SUMS anywhere in the tree, so an
+    # unlisted `evidence/SHA256SUMS` fell outside the closure and could be added to an accepted
+    # Stage-H run without moving its evidence identity. Exactly one path is exempt: the manifest
+    # cannot describe itself.
     present = {
-        str(path.relative_to(run_dir))
-        for path in run_dir.rglob("*")
-        if path.is_file() and path.name != H_EVIDENCE_MANIFEST_FILENAME
+        relative
+        for relative in (
+            path.relative_to(run_dir).as_posix() for path in run_dir.rglob("*") if path.is_file()
+        )
+        if relative != H_EVIDENCE_MANIFEST_FILENAME
     }
     missing = sorted(present - set(entries))
     extra = sorted(set(entries) - present)
@@ -2961,6 +3024,9 @@ __all__ = [
     "BUNDLE_SCHEMA",
     "H_I_REQUIRED_DIMENSIONS",
     "IMPLEMENTATION_BUNDLE_FILES",
+    "IMPLEMENTATION_DEPENDENCY_CLOSURE",
+    "INDEPENDENTLY_BOUND_IMPLEMENTATION_FILES",
+    "STAGE_I_PRODUCTION_ROOTS",
     "H_EVIDENCE_MANIFEST_SCHEMA",
     "PASS1_RESULT_SCHEMA",
     "PLAN_SCHEMA",

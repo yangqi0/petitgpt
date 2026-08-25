@@ -63,15 +63,20 @@ from pretrain.stage_i_output_v1 import (
     validate_record,
 )
 from pretrain.stage_i_realize_v1 import (
+    _AUTHORITY_PATHS,
     ACCEPTED_H_COMPLETE_SHA256,
     ACCEPTED_H_RUN_DIR,
     CANONICAL_REPO_ROOT,
     IMPLEMENTATION_BUNDLE_FILES,
+    IMPLEMENTATION_DEPENDENCY_CLOSURE,
+    INDEPENDENTLY_BOUND_IMPLEMENTATION_FILES,
     PLAN_SCHEMA,
+    REQUIRED_AUTHORITIES,
     REQUIRED_PYTHON_EXECUTABLE,
     REQUIRED_PYTHON_VERSION,
     REQUIRED_TOKENIZERS_VERSION,
     SHARD_POLICY_RULE,
+    STAGE_I_PRODUCTION_ROOTS,
     AcceptedH,
     AuthorizedIContext,
     Environment,
@@ -1615,7 +1620,10 @@ def test_28_stage_i_selection_has_no_h_replay_dependency():
         "_available",
         "_fingerprint",
     }
-    for relative in IMPLEMENTATION_BUNDLE_FILES:
+    # Scoped to the Stage-I-authored modules. The bundle now also carries shared library code and
+    # `pretrain/h_census_v2.py`, which IS Stage H and binds these names by definition; requiring
+    # them to be absent there would be a category error, not an independence check.
+    for relative in STAGE_I_PRODUCTION_ROOTS:
         tree = ast.parse((ROOT / relative).read_text())
         bound: set[str] = set()
         for statement in ast.walk(tree):
@@ -2731,25 +2739,406 @@ def test_r1_t2_run_identity_changes_with_every_bound_field():
     assert len(seen) == len(authorization) + len(downstream) + 1
 
 
-def test_r1_v_implementation_bundle_covers_every_stage_i_production_module():
-    """The bundle must name every module whose bytes can change a Stage-I result.
+def _package_initializers(relative: str) -> list[str]:
+    """Every ``__init__.py`` that executes when ``relative`` is imported."""
+    found = []
+    parts = Path(relative).parts[:-1]
+    for depth in range(1, len(parts) + 1):
+        candidate = Path(*parts[:depth]) / "__init__.py"
+        if (ROOT / candidate).is_file():
+            found.append(candidate.as_posix())
+    return found
 
-    Caught during R1: the new audit module decides whether a realization may be published and what
-    the consumer accepts, but was initially absent from the bundle -- so editing it would not have
-    invalidated an authorized plan. Enumerating the directory keeps this honest as modules are
-    added rather than relying on someone remembering to update a tuple.
+
+def _local_module_files(module: str) -> list[str]:
+    """Resolve a dotted module name to the repository files importing it would execute."""
+    as_module = Path(module.replace(".", "/") + ".py")
+    if (ROOT / as_module).is_file():
+        return [as_module.as_posix(), *_package_initializers(as_module.as_posix())]
+    as_package = Path(module.replace(".", "/")) / "__init__.py"
+    if (ROOT / as_package).is_file():
+        return [as_package.as_posix(), *_package_initializers(as_package.as_posix())]
+    return []
+
+
+def stage_i_dependency_closure(roots=STAGE_I_PRODUCTION_ROOTS) -> tuple[str, ...]:
+    """The transitive local-import closure of the Stage-I production roots, from the source.
+
+    Deterministic and independent of the process working directory: it parses the files named by
+    ``roots``, follows every local project import (anything that resolves to a repository ``.py``
+    file), and includes the package initializers those imports execute along the way. Standard
+    library and installed packages resolve to nothing and drop out; tests, docs and unrelated CLIs
+    are never reached because nothing on the production path imports them.
+
+    This is the expected value the bundle is checked against, so the byte-verified set follows
+    what the code actually imports rather than a filename convention.
     """
-    on_disk = sorted(
-        f"pretrain/{path.name}" for path in (ROOT / "pretrain").glob("stage_i_*_v1.py")
+    seen: set[str] = set()
+    pending: list[str] = []
+    for root in roots:
+        pending.append(root)
+        pending.extend(_package_initializers(root))
+    while pending:
+        relative = pending.pop()
+        if relative in seen:
+            continue
+        seen.add(relative)
+        tree = ast.parse((ROOT / relative).read_text())
+        for statement in ast.walk(tree):
+            modules: list[str] = []
+            if isinstance(statement, ast.Import):
+                modules = [alias.name for alias in statement.names]
+            elif isinstance(statement, ast.ImportFrom):
+                assert not statement.level, (
+                    f"{relative}: relative imports are not resolvable by this closure check"
+                )
+                if statement.module:
+                    modules = [statement.module]
+            for module in modules:
+                pending.extend(_local_module_files(module))
+    return tuple(sorted(seen))
+
+
+def test_r6_a_declared_closure_is_the_real_local_dependency_closure():
+    """The reviewed closure constant must equal what the production path actually imports."""
+    derived = stage_i_dependency_closure()
+    assert derived == IMPLEMENTATION_DEPENDENCY_CLOSURE, (
+        "IMPLEMENTATION_DEPENDENCY_CLOSURE disagrees with the closure derived from the source; "
+        f"derived={list(derived)} declared={list(IMPLEMENTATION_DEPENDENCY_CLOSURE)}"
     )
-    assert on_disk, "no Stage-I v1 production modules found"
-    assert sorted(IMPLEMENTATION_BUNDLE_FILES) == on_disk, (
-        "IMPLEMENTATION_BUNDLE_FILES does not cover every Stage-I v1 production module"
+    # The five modules Codex identified as unbound at R5, plus the package initializer that
+    # executes with them, must all be inside it.
+    for relative in (
+        "pretrain/stage_i_graph_v2.py",
+        "pretrain/build_pretrain_shards.py",
+        "pretrain/h_census_v2.py",
+        "pretrain/stage_i_replay_v2.py",
+        "src/special_tokens.py",
+        "src/__init__.py",
+    ):
+        assert relative in derived, f"{relative} is load-bearing but outside the closure"
+
+
+def test_r6_a_every_closure_member_is_byte_bound_exactly_once():
+    """No third category: every closure member is bundled or independently plan-bound.
+
+    R6-A: the bundle named only the four ``stage_i_*_v1.py`` roots, so a load-bearing edit to
+    ``stage_i_graph_v2.py`` left the plan SHA, the bundle SHA, git HEAD and the canonical-state
+    SHA all unchanged and authorization still succeeded. The set is now derived from the imports,
+    and this test fails if any member is dropped from BOTH byte-verified sets.
+    """
+    bundled = set(IMPLEMENTATION_BUNDLE_FILES)
+    independent = set(INDEPENDENTLY_BOUND_IMPLEMENTATION_FILES)
+    # Derived from the source, not from the declared constant: comparing the two byte-verified
+    # sets against `IMPLEMENTATION_DEPENDENCY_CLOSURE` would be true by construction and would
+    # prove nothing. This is the comparison with teeth.
+    closure = set(stage_i_dependency_closure())
+
+    assert bundled | independent == closure, (
+        "a load-bearing module is neither bundled nor independently byte-bound: "
+        f"{sorted(closure - bundled - independent)}"
     )
+    assert not (bundled & independent), (
+        f"a module claims both byte authorities: {sorted(bundled & independent)}"
+    )
+    # Every independently bound member must name an authority the plan actually requires.
+    for relative, authority in INDEPENDENTLY_BOUND_IMPLEMENTATION_FILES.items():
+        assert authority in REQUIRED_AUTHORITIES, (
+            f"{relative} claims authority {authority!r}, which the plan does not require"
+        )
+        assert _AUTHORITY_PATHS[authority] == relative, (
+            f"authority {authority!r} does not point at {relative}"
+        )
+
+    # The specific regression: dropping stage_i_graph_v2.py must be a failure, not a naming
+    # question. Simulating it here proves the assertion above has teeth.
+    without_graph = bundled - {"pretrain/stage_i_graph_v2.py"}
+    assert without_graph | independent != closure, (
+        "the coverage assertion would still pass with stage_i_graph_v2.py removed"
+    )
+
     # And every named member must actually exist and hash.
     files = implementation_files(ROOT)
-    assert set(files) == set(IMPLEMENTATION_BUNDLE_FILES)
+    assert set(files) == bundled
     assert implementation_bundle_sha256(files) == implementation_bundle_sha256(files)
+
+
+def test_r6_a_bundle_membership_is_not_a_filename_convention():
+    """The bundle must not be derivable from a ``stage_i_*_v1.py`` glob any more."""
+    suffix_only = sorted(
+        f"pretrain/{path.name}" for path in (ROOT / "pretrain").glob("stage_i_*_v1.py")
+    )
+    assert suffix_only, "no Stage-I v1 production modules found"
+    assert sorted(IMPLEMENTATION_BUNDLE_FILES) != suffix_only, (
+        "IMPLEMENTATION_BUNDLE_FILES is once again exactly the stage_i_*_v1.py glob, which is a "
+        "naming convention rather than the set of modules whose bytes execute"
+    )
+    assert set(suffix_only) < set(IMPLEMENTATION_BUNDLE_FILES)
+
+
+def test_r6_a_bundle_digest_binds_path_as_well_as_content():
+    """Identical bytes under a different member name must move the bundle digest."""
+    files = implementation_files(ROOT)
+    baseline = implementation_bundle_sha256(files)
+
+    renamed = dict(files)
+    digest = renamed.pop("pretrain/stage_i_graph_v2.py")
+    renamed["pretrain/stage_i_graph_v3.py"] = digest
+    assert implementation_bundle_sha256(renamed) != baseline, (
+        "the bundle digest does not bind member paths, only their contents"
+    )
+
+    dropped = {k: v for k, v in files.items() if k != "src/__init__.py"}
+    assert implementation_bundle_sha256(dropped) != baseline
+    assert implementation_bundle_sha256(files) == baseline
+
+
+# ---- R6-A: the per-member dirty-worktree rejection matrix ----------------------
+#
+# These need an isolated EXECUTING installation, because the canonical repository root is derived
+# from the running module's own location and a caller cannot relocate it. The installation is
+# staged inside the repository so `git -C <install> rev-parse HEAD` still reports the real HEAD --
+# which is the whole point: the edit must be caught with a clean HEAD and a dirty worktree. Files
+# that get mutated are COPIED; the bulk plan-bound artifacts are hard-linked and never written.
+
+
+_ISOLATED_RUNNER = r"""
+import os, sys
+from pathlib import Path
+INSTALL = Path(os.environ["STAGE_I_INSTALL"]).resolve()
+sys.path.insert(0, str(INSTALL))
+import pretrain.stage_i_realize_v1 as mod
+from pretrain.stage_i_graph_v2 import canonical_json_bytes, load_source_graph, sha256_file
+
+GRAPH_REL = "runs/h_tooling_repair_v2_2026-08-21/policy/stage_i_source_graph_v1.json"
+mode, plan_path = sys.argv[1], Path(sys.argv[2])
+if mod.CANONICAL_REPO_ROOT != INSTALL:
+    raise SystemExit(f"EXECUTING_ROOT_MISMATCH {mod.CANONICAL_REPO_ROOT} != {INSTALL}")
+
+if mode == "generate":
+    graph = load_source_graph(INSTALL / GRAPH_REL, verify_hashes=True)
+    accepted = mod.load_accepted_h(INSTALL / "runs/h_production_v2_2026-08-23")
+    plan = mod.generate_candidate_plan(
+        repo_root=INSTALL, graph_path=INSTALL / GRAPH_REL, graph=graph, accepted=accepted,
+        environment=mod.Environment(
+            python_executable=mod.REQUIRED_PYTHON_EXECUTABLE,
+            python_version=mod.REQUIRED_PYTHON_VERSION,
+            tokenizers_version=mod.REQUIRED_TOKENIZERS_VERSION))
+    plan_path.write_bytes(canonical_json_bytes(plan))
+    print("PLAN_SHA256=" + sha256_file(plan_path))
+    raise SystemExit(0)
+
+expected = sys.argv[3]
+try:
+    context = mod.authorize_plan(plan_path, expected, INSTALL)
+    if mode == "revalidate":
+        target = INSTALL / sys.argv[4]
+        target.write_bytes(target.read_bytes() + b"\n# dirty worktree byte\n")
+        context.revalidate()
+except BaseException as exc:
+    print("OUTCOME=REJECTED")
+    print("DETAIL=" + f"{type(exc).__name__}: {exc}".splitlines()[0][:400])
+    raise SystemExit(0)
+print("OUTCOME=ACCEPTED")
+"""
+
+
+@pytest.fixture(scope="module")
+def isolated_installation(accepted_h):
+    """A second Stage-I installation at this HEAD, with a fixed candidate plan of its own."""
+    import os
+    import shutil
+    import subprocess
+    import sys
+    import tempfile
+
+    staging = Path(tempfile.mkdtemp(dir=str(ROOT), prefix=".pytest-r6-install-"))
+    install = staging / "install"
+    try:
+        # Mutable: real copies, so an edit here never reaches the repository's own file.
+        for relative in IMPLEMENTATION_DEPENDENCY_CLOSURE:
+            target = install / relative
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(ROOT / relative, target)
+        # Immutable: hard links to the plan-bound artifacts, never written by these tests.
+        graph_relative = str(GRAPH.relative_to(ROOT))
+        artifacts = {graph_relative, *_AUTHORITY_PATHS.values()}
+        artifacts.update(
+            binding["release_manifest_path"]
+            for binding in json.loads(GRAPH.read_text())["input_bindings"].values()
+        )
+        artifacts.update(
+            str(path.relative_to(ROOT)) for path in H_RUN_DIR.rglob("*") if path.is_file()
+        )
+        for relative in sorted(artifacts):
+            target = install / relative
+            if target.exists():
+                continue
+            target.parent.mkdir(parents=True, exist_ok=True)
+            try:
+                os.link(ROOT / relative, target)
+            except OSError:
+                shutil.copyfile(ROOT / relative, target)
+
+        head = subprocess.run(
+            ["git", "-C", str(install), "rev-parse", "HEAD"],
+            capture_output=True,
+            text=True,
+            check=True,
+        ).stdout.strip()
+        assert head == _head_commit(), (
+            "the isolated installation does not report the repository HEAD, so a dirty-byte "
+            "rejection there would not prove anything about a clean-HEAD worktree edit"
+        )
+
+        runner = staging / "runner.py"
+        runner.write_text(_ISOLATED_RUNNER)
+        plan_path = staging / "candidate_plan.json"
+
+        def run(*argv: str) -> tuple[str, str]:
+            result = subprocess.run(
+                [sys.executable, str(runner), *argv],
+                capture_output=True,
+                text=True,
+                cwd=str(staging),
+                env=dict(os.environ, STAGE_I_INSTALL=str(install)),
+            )
+            output = result.stdout + result.stderr
+            detail = next(
+                (
+                    line[len("DETAIL=") :]
+                    for line in output.splitlines()
+                    if line.startswith("DETAIL=")
+                ),
+                "",
+            )
+            if "OUTCOME=REJECTED" in output:
+                return "REJECTED", detail
+            if "OUTCOME=ACCEPTED" in output:
+                return "ACCEPTED", ""
+            raise AssertionError(f"isolated runner produced no verdict:\n{output}")
+
+        generated = subprocess.run(
+            [sys.executable, str(runner), "generate", str(plan_path)],
+            capture_output=True,
+            text=True,
+            cwd=str(staging),
+            env=dict(os.environ, STAGE_I_INSTALL=str(install)),
+        )
+        assert "PLAN_SHA256=" in generated.stdout, (
+            f"could not generate the fixed plan:\n{generated.stdout}\n{generated.stderr}"
+        )
+        plan_sha = generated.stdout.split("PLAN_SHA256=")[1].split()[0]
+
+        # The plan is fixed from here on. Nothing below regenerates it.
+        assert run("authorize", str(plan_path), plan_sha) == ("ACCEPTED", ""), (
+            "the isolated installation cannot authorize its own untouched plan"
+        )
+        yield install, plan_path, plan_sha, run
+    finally:
+        shutil.rmtree(staging, ignore_errors=True)
+
+
+@pytest.mark.parametrize("relative", sorted(IMPLEMENTATION_BUNDLE_FILES))
+def test_r6_a_dirty_worktree_byte_change_is_refused(isolated_installation, relative):
+    """A one-byte edit to any bundle member must be refused by the FIXED plan, at a clean HEAD."""
+    install, plan_path, plan_sha, run = isolated_installation
+    target = install / relative
+    original = target.read_bytes()
+    try:
+        target.write_bytes(original + b"\n# dirty worktree byte\n")
+        verdict, detail = run("authorize", str(plan_path), plan_sha)
+    finally:
+        target.write_bytes(original)
+    assert verdict == "REJECTED", (
+        f"a dirty-worktree edit to {relative} was accepted against a fixed candidate plan"
+    )
+    assert "implementation" in detail, (
+        f"{relative} was refused, but not as an implementation-byte mismatch: {detail}"
+    )
+
+
+def test_r6_a_load_bearing_logic_change_is_refused(isolated_installation):
+    """Codex's exact proof shape: change load-bearing LOGIC, not merely append a byte.
+
+    Widening the hex alphabet in `stage_i_graph_v2.py` weakens every digest check in the Stage-I
+    stack. At R5 this was accepted with the plan SHA, the bundle SHA, git HEAD and the
+    canonical-state SHA all unchanged.
+    """
+    install, plan_path, plan_sha, run = isolated_installation
+    target = install / "pretrain/stage_i_graph_v2.py"
+    original = target.read_bytes()
+    anchor = b'_HEX64 = frozenset("0123456789abcdef")'
+    assert anchor in original, "the load-bearing anchor moved; pick another one"
+    try:
+        target.write_bytes(
+            original.replace(anchor, b'_HEX64 = frozenset("0123456789abcdefABCDEF")')
+        )
+        verdict, detail = run("authorize", str(plan_path), plan_sha)
+    finally:
+        target.write_bytes(original)
+    assert verdict == "REJECTED", "a load-bearing logic change was accepted"
+    assert "implementation" in detail, detail
+
+
+def test_r6_a_edit_after_authorization_is_caught_by_revalidation(isolated_installation):
+    """The same edit landing AFTER authorization must fail the next revalidation."""
+    install, plan_path, plan_sha, run = isolated_installation
+    relative = "pretrain/stage_i_graph_v2.py"
+    original = (install / relative).read_bytes()
+    try:
+        verdict, detail = run("revalidate", str(plan_path), plan_sha, relative)
+    finally:
+        (install / relative).write_bytes(original)
+    assert verdict == "REJECTED", (
+        "an authorized context survived a dirty-worktree edit to a bundle member"
+    )
+    assert "implementation" in detail or "re-derives" in detail, detail
+
+
+def test_r6_a_selector_is_refused_through_its_independent_authority(isolated_installation):
+    """`select_pretrain_documents.py` is not bundled; prove its own authority catches it."""
+    install, plan_path, plan_sha, run = isolated_installation
+    relative = "pretrain/select_pretrain_documents.py"
+    assert relative in INDEPENDENTLY_BOUND_IMPLEMENTATION_FILES
+    assert relative not in IMPLEMENTATION_BUNDLE_FILES
+    target = install / relative
+    original = target.read_bytes()
+    try:
+        target.write_bytes(original + b"\n# dirty worktree byte\n")
+        verdict, detail = run("authorize", str(plan_path), plan_sha)
+    finally:
+        target.write_bytes(original)
+    assert verdict == "REJECTED", "a dirty-worktree edit to the selector was accepted"
+    assert "selector_v1" in detail, (
+        f"the selector was refused, but not through its own authority: {detail}"
+    )
+
+
+def test_r6_a_untouched_installation_still_authorizes(isolated_installation):
+    """Control: with every byte restored, the same fixed plan authorizes again.
+
+    Without this, every rejection above could be an artefact of the isolated installation rather
+    than of the edit under test.
+    """
+    _install, plan_path, plan_sha, run = isolated_installation
+    assert run("authorize", str(plan_path), plan_sha) == ("ACCEPTED", "")
+
+
+def test_r6_a_bundle_file_set_is_deterministic_and_cwd_independent(tmp_path: Path):
+    """The member set comes from an explicit list, never from directory iteration order."""
+    import os
+
+    first = implementation_files(ROOT)
+    origin = Path.cwd()
+    try:
+        os.chdir(tmp_path)
+        second = implementation_files(ROOT)
+    finally:
+        os.chdir(origin)
+    assert first == second
+    assert tuple(sorted(first)) == tuple(sorted(IMPLEMENTATION_BUNDLE_FILES))
+    assert implementation_bundle_sha256(first) == implementation_bundle_sha256(second)
 
 
 # ================================================================================
@@ -3114,8 +3503,6 @@ def test_r2_d_closed_plan_schema_rejects(live_plan_path, tmp_path, mutation, mat
 
 
 def test_r2_d_required_authority_set_is_closed_and_exact(live_plan_path):
-    from pretrain.stage_i_realize_v1 import REQUIRED_AUTHORITIES
-
     plan = json.loads(live_plan_path.read_text())
     assert frozenset(plan["authorities"]) == REQUIRED_AUTHORITIES
     assert "hq_policy" in REQUIRED_AUTHORITIES
@@ -3923,8 +4310,6 @@ def test_r3_e_equivalent_but_noncanonical_authority_paths_do_not_authorize(live_
 
 def test_r3_e_authority_mapping_is_name_to_path_to_digest(live_plan_path):
     """Every required authority is pinned to one canonical location and one digest."""
-    from pretrain.stage_i_realize_v1 import _AUTHORITY_PATHS, REQUIRED_AUTHORITIES
-
     plan = json.loads(live_plan_path.read_text())
     assert frozenset(_AUTHORITY_PATHS) == REQUIRED_AUTHORITIES
     for name, entry in plan["authorities"].items():
@@ -4884,14 +5269,21 @@ def h_run_copy():
 
     staging = Path(tempfile.mkdtemp(dir=str(ROOT), prefix=".pytest-h-run-"))
 
-    def build(mutate=None) -> Path:
+    def build(mutate=None, extra_files=None) -> Path:
         target = Path(tempfile.mkdtemp(dir=str(staging))) / "h"
         for child in sorted(H_RUN_DIR.rglob("*")):
-            if not child.is_file() or child.name == "SHA256SUMS":
+            # R6-B: the ROOT manifest is excluded by its run-relative path, not by its basename.
+            # Filtering on `child.name` here would silently drop a nested SHA256SUMS and make the
+            # copy unable to express the very case this fixture now has to stage.
+            if not child.is_file() or child.relative_to(H_RUN_DIR).as_posix() == "SHA256SUMS":
                 continue
             dest = target / child.relative_to(H_RUN_DIR)
             dest.parent.mkdir(parents=True, exist_ok=True)
             os.link(child, dest)
+        for relative, payload in (extra_files or {}).items():
+            dest = target / relative
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            dest.write_bytes(payload)
         lines = (H_RUN_DIR / "SHA256SUMS").read_text().splitlines()
         if mutate is not None:
             lines = mutate(list(lines))
@@ -4939,13 +5331,79 @@ def test_r5_b_evidence_manifest_identity_is_bound(accepted_h):
 
 
 def test_r5_b_entry_set_enumerates_the_run(accepted_h):
-    """The closure rule: the manifest lists exactly the run's files, minus itself."""
+    """The closure rule: the manifest lists exactly the run's files, minus itself.
+
+    R6-B: the expectation is built by excluding the ROOT manifest's run-relative path. Reusing the
+    implementation's old basename filter here made the test agree with the bug.
+    """
     present = {
-        str(path.relative_to(H_RUN_DIR))
-        for path in H_RUN_DIR.rglob("*")
-        if path.is_file() and path.name != "SHA256SUMS"
+        relative
+        for relative in (
+            path.relative_to(H_RUN_DIR).as_posix()
+            for path in H_RUN_DIR.rglob("*")
+            if path.is_file()
+        )
+        if relative != "SHA256SUMS"
     }
     assert {name for name, _digest in accepted_h.evidence_entries} == present
+    assert "SHA256SUMS" not in present, "the root manifest cannot be inside the set it describes"
+
+
+@pytest.mark.parametrize(
+    "label,relative",
+    [
+        ("nested", "evidence/SHA256SUMS"),
+        ("deep_nested", "nested/foo/SHA256SUMS"),
+        ("ordinary_name_control", "evidence/SMUGGLED.txt"),
+    ],
+)
+def test_r6_b_unlisted_file_is_refused_whatever_it_is_called(h_run_copy, label, relative):
+    """R6-B. Directory scope excludes exactly the root manifest, not a basename.
+
+    The implementation dropped every file called SHA256SUMS anywhere in the tree, so an added
+    `evidence/SHA256SUMS` fell outside the closure entirely: it was neither listed nor missed, and
+    the accepted-H evidence identity did not move. The control case shows the same file under any
+    other name was already refused, which is what made the hole basename-shaped.
+    """
+    from pretrain.stage_i_realize_v1 import verify_h_evidence_manifest
+
+    directory = h_run_copy(extra_files={relative: b"deadbeef  smuggled\n"})
+    with pytest.raises(RealizationError, match="does not enumerate the accepted H run"):
+        verify_h_evidence_manifest(directory)
+
+
+def test_r6_b_root_manifest_stays_out_of_the_set_it_describes(h_run_copy):
+    """The one exemption really is exactly one path, and it is still exempt."""
+    from pretrain.stage_i_realize_v1 import verify_h_evidence_manifest
+
+    directory = h_run_copy()
+    evidence = verify_h_evidence_manifest(directory)
+    names = {name for name, _digest in evidence.entries}
+    assert "SHA256SUMS" not in names
+    assert len(evidence.entries) == 16
+    on_disk = {
+        path.relative_to(directory).as_posix() for path in directory.rglob("*") if path.is_file()
+    }
+    assert on_disk - names == {"SHA256SUMS"}, (
+        "exactly one file -- the root manifest -- may be outside the closed entry set"
+    )
+
+
+def test_r6_b_genuine_h_evidence_identity_is_unchanged(accepted_h):
+    """The scope repair must not move the accepted run's identity: it has no nested manifests."""
+    from pretrain.stage_i_realize_v1 import verify_h_evidence_manifest
+
+    nested = [
+        path.relative_to(H_RUN_DIR).as_posix()
+        for path in H_RUN_DIR.rglob("*")
+        if path.is_file() and path.name == "SHA256SUMS"
+    ]
+    assert nested == ["SHA256SUMS"], (
+        f"the accepted H run contains a nested reserved-basename file: {nested}"
+    )
+    evidence = verify_h_evidence_manifest(H_RUN_DIR)
+    assert evidence.identity == accepted_h.evidence_identity
+    assert len(evidence.entries) == 16
 
 
 @pytest.mark.parametrize(
@@ -5130,26 +5588,6 @@ def test_r5_b_evidence_identity_reaches_publication_transitively(authorized_stat
 # ---- R5-C: the strict consumer reconciles physical facts first ------------------
 
 
-def test_r5_c_strict_consumer_reports_physical_mismatch_before_identity(tmp_path: Path):
-    """R5-C. A false total plus an invalid run identity must surface the false total.
-
-    The shared reconciler was already physical-first; the consumer was not, because it ran full
-    manifest validation -- which recomputes the published run identity -- before the audit.
-    """
-    manifest, records, expected = _publishable(tmp_path, count=3)
-    final = publish_atomic(tmp_path / "out", "run-x", manifest, records, expected=expected)
-    load_published_realization(final, expected=expected)  # valid before tampering
-
-    def falsify(obj):
-        obj["totals"]["serialized_tokens"] = 22
-        obj["nodes"][0]["selected_serialized_tokens"] = 22
-        obj["stage_i_run"] = {**obj["stage_i_run"], "run_identity": "0" * 64}
-
-    _fully_reseal(final, lambda lines: b"".join(line + b"\n" for line in lines), falsify)
-    with pytest.raises(OutputError, match="serialized_tokens is 22 but the staged records"):
-        load_published_realization(final, expected=expected)
-
-
 def _reseal_preserving_fault(final: Path, mutate) -> None:
     """Reseal the marker around a deliberately faulty manifest, leaving the fault in place.
 
@@ -5170,6 +5608,83 @@ def _reseal_preserving_fault(final: Path, mutate) -> None:
             "h_run_identity": manifest["h_binding"]["h_run_identity"],
             "stage_i_run_identity": manifest["stage_i_run"]["run_identity"],
         })
+    )
+
+
+def test_r5_c_strict_consumer_reports_physical_mismatch_before_identity(tmp_path: Path):
+    """R5-C. A false total plus an invalid run identity must surface the false total.
+
+    The shared reconciler was already physical-first; the consumer was not, because it ran full
+    manifest validation -- which recomputes the published run identity -- before the audit.
+
+    R6-D: this fixture used to inject the identity fault through `_fully_reseal`'s mutate hook,
+    which runs BEFORE that helper regenerates `run_identity` from the manifest's own fields -- so
+    the identity was quietly repaired and only ONE of the two faults ever reached the consumer.
+    The physical reseal and the identity injection are now separate steps in that order, and the
+    preconditions below prove both defects are present before the consumer is invoked.
+    """
+    manifest, records, expected = _publishable(tmp_path, count=3)
+    final = publish_atomic(tmp_path / "out", "run-x", manifest, records, expected=expected)
+    load_published_realization(final, expected=expected)  # valid before tampering
+
+    def falsify(obj):
+        obj["totals"]["serialized_tokens"] = 22
+        obj["nodes"][0]["selected_serialized_tokens"] = 22
+
+    # Step 1: physically seal a realization that CLAIMS 22 while its records still sum to 21.
+    _fully_reseal(final, lambda lines: b"".join(line + b"\n" for line in lines), falsify)
+    # Step 2: break the run identity last, so nothing recomputes it away.
+    _reseal_preserving_fault(
+        final,
+        lambda obj: obj.__setitem__(
+            "stage_i_run", {**obj["stage_i_run"], "run_identity": "0" * 64}
+        ),
+    )
+
+    # --- preconditions: BOTH faults, established before the consumer runs -------------------
+    tampered = json.loads((final / MANIFEST_FILENAME).read_text())
+    run_block = tampered["stage_i_run"]
+    assert run_block["run_identity"] == "0" * 64
+    assert recompute_stage_i_run_identity(run_block) != run_block["run_identity"], (
+        "fault 2 is absent: the manifest's run identity is generated by its own bound fields"
+    )
+    assert tampered["totals"]["serialized_tokens"] == 22, "fault 1 is absent: nothing claims 22"
+    staged = sum(
+        json.loads(line)["serialized_token_count"]
+        for line in (final / DOCUMENTS_DIRNAME / "documents-00000.jsonl").read_bytes().splitlines()
+    )
+    assert staged == 21, f"fault 1 is absent: the records sum to {staged}, not 21"
+
+    # --- and the physical fault is the one reported ------------------------------------------
+    with pytest.raises(OutputError, match="serialized_tokens is 22 but the staged records"):
+        load_published_realization(final, expected=expected)
+
+
+def test_r6_d_combined_fixture_would_have_been_repaired_by_a_single_reseal(tmp_path: Path):
+    """Guard the fixture itself: `_fully_reseal` alone cannot express the identity fault.
+
+    This is the R6-D note stated as a test. If someone folds the identity injection back into the
+    `_fully_reseal` hook, the combined regression silently degrades to a one-fault fixture again;
+    here that degradation is the assertion.
+    """
+    manifest, records, expected = _publishable(tmp_path, count=3)
+    final = publish_atomic(tmp_path / "out", "run-x", manifest, records, expected=expected)
+
+    def falsify_including_identity(obj):
+        obj["totals"]["serialized_tokens"] = 22
+        obj["nodes"][0]["selected_serialized_tokens"] = 22
+        obj["stage_i_run"] = {**obj["stage_i_run"], "run_identity": "0" * 64}
+
+    _fully_reseal(
+        final,
+        lambda lines: b"".join(line + b"\n" for line in lines),
+        falsify_including_identity,
+    )
+    run_block = json.loads((final / MANIFEST_FILENAME).read_text())["stage_i_run"]
+    assert run_block["run_identity"] != "0" * 64
+    assert recompute_stage_i_run_identity(run_block) == run_block["run_identity"], (
+        "_fully_reseal no longer regenerates the run identity, so the R6-D hazard has changed "
+        "shape; re-check how the combined fixture injects its second fault"
     )
 
 
@@ -5215,6 +5730,156 @@ def test_r5_c_strict_consumer_keeps_malformed_structure_controlled(tmp_path: Pat
     (final / MANIFEST_FILENAME).write_bytes(pristine)
 
 
+def _reseal_marker_only(final: Path) -> None:
+    """Bring the COMPLETE marker back into agreement with whatever the manifest now says.
+
+    Used by the R6-C cases: without it the marker comparison fires first and every malformed
+    manifest would look controlled for the wrong reason, hiding the nested field under test.
+    Where the damaged field is one the marker itself names, the marker is left as published --
+    which is the honest situation for that case.
+    """
+    manifest_bytes = (final / MANIFEST_FILENAME).read_bytes()
+    manifest = json.loads(manifest_bytes)
+    try:
+        marker = {
+            "marker": "COMPLETE",
+            "manifest_sha256": hashlib.sha256(manifest_bytes).hexdigest(),
+            "record_schema_version": RECORD_SCHEMA,
+            "manifest_schema_version": MANIFEST_SCHEMA,
+            "h_run_identity": manifest["h_binding"]["h_run_identity"],
+            "stage_i_run_identity": manifest["stage_i_run"]["run_identity"],
+        }
+    except (KeyError, TypeError):
+        return
+    (final / COMPLETE_MARKER).write_bytes(canonical_json_bytes(marker))
+
+
+@pytest.mark.parametrize(
+    "label,mutate",
+    [
+        ("missing_run_identity", lambda m: m["stage_i_run"].pop("run_identity")),
+        ("missing_serialized_tokens", lambda m: m["totals"].pop("serialized_tokens")),
+        ("missing_totals_records", lambda m: m["totals"].pop("records")),
+        ("missing_h_run_identity", lambda m: m["h_binding"].pop("h_run_identity")),
+        ("missing_environment_sha256", lambda m: m["stage_i_run"].pop("environment_sha256")),
+        (
+            "missing_binding_document_digests_sha256",
+            lambda m: m["stage_i_run"].pop("binding_document_digests_sha256"),
+        ),
+        (
+            "missing_node_binding_projection_sha256",
+            lambda m: m["stage_i_run"].pop("node_binding_projection_sha256"),
+        ),
+        ("run_identity_wrong_type", lambda m: m["stage_i_run"].__setitem__("run_identity", 17)),
+        (
+            "serialized_tokens_wrong_type",
+            lambda m: m["totals"].__setitem__("serialized_tokens", "21"),
+        ),
+        ("h_run_identity_wrong_type", lambda m: m["h_binding"].__setitem__("h_run_identity", None)),
+        ("node_missing_source_id", lambda m: m["nodes"][0].pop("source_id")),
+        ("node_missing_selected_identities", lambda m: m["nodes"][0].pop("selected_identities")),
+        (
+            "node_missing_selection_sequence_commitment",
+            lambda m: m["nodes"][0].pop("selection_sequence_commitment"),
+        ),
+        ("node_not_an_object", lambda m: m["nodes"].__setitem__(0, ["b_x"])),
+        ("node_source_id_unhashable", lambda m: m["nodes"][0].__setitem__("source_id", ["b_x"])),
+        (
+            "node_input_binding_ids_not_a_list",
+            lambda m: m["nodes"][0].__setitem__("input_binding_ids", "ib_x"),
+        ),
+        (
+            "node_input_binding_ids_mixed_types",
+            lambda m: m["nodes"][0].__setitem__("input_binding_ids", ["ib_x", 3]),
+        ),
+        (
+            "projection_value_not_a_list",
+            lambda m: m["node_binding_projection"].__setitem__("b_x", "ib_x"),
+        ),
+        ("binding_digest_wrong_type", lambda m: m["bindings"].__setitem__("ib_x", 6)),
+        (
+            "crossing_identity_wrong_type",
+            lambda m: m["nodes"][0].__setitem__("crossing_identity", 3),
+        ),
+    ],
+)
+def test_r6_c_malformed_nested_fields_stay_controlled(tmp_path: Path, label, mutate):
+    """R6-C. Every nested field indexed before full validation fails as a Stage-I refusal.
+
+    R5-C moved full manifest validation after the physical audit, which left the marker check and
+    the reconcilers as the first code to index nested manifest fields. A manifest missing
+    ``stage_i_run.run_identity`` or ``totals.serialized_tokens`` then escaped as a raw
+    ``KeyError``: still fail-closed, but outside the controlled validation contract.
+    """
+    manifest, records, expected = _publishable(tmp_path, count=3)
+    final = publish_atomic(tmp_path / "out", "run-x", manifest, records, expected=expected)
+    load_published_realization(final, expected=expected)  # valid before tampering
+
+    payload = json.loads((final / MANIFEST_FILENAME).read_text())
+    mutate(payload)
+    (final / MANIFEST_FILENAME).write_bytes(canonical_json_bytes(payload))
+    _reseal_marker_only(final)
+
+    with pytest.raises(OutputError):
+        load_published_realization(final, expected=expected)
+
+
+def test_r6_c_nested_precheck_does_not_run_ahead_of_the_physical_audit(tmp_path: Path):
+    """The new pre-check must not become an early semantic validator.
+
+    It may establish that a field is a 64-character-shaped string; it may NOT decide whether the
+    run identity is the right one. A realization whose identity is wrong AND whose totals lie must
+    still report the lie first -- which is the R5-C behaviour this repair has to preserve.
+    """
+    from pretrain.stage_i_output_v1 import require_physical_projection_shape
+
+    manifest, records, expected = _publishable(tmp_path, count=3)
+    final = publish_atomic(tmp_path / "out", "run-x", manifest, records, expected=expected)
+    payload = json.loads((final / MANIFEST_FILENAME).read_text())
+
+    # A structurally valid manifest carrying a semantically wrong identity passes the pre-check.
+    payload["stage_i_run"] = {**payload["stage_i_run"], "run_identity": "0" * 64}
+    payload["totals"]["serialized_tokens"] = 22
+    payload["nodes"][0]["selected_serialized_tokens"] = 22
+    require_physical_projection_shape(payload)
+
+    # A shorter-but-still-string identity also passes: shape is not identity.
+    payload["stage_i_run"] = {**payload["stage_i_run"], "run_identity": "nope"}
+    require_physical_projection_shape(payload)
+
+
+def test_r6_c_precheck_covers_every_field_read_before_full_validation():
+    """Structural: the pre-check runs before anything that indexes nested manifest data."""
+    function = _function_source("pretrain/stage_i_output_v1.py", "load_published_realization")
+    calls = _call_lines_by_name(function)
+    first = {}
+    for line, name in sorted(calls):
+        first.setdefault(name, line)
+    assert "require_physical_projection_shape" in first, (
+        "the consumer no longer performs the nested structural pre-check"
+    )
+    assert first["require_manifest_shape"] < first["require_physical_projection_shape"]
+    assert first["validate_shard_list"] < first["require_physical_projection_shape"], (
+        "shard-location problems must keep reporting before the nested pre-check, as they did "
+        "before R6-C added it"
+    )
+    assert first["require_physical_projection_shape"] < first["_validate_complete_marker"], (
+        "the COMPLETE marker check indexes stage_i_run.run_identity and h_binding.h_run_identity, "
+        "so the nested pre-check must precede it"
+    )
+    assert first["require_physical_projection_shape"] < first["audit_staged_realization"]
+    assert first["require_physical_projection_shape"] < first["reconcile_manifest_with_audit"]
+
+    # The shared reconciler is also called directly by the publisher, so it must protect itself.
+    reconciler = _function_source("pretrain/stage_i_output_v1.py", "reconcile_manifest_with_audit")
+    reconciler_calls = _call_lines_by_name(reconciler)
+    order = {}
+    for line, name in sorted(reconciler_calls):
+        order.setdefault(name, line)
+    assert "require_physical_projection_shape" in order
+    assert order["require_physical_projection_shape"] < order["_reconcile_physical"]
+
+
 def test_r5_c_consumer_orders_structure_then_physical_then_identity():
     """Structural: the order is part of the contract, not an accident of call sites."""
     function = _function_source("pretrain/stage_i_output_v1.py", "load_published_realization")
@@ -5225,13 +5890,15 @@ def test_r5_c_consumer_orders_structure_then_physical_then_identity():
     for name in (
         "require_manifest_shape",
         "validate_shard_list",
+        "require_physical_projection_shape",
         "audit_staged_realization",
         "reconcile_manifest_with_audit",
         "validate_manifest",
     ):
         assert name in first, f"the consumer does not call {name}"
     assert first["require_manifest_shape"] < first["validate_shard_list"]
-    assert first["validate_shard_list"] < first["audit_staged_realization"]
+    assert first["validate_shard_list"] < first["require_physical_projection_shape"]
+    assert first["require_physical_projection_shape"] < first["audit_staged_realization"]
     assert first["audit_staged_realization"] < first["reconcile_manifest_with_audit"]
     assert first["reconcile_manifest_with_audit"] < first["validate_manifest"], (
         "full manifest validation (which recomputes the run identity) must follow reconciliation"

@@ -1014,6 +1014,109 @@ def require_manifest_shape(manifest: Any) -> dict[str, Any]:
     return obj
 
 
+# R6-C: exactly the nested manifest fields that are indexed before the full semantic validator
+# runs, with the type each of those reads needs in order to execute safely. Presence and scalar
+# type only -- nothing here compares a value with anything, recomputes an identity or asks a
+# Layer-2 question. Those all stay after the physical audit, which is the whole point of the
+# physical-first ordering.
+_EARLY_TOTALS_FIELDS = (
+    "records",
+    "content_tokens",
+    "serialized_tokens",
+    "shards",
+    "unique_cleaned_identities",
+)
+_EARLY_NODE_INT_FIELDS = (
+    "target_serialized_tokens",
+    "selected_identities",
+    "selected_serialized_tokens",
+    "actual_overshoot_tokens",
+)
+_EARLY_NODE_STR_FIELDS = (
+    "source_id",
+    "stage",
+    "branch",
+    "selection_mode",
+    "selection_fingerprint",
+    "selection_sequence_commitment",
+)
+_EARLY_STAGE_I_RUN_STR_FIELDS = (
+    "run_identity",
+    "environment_sha256",
+    "binding_document_digests_sha256",
+    "node_binding_projection_sha256",
+)
+_EARLY_H_BINDING_STR_FIELDS = ("h_run_identity",)
+
+
+def _early_present(obj: Mapping[str, Any], key: str, where: str) -> Any:
+    _require(key in obj, f"{where} is missing field(s): ['{key}']")
+    return obj[key]
+
+
+def require_physical_projection_shape(manifest: Mapping[str, Any]) -> None:
+    """Presence and scalar type of every nested field read before full manifest validation.
+
+    ``require_manifest_shape`` closes the manifest's top level and pins the nine container types,
+    so ``manifest[X]`` is total. It says nothing about ``manifest[X][Y]``, and R5-C moved the full
+    semantic validator to AFTER the physical audit -- so the marker check, the physical
+    reconciliation and the Layer-2 comparisons became the first code to index those nested fields.
+    A manifest missing ``stage_i_run.run_identity`` or ``totals.serialized_tokens`` therefore
+    escaped as a raw ``KeyError`` instead of a controlled Stage-I refusal: still fail-closed, but
+    outside the validation contract.
+
+    This closes that gap without weakening the ordering. It establishes only that the fields those
+    reads consume exist and are the right kind of scalar; every question about what they MEAN --
+    the run identity's own derivation, the Layer-2 equalities, the projection equality -- still
+    runs after the physical facts have been reconciled, so a realization whose totals do not
+    describe its own records still fails on that.
+    """
+    totals = manifest["totals"]
+    for field_name in _EARLY_TOTALS_FIELDS:
+        _exact_int(
+            _early_present(totals, field_name, "manifest.totals"),
+            f"manifest.totals.{field_name}",
+        )
+
+    for index, entry in enumerate(manifest["nodes"]):
+        where = f"manifest.nodes[{index}]"
+        _require(type(entry) is dict, f"{where} must be a JSON object")
+        for field_name in _EARLY_NODE_STR_FIELDS:
+            _exact_str(_early_present(entry, field_name, where), f"{where}.{field_name}")
+        for field_name in _EARLY_NODE_INT_FIELDS:
+            _exact_int(_early_present(entry, field_name, where), f"{where}.{field_name}")
+        crossing = _early_present(entry, "crossing_identity", where)
+        _require(
+            crossing is None or type(crossing) is str,
+            f"{where}.crossing_identity must be a string or null",
+        )
+        bindings = _early_present(entry, "input_binding_ids", where)
+        _require(type(bindings) is list, f"{where}.input_binding_ids must be a JSON array")
+        for position, binding_id in enumerate(bindings):
+            _exact_str(binding_id, f"{where}.input_binding_ids[{position}]")
+
+    for field_name in _EARLY_STAGE_I_RUN_STR_FIELDS:
+        _exact_str(
+            _early_present(manifest["stage_i_run"], field_name, "manifest.stage_i_run"),
+            f"manifest.stage_i_run.{field_name}",
+        )
+    for field_name in _EARLY_H_BINDING_STR_FIELDS:
+        _exact_str(
+            _early_present(manifest["h_binding"], field_name, "manifest.h_binding"),
+            f"manifest.h_binding.{field_name}",
+        )
+
+    # `tuple(value)` over a scalar raises TypeError, and a str would splat into characters.
+    for source_id, allowed in manifest["node_binding_projection"].items():
+        where = f"manifest.node_binding_projection[{source_id!r}]"
+        _require(type(allowed) is list, f"{where} must be a JSON array")
+        for position, binding_id in enumerate(allowed):
+            _exact_str(binding_id, f"{where}[{position}]")
+
+    for binding_id, digest in manifest["bindings"].items():
+        _exact_str(digest, f"manifest.bindings[{binding_id!r}]")
+
+
 def validate_shard_list(manifest: Mapping[str, Any]) -> int:
     """The shard list's structure, in isolation. Returns the declared record total.
 
@@ -1424,6 +1527,7 @@ def reconcile_manifest_with_audit(
     under the authorized environment, over the authorized inputs, with the committed selection?
     """
     obj = require_manifest_shape(manifest)
+    require_physical_projection_shape(obj)
 
     # --- Layer 3 against the bytes it claims to describe --------------------------------
     _reconcile_physical(obj, audit)
@@ -1882,8 +1986,14 @@ def load_published_realization(
     # R5-C: only enough structure to locate and read the physical data. Full manifest validation
     # -- which recomputes the published run identity -- runs after the physical facts have been
     # reconciled, so a false total is reported as a false total.
+    # R6-C: and enough nested structure that every read between here and there is safe. Presence
+    # and scalar type only: no value is compared, no identity recomputed, no Layer-2 question
+    # asked before the physical audit. It sits after the shard list so that shard-location
+    # problems keep surfacing first, exactly as they did before, and before the COMPLETE marker
+    # check, which is the first code to index a nested manifest field.
     require_manifest_shape(manifest)
     validate_shard_list(manifest)
+    require_physical_projection_shape(manifest)
     _validate_complete_marker(marker, manifest, manifest_digest)
 
     documents_dir = final / DOCUMENTS_DIRNAME
@@ -1977,6 +2087,7 @@ __all__ = [
     "recompute_stage_i_run_identity",
     "reconcile_manifest_with_audit",
     "require_manifest_shape",
+    "require_physical_projection_shape",
     "environment_sha256",
     "binding_document_digests_sha256",
     "ENVIRONMENT_FIELDS",
