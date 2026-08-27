@@ -31,6 +31,13 @@ from pretrain.dataset_pretrain import (  # noqa: E402
     PackedBinDataset,
     validate_shard_release,
 )
+from pretrain.stage_p_native_provenance_v1 import (  # noqa: E402
+    LEGACY_CHAIN_KIND,
+    NATIVE_CHAIN_KIND,
+    PROVENANCE_CHAIN_KINDS,
+    assert_single_branch,
+    validate_native_chain,
+)
 from src.special_tokens import (  # noqa: E402
     CANONICAL_VOCAB_SIZE,
     SPECIAL_TOKEN_IDS,
@@ -1637,8 +1644,43 @@ def build_run_plan(
     reference_val_dir: str | Path | None = None,
     tokenizer_release_manifest: str | Path | None = None,
     selection_manifest: str | Path | None = None,
+    provenance_chain_kind: str = LEGACY_CHAIN_KIND,
+    accepted_stage_i_dir: str | Path | None = None,
+    candidate_m_plan: str | Path | None = None,
+    expected_candidate_m_plan_sha256: str | None = None,
 ) -> dict[str, Any]:
-    """Return an exact explicit-exposure Stage A/B plan and WSD candidate."""
+    """Return an exact explicit-exposure Stage A/B plan and WSD candidate.
+
+    ``provenance_chain_kind`` selects which provenance branch validates the releases.
+    ``legacy_selector_v1`` is the historical D-026 chain and is unchanged.
+    ``accepted_stage_i_native_v1`` is the branch for accepted H/I-derived releases
+    (DECISIONS D-146); it validates the accepted Stage-I publication and the derived Stage-M
+    releases directly. The two branches are never mixed and never silently fall back to
+    each other.
+    """
+    if provenance_chain_kind not in PROVENANCE_CHAIN_KINDS:
+        raise ValueError(
+            f"provenance_chain_kind must be one of {list(PROVENANCE_CHAIN_KINDS)}, "
+            f"got {provenance_chain_kind!r}"
+        )
+    _native_inputs = (accepted_stage_i_dir, candidate_m_plan, expected_candidate_m_plan_sha256)
+    if provenance_chain_kind == NATIVE_CHAIN_KIND:
+        # The reference-validation release and the tokenizer release are H/I-native artefacts
+        # (G2 and G) and remain valid inputs. Only the selection manifest is selector-v1-only,
+        # and supplying one here would be branch mixing.
+        if selection_manifest is not None:
+            raise ValueError(
+                "native provenance must not be given a legacy selector-v1 selection_manifest"
+            )
+        if not all(value is not None for value in _native_inputs):
+            raise ValueError(
+                "accepted_stage_i_dir, candidate_m_plan and expected_candidate_m_plan_sha256 "
+                "must be supplied together for the native provenance chain"
+            )
+    elif any(value is not None for value in _native_inputs):
+        raise ValueError(
+            "legacy provenance must not be given accepted Stage-I native inputs"
+        )
     seq_len = _positive_int("seq_len", seq_len)
     micro_bsz = _positive_int("micro_bsz", micro_bsz)
     grad_accum = _positive_int("grad_accum", grad_accum)
@@ -1736,25 +1778,53 @@ def build_run_plan(
             "reference_val_dir, tokenizer_release_manifest, and selection_manifest "
             "must be supplied together"
         )
-    full_chain_validated = all(value is not None for value in provenance_inputs)
-    if full_chain_validated:
-        assert reference_val_dir is not None
-        assert tokenizer_release_manifest is not None
-        assert selection_manifest is not None
-        release_provenance.update(
-            _validate_full_provenance(
-                reference_val_dir=reference_val_dir,
-                tokenizer_release_manifest=tokenizer_release_manifest,
-                selection_manifest=selection_manifest,
-                stage_b_selection_stage=stage_b_selection_stage,
-                expected_exclusion_sha256s=stage_a_exclusion_sha256s,
-                stage_a_release=stage_a_release,
-                stage_b_release=stage_b_release,
-                expected_tokenizer_sha256=stage_a_tokenizer_sha256,
-            )
+    release_provenance["provenance_chain_kind"] = provenance_chain_kind
+    if provenance_chain_kind == NATIVE_CHAIN_KIND:
+        # The native branch derives full_chain_validated itself, and only after every link of
+        # accepted-I -> candidate-M plan -> both Stage-M releases has been proved from bytes.
+        assert_single_branch(release_provenance, chain_kind=NATIVE_CHAIN_KIND)
+        assert accepted_stage_i_dir is not None
+        assert candidate_m_plan is not None
+        assert expected_candidate_m_plan_sha256 is not None
+        native = validate_native_chain(
+            repo_root=Path(__file__).resolve().parent.parent,
+            accepted_stage_i_dir=Path(accepted_stage_i_dir),
+            candidate_m_plan=Path(candidate_m_plan),
+            expected_candidate_m_plan_sha256=str(expected_candidate_m_plan_sha256),
+            stage_releases={"stage_a": stage_a_path.parent, "stage_b": stage_b_path.parent},
+            reference_val_dir=(
+                Path(reference_val_dir) if reference_val_dir is not None else None
+            ),
+            tokenizer_release_manifest=(
+                Path(tokenizer_release_manifest)
+                if tokenizer_release_manifest is not None
+                else None
+            ),
         )
+        if native.get("full_chain_validated") is not True:
+            raise RuntimeError("native provenance chain did not validate")
+        release_provenance.update(native)
+        full_chain_validated = True
     else:
-        release_provenance["full_chain_validated"] = False
+        full_chain_validated = all(value is not None for value in provenance_inputs)
+        if full_chain_validated:
+            assert reference_val_dir is not None
+            assert tokenizer_release_manifest is not None
+            assert selection_manifest is not None
+            release_provenance.update(
+                _validate_full_provenance(
+                    reference_val_dir=reference_val_dir,
+                    tokenizer_release_manifest=tokenizer_release_manifest,
+                    selection_manifest=selection_manifest,
+                    stage_b_selection_stage=stage_b_selection_stage,
+                    expected_exclusion_sha256s=stage_a_exclusion_sha256s,
+                    stage_a_release=stage_a_release,
+                    stage_b_release=stage_b_release,
+                    expected_tokenizer_sha256=stage_a_tokenizer_sha256,
+                )
+            )
+        else:
+            release_provenance["full_chain_validated"] = False
 
     stage_a_steps = int(stage_a["planned_optimizer_steps"])
     stage_b_steps = int(stage_b["planned_optimizer_steps"])
@@ -1975,9 +2045,20 @@ def build_parser() -> argparse.ArgumentParser:
         choices=STAGE_B_SELECTION_STAGES,
         default="stage_b",
     )
-    parser.add_argument("--reference_val_dir", required=True)
-    parser.add_argument("--tokenizer_release_manifest", required=True)
-    parser.add_argument("--selection_manifest", required=True)
+    # Legacy selector-v1 provenance inputs. Still mandatory for the legacy branch: `main`
+    # rejects a legacy invocation that omits any of them, exactly as `required=True` did.
+    parser.add_argument("--reference_val_dir")
+    parser.add_argument("--tokenizer_release_manifest")
+    parser.add_argument("--selection_manifest")
+    # Accepted-Stage-I native provenance inputs (DECISIONS D-146).
+    parser.add_argument(
+        "--provenance_chain_kind",
+        choices=list(PROVENANCE_CHAIN_KINDS),
+        default=LEGACY_CHAIN_KIND,
+    )
+    parser.add_argument("--accepted_stage_i_dir")
+    parser.add_argument("--candidate_m_plan")
+    parser.add_argument("--expected_candidate_m_plan_sha256")
     parser.add_argument("--out_json", required=True)
     return parser
 
@@ -1985,6 +2066,19 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: Sequence[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
+    legacy_required = (
+        "reference_val_dir",
+        "tokenizer_release_manifest",
+        "selection_manifest",
+    )
+    if args.provenance_chain_kind == LEGACY_CHAIN_KIND:
+        missing = [name for name in legacy_required if getattr(args, name) is None]
+        if missing:
+            parser.error(
+                "the following arguments are required for "
+                f"--provenance_chain_kind {LEGACY_CHAIN_KIND}: "
+                + ", ".join(f"--{name}" for name in missing)
+            )
     try:
         plan = build_run_plan(
             stage_a_dir=args.stage_a_dir,
@@ -2000,6 +2094,10 @@ def main(argv: Sequence[str] | None = None) -> int:
             reference_val_dir=args.reference_val_dir,
             tokenizer_release_manifest=args.tokenizer_release_manifest,
             selection_manifest=args.selection_manifest,
+            provenance_chain_kind=args.provenance_chain_kind,
+            accepted_stage_i_dir=args.accepted_stage_i_dir,
+            candidate_m_plan=args.candidate_m_plan,
+            expected_candidate_m_plan_sha256=args.expected_candidate_m_plan_sha256,
         )
         output = write_json_atomic(args.out_json, plan)
     except (OSError, ValueError, RuntimeError) as exc:

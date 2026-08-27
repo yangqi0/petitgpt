@@ -13,6 +13,14 @@ RUN_PLAN_SCHEMA_VERSION = 3
 RUN_PLAN_STAGES = ("stage_a", "stage_b")
 STAGE_B_SELECTION_STAGES = ("stage_b", "control")
 
+# Provenance branch discriminators (DECISIONS D-146). Restated as literals rather than imported
+# so this launch-path module keeps its zero local-import surface; the authoritative definitions
+# live in pretrain/stage_p_native_provenance_v1.py and
+# tests/test_stage_p_native_provenance_v1.py pins the two spellings to each other.
+NATIVE_CHAIN_KIND = "accepted_stage_i_native_v1"
+LEGACY_CHAIN_KIND = "legacy_selector_v1"
+PROVENANCE_CHAIN_KINDS = (NATIVE_CHAIN_KIND, LEGACY_CHAIN_KIND)
+
 
 def _mapping(value: Any, *, field: str) -> Mapping[str, Any]:
     if not isinstance(value, dict):
@@ -160,23 +168,63 @@ def load_run_plan_binding(
         )
     if provenance.get("stage_b_selection_stage") != stage_b_selection_stage:
         raise RuntimeError("run plan Stage-B selection cohort disagrees within provenance")
-    selection_provenance = _mapping(
-        provenance.get("selection"), field="release_provenance.selection"
-    )
-    selection_manifest_sha256 = _sha256(
-        selection_provenance.get("manifest_sha256"),
-        field="release_provenance.selection.manifest_sha256",
-    )
-    if selection_provenance.get("stage_b_selection_stage") != stage_b_selection_stage:
-        raise RuntimeError("run plan selection artifact uses a different Stage-B cohort")
-    source_bindings = _mapping(
-        provenance.get("source_bindings"), field="release_provenance.source_bindings"
-    )
-    if (
-        source_bindings.get("validated") is not True
-        or source_bindings.get("stage_b_selection_stage") != stage_b_selection_stage
-    ):
-        raise RuntimeError("run plan source bindings do not validate the selected Stage-B cohort")
+    # DECISIONS D-146: a run plan declares exactly one provenance branch. The legacy
+    # selector-v1 chain still requires its selection artifact and source bindings, unchanged.
+    # The accepted-Stage-I native chain has neither, and proves the corresponding facts through
+    # the accepted publication, the candidate-M plan and the two Stage-M releases instead.
+    provenance_chain_kind = provenance.get("provenance_chain_kind", LEGACY_CHAIN_KIND)
+    if provenance_chain_kind not in PROVENANCE_CHAIN_KINDS:
+        raise RuntimeError(
+            f"unsupported release_provenance.provenance_chain_kind: {provenance_chain_kind!r}"
+        )
+    native_chain = provenance_chain_kind == NATIVE_CHAIN_KIND
+    if native_chain:
+        if provenance.get("selection") is not None or provenance.get("source_bindings") is not None:
+            raise RuntimeError(
+                "native provenance must not carry legacy selection/source_bindings objects"
+            )
+        selection_manifest_sha256 = _sha256(
+            provenance.get("candidate_m_plan_sha256"),
+            field="release_provenance.candidate_m_plan_sha256",
+        )
+        _sha256(
+            provenance.get("stage_m_implementation_bundle_sha256"),
+            field="release_provenance.stage_m_implementation_bundle_sha256",
+        )
+        _sha256(
+            provenance.get("accepted_stage_i_identity_sha256"),
+            field="release_provenance.accepted_stage_i_identity_sha256",
+        )
+        native_stages = _mapping(provenance.get("stages"), field="release_provenance.stages")
+        if sorted(native_stages) != ["stage_a", "stage_b"]:
+            raise RuntimeError("native provenance must bind exactly stage_a and stage_b releases")
+        source_bindings = {
+            "validated": True,
+            "stage_b_selection_stage": stage_b_selection_stage,
+            "stage_b": _mapping(
+                native_stages.get("stage_b"), field="release_provenance.stages.stage_b"
+            ).get("input_sequence_commitment"),
+        }
+    else:
+        selection_provenance = _mapping(
+            provenance.get("selection"), field="release_provenance.selection"
+        )
+        selection_manifest_sha256 = _sha256(
+            selection_provenance.get("manifest_sha256"),
+            field="release_provenance.selection.manifest_sha256",
+        )
+        if selection_provenance.get("stage_b_selection_stage") != stage_b_selection_stage:
+            raise RuntimeError("run plan selection artifact uses a different Stage-B cohort")
+        source_bindings = _mapping(
+            provenance.get("source_bindings"), field="release_provenance.source_bindings"
+        )
+        if (
+            source_bindings.get("validated") is not True
+            or source_bindings.get("stage_b_selection_stage") != stage_b_selection_stage
+        ):
+            raise RuntimeError(
+                "run plan source bindings do not validate the selected Stage-B cohort"
+            )
     if bool(getattr(args, "allow_data_branch", False)) and (
         stage_name != "stage_b" or stage_b_selection_stage != "control"
     ):
