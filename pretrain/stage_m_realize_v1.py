@@ -148,20 +148,34 @@ def release_exclusion_block(canonical: Mapping[str, Any]) -> dict[str, Any]:
     ``enforced_at_stage``/``reapplied_by_stage_m`` state the frozen behaviour exactly: Stage I
     applied the exclusion, Stage M inherits and re-verifies the artifact but never re-filters.
     """
+    path = str(canonical["canonical_artifact_path"])
+    digest = str(canonical["artifact_sha256"])
+    count = int(canonical["derived_count"])
+    kind = str(canonical["kind"])
+    algorithm = str(canonical["hash_algorithm"])
+    artifact_schema = canonical["artifact_schema_version"]
     return {
         "enabled": True,
         "manifest_count": 1,
-        "union_hash_count": int(canonical["derived_count"]),
+        "union_hash_count": count,
         "enforced_at_stage": "stage_i",
         "reapplied_by_stage_m": False,
-        "canonical_artifact_path": str(canonical["canonical_artifact_path"]),
-        "canonical_artifact_sha256": str(canonical["artifact_sha256"]),
+        "canonical_artifact_path": path,
+        "canonical_artifact_sha256": digest,
+        # R4-A: the release carries the whole closed sub-schema, so a Stage-M release is a full
+        # participant in the five-party derivation rather than a digest plus a count.
+        "canonical_artifact_schema_version": artifact_schema,
+        "kind": kind,
+        "hash_algorithm": algorithm,
         "manifests": [
             {
                 "enabled": True,
-                "path": str(canonical["canonical_artifact_path"]),
-                "manifest_sha256": str(canonical["artifact_sha256"]),
-                "hash_count": int(canonical["derived_count"]),
+                "path": path,
+                "manifest_sha256": digest,
+                "hash_count": count,
+                "kind": kind,
+                "hash_algorithm": algorithm,
+                "schema_version": artifact_schema,
             }
         ],
     }
@@ -228,9 +242,10 @@ def generate_candidate_plan(
                 "schema_version": canonical["schema_version"],
                 "artifact_path": canonical["canonical_artifact_path"],
                 "artifact_sha256": canonical["artifact_sha256"],
+                "artifact_schema_version": canonical["artifact_schema_version"],
                 "derived_count": canonical["derived_count"],
-                "kind": canonical["accepted_g"]["kind"],
-                "hash_algorithm": canonical["accepted_g"]["hash_algorithm"],
+                "kind": canonical["kind"],
+                "hash_algorithm": canonical["hash_algorithm"],
                 "named_by": {
                     "accepted_g_manifest": ACCEPTED_G_TOKENIZER_RELEASE_MANIFEST,
                     "accepted_g_derived_count": canonical["accepted_g"]["derived_count"],
@@ -313,7 +328,7 @@ def _derive_state(
     )
     # R2-B / section 7: the reviewed digest says which bytes these are; this says they describe
     # the one permitted Stage-M contract. Both are required, on every production path.
-    plan_contract = validate_candidate_plan_contract(plan)
+    plan_contract = validate_candidate_plan_contract(plan, root)
 
     environment = current_environment()
     verify_environment(environment)
@@ -514,7 +529,12 @@ def realize_stage(
         )
         meta = build_release_meta(
             packed,
-            tokenizer_path=str(context.tokenizer_path),
+            # R4-C: record the canonical REPOSITORY-RELATIVE tokenizer path, the same
+            # spelling the plan binds, so the release names one resolvable identity
+            # rather than a machine-local absolute path.
+            tokenizer_path=str(
+                Path(context.tokenizer_path).resolve().relative_to(context.repo_root)
+            ),
             tokenizer_sha256=str(context.plan["resources"]["tokenizer"]["sha256"]),
             stage_m_binding=stage_m_release_binding(context, stage),
             reference_exclusion=release_exclusion_block(context.canonical_exclusion),

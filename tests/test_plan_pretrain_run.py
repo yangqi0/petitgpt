@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+from pathlib import Path
 import sqlite3
 from types import SimpleNamespace
 
@@ -115,6 +116,7 @@ def _write_full_provenance(
     tmp_path,
     stage_a,
     stage_b,
+    reserve_exclusion_path=None,
 ):
     cleaning = {
         "strip_leading_noise": False,
@@ -127,9 +129,17 @@ def _write_full_provenance(
     exclusion_kind = "petitgpt_reference_validation_exclusions"
     reserved_hashes = ["1" * 64, "2" * 64]
 
-    reserve_root = tmp_path / "reference_reserve"
-    reserve_root.mkdir()
-    reserve_exclusion = reserve_root / "reserve_exclusion.json"
+    # R4-A: the native flow needs ONE canonical exclusion artifact named by every participant,
+    # so callers can direct the whole reserve to the canonical L1 directory. The production
+    # contract requires the exclusion manifest to be a sibling of the reserve manifest, so the
+    # directory moves together with the file name; the payloads are unchanged either way.
+    if reserve_exclusion_path is not None:
+        reserve_exclusion = Path(reserve_exclusion_path)
+        reserve_root = reserve_exclusion.parent
+    else:
+        reserve_root = tmp_path / "reference_reserve"
+        reserve_exclusion = reserve_root / "reserve_exclusion.json"
+    reserve_root.mkdir(parents=True, exist_ok=True)
     reserve_exclusion_payload = {
         "schema_version": 1,
         "kind": exclusion_kind,

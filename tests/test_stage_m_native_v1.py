@@ -128,10 +128,13 @@ def relaxed(monkeypatch, tmp_path, tok):
 
     monkeypatch.setattr(realize, "assert_tokenizer_contract", _contract)
     monkeypatch.setattr(realize, "verify_environment", _env)
-    tokenizer_path = save_tokenizer(tok, tmp_path / "tok" / "tokenizer.json")
+    staged_tokenizer = save_tokenizer(tok, tmp_path / "tok" / "tokenizer.json")
     # R3: the canonical exclusion authority comes from accepted G and G2, so the fixture writes
     # both manifests and the single L1 artifact they name.
-    canonical = write_accepted_exclusion_authorities(tmp_path)
+    # R4-C: the canonical tokenizer path is recovered from the accepted G release, so the same
+    # bytes are published at that release's canonical runtime-artifact path.
+    canonical = write_accepted_exclusion_authorities(tmp_path, tokenizer_source=staged_tokenizer)
+    tokenizer_path = canonical["tokenizer_abs"]
     monkeypatch.setattr(realize, "resolve_repo_root", lambda explicit=None: tmp_path.resolve())
     return {
         "calls": calls,

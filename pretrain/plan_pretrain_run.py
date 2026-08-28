@@ -32,7 +32,7 @@ from pretrain.dataset_pretrain import (  # noqa: E402
     validate_shard_release,
 )
 from pretrain.stage_m_contract_v1 import (  # noqa: E402
-    exclusion_authority,
+    derive_exclusion_reference,
     require_identical_exclusion_authorities,
 )
 from pretrain.stage_p_native_provenance_v1 import (  # noqa: E402
@@ -1117,19 +1117,25 @@ def _derived_exclusion_authority(
 ) -> dict[str, Any]:
     """Read one accepted authority's OWN exclusion identity and count.
 
-    These values were already proved against the artifact's real bytes by
-    `_validate_exclusion_collection`, which derives the union hash set by reading the files.
-    Returning them lets the native branch compare counts that each authority derived for
-    itself, instead of the candidate's count standing in for everyone's.
+    R4-B: this returns the authority's OWN serialized reference, normalized to the closed
+    sub-schema. It is a declaration, not a result: the native branch hands it to
+    `derive_exclusion_reference`, which reopens the artifact at that path and validates every
+    field against the real bytes. Nothing here is accepted on the manifest's word.
     """
     record = _require_mapping(entry, field=f"{label} exclusion entry")
-    return {
+    declared: dict[str, Any] = {
         "artifact_path": str(record.get(path_field)),
         "artifact_sha256": _require_sha256(record.get(sha_field), field=f"{label}.{sha_field}"),
         "derived_count": _require_manifest_int(
             record.get(count_field), field=f"{label}.{count_field}", positive=True
         ),
     }
+    # R4-A: carry whatever the accepted manifest states about the artifact's closed sub-schema,
+    # so derive_exclusion_reference can check those declarations against the file itself.
+    for field in ("kind", "hash_algorithm"):
+        if field in record:
+            declared[field] = record[field]
+    return declared
 
 
 def _validate_reference_release(
@@ -1976,25 +1982,26 @@ def build_run_plan(
         # R3-B: each accepted authority contributes the count IT derived from ITS OWN
         # evidence. Previously the candidate's count was passed in as G's and G2's, so an
         # inconsistent underlying count could not be seen.
+        # R4-B: the planner's own two accepted-release validators are independent participants
+        # as well. Each hands in only its own serialized reference; derive_exclusion_reference
+        # reopens the artifact at that path and derives every compared field from the bytes.
+        native_repo_root = native_provenance_repo_root()
         agreed_exclusion = require_identical_exclusion_authorities([
             dict(
                 native["shared_exclusion_authority"],
                 participant="candidate_m_and_releases",
-                artifact_sha256=native["shared_exclusion_authority"]["artifact_sha256"],
-                derived_count=native["shared_exclusion_authority"]["derived_count"],
-                artifact_path=native["shared_exclusion_authority"]["artifact_paths"][0],
             ),
-            exclusion_authority(
+            derive_exclusion_reference(
+                native_repo_root,
+                native_reference_exclusion_authority,
                 participant="g2_reference_release_validator",
-                artifact_path=native_reference_exclusion_authority["artifact_path"],
-                artifact_sha256=native_reference_exclusion_authority["artifact_sha256"],
-                derived_count=native_reference_exclusion_authority["derived_count"],
+                label="accepted G2 reference release",
             ),
-            exclusion_authority(
+            derive_exclusion_reference(
+                native_repo_root,
+                native_tokenizer_exclusion_authority,
                 participant="g_tokenizer_release_validator",
-                artifact_path=native_tokenizer_exclusion_authority["artifact_path"],
-                artifact_sha256=native_tokenizer_exclusion_authority["artifact_sha256"],
-                derived_count=native_tokenizer_exclusion_authority["derived_count"],
+                label="accepted G tokenizer release",
             ),
         ])
 

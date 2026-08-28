@@ -73,19 +73,59 @@ def test_old_g2_release_copy_is_a_different_artifact_with_the_same_count():
     assert copy["derived_count"] == REAL_CANONICAL_COUNT, "same number of exclusion hashes"
     assert copy["artifact_sha256"] != REAL_CANONICAL_SHA, "but a different artifact"
     # Identity is the artifact, so a count-only comparison would have missed this.
+    canonical = exclusion_authority(
+        participant="accepted_g",
+        artifact_path=REAL_CANONICAL_PATH,
+        artifact_sha256=REAL_CANONICAL_SHA,
+        derived_count=REAL_CANONICAL_COUNT,
+        artifact_schema_version=_REAL["artifact_schema_version"],
+        kind=_REAL["kind"],
+        hash_algorithm=_REAL["hash_algorithm"],
+    )
+    other = exclusion_authority(
+        participant="old_g2_release_copy",
+        artifact_path=OLD_G2_RELEASE_COPY,
+        artifact_sha256=copy["artifact_sha256"],
+        derived_count=copy["derived_count"],
+        artifact_schema_version=copy["artifact_schema_version"],
+        kind=copy["kind"],
+        hash_algorithm=copy["hash_algorithm"],
+    )
     with pytest.raises(contract.StageMError, match="disagree"):
+        require_identical_exclusion_authorities([canonical, other])
+
+
+def test_a_byte_identical_copy_at_another_path_is_still_a_different_reference(tmp_path):
+    """R4-A: artifact_path is load-bearing; equal digests must not launder a different path."""
+    source = REPO_ROOT / REAL_CANONICAL_PATH
+    alt_rel = "runs/l1_production_2026-08-20/reference_reserve_v1/copy_of_exclusions.json"
+    alt = tmp_path / alt_rel
+    alt.parent.mkdir(parents=True, exist_ok=True)
+    alt.write_bytes(source.read_bytes())
+    copy = read_exclusion_artifact(tmp_path, alt_rel)
+    assert copy["artifact_sha256"] == REAL_CANONICAL_SHA
+    assert copy["derived_count"] == REAL_CANONICAL_COUNT
+    assert copy["kind"] == _REAL["kind"]
+    # Everything except the path is identical, and it is still refused.
+    with pytest.raises(contract.StageMError, match="artifact_path"):
         require_identical_exclusion_authorities([
             exclusion_authority(
                 participant="accepted_g",
                 artifact_path=REAL_CANONICAL_PATH,
                 artifact_sha256=REAL_CANONICAL_SHA,
                 derived_count=REAL_CANONICAL_COUNT,
+                artifact_schema_version=_REAL["artifact_schema_version"],
+                kind=_REAL["kind"],
+                hash_algorithm=_REAL["hash_algorithm"],
             ),
             exclusion_authority(
-                participant="old_g2_release_copy",
-                artifact_path=OLD_G2_RELEASE_COPY,
+                participant="same_bytes_other_path",
+                artifact_path=alt_rel,
                 artifact_sha256=copy["artifact_sha256"],
                 derived_count=copy["derived_count"],
+                artifact_schema_version=copy["artifact_schema_version"],
+                kind=copy["kind"],
+                hash_algorithm=copy["hash_algorithm"],
             ),
         ])
 
@@ -108,7 +148,7 @@ def test_artifact_whose_declared_count_lies_is_rejected(tmp_path):
 
 
 def test_candidate_binds_the_canonical_authority(m_run):
-    authority = plan_exclusion_authority(read_json(m_run["plan_path"]))
+    authority = plan_exclusion_authority(read_json(m_run["plan_path"]), m_run["tmp_path"])
     canonical = m_run["canonical_exclusion"]
     assert authority["artifact_sha256"] == canonical["artifact_sha256"]
     assert authority["derived_count"] == canonical["derived_count"]
@@ -160,7 +200,7 @@ def test_accepted_authority_count_is_derived_from_its_own_evidence(m_run, partic
     )
     entry["hash_count"] = 4321
     path.write_text(json.dumps(payload), encoding="utf-8")
-    with pytest.raises(contract.StageMError, match="declares hash_count"):
+    with pytest.raises(contract.StageMError, match="declares derived_count"):
         native_chain(m_run)
 
 

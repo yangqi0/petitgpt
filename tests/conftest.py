@@ -100,6 +100,7 @@ from pretrain.stage_m_contract_v1 import (  # noqa: E402
 import pretrain.stage_m_realize_v1 as _realize  # noqa: E402
 from tests._stage_m_fixtures import (  # noqa: E402
     e2e_records as _e2e_records,
+    restore_canonical_exclusion_block as _restore_canonical_exclusion_block,
     save_tokenizer as _save_tokenizer,
     tiny_tokenizer as _tiny_tokenizer,
     write_accepted_exclusion_authorities as _write_accepted_exclusions,
@@ -134,10 +135,13 @@ def m_run(tmp_path, tok, monkeypatch, accepted):
         destination = tmp_path / relative
         destination.parent.mkdir(parents=True, exist_ok=True)
         destination.write_bytes((_REPO_ROOT / relative).read_bytes())
-    tokenizer_path = _save_tokenizer(tok, tmp_path / "tok" / "tokenizer.json")
+    staged_tokenizer = _save_tokenizer(tok, tmp_path / "tok" / "tokenizer.json")
     # R3: the canonical exclusion authority is recovered from accepted G and G2, so the fixture
     # writes those two manifests and the single L1 artifact they both name.
-    canonical = _write_accepted_exclusions(tmp_path)
+    # R4-C: the canonical tokenizer PATH is recovered from the accepted G release too, so the
+    # same tokenizer bytes are published at that release's canonical runtime-artifact path.
+    canonical = _write_accepted_exclusions(tmp_path, tokenizer_source=staged_tokenizer)
+    tokenizer_path = canonical["tokenizer_abs"]
     plan_path = tmp_path / "candidate_m_plan.json"
     assert (
         _realize.main([
@@ -166,6 +170,7 @@ def m_run(tmp_path, tok, monkeypatch, accepted):
         "plan_sha": plan_sha,
         "tokenizer_path": tokenizer_path,
         "canonical_exclusion": canonical,
+        "canonical_tokenizer_path": canonical["tokenizer_path"],
         "releases": {s: out_dir / s for s in _STAGE_STREAMS},
         "context": context,
     }
@@ -182,12 +187,22 @@ def native_e2e(m_run, monkeypatch):
     tmp_path = m_run["tmp_path"]
     stage_a_train = m_run["releases"]["stage_a"] / "train"
     stage_b_train = m_run["releases"]["stage_b"] / "train"
-    provenance = _write_full_provenance(tmp_path, stage_a_train, stage_b_train)
+    # R4-A: publish the reserve exclusion AT the canonical L1 path, so the accepted G and
+    # G2 releases, the candidate plan and both Stage-M releases all name one artifact --
+    # exactly the real relationship the native chain requires.
+    provenance = _write_full_provenance(
+        tmp_path,
+        stage_a_train,
+        stage_b_train,
+        reserve_exclusion_path=m_run["canonical_exclusion"]["artifact_abs"],
+    )
 
     tokenizer_bytes = m_run["tokenizer_path"].read_bytes()
     tokenizer_sha = hashlib.sha256(tokenizer_bytes).hexdigest()
     release_tokenizer = _Path(provenance["tokenizer_release_manifest"]).parent / "tokenizer.json"
     release_tokenizer.write_bytes(tokenizer_bytes)
+    # R4-C: the canonical accepted-G tokenizer path must keep the same bytes the plan bound.
+    _Path(m_run["canonical_exclusion"]["tokenizer_abs"]).write_bytes(tokenizer_bytes)
     for path, key in (
         (_Path(provenance["tokenizer_release_manifest"]), "tokenizer_sha256"),
         (_Path(provenance["reference_val_dir"]).parent / "manifest.json", "tokenizer_sha256"),
@@ -199,29 +214,11 @@ def native_e2e(m_run, monkeypatch):
         path.write_text(_json.dumps(payload), encoding="utf-8")
 
     # _write_full_provenance rewrites each release's reference_validation_exclusion into the
-    # legacy shape. Restore the canonical R3 block so the release still names the canonical L1
-    # artifact; the two payloads are byte-identical, so the digests already agree.
+    # legacy shape. Restore the canonical R4 block so the release still names the canonical L1
+    # artifact with its complete closed sub-schema; the payload identity is unchanged.
     canonical = m_run["canonical_exclusion"]
     for meta_path in (stage_a_train.parent / "meta.json", stage_b_train.parent / "meta.json"):
-        payload = _json.loads(meta_path.read_text(encoding="utf-8"))
-        payload["reference_validation_exclusion"] = {
-            "enabled": True,
-            "manifest_count": 1,
-            "union_hash_count": canonical["derived_count"],
-            "enforced_at_stage": "stage_i",
-            "reapplied_by_stage_m": False,
-            "canonical_artifact_path": canonical["artifact_path"],
-            "canonical_artifact_sha256": canonical["artifact_sha256"],
-            "manifests": [
-                {
-                    "enabled": True,
-                    "path": canonical["artifact_path"],
-                    "manifest_sha256": canonical["artifact_sha256"],
-                    "hash_count": canonical["derived_count"],
-                }
-            ],
-        }
-        meta_path.write_text(_json.dumps(payload), encoding="utf-8")
+        _restore_canonical_exclusion_block(meta_path, canonical)
         check = _json.loads(meta_path.read_text(encoding="utf-8"))
         assert (
             check["reference_validation_exclusion"]["canonical_artifact_sha256"]

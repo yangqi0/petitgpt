@@ -103,24 +103,48 @@ def test_accepted_authority_exclusion_mismatch_is_rejected(m_run, authority, fie
 
 
 def test_exclusion_authority_normalizer_is_single_definition():
+    common = {
+        "artifact_schema_version": 1,
+        "kind": "petitgpt_reference_validation_exclusions",
+        "hash_algorithm": "sha256-cleaned-text-utf8-v1",
+    }
     a = exclusion_authority(
-        participant="one", artifact_path="p", artifact_sha256="a" * 64, derived_count=5
+        participant="one", artifact_path="p", artifact_sha256="a" * 64, derived_count=5, **common
     )
     b = exclusion_authority(
-        participant="two", artifact_path="p", artifact_sha256="a" * 64, derived_count=5
+        participant="two", artifact_path="p", artifact_sha256="a" * 64, derived_count=5, **common
     )
     assert require_identical_exclusion_authorities([a, b])["derived_count"] == 5
     c = exclusion_authority(
-        participant="three", artifact_path="p", artifact_sha256="a" * 64, derived_count=6
+        participant="three", artifact_path="p", artifact_sha256="a" * 64, derived_count=6, **common
     )
     with pytest.raises(contract.StageMError, match="disagree"):
         require_identical_exclusion_authorities([a, c])
     # R3: same count, DIFFERENT artifact -- the substitution candidate v3 made.
     d = exclusion_authority(
-        participant="copy", artifact_path="other", artifact_sha256="b" * 64, derived_count=5
+        participant="copy",
+        artifact_path="other",
+        artifact_sha256="b" * 64,
+        derived_count=5,
+        **common,
     )
     with pytest.raises(contract.StageMError, match="disagree"):
         require_identical_exclusion_authorities([a, d])
+    # R4-A: the closed sub-schema is compared whole, so kind and algorithm are load-bearing too.
+    for field, bad in (
+        ("kind", "petitgpt_something_else"),
+        ("hash_algorithm", "sha256"),
+        ("artifact_schema_version", 2),
+    ):
+        variant = exclusion_authority(
+            participant=f"wrong_{field}",
+            artifact_path="p",
+            artifact_sha256="a" * 64,
+            derived_count=5,
+            **{**common, field: bad},
+        )
+        with pytest.raises(contract.StageMError, match=field):
+            require_identical_exclusion_authorities([a, variant])
 
 
 # ------------------------------------------------------------------ R2-B candidate plan
@@ -131,7 +155,7 @@ def _plan(m_run) -> dict[str, Any]:
 
 
 def test_valid_plan_passes_the_closed_contract(m_run):
-    result = validate_candidate_plan_contract(_plan(m_run))
+    result = validate_candidate_plan_contract(_plan(m_run), m_run["tmp_path"])
     assert result["schema_version"] == contract.CANDIDATE_PLAN_CONTRACT_SCHEMA
     assert result["validated_field_count"] > 80
     assert result["stage_streams"] == list(contract.STAGE_STREAMS)
@@ -204,7 +228,7 @@ def test_semantically_invalid_plan_is_rejected(m_run, name):
     plan = _plan(m_run)
     _mutations()[name](plan)
     with pytest.raises((contract.StageMError, KeyError)):
-        validate_candidate_plan_contract(plan)
+        validate_candidate_plan_contract(plan, m_run["tmp_path"])
 
 
 def test_plan_contract_runs_on_the_production_authorization_path(m_run):
@@ -533,7 +557,7 @@ def test_frozen_profile_declares_byte_order():
 
 
 def test_plan_exclusion_authority_is_extracted_canonically(m_run):
-    authority = plan_exclusion_authority(_plan(m_run))
+    authority = plan_exclusion_authority(_plan(m_run), m_run["tmp_path"])
     assert authority["schema_version"] == contract.CANONICAL_EXCLUSION_AUTHORITY_SCHEMA
     assert authority["participant"] == "candidate_m_plan"
     assert authority["artifact_sha256"] == m_run["canonical_exclusion"]["artifact_sha256"]

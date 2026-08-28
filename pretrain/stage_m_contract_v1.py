@@ -50,14 +50,21 @@ if ROOT not in sys.path:
 
 # --------------------------------------------------------------------- schema names
 
-# R3 bumps this deliberately: resources.reference_exclusion_manifest was replaced by
-# resources.canonical_exclusion_authority, which is a different serialized key carrying
-# different fields (the canonical L1 artifact named by accepted G/G2, plus independently
-# derived counts). That is a candidate-plan contract change, not merely changed bytes.
-CANDIDATE_PLAN_SCHEMA = "petitgpt-m-candidate-plan-v2"
+# Bumped deliberately, twice, each time for a serialized-contract change and never merely
+# because bytes or digests moved:
+#   v1 -> v2 (R3): resources.reference_exclusion_manifest was replaced by
+#     resources.canonical_exclusion_authority -- a different key carrying different fields.
+#   v2 -> v3 (R4): resources.canonical_exclusion_authority gained artifact_schema_version,
+#     completing the closed exclusion sub-schema (EXCLUSION_REFERENCE_FIELDS). A v2 plan does
+#     not carry that field and so cannot satisfy the v3 contract.
+CANDIDATE_PLAN_SCHEMA = "petitgpt-m-candidate-plan-v3"
 INPUT_SEQUENCE_COMMITMENT_SCHEMA = "petitgpt-stage-m-input-sequence-commitment-v1"
 ACCOUNTING_SCHEMA = "petitgpt-stage-m-accounting-v1"
 BUNDLE_SCHEMA = "petitgpt-m-implementation-bundle-v1"
+# R4-E: the Stage-P native helper bundle is a distinct artifact from the Stage-M producer
+# bundle, so its canonical digest preimage carries its OWN schema. Sharing BUNDLE_SCHEMA
+# made a P file map and an M file map hash into the same namespace.
+P_NATIVE_HELPER_BUNDLE_SCHEMA = "petitgpt-p-native-helper-bundle-v1"
 RELEASE_PROFILE_SCHEMA = "petitgpt-stage-m-release-profile-v1"
 ORDERING_CONTRACT_ID = "ACCEPTED_STAGE_I_PHYSICAL_ORDER_V1"
 CANDIDATE_PLAN_CONTRACT_SCHEMA = "petitgpt-m-candidate-plan-contract-v1"
@@ -501,8 +508,9 @@ def m_implementation_bundle(repo_root: Path) -> tuple[dict[str, str], str]:
 
 
 def p_native_implementation_bundle(repo_root: Path) -> tuple[dict[str, str], str]:
+    """The Stage-P native helper bundle, digested under its own P-specific schema (R4-E)."""
     files = bundle_files(repo_root, P_NATIVE_IMPLEMENTATION_BUNDLE_FILES)
-    return files, bundle_sha256(files)
+    return files, bundle_sha256(files, schema=P_NATIVE_HELPER_BUNDLE_SCHEMA)
 
 
 # --------------------------------------------------------------------- release profile
@@ -538,7 +546,7 @@ def _exact(actual: Any, expected: Any, *, field: str) -> None:
     )
 
 
-def validate_candidate_plan_contract(plan: Mapping[str, Any]) -> dict[str, Any]:
+def validate_candidate_plan_contract(plan: Mapping[str, Any], repo_root: Path) -> dict[str, Any]:
     """Closed semantic validation of a candidate-M plan. R2-B.
 
     Matching the reviewed plan digest proves *which bytes* were reviewed; it does not prove the
@@ -675,13 +683,36 @@ def validate_candidate_plan_contract(plan: Mapping[str, Any]) -> dict[str, Any]:
     validated_sha256(tokenizer.get("sha256"), field="resources.tokenizer.sha256")
     require_int(tokenizer.get("size_bytes"), field="resources.tokenizer.size_bytes", minimum=1)
     checked += 2
-    exclusion = plan_exclusion_authority(plan)
+    # R4-C: bind the canonical tokenizer PATH as well as its digest, and prove the bytes at that
+    # exact repository-relative path are the ones the accepted G release published. A basename
+    # or suffix comparison would accept a nonexistent path, an alternate directory holding a
+    # same-named file, or a correct digest declared against the wrong path.
+    canonical_tokenizer = canonical_tokenizer_authority(repo_root)
+    check(
+        tokenizer.get("path"),
+        canonical_tokenizer["tokenizer_path"],
+        "resources.tokenizer.path (canonical accepted-G tokenizer path)",
+    )
+    check(
+        tokenizer.get("sha256"),
+        canonical_tokenizer["tokenizer_sha256"],
+        "resources.tokenizer.sha256 (bytes at the canonical path)",
+    )
+    exclusion = plan_exclusion_authority(plan, repo_root)
     canonical_block = resources["canonical_exclusion_authority"]
     check(
         canonical_block.get("schema_version"),
         CANONICAL_EXCLUSION_AUTHORITY_SCHEMA,
         "resources.canonical_exclusion_authority.schema_version",
     )
+    # R4-A: the closed sub-schema is required in full, and each field is compared against what
+    # the referenced artifact actually contains (plan_exclusion_authority reopened it above).
+    for field in EXCLUSION_REFERENCE_FIELDS:
+        check(
+            canonical_block.get(field),
+            exclusion[field],
+            f"resources.canonical_exclusion_authority.{field}",
+        )
     named = canonical_block.get("named_by")
     require(
         isinstance(named, Mapping),
@@ -877,14 +908,63 @@ ACCEPTED_G_TOKENIZER_RELEASE_MANIFEST = (
 ACCEPTED_G2_RELEASE_MANIFEST = "runs/g2_production_2026-08-21/release/manifest.json"
 
 
-def read_exclusion_artifact(repo_root: Path, relative: str) -> dict[str, Any]:
-    """Independently derive an exclusion artifact's identity and item count from its bytes.
+# R4-A. The canonical shared exclusion authority is a CLOSED sub-schema, not a digest plus a
+# count. These six fields are what every participant must independently derive and what all
+# participants must agree on. artifact_path is load-bearing: a byte-identical copy at another
+# path is a different reference, and agreeing digests must not launder it.
+EXCLUSION_REFERENCE_FIELDS = (
+    "artifact_path",
+    "artifact_sha256",
+    "artifact_schema_version",
+    "kind",
+    "hash_algorithm",
+    "derived_count",
+)
 
-    R3-B: every participant derives its own count from its own evidence. Nothing here accepts a
-    count from a caller, so one participant can never supply another's number.
+
+def canonical_repo_relative(repo_root: Path, value: object, *, label: str) -> tuple[str, Path]:
+    """Normalize one path reference to its single canonical repository-relative spelling.
+
+    R4-A. Resolution is anchored on the repository root and never on the caller's working
+    directory, so the same reference resolves identically from any CWD. Both spellings a
+    serialized artifact may legitimately use -- repository-relative, or absolute inside the
+    repository -- normalize to the same relative string, which is then the value compared
+    across participants. Anything outside the root is refused rather than normalized.
     """
-    path = (Path(repo_root) / relative).resolve()
-    require(path.is_file(), f"exclusion artifact is missing: {relative}")
+    root = Path(repo_root).resolve()
+    require(
+        isinstance(value, str) and bool(value),
+        f"{label}: path must be a non-empty string, got {value!r}",
+    )
+    assert isinstance(value, str)
+    candidate = Path(value)
+    resolved = candidate.resolve() if candidate.is_absolute() else (root / candidate).resolve()
+    require(
+        root in resolved.parents,
+        f"{label}: path is outside the repository root: {value!r}",
+    )
+    return str(resolved.relative_to(root)), resolved
+
+
+def read_exclusion_artifact(repo_root: Path, relative: str) -> dict[str, Any]:
+    """Open the actual artifact and derive its complete identity from its own bytes.
+
+    R3-B: every participant derives its own count from its own evidence, so one participant can
+    never supply another's number. R4-A: the derived identity is the whole closed sub-schema --
+    path, digest, artifact schema version, kind, hash algorithm and count -- because a
+    declaration is not proof of the file it names.
+    """
+    root = Path(repo_root).resolve()
+    relative, path = canonical_repo_relative(root, relative, label="exclusion artifact")
+    require(path.exists(), f"exclusion artifact is missing: {relative}")
+    require(
+        path.is_file() and not path.is_symlink(),
+        f"exclusion artifact is not a regular file: {relative}",
+    )
+    require(
+        path.suffix == ".json",
+        f"exclusion artifact must be a .json manifest, got {relative}",
+    )
     digest = file_sha256(path)
     with open(path, encoding="utf-8") as handle:
         payload = json.load(handle)
@@ -902,14 +982,29 @@ def read_exclusion_artifact(repo_root: Path, relative: str) -> dict[str, Any]:
         f"{relative}: declared hash_count {declared!r} disagrees with the {derived} hashes "
         "actually present",
     )
+    kind = payload.get("kind")
+    require(
+        isinstance(kind, str) and bool(kind),
+        f"{relative}: exclusion artifact declares no kind",
+    )
+    algorithm = payload.get("hash_algorithm")
+    require(
+        isinstance(algorithm, str) and bool(algorithm),
+        f"{relative}: exclusion artifact declares no hash_algorithm",
+    )
+    schema_version = payload.get("schema_version")
+    require(
+        schema_version is not None,
+        f"{relative}: exclusion artifact declares no schema_version",
+    )
     return {
         "artifact_path": relative,
         "artifact_sha256": digest,
         "artifact_size_bytes": int(path.stat().st_size),
+        "artifact_schema_version": schema_version,
         "derived_count": derived,
-        "kind": payload.get("kind"),
-        "hash_algorithm": payload.get("hash_algorithm"),
-        "schema_version": payload.get("schema_version"),
+        "kind": kind,
+        "hash_algorithm": algorithm,
     }
 
 
@@ -919,17 +1014,36 @@ def exclusion_authority(
     artifact_path: str,
     artifact_sha256: str,
     derived_count: int,
-    kind: object = None,
-    hash_algorithm: object = None,
+    artifact_schema_version: object,
+    kind: object,
+    hash_algorithm: object,
 ) -> dict[str, Any]:
-    """One participant's independently derived view of the shared exclusion authority."""
+    """One participant's independently derived view of the canonical exclusion authority."""
+    require(
+        isinstance(artifact_path, str) and bool(artifact_path),
+        f"{participant}.exclusion.artifact_path must be a non-empty string",
+    )
+    require(
+        isinstance(kind, str) and bool(kind),
+        f"{participant}.exclusion.kind must be a non-empty string, got {kind!r}",
+    )
+    require(
+        isinstance(hash_algorithm, str) and bool(hash_algorithm),
+        f"{participant}.exclusion.hash_algorithm must be a non-empty string, "
+        f"got {hash_algorithm!r}",
+    )
+    require(
+        artifact_schema_version is not None,
+        f"{participant}.exclusion.artifact_schema_version must be present",
+    )
     return {
         "schema_version": CANONICAL_EXCLUSION_AUTHORITY_SCHEMA,
         "participant": participant,
-        "artifact_path": str(artifact_path),
+        "artifact_path": artifact_path,
         "artifact_sha256": validated_sha256(
             artifact_sha256, field=f"{participant}.exclusion.artifact_sha256"
         ),
+        "artifact_schema_version": artifact_schema_version,
         "derived_count": require_int(
             derived_count, field=f"{participant}.exclusion.derived_count", minimum=1
         ),
@@ -938,37 +1052,94 @@ def exclusion_authority(
     }
 
 
+def derive_exclusion_reference(
+    repo_root: Path,
+    declared: Mapping[str, Any],
+    *,
+    participant: str,
+    label: str,
+) -> dict[str, Any]:
+    """Resolve ONE participant's own serialized reference and validate the real file.
+
+    R4-B. This is the literal independent-derivation step: the artifact path comes from this
+    participant's own object, the file at that path is opened and hashed here, and every field
+    the participant declared is then checked against what the artifact actually contains. No
+    value is accepted on the participant's word, and nothing is carried in from another
+    participant. Callers compare the five completed results only afterwards.
+    """
+    require(
+        isinstance(declared, Mapping),
+        f"{label}: exclusion reference must be an object, got {type(declared).__name__}",
+    )
+    relative = declared.get("artifact_path")
+    require(
+        isinstance(relative, str) and bool(relative),
+        f"{label}: exclusion reference names no artifact_path",
+    )
+    assert isinstance(relative, str)
+    artifact = read_exclusion_artifact(repo_root, relative)
+    # Every field the participant serialized must match the artifact it actually points at.
+    # The path is compared in its normalized repository-relative spelling, so an equivalent
+    # absolute reference passes while a genuinely different path -- including a same-basename
+    # file in another directory -- does not.
+    normalized, _ = canonical_repo_relative(repo_root, relative, label=label)
+    for field in EXCLUSION_REFERENCE_FIELDS:
+        if field not in declared:
+            continue
+        expected = artifact[field]
+        actual = normalized if field == "artifact_path" else declared[field]
+        require(
+            actual == expected,
+            f"{label}: declares {field}={declared[field]!r} but {normalized} actually has "
+            f"{field}={expected!r}",
+        )
+    return exclusion_authority(
+        participant=participant,
+        artifact_path=artifact["artifact_path"],
+        artifact_sha256=artifact["artifact_sha256"],
+        derived_count=artifact["derived_count"],
+        artifact_schema_version=artifact["artifact_schema_version"],
+        kind=artifact["kind"],
+        hash_algorithm=artifact["hash_algorithm"],
+    )
+
+
 def require_identical_exclusion_authorities(
     authorities: Sequence[Mapping[str, Any]],
 ) -> dict[str, Any]:
-    """Prove every participant derived the SAME canonical artifact and the SAME count.
+    """Prove every participant independently derived the SAME canonical reference.
 
-    Identity is the exact artifact SHA-256. A copied, reordered, reformatted or reserialized
-    exclusion file is a different artifact even when it carries the same number of hashes --
-    which is exactly the substitution candidate v3 made, and exactly what an item-count
-    comparison cannot see. Both the digest and the independently derived count must agree.
+    Identity is the whole closed sub-schema, not the digest alone. A copied, reordered,
+    reformatted or reserialized exclusion file is a different artifact even when it carries the
+    same number of hashes -- exactly the substitution candidate v3 made, and exactly what an
+    item-count comparison cannot see. A byte-identical copy at a different path is likewise a
+    different reference, which is why artifact_path is compared here (R4-A).
     """
     require(len(authorities) >= 2, "exclusion agreement needs at least two participants")
-    digests = {a["artifact_sha256"] for a in authorities}
-    counts = {int(a["derived_count"]) for a in authorities}
-    if len(digests) != 1 or len(counts) != 1:
-        detail = ", ".join(
-            f"{a['participant']}(sha={a['artifact_sha256'][:12]}…, "
-            f"count={a['derived_count']}, path={a['artifact_path']})"
-            for a in authorities
-        )
+    disagreements: list[str] = []
+    for field in EXCLUSION_REFERENCE_FIELDS:
+        values = {json.dumps(a.get(field), sort_keys=True) for a in authorities}
+        if len(values) != 1:
+            detail = ", ".join(f"{a['participant']}={a.get(field)!r}" for a in authorities)
+            disagreements.append(f"{field}: {detail}")
+    if disagreements:
         require(
             False,
-            "shared reference-exclusion authorities disagree: "
-            f"{len(digests)} distinct artifact digests, {len(counts)} distinct derived counts; "
-            f"{detail}",
+            "shared reference-exclusion authorities disagree on "
+            f"{len(disagreements)} of {len(EXCLUSION_REFERENCE_FIELDS)} closed fields; "
+            + "; ".join(disagreements),
         )
-    paths = sorted({a["artifact_path"] for a in authorities})
+    first = authorities[0]
     return {
         "schema_version": CANONICAL_EXCLUSION_AUTHORITY_SCHEMA,
-        "artifact_sha256": next(iter(digests)),
-        "derived_count": next(iter(counts)),
-        "artifact_paths": paths,
+        "artifact_path": first["artifact_path"],
+        "artifact_sha256": first["artifact_sha256"],
+        "artifact_schema_version": first["artifact_schema_version"],
+        "kind": first["kind"],
+        "hash_algorithm": first["hash_algorithm"],
+        "derived_count": int(first["derived_count"]),
+        "artifact_paths": sorted({a["artifact_path"] for a in authorities}),
+        "compared_fields": list(EXCLUSION_REFERENCE_FIELDS),
         "participants": [a["participant"] for a in authorities],
         "participant_count": len(authorities),
     }
@@ -977,34 +1148,35 @@ def require_identical_exclusion_authorities(
 def _named_exclusion(
     repo_root: Path, entry: Mapping[str, Any], *, participant: str, label: str
 ) -> dict[str, Any]:
-    """Bind the artifact an accepted manifest NAMES, then derive its count from its own bytes."""
+    """Bind the artifact an accepted manifest NAMES, then validate that actual file (R4-B).
+
+    The accepted G / G2 manifests spell their exclusion reference with ``manifest_path`` and
+    ``manifest_sha256``; that spelling is normalized to the closed sub-schema here and then
+    resolved and reopened exactly like every other participant.
+    """
+    require(
+        isinstance(entry, Mapping),
+        f"{label}: exclusion entry must be an object",
+    )
     relative = entry.get("manifest_path")
     require(
         isinstance(relative, str) and relative,
         f"{label}: exclusion entry has no manifest_path",
     )
     assert isinstance(relative, str)
-    declared = validated_sha256(entry.get("manifest_sha256"), field=f"{label}.manifest_sha256")
-    artifact = read_exclusion_artifact(repo_root, relative)
-    require(
-        artifact["artifact_sha256"] == declared,
-        f"{label}: names {relative} with SHA-256 {declared} but the artifact on disk hashes to "
-        f"{artifact['artifact_sha256']}",
-    )
-    declared_count = entry.get("hash_count")
-    require(
-        declared_count == artifact["derived_count"],
-        f"{label}: declares hash_count {declared_count!r} for {relative} but the artifact "
-        f"contains {artifact['derived_count']} hashes",
-    )
-    return exclusion_authority(
-        participant=participant,
-        artifact_path=relative,
-        artifact_sha256=artifact["artifact_sha256"],
-        derived_count=artifact["derived_count"],
-        kind=artifact["kind"],
-        hash_algorithm=artifact["hash_algorithm"],
-    )
+    declared = {
+        "artifact_path": relative,
+        "artifact_sha256": validated_sha256(
+            entry.get("manifest_sha256"), field=f"{label}.manifest_sha256"
+        ),
+        "derived_count": entry.get("hash_count"),
+    }
+    # The accepted manifests also state kind and hash_algorithm; whatever they state must match
+    # the artifact, so they are folded into the same declared-vs-derived comparison.
+    for declared_field, entry_field in (("kind", "kind"), ("hash_algorithm", "hash_algorithm")):
+        if entry_field in entry:
+            declared[declared_field] = entry[entry_field]
+    return derive_exclusion_reference(repo_root, declared, participant=participant, label=label)
 
 
 def accepted_g_exclusion_authority(repo_root: Path) -> dict[str, Any]:
@@ -1054,8 +1226,77 @@ def canonical_exclusion_authority(repo_root: Path) -> dict[str, Any]:
     }
 
 
-def plan_exclusion_authority(plan: Mapping[str, Any]) -> dict[str, Any]:
-    """The candidate-M plan's declared canonical exclusion authority."""
+CANONICAL_TOKENIZER_AUTHORITY_SCHEMA = "petitgpt-stage-m-canonical-tokenizer-authority-v1"
+
+
+def canonical_tokenizer_authority(repo_root: Path) -> dict[str, Any]:
+    """Recover the canonical tokenizer PATH and digest from the accepted G release (R4-C).
+
+    The accepted G release manifest names its own canonical runtime artifact; that name is
+    resolved against the manifest's own directory, so the canonical repository-relative path is
+    derived from the accepted release rather than assumed. The bytes at that path are then
+    hashed and must equal the digest the accepted release declares.
+    """
+    root = Path(repo_root).resolve()
+    manifest_relative = ACCEPTED_G_TOKENIZER_RELEASE_MANIFEST
+    manifest_path = (root / manifest_relative).resolve()
+    require(manifest_path.is_file(), f"accepted G manifest is missing: {manifest_relative}")
+    with open(manifest_path, encoding="utf-8") as handle:
+        manifest = json.load(handle)
+    require(isinstance(manifest, Mapping), "accepted G manifest must be a JSON object")
+    artifacts = (manifest or {}).get("artifacts") or {}
+    runtime_name = artifacts.get("canonical_runtime_artifact")
+    require(
+        isinstance(runtime_name, str) and bool(runtime_name),
+        "accepted G manifest names no artifacts.canonical_runtime_artifact",
+    )
+    assert isinstance(runtime_name, str)
+    require(
+        "/" not in runtime_name and not Path(runtime_name).is_absolute(),
+        f"accepted G canonical_runtime_artifact must be a bare file name, got {runtime_name!r}",
+    )
+    relative = str((manifest_path.parent / runtime_name).resolve().relative_to(root))
+    declared = validated_sha256(
+        manifest.get("tokenizer_sha256"), field="accepted G tokenizer_release.tokenizer_sha256"
+    )
+    digest = require_canonical_file(root, relative, label="canonical tokenizer")
+    require(
+        digest == declared,
+        f"accepted G declares tokenizer_sha256 {declared} but {relative} hashes to {digest}",
+    )
+    return {
+        "schema_version": CANONICAL_TOKENIZER_AUTHORITY_SCHEMA,
+        "tokenizer_path": relative,
+        "tokenizer_sha256": digest,
+        "named_by": manifest_relative,
+    }
+
+
+def require_canonical_file(repo_root: Path, relative: str, *, label: str) -> str:
+    """Resolve a repository-relative path from the ROOT and hash the actual bytes there.
+
+    R4-C: a basename or suffix comparison accepts a nonexistent path, an alternate directory
+    holding a same-named file, and a correct digest declared against the wrong path. Resolving
+    from the repository root and hashing the file that is actually there accepts none of them.
+    Resolution never consults the caller's working directory.
+    """
+    root = Path(repo_root).resolve()
+    relative, path = canonical_repo_relative(root, relative, label=label)
+    require(path.exists(), f"{label}: no file at {relative}")
+    require(
+        path.is_file() and not path.is_symlink(),
+        f"{label}: not a regular file: {relative}",
+    )
+    return file_sha256(path)
+
+
+def plan_exclusion_authority(plan: Mapping[str, Any], repo_root: Path) -> dict[str, Any]:
+    """The candidate-M plan's exclusion reference, resolved and validated against the real file.
+
+    R4-B: the candidate is a full participant, not a stored declaration. Its serialized
+    ``resources.canonical_exclusion_authority`` supplies only the path to open; every compared
+    field is then derived from the artifact at that path.
+    """
     resources = plan.get("resources")
     require(isinstance(resources, Mapping), "plan.resources must be an object")
     assert isinstance(resources, Mapping)
@@ -1065,13 +1306,19 @@ def plan_exclusion_authority(plan: Mapping[str, Any]) -> dict[str, Any]:
         "plan.resources.canonical_exclusion_authority must be an object",
     )
     assert isinstance(entry, Mapping)
-    return exclusion_authority(
-        participant="candidate_m_plan",
-        artifact_path=str(entry.get("artifact_path")),
-        artifact_sha256=entry.get("artifact_sha256"),
-        derived_count=entry.get("derived_count"),
-        kind=entry.get("kind"),
-        hash_algorithm=entry.get("hash_algorithm"),
+    require(
+        entry.get("schema_version") == CANONICAL_EXCLUSION_AUTHORITY_SCHEMA,
+        "plan.resources.canonical_exclusion_authority.schema_version must be "
+        f"{CANONICAL_EXCLUSION_AUTHORITY_SCHEMA}, got {entry.get('schema_version')!r}",
+    )
+    missing = [f for f in EXCLUSION_REFERENCE_FIELDS if entry.get(f) is None]
+    require(
+        not missing,
+        "plan.resources.canonical_exclusion_authority is missing required closed fields: "
+        + ", ".join(missing),
+    )
+    return derive_exclusion_reference(
+        repo_root, entry, participant="candidate_m_plan", label="candidate M plan"
     )
 
 
@@ -1095,6 +1342,12 @@ def iter_sorted(values: Iterable[str]) -> tuple[str, ...]:
 __all__ = [
     "ACCOUNTING_SCHEMA",
     "BUNDLE_SCHEMA",
+    "EXCLUSION_REFERENCE_FIELDS",
+    "P_NATIVE_HELPER_BUNDLE_SCHEMA",
+    "canonical_repo_relative",
+    "derive_exclusion_reference",
+    "canonical_tokenizer_authority",
+    "require_canonical_file",
     "CANDIDATE_PLAN_SCHEMA",
     "INPUT_SEQUENCE_COMMITMENT_SCHEMA",
     "MODEL_CONTRACT",

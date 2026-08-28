@@ -88,6 +88,24 @@ NATIVE_REQUIRED_PROVENANCE_FIELDS = (
     "tokenizer_release",
 )
 
+# R4-D. The tuple above is the list this module checks by name; it is NOT the loader's full
+# required scope. Four further top-level fields are required by dedicated checks earlier in
+# ``load_run_plan_binding`` (branch dispatch, chain validation and the stage release bindings),
+# so removing any of them is also a controlled failure. The complete effective scope is
+# therefore these 23 top-level fields plus NATIVE_REQUIRED_STAGE_FIELDS for BOTH stages:
+# 23 + 2 x 8 = 39 slots. tests/test_stage_m_p_repair_r4.py measures all three numbers by
+# deleting each serialized field in turn and driving the real loader, so this comment cannot
+# drift from what is enforced.
+NATIVE_REQUIRED_TOP_LEVEL_FIELDS_ENFORCED_ELSEWHERE = (
+    "full_chain_validated",
+    "stage_a",
+    "stage_b",
+    "stage_b_selection_stage",
+)
+NATIVE_EFFECTIVE_REQUIRED_TOP_LEVEL_FIELDS = tuple(
+    sorted(NATIVE_REQUIRED_PROVENANCE_FIELDS + NATIVE_REQUIRED_TOP_LEVEL_FIELDS_ENFORCED_ELSEWHERE)
+)
+
 # Mirrors pretrain/stage_p_native_provenance_v1.POST_MERGE_DATA_BRANCH_IDENTITY_FIELDS.
 POST_MERGE_DATA_BRANCH_IDENTITY_FIELDS = (
     "accepted_stage_i",

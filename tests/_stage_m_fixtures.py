@@ -312,7 +312,9 @@ G_MANIFEST_RELATIVE = "runs/g_production_2026-08-21/release/tokenizer_release_ma
 G2_MANIFEST_RELATIVE = "runs/g2_production_2026-08-21/release/manifest.json"
 
 
-def write_accepted_exclusion_authorities(root: Path) -> dict[str, Any]:
+def write_accepted_exclusion_authorities(
+    root: Path, *, tokenizer_source: Path | None = None
+) -> dict[str, Any]:
     """Write a synthetic canonical L1 artifact plus the accepted G and G2 manifests naming it.
 
     Mirrors the real shape: one L1 exclusion artifact, named identically by the accepted G
@@ -349,10 +351,23 @@ def write_accepted_exclusion_authorities(root: Path) -> dict[str, Any]:
 
     g = root / G_MANIFEST_RELATIVE
     g.parent.mkdir(parents=True, exist_ok=True)
+    # R4-C: the accepted G release names its own canonical runtime artifact, and the canonical
+    # tokenizer path is derived from that name relative to the manifest's own directory.
+    tokenizer_path = g.parent / "tokenizer.json"
+    if tokenizer_source is not None:
+        tokenizer_path.write_bytes(Path(tokenizer_source).read_bytes())
+    elif not tokenizer_path.exists():
+        tokenizer_path.write_text("{}", encoding="utf-8")
+    tokenizer_sha = hashlib.sha256(tokenizer_path.read_bytes()).hexdigest()
     g.write_text(
         json.dumps({
             "schema_version": 2,
             "kind": "petitgpt_tokenizer_release",
+            "tokenizer_sha256": tokenizer_sha,
+            "artifacts": {
+                "canonical_runtime_artifact": "tokenizer.json",
+                "authoritative_manifest": "tokenizer_release_manifest.json",
+            },
             "reference_reserve_exclusion": {
                 "enabled": True,
                 "hash_algorithm": "sha256-cleaned-text-utf8-v1",
@@ -379,11 +394,17 @@ def write_accepted_exclusion_authorities(root: Path) -> dict[str, Any]:
         "artifact_path": L1_EXCLUSION_RELATIVE,
         "artifact_sha256": digest,
         "artifact_size_bytes": size,
+        "artifact_schema_version": 1,
+        "kind": "petitgpt_reference_validation_exclusions",
+        "hash_algorithm": "sha256-cleaned-text-utf8-v1",
         "derived_count": len(CANONICAL_EXCLUSION_HASHES),
         "artifact_abs": artifact,
         "g_manifest": g,
         "g2_manifest": g2,
         "entry": entry,
+        "tokenizer_path": str(tokenizer_path.relative_to(root)),
+        "tokenizer_sha256": tokenizer_sha,
+        "tokenizer_abs": tokenizer_path,
     }
 
 
@@ -404,12 +425,18 @@ def restore_canonical_exclusion_block(meta_path: Path, canonical: dict) -> None:
         "reapplied_by_stage_m": False,
         "canonical_artifact_path": canonical["artifact_path"],
         "canonical_artifact_sha256": canonical["artifact_sha256"],
+        "canonical_artifact_schema_version": canonical["artifact_schema_version"],
+        "kind": canonical["kind"],
+        "hash_algorithm": canonical["hash_algorithm"],
         "manifests": [
             {
                 "enabled": True,
                 "path": canonical["artifact_path"],
                 "manifest_sha256": canonical["artifact_sha256"],
                 "hash_count": canonical["derived_count"],
+                "kind": canonical["kind"],
+                "hash_algorithm": canonical["hash_algorithm"],
+                "schema_version": canonical["artifact_schema_version"],
             }
         ],
     }

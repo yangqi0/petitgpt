@@ -5,7 +5,6 @@ Bounded synthetic fixtures only. No real Stage-M production, no real packed corp
 
 from __future__ import annotations
 
-import hashlib
 import json
 from pathlib import Path
 from typing import Any
@@ -364,40 +363,10 @@ def test_nested_shard_directory_is_fsynced_before_publication(tmp_path, monkeypa
 
 
 # ------------------------------------------------------------------ native e2e fixtures
-
-
-@pytest.fixture
-def native_e2e(m_run, monkeypatch):
-    """Bounded native route: real M releases plus the frozen G/G2 authorities, no selection."""
-    tmp_path = m_run["tmp_path"]
-    stage_a_train = m_run["releases"]["stage_a"] / "train"
-    stage_b_train = m_run["releases"]["stage_b"] / "train"
-    provenance = _write_full_provenance(tmp_path, stage_a_train, stage_b_train)
-
-    # Align every authority on the tokenizer the candidate-M plan actually bound.
-    tokenizer_bytes = m_run["tokenizer_path"].read_bytes()
-    tokenizer_sha = hashlib.sha256(tokenizer_bytes).hexdigest()
-    release_tokenizer = Path(provenance["tokenizer_release_manifest"]).parent / "tokenizer.json"
-    release_tokenizer.write_bytes(tokenizer_bytes)
-    for path, key in (
-        (Path(provenance["tokenizer_release_manifest"]), "tokenizer_sha256"),
-        (Path(provenance["reference_val_dir"]).parent / "manifest.json", "tokenizer_sha256"),
-        (stage_a_train.parent / "meta.json", "tokenizer_sha256"),
-        (stage_b_train.parent / "meta.json", "tokenizer_sha256"),
-    ):
-        payload = json.loads(path.read_text(encoding="utf-8"))
-        payload[key] = tokenizer_sha
-        path.write_text(json.dumps(payload), encoding="utf-8")
-
-    monkeypatch.setattr("pretrain.plan_pretrain_run.assert_tokenizer_contract", lambda p: None)
-    return {
-        **m_run,
-        "stage_a_dir": stage_a_train,
-        "stage_b_dir": stage_b_train,
-        "reference_val_dir": provenance["reference_val_dir"],
-        "tokenizer_release_manifest": provenance["tokenizer_release_manifest"],
-        "selection_manifest": provenance["selection_manifest"],
-    }
+#
+# The `m_run` and `native_e2e` fixtures live in tests/conftest.py so this module and
+# tests/test_stage_m_p_repair_r2.py share one definition. R4 removed the stale local copy
+# that shadowed the shared one here and had drifted out of sync with it.
 
 
 # ------------------------------------------------------------------ R1-B planner reachability
@@ -691,7 +660,7 @@ def test_m_bundle_closure_is_still_complete_after_r1():
     files, digest = m_implementation_bundle(REPO_ROOT)
     assert set(files) == set(M_IMPLEMENTATION_BUNDLE_FILES)
     assert len(digest) == 64
-    assert CANDIDATE_PLAN_SCHEMA == "petitgpt-m-candidate-plan-v2"
+    assert CANDIDATE_PLAN_SCHEMA == "petitgpt-m-candidate-plan-v3"
 
 
 # ------------------------------------------------------------------ section 16 P bundle scope

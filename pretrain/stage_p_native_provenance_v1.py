@@ -35,16 +35,19 @@ if ROOT not in sys.path:
 
 from pretrain.stage_m_contract_v1 import (  # noqa: E402
     CANDIDATE_PLAN_SCHEMA,
+    EXCLUSION_REFERENCE_FIELDS,
     MODEL_CONTRACT,
     ORDERING_CONTRACT_ID,
     SEQ_LEN,
     STAGE_STREAMS,
     canonical_exclusion_authority,
     canonical_json_bytes,
-    exclusion_authority,
+    canonical_tokenizer_authority,
+    derive_exclusion_reference,
     file_sha256,
     p_native_implementation_bundle,
     plan_exclusion_authority,
+    require_canonical_file,
     require_identical_exclusion_authorities,
     sha256_hex,
     stream_accounting,
@@ -210,6 +213,7 @@ def validate_release_semantics(
     plan: Mapping[str, Any],
     plan_sha256: str,
     accepted: Any,
+    repo_root: Path,
 ) -> tuple[str, ...]:
     """Check every load-bearing semantic group of one Stage-M release. R2-C.
 
@@ -337,18 +341,39 @@ def validate_release_semantics(
         and validation.get("tokenizer_sha256") == tokenizer_sha256,
         "release tokenizer differs from the plan",
     )
-    # R3-C 8.4: the emitted tokenizer PATH, not only its digest. A release must not name a
-    # different tokenizer file while carrying the right hash.
+    # R4-C: the emitted tokenizer PATH, resolved from the repository root and hashed. The R3
+    # basename+suffix comparison accepted a nonexistent path, an alternate directory holding a
+    # same-named file, and a correct digest declared against the wrong path; all three now fail.
     planned_tokenizer_path = ((plan.get("resources") or {}).get("tokenizer") or {}).get("path")
     emitted_tokenizer_path = manifest.get("tokenizer_path")
+    canonical_tokenizer = canonical_tokenizer_authority(repo_root)
+    tokenizer_checks: dict[str, bool] = {
+        "plan_path_is_canonical": planned_tokenizer_path == canonical_tokenizer["tokenizer_path"],
+        "release_path_equals_plan_path": isinstance(emitted_tokenizer_path, str)
+        and emitted_tokenizer_path == planned_tokenizer_path,
+        "release_digest_is_canonical": manifest.get("tokenizer_sha256")
+        == canonical_tokenizer["tokenizer_sha256"],
+    }
+    if tokenizer_checks["release_path_equals_plan_path"]:
+        # Open the file at exactly that repository-relative path and hash the actual bytes.
+        assert isinstance(emitted_tokenizer_path, str)
+        try:
+            actual = require_canonical_file(
+                repo_root, emitted_tokenizer_path, label=f"{stage}.tokenizer_path"
+            )
+        except Exception:  # noqa: BLE001 - a missing/unreadable path is a normal failure here
+            actual = None
+        tokenizer_checks["bytes_at_path_match"] = actual == canonical_tokenizer["tokenizer_sha256"]
+    else:
+        tokenizer_checks["bytes_at_path_match"] = False
+    failed_tokenizer = sorted(k for k, ok in tokenizer_checks.items() if not ok)
     group(
         "tokenizer_path",
-        isinstance(emitted_tokenizer_path, str)
-        and isinstance(planned_tokenizer_path, str)
-        and Path(emitted_tokenizer_path).name == Path(planned_tokenizer_path).name
-        and str(emitted_tokenizer_path).endswith(str(planned_tokenizer_path)),
-        f"release tokenizer_path {emitted_tokenizer_path!r} does not resolve to the plan's "
-        f"canonical tokenizer path {planned_tokenizer_path!r}",
+        not failed_tokenizer,
+        f"release tokenizer_path {emitted_tokenizer_path!r} is not the canonical accepted-G "
+        f"tokenizer {canonical_tokenizer['tokenizer_path']!r}: "
+        f"{len(failed_tokenizer)} of {len(tokenizer_checks)} checks failed: "
+        + ", ".join(failed_tokenizer),
     )
     group(
         "stage_identity",
@@ -495,34 +520,66 @@ def validate_release_semantics(
         if isinstance(exclusion_entries, list) and len(exclusion_entries) == 1
         else {}
     )
+    # R4-A/R4-C: the release's exclusion reference is resolved and the real artifact reopened,
+    # then EVERY serialized field in both representations is compared against what that file
+    # actually contains -- not against the plan's declarations. The plan is compared separately
+    # as its own participant, so agreement here is agreement between two independent reads.
+    release_reference = derive_exclusion_reference(
+        repo_root,
+        {
+            "artifact_path": exclusion_block.get("canonical_artifact_path"),
+            "artifact_sha256": exclusion_block.get("canonical_artifact_sha256"),
+            "artifact_schema_version": exclusion_block.get("canonical_artifact_schema_version"),
+            "kind": exclusion_block.get("kind"),
+            "hash_algorithm": exclusion_block.get("hash_algorithm"),
+            "derived_count": exclusion_block.get("union_hash_count"),
+        },
+        participant=f"stage_m_release[{stage}]",
+        label=f"{stage}.reference_validation_exclusion",
+    )
+    entry = exclusion_entry or {}
+    exclusion_checks = {
+        "enabled": exclusion_block.get("enabled") is True,
+        "manifest_count": exclusion_block.get("manifest_count") == 1,
+        "manifests_length": isinstance(exclusion_entries, list) and len(exclusion_entries) == 1,
+        "block.canonical_artifact_path": exclusion_block.get("canonical_artifact_path")
+        == release_reference["artifact_path"],
+        "block.canonical_artifact_sha256": exclusion_block.get("canonical_artifact_sha256")
+        == release_reference["artifact_sha256"],
+        "block.canonical_artifact_schema_version": exclusion_block.get(
+            "canonical_artifact_schema_version"
+        )
+        == release_reference["artifact_schema_version"],
+        "block.kind": exclusion_block.get("kind") == release_reference["kind"],
+        "block.hash_algorithm": exclusion_block.get("hash_algorithm")
+        == release_reference["hash_algorithm"],
+        "block.union_hash_count": exclusion_block.get("union_hash_count")
+        == release_reference["derived_count"],
+        "block.enforced_at_stage": exclusion_block.get("enforced_at_stage") == "stage_i",
+        "block.reapplied_by_stage_m": exclusion_block.get("reapplied_by_stage_m") is False,
+        "entry.enabled": entry.get("enabled") is True,
+        "entry.path": entry.get("path") == release_reference["artifact_path"],
+        "entry.manifest_sha256": entry.get("manifest_sha256")
+        == release_reference["artifact_sha256"],
+        "entry.hash_count": entry.get("hash_count") == release_reference["derived_count"],
+        "entry.kind": entry.get("kind") == release_reference["kind"],
+        "entry.hash_algorithm": entry.get("hash_algorithm") == release_reference["hash_algorithm"],
+        "entry.schema_version": entry.get("schema_version")
+        == release_reference["artifact_schema_version"],
+        # The plan is an independent participant; both must have landed on the same reference.
+        "agrees_with_plan": all(
+            plan_exclusion.get(field) == release_reference[field]
+            for field in EXCLUSION_REFERENCE_FIELDS
+        ),
+    }
+    failed_exclusion = sorted(k for k, ok in exclusion_checks.items() if not ok)
     group(
         "shared_exclusion_authority",
-        exclusion_block.get("enabled") is True
-        and exclusion_block.get("manifest_count") == 1
-        and isinstance(exclusion_entries, list)
-        and len(exclusion_entries) == 1
-        and exclusion_block.get("canonical_artifact_sha256")
-        == plan_exclusion.get("artifact_sha256")
-        and exclusion_block.get("canonical_artifact_path") == plan_exclusion.get("artifact_path")
-        and int(exclusion_block.get("union_hash_count", -1))
-        == int(plan_exclusion.get("derived_count", -2))
-        and exclusion_block.get("enforced_at_stage") == "stage_i"
-        and exclusion_block.get("reapplied_by_stage_m") is False
-        and (exclusion_entry or {}).get("enabled") is True
-        and (exclusion_entry or {}).get("path") == plan_exclusion.get("artifact_path")
-        and (exclusion_entry or {}).get("manifest_sha256") == plan_exclusion.get("artifact_sha256")
-        and int((exclusion_entry or {}).get("hash_count", -1))
-        == int(plan_exclusion.get("derived_count", -2)),
-        "release exclusion representations disagree with the canonical authority: "
-        f"release={{'sha': {exclusion_block.get('canonical_artifact_sha256')!r}, "
-        f"'path': {exclusion_block.get('canonical_artifact_path')!r}, "
-        f"'count': {exclusion_block.get('union_hash_count')!r}, "
-        f"'enforced': {exclusion_block.get('enforced_at_stage')!r}, "
-        f"'reapplied': {exclusion_block.get('reapplied_by_stage_m')!r}, "
-        f"'entry': {exclusion_entry!r}}} vs plan={{'sha': "
-        f"{plan_exclusion.get('artifact_sha256')!r}, 'path': "
-        f"{plan_exclusion.get('artifact_path')!r}, 'count': "
-        f"{plan_exclusion.get('derived_count')!r}}}",
+        not failed_exclusion,
+        f"release exclusion representations disagree with the artifact the release itself "
+        f"names ({release_reference['artifact_path']}): "
+        f"{len(failed_exclusion)} of {len(exclusion_checks)} checks failed: "
+        + ", ".join(failed_exclusion),
     )
 
     group(
@@ -555,13 +612,19 @@ def validate_release_semantics(
 
 
 def release_exclusion_authority(
-    manifest: Mapping[str, Any], validation: Mapping[str, Any], *, stage: str
+    manifest: Mapping[str, Any],
+    validation: Mapping[str, Any],
+    repo_root: Path,
+    *,
+    stage: str,
 ) -> dict[str, Any]:
     """One Stage-M release's independently derived exclusion authority.
 
-    The digest is taken from the frozen schema-3 validator's own parse of the release, so the
-    release cannot present one value to the validator and another to this comparison, and the
-    count is the release's own declared union count -- not a number handed in by a caller.
+    R4-B. The release is a full participant: the path comes from the release's own serialized
+    block, the artifact at that path is opened and hashed here, and everything the release
+    declares -- including the digest the frozen schema-3 validator independently parsed out of
+    it -- is checked against the file that is actually there. Nothing is carried in from the
+    plan or from another participant.
     """
     declared = manifest.get("reference_validation_exclusion")
     _require(
@@ -580,11 +643,32 @@ def release_exclusion_authority(
         f"{stage}: release reference_validation_exclusion.manifests must hold exactly one entry",
     )
     assert isinstance(entries, list)
-    return exclusion_authority(
+    entry = entries[0] or {}
+    # The release states the reference twice: once at block level, once in its single manifest
+    # entry. Both spellings must agree before either is trusted as this participant's reference.
+    _require(
+        entry.get("path") == declared.get("canonical_artifact_path"),
+        f"{stage}: release names {entry.get('path')!r} in its manifest entry but "
+        f"{declared.get('canonical_artifact_path')!r} at block level",
+    )
+    _require(
+        digests[0] == declared.get("canonical_artifact_sha256"),
+        f"{stage}: schema-3 validation parsed exclusion digest {digests[0]} but the release "
+        f"block declares {declared.get('canonical_artifact_sha256')!r}",
+    )
+    reference = {
+        "artifact_path": entry.get("path"),
+        "artifact_sha256": digests[0],
+        "artifact_schema_version": declared.get("canonical_artifact_schema_version"),
+        "kind": declared.get("kind"),
+        "hash_algorithm": declared.get("hash_algorithm"),
+        "derived_count": declared.get("union_hash_count"),
+    }
+    return derive_exclusion_reference(
+        repo_root,
+        reference,
         participant=f"stage_m_release[{stage}]",
-        artifact_path=str((entries[0] or {}).get("path")),
-        artifact_sha256=digests[0],
-        derived_count=declared.get("union_hash_count"),
+        label=f"stage_m_release[{stage}]",
     )
 
 
@@ -675,7 +759,7 @@ def validate_native_chain(
     # R2-B / section 7: the same closed contract validator the producer uses. A plan whose
     # digest matches but whose declarations contradict the frozen contract is refused here too.
     try:
-        plan_contract = validate_candidate_plan_contract(plan)
+        plan_contract = validate_candidate_plan_contract(plan, repo_root)
     except Exception as exc:  # normalized into this module's controlled failure type
         raise NativeProvenanceError(f"candidate Stage-M plan contract: {exc}") from exc
 
@@ -716,7 +800,7 @@ def validate_native_chain(
     # R2-A / R3-B: the candidate-M plan, both releases and the two accepted authorities each
     # derive their own view; the comparison then requires the SAME canonical artifact digest
     # and the SAME independently derived count.
-    exclusion_authorities = [plan_exclusion_authority(plan)]
+    exclusion_authorities = [plan_exclusion_authority(plan, repo_root)]
     canonical = canonical_exclusion_authority(repo_root)
     exclusion_authorities.append(canonical["accepted_g"])
     exclusion_authorities.append(canonical["accepted_g2"])
@@ -732,6 +816,7 @@ def validate_native_chain(
             plan=plan,
             plan_sha256=plan_sha256,
             accepted=accepted,
+            repo_root=repo_root,
         )
         planned = _mapping(
             (plan.get("stage_streams") or {}).get(stage), field=f"plan.stage_streams.{stage}"
@@ -752,7 +837,9 @@ def validate_native_chain(
         stored = _int(validation["expected_tokens"], field=f"{stage}.expected_tokens")
         records = [dict(r) for r in validation.get("shard_file_records") or ()]
 
-        exclusion_authorities.append(release_exclusion_authority(manifest, validation, stage=stage))
+        exclusion_authorities.append(
+            release_exclusion_authority(manifest, validation, repo_root, stage=stage)
+        )
         records = [dict(r) for r in validation.get("shard_file_records") or ()]
         _require(
             len(records) == int(validation["expected_shards"]),
