@@ -343,21 +343,60 @@ def test_adjacent_documents_meet_as_eos_then_bos(tmp_path, tok):
 
 
 def test_multiple_documents_share_a_block_and_a_document_spans_blocks(tmp_path, tok):
-    short = [framed_ids(tok, f"tiny {i}") for i in range(40)]
-    total = sum(len(d) for d in short)
-    accounting = stream_accounting("stage_a", total, 8)
-    assert accounting.training_sequences >= 2
+    """Prove both packing properties from the emitted stream, not from arithmetic.
+
+    A block covers ``[i*T, i*T + T)`` of the virtual stream. Each document occupies a known
+    half-open token range, so "several documents share a block" and "a document crosses a block
+    boundary" are both decidable by interval arithmetic against the ranges actually written.
+    """
+    seq_len = 8
+    docs = [framed_ids(tok, f"tiny {i}") for i in range(20)]
+    docs.append(framed_ids(tok, "a deliberately much longer document " * 6))
+    docs += [framed_ids(tok, f"tail {i}") for i in range(20)]
+    total = sum(len(d) for d in docs)
+    accounting = stream_accounting("stage_a", total, seq_len)
+    assert accounting.training_sequences >= 3
+
     packed = pack_stream(
         stage="stage_a",
-        documents=iter(short),
+        documents=iter(docs),
         accounting=accounting,
         directory=tmp_path / "train",
         shard_tokens=32,
     )
-    assert packed.documents == 40
-    # With 8-token blocks and multi-token documents, both properties hold by construction.
-    assert min(len(d) for d in short) < 8 or True
-    assert accounting.model_input_positions == accounting.training_sequences * 8
+    assert packed.documents == len(docs)
+
+    stream = np.concatenate([
+        np.fromfile(tmp_path / "train" / Path(r["path"]).name, dtype=np.uint16)
+        for r in packed.shard_records
+    ]).tolist()
+    assert len(stream) == accounting.retained_stored_token_ids
+
+    ranges, offset = [], 0
+    for ids in docs:
+        start, end = offset, offset + len(ids)
+        offset = end
+        if start < len(stream):
+            ranges.append((start, min(end, len(stream))))
+
+    shared = 0
+    for index in range(accounting.training_sequences):
+        lo, hi = index * seq_len, (index + 1) * seq_len
+        if len([r for r in ranges if r[0] < hi and r[1] > lo]) > 1:
+            shared += 1
+    spanning = sum(1 for start, end in ranges if (start // seq_len) != ((end - 1) // seq_len))
+    assert shared > 0, "no packed block contains more than one document"
+    assert spanning > 0, "no document crosses a block boundary"
+
+    boundaries = [
+        i for i, value in enumerate(stream[:-1]) if value == EOS_ID and stream[i + 1] != EOS_ID
+    ]
+    assert boundaries, "the packed stream has no document boundary to check"
+    for position in boundaries:
+        assert stream[position + 1] == BOS_ID, "a separator token appeared between documents"
+    assert {start for start, _end in ranges} == {
+        i for i, value in enumerate(stream) if value == BOS_ID
+    }
 
 
 @pytest.mark.parametrize("t", [4, 8, 2048])
@@ -559,8 +598,8 @@ def test_record_byte_substitution_in_a_shard_is_rejected(accepted):
     shard = accepted_dir / "documents" / str(binding.shard_inventory[0]["name"])
     payload = shard.read_bytes().replace(b"quick", b"slowl", 1)
     shard.write_bytes(payload)
-    with pytest.raises(StageIInputError, match="SHA-256 changed"):
-        list(iter_accepted_records(binding, verify_shard_bytes=True))
+    with pytest.raises(StageIInputError, match="do not match the accepted manifest digest"):
+        list(iter_accepted_records(binding))
 
 
 # --------------------------------------------------------------------- 13.6 accepted-I binding
@@ -608,15 +647,17 @@ def test_accepted_binding_rejects_an_extra_undeclared_shard(accepted):
         load_accepted_stage_i(accepted_dir)
 
 
-def test_accepted_binding_verifies_shard_bytes_when_asked(accepted):
+def test_accepted_binding_always_verifies_shard_bytes(accepted):
+    """R1-A: the production loader hashes every shard; there is no switch to turn that off."""
     accepted_dir, _records = accepted
     binding = load_accepted_stage_i(accepted_dir)
+    assert binding.shard_bytes_verified is True
     shard = accepted_dir / "documents" / str(binding.shard_inventory[0]["name"])
     data = bytearray(shard.read_bytes())
     data[0:1] = b" "
     shard.write_bytes(bytes(data))
     with pytest.raises(StageIInputError, match="SHA-256 mismatch"):
-        load_accepted_stage_i(accepted_dir, verify_shard_bytes=True)
+        load_accepted_stage_i(accepted_dir)
 
 
 # --------------------------------------------------------------------- 13.7 implementation bytes
@@ -706,6 +747,7 @@ def test_frozen_environment_constants():
         ("python_executable", "/usr/bin/python3"),
         ("python_version", "3.12.1"),
         ("tokenizers_version", "0.21.0"),
+        ("byte_order", "big"),
     ],
 )
 def test_environment_mismatch_is_rejected(field, value):
@@ -714,6 +756,7 @@ def test_environment_mismatch_is_rejected(field, value):
         "python_version": contract.REQUIRED_PYTHON_VERSION,
         "tokenizers_version": contract.REQUIRED_TOKENIZERS_VERSION,
         "numpy_version": "2.2.6",
+        "byte_order": contract.REQUIRED_BYTE_ORDER,
     }
     kwargs[field] = value
     with pytest.raises(contract.StageMError):
@@ -737,6 +780,7 @@ def test_plan_binds_the_running_environment_and_rejects_a_different_one(
         python_version="3.12.1",
         tokenizers_version="0.21.0",
         numpy_version="1.0.0",
+        byte_order="little",
     )
     monkeypatch.setattr(realize, "current_environment", lambda: other)
     with pytest.raises(contract.StageMError, match="environment"):

@@ -1098,17 +1098,16 @@ def _validate_selection_database_evidence(
     }
 
 
-def _validate_full_provenance(
-    *,
+def _validate_reference_release(
     reference_val_dir: str | Path,
-    tokenizer_release_manifest: str | Path,
-    selection_manifest: str | Path,
-    stage_b_selection_stage: str,
-    expected_exclusion_sha256s: tuple[str, ...],
-    stage_a_release: Mapping[str, Any],
-    stage_b_release: Mapping[str, Any],
-    expected_tokenizer_sha256: str,
-) -> dict[str, Any]:
+) -> tuple[dict[str, Any], tuple[str, ...], Mapping[str, Any]]:
+    """Validate the frozen reference-validation release and return its provenance block.
+
+    Extracted verbatim from ``_validate_full_provenance`` so the legacy selector-v1 branch and
+    the accepted-Stage-I-native branch validate the G2 reference release through exactly the
+    same code. Legacy behaviour is unchanged: the caller below still runs it in the same order
+    with the same inputs.
+    """
     reference_release = validate_shard_release(reference_val_dir)
     if reference_release["release_kind"] != "reference" or reference_release["split"] != "val":
         raise RuntimeError("--reference_val_dir must identify the combined reference val split")
@@ -1146,7 +1145,31 @@ def _validate_full_provenance(
         reserve_exclusion_evidence,
         reference_exclusion_sha256s,
     ) = _validate_reference_reserve_evidence(reserve)
+    return (
+        {
+            "release_root": reference_release["release_root"],
+            "manifest_path": str(reference_path),
+            "manifest_sha256": reference_manifest_sha256,
+            "manifest_size_bytes": reference_manifest_size_bytes,
+            "reserve_manifest_path": reserve_evidence["path"],
+            "reserve_manifest_sha256": reserve_evidence["sha256"],
+            "reserve_manifest_size_bytes": reserve_evidence["size_bytes"],
+            "reserve_exclusion_manifest_sha256s": list(reference_exclusion_sha256s),
+            "reserve_exclusion_evidence": reserve_exclusion_evidence,
+        },
+        reference_exclusion_sha256s,
+        reference,
+    )
 
+
+def _validate_tokenizer_release(
+    tokenizer_release_manifest: str | Path,
+) -> tuple[dict[str, Any], tuple[str, ...], str, Path, str]:
+    """Validate the canonical tokenizer release and return its provenance block.
+
+    Extracted verbatim from ``_validate_full_provenance`` for the same reason as
+    :func:`_validate_reference_release`.
+    """
     (
         tokenizer_release_path,
         tokenizer_release,
@@ -1229,6 +1252,48 @@ def _validate_full_provenance(
         expected_sha256=actual_tokenizer_sha256,
         expected_size_bytes=actual_tokenizer_size_bytes,
     )
+    return (
+        {
+            "manifest_path": str(tokenizer_release_path),
+            "manifest_sha256": tokenizer_manifest_sha256,
+            "manifest_size_bytes": tokenizer_manifest_size_bytes,
+            "tokenizer_json_path": str(tokenizer_json_resolved),
+            "tokenizer_sha256": actual_tokenizer_sha256,
+            "tokenizer_size_bytes": actual_tokenizer_size_bytes,
+            "reserve_exclusion_manifest_sha256s": list(tokenizer_exclusion_sha256s),
+            "reserve_exclusion_evidence": tokenizer_exclusion_evidence,
+        },
+        tokenizer_exclusion_sha256s,
+        actual_tokenizer_sha256,
+        tokenizer_json_resolved,
+        tokenizer_release_sha256,
+    )
+
+
+def _validate_full_provenance(
+    *,
+    reference_val_dir: str | Path,
+    tokenizer_release_manifest: str | Path,
+    selection_manifest: str | Path,
+    stage_b_selection_stage: str,
+    expected_exclusion_sha256s: tuple[str, ...],
+    stage_a_release: Mapping[str, Any],
+    stage_b_release: Mapping[str, Any],
+    expected_tokenizer_sha256: str,
+) -> dict[str, Any]:
+    (
+        reference_block,
+        reference_exclusion_sha256s,
+        reference,
+    ) = _validate_reference_release(reference_val_dir)
+
+    (
+        tokenizer_block,
+        tokenizer_exclusion_sha256s,
+        actual_tokenizer_sha256,
+        tokenizer_json_resolved,
+        tokenizer_release_sha256,
+    ) = _validate_tokenizer_release(tokenizer_release_manifest)
 
     (
         selection_path,
@@ -1365,27 +1430,8 @@ def _validate_full_provenance(
     return {
         "full_chain_validated": True,
         "source_bindings": source_bindings,
-        "reference_validation": {
-            "release_root": reference_release["release_root"],
-            "manifest_path": str(reference_path),
-            "manifest_sha256": reference_manifest_sha256,
-            "manifest_size_bytes": reference_manifest_size_bytes,
-            "reserve_manifest_path": reserve_evidence["path"],
-            "reserve_manifest_sha256": reserve_evidence["sha256"],
-            "reserve_manifest_size_bytes": reserve_evidence["size_bytes"],
-            "reserve_exclusion_manifest_sha256s": list(reference_exclusion_sha256s),
-            "reserve_exclusion_evidence": reserve_exclusion_evidence,
-        },
-        "tokenizer_release": {
-            "manifest_path": str(tokenizer_release_path),
-            "manifest_sha256": tokenizer_manifest_sha256,
-            "manifest_size_bytes": tokenizer_manifest_size_bytes,
-            "tokenizer_json_path": str(tokenizer_json_resolved),
-            "tokenizer_sha256": actual_tokenizer_sha256,
-            "tokenizer_size_bytes": actual_tokenizer_size_bytes,
-            "reserve_exclusion_manifest_sha256s": list(tokenizer_exclusion_sha256s),
-            "reserve_exclusion_evidence": tokenizer_exclusion_evidence,
-        },
+        "reference_validation": reference_block,
+        "tokenizer_release": tokenizer_block,
         "selection": {
             "stage_b_selection_stage": stage_b_selection_stage,
             "manifest_path": str(selection_path),
@@ -1665,9 +1711,10 @@ def build_run_plan(
         )
     _native_inputs = (accepted_stage_i_dir, candidate_m_plan, expected_candidate_m_plan_sha256)
     if provenance_chain_kind == NATIVE_CHAIN_KIND:
-        # The reference-validation release and the tokenizer release are H/I-native artefacts
-        # (G2 and G) and remain valid inputs. Only the selection manifest is selector-v1-only,
-        # and supplying one here would be branch mixing.
+        # R1-B. The reference-validation release (G2) and the tokenizer release (G) are
+        # H/I-native artefacts and are *required* on this branch: the native chain must supply
+        # everything strict reference/tokenizer validation needs without ever creating a legacy
+        # selection manifest. Only the selector-v1 selection manifest is forbidden here.
         if selection_manifest is not None:
             raise ValueError(
                 "native provenance must not be given a legacy selector-v1 selection_manifest"
@@ -1677,10 +1724,21 @@ def build_run_plan(
                 "accepted_stage_i_dir, candidate_m_plan and expected_candidate_m_plan_sha256 "
                 "must be supplied together for the native provenance chain"
             )
+        missing_shared = [
+            name
+            for name, value in (
+                ("reference_val_dir", reference_val_dir),
+                ("tokenizer_release_manifest", tokenizer_release_manifest),
+            )
+            if value is None
+        ]
+        if missing_shared:
+            raise ValueError(
+                "native provenance requires the frozen reference-validation and tokenizer "
+                f"release authorities: missing {missing_shared}"
+            )
     elif any(value is not None for value in _native_inputs):
-        raise ValueError(
-            "legacy provenance must not be given accepted Stage-I native inputs"
-        )
+        raise ValueError("legacy provenance must not be given accepted Stage-I native inputs")
     seq_len = _positive_int("seq_len", seq_len)
     micro_bsz = _positive_int("micro_bsz", micro_bsz)
     grad_accum = _positive_int("grad_accum", grad_accum)
@@ -1771,8 +1829,12 @@ def build_run_plan(
         tokenizer_release_manifest,
         selection_manifest,
     )
-    if any(value is not None for value in provenance_inputs) and not all(
-        value is not None for value in provenance_inputs
+    # R1-B: the all-or-nothing triple is a *legacy* requirement. The native branch has its own
+    # required-input rule (accepted-I + candidate-M plan + digest, plus the G/G2 authorities,
+    # and never a selection manifest), checked at the top of this function.
+    if provenance_chain_kind != NATIVE_CHAIN_KIND and (
+        any(value is not None for value in provenance_inputs)
+        and not all(value is not None for value in provenance_inputs)
     ):
         raise ValueError(
             "reference_val_dir, tokenizer_release_manifest, and selection_manifest "
@@ -1792,18 +1854,66 @@ def build_run_plan(
             candidate_m_plan=Path(candidate_m_plan),
             expected_candidate_m_plan_sha256=str(expected_candidate_m_plan_sha256),
             stage_releases={"stage_a": stage_a_path.parent, "stage_b": stage_b_path.parent},
-            reference_val_dir=(
-                Path(reference_val_dir) if reference_val_dir is not None else None
-            ),
-            tokenizer_release_manifest=(
-                Path(tokenizer_release_manifest)
-                if tokenizer_release_manifest is not None
-                else None
-            ),
         )
         if native.get("full_chain_validated") is not True:
             raise RuntimeError("native provenance chain did not validate")
+
+        # R1-B. The same frozen validators the legacy branch uses, so the native branch gets
+        # the full G2 reserve provenance and G tokenizer-release authority without a selection
+        # manifest. These are the blocks strict reference/tokenizer validation consumes later.
+        assert reference_val_dir is not None
+        assert tokenizer_release_manifest is not None
+        (
+            native_reference_block,
+            native_reference_exclusion_sha256s,
+            native_reference_manifest,
+        ) = _validate_reference_release(reference_val_dir)
+        (
+            native_tokenizer_block,
+            native_tokenizer_exclusion_sha256s,
+            native_tokenizer_sha256,
+            _native_tokenizer_json,
+            _native_tokenizer_declared_sha256,
+        ) = _validate_tokenizer_release(tokenizer_release_manifest)
+
+        differing = {
+            name: values
+            for name, values in (
+                ("Stage A/B shards", stage_a_exclusion_sha256s),
+                ("reference validation", native_reference_exclusion_sha256s),
+                ("tokenizer release", native_tokenizer_exclusion_sha256s),
+            )
+            if values != stage_a_exclusion_sha256s
+        }
+        if differing:
+            raise RuntimeError(
+                "native chain reference reserve exclusion manifest SHA sets disagree: "
+                + ", ".join(f"{name}={values}" for name, values in differing.items())
+            )
+        native_reference_tokenizer_sha256 = _require_sha256(
+            native_reference_manifest.get("tokenizer_sha256"),
+            field="reference validation release manifest.tokenizer_sha256",
+        )
+        tokenizer_disagreements = {
+            name: value
+            for name, value in (
+                ("Stage A/B shards", stage_a_tokenizer_sha256),
+                ("reference validation", native_reference_tokenizer_sha256),
+                ("tokenizer release", native_tokenizer_sha256),
+                ("candidate M plan", str(native["shared_tokenizer_sha256"])),
+            )
+            if value != stage_a_tokenizer_sha256
+        }
+        if tokenizer_disagreements:
+            raise RuntimeError(
+                "native chain tokenizer SHA-256 values disagree: "
+                + ", ".join(f"{name}={value}" for name, value in tokenizer_disagreements.items())
+            )
+
         release_provenance.update(native)
+        release_provenance["reference_validation"] = native_reference_block
+        release_provenance["tokenizer_release"] = native_tokenizer_block
+        release_provenance["native_shared_authority_validated"] = True
         full_chain_validated = True
     else:
         full_chain_validated = all(value is not None for value in provenance_inputs)

@@ -131,6 +131,20 @@ class AcceptedStageI:
             },
         }
 
+    def require_physically_verified(self, context: str) -> None:
+        """Refuse to let an unverified binding reach a production path.
+
+        ``shard_bytes_verified`` is only ever True when every declared shard was hashed from
+        disk. The diagnostic loader cannot set it, so a diagnostic binding cannot derive an
+        authorizable plan, resolve an authorization, consume input for publication, or feed the
+        Stage-P native chain.
+        """
+        _require(
+            self.shard_bytes_verified,
+            f"{context}: refusing an accepted Stage-I binding whose {self.shard_count} shard "
+            "files were not physically verified against their authoritative SHA-256 digests",
+        )
+
     def identity_sha256(self) -> str:
         """One digest over the whole accepted binding, inventory and digests included."""
         from pretrain.stage_m_contract_v1 import canonical_sha256
@@ -161,15 +175,79 @@ def load_accepted_stage_i(
     expected_records: int | None = None,
     expected_serialized_tokens: int | None = None,
     expected_shard_count: int | None = None,
-    verify_shard_bytes: bool = False,
 ) -> AcceptedStageI:
-    """Bind and revalidate an accepted Stage-I publication from disk.
+    """Bind an accepted Stage-I publication, hashing every declared shard file from disk.
+
+    D-147 requires the whole publication to be bound, not only its top-level hashes, so this
+    function always re-reads and re-hashes all declared shards. There is deliberately no
+    ``verify_shard_bytes`` switch: a boolean whose default is False is exactly how physical
+    validation silently stops happening on the production path.
 
     Every expectation the caller supplies is checked against freshly read bytes. Passing none
     of them still validates internal consistency: the completion object must agree with the
-    manifest it names, the inventory must be exactly the files present, and the declared totals
-    must equal the summed inventory.
+    manifest it names, the inventory must be exactly the files present, the declared totals
+    must equal the summed inventory, and every shard's bytes must hash to its manifest digest.
+
+    Use :func:`inspect_accepted_stage_i_metadata_only` for cheap diagnostics; the binding it
+    returns cannot reach any production path.
     """
+    return _load_accepted_stage_i(
+        run_dir,
+        expected_run_identity=expected_run_identity,
+        expected_manifest_sha256=expected_manifest_sha256,
+        expected_completion_sha256=expected_completion_sha256,
+        expected_layer2_sha256=expected_layer2_sha256,
+        expected_records=expected_records,
+        expected_serialized_tokens=expected_serialized_tokens,
+        expected_shard_count=expected_shard_count,
+        verify_shard_bytes=True,
+    )
+
+
+def inspect_accepted_stage_i_metadata_only(
+    run_dir: Path,
+    *,
+    expected_run_identity: str | None = None,
+    expected_manifest_sha256: str | None = None,
+    expected_completion_sha256: str | None = None,
+    expected_layer2_sha256: str | None = None,
+    expected_records: int | None = None,
+    expected_serialized_tokens: int | None = None,
+    expected_shard_count: int | None = None,
+) -> AcceptedStageI:
+    """Diagnostic-only binding that skips per-shard hashing.
+
+    Everything except the shard-byte digests is still checked. The result carries
+    ``shard_bytes_verified=False``, and every production entry point calls
+    :meth:`AcceptedStageI.require_physically_verified`, so this binding cannot derive or
+    authorize a candidate plan, publish Stage-M output, or yield ``full_chain_validated``.
+    """
+    return _load_accepted_stage_i(
+        run_dir,
+        expected_run_identity=expected_run_identity,
+        expected_manifest_sha256=expected_manifest_sha256,
+        expected_completion_sha256=expected_completion_sha256,
+        expected_layer2_sha256=expected_layer2_sha256,
+        expected_records=expected_records,
+        expected_serialized_tokens=expected_serialized_tokens,
+        expected_shard_count=expected_shard_count,
+        verify_shard_bytes=False,
+    )
+
+
+def _load_accepted_stage_i(
+    run_dir: Path,
+    *,
+    expected_run_identity: str | None = None,
+    expected_manifest_sha256: str | None = None,
+    expected_completion_sha256: str | None = None,
+    expected_layer2_sha256: str | None = None,
+    expected_records: int | None = None,
+    expected_serialized_tokens: int | None = None,
+    expected_shard_count: int | None = None,
+    verify_shard_bytes: bool,
+) -> AcceptedStageI:
+    """Shared implementation. Private: the two public spellings above are the whole API."""
     run_dir = Path(run_dir).expanduser().resolve()
     _require(run_dir.is_dir(), f"accepted Stage-I run directory is missing: {run_dir}")
 
@@ -427,27 +505,32 @@ def validate_record(raw: object, *, label: str) -> dict[str, Any]:
 
 
 def iter_accepted_records(
-    accepted: AcceptedStageI, *, verify_shard_bytes: bool = False
+    accepted: AcceptedStageI,
 ) -> Iterator[tuple[str, dict[str, Any]]]:
     """Stream ``(stage, record)`` in the accepted Stage-I physical order, bounded memory.
 
     The iteration order is the manifest's declared shard inventory order and, within a shard,
     file order. That *is* the accepted physical order, so per-stage relative order follows by
     construction: filtering a sequence never reorders what it keeps.
+
+    Every shard is re-hashed while it is read and compared to its manifest digest at end of
+    file. Hashing at bind time proves what was there when the binding was made; hashing again
+    while consuming proves the bytes actually consumed are those same bytes, which is what
+    catches a replacement between authorization and use.
     """
     import hashlib
 
+    accepted.require_physically_verified("streaming accepted Stage-I records")
     documents_dir = accepted.run_dir / DOCUMENTS_DIRNAME
     seen_records = 0
     for entry in accepted.shard_inventory:
         name = str(entry["name"])
         path = documents_dir / name
-        digest = hashlib.sha256() if verify_shard_bytes else None
+        digest = hashlib.sha256()
         shard_records = 0
         with open(path, "rb") as handle:
             for line_no, raw_line in enumerate(handle):
-                if digest is not None:
-                    digest.update(raw_line)
+                digest.update(raw_line)
                 stripped = raw_line.strip()
                 if not stripped:
                     raise StageIInputError(f"{name}:{line_no + 1}: blank line in a Stage-I shard")
@@ -464,8 +547,11 @@ def iter_accepted_records(
                 f"{name}: record count mismatch: actual={shard_records}, "
                 f"manifest={entry['records']}"
             )
-        if digest is not None and digest.hexdigest() != str(entry["sha256"]):
-            raise StageIInputError(f"{name}: shard SHA-256 changed during the streaming read")
+        if digest.hexdigest() != str(entry["sha256"]):
+            raise StageIInputError(
+                f"{name}: shard bytes do not match the accepted manifest digest during the "
+                "streaming read"
+            )
     if seen_records != accepted.total_records:
         raise StageIInputError(
             f"streamed {seen_records} records, accepted publication declares "
@@ -474,7 +560,7 @@ def iter_accepted_records(
 
 
 def derive_input_sequence_commitments(
-    accepted: AcceptedStageI, *, verify_shard_bytes: bool = False
+    accepted: AcceptedStageI,
 ) -> dict[str, InputSequenceCommitment]:
     """One bounded-memory streaming pass producing both per-stage commitments.
 
@@ -483,10 +569,11 @@ def derive_input_sequence_commitments(
     membership, so a commitment can never be sealed over a stream that silently lost or gained
     records relative to what Stage I published.
     """
+    accepted.require_physically_verified("deriving input sequence commitments")
     commitments = {stage: InputSequenceCommitment(stage) for stage in STAGE_STREAMS}
     ordinals = dict.fromkeys(STAGE_STREAMS, 0)
 
-    for stage, record in iter_accepted_records(accepted, verify_shard_bytes=verify_shard_bytes):
+    for stage, record in iter_accepted_records(accepted):
         ordinal = ordinals[stage]
         payload = canonical_record_commitment_payload(
             stage=stage,
@@ -549,6 +636,7 @@ __all__ = [
     "StageIInputError",
     "commitments_as_canonical",
     "derive_input_sequence_commitments",
+    "inspect_accepted_stage_i_metadata_only",
     "iter_accepted_records",
     "load_accepted_stage_i",
     "validate_record",

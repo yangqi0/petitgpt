@@ -20,6 +20,67 @@ STAGE_B_SELECTION_STAGES = ("stage_b", "control")
 NATIVE_CHAIN_KIND = "accepted_stage_i_native_v1"
 LEGACY_CHAIN_KIND = "legacy_selector_v1"
 PROVENANCE_CHAIN_KINDS = (NATIVE_CHAIN_KIND, LEGACY_CHAIN_KIND)
+NATIVE_PROVENANCE_SCHEMA = "petitgpt-accepted-stage-i-native-release-provenance-v1"
+NATIVE_IMMUTABLE_IDENTITY_SCHEMA = "petitgpt-stage-p-native-data-branch-identity-v1"
+NATIVE_CHAIN_IDENTITY_SCHEMA = "petitgpt-stage-i-native-chain-identity-v1"
+# Mirrors pretrain/stage_p_native_provenance_v1.NATIVE_CHAIN_IDENTITY_FIELDS; the two lists are
+# pinned to each other by tests/test_stage_m_p_repair_r1.py.
+NATIVE_CHAIN_IDENTITY_FIELDS = (
+    "accepted_stage_i",
+    "accepted_stage_i_identity_sha256",
+    "candidate_m_plan_schema",
+    "candidate_m_plan_sha256",
+    "model_contract",
+    "provenance_chain_kind",
+    "schema_version",
+    "shared_tokenizer_sha256",
+    "stage_m_implementation_bundle_sha256",
+    "stage_m_ordering_policy",
+    "stage_p_native_validator_bundle_sha256",
+    "stages",
+)
+
+# Serialized objects that only ever exist on the legacy selector-v1 branch. Derived from what
+# `_validate_full_provenance` actually emits plus the legacy CLI artifacts, not from flag names.
+NATIVE_FORBIDDEN_PROVENANCE_FIELDS = (
+    "selection",
+    "source_bindings",
+    "selection_manifest",
+    "selection_manifest_sha256",
+    "selection_registry",
+    "selection_audit",
+    "selection_database",
+    "sqlite_registry",
+    "selected_jsonl",
+    "selection_spec",
+)
+
+# Top-level objects a native provenance block must carry. Absence is a controlled failure, not
+# a reason to fall back to the legacy branch.
+NATIVE_REQUIRED_PROVENANCE_FIELDS = (
+    "accepted_stage_i",
+    "accepted_stage_i_identity_sha256",
+    "candidate_m_plan_schema",
+    "candidate_m_plan_sha256",
+    "model_contract",
+    "native_chain_identity_sha256",
+    "schema_version",
+    "shared_tokenizer_sha256",
+    "stage_m_implementation_bundle_sha256",
+    "stage_m_ordering_policy",
+    "stage_p_native_validator_bundle_sha256",
+    "stages",
+)
+
+NATIVE_REQUIRED_STAGE_FIELDS = (
+    "expected_accounting",
+    "input_sequence_commitment",
+    "manifest_sha256",
+    "release_dir",
+    "shard_inventory_sha256",
+    "shards",
+    "stored_token_ids",
+)
 
 
 def _mapping(value: Any, *, field: str) -> Mapping[str, Any]:
@@ -77,23 +138,182 @@ def _data_branch_immutable_sha256(plan: Mapping[str, Any]) -> str:
     inputs = _mapping(normalized.get("inputs"), field="inputs")
     provenance = _mapping(normalized.get("release_provenance"), field="release_provenance")
     stages = _mapping(normalized.get("stages"), field="stages")
-    source_bindings = _mapping(
-        provenance.get("source_bindings"), field="release_provenance.source_bindings"
-    )
-    selection = _mapping(provenance.get("selection"), field="release_provenance.selection")
     marker = "<validated-stage-b-data-branch>"
     inputs["stage_b_dir"] = marker
     inputs["stage_b_selection_stage"] = marker
     provenance["stage_b_selection_stage"] = marker
     provenance["stage_b"] = marker
-    source_bindings["stage_b_selection_stage"] = marker
-    source_bindings["stage_b"] = marker
-    selection["stage_b_selection_stage"] = marker
+    # R1-C: branch-aware. A native plan has no selection/source_bindings objects and must not be
+    # asked for them; a legacy plan is masked exactly as before, so its digest is unchanged.
+    if provenance.get("provenance_chain_kind", LEGACY_CHAIN_KIND) == NATIVE_CHAIN_KIND:
+        native_stages = _mapping(provenance.get("stages"), field="release_provenance.stages")
+        native_stages["stage_b"] = marker
+    else:
+        source_bindings = _mapping(
+            provenance.get("source_bindings"), field="release_provenance.source_bindings"
+        )
+        selection = _mapping(provenance.get("selection"), field="release_provenance.selection")
+        source_bindings["stage_b_selection_stage"] = marker
+        source_bindings["stage_b"] = marker
+        selection["stage_b_selection_stage"] = marker
     stages["stage_b"] = marker
     normalized["totals"] = marker
     return hashlib.sha256(
         json.dumps(normalized, sort_keys=True, separators=(",", ":")).encode("utf-8")
     ).hexdigest()
+
+
+def _canonical_json_bytes(value: Any) -> bytes:
+    """Byte-for-byte the encoding pretrain/stage_m_contract_v1.py uses.
+
+    Restated here rather than imported so this launch-path module keeps its zero local-import
+    surface; tests/test_stage_p_native_provenance_v1.py pins the two encoders to each other.
+    """
+    return (
+        json.dumps(
+            value, ensure_ascii=False, sort_keys=True, separators=(",", ":"), allow_nan=False
+        )
+        + "\n"
+    ).encode("utf-8")
+
+
+def native_chain_identity_sha256(provenance: Mapping[str, Any]) -> str:
+    """Recompute the native chain identity over everything but the compatibility boolean.
+
+    This is the mechanism that makes ``full_chain_validated`` non-authoritative: the digest is
+    derived from the provenance object's own contents, so a caller cannot assert a validated
+    chain by flipping a flag -- every field the validator committed to has to still be there,
+    unchanged.
+    """
+    payload = {
+        "schema_version": NATIVE_CHAIN_IDENTITY_SCHEMA,
+        "fields": {name: provenance.get(name) for name in NATIVE_CHAIN_IDENTITY_FIELDS},
+    }
+    return hashlib.sha256(_canonical_json_bytes(payload)).hexdigest()
+
+
+def native_data_branch_identity_sha256(provenance: Mapping[str, Any]) -> str:
+    """Versioned canonical identity of the complete native data authority.
+
+    Binds exactly the native provenance fields that decide what data a training plan is about:
+    the chain kind and schema, the accepted Stage-I identity, the candidate-M plan identity,
+    both Stage-M release identities and their shard inventories, the per-stage input sequence
+    commitments and accounting, the tokenizer/reference authorities and the validator
+    identities. No legacy-only object is included for compatibility.
+    """
+    stages = _mapping(provenance.get("stages"), field="release_provenance.stages")
+    projection = {
+        "schema_version": NATIVE_IMMUTABLE_IDENTITY_SCHEMA,
+        "provenance_chain_kind": provenance.get("provenance_chain_kind"),
+        "native_provenance_schema": provenance.get("schema_version"),
+        "accepted_stage_i_identity_sha256": provenance.get("accepted_stage_i_identity_sha256"),
+        "accepted_stage_i": provenance.get("accepted_stage_i"),
+        "candidate_m_plan_schema": provenance.get("candidate_m_plan_schema"),
+        "candidate_m_plan_sha256": provenance.get("candidate_m_plan_sha256"),
+        "stage_m_implementation_bundle_sha256": provenance.get(
+            "stage_m_implementation_bundle_sha256"
+        ),
+        "stage_m_ordering_policy": provenance.get("stage_m_ordering_policy"),
+        "stage_p_native_validator_bundle_sha256": provenance.get(
+            "stage_p_native_validator_bundle_sha256"
+        ),
+        "shared_tokenizer_sha256": provenance.get("shared_tokenizer_sha256"),
+        "model_contract": provenance.get("model_contract"),
+        "native_chain_identity_sha256": provenance.get("native_chain_identity_sha256"),
+        "reference_validation": provenance.get("reference_validation"),
+        "tokenizer_release": provenance.get("tokenizer_release"),
+        "stages": {
+            stage: {
+                key: _mapping(stages.get(stage), field=f"release_provenance.stages.{stage}").get(
+                    key
+                )
+                for key in NATIVE_REQUIRED_STAGE_FIELDS
+            }
+            for stage in sorted(stages)
+        },
+    }
+    return hashlib.sha256(_canonical_json_bytes(projection)).hexdigest()
+
+
+def validate_native_provenance_object(provenance: Mapping[str, Any]) -> str:
+    """Fully validate a native provenance block and return its data-branch identity.
+
+    ``full_chain_validated`` is checked *last* and only as a consistency field: everything it
+    claims has already had to be proved by the checks above it.
+    """
+    intruders = [name for name in NATIVE_FORBIDDEN_PROVENANCE_FIELDS if name in provenance]
+    if intruders:
+        raise RuntimeError(
+            f"native run plan carries legacy selector-v1 provenance objects: {intruders}"
+        )
+    if provenance.get("schema_version") != NATIVE_PROVENANCE_SCHEMA:
+        raise RuntimeError(
+            "native run plan release_provenance.schema_version must be "
+            f"{NATIVE_PROVENANCE_SCHEMA!r}, got {provenance.get('schema_version')!r}"
+        )
+    missing = [name for name in NATIVE_REQUIRED_PROVENANCE_FIELDS if provenance.get(name) is None]
+    if missing:
+        raise RuntimeError(f"native run plan release_provenance is missing {missing}")
+
+    _sha256(
+        provenance.get("candidate_m_plan_sha256"),
+        field="release_provenance.candidate_m_plan_sha256",
+    )
+    _sha256(
+        provenance.get("stage_m_implementation_bundle_sha256"),
+        field="release_provenance.stage_m_implementation_bundle_sha256",
+    )
+    _sha256(
+        provenance.get("stage_p_native_validator_bundle_sha256"),
+        field="release_provenance.stage_p_native_validator_bundle_sha256",
+    )
+    _sha256(
+        provenance.get("accepted_stage_i_identity_sha256"),
+        field="release_provenance.accepted_stage_i_identity_sha256",
+    )
+    accepted = _mapping(
+        provenance.get("accepted_stage_i"), field="release_provenance.accepted_stage_i"
+    )
+    for field in (
+        "run_identity",
+        "manifest_sha256",
+        "completion_object_sha256",
+        "layer2_expected_result_sha256",
+    ):
+        _sha256(accepted.get(field), field=f"release_provenance.accepted_stage_i.{field}")
+    if not isinstance(accepted.get("shard_inventory"), list) or not accepted["shard_inventory"]:
+        raise RuntimeError("native run plan accepted_stage_i.shard_inventory must be non-empty")
+
+    stages = _mapping(provenance.get("stages"), field="release_provenance.stages")
+    if sorted(stages) != list(RUN_PLAN_STAGES):
+        raise RuntimeError(
+            f"native run plan must bind exactly {list(RUN_PLAN_STAGES)}, got {sorted(stages)}"
+        )
+    for stage in RUN_PLAN_STAGES:
+        entry = _mapping(stages.get(stage), field=f"release_provenance.stages.{stage}")
+        absent = [name for name in NATIVE_REQUIRED_STAGE_FIELDS if entry.get(name) is None]
+        if absent:
+            raise RuntimeError(f"native run plan stages.{stage} is missing {absent}")
+        _sha256(entry.get("manifest_sha256"), field=f"stages.{stage}.manifest_sha256")
+        _sha256(entry.get("shard_inventory_sha256"), field=f"stages.{stage}.shard_inventory_sha256")
+        _sha256(
+            entry.get("input_sequence_commitment"),
+            field=f"stages.{stage}.input_sequence_commitment",
+        )
+        _integer(entry.get("shards"), field=f"stages.{stage}.shards", positive=True)
+        _integer(
+            entry.get("stored_token_ids"), field=f"stages.{stage}.stored_token_ids", positive=True
+        )
+
+    recomputed = native_chain_identity_sha256(provenance)
+    if recomputed != provenance.get("native_chain_identity_sha256"):
+        raise RuntimeError(
+            "native run plan release_provenance was modified after validation: "
+            f"recomputed={recomputed}, declared={provenance.get('native_chain_identity_sha256')}"
+        )
+    if provenance.get("full_chain_validated") is not True:
+        raise RuntimeError("native run plan release_provenance.full_chain_validated must be true")
+    return native_data_branch_identity_sha256(provenance)
 
 
 def validate_run_plan_args(args: argparse.Namespace) -> None:
@@ -178,26 +398,17 @@ def load_run_plan_binding(
             f"unsupported release_provenance.provenance_chain_kind: {provenance_chain_kind!r}"
         )
     native_chain = provenance_chain_kind == NATIVE_CHAIN_KIND
+    native_data_branch_identity: str | None = None
     if native_chain:
-        if provenance.get("selection") is not None or provenance.get("source_bindings") is not None:
-            raise RuntimeError(
-                "native provenance must not carry legacy selection/source_bindings objects"
-            )
+        # R1-E / R1-C. The whole native provenance object is validated -- schema, required
+        # fields, identities, both release bindings -- and its self-derived chain identity is
+        # recomputed, before full_chain_validated is even looked at.
+        native_data_branch_identity = validate_native_provenance_object(provenance)
+        native_stages = _mapping(provenance.get("stages"), field="release_provenance.stages")
         selection_manifest_sha256 = _sha256(
             provenance.get("candidate_m_plan_sha256"),
             field="release_provenance.candidate_m_plan_sha256",
         )
-        _sha256(
-            provenance.get("stage_m_implementation_bundle_sha256"),
-            field="release_provenance.stage_m_implementation_bundle_sha256",
-        )
-        _sha256(
-            provenance.get("accepted_stage_i_identity_sha256"),
-            field="release_provenance.accepted_stage_i_identity_sha256",
-        )
-        native_stages = _mapping(provenance.get("stages"), field="release_provenance.stages")
-        if sorted(native_stages) != ["stage_a", "stage_b"]:
-            raise RuntimeError("native provenance must bind exactly stage_a and stage_b releases")
         source_bindings = {
             "validated": True,
             "stage_b_selection_stage": stage_b_selection_stage,
@@ -501,6 +712,8 @@ def load_run_plan_binding(
         "schedule_total_steps": schedule_total,
         "expected_stage_samples": expected_samples,
         "data_branch_immutable_sha256": _data_branch_immutable_sha256(plan),
+        "provenance_chain_kind": provenance_chain_kind,
+        "native_data_branch_identity_sha256": native_data_branch_identity,
         "data_branch_validation": None,
         "selection_manifest_sha256": selection_manifest_sha256,
         "sequences_per_optimizer_step": sequences_per_step,
@@ -684,6 +897,10 @@ def _record_validated_data_branch(
         "plan_schema_version",
         "plan_type",
         "data_branch_immutable_sha256",
+        # R1-C: for a native plan the immutable data authority is this identity; for a legacy
+        # plan it is None on both sides, so the comparison is a no-op there.
+        "provenance_chain_kind",
+        "native_data_branch_identity_sha256",
         "schedule_total_steps",
         "tokenizer_sha256",
         "reference_release_manifest_sha256",

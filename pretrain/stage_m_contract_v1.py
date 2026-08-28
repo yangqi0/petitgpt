@@ -371,6 +371,14 @@ class InputSequenceCommitment:
 REQUIRED_PYTHON_EXECUTABLE = "/workspace/petitgpt/.venv/bin/python"
 REQUIRED_PYTHON_VERSION = "3.10.12"
 REQUIRED_TOKENIZERS_VERSION = "0.22.2"
+# R1-G. Stage-M writes uint16 shards and the frozen schema-3 consumer reads them back with
+# numpy's *native* uint16, so producer and consumer only agree while the host is
+# little-endian. Rather than change the canonical `dtype: "uint16"` spelling that existing
+# schema-3 consumers already assume, the byte order is made explicit and bound: the writer
+# emits explicit little-endian "<u2" and the environment contract refuses to run anywhere the
+# native order is not little. On a big-endian host M-v1 production stops instead of silently
+# producing shards the reader would byte-swap.
+REQUIRED_BYTE_ORDER = "little"
 
 
 @dataclass(frozen=True)
@@ -385,6 +393,7 @@ class Environment:
     python_version: str
     tokenizers_version: str
     numpy_version: str
+    byte_order: str
 
     def as_canonical(self) -> dict[str, str]:
         return {
@@ -392,6 +401,7 @@ class Environment:
             "python_version": self.python_version,
             "tokenizers_version": self.tokenizers_version,
             "numpy_version": self.numpy_version,
+            "byte_order": self.byte_order,
         }
 
 
@@ -404,6 +414,7 @@ def current_environment() -> Environment:
         python_version=platform.python_version(),
         tokenizers_version=str(tokenizers.__version__),
         numpy_version=str(numpy.__version__),
+        byte_order=sys.byteorder,
     )
 
 
@@ -420,6 +431,11 @@ def verify_environment(environment: Environment) -> None:
         environment.tokenizers_version == REQUIRED_TOKENIZERS_VERSION,
         f"Stage-M requires tokenizers {REQUIRED_TOKENIZERS_VERSION}, "
         f"got {environment.tokenizers_version}",
+    )
+    require(
+        environment.byte_order == REQUIRED_BYTE_ORDER,
+        f"Stage-M v1 canonical uint16 output requires a {REQUIRED_BYTE_ORDER}-endian runtime, "
+        f"got {environment.byte_order}",
     )
 
 
@@ -494,6 +510,8 @@ RELEASE_PROFILE = MappingProxyType({
     "manifest_filename": "meta.json",
     "completion_object_kind": "meta.json:status=complete",
     "storage_dtype": "uint16",
+    "storage_byte_order": REQUIRED_BYTE_ORDER,
+    "storage_dtype_explicit": "<u2",
     "shard_basename_format": "shard_{index:05d}.bin",
     "split": "train",
     "stage_streams": list(STAGE_STREAMS),
@@ -534,6 +552,7 @@ __all__ = [
     "RELEASE_PROFILE",
     "RELEASE_PROFILE_SCHEMA",
     "SEQ_LEN",
+    "REQUIRED_BYTE_ORDER",
     "REQUIRED_PYTHON_EXECUTABLE",
     "REQUIRED_PYTHON_VERSION",
     "REQUIRED_TOKENIZERS_VERSION",

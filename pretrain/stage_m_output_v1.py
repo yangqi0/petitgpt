@@ -42,6 +42,7 @@ if ROOT not in sys.path:
 
 from pretrain.dataset_pretrain import validate_shard_release  # noqa: E402
 from pretrain.stage_m_contract_v1 import (  # noqa: E402
+    REQUIRED_BYTE_ORDER,
     StreamAccounting,
     canonical_json_bytes,
     file_sha256,
@@ -49,7 +50,10 @@ from pretrain.stage_m_contract_v1 import (  # noqa: E402
 )
 from src.special_tokens import BOS_ID, CANONICAL_VOCAB_SIZE, EOS_ID, SPECIAL_TOKEN_IDS  # noqa: E402
 
-STORAGE_DTYPE = np.uint16
+# R1-G: explicit little-endian, so the emitted bytes are defined by the dtype rather than by
+# the host. The environment contract additionally refuses a non-little-endian runtime, which is
+# what keeps this in agreement with the frozen schema-3 reader's native uint16.
+STORAGE_DTYPE = np.dtype("<u2")
 DEFAULT_SHARD_TOKENS = 10_000_000
 SPLIT = "train"
 MANIFEST_FILENAME = "meta.json"
@@ -104,6 +108,11 @@ class ShardWriter:
 
     def __post_init__(self) -> None:
         require_int(self.shard_tokens, field="shard_tokens", minimum=1)
+        _require(
+            sys.byteorder == REQUIRED_BYTE_ORDER,
+            f"Stage-M v1 canonical output requires a {REQUIRED_BYTE_ORDER}-endian runtime, "
+            f"got {sys.byteorder}",
+        )
         self.directory.mkdir(parents=True, exist_ok=True)
 
     def extend(self, ids: Sequence[int]) -> None:
@@ -127,7 +136,7 @@ class ShardWriter:
             os.fsync(handle.fileno())
         size_bytes = int(path.stat().st_size)
         _require(
-            size_bytes == count * STORAGE_DTYPE().itemsize,
+            size_bytes == count * STORAGE_DTYPE.itemsize,
             f"{name}: byte geometry mismatch after write",
         )
         self.records.append({
@@ -143,6 +152,9 @@ class ShardWriter:
         if self._buffer:
             self._flush(len(self._buffer))
         _require(self.records, "release must contain at least one shard")
+        # R1-F: every shard file's bytes are already fsynced; this persists the directory
+        # entries that name them.
+        fsync_dir(self.directory)
 
     @property
     def total_tokens(self) -> int:
@@ -323,12 +335,22 @@ def write_failure_marker(directory: Path, reason: str) -> None:
         os.fsync(handle.fileno())
 
 
-def _fsync_dir(path: Path) -> None:
+def fsync_dir(path: Path) -> None:
+    """Durably persist a directory entry, so a created file is findable after a crash.
+
+    Writing and fsyncing a file persists its *contents*; the directory entry that names it is a
+    separate write. R1-F: the nested ``train/`` directory holding the shards must be synced
+    after the shards are finalized, before the staging root is synced and before the rename
+    that publishes the release.
+    """
     fd = os.open(str(path), os.O_RDONLY)
     try:
         os.fsync(fd)
     finally:
         os.close(fd)
+
+
+_fsync_dir = fsync_dir
 
 
 def publish_release_atomic(staging: Path, destination: Path) -> Path:
@@ -339,14 +361,18 @@ def publish_release_atomic(staging: Path, destination: Path) -> Path:
         f"refusing to replace an existing Stage-M release: {destination}",
     )
     destination.parent.mkdir(parents=True, exist_ok=True)
-    _fsync_dir(staging)
+    # R1-F ordering: nested shard directories first (deepest first), then the staging root,
+    # then the rename, then the destination's parent.
+    for child in sorted(p for p in staging.iterdir() if p.is_dir()):
+        fsync_dir(child)
+    fsync_dir(staging)
     try:
         os.rename(str(staging), str(destination))
     except OSError as exc:
         raise StageMOutputError(
             f"atomic publication failed: {staging} -> {destination}: {exc}"
         ) from exc
-    _fsync_dir(destination.parent)
+    fsync_dir(destination.parent)
     return destination
 
 
@@ -424,6 +450,7 @@ __all__ = [
     "build_release_meta",
     "canonical_contract_block",
     "discard_staging",
+    "fsync_dir",
     "pack_stream",
     "publish_release_atomic",
     "shard_basename",

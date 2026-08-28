@@ -51,6 +51,27 @@ from pretrain.stage_m_output_v1 import MANIFEST_FILENAME, validate_published_rel
 NATIVE_CHAIN_KIND = "accepted_stage_i_native_v1"
 LEGACY_CHAIN_KIND = "legacy_selector_v1"
 NATIVE_PROVENANCE_SCHEMA = "petitgpt-accepted-stage-i-native-release-provenance-v1"
+NATIVE_CHAIN_IDENTITY_SCHEMA = "petitgpt-stage-i-native-chain-identity-v1"
+
+# The exact fields the native validator commits to. The identity is a projection over this
+# closed list rather than "everything except one flag", because the planner legitimately merges
+# further shared authorities (reference_validation, tokenizer_release, the stage release
+# pointers) into the same provenance object afterwards. Anything in this list changing moves
+# the identity; anything outside it is validated separately by the strict run-plan contract.
+NATIVE_CHAIN_IDENTITY_FIELDS = (
+    "accepted_stage_i",
+    "accepted_stage_i_identity_sha256",
+    "candidate_m_plan_schema",
+    "candidate_m_plan_sha256",
+    "model_contract",
+    "provenance_chain_kind",
+    "schema_version",
+    "shared_tokenizer_sha256",
+    "stage_m_implementation_bundle_sha256",
+    "stage_m_ordering_policy",
+    "stage_p_native_validator_bundle_sha256",
+    "stages",
+)
 PROVENANCE_CHAIN_KINDS = (NATIVE_CHAIN_KIND, LEGACY_CHAIN_KIND)
 
 # Fields that only ever belong to the legacy selector-v1 chain. Their presence in a native
@@ -125,6 +146,19 @@ def assert_single_branch(payload: Mapping[str, Any], *, chain_kind: str) -> None
     )
 
 
+def planned_commitment_schema(plan: Mapping[str, Any], stage: str) -> str:
+    """The input-sequence-commitment schema the authorized plan declares for one stage."""
+    streams = _mapping(plan.get("stage_streams"), field="plan.stage_streams")
+    entry = _mapping(streams.get(stage), field=f"plan.stage_streams.{stage}")
+    schema = entry.get("input_sequence_commitment_schema")
+    _require(
+        isinstance(schema, str) and schema,
+        f"plan.stage_streams.{stage}.input_sequence_commitment_schema is missing",
+    )
+    assert isinstance(schema, str)
+    return schema
+
+
 def _load_release(release_root: Path, *, stage: str) -> tuple[Mapping[str, Any], str, dict]:
     """Strictly validate one Stage-M release and return its manifest, digest and read-back."""
     root = Path(release_root).expanduser().resolve()
@@ -156,63 +190,6 @@ def _load_release(release_root: Path, *, stage: str) -> tuple[Mapping[str, Any],
     return manifest, manifest_sha256, validation
 
 
-def _bind_reference_validation(
-    reference_val_dir: Path, *, expected_tokenizer_sha256: str
-) -> dict[str, Any]:
-    """Bind the frozen reference-validation release through the existing frozen validator.
-
-    The native chain does not re-implement reference validation: the G2 release is already a
-    canonical schema-2 reference release, and ``validate_shard_release`` is the same check the
-    legacy branch and the trainer perform. Only its identity is recorded here.
-    """
-    from pretrain.dataset_pretrain import validate_shard_release as _validate
-
-    result = _validate(Path(reference_val_dir))
-    _require(
-        result["release_kind"] == "reference" and result["split"] == "val",
-        "reference_val_dir must identify the combined reference val split",
-    )
-    _require(
-        result["tokenizer_sha256"] == expected_tokenizer_sha256,
-        "reference validation release uses a different tokenizer than the Stage-M plan",
-    )
-    return {
-        "reference_val_dir": str(Path(reference_val_dir).expanduser().resolve()),
-        "manifest_sha256": str(result["manifest_sha256"]),
-        "manifest_schema_version": result["manifest_schema_version"],
-        "shards": int(result["expected_shards"]),
-        "tokens": int(result["expected_tokens"]),
-        "tokenizer_sha256": str(result["tokenizer_sha256"]),
-    }
-
-
-def _bind_tokenizer_release(
-    tokenizer_release_manifest: Path, *, expected_tokenizer_sha256: str
-) -> dict[str, Any]:
-    """Bind the canonical tokenizer release manifest by bytes and prove it names our tokenizer."""
-    import json
-
-    path = Path(tokenizer_release_manifest).expanduser().resolve()
-    _require(path.is_file(), f"tokenizer release manifest is missing: {path}")
-    manifest_sha256 = file_sha256(path)
-    with open(path, encoding="utf-8") as handle:
-        manifest = json.load(handle)
-    _require(isinstance(manifest, Mapping), "tokenizer release manifest must be an object")
-    declared = manifest.get("tokenizer_sha256")
-    if declared is None:
-        declared = (manifest.get("tokenizer") or {}).get("sha256")
-    _require(
-        declared == expected_tokenizer_sha256,
-        "tokenizer release manifest does not name the tokenizer the Stage-M plan bound: "
-        f"release={declared!r}, plan={expected_tokenizer_sha256}",
-    )
-    return {
-        "path": str(path),
-        "manifest_sha256": manifest_sha256,
-        "tokenizer_sha256": str(declared),
-    }
-
-
 def validate_native_chain(
     *,
     repo_root: Path,
@@ -220,8 +197,6 @@ def validate_native_chain(
     candidate_m_plan: Path,
     expected_candidate_m_plan_sha256: str,
     stage_releases: Mapping[str, Path],
-    reference_val_dir: Path | None = None,
-    tokenizer_release_manifest: Path | None = None,
 ) -> dict[str, Any]:
     """Validate the whole accepted-Stage-I-native chain and derive its provenance block.
 
@@ -339,6 +314,51 @@ def validate_native_chain(
             f"{stage}: release model contract differs from the frozen contract",
         )
 
+        # R1-D. Every load-bearing serialized M metadata field is proved against the authorized
+        # plan or the frozen contract. Previously these three in particular could contradict
+        # the plan and still yield a valid chain.
+        _require(
+            binding.get("candidate_plan_schema") == plan.get("schema_version"),
+            f"{stage}: release candidate_plan_schema {binding.get('candidate_plan_schema')!r} "
+            f"differs from the plan schema {plan.get('schema_version')!r}",
+        )
+        _require(
+            binding.get("candidate_plan_schema") == CANDIDATE_PLAN_SCHEMA,
+            f"{stage}: release candidate_plan_schema is not {CANDIDATE_PLAN_SCHEMA!r}",
+        )
+        _require(
+            binding.get("stage_stream_count") == len(STAGE_STREAMS),
+            f"{stage}: release stage_stream_count {binding.get('stage_stream_count')!r} "
+            f"differs from the frozen two-stream contract",
+        )
+        _require(
+            binding.get("input_sequence_commitment_schema")
+            == planned_commitment_schema(plan, stage),
+            f"{stage}: release input_sequence_commitment_schema "
+            f"{binding.get('input_sequence_commitment_schema')!r} differs from the plan",
+        )
+        _require(
+            binding.get("implementation_commit") == plan.get("implementation_commit"),
+            f"{stage}: release implementation_commit differs from the plan",
+        )
+        _require(
+            manifest.get("dtype") == (plan.get("release_profile") or {}).get("storage_dtype"),
+            f"{stage}: release dtype {manifest.get('dtype')!r} differs from the plan profile",
+        )
+        _require(
+            manifest.get("vocab_size") == int(MODEL_CONTRACT["vocab_size"]),
+            f"{stage}: release vocab_size differs from the frozen model contract",
+        )
+        _require(
+            int((manifest.get("stage_m_accounting") or {}).get("seq_len", -1))
+            == int(MODEL_CONTRACT["seq_len"]),
+            f"{stage}: release accounting seq_len differs from the frozen model contract",
+        )
+        _require(
+            manifest.get("shard_tokens") == (plan.get("release_profile") or {}).get("shard_tokens"),
+            f"{stage}: release shard_tokens differs from the plan profile",
+        )
+
         accepted_block = _mapping(
             binding.get("accepted_stage_i"), field=f"{stage}.stage_m.accepted_stage_i"
         )
@@ -415,21 +435,6 @@ def validate_native_chain(
             "expected_accounting": expected,
         }
 
-    reference_validation = (
-        _bind_reference_validation(
-            Path(reference_val_dir), expected_tokenizer_sha256=tokenizer_sha256
-        )
-        if reference_val_dir is not None
-        else None
-    )
-    tokenizer_release = (
-        _bind_tokenizer_release(
-            Path(tokenizer_release_manifest), expected_tokenizer_sha256=tokenizer_sha256
-        )
-        if tokenizer_release_manifest is not None
-        else None
-    )
-
     _, native_bundle_sha256 = p_native_implementation_bundle(repo_root)
     provenance = {
         "schema_version": NATIVE_PROVENANCE_SCHEMA,
@@ -444,14 +449,20 @@ def validate_native_chain(
         "shared_tokenizer_sha256": tokenizer_sha256,
         "model_contract": dict(MODEL_CONTRACT),
         "stages": stages,
-        "reference_validation": reference_validation,
-        "tokenizer_release": tokenizer_release,
         "full_chain_validated": True,
     }
-    provenance["native_chain_identity_sha256"] = sha256_hex(
-        canonical_json_bytes({k: v for k, v in provenance.items() if k != "full_chain_validated"})
-    )
+    provenance["native_chain_identity_sha256"] = native_chain_identity_sha256(provenance)
     return provenance
+
+
+def native_chain_identity_sha256(provenance: Mapping[str, Any]) -> str:
+    """Digest over the closed native-identity projection. See NATIVE_CHAIN_IDENTITY_FIELDS."""
+    return sha256_hex(
+        canonical_json_bytes({
+            "schema_version": NATIVE_CHAIN_IDENTITY_SCHEMA,
+            "fields": {name: provenance.get(name) for name in NATIVE_CHAIN_IDENTITY_FIELDS},
+        })
+    )
 
 
 def native_chain_field_names() -> Sequence[str]:
@@ -461,6 +472,8 @@ def native_chain_field_names() -> Sequence[str]:
 __all__ = [
     "LEGACY_CHAIN_KIND",
     "LEGACY_ONLY_FIELDS",
+    "NATIVE_CHAIN_IDENTITY_FIELDS",
+    "NATIVE_CHAIN_IDENTITY_SCHEMA",
     "NATIVE_CHAIN_KIND",
     "NATIVE_ONLY_FIELDS",
     "NATIVE_PROVENANCE_SCHEMA",
@@ -468,5 +481,7 @@ __all__ = [
     "NativeProvenanceError",
     "assert_single_branch",
     "native_chain_field_names",
+    "native_chain_identity_sha256",
+    "planned_commitment_schema",
     "validate_native_chain",
 ]

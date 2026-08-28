@@ -353,6 +353,7 @@ def _derive_state(
         expected_serialized_tokens=int(bound["total_serialized_tokens"]),
         expected_shard_count=int(bound["shard_count"]),
     )
+    accepted.require_physically_verified("Stage-M authorization")
     require(
         accepted.as_canonical() == dict(bound),
         "the accepted Stage-I publication on disk differs from the one the plan authorized",
@@ -543,10 +544,52 @@ def stage_m_release_binding(context: AuthorizedMContext, stage: str) -> dict[str
     }
 
 
+def rederive_and_prove_input_commitments(context: AuthorizedMContext) -> dict[str, Any]:
+    """Re-derive both input sequence commitments from the physically verified shards.
+
+    The plan's commitments are only evidence about the bytes that existed when the plan was
+    made. This streams the accepted records again -- from the same files whose SHA-256 digests
+    were just freshly verified, re-hashing each shard as it is consumed -- and proves the
+    commitments, record counts and serialized-token totals still reproduce exactly.
+
+    A stored commitment copied out of the plan is deliberately never compared against itself.
+    """
+    context.accepted.require_physically_verified("runtime commitment re-derivation")
+    derived = derive_input_sequence_commitments(context.accepted)
+    proof: dict[str, Any] = {}
+    for stage in STAGE_STREAMS:
+        planned = context.plan["stage_streams"][stage]
+        actual = derived[stage]
+        for field, observed, expected in (
+            ("input_sequence_commitment", actual.seal(), planned["input_sequence_commitment"]),
+            ("input_record_count", actual.record_count, planned["input_record_count"]),
+            (
+                "input_serialized_tokens",
+                actual.serialized_tokens,
+                planned["input_serialized_tokens"],
+            ),
+            (
+                "input_content_tokens",
+                actual.content_tokens,
+                planned["input_content_tokens"],
+            ),
+        ):
+            require(
+                observed == expected,
+                f"{stage}: runtime {field} does not reproduce the authorized plan: "
+                f"actual={observed!r}, plan={expected!r}",
+            )
+        proof[stage] = actual.as_canonical()
+    return proof
+
+
 def realize_and_publish(context: AuthorizedMContext, *, out_dir: Path) -> dict[str, Any]:
     """Pack, validate and publish both stage streams."""
-    # First fresh revalidation: before a single output byte exists.
+    # First fresh revalidation: before a single output byte exists. Because the accepted
+    # binding now rehashes every declared shard, this is a physical check, not a metadata one.
     revalidate(context)
+    # Then prove the authorized commitments still reproduce from those verified bytes.
+    commitment_proof = rederive_and_prove_input_commitments(context)
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     tokenizer = load_tokenizer(str(context.tokenizer_path))
@@ -559,6 +602,7 @@ def realize_and_publish(context: AuthorizedMContext, *, out_dir: Path) -> dict[s
         "out_dir": str(out_dir),
         "candidate_plan_sha256": context.plan_sha256,
         "authorized_state_sha256": context.state_sha256,
+        "runtime_input_commitment_proof": commitment_proof,
         "stages": results,
     }
 
@@ -672,6 +716,7 @@ __all__ = [
     "main",
     "realize_and_publish",
     "realize_stage",
+    "rederive_and_prove_input_commitments",
     "release_exclusion_block",
     "revalidate",
     "stage_m_release_binding",
