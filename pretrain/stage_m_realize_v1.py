@@ -46,6 +46,7 @@ from pretrain.stage_m_contract_v1 import (  # noqa: E402
     ACCEPTED_G2_RELEASE_MANIFEST,
     ACCEPTED_G_TOKENIZER_RELEASE_MANIFEST,
     CANDIDATE_PLAN_SCHEMA,
+    EXCLUSION_REFERENCE_FIELDS,
     MODEL_CONTRACT,
     ORDERING_CONTRACT_ID,
     PACKING_SEMANTICS,
@@ -61,6 +62,7 @@ from pretrain.stage_m_contract_v1 import (  # noqa: E402
     file_sha256,
     m_implementation_bundle,
     require,
+    require_identical_exclusion_authorities,
     resolve_repo_root,
     sha256_hex,
     stream_accounting,
@@ -294,6 +296,9 @@ class AuthorizedMContext:
     environment: Environment
     bundle_sha256: str
     state_sha256: str
+    # R5-A: exactly what the producer gate compared, exposed rather than only hashed into
+    # state_sha256, so the gate's scope is observable by a reviewer and by a test.
+    producer_gate: Mapping[str, Any]
 
     def stage_accounting(self, stage: str) -> StreamAccounting:
         declared = self.plan["stage_streams"][stage]["expected_accounting"]
@@ -351,19 +356,30 @@ def _derive_state(
 
     tokenizer = _verify_resource(root, plan["resources"]["tokenizer"], label="canonical tokenizer")
     assert_tokenizer_contract(str(tokenizer))
-    # R3-A/B: re-derive the canonical authority from accepted G and G2 and prove the plan
-    # bound exactly that artifact, by digest and by independently derived count.
+    # R3-A/B: re-derive the canonical authority from accepted G and G2 and prove the plan bound
+    # exactly that artifact.
+    #
+    # R5-A: over the WHOLE closed reference, not a digest and a count. The R4 gate compared only
+    # artifact_sha256 and derived_count, so a plan naming a byte-identical copy at another path,
+    # or declaring a different kind, hash_algorithm or artifact schema version, passed the
+    # producer side even though the Stage-P native validator would later refuse it. The producer
+    # and the native validator now use the SAME neutral six-field model and the SAME comparison
+    # routine from the Stage-M contract layer -- no second, partial comparison exists, and no
+    # Stage-P import is introduced here.
+    #
+    # Three participants, each of which has already opened the artifact its own object names:
+    # the candidate plan (reopened by validate_candidate_plan_contract above), accepted G, and
+    # accepted G2. The two Stage-M releases join as participants four and five later, in the
+    # Stage-P native chain, once they exist.
     canonical = canonical_exclusion_authority(root)
-    declared = plan_contract["exclusion_authority"]
+    producer_exclusion_agreement = require_identical_exclusion_authorities([
+        plan_contract["exclusion_authority"],
+        canonical["accepted_g"],
+        canonical["accepted_g2"],
+    ])
     require(
-        declared["artifact_sha256"] == canonical["artifact_sha256"],
-        "candidate plan binds exclusion artifact "
-        f"{declared['artifact_sha256']} but accepted G/G2 name "
-        f"{canonical['artifact_sha256']}",
-    )
-    require(
-        int(declared["derived_count"]) == int(canonical["derived_count"]),
-        "candidate plan exclusion count differs from the independently derived canonical count",
+        producer_exclusion_agreement["compared_fields"] == list(EXCLUSION_REFERENCE_FIELDS),
+        "producer-side exclusion comparison must cover every closed reference field",
     )
 
     require(
@@ -429,6 +445,13 @@ def _derive_state(
         "tokenizer_sha256": plan["resources"]["tokenizer"]["sha256"],
         "canonical_exclusion_sha256": canonical["artifact_sha256"],
         "canonical_exclusion_derived_count": canonical["derived_count"],
+        # R5-A: the full closed reference the producer gate actually compared, and over which
+        # fields, so the gate's scope is recorded rather than implied.
+        "canonical_exclusion_reference": {
+            field: producer_exclusion_agreement[field] for field in EXCLUSION_REFERENCE_FIELDS
+        },
+        "producer_exclusion_compared_fields": list(producer_exclusion_agreement["compared_fields"]),
+        "producer_exclusion_participants": list(producer_exclusion_agreement["participants"]),
     }
     return AuthorizedMContext(
         repo_root=root,
@@ -441,6 +464,7 @@ def _derive_state(
         environment=environment,
         bundle_sha256=bundle_digest,
         state_sha256=sha256_hex(canonical_json_bytes(state)),
+        producer_gate=state,
     )
 
 

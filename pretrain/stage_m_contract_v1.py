@@ -152,7 +152,12 @@ def canonical_sha256(value: Any) -> str:
 
 
 def file_sha256(path: Path, *, chunk: int = 1 << 20) -> str:
-    """Hash a regular non-symlink file, rejecting a size change during the read."""
+    """Hash a regular file, rejecting a symlink argument and a size change during the read.
+
+    The symlink refusal applies to the path AS GIVEN. A caller that has already resolved the
+    path -- as ``read_exclusion_artifact`` does -- has therefore had its symlink check performed
+    earlier, by ``canonical_repo_relative`` on the unresolved reference.
+    """
     resolved = Path(path)
     require(not resolved.is_symlink(), f"refusing to hash a symlink: {resolved}")
     require(resolved.is_file(), f"not a regular file: {resolved}")
@@ -930,6 +935,15 @@ def canonical_repo_relative(repo_root: Path, value: object, *, label: str) -> tu
     serialized artifact may legitimately use -- repository-relative, or absolute inside the
     repository -- normalize to the same relative string, which is then the value compared
     across participants. Anything outside the root is refused rather than normalized.
+
+    R5. The final-component symlink check runs BEFORE resolution. This is not a new policy: it
+    is the repository's existing regular-non-symlink rule for repository-bound artifact reads,
+    already stated by ``file_sha256`` above and enforced identically by
+    ``stage_m_input_v1._require(not path.is_symlink(), ...)`` for accepted Stage-I shards, by
+    ``dataset_pretrain`` for shard files, and by ``run_plan_contract`` for ``--run_plan_json``.
+    R4 performed the same check but only after ``resolve()`` had already followed the link, so
+    it could never fire. Its exact scope is the FINAL component: an intermediate directory
+    symlink is still resolved, after which the containment check below applies to the real path.
     """
     root = Path(repo_root).resolve()
     require(
@@ -938,7 +952,12 @@ def canonical_repo_relative(repo_root: Path, value: object, *, label: str) -> tu
     )
     assert isinstance(value, str)
     candidate = Path(value)
-    resolved = candidate.resolve() if candidate.is_absolute() else (root / candidate).resolve()
+    unresolved = candidate if candidate.is_absolute() else (root / candidate)
+    require(
+        not unresolved.is_symlink(),
+        f"{label}: path must be a regular non-symlink file, got a symlink: {value!r}",
+    )
+    resolved = unresolved.resolve()
     require(
         root in resolved.parents,
         f"{label}: path is outside the repository root: {value!r}",
@@ -957,8 +976,10 @@ def read_exclusion_artifact(repo_root: Path, relative: str) -> dict[str, Any]:
     root = Path(repo_root).resolve()
     relative, path = canonical_repo_relative(root, relative, label="exclusion artifact")
     require(path.exists(), f"exclusion artifact is missing: {relative}")
+    # canonical_repo_relative already refused a final-component symlink on the SUPPLIED path,
+    # before resolution; this confirms the resolved target is itself a regular file.
     require(
-        path.is_file() and not path.is_symlink(),
+        path.is_file(),
         f"exclusion artifact is not a regular file: {relative}",
     )
     require(
@@ -1283,8 +1304,9 @@ def require_canonical_file(repo_root: Path, relative: str, *, label: str) -> str
     root = Path(repo_root).resolve()
     relative, path = canonical_repo_relative(root, relative, label=label)
     require(path.exists(), f"{label}: no file at {relative}")
+    # As above: the symlink refusal happened pre-resolution in canonical_repo_relative.
     require(
-        path.is_file() and not path.is_symlink(),
+        path.is_file(),
         f"{label}: not a regular file: {relative}",
     )
     return file_sha256(path)
