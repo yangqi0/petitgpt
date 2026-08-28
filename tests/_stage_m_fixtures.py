@@ -201,6 +201,14 @@ def write_accepted_stage_i(
 
 
 def write_exclusion_manifest(path: Path, *, hash_count: int = 3) -> Path:
+    """Write a reference-exclusion manifest.
+
+    With the default ``hash_count=3`` this is a standalone fixture. Pass ``shared=True`` via
+    :func:`write_shared_exclusion_manifest` to emit bytes identical to the reserve exclusion
+    that tests/test_plan_pretrain_run.py's provenance fixture creates, so the candidate-M plan,
+    both Stage-M releases and the G/G2 authorities all bind one artifact -- which is what the
+    real pipeline does and what the R2-A shared-authority comparison requires.
+    """
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_bytes(
@@ -210,6 +218,37 @@ def write_exclusion_manifest(path: Path, *, hash_count: int = 3) -> Path:
             "hash_count": hash_count,
             "hashes": [hashlib.sha256(f"x{i}".encode()).hexdigest() for i in range(hash_count)],
         })
+    )
+    return path
+
+
+# Byte-for-byte the payload tests/test_plan_pretrain_run.py::_write_full_provenance writes as
+# its reserve exclusion. Kept here so the native end-to-end fixture can bind exactly one
+# exclusion artifact across the plan, both releases and the G/G2 authorities.
+SHARED_EXCLUSION_HASHES = ["1" * 64, "2" * 64]
+SHARED_EXCLUSION_CLEANING = {
+    "strip_leading_noise": False,
+    "normalize_quotes": False,
+    "underscores_policy": "keep",
+    "min_chars": 0,
+    "min_ascii_ratio": 0.0,
+}
+
+
+def write_shared_exclusion_manifest(path: Path) -> Path:
+    """Emit the exact reserve-exclusion bytes the legacy provenance fixture also writes."""
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        json.dumps({
+            "schema_version": 1,
+            "kind": "petitgpt_reference_validation_exclusions",
+            "hash_algorithm": "sha256-cleaned-text-utf8-v1",
+            "cleaning": SHARED_EXCLUSION_CLEANING,
+            "hash_count": len(SHARED_EXCLUSION_HASHES),
+            "hashes": SHARED_EXCLUSION_HASHES,
+        }),
+        encoding="utf-8",
     )
     return path
 
@@ -224,3 +263,33 @@ def save_tokenizer(tok: Tokenizer, path: Path) -> Path:
 def read_json(path: Path) -> dict[str, Any]:
     with open(path, encoding="utf-8") as handle:
         return json.load(handle)
+
+
+def e2e_records(tok, count: int = 400):
+    """Records whose physical order interleaves both stages and two sources."""
+    stages = ("stage_b", "stage_a", "stage_b", "stage_a")
+    return [
+        make_record(
+            tok,
+            stage=stages[i % len(stages)],
+            source_id=f"{stages[i % len(stages)][-1]}_src{i % 2}",
+            binding=f"ib_src{i % 2}",
+            ordinal=i,
+            rank=count - i,
+            text=(
+                "The quick brown fox jumps over the lazy dog while a tutorial paragraph "
+                f"explains a concept step by step with examples number {i}."
+            ),
+        )
+        for i in range(count)
+    ]
+
+
+def same_size_mutation(path: Path) -> None:
+    """Flip one payload byte without changing the file length."""
+    data = bytearray(Path(path).read_bytes())
+    for index, byte in enumerate(data):
+        if byte not in (0x0A, 0x22, 0x7B, 0x7D):
+            data[index] = 0x41 if byte != 0x41 else 0x42
+            break
+    Path(path).write_bytes(bytes(data))

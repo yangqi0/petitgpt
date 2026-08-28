@@ -63,6 +63,7 @@ from pretrain.stage_m_contract_v1 import (  # noqa: E402
     sha256_hex,
     stream_accounting,
     total_accounting,
+    validate_candidate_plan_contract,
     validated_sha256,
     verify_environment,
 )
@@ -302,8 +303,9 @@ def _derive_state(
         "a Stage-M plan must not carry a self-declared authorization; owner authorization is "
         "the externally supplied digest only",
     )
-    require(plan.get("legacy_orchestration_used") is False, "plan declares legacy orchestration")
-    require(plan.get("text_field") == "training_text", "plan does not bind training_text")
+    # R2-B / section 7: the reviewed digest says which bytes these are; this says they describe
+    # the one permitted Stage-M contract. Both are required, on every production path.
+    plan_contract = validate_candidate_plan_contract(plan)
 
     environment = current_environment()
     verify_environment(environment)
@@ -383,6 +385,8 @@ def _derive_state(
         )
 
     state = {
+        "plan_contract_field_count": plan_contract["validated_field_count"],
+        "plan_exclusion_authority": plan_contract["exclusion_authority"],
         "plan_sha256": actual,
         "bundle_sha256": bundle_digest,
         "environment": environment.as_canonical(),

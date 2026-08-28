@@ -816,7 +816,7 @@ def test_model_and_seq_len_contract_are_bound(big_accepted, relaxed, tmp_path):
     plan["model_contract"]["n_layers"] = 31
     plan_path.write_bytes(canonical_json_bytes(plan))
     digest = hashlib.sha256(plan_path.read_bytes()).hexdigest()
-    with pytest.raises(contract.StageMError, match="model contract"):
+    with pytest.raises(contract.StageMError, match="model_contract"):
         realize.authorize_plan(plan_path, digest, relaxed["repo_root"])
 
 

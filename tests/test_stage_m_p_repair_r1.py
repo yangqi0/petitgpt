@@ -40,96 +40,15 @@ from pretrain.stage_p_native_provenance_v1 import (
     validate_native_chain,
 )
 from tests._stage_m_fixtures import (
-    make_record,
     read_json,
-    save_tokenizer,
-    tiny_tokenizer,
-    write_accepted_stage_i,
-    write_exclusion_manifest,
 )
 from tests.test_plan_pretrain_run import _write_full_provenance
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
-@pytest.fixture(scope="module")
-def tok():
-    return tiny_tokenizer()
-
-
-def _records(tok, count: int = 400):
-    stages = ("stage_b", "stage_a", "stage_b", "stage_a")
-    return [
-        make_record(
-            tok,
-            stage=stages[i % len(stages)],
-            source_id=f"{stages[i % len(stages)][-1]}_src{i % 2}",
-            binding=f"ib_src{i % 2}",
-            ordinal=i,
-            rank=count - i,
-            text=(
-                "The quick brown fox jumps over the lazy dog while a tutorial paragraph "
-                f"explains a concept step by step with examples number {i}."
-            ),
-        )
-        for i in range(count)
-    ]
-
-
-@pytest.fixture
-def accepted(tmp_path, tok):
-    recs = _records(tok)
-    return write_accepted_stage_i(tmp_path / "stage_i", recs, records_per_shard=64), recs
-
-
-@pytest.fixture
-def m_run(tmp_path, tok, monkeypatch, accepted):
-    """A real authorized Stage-M run: plan, authorize, publish both stage releases."""
-    accepted_dir, _recs = accepted
-    monkeypatch.setattr(realize, "assert_tokenizer_contract", lambda path: None)
-    monkeypatch.setattr(realize, "verify_environment", lambda environment: None)
-    monkeypatch.setattr(realize, "resolve_repo_root", lambda explicit=None: tmp_path.resolve())
-    for relative in M_IMPLEMENTATION_BUNDLE_FILES:
-        dest = tmp_path / relative
-        dest.parent.mkdir(parents=True, exist_ok=True)
-        dest.write_bytes((REPO_ROOT / relative).read_bytes())
-    tokenizer_path = save_tokenizer(tok, tmp_path / "tok" / "tokenizer.json")
-    exclusion_path = write_exclusion_manifest(tmp_path / "excl" / "exclusion.json")
-    plan_path = tmp_path / "candidate_m_plan.json"
-    assert (
-        realize.main([
-            "plan",
-            "--accepted-stage-i-dir",
-            str(accepted_dir),
-            "--tokenizer",
-            str(tokenizer_path.relative_to(tmp_path)),
-            "--reference-exclusion-manifest",
-            str(exclusion_path.relative_to(tmp_path)),
-            "--out",
-            str(plan_path),
-            "--shard-tokens",
-            "4096",
-            "--implementation-commit",
-            "0" * 40,
-        ])
-        == 0
-    )
-    plan_sha = hashlib.sha256(plan_path.read_bytes()).hexdigest()
-    context = realize.authorize_plan(plan_path, plan_sha, tmp_path.resolve())
-    out_dir = tmp_path / "stage_m"
-    realize.realize_and_publish(context, out_dir=out_dir)
-    return {
-        "tmp_path": tmp_path,
-        "accepted_dir": accepted_dir,
-        "plan_path": plan_path,
-        "plan_sha": plan_sha,
-        "tokenizer_path": tokenizer_path,
-        "releases": {s: out_dir / s for s in STAGE_STREAMS},
-        "context": context,
-    }
-
-
-def _native(m_run, **overrides):
+def native_chain(m_run, **overrides):
+    """Run validate_native_chain against a bounded m_run fixture."""
     kwargs = {
         "repo_root": REPO_ROOT,
         "accepted_stage_i_dir": m_run["accepted_dir"],
@@ -139,6 +58,27 @@ def _native(m_run, **overrides):
     }
     kwargs.update(overrides)
     return validate_native_chain(**kwargs)
+
+
+def native_plan(native_e2e, **overrides):
+    """Build a native run plan through the real planner entrypoint."""
+    kwargs: dict[str, Any] = {
+        "stage_a_dir": native_e2e["stage_a_dir"],
+        "stage_b_dir": native_e2e["stage_b_dir"],
+        "seq_len": 2048,
+        "micro_bsz": 1,
+        "grad_accum": 1,
+        "warmup_steps": 1,
+        "decay_fraction": 0.5,
+        "provenance_chain_kind": NATIVE_CHAIN_KIND,
+        "accepted_stage_i_dir": native_e2e["accepted_dir"],
+        "candidate_m_plan": native_e2e["plan_path"],
+        "expected_candidate_m_plan_sha256": native_e2e["plan_sha"],
+        "reference_val_dir": native_e2e["reference_val_dir"],
+        "tokenizer_release_manifest": native_e2e["tokenizer_release_manifest"],
+    }
+    kwargs.update(overrides)
+    return build_run_plan(**kwargs)
 
 
 # ------------------------------------------------------------------ R1-A physical hashing
@@ -197,7 +137,7 @@ def test_native_chain_cannot_validate_after_a_same_size_shard_change(m_run):
     shard = sorted((m_run["accepted_dir"] / "documents").glob("*.jsonl"))[0]
     _same_size_mutation(shard)
     with pytest.raises((StageIInputError, NativeProvenanceError)):
-        _native(m_run)
+        native_chain(m_run)
 
 
 @pytest.mark.parametrize(
@@ -318,7 +258,7 @@ def test_contradictory_stage_m_metadata_is_rejected(m_run, field, value):
     meta["stage_m"][field] = value
     meta_path.write_bytes(canonical_json_bytes(meta))
     with pytest.raises(NativeProvenanceError):
-        _native(m_run)
+        native_chain(m_run)
 
 
 @pytest.mark.parametrize("field", ["dtype", "vocab_size", "shard_tokens"])
@@ -328,7 +268,7 @@ def test_contradictory_release_profile_metadata_is_rejected(m_run, field):
     meta[field] = {"dtype": "uint32", "vocab_size": 31_999, "shard_tokens": 12345}[field]
     meta_path.write_bytes(canonical_json_bytes(meta))
     with pytest.raises((NativeProvenanceError, RuntimeError)):
-        _native(m_run)
+        native_chain(m_run)
 
 
 def test_contradictory_accounting_seq_len_is_rejected(m_run):
@@ -337,7 +277,7 @@ def test_contradictory_accounting_seq_len_is_rejected(m_run):
     meta["stage_m_accounting"]["seq_len"] = 1024
     meta_path.write_bytes(canonical_json_bytes(meta))
     with pytest.raises(NativeProvenanceError):
-        _native(m_run)
+        native_chain(m_run)
 
 
 # ------------------------------------------------------------------ R1-G byte order
@@ -447,31 +387,11 @@ def native_e2e(m_run, monkeypatch):
     }
 
 
-def _native_plan(native_e2e, **overrides):
-    kwargs: dict[str, Any] = {
-        "stage_a_dir": native_e2e["stage_a_dir"],
-        "stage_b_dir": native_e2e["stage_b_dir"],
-        "seq_len": 2048,
-        "micro_bsz": 1,
-        "grad_accum": 1,
-        "warmup_steps": 1,
-        "decay_fraction": 0.5,
-        "provenance_chain_kind": NATIVE_CHAIN_KIND,
-        "accepted_stage_i_dir": native_e2e["accepted_dir"],
-        "candidate_m_plan": native_e2e["plan_path"],
-        "expected_candidate_m_plan_sha256": native_e2e["plan_sha"],
-        "reference_val_dir": native_e2e["reference_val_dir"],
-        "tokenizer_release_manifest": native_e2e["tokenizer_release_manifest"],
-    }
-    kwargs.update(overrides)
-    return build_run_plan(**kwargs)
-
-
 # ------------------------------------------------------------------ R1-B planner reachability
 
 
 def test_native_planner_produces_a_valid_plan_with_gg2_inputs(native_e2e):
-    plan = _native_plan(native_e2e)
+    plan = native_plan(native_e2e)
     provenance = plan["release_provenance"]
     assert provenance["provenance_chain_kind"] == NATIVE_CHAIN_KIND
     assert provenance["full_chain_validated"] is True
@@ -487,12 +407,12 @@ def test_native_planner_produces_a_valid_plan_with_gg2_inputs(native_e2e):
 @pytest.mark.parametrize("missing", ["reference_val_dir", "tokenizer_release_manifest"])
 def test_native_planner_requires_the_gg2_authorities(native_e2e, missing):
     with pytest.raises(ValueError, match="reference-validation and tokenizer"):
-        _native_plan(native_e2e, **{missing: None})
+        native_plan(native_e2e, **{missing: None})
 
 
 def test_native_planner_rejects_a_legacy_selection_manifest(native_e2e):
     with pytest.raises(ValueError, match="must not be given a legacy selector-v1"):
-        _native_plan(native_e2e, selection_manifest=native_e2e["selection_manifest"])
+        native_plan(native_e2e, selection_manifest=native_e2e["selection_manifest"])
 
 
 def test_native_planner_rejects_a_tokenizer_authority_mismatch(native_e2e):
@@ -501,7 +421,7 @@ def test_native_planner_rejects_a_tokenizer_authority_mismatch(native_e2e):
     payload["tokenizer_sha256"] = "9" * 64
     manifest.write_text(json.dumps(payload), encoding="utf-8")
     with pytest.raises(RuntimeError, match="tokenizer SHA-256 values disagree"):
-        _native_plan(native_e2e)
+        native_plan(native_e2e)
 
 
 # ------------------------------------------------------------------ R1-C strict contract
@@ -523,61 +443,76 @@ def _strict_args(plan_path: Path, stage: str, native_e2e):
     )
 
 
-def test_strict_contract_accepts_a_valid_native_plan(native_e2e, tmp_path):
-    plan = _native_plan(native_e2e)
+def test_strict_contract_accepts_a_validnative_plan(native_e2e, tmp_path):
+    plan = native_plan(native_e2e)
     plan_path = tmp_path / "native_run_plan.json"
     plan_path.write_text(json.dumps(plan), encoding="utf-8")
     provenance = plan["release_provenance"]
     identity = rpc.validate_native_provenance_object(provenance)
     assert len(identity) == 64
     assert (
-        rpc.native_chain_identity_sha256(provenance) == provenance["native_chain_identity_sha256"]
+        rpc.premerge_native_chain_identity_sha256(provenance)
+        == provenance["premerge_native_chain_identity_sha256"]
     )
+    assert identity == provenance["native_post_merge_data_branch_identity_sha256"]
 
 
 def test_native_data_branch_identity_is_versioned_and_binds_the_authority(native_e2e):
-    plan = _native_plan(native_e2e)
+    plan = native_plan(native_e2e)
     provenance = dict(plan["release_provenance"])
-    base = rpc.native_data_branch_identity_sha256(provenance)
-    mutated = dict(provenance)
-    mutated["accepted_stage_i_identity_sha256"] = "0" * 64
-    assert rpc.native_data_branch_identity_sha256(mutated) != base
-    mutated = dict(provenance)
-    mutated["candidate_m_plan_sha256"] = "0" * 64
-    assert rpc.native_data_branch_identity_sha256(mutated) != base
+    base = rpc.post_merge_data_branch_identity_sha256(provenance)
+    for field in (
+        "accepted_stage_i_identity_sha256",
+        "candidate_m_plan_sha256",
+        "shared_tokenizer_sha256",
+        "stage_m_implementation_bundle_sha256",
+    ):
+        mutated = dict(provenance)
+        mutated[field] = "0" * 64
+        assert rpc.post_merge_data_branch_identity_sha256(mutated) != base, field
     stages = json.loads(json.dumps(provenance["stages"]))
     stages["stage_a"]["input_sequence_commitment"] = "0" * 64
-    mutated = {**provenance, "stages": stages}
-    assert rpc.native_data_branch_identity_sha256(mutated) != base
+    assert rpc.post_merge_data_branch_identity_sha256({**provenance, "stages": stages}) != base
 
 
 def test_data_branch_immutable_sha_does_not_require_legacy_objects(native_e2e, tmp_path):
-    plan = _native_plan(native_e2e)
+    plan = native_plan(native_e2e)
     digest = rpc._data_branch_immutable_sha256(plan)  # noqa: SLF001 - contract surface
     assert len(digest) == 64
 
 
 def test_native_chain_identity_field_lists_agree_between_modules():
     from pretrain.stage_p_native_provenance_v1 import (
-        NATIVE_CHAIN_IDENTITY_FIELDS,
-        NATIVE_CHAIN_IDENTITY_SCHEMA,
+        POST_MERGE_DATA_BRANCH_IDENTITY_FIELDS,
+        POST_MERGE_DATA_BRANCH_IDENTITY_SCHEMA,
+        POST_MERGE_STAGE_FIELDS,
+        PREMERGE_NATIVE_CHAIN_IDENTITY_FIELDS,
+        PREMERGE_NATIVE_CHAIN_IDENTITY_SCHEMA,
     )
 
-    assert rpc.NATIVE_CHAIN_IDENTITY_FIELDS == NATIVE_CHAIN_IDENTITY_FIELDS
-    assert rpc.NATIVE_CHAIN_IDENTITY_SCHEMA == NATIVE_CHAIN_IDENTITY_SCHEMA
+    assert rpc.PREMERGE_NATIVE_CHAIN_IDENTITY_FIELDS == PREMERGE_NATIVE_CHAIN_IDENTITY_FIELDS
+    assert rpc.PREMERGE_NATIVE_CHAIN_IDENTITY_SCHEMA == PREMERGE_NATIVE_CHAIN_IDENTITY_SCHEMA
+    assert rpc.POST_MERGE_DATA_BRANCH_IDENTITY_FIELDS == POST_MERGE_DATA_BRANCH_IDENTITY_FIELDS
+    assert rpc.POST_MERGE_DATA_BRANCH_IDENTITY_SCHEMA == POST_MERGE_DATA_BRANCH_IDENTITY_SCHEMA
+    assert rpc.POST_MERGE_STAGE_FIELDS == POST_MERGE_STAGE_FIELDS
     assert rpc.NATIVE_PROVENANCE_SCHEMA == (
-        "petitgpt-accepted-stage-i-native-release-provenance-v1"
+        "petitgpt-accepted-stage-i-native-release-provenance-v2"
     )
 
 
 def test_native_chain_identity_is_computed_identically_by_both_modules(native_e2e):
     from pretrain.stage_p_native_provenance_v1 import (
-        native_chain_identity_sha256 as native_side,
+        post_merge_data_branch_identity_sha256 as post_native,
+        premerge_native_chain_identity_sha256 as pre_native,
     )
 
-    provenance = _native_plan(native_e2e)["release_provenance"]
-    assert native_side(provenance) == rpc.native_chain_identity_sha256(provenance)
-    assert native_side(provenance) == provenance["native_chain_identity_sha256"]
+    provenance = native_plan(native_e2e)["release_provenance"]
+    assert pre_native(provenance) == rpc.premerge_native_chain_identity_sha256(provenance)
+    assert pre_native(provenance) == provenance["premerge_native_chain_identity_sha256"]
+    assert post_native(provenance) == rpc.post_merge_data_branch_identity_sha256(provenance)
+    assert post_native(provenance) == provenance["native_post_merge_data_branch_identity_sha256"]
+    # The two identities are distinct concepts and must not collide.
+    assert pre_native(provenance) != post_native(provenance)
 
 
 def test_canonical_encoders_agree_between_modules():
@@ -590,7 +525,7 @@ def test_canonical_encoders_agree_between_modules():
 
 @pytest.mark.parametrize("field", list(rpc.NATIVE_FORBIDDEN_PROVENANCE_FIELDS))
 def test_native_plan_carrying_a_legacy_object_is_rejected(native_e2e, field):
-    provenance = dict(_native_plan(native_e2e)["release_provenance"])
+    provenance = dict(native_plan(native_e2e)["release_provenance"])
     provenance[field] = {"anything": True}
     with pytest.raises(RuntimeError, match="legacy selector-v1 provenance objects"):
         rpc.validate_native_provenance_object(provenance)
@@ -598,7 +533,7 @@ def test_native_plan_carrying_a_legacy_object_is_rejected(native_e2e, field):
 
 @pytest.mark.parametrize("field", list(rpc.NATIVE_REQUIRED_PROVENANCE_FIELDS))
 def test_native_plan_missing_a_required_field_is_rejected(native_e2e, field):
-    provenance = dict(_native_plan(native_e2e)["release_provenance"])
+    provenance = dict(native_plan(native_e2e)["release_provenance"])
     provenance.pop(field, None)
     with pytest.raises(RuntimeError):
         rpc.validate_native_provenance_object(provenance)
@@ -606,14 +541,14 @@ def test_native_plan_missing_a_required_field_is_rejected(native_e2e, field):
 
 @pytest.mark.parametrize("field", list(rpc.NATIVE_REQUIRED_STAGE_FIELDS))
 def test_native_plan_missing_a_required_stage_field_is_rejected(native_e2e, field):
-    provenance = json.loads(json.dumps(_native_plan(native_e2e)["release_provenance"]))
+    provenance = json.loads(json.dumps(native_plan(native_e2e)["release_provenance"]))
     provenance["stages"]["stage_b"].pop(field, None)
     with pytest.raises(RuntimeError):
         rpc.validate_native_provenance_object(provenance)
 
 
 def test_native_plan_with_a_wrong_schema_version_is_rejected(native_e2e):
-    provenance = dict(_native_plan(native_e2e)["release_provenance"])
+    provenance = dict(native_plan(native_e2e)["release_provenance"])
     provenance["schema_version"] = "petitgpt-something-else-v9"
     with pytest.raises(RuntimeError, match="schema_version must be"):
         rpc.validate_native_provenance_object(provenance)
@@ -646,7 +581,7 @@ def test_unknown_chain_kind_is_not_reinterpreted_as_legacy():
     ],
 )
 def test_serialized_full_chain_validated_cannot_substitute_for_validation(native_e2e, corruption):
-    provenance = json.loads(json.dumps(_native_plan(native_e2e)["release_provenance"]))
+    provenance = json.loads(json.dumps(native_plan(native_e2e)["release_provenance"]))
     assert provenance["full_chain_validated"] is True
     if corruption == "wrong_schema":
         provenance["schema_version"] = "nope-v1"
@@ -665,7 +600,7 @@ def test_serialized_full_chain_validated_cannot_substitute_for_validation(native
 
 
 def test_full_chain_validated_false_cannot_be_upgraded_by_caller(native_e2e):
-    provenance = dict(_native_plan(native_e2e)["release_provenance"])
+    provenance = dict(native_plan(native_e2e)["release_provenance"])
     provenance["full_chain_validated"] = False
     with pytest.raises(RuntimeError, match="full_chain_validated must be true"):
         rpc.validate_native_provenance_object(provenance)
@@ -675,7 +610,7 @@ def test_full_chain_validated_false_cannot_be_upgraded_by_caller(native_e2e):
 
 
 def test_end_to_end_native_route(native_e2e, tmp_path):
-    plan = _native_plan(native_e2e)
+    plan = native_plan(native_e2e)
     provenance = plan["release_provenance"]
     assert provenance["full_chain_validated"] is True
 

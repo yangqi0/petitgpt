@@ -25,10 +25,13 @@ completion authority and adding a second one would create two things that can di
 from __future__ import annotations
 
 from collections.abc import Iterable, Mapping, Sequence
+import ctypes
 from dataclasses import dataclass, field
+import errno
 import hashlib
 import os
 from pathlib import Path
+import platform
 import shutil
 import sys
 import tempfile
@@ -353,25 +356,90 @@ def fsync_dir(path: Path) -> None:
 _fsync_dir = fsync_dir
 
 
-def publish_release_atomic(staging: Path, destination: Path) -> Path:
-    """Rename a fully built staging directory into place. Never replaces an existing release."""
-    destination = Path(destination)
-    _require(
-        not destination.exists(),
-        f"refusing to replace an existing Stage-M release: {destination}",
+# R2-F. `os.rename` on a directory REPLACES an empty destination, so `exists()` followed by
+# `rename()` is a check-then-act with a real window: a destination created between the two calls
+# is silently consumed. The kernel primitive that closes it is renameat2(RENAME_NOREPLACE),
+# which either creates the destination or fails with EEXIST, with no window in between.
+RENAME_NOREPLACE = 1
+AT_FDCWD = -100
+# renameat2 syscall numbers for the architectures this project supports.
+_RENAMEAT2_SYSCALL = {"x86_64": 316, "aarch64": 276}
+
+
+class AtomicPublicationUnsupported(StageMOutputError):
+    """No atomic no-replace rename is available. Publication stops rather than weakening."""
+
+
+def _renameat2_noreplace(source: Path, destination: Path) -> None:
+    """Atomically publish ``source`` as ``destination``, never replacing an existing object."""
+    libc = ctypes.CDLL(None, use_errno=True)
+    src = os.fsencode(str(source))
+    dst = os.fsencode(str(destination))
+
+    handler = getattr(libc, "renameat2", None)
+    if handler is not None:
+        handler.argtypes = [
+            ctypes.c_int,
+            ctypes.c_char_p,
+            ctypes.c_int,
+            ctypes.c_char_p,
+            ctypes.c_uint,
+        ]
+        handler.restype = ctypes.c_int
+        ctypes.set_errno(0)
+        result = handler(AT_FDCWD, src, AT_FDCWD, dst, RENAME_NOREPLACE)
+    else:
+        number = _RENAMEAT2_SYSCALL.get(platform.machine())
+        if number is None:
+            raise AtomicPublicationUnsupported(
+                "no atomic no-replace rename is available on this platform "
+                f"({platform.machine()}); refusing to publish with weaker semantics"
+            )
+        libc.syscall.argtypes = [
+            ctypes.c_long,
+            ctypes.c_int,
+            ctypes.c_char_p,
+            ctypes.c_int,
+            ctypes.c_char_p,
+            ctypes.c_uint,
+        ]
+        libc.syscall.restype = ctypes.c_long
+        ctypes.set_errno(0)
+        result = libc.syscall(number, AT_FDCWD, src, AT_FDCWD, dst, RENAME_NOREPLACE)
+
+    if result == 0:
+        return
+    code = ctypes.get_errno()
+    if code == errno.EEXIST or code == errno.ENOTEMPTY:
+        raise StageMOutputError(f"refusing to replace an existing Stage-M release: {destination}")
+    if code in (errno.ENOSYS, errno.EINVAL, errno.EOPNOTSUPP):
+        # The kernel or the filesystem does not implement RENAME_NOREPLACE. Falling back to a
+        # replacing rename would reintroduce exactly the defect this function exists to remove.
+        raise AtomicPublicationUnsupported(
+            "RENAME_NOREPLACE is not supported by this kernel or filesystem "
+            f"(errno {code}); refusing to publish with weaker semantics"
+        )
+    raise StageMOutputError(
+        f"atomic publication failed: {source} -> {destination}: [Errno {code}] {os.strerror(code)}"
     )
+
+
+def publish_release_atomic(staging: Path, destination: Path) -> Path:
+    """Publish a fully built staging directory atomically, never replacing a destination.
+
+    There is deliberately no ``exists()`` pre-check driving the decision: the kernel makes the
+    create-or-fail choice in one operation. A destination that appears between the last fsync
+    and the publication is left untouched and this call fails cleanly, leaving the staging
+    directory intact for the caller to discard.
+    """
+    destination = Path(destination)
     destination.parent.mkdir(parents=True, exist_ok=True)
-    # R1-F ordering: nested shard directories first (deepest first), then the staging root,
-    # then the rename, then the destination's parent.
+    # R1-F ordering, preserved: nested shard directories first, then the staging root, then the
+    # publication, then the destination's parent.
     for child in sorted(p for p in staging.iterdir() if p.is_dir()):
         fsync_dir(child)
     fsync_dir(staging)
-    try:
-        os.rename(str(staging), str(destination))
-    except OSError as exc:
-        raise StageMOutputError(
-            f"atomic publication failed: {staging} -> {destination}: {exc}"
-        ) from exc
+    _renameat2_noreplace(staging, destination)
     fsync_dir(destination.parent)
     return destination
 
@@ -445,6 +513,8 @@ __all__ = [
     "STORAGE_DTYPE",
     "PackedStream",
     "ShardWriter",
+    "AtomicPublicationUnsupported",
+    "RENAME_NOREPLACE",
     "StageMOutputError",
     "assert_token_ids",
     "build_release_meta",

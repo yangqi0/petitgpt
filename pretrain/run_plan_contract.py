@@ -20,12 +20,19 @@ STAGE_B_SELECTION_STAGES = ("stage_b", "control")
 NATIVE_CHAIN_KIND = "accepted_stage_i_native_v1"
 LEGACY_CHAIN_KIND = "legacy_selector_v1"
 PROVENANCE_CHAIN_KINDS = (NATIVE_CHAIN_KIND, LEGACY_CHAIN_KIND)
-NATIVE_PROVENANCE_SCHEMA = "petitgpt-accepted-stage-i-native-release-provenance-v1"
-NATIVE_IMMUTABLE_IDENTITY_SCHEMA = "petitgpt-stage-p-native-data-branch-identity-v1"
-NATIVE_CHAIN_IDENTITY_SCHEMA = "petitgpt-stage-i-native-chain-identity-v1"
-# Mirrors pretrain/stage_p_native_provenance_v1.NATIVE_CHAIN_IDENTITY_FIELDS; the two lists are
-# pinned to each other by tests/test_stage_m_p_repair_r1.py.
-NATIVE_CHAIN_IDENTITY_FIELDS = (
+NATIVE_PROVENANCE_SCHEMA = "petitgpt-accepted-stage-i-native-release-provenance-v2"
+
+# R2-E. Two DISTINCT identities. The pre-merge chain identity covers what the native validator
+# itself established; the post-merge data-branch identity covers the COMPLETE assembled native
+# data authority this module consumes. They are not the same projection and are not named as if
+# they were.
+PREMERGE_NATIVE_CHAIN_IDENTITY_SCHEMA = "petitgpt-stage-i-native-premerge-chain-identity-v1"
+POST_MERGE_DATA_BRANCH_IDENTITY_SCHEMA = (
+    "petitgpt-stage-p-native-post-merge-data-branch-identity-v1"
+)
+
+# Mirrors pretrain/stage_p_native_provenance_v1.PREMERGE_NATIVE_CHAIN_IDENTITY_FIELDS.
+PREMERGE_NATIVE_CHAIN_IDENTITY_FIELDS = (
     "accepted_stage_i",
     "accepted_stage_i_identity_sha256",
     "candidate_m_plan_schema",
@@ -57,19 +64,61 @@ NATIVE_FORBIDDEN_PROVENANCE_FIELDS = (
 
 # Top-level objects a native provenance block must carry. Absence is a controlled failure, not
 # a reason to fall back to the legacy branch.
+# R2-D. Derived from what the native planner branch actually serializes after the merge, not
+# from a prose list. Missing any of these is a controlled failure.
 NATIVE_REQUIRED_PROVENANCE_FIELDS = (
     "accepted_stage_i",
     "accepted_stage_i_identity_sha256",
     "candidate_m_plan_schema",
     "candidate_m_plan_sha256",
+    "candidate_plan_contract_field_count",
     "model_contract",
-    "native_chain_identity_sha256",
+    "native_post_merge_data_branch_identity_sha256",
+    "native_shared_authority_validated",
+    "premerge_native_chain_identity_sha256",
+    "provenance_chain_kind",
+    "reference_validation",
     "schema_version",
+    "shared_exclusion_authority",
     "shared_tokenizer_sha256",
     "stage_m_implementation_bundle_sha256",
     "stage_m_ordering_policy",
     "stage_p_native_validator_bundle_sha256",
     "stages",
+    "tokenizer_release",
+)
+
+# Mirrors pretrain/stage_p_native_provenance_v1.POST_MERGE_DATA_BRANCH_IDENTITY_FIELDS.
+POST_MERGE_DATA_BRANCH_IDENTITY_FIELDS = (
+    "accepted_stage_i",
+    "accepted_stage_i_identity_sha256",
+    "candidate_m_plan_schema",
+    "candidate_m_plan_sha256",
+    "candidate_plan_contract_field_count",
+    "model_contract",
+    "native_shared_authority_validated",
+    "premerge_native_chain_identity_sha256",
+    "provenance_chain_kind",
+    "reference_validation",
+    "schema_version",
+    "shared_exclusion_authority",
+    "shared_tokenizer_sha256",
+    "stage_m_implementation_bundle_sha256",
+    "stage_m_ordering_policy",
+    "stage_p_native_validator_bundle_sha256",
+    "stages",
+    "tokenizer_release",
+)
+
+POST_MERGE_STAGE_FIELDS = (
+    "expected_accounting",
+    "input_sequence_commitment",
+    "manifest_sha256",
+    "release_dir",
+    "semantic_groups_checked",
+    "shard_inventory_sha256",
+    "shards",
+    "stored_token_ids",
 )
 
 NATIVE_REQUIRED_STAGE_FIELDS = (
@@ -77,6 +126,7 @@ NATIVE_REQUIRED_STAGE_FIELDS = (
     "input_sequence_commitment",
     "manifest_sha256",
     "release_dir",
+    "semantic_groups_checked",
     "shard_inventory_sha256",
     "shards",
     "stored_token_ids",
@@ -177,60 +227,30 @@ def _canonical_json_bytes(value: Any) -> bytes:
     ).encode("utf-8")
 
 
-def native_chain_identity_sha256(provenance: Mapping[str, Any]) -> str:
-    """Recompute the native chain identity over everything but the compatibility boolean.
-
-    This is the mechanism that makes ``full_chain_validated`` non-authoritative: the digest is
-    derived from the provenance object's own contents, so a caller cannot assert a validated
-    chain by flipping a flag -- every field the validator committed to has to still be there,
-    unchanged.
-    """
+def premerge_native_chain_identity_sha256(provenance: Mapping[str, Any]) -> str:
+    """Recompute the PRE-MERGE native chain identity. Not the final data-branch identity."""
     payload = {
-        "schema_version": NATIVE_CHAIN_IDENTITY_SCHEMA,
-        "fields": {name: provenance.get(name) for name in NATIVE_CHAIN_IDENTITY_FIELDS},
+        "schema_version": PREMERGE_NATIVE_CHAIN_IDENTITY_SCHEMA,
+        "fields": {name: provenance.get(name) for name in PREMERGE_NATIVE_CHAIN_IDENTITY_FIELDS},
     }
     return hashlib.sha256(_canonical_json_bytes(payload)).hexdigest()
 
 
-def native_data_branch_identity_sha256(provenance: Mapping[str, Any]) -> str:
-    """Versioned canonical identity of the complete native data authority.
+def post_merge_data_branch_identity_sha256(provenance: Mapping[str, Any]) -> str:
+    """Independently recompute the COMPLETE assembled native data-branch identity. R2-E.
 
-    Binds exactly the native provenance fields that decide what data a training plan is about:
-    the chain kind and schema, the accepted Stage-I identity, the candidate-M plan identity,
-    both Stage-M release identities and their shard inventories, the per-stage input sequence
-    commitments and accounting, the tokenizer/reference authorities and the validator
-    identities. No legacy-only object is included for compatibility.
+    This is the mechanism that makes ``full_chain_validated`` non-authoritative: the digest is
+    derived from the provenance object's own assembled contents, so a caller cannot assert a
+    validated chain by flipping a flag.
     """
     stages = _mapping(provenance.get("stages"), field="release_provenance.stages")
-    projection = {
-        "schema_version": NATIVE_IMMUTABLE_IDENTITY_SCHEMA,
-        "provenance_chain_kind": provenance.get("provenance_chain_kind"),
-        "native_provenance_schema": provenance.get("schema_version"),
-        "accepted_stage_i_identity_sha256": provenance.get("accepted_stage_i_identity_sha256"),
-        "accepted_stage_i": provenance.get("accepted_stage_i"),
-        "candidate_m_plan_schema": provenance.get("candidate_m_plan_schema"),
-        "candidate_m_plan_sha256": provenance.get("candidate_m_plan_sha256"),
-        "stage_m_implementation_bundle_sha256": provenance.get(
-            "stage_m_implementation_bundle_sha256"
-        ),
-        "stage_m_ordering_policy": provenance.get("stage_m_ordering_policy"),
-        "stage_p_native_validator_bundle_sha256": provenance.get(
-            "stage_p_native_validator_bundle_sha256"
-        ),
-        "shared_tokenizer_sha256": provenance.get("shared_tokenizer_sha256"),
-        "model_contract": provenance.get("model_contract"),
-        "native_chain_identity_sha256": provenance.get("native_chain_identity_sha256"),
-        "reference_validation": provenance.get("reference_validation"),
-        "tokenizer_release": provenance.get("tokenizer_release"),
-        "stages": {
-            stage: {
-                key: _mapping(stages.get(stage), field=f"release_provenance.stages.{stage}").get(
-                    key
-                )
-                for key in NATIVE_REQUIRED_STAGE_FIELDS
-            }
-            for stage in sorted(stages)
-        },
+    projection: dict[str, Any] = {
+        "schema_version": POST_MERGE_DATA_BRANCH_IDENTITY_SCHEMA,
+        "fields": {name: provenance.get(name) for name in POST_MERGE_DATA_BRANCH_IDENTITY_FIELDS},
+    }
+    projection["fields"]["stages"] = {
+        stage: {key: (stages.get(stage) or {}).get(key) for key in POST_MERGE_STAGE_FIELDS}
+        for stage in sorted(stages)
     }
     return hashlib.sha256(_canonical_json_bytes(projection)).hexdigest()
 
@@ -305,15 +325,34 @@ def validate_native_provenance_object(provenance: Mapping[str, Any]) -> str:
             entry.get("stored_token_ids"), field=f"stages.{stage}.stored_token_ids", positive=True
         )
 
-    recomputed = native_chain_identity_sha256(provenance)
-    if recomputed != provenance.get("native_chain_identity_sha256"):
+    if provenance.get("native_shared_authority_validated") is not True:
         raise RuntimeError(
-            "native run plan release_provenance was modified after validation: "
-            f"recomputed={recomputed}, declared={provenance.get('native_chain_identity_sha256')}"
+            "native run plan release_provenance.native_shared_authority_validated must be true"
+        )
+    exclusion = _mapping(
+        provenance.get("shared_exclusion_authority"),
+        field="release_provenance.shared_exclusion_authority",
+    )
+    if not exclusion.get("manifest_sha256s") or not isinstance(exclusion.get("hash_count"), int):
+        raise RuntimeError("native run plan shared exclusion authority is incomplete")
+
+    premerge = premerge_native_chain_identity_sha256(provenance)
+    if premerge != provenance.get("premerge_native_chain_identity_sha256"):
+        raise RuntimeError(
+            "native run plan pre-merge chain identity does not recompute: "
+            f"recomputed={premerge}, "
+            f"declared={provenance.get('premerge_native_chain_identity_sha256')}"
+        )
+    recomputed = post_merge_data_branch_identity_sha256(provenance)
+    declared = provenance.get("native_post_merge_data_branch_identity_sha256")
+    if recomputed != declared:
+        raise RuntimeError(
+            "native run plan post-merge data-branch identity does not recompute: "
+            f"recomputed={recomputed}, declared={declared}"
         )
     if provenance.get("full_chain_validated") is not True:
         raise RuntimeError("native run plan release_provenance.full_chain_validated must be true")
-    return native_data_branch_identity_sha256(provenance)
+    return recomputed
 
 
 def validate_run_plan_args(args: argparse.Namespace) -> None:
@@ -713,7 +752,7 @@ def load_run_plan_binding(
         "expected_stage_samples": expected_samples,
         "data_branch_immutable_sha256": _data_branch_immutable_sha256(plan),
         "provenance_chain_kind": provenance_chain_kind,
-        "native_data_branch_identity_sha256": native_data_branch_identity,
+        "native_post_merge_data_branch_identity_sha256": native_data_branch_identity,
         "data_branch_validation": None,
         "selection_manifest_sha256": selection_manifest_sha256,
         "sequences_per_optimizer_step": sequences_per_step,
@@ -900,7 +939,7 @@ def _record_validated_data_branch(
         # R1-C: for a native plan the immutable data authority is this identity; for a legacy
         # plan it is None on both sides, so the comparison is a no-op there.
         "provenance_chain_kind",
-        "native_data_branch_identity_sha256",
+        "native_post_merge_data_branch_identity_sha256",
         "schedule_total_steps",
         "tokenizer_sha256",
         "reference_release_manifest_sha256",

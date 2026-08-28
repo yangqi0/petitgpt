@@ -42,23 +42,33 @@ from pretrain.stage_m_contract_v1 import (  # noqa: E402
     canonical_json_bytes,
     file_sha256,
     p_native_implementation_bundle,
+    plan_exclusion_authority,
+    require_agreeing_exclusion_authorities,
     sha256_hex,
+    shared_exclusion_authority,
     stream_accounting,
+    validate_candidate_plan_contract,
     validated_sha256,
 )
 from pretrain.stage_m_output_v1 import MANIFEST_FILENAME, validate_published_release  # noqa: E402
 
 NATIVE_CHAIN_KIND = "accepted_stage_i_native_v1"
 LEGACY_CHAIN_KIND = "legacy_selector_v1"
-NATIVE_PROVENANCE_SCHEMA = "petitgpt-accepted-stage-i-native-release-provenance-v1"
-NATIVE_CHAIN_IDENTITY_SCHEMA = "petitgpt-stage-i-native-chain-identity-v1"
+# R2 bumps this deliberately: the native provenance object gained shared_exclusion_authority
+# and candidate_plan_contract_field_count, and renamed its chain-identity field, so the
+# serialized contract changed. Schema discipline, not a version bump for changed source bytes.
+NATIVE_PROVENANCE_SCHEMA = "petitgpt-accepted-stage-i-native-release-provenance-v2"
 
-# The exact fields the native validator commits to. The identity is a projection over this
-# closed list rather than "everything except one flag", because the planner legitimately merges
-# further shared authorities (reference_validation, tokenizer_release, the stage release
-# pointers) into the same provenance object afterwards. Anything in this list changing moves
-# the identity; anything outside it is validated separately by the strict run-plan contract.
-NATIVE_CHAIN_IDENTITY_FIELDS = (
+# R2-E. Two DISTINCT identities, named for what they actually cover. The R1 report wrongly
+# described them as one mirrored definition; they were never the same projection.
+#
+#   PRE-MERGE  (here)  covers what validate_native_chain itself commits to, before the planner
+#                      merges the shared G/G2 authorities in.
+#   POST-MERGE (below) covers the complete assembled native data authority that the
+#                      training-facing run-plan contract consumes.
+PREMERGE_NATIVE_CHAIN_IDENTITY_SCHEMA = "petitgpt-stage-i-native-premerge-chain-identity-v1"
+
+PREMERGE_NATIVE_CHAIN_IDENTITY_FIELDS = (
     "accepted_stage_i",
     "accepted_stage_i_identity_sha256",
     "candidate_m_plan_schema",
@@ -146,6 +156,342 @@ def assert_single_branch(payload: Mapping[str, Any], *, chain_kind: str) -> None
     )
 
 
+# R2-C. The complete load-bearing semantic projection of a Stage-M schema-3 release, derived
+# from the fields build_release_meta actually emits rather than from the review's examples.
+# Every group here is checked by validate_release_semantics; the count is machine-derived from
+# this tuple so it cannot drift from the prose.
+M_RELEASE_SEMANTIC_GROUPS = (
+    "release_schema_version",
+    "release_completion_status",
+    "release_storage_dtype",
+    "release_byte_order_profile",
+    "release_vocab_size",
+    "release_canonical_contract_block",
+    "release_legacy_flags",
+    "release_source_exhaustion_policy",
+    "release_shard_tokens",
+    "release_train_split_geometry",
+    "release_no_validation_split",
+    "release_shard_inventory_and_digests",
+    "tokenizer_identity",
+    "stage_identity",
+    "stage_stream_count",
+    "candidate_plan_identity",
+    "candidate_plan_schema",
+    "ordering_policy",
+    "commitment_schema",
+    "stage_input_commitment",
+    "accepted_i_run_identity",
+    "accepted_i_manifest_identity",
+    "accepted_i_completion_identity",
+    "accepted_i_layer2_identity",
+    "accepted_i_binding_identity",
+    "accepted_i_record_token_aggregates",
+    "per_stage_input_accounting",
+    "per_stage_expected_accounting",
+    "per_stage_actual_accounting",
+    "document_framing_semantics",
+    "tail_lookahead_semantics",
+    "model_seq_len_authority",
+    "shared_exclusion_authority",
+    "implementation_identity",
+    "environment_identity",
+    "validation_completion_claims",
+)
+
+
+def validate_release_semantics(
+    *,
+    stage: str,
+    manifest: Mapping[str, Any],
+    validation: Mapping[str, Any],
+    plan: Mapping[str, Any],
+    plan_sha256: str,
+    accepted: Any,
+) -> tuple[str, ...]:
+    """Check every load-bearing semantic group of one Stage-M release. R2-C.
+
+    Each group is proved against the authorized candidate-M plan, the verified accepted-Stage-I
+    authority, or the frozen contract -- whichever is the real authority for that fact. Where a
+    fact is serialized in more than one place, the copies must agree, so a release cannot carry
+    two contradictory statements of the same thing.
+    """
+    from pretrain.stage_m_contract_v1 import MODEL_CONTRACT as _MODEL
+
+    checked: list[str] = []
+
+    def group(name: str, condition: object, message: str) -> None:
+        _require(condition, f"{stage}: {message}")
+        checked.append(name)
+
+    binding = _mapping(manifest.get("stage_m"), field=f"{stage}.meta.stage_m")
+    profile = _mapping(plan.get("release_profile"), field="plan.release_profile")
+    planned = _mapping(
+        (plan.get("stage_streams") or {}).get(stage), field=f"plan.stage_streams.{stage}"
+    )
+    expected_accounting = dict(planned.get("expected_accounting") or {})
+    seq_len = int(_MODEL["seq_len"])
+
+    group(
+        "release_schema_version",
+        manifest.get("schema_version") == 3,
+        "release is not canonical schema 3",
+    )
+    group(
+        "release_completion_status",
+        manifest.get("status") == "complete",
+        "release is not in the canonical schema-3 complete state",
+    )
+    group(
+        "release_storage_dtype",
+        manifest.get("dtype") == profile.get("storage_dtype"),
+        f"release dtype {manifest.get('dtype')!r} differs from the plan profile",
+    )
+    group(
+        "release_byte_order_profile",
+        profile.get("storage_byte_order") == "little"
+        and profile.get("storage_dtype_explicit") == "<u2",
+        "plan release profile does not declare the frozen little-endian uint16 byte order",
+    )
+    group(
+        "release_vocab_size",
+        manifest.get("vocab_size") == int(_MODEL["vocab_size"]),
+        "release vocab_size differs from the frozen model contract",
+    )
+
+    contract_block = _mapping(manifest.get("contract"), field=f"{stage}.contract")
+    group(
+        "release_canonical_contract_block",
+        contract_block.get("canonical") is True
+        and contract_block.get("issues") == []
+        and contract_block.get("legacy_allow_noncanonical_contract") is False,
+        "release contract block is not canonical",
+    )
+    legacy = _mapping(manifest.get("legacy_flags"), field=f"{stage}.legacy_flags")
+    group(
+        "release_legacy_flags",
+        legacy.get("allow_noncanonical_contract") is False
+        and legacy.get("replay_on_exhaustion") is False,
+        "release declares legacy/debug flags",
+    )
+    group(
+        "release_source_exhaustion_policy",
+        manifest.get("source_exhaustion_policy") == "fail_fast",
+        "release does not declare fail_fast source exhaustion",
+    )
+    group(
+        "release_shard_tokens",
+        manifest.get("shard_tokens") == profile.get("shard_tokens"),
+        "release shard_tokens differs from the plan profile",
+    )
+
+    stored = _int(validation.get("expected_tokens"), field=f"{stage}.expected_tokens")
+    group(
+        "release_train_split_geometry",
+        manifest.get("train_tokens") == stored
+        and manifest.get("train_shards") == validation.get("expected_shards")
+        and (manifest.get("accounting") or {}).get("train", {}).get("emitted_shard_tokens")
+        == stored,
+        "release train split geometry is internally inconsistent",
+    )
+    group(
+        "release_no_validation_split",
+        manifest.get("val_tokens") == 0
+        and manifest.get("val_shards") == 0
+        and manifest.get("val_by_source") == {},
+        "a Stage-M release must carry no validation split",
+    )
+    records = [dict(r) for r in validation.get("shard_file_records") or ()]
+    group(
+        "release_shard_inventory_and_digests",
+        len(records) == int(validation["expected_shards"]) and bool(records),
+        "validated shard inventory is incomplete",
+    )
+
+    tokenizer_sha256 = ((plan.get("resources") or {}).get("tokenizer") or {}).get("sha256")
+    group(
+        "tokenizer_identity",
+        manifest.get("tokenizer_sha256") == tokenizer_sha256
+        and validation.get("tokenizer_sha256") == tokenizer_sha256,
+        "release tokenizer differs from the plan",
+    )
+    group(
+        "stage_identity",
+        binding.get("stage") == stage,
+        "release stage_m block names a different stage",
+    )
+    group(
+        "stage_stream_count",
+        binding.get("stage_stream_count") == len(STAGE_STREAMS),
+        "release stage_stream_count differs from the frozen two-stream contract",
+    )
+    group(
+        "candidate_plan_identity",
+        binding.get("candidate_plan_sha256") == plan_sha256,
+        "release was not produced by this candidate Stage-M plan",
+    )
+    group(
+        "candidate_plan_schema",
+        binding.get("candidate_plan_schema") == plan.get("schema_version") == CANDIDATE_PLAN_SCHEMA,
+        "release candidate_plan_schema disagrees with the plan",
+    )
+    group(
+        "ordering_policy",
+        binding.get("ordering_policy") == ORDERING_CONTRACT_ID,
+        "release does not declare the frozen ordering policy",
+    )
+    group(
+        "commitment_schema",
+        binding.get("input_sequence_commitment_schema")
+        == planned.get("input_sequence_commitment_schema"),
+        "release input_sequence_commitment_schema differs from the plan",
+    )
+    group(
+        "stage_input_commitment",
+        binding.get("input_sequence_commitment") == planned.get("input_sequence_commitment"),
+        "release input sequence commitment differs from the plan",
+    )
+
+    accepted_block = _mapping(
+        binding.get("accepted_stage_i"), field=f"{stage}.stage_m.accepted_stage_i"
+    )
+    group(
+        "accepted_i_run_identity",
+        accepted_block.get("run_identity") == accepted.run_identity,
+        "release accepted Stage-I run identity differs from the verified publication",
+    )
+    group(
+        "accepted_i_manifest_identity",
+        accepted_block.get("manifest_sha256") == accepted.manifest_sha256,
+        "release accepted Stage-I manifest digest differs",
+    )
+    group(
+        "accepted_i_completion_identity",
+        accepted_block.get("completion_object_sha256") == accepted.completion_sha256,
+        "release accepted Stage-I completion digest differs",
+    )
+    group(
+        "accepted_i_layer2_identity",
+        accepted_block.get("layer2_expected_result_sha256") == accepted.layer2_sha256,
+        "release accepted Stage-I Layer-2 digest differs",
+    )
+    group(
+        "accepted_i_binding_identity",
+        accepted_block.get("identity_sha256") == accepted.identity_sha256(),
+        "release accepted Stage-I binding identity differs",
+    )
+    group(
+        "accepted_i_record_token_aggregates",
+        accepted_block.get("shard_count") == accepted.shard_count
+        and accepted_block.get("total_records") == accepted.total_records
+        and accepted_block.get("total_serialized_tokens") == accepted.total_serialized_tokens,
+        "release accepted Stage-I aggregates differ from the verified publication",
+    )
+
+    group(
+        "per_stage_input_accounting",
+        _int(binding.get("input_record_count"), field=f"{stage}.input_record_count")
+        == int(planned["input_record_count"])
+        and _int(binding.get("input_serialized_tokens"), field=f"{stage}.input_serialized_tokens")
+        == int(planned["input_serialized_tokens"]),
+        "release input accounting differs from the plan",
+    )
+    group(
+        "per_stage_expected_accounting",
+        dict(manifest.get("stage_m_accounting") or {}) == expected_accounting,
+        "release accounting differs from the plan's expected accounting",
+    )
+    documents = manifest.get("documents")
+    group(
+        "per_stage_actual_accounting",
+        documents == int(planned["input_record_count"])
+        and (manifest.get("accounting") or {}).get("train", {}).get("serialized_tokens")
+        == int(planned["input_serialized_tokens"]),
+        "release actual accounting differs from the plan",
+    )
+
+    group(
+        "document_framing_semantics",
+        contract_block.get("add_bos") is True
+        and contract_block.get("add_eos") is True
+        and contract_block.get("doc_sep") == ""
+        and (manifest.get("accounting") or {}).get("train", {}).get("separator_tokens") == 0
+        and (manifest.get("accounting") or {}).get("train", {}).get("boundary_tokens")
+        == 2 * int(documents or 0),
+        "release document framing declarations are not the frozen contract",
+    )
+    group(
+        "tail_lookahead_semantics",
+        stored == int(expected_accounting["retained_stored_token_ids"])
+        and (stored - 1) % seq_len == 0
+        and (stored - 1) // seq_len == int(expected_accounting["training_sequences"])
+        and int(expected_accounting["padding_tokens"]) == 0
+        and int(expected_accounting["final_lookahead_tokens"]) == 1,
+        "release block geometry differs from the expected tail/lookahead accounting",
+    )
+    group(
+        "model_seq_len_authority",
+        dict(binding.get("model_contract") or {}) == dict(_MODEL)
+        and int(expected_accounting["seq_len"]) == seq_len,
+        "release model/seq_len authority differs from the frozen contract",
+    )
+
+    group(
+        "shared_exclusion_authority",
+        isinstance(manifest.get("reference_validation_exclusion"), Mapping),
+        "release has no reference_validation_exclusion object",
+    )
+
+    group(
+        "implementation_identity",
+        binding.get("implementation_bundle_sha256") == plan.get("implementation_bundle_sha256")
+        and binding.get("implementation_commit") == plan.get("implementation_commit"),
+        "release implementation identity differs from the plan",
+    )
+    group(
+        "environment_identity",
+        dict(binding.get("environment") or {}) == dict(plan.get("environment_contract") or {}),
+        "release environment differs from the plan",
+    )
+    group(
+        "validation_completion_claims",
+        validation.get("manifest_schema_version") == 3
+        and validation.get("dtype") == "uint16"
+        and validation.get("release_kind") == "regular"
+        and validation.get("split") == "train",
+        "release did not validate as a canonical schema-3 train split",
+    )
+
+    missing = [g for g in M_RELEASE_SEMANTIC_GROUPS if g not in checked]
+    _require(not missing, f"{stage}: semantic groups not validated: {missing}")
+    _require(
+        len(checked) == len(M_RELEASE_SEMANTIC_GROUPS),
+        f"{stage}: expected {len(M_RELEASE_SEMANTIC_GROUPS)} groups, checked {len(checked)}",
+    )
+    return tuple(checked)
+
+
+def release_exclusion_authority(
+    manifest: Mapping[str, Any], validation: Mapping[str, Any], *, stage: str
+) -> dict[str, Any]:
+    """Extract one Stage-M release's exclusion authority through the canonical normalizer.
+
+    The digests come from the frozen schema-3 validator's own parse of the release, so the
+    release cannot present one set to the validator and another to this comparison.
+    """
+    declared = manifest.get("reference_validation_exclusion")
+    _require(
+        isinstance(declared, Mapping),
+        f"{stage}: release has no reference_validation_exclusion object",
+    )
+    assert isinstance(declared, Mapping)
+    return shared_exclusion_authority(
+        sha256s=list(validation.get("reference_exclusion_manifest_sha256s") or ()),
+        hash_count=declared.get("union_hash_count"),
+        source=f"stage_m_release[{stage}]",
+    )
+
+
 def planned_commitment_schema(plan: Mapping[str, Any], stage: str) -> str:
     """The input-sequence-commitment schema the authorized plan declares for one stage."""
     streams = _mapping(plan.get("stage_streams"), field="plan.stage_streams")
@@ -230,18 +576,12 @@ def validate_native_chain(
         plan.get("schema_version") == CANDIDATE_PLAN_SCHEMA,
         f"unsupported candidate Stage-M plan schema: {plan.get('schema_version')!r}",
     )
-    _require(
-        (plan.get("ordering_contract") or {}).get("policy") == ORDERING_CONTRACT_ID,
-        "candidate Stage-M plan does not carry the frozen ordering policy",
-    )
-    _require(
-        dict(plan.get("model_contract") or {}) == dict(MODEL_CONTRACT),
-        "candidate Stage-M plan model contract differs from the frozen contract",
-    )
-    _require(
-        int(plan["model_contract"]["seq_len"]) == SEQ_LEN,
-        "candidate Stage-M plan seq_len is not the frozen context length",
-    )
+    # R2-B / section 7: the same closed contract validator the producer uses. A plan whose
+    # digest matches but whose declarations contradict the frozen contract is refused here too.
+    try:
+        plan_contract = validate_candidate_plan_contract(plan)
+    except Exception as exc:  # normalized into this module's controlled failure type
+        raise NativeProvenanceError(f"candidate Stage-M plan contract: {exc}") from exc
 
     # --- link 2: the accepted Stage-I publication ----------------------------------------
     bound = _mapping(plan.get("accepted_stage_i"), field="plan.accepted_stage_i")
@@ -277,119 +617,23 @@ def validate_native_chain(
     )
 
     # --- link 3: the two derived Stage-M releases ----------------------------------------
+    # R2-A: the candidate-M plan's own exclusion authority joins the shared comparison.
+    exclusion_authorities = [plan_exclusion_authority(plan)]
     stages: dict[str, Any] = {}
     for stage in STAGE_STREAMS:
         manifest, manifest_sha256, validation = _load_release(stage_releases[stage], stage=stage)
-        binding = _mapping(manifest.get("stage_m"), field=f"{stage}.meta.stage_m")
-        _require(
-            binding.get("candidate_plan_sha256") == plan_sha256,
-            f"{stage}: release was not produced by this candidate Stage-M plan",
+        # R2-C: every load-bearing semantic group, table-driven so the coverage count cannot
+        # drift from the prose in the evidence.
+        groups = validate_release_semantics(
+            stage=stage,
+            manifest=manifest,
+            validation=validation,
+            plan=plan,
+            plan_sha256=plan_sha256,
+            accepted=accepted,
         )
-        _require(
-            binding.get("implementation_bundle_sha256") == bundle_sha256,
-            f"{stage}: release implementation bundle differs from the plan",
-        )
-        _require(
-            binding.get("ordering_policy") == ORDERING_CONTRACT_ID,
-            f"{stage}: release does not declare the frozen ordering policy",
-        )
-        _require(
-            binding.get("stage") == stage,
-            f"{stage}: release stage_m block names a different stage",
-        )
-        _require(
-            dict(binding.get("environment") or {}) == dict(plan.get("environment_contract") or {}),
-            f"{stage}: release environment differs from the plan",
-        )
-        _require(
-            manifest.get("tokenizer_sha256") == tokenizer_sha256,
-            f"{stage}: release tokenizer differs from the plan",
-        )
-        _require(
-            validation["tokenizer_sha256"] == tokenizer_sha256,
-            f"{stage}: validated release tokenizer differs from the plan",
-        )
-        _require(
-            dict(binding.get("model_contract") or {}) == dict(MODEL_CONTRACT),
-            f"{stage}: release model contract differs from the frozen contract",
-        )
-
-        # R1-D. Every load-bearing serialized M metadata field is proved against the authorized
-        # plan or the frozen contract. Previously these three in particular could contradict
-        # the plan and still yield a valid chain.
-        _require(
-            binding.get("candidate_plan_schema") == plan.get("schema_version"),
-            f"{stage}: release candidate_plan_schema {binding.get('candidate_plan_schema')!r} "
-            f"differs from the plan schema {plan.get('schema_version')!r}",
-        )
-        _require(
-            binding.get("candidate_plan_schema") == CANDIDATE_PLAN_SCHEMA,
-            f"{stage}: release candidate_plan_schema is not {CANDIDATE_PLAN_SCHEMA!r}",
-        )
-        _require(
-            binding.get("stage_stream_count") == len(STAGE_STREAMS),
-            f"{stage}: release stage_stream_count {binding.get('stage_stream_count')!r} "
-            f"differs from the frozen two-stream contract",
-        )
-        _require(
-            binding.get("input_sequence_commitment_schema")
-            == planned_commitment_schema(plan, stage),
-            f"{stage}: release input_sequence_commitment_schema "
-            f"{binding.get('input_sequence_commitment_schema')!r} differs from the plan",
-        )
-        _require(
-            binding.get("implementation_commit") == plan.get("implementation_commit"),
-            f"{stage}: release implementation_commit differs from the plan",
-        )
-        _require(
-            manifest.get("dtype") == (plan.get("release_profile") or {}).get("storage_dtype"),
-            f"{stage}: release dtype {manifest.get('dtype')!r} differs from the plan profile",
-        )
-        _require(
-            manifest.get("vocab_size") == int(MODEL_CONTRACT["vocab_size"]),
-            f"{stage}: release vocab_size differs from the frozen model contract",
-        )
-        _require(
-            int((manifest.get("stage_m_accounting") or {}).get("seq_len", -1))
-            == int(MODEL_CONTRACT["seq_len"]),
-            f"{stage}: release accounting seq_len differs from the frozen model contract",
-        )
-        _require(
-            manifest.get("shard_tokens") == (plan.get("release_profile") or {}).get("shard_tokens"),
-            f"{stage}: release shard_tokens differs from the plan profile",
-        )
-
-        accepted_block = _mapping(
-            binding.get("accepted_stage_i"), field=f"{stage}.stage_m.accepted_stage_i"
-        )
-        for key, value in (
-            ("run_identity", accepted.run_identity),
-            ("layer2_expected_result_sha256", accepted.layer2_sha256),
-            ("manifest_sha256", accepted.manifest_sha256),
-            ("completion_object_sha256", accepted.completion_sha256),
-            ("identity_sha256", accepted.identity_sha256()),
-        ):
-            _require(
-                accepted_block.get(key) == value,
-                f"{stage}: release accepted Stage-I {key} differs from the verified publication",
-            )
-
         planned = _mapping(
             (plan.get("stage_streams") or {}).get(stage), field=f"plan.stage_streams.{stage}"
-        )
-        _require(
-            binding.get("input_sequence_commitment") == planned.get("input_sequence_commitment"),
-            f"{stage}: release input sequence commitment differs from the plan",
-        )
-        _require(
-            _int(binding.get("input_record_count"), field=f"{stage}.input_record_count")
-            == int(planned["input_record_count"]),
-            f"{stage}: release input record count differs from the plan",
-        )
-        _require(
-            _int(binding.get("input_serialized_tokens"), field=f"{stage}.input_serialized_tokens")
-            == int(planned["input_serialized_tokens"]),
-            f"{stage}: release input serialized tokens differ from the plan",
         )
         membership = accepted.stage_membership[stage]
         _require(
@@ -397,7 +641,6 @@ def validate_native_chain(
             and int(planned["input_serialized_tokens"]) == int(membership["serialized_tokens"]),
             f"{stage}: plan input accounting differs from the accepted publication",
         )
-
         expected = stream_accounting(
             stage, int(membership["serialized_tokens"]), SEQ_LEN
         ).as_canonical()
@@ -405,27 +648,17 @@ def validate_native_chain(
             dict(planned.get("expected_accounting") or {}) == expected,
             f"{stage}: plan expected accounting is not the frozen derivation",
         )
-        _require(
-            dict(manifest.get("stage_m_accounting") or {}) == expected,
-            f"{stage}: release accounting differs from the plan's expected accounting",
-        )
         stored = _int(validation["expected_tokens"], field=f"{stage}.expected_tokens")
-        _require(
-            stored == int(expected["retained_stored_token_ids"]),
-            f"{stage}: published stored token IDs differ from the expected accounting",
-        )
-        _require(
-            (stored - 1) // SEQ_LEN == int(expected["training_sequences"])
-            and (stored - 1) % SEQ_LEN == 0,
-            f"{stage}: published block geometry differs from the expected accounting",
-        )
+        records = [dict(r) for r in validation.get("shard_file_records") or ()]
 
+        exclusion_authorities.append(release_exclusion_authority(manifest, validation, stage=stage))
         records = [dict(r) for r in validation.get("shard_file_records") or ()]
         _require(
             len(records) == int(validation["expected_shards"]),
             f"{stage}: validated shard inventory is incomplete",
         )
         stages[stage] = {
+            "semantic_groups_checked": len(groups),
             "release_dir": str(Path(stage_releases[stage]).expanduser().resolve()),
             "manifest_sha256": manifest_sha256,
             "shards": int(validation["expected_shards"]),
@@ -434,6 +667,8 @@ def validate_native_chain(
             "input_sequence_commitment": str(planned["input_sequence_commitment"]),
             "expected_accounting": expected,
         }
+
+    agreed_exclusion = require_agreeing_exclusion_authorities(exclusion_authorities)
 
     _, native_bundle_sha256 = p_native_implementation_bundle(repo_root)
     provenance = {
@@ -449,20 +684,92 @@ def validate_native_chain(
         "shared_tokenizer_sha256": tokenizer_sha256,
         "model_contract": dict(MODEL_CONTRACT),
         "stages": stages,
+        "shared_exclusion_authority": agreed_exclusion,
+        "candidate_plan_contract_field_count": plan_contract["validated_field_count"],
         "full_chain_validated": True,
     }
-    provenance["native_chain_identity_sha256"] = native_chain_identity_sha256(provenance)
+    provenance["premerge_native_chain_identity_sha256"] = premerge_native_chain_identity_sha256(
+        provenance
+    )
     return provenance
 
 
-def native_chain_identity_sha256(provenance: Mapping[str, Any]) -> str:
-    """Digest over the closed native-identity projection. See NATIVE_CHAIN_IDENTITY_FIELDS."""
+def premerge_native_chain_identity_sha256(provenance: Mapping[str, Any]) -> str:
+    """Digest over the closed PRE-MERGE projection.
+
+    Covers only what validate_native_chain established. It is deliberately NOT the final
+    training-facing data-branch identity; that is computed after the planner merges the shared
+    G/G2 authorities, by :func:`post_merge_data_branch_identity_sha256`. The R1 report described
+    these two as one mirrored definition, which was never true.
+    """
     return sha256_hex(
         canonical_json_bytes({
-            "schema_version": NATIVE_CHAIN_IDENTITY_SCHEMA,
-            "fields": {name: provenance.get(name) for name in NATIVE_CHAIN_IDENTITY_FIELDS},
+            "schema_version": PREMERGE_NATIVE_CHAIN_IDENTITY_SCHEMA,
+            "fields": {
+                name: provenance.get(name) for name in PREMERGE_NATIVE_CHAIN_IDENTITY_FIELDS
+            },
         })
     )
+
+
+# --------------------------------------------------------------------- post-merge identity
+
+POST_MERGE_DATA_BRANCH_IDENTITY_SCHEMA = (
+    "petitgpt-stage-p-native-post-merge-data-branch-identity-v1"
+)
+
+# The complete assembled native data authority as it exists in the final run plan. Producer
+# (here) and training-facing consumer (pretrain/run_plan_contract.py) keep separate
+# implementations so the launch path retains its zero-local-import surface; field list, field
+# order, canonical encoder, schema name and hash algorithm must match exactly, and tests
+# deliberately drift each side to prove a mismatch is detected.
+POST_MERGE_DATA_BRANCH_IDENTITY_FIELDS = (
+    "accepted_stage_i",
+    "accepted_stage_i_identity_sha256",
+    "candidate_m_plan_schema",
+    "candidate_m_plan_sha256",
+    "candidate_plan_contract_field_count",
+    "model_contract",
+    "native_shared_authority_validated",
+    "premerge_native_chain_identity_sha256",
+    "provenance_chain_kind",
+    "reference_validation",
+    "schema_version",
+    "shared_exclusion_authority",
+    "shared_tokenizer_sha256",
+    "stage_m_implementation_bundle_sha256",
+    "stage_m_ordering_policy",
+    "stage_p_native_validator_bundle_sha256",
+    "stages",
+    "tokenizer_release",
+)
+
+POST_MERGE_STAGE_FIELDS = (
+    "expected_accounting",
+    "input_sequence_commitment",
+    "manifest_sha256",
+    "release_dir",
+    "semantic_groups_checked",
+    "shard_inventory_sha256",
+    "shards",
+    "stored_token_ids",
+)
+
+
+def post_merge_data_branch_identity_sha256(provenance: Mapping[str, Any]) -> str:
+    """Identity of the COMPLETE assembled native data authority. R2-E / section 13."""
+    stages = provenance.get("stages")
+    _require(isinstance(stages, Mapping), "post-merge identity requires release_provenance.stages")
+    assert isinstance(stages, Mapping)
+    projection: dict[str, Any] = {
+        "schema_version": POST_MERGE_DATA_BRANCH_IDENTITY_SCHEMA,
+        "fields": {name: provenance.get(name) for name in POST_MERGE_DATA_BRANCH_IDENTITY_FIELDS},
+    }
+    projection["fields"]["stages"] = {
+        stage: {key: (stages.get(stage) or {}).get(key) for key in POST_MERGE_STAGE_FIELDS}
+        for stage in sorted(stages)
+    }
+    return sha256_hex(canonical_json_bytes(projection))
 
 
 def native_chain_field_names() -> Sequence[str]:
@@ -472,8 +779,14 @@ def native_chain_field_names() -> Sequence[str]:
 __all__ = [
     "LEGACY_CHAIN_KIND",
     "LEGACY_ONLY_FIELDS",
-    "NATIVE_CHAIN_IDENTITY_FIELDS",
-    "NATIVE_CHAIN_IDENTITY_SCHEMA",
+    "POST_MERGE_DATA_BRANCH_IDENTITY_FIELDS",
+    "POST_MERGE_DATA_BRANCH_IDENTITY_SCHEMA",
+    "POST_MERGE_STAGE_FIELDS",
+    "POST_MERGE_DATA_BRANCH_IDENTITY_FIELDS",
+    "POST_MERGE_DATA_BRANCH_IDENTITY_SCHEMA",
+    "POST_MERGE_STAGE_FIELDS",
+    "PREMERGE_NATIVE_CHAIN_IDENTITY_FIELDS",
+    "PREMERGE_NATIVE_CHAIN_IDENTITY_SCHEMA",
     "NATIVE_CHAIN_KIND",
     "NATIVE_ONLY_FIELDS",
     "NATIVE_PROVENANCE_SCHEMA",
@@ -481,7 +794,11 @@ __all__ = [
     "NativeProvenanceError",
     "assert_single_branch",
     "native_chain_field_names",
-    "native_chain_identity_sha256",
+    "M_RELEASE_SEMANTIC_GROUPS",
+    "release_exclusion_authority",
+    "validate_release_semantics",
+    "post_merge_data_branch_identity_sha256",
+    "premerge_native_chain_identity_sha256",
     "planned_commitment_schema",
     "validate_native_chain",
 ]

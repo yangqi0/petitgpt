@@ -82,3 +82,125 @@ def tiny_cfg() -> GPTConfig:
         dropout=0.0,
         tie_embeddings=True,
     )
+
+
+# --------------------------------------------------------------------- Stage-M / Stage-P native
+#
+# Shared bounded fixtures for tests/test_stage_m_p_repair_r1.py and
+# tests/test_stage_m_p_repair_r2.py. They live here rather than being imported between test
+# modules, which is what pytest expects and what keeps the linter honest about redefinition.
+
+from pathlib import Path as _Path  # noqa: E402
+
+from pretrain.stage_m_contract_v1 import (  # noqa: E402
+    M_IMPLEMENTATION_BUNDLE_FILES as _M_BUNDLE,
+    STAGE_STREAMS as _STAGE_STREAMS,
+)
+import pretrain.stage_m_realize_v1 as _realize  # noqa: E402
+from tests._stage_m_fixtures import (  # noqa: E402
+    e2e_records as _e2e_records,
+    save_tokenizer as _save_tokenizer,
+    tiny_tokenizer as _tiny_tokenizer,
+    write_accepted_stage_i as _write_accepted_stage_i,
+    write_shared_exclusion_manifest as _write_shared_exclusion,
+)
+
+_REPO_ROOT = _Path(__file__).resolve().parent.parent
+
+
+@pytest.fixture(scope="module")
+def tok():
+    return _tiny_tokenizer()
+
+
+@pytest.fixture
+def accepted(tmp_path, tok):
+    records = _e2e_records(tok)
+    return _write_accepted_stage_i(tmp_path / "stage_i", records, records_per_shard=64), records
+
+
+@pytest.fixture
+def m_run(tmp_path, tok, monkeypatch, accepted):
+    """A real authorized Stage-M run: plan, authorize, publish both stage releases."""
+    import hashlib
+
+    accepted_dir, _records = accepted
+    monkeypatch.setattr(_realize, "assert_tokenizer_contract", lambda path: None)
+    monkeypatch.setattr(_realize, "verify_environment", lambda environment: None)
+    monkeypatch.setattr(_realize, "resolve_repo_root", lambda explicit=None: tmp_path.resolve())
+    for relative in _M_BUNDLE:
+        destination = tmp_path / relative
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_bytes((_REPO_ROOT / relative).read_bytes())
+    tokenizer_path = _save_tokenizer(tok, tmp_path / "tok" / "tokenizer.json")
+    exclusion_path = _write_shared_exclusion(tmp_path / "excl" / "exclusion.json")
+    plan_path = tmp_path / "candidate_m_plan.json"
+    assert (
+        _realize.main([
+            "plan",
+            "--accepted-stage-i-dir",
+            str(accepted_dir),
+            "--tokenizer",
+            str(tokenizer_path.relative_to(tmp_path)),
+            "--reference-exclusion-manifest",
+            str(exclusion_path.relative_to(tmp_path)),
+            "--out",
+            str(plan_path),
+            "--shard-tokens",
+            "4096",
+            "--implementation-commit",
+            "0" * 40,
+        ])
+        == 0
+    )
+    plan_sha = hashlib.sha256(plan_path.read_bytes()).hexdigest()
+    context = _realize.authorize_plan(plan_path, plan_sha, tmp_path.resolve())
+    out_dir = tmp_path / "stage_m"
+    _realize.realize_and_publish(context, out_dir=out_dir)
+    return {
+        "tmp_path": tmp_path,
+        "accepted_dir": accepted_dir,
+        "plan_path": plan_path,
+        "plan_sha": plan_sha,
+        "tokenizer_path": tokenizer_path,
+        "releases": {s: out_dir / s for s in _STAGE_STREAMS},
+        "context": context,
+    }
+
+
+@pytest.fixture
+def native_e2e(m_run, monkeypatch):
+    """Bounded native route: real M releases plus the frozen G/G2 authorities, no selection."""
+    import hashlib
+    import json as _json
+
+    from tests.test_plan_pretrain_run import _write_full_provenance
+
+    tmp_path = m_run["tmp_path"]
+    stage_a_train = m_run["releases"]["stage_a"] / "train"
+    stage_b_train = m_run["releases"]["stage_b"] / "train"
+    provenance = _write_full_provenance(tmp_path, stage_a_train, stage_b_train)
+
+    tokenizer_bytes = m_run["tokenizer_path"].read_bytes()
+    tokenizer_sha = hashlib.sha256(tokenizer_bytes).hexdigest()
+    release_tokenizer = _Path(provenance["tokenizer_release_manifest"]).parent / "tokenizer.json"
+    release_tokenizer.write_bytes(tokenizer_bytes)
+    for path, key in (
+        (_Path(provenance["tokenizer_release_manifest"]), "tokenizer_sha256"),
+        (_Path(provenance["reference_val_dir"]).parent / "manifest.json", "tokenizer_sha256"),
+        (stage_a_train.parent / "meta.json", "tokenizer_sha256"),
+        (stage_b_train.parent / "meta.json", "tokenizer_sha256"),
+    ):
+        payload = _json.loads(path.read_text(encoding="utf-8"))
+        payload[key] = tokenizer_sha
+        path.write_text(_json.dumps(payload), encoding="utf-8")
+
+    monkeypatch.setattr("pretrain.plan_pretrain_run.assert_tokenizer_contract", lambda p: None)
+    return {
+        **m_run,
+        "stage_a_dir": stage_a_train,
+        "stage_b_dir": stage_b_train,
+        "reference_val_dir": provenance["reference_val_dir"],
+        "tokenizer_release_manifest": provenance["tokenizer_release_manifest"],
+        "selection_manifest": provenance["selection_manifest"],
+    }

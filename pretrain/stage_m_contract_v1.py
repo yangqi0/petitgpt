@@ -56,6 +56,8 @@ ACCOUNTING_SCHEMA = "petitgpt-stage-m-accounting-v1"
 BUNDLE_SCHEMA = "petitgpt-m-implementation-bundle-v1"
 RELEASE_PROFILE_SCHEMA = "petitgpt-stage-m-release-profile-v1"
 ORDERING_CONTRACT_ID = "ACCEPTED_STAGE_I_PHYSICAL_ORDER_V1"
+CANDIDATE_PLAN_CONTRACT_SCHEMA = "petitgpt-m-candidate-plan-contract-v1"
+SHARED_EXCLUSION_AUTHORITY_SCHEMA = "petitgpt-stage-m-shared-exclusion-authority-v1"
 
 STAGE_I_RECORD_SCHEMA = "petitgpt-stage-i-document-v1"
 STAGE_I_MANIFEST_SCHEMA = "petitgpt-stage-i-manifest-v1"
@@ -522,6 +524,386 @@ RELEASE_PROFILE = MappingProxyType({
 })
 
 
+# --------------------------------------------------------------------- candidate-plan contract
+
+
+def _exact(actual: Any, expected: Any, *, field: str) -> None:
+    require(
+        actual == expected,
+        f"candidate plan {field}: got {actual!r}, contract requires {expected!r}",
+    )
+
+
+def validate_candidate_plan_contract(plan: Mapping[str, Any]) -> dict[str, Any]:
+    """Closed semantic validation of a candidate-M plan. R2-B.
+
+    Matching the reviewed plan digest proves *which bytes* were reviewed; it does not prove the
+    bytes describe the one permitted Stage-M contract. A plan whose digest is correct but whose
+    declarations contradict the frozen contract -- a different stride, a shuffle enabled, a
+    big-endian profile -- would previously have resolved fine because the runtime is hard-coded
+    to do the right thing regardless. That divergence between what a plan *says* and what the
+    code *does* is exactly what a reviewer reading the plan would be misled by, so it is a
+    contract error here.
+
+    Returns a summary including the number of leaf fields actually validated.
+    """
+    checked = 0
+
+    def check(actual: Any, expected: Any, field: str) -> None:
+        nonlocal checked
+        checked += 1
+        _exact(actual, expected, field=field)
+
+    require(isinstance(plan, Mapping), "candidate plan must be a JSON object")
+
+    # --- identity and posture -----------------------------------------------------------
+    check(plan.get("schema_version"), CANDIDATE_PLAN_SCHEMA, "schema_version")
+    check(plan.get("authorization_status"), "NOT_AUTHORIZED", "authorization_status")
+    check(plan.get("text_field"), "training_text", "text_field")
+    check(plan.get("legacy_orchestration_used"), False, "legacy_orchestration_used")
+    checked += 1
+    require(
+        isinstance(plan.get("authorization_note"), str) and plan["authorization_note"],
+        "candidate plan authorization_note must be a non-empty string",
+    )
+
+    # --- frozen contracts, compared whole ------------------------------------------------
+    check(dict(plan.get("model_contract") or {}), dict(MODEL_CONTRACT), "model_contract")
+    check(dict(plan.get("packing_semantics") or {}), dict(PACKING_SEMANTICS), "packing_semantics")
+
+    ordering = plan.get("ordering_contract")
+    require(isinstance(ordering, Mapping), "candidate plan ordering_contract must be an object")
+    assert isinstance(ordering, Mapping)
+    check(ordering.get("policy"), ORDERING_CONTRACT_ID, "ordering_contract.policy")
+    for flag in (
+        "weighted_interleave",
+        "selection_rank_reorder",
+        "source_quota_scheduling",
+        "hash_shuffle",
+        "new_random_permutation",
+    ):
+        check(ordering.get(flag), False, f"ordering_contract.{flag}")
+    check(
+        ordering.get("only_shuffle"),
+        "training-time block-ID permutation",
+        "ordering_contract.only_shuffle",
+    )
+    checked += 1
+    require(
+        isinstance(ordering.get("rule"), str) and ordering["rule"],
+        "candidate plan ordering_contract.rule must be a non-empty string",
+    )
+
+    # --- release profile ------------------------------------------------------------------
+    profile = plan.get("release_profile")
+    require(isinstance(profile, Mapping), "candidate plan release_profile must be an object")
+    assert isinstance(profile, Mapping)
+    for field, expected in RELEASE_PROFILE.items():
+        check(profile.get(field), expected, f"release_profile.{field}")
+    shard_tokens = require_int(
+        profile.get("shard_tokens"), field="release_profile.shard_tokens", minimum=1
+    )
+    checked += 1
+
+    # --- environment -----------------------------------------------------------------------
+    environment = plan.get("environment_contract")
+    require(isinstance(environment, Mapping), "candidate plan environment_contract must be object")
+    assert isinstance(environment, Mapping)
+    check(
+        sorted(environment),
+        sorted([
+            "python_executable",
+            "python_version",
+            "tokenizers_version",
+            "numpy_version",
+            "byte_order",
+        ]),
+        "environment_contract field set",
+    )
+    check(
+        environment.get("python_executable"),
+        REQUIRED_PYTHON_EXECUTABLE,
+        "environment_contract.python_executable",
+    )
+    check(
+        environment.get("python_version"),
+        REQUIRED_PYTHON_VERSION,
+        "environment_contract.python_version",
+    )
+    check(
+        environment.get("tokenizers_version"),
+        REQUIRED_TOKENIZERS_VERSION,
+        "environment_contract.tokenizers_version",
+    )
+    check(environment.get("byte_order"), REQUIRED_BYTE_ORDER, "environment_contract.byte_order")
+    checked += 1
+    require(
+        isinstance(environment.get("numpy_version"), str) and environment["numpy_version"],
+        "candidate plan environment_contract.numpy_version must be a non-empty string",
+    )
+
+    # --- implementation identity ------------------------------------------------------------
+    files = plan.get("implementation_files")
+    require(isinstance(files, Mapping), "candidate plan implementation_files must be an object")
+    assert isinstance(files, Mapping)
+    check(sorted(files), sorted(M_IMPLEMENTATION_BUNDLE_FILES), "implementation_files key set")
+    for name, digest in files.items():
+        validated_sha256(digest, field=f"implementation_files[{name}]")
+        checked += 1
+    check(
+        bundle_sha256(dict(files)),
+        plan.get("implementation_bundle_sha256"),
+        "implementation_bundle_sha256 (recomputed from implementation_files)",
+    )
+    checked += 1
+    require(
+        isinstance(plan.get("implementation_commit"), str) and plan["implementation_commit"],
+        "candidate plan implementation_commit must be a non-empty string",
+    )
+
+    # --- resources ---------------------------------------------------------------------------
+    resources = plan.get("resources")
+    require(isinstance(resources, Mapping), "candidate plan resources must be an object")
+    assert isinstance(resources, Mapping)
+    check(sorted(resources), ["reference_exclusion_manifest", "tokenizer"], "resources key set")
+    tokenizer = resources["tokenizer"]
+    require(isinstance(tokenizer, Mapping), "candidate plan resources.tokenizer must be object")
+    validated_sha256(tokenizer.get("sha256"), field="resources.tokenizer.sha256")
+    require_int(tokenizer.get("size_bytes"), field="resources.tokenizer.size_bytes", minimum=1)
+    checked += 2
+    exclusion = plan_exclusion_authority(plan)
+    checked += 2
+
+    # --- accepted Stage-I authority ------------------------------------------------------------
+    accepted = plan.get("accepted_stage_i")
+    require(isinstance(accepted, Mapping), "candidate plan accepted_stage_i must be an object")
+    assert isinstance(accepted, Mapping)
+    for field in (
+        "run_identity",
+        "manifest_sha256",
+        "completion_object_sha256",
+        "layer2_expected_result_sha256",
+    ):
+        validated_sha256(accepted.get(field), field=f"accepted_stage_i.{field}")
+        checked += 1
+    validated_sha256(
+        plan.get("accepted_stage_i_identity_sha256"), field="accepted_stage_i_identity_sha256"
+    )
+    check(
+        accepted.get("record_schema_version"),
+        STAGE_I_RECORD_SCHEMA,
+        "accepted_stage_i.record_schema_version",
+    )
+    check(
+        accepted.get("manifest_schema_version"),
+        STAGE_I_MANIFEST_SCHEMA,
+        "accepted_stage_i.manifest_schema_version",
+    )
+    check(
+        accepted.get("completion_object_kind"),
+        "stage_i:COMPLETE",
+        "accepted_stage_i.completion_object_kind",
+    )
+    inventory = accepted.get("shard_inventory")
+    require(
+        isinstance(inventory, list) and bool(inventory),
+        "candidate plan accepted_stage_i.shard_inventory must be a non-empty list",
+    )
+    assert isinstance(inventory, list)
+    check(len(inventory), accepted.get("shard_count"), "accepted_stage_i.shard_count")
+    summed_records = 0
+    for index, entry in enumerate(inventory):
+        require(isinstance(entry, Mapping), f"shard_inventory[{index}] must be an object")
+        validated_sha256(entry.get("sha256"), field=f"shard_inventory[{index}].sha256")
+        summed_records += require_int(
+            entry.get("records"), field=f"shard_inventory[{index}].records", minimum=1
+        )
+        require_int(entry.get("bytes"), field=f"shard_inventory[{index}].bytes", minimum=1)
+    check(
+        summed_records,
+        accepted.get("total_records"),
+        "accepted_stage_i.total_records (summed inventory)",
+    )
+    total_records = require_int(accepted.get("total_records"), field="total_records", minimum=1)
+    total_serialized = require_int(
+        accepted.get("total_serialized_tokens"), field="total_serialized_tokens", minimum=1
+    )
+    total_content = require_int(
+        accepted.get("total_content_tokens"), field="total_content_tokens", minimum=1
+    )
+    check(
+        total_content + 2 * total_records,
+        total_serialized,
+        "accepted_stage_i content + 2*records == serialized",
+    )
+
+    membership = accepted.get("stage_membership")
+    require(isinstance(membership, Mapping), "accepted_stage_i.stage_membership must be object")
+    assert isinstance(membership, Mapping)
+    check(sorted(membership), sorted(STAGE_STREAMS), "accepted_stage_i.stage_membership key set")
+
+    # --- stage streams and accounting ------------------------------------------------------
+    streams = plan.get("stage_streams")
+    require(isinstance(streams, Mapping), "candidate plan stage_streams must be an object")
+    assert isinstance(streams, Mapping)
+    check(sorted(streams), sorted(STAGE_STREAMS), "stage_streams key set")
+    check(len(streams), 2, "stage stream count")
+    check(
+        int(PACKING_SEMANTICS["stage_stream_count"]),
+        len(streams),
+        "packing_semantics.stage_stream_count vs stage_streams",
+    )
+    check(list(profile["stage_streams"]), list(STAGE_STREAMS), "release_profile.stage_streams")
+
+    seq_len = int(MODEL_CONTRACT["seq_len"])
+    check(seq_len, SEQ_LEN, "model_contract.seq_len")
+    check(int(PACKING_SEMANTICS["model_input_length"]), seq_len, "packing model_input_length == T")
+    check(int(PACKING_SEMANTICS["stride"]), seq_len, "packing stride == T")
+    check(int(PACKING_SEMANTICS["read_length"]), seq_len + 1, "packing read_length == T+1")
+    check(int(PACKING_SEMANTICS["label_length"]), seq_len, "packing label_length == T")
+
+    accountings: list[StreamAccounting] = []
+    for stage in STAGE_STREAMS:
+        entry = streams[stage]
+        require(isinstance(entry, Mapping), f"stage_streams.{stage} must be an object")
+        assert isinstance(entry, Mapping)
+        check(
+            entry.get("input_sequence_commitment_schema"),
+            INPUT_SEQUENCE_COMMITMENT_SCHEMA,
+            f"stage_streams.{stage}.input_sequence_commitment_schema",
+        )
+        validated_sha256(
+            entry.get("input_sequence_commitment"),
+            field=f"stage_streams.{stage}.input_sequence_commitment",
+        )
+        records = require_int(
+            entry.get("input_record_count"), field=f"{stage}.input_record_count", minimum=1
+        )
+        serialized = require_int(
+            entry.get("input_serialized_tokens"),
+            field=f"{stage}.input_serialized_tokens",
+            minimum=1,
+        )
+        content = require_int(
+            entry.get("input_content_tokens"), field=f"{stage}.input_content_tokens", minimum=1
+        )
+        check(content + 2 * records, serialized, f"{stage} content + 2*records == serialized")
+        declared = membership[stage]
+        check(int(declared["records"]), records, f"{stage} membership records vs stream")
+        check(
+            int(declared["serialized_tokens"]),
+            serialized,
+            f"{stage} membership serialized tokens vs stream",
+        )
+        derived = stream_accounting(stage, serialized, seq_len)
+        check(
+            dict(entry.get("expected_accounting") or {}),
+            derived.as_canonical(),
+            f"stage_streams.{stage}.expected_accounting (recomputed)",
+        )
+        accountings.append(derived)
+        checked += 4
+
+    check(
+        sum(a.input_serialized_tokens for a in accountings),
+        total_serialized,
+        "stage streams sum to accepted serialized tokens",
+    )
+    check(
+        sum(int(membership[s]["records"]) for s in STAGE_STREAMS),
+        total_records,
+        "stage membership sums to accepted record count",
+    )
+    check(
+        dict(plan.get("expected_totals") or {}),
+        total_accounting(accountings),
+        "expected_totals (recomputed)",
+    )
+
+    return {
+        "schema_version": CANDIDATE_PLAN_CONTRACT_SCHEMA,
+        "validated_field_count": checked,
+        "shard_tokens": shard_tokens,
+        "seq_len": seq_len,
+        "exclusion_authority": exclusion,
+        "stage_streams": list(STAGE_STREAMS),
+    }
+
+
+# --------------------------------------------------------------------- shared exclusion authority
+
+
+def shared_exclusion_authority(
+    *, sha256s: Sequence[str], hash_count: int, source: str
+) -> dict[str, Any]:
+    """The one canonical normalization of a reference-exclusion authority (R2-A).
+
+    Every artifact that must share the exclusion contract -- the candidate-M plan, both Stage-M
+    releases, the G tokenizer release and the G2 reference release -- is reduced to this same
+    shape before comparison, so there is a single definition rather than one per call site.
+    """
+    normalized = tuple(
+        sorted({validated_sha256(v, field=f"{source}.exclusion.sha256") for v in sha256s})
+    )
+    require(bool(normalized), f"{source}: declares no reference exclusion manifest")
+    return {
+        "schema_version": SHARED_EXCLUSION_AUTHORITY_SCHEMA,
+        "source": source,
+        "manifest_sha256s": list(normalized),
+        "manifest_count": len(normalized),
+        "hash_count": require_int(hash_count, field=f"{source}.exclusion.hash_count", minimum=1),
+    }
+
+
+def require_agreeing_exclusion_authorities(
+    authorities: Sequence[Mapping[str, Any]],
+) -> dict[str, Any]:
+    """Prove every supplied exclusion authority agrees, and return the agreed one.
+
+    Digest set and hash count must both match. Comparing only the digests would let a release
+    claim a different number of excluded identities under the same manifest name.
+    """
+    require(len(authorities) >= 2, "exclusion agreement needs at least two authorities")
+    reference = authorities[0]
+    digests = tuple(reference["manifest_sha256s"])
+    count = int(reference["hash_count"])
+    disagreements = [
+        f"{a['source']}(sha={list(a['manifest_sha256s'])}, hash_count={a['hash_count']})"
+        for a in authorities
+        if tuple(a["manifest_sha256s"]) != digests or int(a["hash_count"]) != count
+    ]
+    require(
+        not disagreements,
+        "shared reference-exclusion authorities disagree: "
+        f"expected sha={list(digests)}, hash_count={count}; offending {disagreements}",
+    )
+    return {
+        "schema_version": SHARED_EXCLUSION_AUTHORITY_SCHEMA,
+        "manifest_sha256s": list(digests),
+        "manifest_count": len(digests),
+        "hash_count": count,
+        "sources": [a["source"] for a in authorities],
+    }
+
+
+def plan_exclusion_authority(plan: Mapping[str, Any]) -> dict[str, Any]:
+    """Extract the candidate-M plan's own exclusion authority. R2-A: it must be compared too."""
+    resources = plan.get("resources")
+    require(isinstance(resources, Mapping), "plan.resources must be an object")
+    assert isinstance(resources, Mapping)
+    entry = resources.get("reference_exclusion_manifest")
+    require(
+        isinstance(entry, Mapping),
+        "plan.resources.reference_exclusion_manifest must be an object",
+    )
+    assert isinstance(entry, Mapping)
+    return shared_exclusion_authority(
+        sha256s=[str(entry.get("sha256"))],
+        hash_count=entry.get("hash_count"),
+        source="candidate_m_plan",
+    )
+
+
 def resolve_repo_root(explicit: Path | None = None) -> Path:
     """Resolve the executing installation root, never the process working directory."""
     installation = Path(ROOT).resolve()
@@ -566,7 +948,13 @@ __all__ = [
     "bundle_files",
     "bundle_sha256",
     "canonical_json_bytes",
+    "CANDIDATE_PLAN_CONTRACT_SCHEMA",
+    "SHARED_EXCLUSION_AUTHORITY_SCHEMA",
     "canonical_record_commitment_payload",
+    "plan_exclusion_authority",
+    "validate_candidate_plan_contract",
+    "require_agreeing_exclusion_authorities",
+    "shared_exclusion_authority",
     "canonical_sha256",
     "current_environment",
     "file_sha256",

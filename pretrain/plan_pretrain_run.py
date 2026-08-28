@@ -31,11 +31,16 @@ from pretrain.dataset_pretrain import (  # noqa: E402
     PackedBinDataset,
     validate_shard_release,
 )
+from pretrain.stage_m_contract_v1 import (  # noqa: E402
+    require_agreeing_exclusion_authorities,
+    shared_exclusion_authority,
+)
 from pretrain.stage_p_native_provenance_v1 import (  # noqa: E402
     LEGACY_CHAIN_KIND,
     NATIVE_CHAIN_KIND,
     PROVENANCE_CHAIN_KINDS,
     assert_single_branch,
+    post_merge_data_branch_identity_sha256,
     validate_native_chain,
 )
 from src.special_tokens import (  # noqa: E402
@@ -1910,10 +1915,35 @@ def build_run_plan(
                 + ", ".join(f"{name}={value}" for name, value in tokenizer_disagreements.items())
             )
 
+        # R2-A: the exclusion authority agreement now spans the candidate-M plan and both
+        # Stage-M releases (proved inside validate_native_chain) plus G and G2 here, so
+        # native_shared_authority_validated is the result of a real comparison rather than a
+        # constant.
+        agreed_exclusion = require_agreeing_exclusion_authorities([
+            dict(native["shared_exclusion_authority"], source="candidate_m_plan_and_releases"),
+            shared_exclusion_authority(
+                sha256s=native_reference_exclusion_sha256s,
+                hash_count=native["shared_exclusion_authority"]["hash_count"],
+                source="g2_reference_release",
+            ),
+            shared_exclusion_authority(
+                sha256s=native_tokenizer_exclusion_sha256s,
+                hash_count=native["shared_exclusion_authority"]["hash_count"],
+                source="g_tokenizer_release",
+            ),
+        ])
+
         release_provenance.update(native)
         release_provenance["reference_validation"] = native_reference_block
         release_provenance["tokenizer_release"] = native_tokenizer_block
+        release_provenance["shared_exclusion_authority"] = agreed_exclusion
         release_provenance["native_shared_authority_validated"] = True
+        # R2-E / section 13: the post-merge identity is computed only once every load-bearing
+        # native data field has been assembled, and is serialized so the training-facing
+        # contract can independently recompute and compare it.
+        release_provenance["native_post_merge_data_branch_identity_sha256"] = (
+            post_merge_data_branch_identity_sha256(release_provenance)
+        )
         full_chain_validated = True
     else:
         full_chain_validated = all(value is not None for value in provenance_inputs)
