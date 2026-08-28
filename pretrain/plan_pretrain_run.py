@@ -32,8 +32,8 @@ from pretrain.dataset_pretrain import (  # noqa: E402
     validate_shard_release,
 )
 from pretrain.stage_m_contract_v1 import (  # noqa: E402
-    require_agreeing_exclusion_authorities,
-    shared_exclusion_authority,
+    exclusion_authority,
+    require_identical_exclusion_authorities,
 )
 from pretrain.stage_p_native_provenance_v1 import (  # noqa: E402
     LEGACY_CHAIN_KIND,
@@ -1103,10 +1103,43 @@ def _validate_selection_database_evidence(
     }
 
 
+def native_provenance_repo_root() -> Path:
+    """The installation root the native provenance chain resolves accepted authorities from.
+
+    A named seam so bounded tests can point the chain at a synthetic accepted G/G2/L1 set
+    without the production call site taking a caller-supplied root.
+    """
+    return Path(__file__).resolve().parent.parent
+
+
+def _derived_exclusion_authority(
+    entry: Any, *, label: str, path_field: str, sha_field: str, count_field: str
+) -> dict[str, Any]:
+    """Read one accepted authority's OWN exclusion identity and count.
+
+    These values were already proved against the artifact's real bytes by
+    `_validate_exclusion_collection`, which derives the union hash set by reading the files.
+    Returning them lets the native branch compare counts that each authority derived for
+    itself, instead of the candidate's count standing in for everyone's.
+    """
+    record = _require_mapping(entry, field=f"{label} exclusion entry")
+    return {
+        "artifact_path": str(record.get(path_field)),
+        "artifact_sha256": _require_sha256(record.get(sha_field), field=f"{label}.{sha_field}"),
+        "derived_count": _require_manifest_int(
+            record.get(count_field), field=f"{label}.{count_field}", positive=True
+        ),
+    }
+
+
 def _validate_reference_release(
     reference_val_dir: str | Path,
-) -> tuple[dict[str, Any], tuple[str, ...], Mapping[str, Any]]:
+) -> tuple[dict[str, Any], tuple[str, ...], Mapping[str, Any], dict[str, Any]]:
     """Validate the frozen reference-validation release and return its provenance block.
+
+    R3-B: also returns the exclusion authority THIS release independently derives from its own
+    accepted evidence -- the artifact it names, that artifact's digest, and the union count
+    `_validate_exclusion_collection` proved against the artifact's actual bytes.
 
     Extracted verbatim from ``_validate_full_provenance`` so the legacy selector-v1 branch and
     the accepted-Stage-I-native branch validate the G2 reference release through exactly the
@@ -1164,12 +1197,19 @@ def _validate_reference_release(
         },
         reference_exclusion_sha256s,
         reference,
+        _derived_exclusion_authority(
+            reserve.get("reserve_exclusion"),
+            label="accepted G2 reference release",
+            path_field="manifest_path",
+            sha_field="manifest_sha256",
+            count_field="hash_count",
+        ),
     )
 
 
 def _validate_tokenizer_release(
     tokenizer_release_manifest: str | Path,
-) -> tuple[dict[str, Any], tuple[str, ...], str, Path, str]:
+) -> tuple[dict[str, Any], tuple[str, ...], str, Path, str, dict[str, Any]]:
     """Validate the canonical tokenizer release and return its provenance block.
 
     Extracted verbatim from ``_validate_full_provenance`` for the same reason as
@@ -1272,6 +1312,16 @@ def _validate_tokenizer_release(
         actual_tokenizer_sha256,
         tokenizer_json_resolved,
         tokenizer_release_sha256,
+        _derived_exclusion_authority(
+            (
+                (tokenizer_release.get("reference_reserve_exclusion") or {}).get("manifests")
+                or [None]
+            )[0],
+            label="accepted G tokenizer release",
+            path_field="manifest_path",
+            sha_field="manifest_sha256",
+            count_field="hash_count",
+        ),
     )
 
 
@@ -1290,6 +1340,7 @@ def _validate_full_provenance(
         reference_block,
         reference_exclusion_sha256s,
         reference,
+        _reference_exclusion_authority,
     ) = _validate_reference_release(reference_val_dir)
 
     (
@@ -1298,6 +1349,7 @@ def _validate_full_provenance(
         actual_tokenizer_sha256,
         tokenizer_json_resolved,
         tokenizer_release_sha256,
+        _tokenizer_exclusion_authority,
     ) = _validate_tokenizer_release(tokenizer_release_manifest)
 
     (
@@ -1854,7 +1906,7 @@ def build_run_plan(
         assert candidate_m_plan is not None
         assert expected_candidate_m_plan_sha256 is not None
         native = validate_native_chain(
-            repo_root=Path(__file__).resolve().parent.parent,
+            repo_root=native_provenance_repo_root(),
             accepted_stage_i_dir=Path(accepted_stage_i_dir),
             candidate_m_plan=Path(candidate_m_plan),
             expected_candidate_m_plan_sha256=str(expected_candidate_m_plan_sha256),
@@ -1872,6 +1924,7 @@ def build_run_plan(
             native_reference_block,
             native_reference_exclusion_sha256s,
             native_reference_manifest,
+            native_reference_exclusion_authority,
         ) = _validate_reference_release(reference_val_dir)
         (
             native_tokenizer_block,
@@ -1879,6 +1932,7 @@ def build_run_plan(
             native_tokenizer_sha256,
             _native_tokenizer_json,
             _native_tokenizer_declared_sha256,
+            native_tokenizer_exclusion_authority,
         ) = _validate_tokenizer_release(tokenizer_release_manifest)
 
         differing = {
@@ -1919,17 +1973,28 @@ def build_run_plan(
         # Stage-M releases (proved inside validate_native_chain) plus G and G2 here, so
         # native_shared_authority_validated is the result of a real comparison rather than a
         # constant.
-        agreed_exclusion = require_agreeing_exclusion_authorities([
-            dict(native["shared_exclusion_authority"], source="candidate_m_plan_and_releases"),
-            shared_exclusion_authority(
-                sha256s=native_reference_exclusion_sha256s,
-                hash_count=native["shared_exclusion_authority"]["hash_count"],
-                source="g2_reference_release",
+        # R3-B: each accepted authority contributes the count IT derived from ITS OWN
+        # evidence. Previously the candidate's count was passed in as G's and G2's, so an
+        # inconsistent underlying count could not be seen.
+        agreed_exclusion = require_identical_exclusion_authorities([
+            dict(
+                native["shared_exclusion_authority"],
+                participant="candidate_m_and_releases",
+                artifact_sha256=native["shared_exclusion_authority"]["artifact_sha256"],
+                derived_count=native["shared_exclusion_authority"]["derived_count"],
+                artifact_path=native["shared_exclusion_authority"]["artifact_paths"][0],
             ),
-            shared_exclusion_authority(
-                sha256s=native_tokenizer_exclusion_sha256s,
-                hash_count=native["shared_exclusion_authority"]["hash_count"],
-                source="g_tokenizer_release",
+            exclusion_authority(
+                participant="g2_reference_release_validator",
+                artifact_path=native_reference_exclusion_authority["artifact_path"],
+                artifact_sha256=native_reference_exclusion_authority["artifact_sha256"],
+                derived_count=native_reference_exclusion_authority["derived_count"],
+            ),
+            exclusion_authority(
+                participant="g_tokenizer_release_validator",
+                artifact_path=native_tokenizer_exclusion_authority["artifact_path"],
+                artifact_sha256=native_tokenizer_exclusion_authority["artifact_sha256"],
+                derived_count=native_tokenizer_exclusion_authority["derived_count"],
             ),
         ])
 

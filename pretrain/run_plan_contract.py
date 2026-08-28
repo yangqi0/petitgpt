@@ -333,8 +333,17 @@ def validate_native_provenance_object(provenance: Mapping[str, Any]) -> str:
         provenance.get("shared_exclusion_authority"),
         field="release_provenance.shared_exclusion_authority",
     )
-    if not exclusion.get("manifest_sha256s") or not isinstance(exclusion.get("hash_count"), int):
-        raise RuntimeError("native run plan shared exclusion authority is incomplete")
+    _sha256(
+        exclusion.get("artifact_sha256"),
+        field="release_provenance.shared_exclusion_authority.artifact_sha256",
+    )
+    _integer(
+        exclusion.get("derived_count"),
+        field="release_provenance.shared_exclusion_authority.derived_count",
+        positive=True,
+    )
+    if not exclusion.get("participants"):
+        raise RuntimeError("native run plan shared exclusion authority names no participants")
 
     premerge = premerge_native_chain_identity_sha256(provenance)
     if premerge != provenance.get("premerge_native_chain_identity_sha256"):

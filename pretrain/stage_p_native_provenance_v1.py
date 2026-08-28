@@ -39,13 +39,14 @@ from pretrain.stage_m_contract_v1 import (  # noqa: E402
     ORDERING_CONTRACT_ID,
     SEQ_LEN,
     STAGE_STREAMS,
+    canonical_exclusion_authority,
     canonical_json_bytes,
+    exclusion_authority,
     file_sha256,
     p_native_implementation_bundle,
     plan_exclusion_authority,
-    require_agreeing_exclusion_authorities,
+    require_identical_exclusion_authorities,
     sha256_hex,
-    shared_exclusion_authority,
     stream_accounting,
     validate_candidate_plan_contract,
     validated_sha256,
@@ -174,6 +175,7 @@ M_RELEASE_SEMANTIC_GROUPS = (
     "release_no_validation_split",
     "release_shard_inventory_and_digests",
     "tokenizer_identity",
+    "tokenizer_path",
     "stage_identity",
     "stage_stream_count",
     "candidate_plan_identity",
@@ -294,12 +296,32 @@ def validate_release_semantics(
         == stored,
         "release train split geometry is internally inconsistent",
     )
+    # R3-C 8.2: every representation of "there is no validation split here".
+    val_accounting = (manifest.get("accounting") or {}).get("val") or {}
+    shard_files = manifest.get("shard_files") or {}
     group(
         "release_no_validation_split",
         manifest.get("val_tokens") == 0
         and manifest.get("val_shards") == 0
-        and manifest.get("val_by_source") == {},
-        "a Stage-M release must carry no validation split",
+        and manifest.get("val_by_source") == {}
+        and manifest.get("val_ratio") == 0.0
+        and manifest.get("val_shard_tokens") == manifest.get("shard_tokens")
+        and shard_files.get("val") == []
+        and shard_files.get("val_by_source") == {}
+        and all(
+            int(val_accounting.get(key, -1)) == 0
+            for key in (
+                "documents",
+                "content_tokens",
+                "boundary_tokens",
+                "serialized_tokens",
+                "separator_tokens",
+                "emitted_shard_tokens",
+            )
+        ),
+        "a Stage-M release must represent the absence of a validation split consistently "
+        "across val_tokens, val_shards, val_ratio, val_shard_tokens, accounting.val, "
+        "shard_files.val and val_by_source",
     )
     records = [dict(r) for r in validation.get("shard_file_records") or ()]
     group(
@@ -314,6 +336,19 @@ def validate_release_semantics(
         manifest.get("tokenizer_sha256") == tokenizer_sha256
         and validation.get("tokenizer_sha256") == tokenizer_sha256,
         "release tokenizer differs from the plan",
+    )
+    # R3-C 8.4: the emitted tokenizer PATH, not only its digest. A release must not name a
+    # different tokenizer file while carrying the right hash.
+    planned_tokenizer_path = ((plan.get("resources") or {}).get("tokenizer") or {}).get("path")
+    emitted_tokenizer_path = manifest.get("tokenizer_path")
+    group(
+        "tokenizer_path",
+        isinstance(emitted_tokenizer_path, str)
+        and isinstance(planned_tokenizer_path, str)
+        and Path(emitted_tokenizer_path).name == Path(planned_tokenizer_path).name
+        and str(emitted_tokenizer_path).endswith(str(planned_tokenizer_path)),
+        f"release tokenizer_path {emitted_tokenizer_path!r} does not resolve to the plan's "
+        f"canonical tokenizer path {planned_tokenizer_path!r}",
     )
     group(
         "stage_identity",
@@ -401,13 +436,22 @@ def validate_release_semantics(
         dict(manifest.get("stage_m_accounting") or {}) == expected_accounting,
         "release accounting differs from the plan's expected accounting",
     )
+    # R3-C 8.3: the whole actual-accounting block, including content tokens.
     documents = manifest.get("documents")
+    train_accounting = (manifest.get("accounting") or {}).get("train") or {}
+    expected_content = int(planned["input_serialized_tokens"]) - 2 * int(
+        planned["input_record_count"]
+    )
     group(
         "per_stage_actual_accounting",
         documents == int(planned["input_record_count"])
-        and (manifest.get("accounting") or {}).get("train", {}).get("serialized_tokens")
-        == int(planned["input_serialized_tokens"]),
-        "release actual accounting differs from the plan",
+        and int(train_accounting.get("documents", -1)) == int(planned["input_record_count"])
+        and int(train_accounting.get("serialized_tokens", -1))
+        == int(planned["input_serialized_tokens"])
+        and int(train_accounting.get("content_tokens", -1)) == expected_content
+        and int(train_accounting.get("content_tokens", -1)) == int(planned["input_content_tokens"]),
+        "release actual accounting differs from the plan "
+        "(documents, serialized tokens or content tokens)",
     )
 
     group(
@@ -436,10 +480,49 @@ def validate_release_semantics(
         "release model/seq_len authority differs from the frozen contract",
     )
 
+    # R3-C 8.1: every serialized exclusion representation, not just presence.
+    exclusion_block = _mapping(
+        manifest.get("reference_validation_exclusion"),
+        field=f"{stage}.reference_validation_exclusion",
+    )
+    plan_exclusion = _mapping(
+        (plan.get("resources") or {}).get("canonical_exclusion_authority"),
+        field="plan.resources.canonical_exclusion_authority",
+    )
+    exclusion_entries = exclusion_block.get("manifests")
+    exclusion_entry = (
+        exclusion_entries[0]
+        if isinstance(exclusion_entries, list) and len(exclusion_entries) == 1
+        else {}
+    )
     group(
         "shared_exclusion_authority",
-        isinstance(manifest.get("reference_validation_exclusion"), Mapping),
-        "release has no reference_validation_exclusion object",
+        exclusion_block.get("enabled") is True
+        and exclusion_block.get("manifest_count") == 1
+        and isinstance(exclusion_entries, list)
+        and len(exclusion_entries) == 1
+        and exclusion_block.get("canonical_artifact_sha256")
+        == plan_exclusion.get("artifact_sha256")
+        and exclusion_block.get("canonical_artifact_path") == plan_exclusion.get("artifact_path")
+        and int(exclusion_block.get("union_hash_count", -1))
+        == int(plan_exclusion.get("derived_count", -2))
+        and exclusion_block.get("enforced_at_stage") == "stage_i"
+        and exclusion_block.get("reapplied_by_stage_m") is False
+        and (exclusion_entry or {}).get("enabled") is True
+        and (exclusion_entry or {}).get("path") == plan_exclusion.get("artifact_path")
+        and (exclusion_entry or {}).get("manifest_sha256") == plan_exclusion.get("artifact_sha256")
+        and int((exclusion_entry or {}).get("hash_count", -1))
+        == int(plan_exclusion.get("derived_count", -2)),
+        "release exclusion representations disagree with the canonical authority: "
+        f"release={{'sha': {exclusion_block.get('canonical_artifact_sha256')!r}, "
+        f"'path': {exclusion_block.get('canonical_artifact_path')!r}, "
+        f"'count': {exclusion_block.get('union_hash_count')!r}, "
+        f"'enforced': {exclusion_block.get('enforced_at_stage')!r}, "
+        f"'reapplied': {exclusion_block.get('reapplied_by_stage_m')!r}, "
+        f"'entry': {exclusion_entry!r}}} vs plan={{'sha': "
+        f"{plan_exclusion.get('artifact_sha256')!r}, 'path': "
+        f"{plan_exclusion.get('artifact_path')!r}, 'count': "
+        f"{plan_exclusion.get('derived_count')!r}}}",
     )
 
     group(
@@ -474,10 +557,11 @@ def validate_release_semantics(
 def release_exclusion_authority(
     manifest: Mapping[str, Any], validation: Mapping[str, Any], *, stage: str
 ) -> dict[str, Any]:
-    """Extract one Stage-M release's exclusion authority through the canonical normalizer.
+    """One Stage-M release's independently derived exclusion authority.
 
-    The digests come from the frozen schema-3 validator's own parse of the release, so the
-    release cannot present one set to the validator and another to this comparison.
+    The digest is taken from the frozen schema-3 validator's own parse of the release, so the
+    release cannot present one value to the validator and another to this comparison, and the
+    count is the release's own declared union count -- not a number handed in by a caller.
     """
     declared = manifest.get("reference_validation_exclusion")
     _require(
@@ -485,10 +569,22 @@ def release_exclusion_authority(
         f"{stage}: release has no reference_validation_exclusion object",
     )
     assert isinstance(declared, Mapping)
-    return shared_exclusion_authority(
-        sha256s=list(validation.get("reference_exclusion_manifest_sha256s") or ()),
-        hash_count=declared.get("union_hash_count"),
-        source=f"stage_m_release[{stage}]",
+    digests = list(validation.get("reference_exclusion_manifest_sha256s") or ())
+    _require(
+        len(digests) == 1,
+        f"{stage}: a Stage-M release must name exactly one exclusion manifest, got {digests}",
+    )
+    entries = declared.get("manifests")
+    _require(
+        isinstance(entries, list) and len(entries) == 1,
+        f"{stage}: release reference_validation_exclusion.manifests must hold exactly one entry",
+    )
+    assert isinstance(entries, list)
+    return exclusion_authority(
+        participant=f"stage_m_release[{stage}]",
+        artifact_path=str((entries[0] or {}).get("path")),
+        artifact_sha256=digests[0],
+        derived_count=declared.get("union_hash_count"),
     )
 
 
@@ -617,8 +713,13 @@ def validate_native_chain(
     )
 
     # --- link 3: the two derived Stage-M releases ----------------------------------------
-    # R2-A: the candidate-M plan's own exclusion authority joins the shared comparison.
+    # R2-A / R3-B: the candidate-M plan, both releases and the two accepted authorities each
+    # derive their own view; the comparison then requires the SAME canonical artifact digest
+    # and the SAME independently derived count.
     exclusion_authorities = [plan_exclusion_authority(plan)]
+    canonical = canonical_exclusion_authority(repo_root)
+    exclusion_authorities.append(canonical["accepted_g"])
+    exclusion_authorities.append(canonical["accepted_g2"])
     stages: dict[str, Any] = {}
     for stage in STAGE_STREAMS:
         manifest, manifest_sha256, validation = _load_release(stage_releases[stage], stage=stage)
@@ -668,7 +769,7 @@ def validate_native_chain(
             "expected_accounting": expected,
         }
 
-    agreed_exclusion = require_agreeing_exclusion_authorities(exclusion_authorities)
+    agreed_exclusion = require_identical_exclusion_authorities(exclusion_authorities)
 
     _, native_bundle_sha256 = p_native_implementation_bundle(repo_root)
     provenance = {

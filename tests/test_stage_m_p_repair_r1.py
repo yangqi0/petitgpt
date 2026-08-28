@@ -41,6 +41,8 @@ from pretrain.stage_p_native_provenance_v1 import (
 )
 from tests._stage_m_fixtures import (
     read_json,
+    restore_canonical_exclusion_block,
+    same_size_mutation,
 )
 from tests.test_plan_pretrain_run import _write_full_provenance
 
@@ -50,7 +52,8 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 def native_chain(m_run, **overrides):
     """Run validate_native_chain against a bounded m_run fixture."""
     kwargs = {
-        "repo_root": REPO_ROOT,
+        # The fixture writes its own accepted G/G2/L1 set, so the chain resolves them there.
+        "repo_root": m_run["tmp_path"],
         "accepted_stage_i_dir": m_run["accepted_dir"],
         "candidate_m_plan": m_run["plan_path"],
         "expected_candidate_m_plan_sha256": m_run["plan_sha"],
@@ -61,7 +64,27 @@ def native_chain(m_run, **overrides):
 
 
 def native_plan(native_e2e, **overrides):
-    """Build a native run plan through the real planner entrypoint."""
+    """Build a native run plan through the real planner entrypoint.
+
+    The accepted-authority root is redirected to the fixture's synthetic accepted G/G2/L1 set
+    for the duration of the call, and each release's canonical exclusion block is restored
+    first because building the legacy G/G2 fixture overwrites it as a side effect.
+    """
+    import pretrain.plan_pretrain_run as planner
+
+    for stage in ("stage_a", "stage_b"):
+        restore_canonical_exclusion_block(
+            native_e2e["releases"][stage] / "meta.json", native_e2e["canonical_exclusion"]
+        )
+    original_root = planner.native_provenance_repo_root
+    planner.native_provenance_repo_root = lambda: Path(native_e2e["tmp_path"]).resolve()
+    try:
+        return _native_plan_inner(native_e2e, **overrides)
+    finally:
+        planner.native_provenance_repo_root = original_root
+
+
+def _native_plan_inner(native_e2e, **overrides):
     kwargs: dict[str, Any] = {
         "stage_a_dir": native_e2e["stage_a_dir"],
         "stage_b_dir": native_e2e["stage_b_dir"],
@@ -102,22 +125,12 @@ def test_production_loader_has_no_verify_switch():
     )
 
 
-def _same_size_mutation(path: Path) -> None:
-    data = bytearray(path.read_bytes())
-    # Swap two distinct bytes inside the payload: the length is unchanged.
-    for index, byte in enumerate(data):
-        if byte not in (0x0A, 0x22, 0x7B, 0x7D):
-            data[index] = 0x41 if byte != 0x41 else 0x42
-            break
-    path.write_bytes(bytes(data))
-
-
 def test_same_size_shard_byte_change_is_rejected(accepted):
     accepted_dir, _recs = accepted
     binding = load_accepted_stage_i(accepted_dir)
     shard = accepted_dir / "documents" / str(binding.shard_inventory[0]["name"])
     before = shard.stat().st_size
-    _same_size_mutation(shard)
+    same_size_mutation(shard)
     assert shard.stat().st_size == before, "the fixture must not change the file length"
     with pytest.raises(StageIInputError, match="SHA-256 mismatch"):
         load_accepted_stage_i(accepted_dir)
@@ -127,7 +140,7 @@ def test_fixed_plan_rejects_a_same_size_shard_change(m_run):
     shard_dir = m_run["accepted_dir"] / "documents"
     shard = sorted(shard_dir.glob("*.jsonl"))[0]
     before = shard.stat().st_size
-    _same_size_mutation(shard)
+    same_size_mutation(shard)
     assert shard.stat().st_size == before
     with pytest.raises(StageIInputError, match="SHA-256 mismatch"):
         realize.authorize_plan(m_run["plan_path"], m_run["plan_sha"], m_run["tmp_path"].resolve())
@@ -135,7 +148,7 @@ def test_fixed_plan_rejects_a_same_size_shard_change(m_run):
 
 def test_native_chain_cannot_validate_after_a_same_size_shard_change(m_run):
     shard = sorted((m_run["accepted_dir"] / "documents").glob("*.jsonl"))[0]
-    _same_size_mutation(shard)
+    same_size_mutation(shard)
     with pytest.raises((StageIInputError, NativeProvenanceError)):
         native_chain(m_run)
 
@@ -233,7 +246,7 @@ def test_runtime_commitment_rederivation_is_not_a_self_comparison(m_run, monkeyp
 
 def test_publication_is_blocked_when_input_changes_after_authorization(m_run, tmp_path):
     shard = sorted((m_run["accepted_dir"] / "documents").glob("*.jsonl"))[0]
-    _same_size_mutation(shard)
+    same_size_mutation(shard)
     with pytest.raises(StageIInputError):
         realize.realize_and_publish(m_run["context"], out_dir=tmp_path / "second")
     assert not (tmp_path / "second" / "stage_a" / "meta.json").exists()
@@ -678,7 +691,7 @@ def test_m_bundle_closure_is_still_complete_after_r1():
     files, digest = m_implementation_bundle(REPO_ROOT)
     assert set(files) == set(M_IMPLEMENTATION_BUNDLE_FILES)
     assert len(digest) == 64
-    assert CANDIDATE_PLAN_SCHEMA == "petitgpt-m-candidate-plan-v1"
+    assert CANDIDATE_PLAN_SCHEMA == "petitgpt-m-candidate-plan-v2"
 
 
 # ------------------------------------------------------------------ section 16 P bundle scope

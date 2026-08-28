@@ -6,7 +6,6 @@ Bounded synthetic fixtures only. No real Stage-M production, no packed corpus.
 from __future__ import annotations
 
 import json
-import pathlib
 from typing import Any
 
 import pytest
@@ -18,9 +17,9 @@ from pretrain.stage_m_contract_v1 import (
     PACKING_SEMANTICS,
     RELEASE_PROFILE,
     canonical_json_bytes,
+    exclusion_authority,
     plan_exclusion_authority,
-    require_agreeing_exclusion_authorities,
-    shared_exclusion_authority,
+    require_identical_exclusion_authorities,
     validate_candidate_plan_contract,
 )
 import pretrain.stage_m_output_v1 as output
@@ -38,10 +37,11 @@ from tests.test_stage_m_p_repair_r1 import native_chain, native_plan
 def test_candidate_plan_exclusion_joins_the_shared_comparison(m_run):
     provenance = native_chain(m_run)
     agreed = provenance["shared_exclusion_authority"]
-    assert agreed["schema_version"] == contract.SHARED_EXCLUSION_AUTHORITY_SCHEMA
-    assert agreed["manifest_count"] >= 1
-    assert "candidate_m_plan" in agreed["sources"]
-    assert any(s.startswith("stage_m_release[") for s in agreed["sources"])
+    assert agreed["schema_version"] == contract.CANONICAL_EXCLUSION_AUTHORITY_SCHEMA
+    assert "candidate_m_plan" in agreed["participants"]
+    assert any(p.startswith("stage_m_release[") for p in agreed["participants"])
+    assert "accepted_g" in agreed["participants"]
+    assert "accepted_g2" in agreed["participants"]
 
 
 def test_candidate_exclusion_digest_mismatch_is_rejected(m_run):
@@ -49,7 +49,7 @@ def test_candidate_exclusion_digest_mismatch_is_rejected(m_run):
     error: the plan alone cannot know it is wrong, so R2-A's cross-artifact comparison is what
     catches it."""
     plan = read_json(m_run["plan_path"])
-    plan["resources"]["reference_exclusion_manifest"]["sha256"] = "0" * 64
+    plan["resources"]["canonical_exclusion_authority"]["artifact_sha256"] = "0" * 64
     m_run["plan_path"].write_bytes(canonical_json_bytes(plan))
     import hashlib
 
@@ -60,7 +60,7 @@ def test_candidate_exclusion_digest_mismatch_is_rejected(m_run):
 
 def test_candidate_exclusion_count_mismatch_is_rejected(m_run):
     plan = read_json(m_run["plan_path"])
-    plan["resources"]["reference_exclusion_manifest"]["hash_count"] = 999
+    plan["resources"]["canonical_exclusion_authority"]["derived_count"] = 999
     m_run["plan_path"].write_bytes(canonical_json_bytes(plan))
     import hashlib
 
@@ -77,6 +77,7 @@ def test_release_exclusion_mismatch_is_rejected(m_run, stage, field):
     block = meta["reference_validation_exclusion"]
     if field == "manifest_sha256":
         block["manifests"][0]["manifest_sha256"] = "0" * 64
+        block["canonical_artifact_sha256"] = "0" * 64
     else:
         block["union_hash_count"] = 987
     path.write_bytes(canonical_json_bytes(meta))
@@ -84,28 +85,42 @@ def test_release_exclusion_mismatch_is_rejected(m_run, stage, field):
         native_chain(m_run)
 
 
-@pytest.mark.parametrize("authority", ["g2_reference", "g_tokenizer"])
-def test_gg2_exclusion_mismatch_is_rejected_by_the_planner(native_e2e, authority):
-    if authority == "g2_reference":
-        path = pathlib.Path(native_e2e["reference_val_dir"]).parent / "manifest.json"
-        payload = json.loads(path.read_text(encoding="utf-8"))
-        payload["reserve_provenance"]["reserve_exclusion"]["manifest_sha256"] = "0" * 64
-    else:
-        path = pathlib.Path(native_e2e["tokenizer_release_manifest"])
-        payload = json.loads(path.read_text(encoding="utf-8"))
-        payload["reference_reserve_exclusion"]["manifests"][0]["manifest_sha256"] = "0" * 64
+@pytest.mark.parametrize("authority", ["accepted_g", "accepted_g2"])
+@pytest.mark.parametrize("field", ["manifest_sha256", "hash_count"])
+def test_accepted_authority_exclusion_mismatch_is_rejected(m_run, authority, field):
+    canonical = m_run["canonical_exclusion"]
+    path = canonical["g_manifest"] if authority == "accepted_g" else canonical["g2_manifest"]
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    entry = (
+        payload["reference_reserve_exclusion"]["manifests"][0]
+        if authority == "accepted_g"
+        else payload["reserve_provenance"]["reserve_exclusion"]
+    )
+    entry[field] = "0" * 64 if field == "manifest_sha256" else 999
     path.write_text(json.dumps(payload), encoding="utf-8")
-    with pytest.raises(RuntimeError):
-        native_plan(native_e2e)
+    with pytest.raises((NativeProvenanceError, contract.StageMError, RuntimeError)):
+        native_chain(m_run)
 
 
 def test_exclusion_authority_normalizer_is_single_definition():
-    a = shared_exclusion_authority(sha256s=["a" * 64], hash_count=5, source="one")
-    b = shared_exclusion_authority(sha256s=["a" * 64], hash_count=5, source="two")
-    assert require_agreeing_exclusion_authorities([a, b])["hash_count"] == 5
-    c = shared_exclusion_authority(sha256s=["a" * 64], hash_count=6, source="three")
+    a = exclusion_authority(
+        participant="one", artifact_path="p", artifact_sha256="a" * 64, derived_count=5
+    )
+    b = exclusion_authority(
+        participant="two", artifact_path="p", artifact_sha256="a" * 64, derived_count=5
+    )
+    assert require_identical_exclusion_authorities([a, b])["derived_count"] == 5
+    c = exclusion_authority(
+        participant="three", artifact_path="p", artifact_sha256="a" * 64, derived_count=6
+    )
     with pytest.raises(contract.StageMError, match="disagree"):
-        require_agreeing_exclusion_authorities([a, c])
+        require_identical_exclusion_authorities([a, c])
+    # R3: same count, DIFFERENT artifact -- the substitution candidate v3 made.
+    d = exclusion_authority(
+        participant="copy", artifact_path="other", artifact_sha256="b" * 64, derived_count=5
+    )
+    with pytest.raises(contract.StageMError, match="disagree"):
+        require_identical_exclusion_authorities([a, d])
 
 
 # ------------------------------------------------------------------ R2-B candidate plan
@@ -170,9 +185,9 @@ def _mutations() -> dict[str, Any]:
         "wrong_stage_b_totals": at("stage_streams.stage_b.expected_accounting.tail_transitions", 0),
         "wrong_total_accounting": at("expected_totals.total_padding_tokens", 7),
         "malformed_exclusion_digest": at(
-            "resources.reference_exclusion_manifest.sha256", "not-a-sha"
+            "resources.canonical_exclusion_authority.artifact_sha256", "not-a-sha"
         ),
-        "wrong_exclusion_count": at("resources.reference_exclusion_manifest.hash_count", 0),
+        "wrong_exclusion_count": at("resources.canonical_exclusion_authority.derived_count", 0),
         "wrong_tokenizer_identity": at("resources.tokenizer.sha256", "nothex"),
         "wrong_bundle_identity": at("implementation_bundle_sha256", "0" * 64),
         "wrong_environment": at("environment_contract.byte_order", "big"),
@@ -234,7 +249,7 @@ _GROUP_MUTATIONS: dict[str, Any] = {
     ),
     "release_shard_tokens": lambda m: m.__setitem__("shard_tokens", 12_345),
     "release_train_split_geometry": lambda m: m.__setitem__("train_tokens", 1),
-    "release_no_validation_split": lambda m: m.__setitem__("val_tokens", 5),
+    "release_no_validation_split": lambda m: m.__setitem__("val_ratio", 0.002),
     "tokenizer_identity": lambda m: m.__setitem__("tokenizer_sha256", "0" * 64),
     "stage_identity": lambda m: m["stage_m"].__setitem__("stage", "stage_b"),
     "stage_stream_count": lambda m: m["stage_m"].__setitem__("stage_stream_count", 3),
@@ -273,11 +288,16 @@ _GROUP_MUTATIONS: dict[str, Any] = {
     "per_stage_expected_accounting": lambda m: m["stage_m_accounting"].__setitem__(
         "training_sequences", 1
     ),
-    "per_stage_actual_accounting": lambda m: m.__setitem__("documents", 1),
+    "per_stage_actual_accounting": lambda m: m["accounting"]["train"].__setitem__(
+        "content_tokens", 1
+    ),
     "document_framing_semantics": lambda m: m["contract"].__setitem__("doc_sep", "\\n\\n"),
     "tail_lookahead_semantics": lambda m: m["stage_m_accounting"].__setitem__("padding_tokens", 4),
     "model_seq_len_authority": lambda m: m["stage_m"]["model_contract"].__setitem__("n_layers", 31),
-    "shared_exclusion_authority": lambda m: m.pop("reference_validation_exclusion"),
+    "shared_exclusion_authority": lambda m: m["reference_validation_exclusion"].__setitem__(
+        "reapplied_by_stage_m", True
+    ),
+    "tokenizer_path": lambda m: m.__setitem__("tokenizer_path", "/elsewhere/other.json"),
     "implementation_identity": lambda m: m["stage_m"].__setitem__(
         "implementation_bundle_sha256", "0" * 64
     ),
@@ -514,6 +534,7 @@ def test_frozen_profile_declares_byte_order():
 
 def test_plan_exclusion_authority_is_extracted_canonically(m_run):
     authority = plan_exclusion_authority(_plan(m_run))
-    assert authority["schema_version"] == contract.SHARED_EXCLUSION_AUTHORITY_SCHEMA
-    assert authority["source"] == "candidate_m_plan"
-    assert authority["manifest_count"] == 1
+    assert authority["schema_version"] == contract.CANONICAL_EXCLUSION_AUTHORITY_SCHEMA
+    assert authority["participant"] == "candidate_m_plan"
+    assert authority["artifact_sha256"] == m_run["canonical_exclusion"]["artifact_sha256"]
+    assert authority["derived_count"] == m_run["canonical_exclusion"]["derived_count"]

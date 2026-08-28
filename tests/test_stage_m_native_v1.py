@@ -54,8 +54,8 @@ from tests._stage_m_fixtures import (
     read_json,
     save_tokenizer,
     tiny_tokenizer,
+    write_accepted_exclusion_authorities,
     write_accepted_stage_i,
-    write_exclusion_manifest,
 )
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -129,12 +129,14 @@ def relaxed(monkeypatch, tmp_path, tok):
     monkeypatch.setattr(realize, "assert_tokenizer_contract", _contract)
     monkeypatch.setattr(realize, "verify_environment", _env)
     tokenizer_path = save_tokenizer(tok, tmp_path / "tok" / "tokenizer.json")
-    exclusion_path = write_exclusion_manifest(tmp_path / "excl" / "exclusion.json")
+    # R3: the canonical exclusion authority comes from accepted G and G2, so the fixture writes
+    # both manifests and the single L1 artifact they name.
+    canonical = write_accepted_exclusion_authorities(tmp_path)
     monkeypatch.setattr(realize, "resolve_repo_root", lambda explicit=None: tmp_path.resolve())
     return {
         "calls": calls,
         "tokenizer_relative": str(tokenizer_path.relative_to(tmp_path)),
-        "exclusion_relative": str(exclusion_path.relative_to(tmp_path)),
+        "canonical_exclusion": canonical,
         "repo_root": tmp_path.resolve(),
     }
 
@@ -155,8 +157,6 @@ def _make_plan(accepted_dir: Path, relaxed_env, out: Path, *, shard_tokens: int 
         str(accepted_dir),
         "--tokenizer",
         relaxed_env["tokenizer_relative"],
-        "--reference-exclusion-manifest",
-        relaxed_env["exclusion_relative"],
         "--out",
         str(out),
         "--shard-tokens",

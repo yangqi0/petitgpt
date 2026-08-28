@@ -293,3 +293,124 @@ def same_size_mutation(path: Path) -> None:
             data[index] = 0x41 if byte != 0x41 else 0x42
             break
     Path(path).write_bytes(bytes(data))
+
+
+# --------------------------------------------------------------------- accepted G / G2 / L1
+
+CANONICAL_EXCLUSION_HASHES = ["1" * 64, "2" * 64]
+CANONICAL_CLEANING = {
+    "strip_leading_noise": False,
+    "normalize_quotes": False,
+    "underscores_policy": "keep",
+    "min_chars": 0,
+    "min_ascii_ratio": 0.0,
+}
+L1_EXCLUSION_RELATIVE = (
+    "runs/l1_production_2026-08-20/reference_reserve_v1/exclusion_hash_manifest.json"
+)
+G_MANIFEST_RELATIVE = "runs/g_production_2026-08-21/release/tokenizer_release_manifest.json"
+G2_MANIFEST_RELATIVE = "runs/g2_production_2026-08-21/release/manifest.json"
+
+
+def write_accepted_exclusion_authorities(root: Path) -> dict[str, Any]:
+    """Write a synthetic canonical L1 artifact plus the accepted G and G2 manifests naming it.
+
+    Mirrors the real shape: one L1 exclusion artifact, named identically by the accepted G
+    tokenizer release and the accepted G2 reference release, with each manifest carrying its own
+    independently derived hash count.
+    """
+    root = Path(root)
+    artifact = root / L1_EXCLUSION_RELATIVE
+    artifact.parent.mkdir(parents=True, exist_ok=True)
+    artifact.write_text(
+        json.dumps({
+            "schema_version": 1,
+            "kind": "petitgpt_reference_validation_exclusions",
+            "hash_algorithm": "sha256-cleaned-text-utf8-v1",
+            "cleaning": CANONICAL_CLEANING,
+            "hash_count": len(CANONICAL_EXCLUSION_HASHES),
+            "hashes": CANONICAL_EXCLUSION_HASHES,
+        }),
+        encoding="utf-8",
+    )
+    digest = hashlib.sha256(artifact.read_bytes()).hexdigest()
+    size = artifact.stat().st_size
+    entry = {
+        "enabled": True,
+        "manifest_path": L1_EXCLUSION_RELATIVE,
+        "manifest_resolved": str(artifact),
+        "manifest_size_bytes": size,
+        "manifest_sha256": digest,
+        "kind": "petitgpt_reference_validation_exclusions",
+        "hash_algorithm": "sha256-cleaned-text-utf8-v1",
+        "hash_count": len(CANONICAL_EXCLUSION_HASHES),
+        "cleaning": CANONICAL_CLEANING,
+    }
+
+    g = root / G_MANIFEST_RELATIVE
+    g.parent.mkdir(parents=True, exist_ok=True)
+    g.write_text(
+        json.dumps({
+            "schema_version": 2,
+            "kind": "petitgpt_tokenizer_release",
+            "reference_reserve_exclusion": {
+                "enabled": True,
+                "hash_algorithm": "sha256-cleaned-text-utf8-v1",
+                "cleaning": CANONICAL_CLEANING,
+                "manifest_count": 1,
+                "union_hash_count": len(CANONICAL_EXCLUSION_HASHES),
+                "manifests": [dict(entry)],
+            },
+        }),
+        encoding="utf-8",
+    )
+
+    g2 = root / G2_MANIFEST_RELATIVE
+    g2.parent.mkdir(parents=True, exist_ok=True)
+    g2.write_text(
+        json.dumps({
+            "schema_version": 2,
+            "kind": "petitgpt_cross_stage_reference_validation",
+            "reserve_provenance": {"reserve_exclusion": dict(entry)},
+        }),
+        encoding="utf-8",
+    )
+    return {
+        "artifact_path": L1_EXCLUSION_RELATIVE,
+        "artifact_sha256": digest,
+        "artifact_size_bytes": size,
+        "derived_count": len(CANONICAL_EXCLUSION_HASHES),
+        "artifact_abs": artifact,
+        "g_manifest": g,
+        "g2_manifest": g2,
+        "entry": entry,
+    }
+
+
+def restore_canonical_exclusion_block(meta_path: Path, canonical: dict) -> None:
+    """Rewrite one Stage-M release's exclusion block to name the canonical L1 artifact.
+
+    tests/test_plan_pretrain_run.py::_write_full_provenance replaces this block with the legacy
+    selector-v1 shape as a side effect of building the G/G2 fixture, so the native flow restores
+    it. The two exclusion payloads are byte-identical, so only the block's shape is restored,
+    never its identity.
+    """
+    payload = json.loads(Path(meta_path).read_text(encoding="utf-8"))
+    payload["reference_validation_exclusion"] = {
+        "enabled": True,
+        "manifest_count": 1,
+        "union_hash_count": canonical["derived_count"],
+        "enforced_at_stage": "stage_i",
+        "reapplied_by_stage_m": False,
+        "canonical_artifact_path": canonical["artifact_path"],
+        "canonical_artifact_sha256": canonical["artifact_sha256"],
+        "manifests": [
+            {
+                "enabled": True,
+                "path": canonical["artifact_path"],
+                "manifest_sha256": canonical["artifact_sha256"],
+                "hash_count": canonical["derived_count"],
+            }
+        ],
+    }
+    Path(meta_path).write_text(json.dumps(payload), encoding="utf-8")

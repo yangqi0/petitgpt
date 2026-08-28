@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import hashlib
 from pathlib import Path
 
 import pytest
@@ -19,7 +18,6 @@ from pretrain.stage_m_contract_v1 import (
     canonical_json_bytes,
     p_native_implementation_bundle,
 )
-import pretrain.stage_m_realize_v1 as realize
 from pretrain.stage_p_native_provenance_v1 import (
     LEGACY_CHAIN_KIND,
     LEGACY_ONLY_FIELDS,
@@ -29,116 +27,30 @@ from pretrain.stage_p_native_provenance_v1 import (
     PROVENANCE_CHAIN_KINDS,
     NativeProvenanceError,
     assert_single_branch,
-    validate_native_chain,
 )
 from tests._stage_m_fixtures import (
-    make_record,
     read_json,
-    save_tokenizer,
-    tiny_tokenizer,
-    write_accepted_stage_i,
-    write_exclusion_manifest,
 )
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
-@pytest.fixture(scope="module")
-def tok():
-    return tiny_tokenizer()
+def _validate(m_run, **overrides):
+    """Validate the native chain for the shared bounded fixture (see tests/conftest.py)."""
+    from tests.test_stage_m_p_repair_r1 import native_chain
 
-
-@pytest.fixture
-def native_chain(tmp_path, tok, monkeypatch):
-    """A complete accepted-I -> candidate-M plan -> two published Stage-M releases fixture."""
-    records = []
-    stages = ("stage_b", "stage_a", "stage_b", "stage_a")
-    for index in range(400):
-        stage = stages[index % len(stages)]
-        records.append(
-            make_record(
-                tok,
-                stage=stage,
-                source_id=f"{stage[-1]}_src{index % 2}",
-                binding=f"ib_src{index % 2}",
-                ordinal=index,
-                rank=400 - index,
-                text=(
-                    "The quick brown fox jumps over the lazy dog while a tutorial paragraph "
-                    f"explains a concept step by step with examples number {index}."
-                ),
-            )
-        )
-    accepted_dir = write_accepted_stage_i(tmp_path / "stage_i", records, records_per_shard=64)
-
-    monkeypatch.setattr(realize, "assert_tokenizer_contract", lambda path: None)
-    monkeypatch.setattr(realize, "verify_environment", lambda environment: None)
-    monkeypatch.setattr(realize, "resolve_repo_root", lambda explicit=None: tmp_path.resolve())
-
-    from pretrain.stage_m_contract_v1 import M_IMPLEMENTATION_BUNDLE_FILES
-
-    for relative in M_IMPLEMENTATION_BUNDLE_FILES:
-        destination = tmp_path / relative
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        destination.write_bytes((REPO_ROOT / relative).read_bytes())
-
-    tokenizer_path = save_tokenizer(tok, tmp_path / "tok" / "tokenizer.json")
-    exclusion_path = write_exclusion_manifest(tmp_path / "excl" / "exclusion.json")
-    plan_path = tmp_path / "candidate_m_plan.json"
-    assert (
-        realize.main([
-            "plan",
-            "--accepted-stage-i-dir",
-            str(accepted_dir),
-            "--tokenizer",
-            str(tokenizer_path.relative_to(tmp_path)),
-            "--reference-exclusion-manifest",
-            str(exclusion_path.relative_to(tmp_path)),
-            "--out",
-            str(plan_path),
-            "--shard-tokens",
-            "4096",
-            "--implementation-commit",
-            "0" * 40,
-        ])
-        == 0
-    )
-    plan_sha256 = hashlib.sha256(plan_path.read_bytes()).hexdigest()
-
-    context = realize.authorize_plan(plan_path, plan_sha256, tmp_path.resolve())
-    out_dir = tmp_path / "stage_m"
-    realize.realize_and_publish(context, out_dir=out_dir)
-
-    return {
-        "accepted_dir": accepted_dir,
-        "plan_path": plan_path,
-        "plan_sha256": plan_sha256,
-        "releases": {stage: out_dir / stage for stage in STAGE_STREAMS},
-        "tmp_path": tmp_path,
-    }
-
-
-def _validate(native_chain, **overrides):
-    kwargs = {
-        "repo_root": REPO_ROOT,
-        "accepted_stage_i_dir": native_chain["accepted_dir"],
-        "candidate_m_plan": native_chain["plan_path"],
-        "expected_candidate_m_plan_sha256": native_chain["plan_sha256"],
-        "stage_releases": dict(native_chain["releases"]),
-    }
-    kwargs.update(overrides)
-    return validate_native_chain(**kwargs)
+    return native_chain(m_run, **overrides)
 
 
 # --------------------------------------------------------------------- 13.12 native chain
 
 
-def test_valid_native_chain_passes_and_derives_full_chain_validated(native_chain):
-    provenance = _validate(native_chain)
+def test_valid_native_chain_passes_and_derives_full_chain_validated(m_run):
+    provenance = _validate(m_run)
     assert provenance["provenance_chain_kind"] == NATIVE_CHAIN_KIND
     assert provenance["schema_version"] == NATIVE_PROVENANCE_SCHEMA
     assert provenance["full_chain_validated"] is True
-    assert provenance["candidate_m_plan_sha256"] == native_chain["plan_sha256"]
+    assert provenance["candidate_m_plan_sha256"] == m_run["plan_sha"]
     assert provenance["stage_m_ordering_policy"] == ORDERING_CONTRACT_ID
     assert provenance["model_contract"] == dict(MODEL_CONTRACT)
     assert sorted(provenance["stages"]) == sorted(STAGE_STREAMS)
@@ -150,80 +62,80 @@ def test_valid_native_chain_passes_and_derives_full_chain_validated(native_chain
         )
 
 
-def test_changed_candidate_plan_sha_fails(native_chain):
+def test_changed_candidate_plan_sha_fails(m_run):
     with pytest.raises(NativeProvenanceError, match="plan digest mismatch"):
-        _validate(native_chain, expected_candidate_m_plan_sha256="0" * 64)
+        _validate(m_run, expected_candidate_m_plan_sha256="0" * 64)
 
 
-def test_changed_accepted_stage_i_identity_fails(native_chain):
-    manifest_path = native_chain["accepted_dir"] / "manifest.json"
+def test_changed_accepted_stage_i_identity_fails(m_run):
+    manifest_path = m_run["accepted_dir"] / "manifest.json"
     manifest = read_json(manifest_path)
     manifest["stage_i_run"]["run_identity"] = "0" * 64
     manifest_path.write_bytes(canonical_json_bytes(manifest))
     with pytest.raises((NativeProvenanceError, RuntimeError)):
-        _validate(native_chain)
+        _validate(m_run)
 
 
-def test_changed_stage_m_release_metadata_fails(native_chain):
-    meta_path = native_chain["releases"]["stage_a"] / "meta.json"
+def test_changed_stage_m_release_metadata_fails(m_run):
+    meta_path = m_run["releases"]["stage_a"] / "meta.json"
     meta = read_json(meta_path)
     meta["stage_m"]["candidate_plan_sha256"] = "0" * 64
     meta_path.write_bytes(canonical_json_bytes(meta))
     with pytest.raises(NativeProvenanceError, match="not produced by this candidate"):
-        _validate(native_chain)
+        _validate(m_run)
 
 
-def test_changed_packed_shard_digest_fails(native_chain):
-    train = native_chain["releases"]["stage_a"] / "train"
+def test_changed_packed_shard_digest_fails(m_run):
+    train = m_run["releases"]["stage_a"] / "train"
     shard = sorted(train.glob("shard_*.bin"))[0]
     data = bytearray(shard.read_bytes())
     data[0] ^= 0xFF
     shard.write_bytes(bytes(data))
     with pytest.raises(RuntimeError, match="SHA-256 mismatch"):
-        _validate(native_chain)
+        _validate(m_run)
 
 
-def test_changed_accounting_fails(native_chain):
-    meta_path = native_chain["releases"]["stage_b"] / "meta.json"
+def test_changed_accounting_fails(m_run):
+    meta_path = m_run["releases"]["stage_b"] / "meta.json"
     meta = read_json(meta_path)
     meta["stage_m_accounting"]["training_sequences"] += 1
     meta_path.write_bytes(canonical_json_bytes(meta))
     with pytest.raises(NativeProvenanceError, match="accounting differs"):
-        _validate(native_chain)
+        _validate(m_run)
 
 
-def test_changed_input_sequence_commitment_fails(native_chain):
-    meta_path = native_chain["releases"]["stage_a"] / "meta.json"
+def test_changed_input_sequence_commitment_fails(m_run):
+    meta_path = m_run["releases"]["stage_a"] / "meta.json"
     meta = read_json(meta_path)
     meta["stage_m"]["input_sequence_commitment"] = "0" * 64
     meta_path.write_bytes(canonical_json_bytes(meta))
     with pytest.raises(NativeProvenanceError, match="commitment differs"):
-        _validate(native_chain)
+        _validate(m_run)
 
 
-def test_missing_native_field_fails_closed(native_chain):
-    meta_path = native_chain["releases"]["stage_a"] / "meta.json"
+def test_missing_native_field_fails_closed(m_run):
+    meta_path = m_run["releases"]["stage_a"] / "meta.json"
     meta = read_json(meta_path)
     del meta["stage_m"]["ordering_policy"]
     meta_path.write_bytes(canonical_json_bytes(meta))
     with pytest.raises(NativeProvenanceError, match="ordering policy"):
-        _validate(native_chain)
+        _validate(m_run)
 
 
-def test_a_missing_stage_release_fails(native_chain):
-    releases = dict(native_chain["releases"])
+def test_a_missing_stage_release_fails(m_run):
+    releases = dict(m_run["releases"])
     releases.pop("stage_b")
     with pytest.raises(NativeProvenanceError, match="requires exactly"):
-        _validate(native_chain, stage_releases=releases)
+        _validate(m_run, stage_releases=releases)
 
 
-def test_swapped_stage_releases_fail(native_chain):
+def test_swapped_stage_releases_fail(m_run):
     releases = {
-        "stage_a": native_chain["releases"]["stage_b"],
-        "stage_b": native_chain["releases"]["stage_a"],
+        "stage_a": m_run["releases"]["stage_b"],
+        "stage_b": m_run["releases"]["stage_a"],
     }
     with pytest.raises(NativeProvenanceError, match="names a different stage"):
-        _validate(native_chain, stage_releases=releases)
+        _validate(m_run, stage_releases=releases)
 
 
 def test_p_native_declared_bundle_is_the_real_local_dependency_closure():
@@ -260,8 +172,8 @@ def test_p_native_declared_bundle_is_the_real_local_dependency_closure():
     assert unbound == []
 
 
-def test_native_validator_bundle_is_reported_and_separate(native_chain):
-    provenance = _validate(native_chain)
+def test_native_validator_bundle_is_reported_and_separate(m_run):
+    provenance = _validate(m_run)
     _files, digest = p_native_implementation_bundle(REPO_ROOT)
     assert provenance["stage_p_native_validator_bundle_sha256"] == digest
     assert provenance["stage_m_implementation_bundle_sha256"] != digest

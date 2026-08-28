@@ -94,6 +94,7 @@ from pathlib import Path as _Path  # noqa: E402
 
 from pretrain.stage_m_contract_v1 import (  # noqa: E402
     M_IMPLEMENTATION_BUNDLE_FILES as _M_BUNDLE,
+    P_NATIVE_IMPLEMENTATION_BUNDLE_FILES as _P_BUNDLE,
     STAGE_STREAMS as _STAGE_STREAMS,
 )
 import pretrain.stage_m_realize_v1 as _realize  # noqa: E402
@@ -101,8 +102,8 @@ from tests._stage_m_fixtures import (  # noqa: E402
     e2e_records as _e2e_records,
     save_tokenizer as _save_tokenizer,
     tiny_tokenizer as _tiny_tokenizer,
+    write_accepted_exclusion_authorities as _write_accepted_exclusions,
     write_accepted_stage_i as _write_accepted_stage_i,
-    write_shared_exclusion_manifest as _write_shared_exclusion,
 )
 
 _REPO_ROOT = _Path(__file__).resolve().parent.parent
@@ -128,12 +129,15 @@ def m_run(tmp_path, tok, monkeypatch, accepted):
     monkeypatch.setattr(_realize, "assert_tokenizer_contract", lambda path: None)
     monkeypatch.setattr(_realize, "verify_environment", lambda environment: None)
     monkeypatch.setattr(_realize, "resolve_repo_root", lambda explicit=None: tmp_path.resolve())
-    for relative in _M_BUNDLE:
+    # Both bundles: the native chain resolves the P helper bundle from the same root.
+    for relative in (*_M_BUNDLE, *_P_BUNDLE):
         destination = tmp_path / relative
         destination.parent.mkdir(parents=True, exist_ok=True)
         destination.write_bytes((_REPO_ROOT / relative).read_bytes())
     tokenizer_path = _save_tokenizer(tok, tmp_path / "tok" / "tokenizer.json")
-    exclusion_path = _write_shared_exclusion(tmp_path / "excl" / "exclusion.json")
+    # R3: the canonical exclusion authority is recovered from accepted G and G2, so the fixture
+    # writes those two manifests and the single L1 artifact they both name.
+    canonical = _write_accepted_exclusions(tmp_path)
     plan_path = tmp_path / "candidate_m_plan.json"
     assert (
         _realize.main([
@@ -142,8 +146,6 @@ def m_run(tmp_path, tok, monkeypatch, accepted):
             str(accepted_dir),
             "--tokenizer",
             str(tokenizer_path.relative_to(tmp_path)),
-            "--reference-exclusion-manifest",
-            str(exclusion_path.relative_to(tmp_path)),
             "--out",
             str(plan_path),
             "--shard-tokens",
@@ -163,6 +165,7 @@ def m_run(tmp_path, tok, monkeypatch, accepted):
         "plan_path": plan_path,
         "plan_sha": plan_sha,
         "tokenizer_path": tokenizer_path,
+        "canonical_exclusion": canonical,
         "releases": {s: out_dir / s for s in _STAGE_STREAMS},
         "context": context,
     }
@@ -194,6 +197,43 @@ def native_e2e(m_run, monkeypatch):
         payload = _json.loads(path.read_text(encoding="utf-8"))
         payload[key] = tokenizer_sha
         path.write_text(_json.dumps(payload), encoding="utf-8")
+
+    # _write_full_provenance rewrites each release's reference_validation_exclusion into the
+    # legacy shape. Restore the canonical R3 block so the release still names the canonical L1
+    # artifact; the two payloads are byte-identical, so the digests already agree.
+    canonical = m_run["canonical_exclusion"]
+    for meta_path in (stage_a_train.parent / "meta.json", stage_b_train.parent / "meta.json"):
+        payload = _json.loads(meta_path.read_text(encoding="utf-8"))
+        payload["reference_validation_exclusion"] = {
+            "enabled": True,
+            "manifest_count": 1,
+            "union_hash_count": canonical["derived_count"],
+            "enforced_at_stage": "stage_i",
+            "reapplied_by_stage_m": False,
+            "canonical_artifact_path": canonical["artifact_path"],
+            "canonical_artifact_sha256": canonical["artifact_sha256"],
+            "manifests": [
+                {
+                    "enabled": True,
+                    "path": canonical["artifact_path"],
+                    "manifest_sha256": canonical["artifact_sha256"],
+                    "hash_count": canonical["derived_count"],
+                }
+            ],
+        }
+        meta_path.write_text(_json.dumps(payload), encoding="utf-8")
+        check = _json.loads(meta_path.read_text(encoding="utf-8"))
+        assert (
+            check["reference_validation_exclusion"]["canonical_artifact_sha256"]
+            == (canonical["artifact_sha256"])
+        ), f"canonical exclusion block was not restored in {meta_path}"
+
+    # The P helper bundle must also resolve from the fixture root.
+    for relative in _P_BUNDLE:
+        destination = tmp_path / relative
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        if not destination.exists():
+            destination.write_bytes((_REPO_ROOT / relative).read_bytes())
 
     monkeypatch.setattr("pretrain.plan_pretrain_run.assert_tokenizer_contract", lambda p: None)
     return {

@@ -43,6 +43,8 @@ if ROOT not in sys.path:
 
 from pretrain.build_pretrain_shards import encode_with_accounting, load_tokenizer  # noqa: E402
 from pretrain.stage_m_contract_v1 import (  # noqa: E402
+    ACCEPTED_G2_RELEASE_MANIFEST,
+    ACCEPTED_G_TOKENIZER_RELEASE_MANIFEST,
     CANDIDATE_PLAN_SCHEMA,
     MODEL_CONTRACT,
     ORDERING_CONTRACT_ID,
@@ -53,12 +55,12 @@ from pretrain.stage_m_contract_v1 import (  # noqa: E402
     Environment,
     StageMError,
     StreamAccounting,
+    canonical_exclusion_authority,
     canonical_json_bytes,
     current_environment,
     file_sha256,
     m_implementation_bundle,
     require,
-    require_int,
     resolve_repo_root,
     sha256_hex,
     stream_accounting,
@@ -138,36 +140,28 @@ def _verify_resource(repo_root: Path, bound: Mapping[str, Any], *, label: str) -
     return path
 
 
-def _exclusion_binding(repo_root: Path, relative: str) -> dict[str, Any]:
-    """Bind the reference-exclusion manifest Stage I enforced, and read its real hash count.
+def release_exclusion_block(canonical: Mapping[str, Any]) -> dict[str, Any]:
+    """The schema-3 ``reference_validation_exclusion`` object for a Stage-M release.
 
-    Stage M does not re-filter: the exclusion was applied at Stage I, and this binding records
-    which manifest governed the corpus so the release can declare it truthfully and Stage P can
-    prove the Stage-A/Stage-B/reference releases share one exclusion identity.
+    Every serialized copy names the *canonical* L1 artifact recovered from accepted G and G2,
+    with the count independently derived from that artifact's own bytes.
+    ``enforced_at_stage``/``reapplied_by_stage_m`` state the frozen behaviour exactly: Stage I
+    applied the exclusion, Stage M inherits and re-verifies the artifact but never re-filters.
     """
-    bound = _bind_resource(repo_root, relative, label="reference exclusion manifest")
-    with open((repo_root / relative).resolve(), encoding="utf-8") as handle:
-        payload = json.load(handle)
-    require(isinstance(payload, dict), "reference exclusion manifest must be a JSON object")
-    hash_count = require_int(payload.get("hash_count"), field="exclusion.hash_count", minimum=1)
-    bound["hash_count"] = hash_count
-    return bound
-
-
-def release_exclusion_block(bound: Mapping[str, Any]) -> dict[str, Any]:
-    """The schema-3 ``reference_validation_exclusion`` object for a Stage-M release."""
     return {
         "enabled": True,
         "manifest_count": 1,
-        "union_hash_count": int(bound["hash_count"]),
+        "union_hash_count": int(canonical["derived_count"]),
         "enforced_at_stage": "stage_i",
         "reapplied_by_stage_m": False,
+        "canonical_artifact_path": str(canonical["canonical_artifact_path"]),
+        "canonical_artifact_sha256": str(canonical["artifact_sha256"]),
         "manifests": [
             {
                 "enabled": True,
-                "path": str(bound["path"]),
-                "manifest_sha256": str(bound["sha256"]),
-                "hash_count": int(bound["hash_count"]),
+                "path": str(canonical["canonical_artifact_path"]),
+                "manifest_sha256": str(canonical["artifact_sha256"]),
+                "hash_count": int(canonical["derived_count"]),
             }
         ],
     }
@@ -182,7 +176,6 @@ def generate_candidate_plan(
     accepted: AcceptedStageI,
     commitments: Mapping[str, Any],
     tokenizer_relative: str,
-    exclusion_relative: str,
     environment: Environment,
     shard_tokens: int,
     implementation_commit: str | None = None,
@@ -194,7 +187,9 @@ def generate_candidate_plan(
     argument that a later run could substitute.
     """
     tokenizer = _bind_resource(repo_root, tokenizer_relative, label="canonical tokenizer")
-    exclusion = _exclusion_binding(repo_root, exclusion_relative)
+    # R3-A: the canonical exclusion authority is the exact L1 artifact accepted G and accepted
+    # G2 both name, recovered from those manifests rather than from a caller-supplied path.
+    canonical = canonical_exclusion_authority(repo_root)
     bundle_files, bundle_digest = m_implementation_bundle(repo_root)
 
     streams: dict[str, Any] = {}
@@ -229,7 +224,20 @@ def generate_candidate_plan(
         "accepted_stage_i_identity_sha256": accepted.identity_sha256(),
         "resources": {
             "tokenizer": tokenizer,
-            "reference_exclusion_manifest": exclusion,
+            "canonical_exclusion_authority": {
+                "schema_version": canonical["schema_version"],
+                "artifact_path": canonical["canonical_artifact_path"],
+                "artifact_sha256": canonical["artifact_sha256"],
+                "derived_count": canonical["derived_count"],
+                "kind": canonical["accepted_g"]["kind"],
+                "hash_algorithm": canonical["accepted_g"]["hash_algorithm"],
+                "named_by": {
+                    "accepted_g_manifest": ACCEPTED_G_TOKENIZER_RELEASE_MANIFEST,
+                    "accepted_g_derived_count": canonical["accepted_g"]["derived_count"],
+                    "accepted_g2_manifest": ACCEPTED_G2_RELEASE_MANIFEST,
+                    "accepted_g2_derived_count": canonical["accepted_g2"]["derived_count"],
+                },
+            },
         },
         "model_contract": dict(MODEL_CONTRACT),
         "ordering_contract": {
@@ -267,7 +275,7 @@ class AuthorizedMContext:
     plan: Mapping[str, Any]
     accepted: AcceptedStageI
     tokenizer_path: Path
-    exclusion: Mapping[str, Any]
+    canonical_exclusion: Mapping[str, Any]
     environment: Environment
     bundle_sha256: str
     state_sha256: str
@@ -328,8 +336,20 @@ def _derive_state(
 
     tokenizer = _verify_resource(root, plan["resources"]["tokenizer"], label="canonical tokenizer")
     assert_tokenizer_contract(str(tokenizer))
-    exclusion = plan["resources"]["reference_exclusion_manifest"]
-    _verify_resource(root, exclusion, label="reference exclusion manifest")
+    # R3-A/B: re-derive the canonical authority from accepted G and G2 and prove the plan
+    # bound exactly that artifact, by digest and by independently derived count.
+    canonical = canonical_exclusion_authority(root)
+    declared = plan_contract["exclusion_authority"]
+    require(
+        declared["artifact_sha256"] == canonical["artifact_sha256"],
+        "candidate plan binds exclusion artifact "
+        f"{declared['artifact_sha256']} but accepted G/G2 name "
+        f"{canonical['artifact_sha256']}",
+    )
+    require(
+        int(declared["derived_count"]) == int(canonical["derived_count"]),
+        "candidate plan exclusion count differs from the independently derived canonical count",
+    )
 
     require(
         dict(plan.get("model_contract") or {}) == dict(MODEL_CONTRACT),
@@ -392,7 +412,8 @@ def _derive_state(
         "environment": environment.as_canonical(),
         "accepted_stage_i_identity_sha256": accepted.identity_sha256(),
         "tokenizer_sha256": plan["resources"]["tokenizer"]["sha256"],
-        "exclusion_sha256": exclusion["sha256"],
+        "canonical_exclusion_sha256": canonical["artifact_sha256"],
+        "canonical_exclusion_derived_count": canonical["derived_count"],
     }
     return AuthorizedMContext(
         repo_root=root,
@@ -401,7 +422,7 @@ def _derive_state(
         plan=plan,
         accepted=accepted,
         tokenizer_path=tokenizer,
-        exclusion=exclusion,
+        canonical_exclusion=canonical,
         environment=environment,
         bundle_sha256=bundle_digest,
         state_sha256=sha256_hex(canonical_json_bytes(state)),
@@ -496,7 +517,7 @@ def realize_stage(
             tokenizer_path=str(context.tokenizer_path),
             tokenizer_sha256=str(context.plan["resources"]["tokenizer"]["sha256"]),
             stage_m_binding=stage_m_release_binding(context, stage),
-            reference_exclusion=release_exclusion_block(context.exclusion),
+            reference_exclusion=release_exclusion_block(context.canonical_exclusion),
         )
         # Second fresh revalidation: everything is built, nothing is published yet, so a late
         # change to the plan, the implementation or the accepted input still costs nothing.
@@ -630,7 +651,6 @@ def main(argv: list[str] | None = None) -> int:
     plan_parser = sub.add_parser("plan", help="generate an unauthorized candidate Stage-M plan")
     plan_parser.add_argument("--accepted-stage-i-dir", type=Path, required=True)
     plan_parser.add_argument("--tokenizer", type=str, required=True)
-    plan_parser.add_argument("--reference-exclusion-manifest", type=str, required=True)
     plan_parser.add_argument("--out", type=Path, required=True)
     plan_parser.add_argument("--repo-root", type=Path, default=None)
     plan_parser.add_argument("--shard-tokens", type=int, default=DEFAULT_SHARD_TOKENS)
@@ -678,7 +698,6 @@ def main(argv: list[str] | None = None) -> int:
             accepted=accepted,
             commitments=canonical,
             tokenizer_relative=args.tokenizer,
-            exclusion_relative=args.reference_exclusion_manifest,
             environment=current_environment(),
             shard_tokens=int(args.shard_tokens),
             implementation_commit=args.implementation_commit,

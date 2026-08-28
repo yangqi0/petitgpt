@@ -50,7 +50,11 @@ if ROOT not in sys.path:
 
 # --------------------------------------------------------------------- schema names
 
-CANDIDATE_PLAN_SCHEMA = "petitgpt-m-candidate-plan-v1"
+# R3 bumps this deliberately: resources.reference_exclusion_manifest was replaced by
+# resources.canonical_exclusion_authority, which is a different serialized key carrying
+# different fields (the canonical L1 artifact named by accepted G/G2, plus independently
+# derived counts). That is a candidate-plan contract change, not merely changed bytes.
+CANDIDATE_PLAN_SCHEMA = "petitgpt-m-candidate-plan-v2"
 INPUT_SEQUENCE_COMMITMENT_SCHEMA = "petitgpt-stage-m-input-sequence-commitment-v1"
 ACCOUNTING_SCHEMA = "petitgpt-stage-m-accounting-v1"
 BUNDLE_SCHEMA = "petitgpt-m-implementation-bundle-v1"
@@ -665,14 +669,46 @@ def validate_candidate_plan_contract(plan: Mapping[str, Any]) -> dict[str, Any]:
     resources = plan.get("resources")
     require(isinstance(resources, Mapping), "candidate plan resources must be an object")
     assert isinstance(resources, Mapping)
-    check(sorted(resources), ["reference_exclusion_manifest", "tokenizer"], "resources key set")
+    check(sorted(resources), ["canonical_exclusion_authority", "tokenizer"], "resources key set")
     tokenizer = resources["tokenizer"]
     require(isinstance(tokenizer, Mapping), "candidate plan resources.tokenizer must be object")
     validated_sha256(tokenizer.get("sha256"), field="resources.tokenizer.sha256")
     require_int(tokenizer.get("size_bytes"), field="resources.tokenizer.size_bytes", minimum=1)
     checked += 2
     exclusion = plan_exclusion_authority(plan)
-    checked += 2
+    canonical_block = resources["canonical_exclusion_authority"]
+    check(
+        canonical_block.get("schema_version"),
+        CANONICAL_EXCLUSION_AUTHORITY_SCHEMA,
+        "resources.canonical_exclusion_authority.schema_version",
+    )
+    named = canonical_block.get("named_by")
+    require(
+        isinstance(named, Mapping),
+        "candidate plan resources.canonical_exclusion_authority.named_by must be an object",
+    )
+    assert isinstance(named, Mapping)
+    check(
+        named.get("accepted_g_manifest"),
+        ACCEPTED_G_TOKENIZER_RELEASE_MANIFEST,
+        "canonical_exclusion_authority.named_by.accepted_g_manifest",
+    )
+    check(
+        named.get("accepted_g2_manifest"),
+        ACCEPTED_G2_RELEASE_MANIFEST,
+        "canonical_exclusion_authority.named_by.accepted_g2_manifest",
+    )
+    check(
+        int(named.get("accepted_g_derived_count", -1)),
+        int(exclusion["derived_count"]),
+        "accepted G independently derived count vs the bound canonical count",
+    )
+    check(
+        int(named.get("accepted_g2_derived_count", -1)),
+        int(exclusion["derived_count"]),
+        "accepted G2 independently derived count vs the bound canonical count",
+    )
+    checked += 3
 
     # --- accepted Stage-I authority ------------------------------------------------------------
     accepted = plan.get("accepted_stage_i")
@@ -830,77 +866,212 @@ def validate_candidate_plan_contract(plan: Mapping[str, Any]) -> dict[str, Any]:
     }
 
 
-# --------------------------------------------------------------------- shared exclusion authority
+# --------------------------------------------------------------------- exclusion authority
+
+CANONICAL_EXCLUSION_AUTHORITY_SCHEMA = "petitgpt-stage-m-canonical-exclusion-authority-v1"
+
+# The two accepted manifests that between them *name* the canonical L1 exclusion artifact.
+ACCEPTED_G_TOKENIZER_RELEASE_MANIFEST = (
+    "runs/g_production_2026-08-21/release/tokenizer_release_manifest.json"
+)
+ACCEPTED_G2_RELEASE_MANIFEST = "runs/g2_production_2026-08-21/release/manifest.json"
 
 
-def shared_exclusion_authority(
-    *, sha256s: Sequence[str], hash_count: int, source: str
-) -> dict[str, Any]:
-    """The one canonical normalization of a reference-exclusion authority (R2-A).
+def read_exclusion_artifact(repo_root: Path, relative: str) -> dict[str, Any]:
+    """Independently derive an exclusion artifact's identity and item count from its bytes.
 
-    Every artifact that must share the exclusion contract -- the candidate-M plan, both Stage-M
-    releases, the G tokenizer release and the G2 reference release -- is reduced to this same
-    shape before comparison, so there is a single definition rather than one per call site.
+    R3-B: every participant derives its own count from its own evidence. Nothing here accepts a
+    count from a caller, so one participant can never supply another's number.
     """
-    normalized = tuple(
-        sorted({validated_sha256(v, field=f"{source}.exclusion.sha256") for v in sha256s})
+    path = (Path(repo_root) / relative).resolve()
+    require(path.is_file(), f"exclusion artifact is missing: {relative}")
+    digest = file_sha256(path)
+    with open(path, encoding="utf-8") as handle:
+        payload = json.load(handle)
+    require(isinstance(payload, Mapping), f"exclusion artifact must be a JSON object: {relative}")
+    hashes = payload.get("hashes")
+    require(
+        isinstance(hashes, list) and bool(hashes),
+        f"exclusion artifact has no hashes list: {relative}",
     )
-    require(bool(normalized), f"{source}: declares no reference exclusion manifest")
+    assert isinstance(hashes, list)
+    derived = len(hashes)
+    declared = payload.get("hash_count")
+    require(
+        declared == derived,
+        f"{relative}: declared hash_count {declared!r} disagrees with the {derived} hashes "
+        "actually present",
+    )
     return {
-        "schema_version": SHARED_EXCLUSION_AUTHORITY_SCHEMA,
-        "source": source,
-        "manifest_sha256s": list(normalized),
-        "manifest_count": len(normalized),
-        "hash_count": require_int(hash_count, field=f"{source}.exclusion.hash_count", minimum=1),
+        "artifact_path": relative,
+        "artifact_sha256": digest,
+        "artifact_size_bytes": int(path.stat().st_size),
+        "derived_count": derived,
+        "kind": payload.get("kind"),
+        "hash_algorithm": payload.get("hash_algorithm"),
+        "schema_version": payload.get("schema_version"),
     }
 
 
-def require_agreeing_exclusion_authorities(
+def exclusion_authority(
+    *,
+    participant: str,
+    artifact_path: str,
+    artifact_sha256: str,
+    derived_count: int,
+    kind: object = None,
+    hash_algorithm: object = None,
+) -> dict[str, Any]:
+    """One participant's independently derived view of the shared exclusion authority."""
+    return {
+        "schema_version": CANONICAL_EXCLUSION_AUTHORITY_SCHEMA,
+        "participant": participant,
+        "artifact_path": str(artifact_path),
+        "artifact_sha256": validated_sha256(
+            artifact_sha256, field=f"{participant}.exclusion.artifact_sha256"
+        ),
+        "derived_count": require_int(
+            derived_count, field=f"{participant}.exclusion.derived_count", minimum=1
+        ),
+        "kind": kind,
+        "hash_algorithm": hash_algorithm,
+    }
+
+
+def require_identical_exclusion_authorities(
     authorities: Sequence[Mapping[str, Any]],
 ) -> dict[str, Any]:
-    """Prove every supplied exclusion authority agrees, and return the agreed one.
+    """Prove every participant derived the SAME canonical artifact and the SAME count.
 
-    Digest set and hash count must both match. Comparing only the digests would let a release
-    claim a different number of excluded identities under the same manifest name.
+    Identity is the exact artifact SHA-256. A copied, reordered, reformatted or reserialized
+    exclusion file is a different artifact even when it carries the same number of hashes --
+    which is exactly the substitution candidate v3 made, and exactly what an item-count
+    comparison cannot see. Both the digest and the independently derived count must agree.
     """
-    require(len(authorities) >= 2, "exclusion agreement needs at least two authorities")
-    reference = authorities[0]
-    digests = tuple(reference["manifest_sha256s"])
-    count = int(reference["hash_count"])
-    disagreements = [
-        f"{a['source']}(sha={list(a['manifest_sha256s'])}, hash_count={a['hash_count']})"
-        for a in authorities
-        if tuple(a["manifest_sha256s"]) != digests or int(a["hash_count"]) != count
-    ]
-    require(
-        not disagreements,
-        "shared reference-exclusion authorities disagree: "
-        f"expected sha={list(digests)}, hash_count={count}; offending {disagreements}",
-    )
+    require(len(authorities) >= 2, "exclusion agreement needs at least two participants")
+    digests = {a["artifact_sha256"] for a in authorities}
+    counts = {int(a["derived_count"]) for a in authorities}
+    if len(digests) != 1 or len(counts) != 1:
+        detail = ", ".join(
+            f"{a['participant']}(sha={a['artifact_sha256'][:12]}…, "
+            f"count={a['derived_count']}, path={a['artifact_path']})"
+            for a in authorities
+        )
+        require(
+            False,
+            "shared reference-exclusion authorities disagree: "
+            f"{len(digests)} distinct artifact digests, {len(counts)} distinct derived counts; "
+            f"{detail}",
+        )
+    paths = sorted({a["artifact_path"] for a in authorities})
     return {
-        "schema_version": SHARED_EXCLUSION_AUTHORITY_SCHEMA,
-        "manifest_sha256s": list(digests),
-        "manifest_count": len(digests),
-        "hash_count": count,
-        "sources": [a["source"] for a in authorities],
+        "schema_version": CANONICAL_EXCLUSION_AUTHORITY_SCHEMA,
+        "artifact_sha256": next(iter(digests)),
+        "derived_count": next(iter(counts)),
+        "artifact_paths": paths,
+        "participants": [a["participant"] for a in authorities],
+        "participant_count": len(authorities),
+    }
+
+
+def _named_exclusion(
+    repo_root: Path, entry: Mapping[str, Any], *, participant: str, label: str
+) -> dict[str, Any]:
+    """Bind the artifact an accepted manifest NAMES, then derive its count from its own bytes."""
+    relative = entry.get("manifest_path")
+    require(
+        isinstance(relative, str) and relative,
+        f"{label}: exclusion entry has no manifest_path",
+    )
+    assert isinstance(relative, str)
+    declared = validated_sha256(entry.get("manifest_sha256"), field=f"{label}.manifest_sha256")
+    artifact = read_exclusion_artifact(repo_root, relative)
+    require(
+        artifact["artifact_sha256"] == declared,
+        f"{label}: names {relative} with SHA-256 {declared} but the artifact on disk hashes to "
+        f"{artifact['artifact_sha256']}",
+    )
+    declared_count = entry.get("hash_count")
+    require(
+        declared_count == artifact["derived_count"],
+        f"{label}: declares hash_count {declared_count!r} for {relative} but the artifact "
+        f"contains {artifact['derived_count']} hashes",
+    )
+    return exclusion_authority(
+        participant=participant,
+        artifact_path=relative,
+        artifact_sha256=artifact["artifact_sha256"],
+        derived_count=artifact["derived_count"],
+        kind=artifact["kind"],
+        hash_algorithm=artifact["hash_algorithm"],
+    )
+
+
+def accepted_g_exclusion_authority(repo_root: Path) -> dict[str, Any]:
+    """The canonical exclusion artifact the accepted G tokenizer release names."""
+    path = (Path(repo_root) / ACCEPTED_G_TOKENIZER_RELEASE_MANIFEST).resolve()
+    require(path.is_file(), f"accepted G manifest is missing: {path}")
+    with open(path, encoding="utf-8") as handle:
+        manifest = json.load(handle)
+    block = (manifest or {}).get("reference_reserve_exclusion") or {}
+    entries = block.get("manifests")
+    require(
+        isinstance(entries, list) and len(entries) == 1,
+        "accepted G must name exactly one reference-reserve exclusion manifest",
+    )
+    assert isinstance(entries, list)
+    return _named_exclusion(repo_root, entries[0], participant="accepted_g", label="accepted G")
+
+
+def accepted_g2_exclusion_authority(repo_root: Path) -> dict[str, Any]:
+    """The canonical exclusion artifact the accepted G2 reference release names."""
+    path = (Path(repo_root) / ACCEPTED_G2_RELEASE_MANIFEST).resolve()
+    require(path.is_file(), f"accepted G2 manifest is missing: {path}")
+    with open(path, encoding="utf-8") as handle:
+        manifest = json.load(handle)
+    reserve = (manifest or {}).get("reserve_provenance") or {}
+    entry = reserve.get("reserve_exclusion")
+    require(isinstance(entry, Mapping), "accepted G2 has no reserve_provenance.reserve_exclusion")
+    assert isinstance(entry, Mapping)
+    return _named_exclusion(repo_root, entry, participant="accepted_g2", label="accepted G2")
+
+
+def canonical_exclusion_authority(repo_root: Path) -> dict[str, Any]:
+    """Recover the canonical L1 exclusion authority from accepted G and accepted G2.
+
+    R3: the canonical authority is the exact artifact both accepted manifests name, not any
+    later release copy of the same hash set. G and G2 are read independently and must agree on
+    both the artifact digest and the independently derived count.
+    """
+    g = accepted_g_exclusion_authority(repo_root)
+    g2 = accepted_g2_exclusion_authority(repo_root)
+    agreed = require_identical_exclusion_authorities([g, g2])
+    return {
+        **agreed,
+        "canonical_artifact_path": g["artifact_path"],
+        "accepted_g": g,
+        "accepted_g2": g2,
     }
 
 
 def plan_exclusion_authority(plan: Mapping[str, Any]) -> dict[str, Any]:
-    """Extract the candidate-M plan's own exclusion authority. R2-A: it must be compared too."""
+    """The candidate-M plan's declared canonical exclusion authority."""
     resources = plan.get("resources")
     require(isinstance(resources, Mapping), "plan.resources must be an object")
     assert isinstance(resources, Mapping)
-    entry = resources.get("reference_exclusion_manifest")
+    entry = resources.get("canonical_exclusion_authority")
     require(
         isinstance(entry, Mapping),
-        "plan.resources.reference_exclusion_manifest must be an object",
+        "plan.resources.canonical_exclusion_authority must be an object",
     )
     assert isinstance(entry, Mapping)
-    return shared_exclusion_authority(
-        sha256s=[str(entry.get("sha256"))],
-        hash_count=entry.get("hash_count"),
-        source="candidate_m_plan",
+    return exclusion_authority(
+        participant="candidate_m_plan",
+        artifact_path=str(entry.get("artifact_path")),
+        artifact_sha256=entry.get("artifact_sha256"),
+        derived_count=entry.get("derived_count"),
+        kind=entry.get("kind"),
+        hash_algorithm=entry.get("hash_algorithm"),
     )
 
 
@@ -949,12 +1120,18 @@ __all__ = [
     "bundle_sha256",
     "canonical_json_bytes",
     "CANDIDATE_PLAN_CONTRACT_SCHEMA",
-    "SHARED_EXCLUSION_AUTHORITY_SCHEMA",
+    "ACCEPTED_G2_RELEASE_MANIFEST",
+    "ACCEPTED_G_TOKENIZER_RELEASE_MANIFEST",
+    "CANONICAL_EXCLUSION_AUTHORITY_SCHEMA",
     "canonical_record_commitment_payload",
     "plan_exclusion_authority",
     "validate_candidate_plan_contract",
-    "require_agreeing_exclusion_authorities",
-    "shared_exclusion_authority",
+    "accepted_g2_exclusion_authority",
+    "accepted_g_exclusion_authority",
+    "canonical_exclusion_authority",
+    "exclusion_authority",
+    "read_exclusion_artifact",
+    "require_identical_exclusion_authorities",
     "canonical_sha256",
     "current_environment",
     "file_sha256",
