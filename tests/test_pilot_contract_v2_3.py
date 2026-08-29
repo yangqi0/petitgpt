@@ -457,23 +457,75 @@ def test_ceiling_checked_before_each_update():
     assert "global_pilot_token_ceiling" in glob["breaches"]
 
 
+def _ledger_identity():
+    return {
+        "contract_sha256": "c",
+        "head": "h",
+        "execution_bundle_sha256": "b",
+        "serialized_index_lists_digest": "i",
+        "authorization_sha256": "a",
+        "authorized_output_root": "/tmp/root",
+        "authorized_scope": "FULL_V2_3_PILOT",
+    }
+
+
+def _ceilings(global_ceiling=C.GLOBAL_PILOT_TOKEN_CEILING):
+    return {
+        "MB": min(C.PHASE_MB_TOKEN_CEILING, global_ceiling),
+        "LR": min(C.PHASE_MUON_LR_TOKEN_CEILING, global_ceiling),
+        "GLOBAL": global_ceiling,
+    }
+
+
 def test_persistent_ledger_round_trip(tmp_path):
-    path = tmp_path / "ledger.json"
-    ledger = R.TokenLedger(path)
-    ledger.require_update_allowed("MB")
-    ledger.commit("MB")
-    assert path.is_file()
-    reloaded = R.TokenLedger(path)
+    ledger = R.TokenLedger(tmp_path / "l.json", _ledger_identity(), _ceilings())
+    ledger.commit_update("MB")
+    reloaded = R.TokenLedger(tmp_path / "l.json", _ledger_identity(), _ceilings())
     assert reloaded.state["global_tokens"] == C.EFFECTIVE_BATCH_TOKENS
     assert reloaded.state["phase_tokens"]["MB"] == C.EFFECTIVE_BATCH_TOKENS
     assert reloaded.state["updates"] == 1
 
 
+def test_ledger_reload_validates_bound_identity(tmp_path):
+    R.TokenLedger(tmp_path / "l.json", _ledger_identity(), _ceilings())
+    other = _ledger_identity() | {"head": "DIFFERENT"}
+    with pytest.raises(C.PilotContractError, match="does not bind this execution"):
+        R.TokenLedger(tmp_path / "l.json", other, _ceilings())
+
+
 def test_ledger_refuses_update_over_ceiling(tmp_path):
-    ledger = R.TokenLedger(tmp_path / "l.json")
+    ledger = R.TokenLedger(tmp_path / "l.json", _ledger_identity(), _ceilings())
     ledger.state["phase_tokens"]["MB"] = C.PHASE_MB_TOKEN_CEILING
+    ledger._write(ledger.state)  # noqa: SLF001 - exercising the persisted path deliberately
     with pytest.raises(C.PilotContractError, match="PILOT_ABORT"):
-        ledger.require_update_allowed("MB")
+        ledger.commit_update("MB")
+
+
+def test_ledger_uses_interprocess_locking(tmp_path):
+    """The commit path takes an exclusive flock before reload/check/commit."""
+    import inspect
+
+    ledger = R.TokenLedger(tmp_path / "l.json", _ledger_identity(), _ceilings())
+    assert "flock" in inspect.getsource(R.TokenLedger._lock)  # noqa: SLF001
+    assert "LOCK_EX" in inspect.getsource(R.TokenLedger._lock)  # noqa: SLF001
+    assert "self._lock()" in inspect.getsource(R.TokenLedger.commit_update)
+    ledger.commit_update("MB")
+    assert ledger.lock_path.exists()
+
+
+@pytest.mark.parametrize("ceiling", [0, -1, C.GLOBAL_PILOT_TOKEN_CEILING + 1, "x", None])
+def test_authorized_ceiling_validation(ceiling):
+    with pytest.raises(C.PilotContractError):
+        R.authorized_effective_ceilings({"pilot_trained_token_ceiling": ceiling})
+
+
+def test_effective_ceiling_is_the_minimum(tmp_path):
+    low = 1_000_000
+    ledger = R.TokenLedger(tmp_path / "l.json", _ledger_identity(), _ceilings(low))
+    assert ledger.effective_ceiling("MB") == low
+    assert ledger.effective_ceiling("LR") == low
+    eff = R.authorized_effective_ceilings({"pilot_trained_token_ceiling": low})
+    assert eff == {"MB": low, "LR": low, "GLOBAL": low}
 
 
 # ------------------------------------------------------------------ indices
@@ -595,7 +647,8 @@ def _authorized(observed, scope="FULL_V2_3_PILOT"):
         "contract_version": C.CONTRACT_VERSION,
         "contract_sha256": observed["contract_sha256"],
         "execution_implementation_bundle_sha256": observed["execution_bundle_sha256"],
-        "pilot_index_manifest_sha256": observed["pilot_index_manifest_sha256"],
+        "serialized_index_lists_digest": observed["serialized_index_lists_digest"],
+        "pilot_index_manifest_file_sha256": observed["pilot_index_manifest_file_sha256"],
         "accepted_stage_a_meta_sha256": observed["stage_a_meta_sha256"],
         "accepted_stage_b_meta_sha256": observed["stage_b_meta_sha256"],
         "allowed_output_root": observed["output_root"],
@@ -610,7 +663,8 @@ def observed():
         "head": "deadbeef",
         "contract_sha256": C.contract_sha256(),
         "execution_bundle_sha256": "bundle",
-        "pilot_index_manifest_sha256": "idx",
+        "serialized_index_lists_digest": "idx",
+        "pilot_index_manifest_file_sha256": "mfile",
         "stage_a_meta_sha256": "a",
         "stage_b_meta_sha256": "b",
         "output_root": "/tmp/out",
@@ -643,7 +697,8 @@ def test_not_authorized_status_refuses(observed):
         "repository_head",
         "contract_sha256",
         "execution_implementation_bundle_sha256",
-        "pilot_index_manifest_sha256",
+        "serialized_index_lists_digest",
+        "pilot_index_manifest_file_sha256",
         "accepted_stage_a_meta_sha256",
         "accepted_stage_b_meta_sha256",
         "allowed_output_root",
@@ -677,46 +732,217 @@ def test_token_ceiling_above_contract_refused(observed):
     assert "token_ceiling_invalid_or_above_contract" in v["failures"]
 
 
-def test_execution_reaches_orchestration_boundary_with_doubles(observed, tmp_path):
-    """With authorization validated, the executor reaches candidate orchestration.
-
-    Every training primitive is a test double; no forward, backward or optimizer step runs.
-    """
-    candidate = R.plan_phase_mb(output_root=tmp_path / "out")[0]
-    fake_ctx = {
-        "authorized": True,
-        "train_view": mock.Mock(),
-        "ledger": mock.Mock(),
-        "observed": observed,
-        "fingerprint": {"fingerprint_sha256": "fp"},
+def _fake_context(tmp_path, scope="FULL_V2_3_PILOT"):
+    """A ValidatedExecutionContext built directly, as build_validated_context would."""
+    root = (tmp_path / "root").resolve()
+    root.mkdir(parents=True, exist_ok=True)
+    identity = {
+        "contract_sha256": "c",
+        "head": "h",
+        "execution_bundle_sha256": "b",
+        "serialized_index_lists_digest": "i",
+        "authorization_sha256": "a",
+        "authorized_output_root": str(root),
+        "authorized_scope": scope,
     }
-    with (
-        mock.patch.object(R, "build_pilot_model") as m_model,
-        mock.patch.object(R, "build_pilot_optimizer"),
-        mock.patch.object(R, "_run_updates") as m_run,
-    ):
-        m_run.return_value = {
-            "losses": {1: 1.0},
-            "grad_norms": {1: 1.0},
-            "step_seconds": [0.5],
-            "diagnostics": [],
-            "completed_updates": 40,
-            "realized_lrs": {},
-        }
-        with mock.patch.dict("sys.modules", {"torch": mock.MagicMock()}):
-            try:
-                R.run_phase_mb_candidate(candidate, fake_ctx)
-            except Exception:  # noqa: BLE001 - torch double is not a full stand-in
-                pass
-        assert m_model.called or m_run.called or True
-    identity = R.pilot_checkpoint_identity(
-        {**candidate, "phase": "MB"},
-        {
-            "observed": {**observed, "pilot_index_manifest_sha256": "idx"},
-            "fingerprint": {"fingerprint_sha256": "fp"},
+    ledger = R.TokenLedger(root / R.LEDGER_FILENAME, identity, _ceilings())
+    return R.ValidatedExecutionContext(
+        scope=scope,
+        phase="MB",
+        manifest_sha256="a",
+        observed={
+            "branch": "b",
+            "head": "h",
+            "contract_sha256": "c",
+            "execution_bundle_sha256": "b",
+            "serialized_index_lists_digest": "i",
+            "pilot_index_manifest_file_sha256": "m",
+            "stage_a_meta_sha256": "sa",
+            "stage_b_meta_sha256": "sb",
+            "output_root": str(root),
         },
+        indices={
+            "stage_a_eval": [0],
+            "stage_a_train": [0],
+            "stage_b_eval": [0],
+            "stage_a_eval_sha256": "x",
+            "stage_a_train_sha256": "y",
+            "stage_b_eval_sha256": "z",
+        },
+        fingerprint={"fingerprint_sha256": "fp", "gpu": {"total_vram_bytes": VRAM_4090}},
+        stage_a={"dataset": None},
+        stage_b={"dataset": None},
+        ledger=ledger,
+        output_root=root,
+        effective_ceilings=_ceilings(),
+        train_order_by_seed={"seed-1": [0], "seed-2": [0]},
     )
-    assert identity["checkpoint_kind"] == "PILOT_V2_3"
+
+
+def test_candidate_functions_reject_a_plain_authorized_dict(tmp_path):
+    """The `context['authorized'] = True` pattern is gone; a mapping is not a context."""
+    candidate = R.plan_phase_mb(output_root=tmp_path / "root")[0]
+    for fn in (R.run_phase_mb_candidate, R.run_phase_lr_candidate):
+        with pytest.raises(C.PilotContractError, match="ValidatedExecutionContext"):
+            fn(candidate, {"authorized": True, "train_view": None, "ledger": None})
+
+
+def test_phase_mb_only_scope_cannot_run_lr(tmp_path):
+    ctx = _fake_context(tmp_path, scope="PHASE_MB_ONLY")
+    ctx.require_phase_allowed("MB")
+    with pytest.raises(C.PilotContractError, match="PHASE_MB_ONLY may not execute"):
+        ctx.require_phase_allowed("LR")
+    with pytest.raises(C.PilotContractError, match="PHASE_MB_ONLY may not execute"):
+        R.orchestrate_phase_muon_lr(ctx, micro_bsz=8, compile_on=False, backend=lambda *_: None)
+
+
+def test_orchestrator_runs_exactly_the_ten_candidates(tmp_path):
+    """A fake backend records what the orchestrator chose to launch."""
+    ctx = _fake_context(tmp_path)
+    launched = []
+
+    def backend(candidate, context):
+        assert isinstance(context, R.ValidatedExecutionContext)
+        launched.append(candidate["candidate_id"])
+        out = Path(candidate["output_dir"])
+        out.mkdir(parents=True)
+        (out / "result.json").write_bytes(
+            C.canonical_json_bytes(_bound_mb_result(candidate, context))
+        )
+
+    report = R.orchestrate_phase_mb(ctx, backend=backend)
+    assert launched == list(C.MB_REQUIRED_CANDIDATE_IDS)
+    assert len(launched) == 10
+    assert report["selection"]["outcome"] == "PHASE_MB_FROZEN"
+
+
+def _bound_mb_result(candidate, context, **over):
+    r = {
+        "phase": "MB",
+        "candidate_id": candidate["candidate_id"],
+        "seed_label": candidate["seed_label"],
+        "micro_bsz": candidate["micro_bsz"],
+        "grad_accum": candidate["grad_accum"],
+        "compile": candidate["compile"],
+        "completed_updates": 40,
+        "median_tokens_per_sec": 1000.0,
+        "max_memory_reserved_bytes": 8 * 1024**3,
+        "oom": False,
+        "uncontrolled_exception": False,
+        "all_losses_finite": True,
+        "all_grad_norms_finite": True,
+        "all_optimizer_states_instantiated": True,
+        "grouping_matches_contract": True,
+        "all_lr_ratios_are_one": True,
+        "canonical_compile_path": True,
+        "run_meta_sha256": "rm",
+        "contract_sha256": context.observed["contract_sha256"],
+        "implementation_head": context.observed["head"],
+        "execution_bundle_sha256": context.observed["execution_bundle_sha256"],
+        "serialized_index_lists_digest": context.observed["serialized_index_lists_digest"],
+        "runtime_fingerprint_sha256": context.fingerprint["fingerprint_sha256"],
+        "authorization_sha256": context.manifest_sha256,
+        "ledger_identity": dict(context.ledger.identity),
+        "output_dir": candidate["output_dir"],
+    }
+    r.update(over)
+    return r
+
+
+def test_candidate_local_failure_becomes_ineligible_evidence_and_grid_continues(tmp_path):
+    ctx = _fake_context(tmp_path)
+    launched = []
+
+    def backend(candidate, context):
+        launched.append(candidate["candidate_id"])
+        if candidate["candidate_id"] == "mb_micro16_compileoff":
+            raise RuntimeError("simulated candidate-local CUDA failure")
+        out = Path(candidate["output_dir"])
+        out.mkdir(parents=True)
+        (out / "result.json").write_bytes(
+            C.canonical_json_bytes(_bound_mb_result(candidate, context))
+        )
+
+    report = R.orchestrate_phase_mb(ctx, backend=backend)
+    assert len(launched) == 10, "the grid must continue after a candidate-local failure"
+    failed = [c for c in report["candidates"] if c["candidate_id"] == "mb_micro16_compileoff"]
+    assert failed and failed[0]["eligible"] is False
+    assert failed[0]["reason"] == "candidate_runtime_exception"
+    assert report["selection"]["outcome"] == "PHASE_MB_FROZEN"
+
+
+def test_phase_level_binding_failure_aborts(tmp_path):
+    ctx = _fake_context(tmp_path)
+
+    def backend(candidate, context):
+        raise C.PilotContractError("accepted-release binding failed")
+
+    with pytest.raises(C.PilotContractError, match="accepted-release binding failed"):
+        R.orchestrate_phase_mb(ctx, backend=backend)
+
+
+def test_result_must_bind_this_execution(tmp_path):
+    ctx = _fake_context(tmp_path)
+
+    def backend(candidate, context):
+        out = Path(candidate["output_dir"])
+        out.mkdir(parents=True)
+        (out / "result.json").write_bytes(
+            C.canonical_json_bytes(_bound_mb_result(candidate, context, contract_sha256="WRONG"))
+        )
+
+    with pytest.raises(C.PilotContractError, match="does not bind this execution"):
+        R.orchestrate_phase_mb(ctx, backend=backend)
+
+
+def test_lr_orchestrator_derives_grid_confirmation_and_edge(tmp_path):
+    """Nothing about which LR candidates run comes from caller input."""
+    ctx = _fake_context(tmp_path)
+    launched = []
+    scores = {2e-4: 3.0, 3e-4: 3.5, 4e-4: 3.9, 1e-4: 2.5}
+
+    def backend(candidate, context):
+        launched.append((candidate["peak_lr"], candidate["seed_label"]))
+        out = Path(candidate["output_dir"])
+        out.mkdir(parents=True)
+        r = {
+            "phase": "LR",
+            "candidate_id": candidate["candidate_id"],
+            "peak_lr": candidate["peak_lr"],
+            "seed_label": candidate["seed_label"],
+            "completed_updates": 200,
+            "all_losses_finite": True,
+            "all_grad_norms_finite": True,
+            "all_parameters_finite": True,
+            "muon_momentum_states_present": True,
+            "aux_adamw_states_present": True,
+            "grouping_matches_contract": True,
+            "all_lr_ratios_are_one": True,
+            "eval_loss_stage_a": 3.0,
+            "eval_loss_stage_b": 3.0,
+            "score": scores[candidate["peak_lr"]],
+            "sustained_divergence": False,
+            "run_meta_sha256": "rm",
+            "contract_sha256": context.observed["contract_sha256"],
+            "implementation_head": context.observed["head"],
+            "execution_bundle_sha256": context.observed["execution_bundle_sha256"],
+            "serialized_index_lists_digest": context.observed["serialized_index_lists_digest"],
+            "runtime_fingerprint_sha256": context.fingerprint["fingerprint_sha256"],
+            "authorization_sha256": context.manifest_sha256,
+            "ledger_identity": dict(context.ledger.identity),
+            "output_dir": candidate["output_dir"],
+        }
+        (out / "result.json").write_bytes(C.canonical_json_bytes(r))
+
+    report = R.orchestrate_phase_muon_lr(ctx, micro_bsz=8, compile_on=False, backend=backend)
+    seed1_lrs = sorted(lr for lr, seed in launched if seed == "seed-1" and lr in C.LR_GRID_SEED1)
+    assert seed1_lrs == sorted(C.LR_GRID_SEED1), "initial grid derived internally"
+    # winner is 2e-4 (lowest score) -> confirmation neighbour is the HIGHER 3e-4
+    seed2_lrs = sorted({lr for lr, seed in launched if seed == "seed-2"})
+    assert 2e-4 in seed2_lrs and 3e-4 in seed2_lrs
+    # 2e-4 confirmed -> edge 1e-4 must have run under BOTH seeds
+    assert (1e-4, "seed-1") in launched and (1e-4, "seed-2") in launched
+    assert report["final"]["second_expansion_permitted"] is False
 
 
 def test_runner_run_subcommand_refuses(tmp_path):
@@ -726,36 +952,29 @@ def test_runner_run_subcommand_refuses(tmp_path):
 # ------------------------------------------------------------------ checkpoint isolation
 
 
-def test_pilot_checkpoint_never_initializes_production():
-    for purpose in ("another pilot candidate", "stage_n", "stage_o"):
-        with pytest.raises(C.PilotContractError, match="forbids initializing"):
-            C.reject_pilot_checkpoint_as_initialization(purpose)
-    with pytest.raises(C.PilotContractError):
-        R.require_not_pilot_checkpoint({"checkpoint_kind": "PILOT_V2_3"}, "stage_n")
-    R.require_not_pilot_checkpoint({"kind": "pretrain"}, "stage_n")  # non-pilot passes
+def test_pilot_checkpointing_is_disabled():
+    assert C.PILOT_CHECKPOINTING == "DISABLED"
+    policy = C.CHECKPOINT_ISOLATION
+    assert policy["executor_creates_training_checkpoints"] is False
+    assert policy["executor_accepts_pilot_resume"] is False
+    assert policy["stage_n_o_consumer_integration_required"] is False
+    for action in ("save a pilot checkpoint", "resume from a pilot checkpoint"):
+        with pytest.raises(C.PilotContractError, match="PILOT_CHECKPOINTING=DISABLED"):
+            C.require_checkpointing_disabled(action)
+    with pytest.raises(C.PilotContractError, match="PILOT_CHECKPOINTING=DISABLED"):
+        R.require_checkpointing_disabled("resume")
 
 
-def test_pilot_resume_requires_exact_same_candidate():
-    base = {
-        "checkpoint_kind": "PILOT_V2_3",
-        "candidate_id": "c1",
-        "seed_label": "seed-1",
-        "contract_sha256": "x",
-        "implementation_head": "h",
-        "pilot_index_manifest_sha256": "i",
-    }
-    assert C.check_pilot_resume(base, dict(base))["may_resume"] is True
-    other = dict(base) | {"candidate_id": "c2"}
-    v = C.check_pilot_resume(base, other)
-    assert not v["may_resume"] and "mismatch:candidate_id" in v["failures"]
-    for field in (
-        "seed_label",
-        "contract_sha256",
-        "implementation_head",
-        "pilot_index_manifest_sha256",
-    ):
-        bad = dict(base) | {field: "DIFFERENT"}
-        assert not C.check_pilot_resume(base, bad)["may_resume"]
+def test_no_pilot_checkpoint_save_or_resume_path_exists():
+    """The executor exposes no checkpoint save/resume entry point and no resume CLI option."""
+    import inspect
+
+    assert not hasattr(R, "resume_pilot_checkpoint")
+    assert not hasattr(R, "pilot_checkpoint_identity")
+    assert not hasattr(C, "check_pilot_resume")
+    src = inspect.getsource(R)
+    assert "torch.save" not in src
+    assert "--resume" not in src
 
 
 # ------------------------------------------------------------------ output isolation
@@ -872,19 +1091,52 @@ def test_planner_geometry_matches_expected():
 
 
 def test_final_lr_discrete_semantics():
+    """Cosine parity, and the deliberate endpoint-vs-last-applied distinction."""
     peak = 4e-4
     s = C.final_lr_semantics(
         peak_lr=peak, warmup_steps=500, decay_start_step=44631, decay_end_step=49590
     )
     assert s["PRODUCTION_MIN_LR_INTENT_RATIO"] == 0.10
-    assert s["mathematical_endpoint_lr"] == pytest.approx(peak * 0.10)
+    assert s["mathematical_endpoint_step"] == 49590
+    assert s["mathematical_endpoint_ratio"] == 0.10
     assert s["last_applied_optimizer_update"] == 49589
-    # The last APPLIED update is one step before the mathematical endpoint, so its LR is
-    # strictly above the floor -- and must not be forced to equal it.
-    assert s["last_applied_lr"] > s["mathematical_endpoint_lr"]
-    span = 49590 - 44631
-    expected = peak + (peak * 0.10 - peak) * ((span - 1) / span)
-    assert s["last_applied_lr"] == pytest.approx(expected)
+    # The frozen expected values: exactly 0.10 at the endpoint, ~0.10000009 one step before.
+    assert s["last_applied_ratio"] == pytest.approx(0.10000009030130619, rel=1e-12)
+    assert s["last_applied_ratio"] > s["mathematical_endpoint_ratio"]
+    assert "cosine" in s["schedule_family"]
+
+
+def test_wsd_helper_matches_the_production_scheduler_exactly():
+    """The V2.3 helper delegates to the SAME pure function the trainer imports."""
+    from src.canonical_schedule import lr_schedule as canonical
+
+    kw = {"peak_lr": 4e-4, "warmup_steps": 500, "decay_start_step": 44631, "decay_end_step": 49590}
+    for step in (0, 1, 250, 499, 500, 1000, 44630, 44631, 44632, 49588, 49589, 49590):
+        assert C.wsd_lr(step, **kw) == canonical(
+            step,
+            500,
+            4e-4,
+            schedule="wsd",
+            schedule_total_steps=49590,
+            decay_start_step=44631,
+            decay_end_step=49590,
+            min_lr_ratio=0.1,
+        )
+
+
+def test_production_trainer_imports_the_same_schedule():
+    import importlib.util
+    import sys as _sys
+
+    from src.canonical_schedule import lr_schedule as shared
+
+    _sys.path.insert(0, "pretrain")
+    spec = importlib.util.spec_from_file_location(
+        "_tpwb_parity", "pretrain/train_pretrain_with_bench.py"
+    )
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    assert mod.lr_schedule is shared
 
 
 def test_wsd_lr_shape():
@@ -932,8 +1184,8 @@ def test_release_identity_derived_not_supplied():
     """Universes come from the accepted releases, never from caller-supplied numbers."""
     import inspect
 
-    src = inspect.getsource(R.authorize_execution)
-    assert "derive" in src or "verify_accepted_release" in src
+    src = inspect.getsource(R.build_validated_context)
+    assert "verify_accepted_release" in src
     assert "verify_accepted_release" in inspect.getsource(R.derive_universes)
     sig = inspect.signature(R.derive_universes)
     assert not sig.parameters, "derive_universes must take no caller-supplied counts"
@@ -946,3 +1198,219 @@ def test_accepted_release_constants_match_owner_values():
     assert R.ACCEPTED_STAGE_B_META_SHA256 == (
         "fe634de7690a1ab56bb7e478b161eb4916724ac648ba09338b55f044fa6e0a2e"
     )
+
+
+# ------------------------------------------------------------------ R1: shared canonical loss
+
+
+def test_canonical_loss_is_shared_by_trainer_and_pilot():
+    """Both import the SAME implementation; the pilot no longer pulls in the whole trainer."""
+    import importlib.util
+    import inspect
+    import sys as _sys
+
+    from src.canonical_loss import masked_weighted_ce_components, masked_weighted_ce_loss
+
+    _sys.path.insert(0, "pretrain")
+    spec = importlib.util.spec_from_file_location(
+        "_tpwb_loss_parity", "pretrain/train_pretrain_with_bench.py"
+    )
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    assert mod.masked_weighted_ce_components is masked_weighted_ce_components
+    assert mod.masked_weighted_ce_loss is masked_weighted_ce_loss
+    # The pilot imports the shared module, not the trainer. Checked at the AST import level
+    # so a docstring mentioning the trainer cannot fail (or silently pass) this test.
+    import ast
+
+    tree = ast.parse(Path(R.__file__).read_text(encoding="utf-8"))
+    imported: set[str] = set()
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import):
+            imported.update(a.name for a in node.names)
+        elif isinstance(node, ast.ImportFrom) and node.module:
+            imported.add(node.module)
+    assert "src.canonical_loss" in imported
+    assert not any("train_pretrain_with_bench" in m for m in imported)
+    assert inspect.getsource(R.canonical_loss_components).count("canonical_loss") >= 1
+
+
+def test_canonical_loss_parity_with_previous_production_behaviour():
+    """Pin the extracted primitives against an independent reference computation."""
+    import torch
+    import torch.nn.functional as F  # noqa: N812
+
+    from src.canonical_loss import masked_weighted_ce_components, masked_weighted_ce_loss
+
+    torch.manual_seed(7)
+    logits = torch.randn(2, 5, 11)
+    labels = torch.randint(0, 11, (2, 5))
+    mask = torch.tensor([[1.0, 1.0, 0.0, 1.0, 1.0], [0.0, 1.0, 1.0, 1.0, 0.0]])
+    per_token = F.cross_entropy(logits.reshape(-1, 11), labels.reshape(-1), reduction="none")
+    expected_num = (per_token * mask.reshape(-1)).sum()
+    expected_w = mask.sum()
+    num, w = masked_weighted_ce_components(logits, labels, mask, eos_id=3, eos_weight=1.0)
+    assert torch.allclose(num, expected_num)
+    assert torch.allclose(w, expected_w)
+    assert torch.allclose(
+        masked_weighted_ce_loss(logits, labels, mask, eos_id=3, eos_weight=1.0),
+        expected_num / expected_w,
+    )
+
+
+def test_global_token_mean_rejects_batch_mean_averaging():
+    """With unequal per-batch weights the two quantities genuinely differ."""
+    components = [(10.0, 2.0), (30.0, 10.0)]  # batch means 5.0 and 3.0
+    global_mean = R.global_token_mean(components)
+    batch_mean_of_means = (10.0 / 2.0 + 30.0 / 10.0) / 2
+    assert global_mean == pytest.approx(40.0 / 12.0)
+    assert batch_mean_of_means == pytest.approx(4.0)
+    assert global_mean != pytest.approx(batch_mean_of_means)
+    import inspect
+
+    src = inspect.getsource(R.evaluate)
+    assert "total_numerator" in src and "total_weight" in src
+    assert "/ max(1.0, total_weight)" in src
+
+
+# ------------------------------------------------------------------ R1: dtype + ordering
+
+
+def test_int16_packed_ids_are_converted_for_embedding_and_ce():
+    """Canonical packed storage surfaces as int16; the model needs long index tensors."""
+    import torch
+
+    from src.model import GPT, GPTConfig
+
+    packed = torch.zeros(2, 4, dtype=torch.int16)
+    converted = R.to_model_ids(packed, "cpu")
+    assert converted.dtype == torch.long
+    torch.manual_seed(0)
+    model = GPT(
+        GPTConfig(
+            vocab_size=32, n_layers=1, d_model=16, n_heads=2, n_kv_heads=1, d_ff=32, max_seq_len=8
+        )
+    )
+    with torch.no_grad():
+        logits = model(converted)  # would raise on an int16 index tensor
+    assert logits.shape == (2, 4, 32)
+    labels = R.to_model_ids(torch.zeros(2, 4, dtype=torch.int16), "cpu")
+    mask = torch.ones(2, 4)
+    num, w = R.canonical_loss_components(logits, labels, mask)
+    assert torch.isfinite(num) and float(w) == 8.0
+
+
+class _FakeDataset:
+    """Minimal stand-in for PackedBinDataset: returns (ids, labels, mask) at int16 storage."""
+
+    def __init__(self, n):
+        self.n = n
+
+    def __len__(self):
+        return self.n
+
+    def __getitem__(self, i):
+        import torch
+
+        return (
+            torch.full((4,), i % 7, dtype=torch.int16),
+            torch.full((4,), i % 5, dtype=torch.int16),
+            torch.ones(4, dtype=torch.float32),
+        )
+
+
+def test_index_view_consumes_the_fixed_order_without_wrap():
+    order = [5, 3, 9, 1]
+    view = R.IndexView(_FakeDataset(20), order)
+    assert len(view) == 4
+    assert [int(view[i][0][0]) for i in range(4)] == [v % 7 for v in order]
+    with pytest.raises(C.PilotContractError, match="no replay or wrap"):
+        view[4]
+
+
+def test_exact_block_consumption_mb_and_lr():
+    assert C.MB_PROBE_UPDATES * C.SEQUENCES_PER_OPTIMIZER_UPDATE == 5120
+    assert C.LR_RUN_UPDATES * C.SEQUENCES_PER_OPTIMIZER_UPDATE == 25600
+    assert C.LR_BLOCKS_PER_RUN == 25600
+    import inspect
+
+    src = inspect.getsource(R._run_updates)  # noqa: SLF001
+    assert "required_blocks" in src
+    assert "no replay" in src or "without replay" in src
+    assert "contract requires exactly" in src
+
+
+def test_run_updates_enforces_exact_consumption_and_ledger(tmp_path):
+    """Drive the real update loop on CPU with fakes: no model, no optimizer step."""
+    import torch
+
+    ledger = R.TokenLedger(tmp_path / "l.json", _ledger_identity(), _ceilings())
+    view = R.IndexView(_FakeDataset(64), list(range(8)))
+    with pytest.raises(C.PilotContractError, match="without replay"):
+        R._run_updates(  # noqa: SLF001
+            model=mock.Mock(),
+            optimizer=mock.Mock(),
+            view=view,
+            micro_bsz=2,
+            grad_accum=64,
+            updates=40,
+            lr_fn=C.mb_lr,
+            ledger=ledger,
+            phase="MB",
+            device="cpu",
+        )
+    assert ledger.state["updates"] == 0, "a refused run must not consume ledger tokens"
+    assert torch is not None
+
+
+# ------------------------------------------------------------------ R1: output containment
+
+
+def test_candidate_output_must_resolve_beneath_the_authorized_root(tmp_path):
+    root = (tmp_path / "authorized").resolve()
+    root.mkdir()
+    assert R.require_candidate_output_dir(root / "cand", root)
+    outside = (tmp_path / "elsewhere").resolve()
+    with pytest.raises(C.PilotContractError, match="beneath the authorized root"):
+        R.require_candidate_output_dir(outside / "cand", root)
+    # traversal that escapes by resolution, not by string prefix
+    with pytest.raises(C.PilotContractError, match="beneath the authorized root"):
+        R.require_candidate_output_dir(root / ".." / "escape", root)
+    existing = root / "already"
+    existing.mkdir()
+    with pytest.raises(C.PilotContractError, match="must not exist"):
+        R.require_candidate_output_dir(existing, root)
+
+
+def test_containment_uses_resolved_paths_not_string_prefixes(tmp_path):
+    root = (tmp_path / "root").resolve()
+    root.mkdir()
+    sibling = (tmp_path / "root_evil").resolve()
+    sibling.mkdir()
+    # "root_evil" starts with the string "root" but is not contained in it
+    with pytest.raises(C.PilotContractError, match="beneath the authorized root"):
+        R.require_candidate_output_dir(sibling / "c", root)
+
+
+# ------------------------------------------------------------------ R1: closure
+
+
+def test_execution_closure_is_derived_and_minimal():
+    closure = R.execution_closure()
+    derived = closure["derived_closure"]
+    for required in (
+        "pretrain/pilot_contract_v2_3.py",
+        "pretrain/pilot_runner_v2_3.py",
+        "src/model.py",
+        "src/optim.py",
+        "pretrain/dataset_pretrain.py",
+        "src/special_tokens.py",
+        "src/canonical_loss.py",
+        "src/canonical_schedule.py",
+    ):
+        assert required in derived, required
+    # the shared-loss refactor removed the broad trainer dependency
+    assert "pretrain/train_pretrain_with_bench.py" not in derived
+    assert closure["unbound_load_bearing_module_count"] == 0
+    assert len(derived) == closure["derived_closure_count"]
+    assert len(set(derived)) == len(derived)

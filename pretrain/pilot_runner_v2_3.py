@@ -14,8 +14,11 @@ through the exact RTX 4090 runtime gate. No tracked code change is needed for a 
 run: publishing the manifest is sufficient.
 
 Reuse, never reimplementation: ``src.model.GPT``, ``src.optim.build_optimizer``,
-``pretrain.dataset_pretrain.PackedBinDataset`` with the manifest requirement on, and the
-canonical production loss mask from ``pretrain.train_pretrain_with_bench``.
+``pretrain.dataset_pretrain.PackedBinDataset`` with the manifest requirement on (which emits
+the canonical production loss mask), and the shared canonical primitives in
+``src.canonical_loss`` and ``src.canonical_schedule`` -- the same modules the production
+trainer imports. R1: the pilot no longer imports the trainer itself, which keeps the execution
+closure minimal and avoids its sibling-style imports.
 """
 
 from __future__ import annotations
@@ -41,14 +44,16 @@ from pretrain.pilot_contract_v2_3 import (  # noqa: E402
     BASE_FINGERPRINT_SCHEMA,
     CONTRACT_VERSION,
     EFFECTIVE_BATCH_TOKENS,
+    GLOBAL_PILOT_TOKEN_CEILING,
     GRAD_CLIP,
     LR_GRID_SEED1,
     LR_RUN_UPDATES,
     LR_WARMUP_UPDATES,
+    MB_MEASURED_FIRST_UPDATE,
     MB_PROBE_UPDATES,
     MUON_LR_ARG,
     MUON_MOMENTUM,
-    PILOT_CHECKPOINT_KIND,
+    PHASE_CEILINGS,
     REQUIRED_NUMPY_VERSION,
     RUN_META_SCHEMA,
     SEED_SEMANTICS,
@@ -58,18 +63,24 @@ from pretrain.pilot_contract_v2_3 import (  # noqa: E402
     PilotContractError,
     authorization_template,
     canonical_json_bytes,
-    check_pilot_resume,
-    check_update_within_ceilings,
+    confirmation_neighbor,
     contract_sha256,
+    edge_candidate,
     frozen_grad_accum,
     generate_pilot_indices,
+    lr_candidate_eligible,
+    lr_confirm,
+    lr_resolve_edge,
     lr_schedule,
+    lr_select_seed1,
     mb_candidate_grid,
     mb_lr,
-    reject_pilot_checkpoint_as_initialization,
+    mb_select,
     require,
+    require_complete_lr_grid,
     require_numpy_version,
     require_training_authority,
+    train_order,
     validate_authorization,
     verify_optimizer_state,
     verify_realized_grouping,
@@ -216,25 +227,6 @@ def git_policy_status() -> dict[str, Any]:
     }
 
 
-def require_new_output_dir(destination: Path) -> Path:
-    """Wired into every candidate launch: new, and never inside an accepted release."""
-    root = repo_root()
-    dest = Path(destination)
-    resolved = (dest if dest.is_absolute() else root / dest).resolve()
-    try:
-        relative = resolved.relative_to(root).as_posix()
-    except ValueError:
-        relative = None
-    if relative is not None:
-        for prefix in PROTECTED_PREFIXES:
-            require(
-                relative != prefix and not relative.startswith(prefix + "/"),
-                f"refusing to write pilot output inside an accepted release: {relative}",
-            )
-    require(not resolved.exists(), f"pilot output directory must not exist: {destination}")
-    return resolved
-
-
 # --------------------------------------------------------------------- release binding
 
 
@@ -348,48 +340,147 @@ def _nvidia_smi(field: str) -> str | None:
 
 # --------------------------------------------------------------------- token ledger
 
+LEDGER_FILENAME = "token_ledger.json"
+LEDGER_LOCK_FILENAME = "token_ledger.lock"
+
 
 class TokenLedger:
-    """Persistent trained-token accounting, checked before and persisted after every update."""
+    """Persistent trained-token accounting, bound to the validated execution identity.
 
-    def __init__(self, path: Path):
+    R1: the ledger is constructed by the orchestrator from a validated context, binds that
+    identity, validates any pre-existing state before reuse, and serializes concurrent
+    subprocess updates with a Linux ``fcntl.flock`` advisory lock.
+
+    Atomic protocol, one documented order per optimizer update:
+
+        1. acquire the exclusive lock
+        2. reload the on-disk state and validate its identity binding
+        3. verify the next update fits BOTH the phase and the global effective ceiling
+        4. commit the update (state written and fsynced, then atomically renamed) BEFORE the
+           lock is released
+
+    Commit-on-completion is the whole protocol: there is no separate reservation that a crashed
+    candidate could leak, and a failed candidate can neither double-count nor give back updates
+    that already ran.
+    """
+
+    def __init__(
+        self, path: Path, identity: Mapping[str, Any], effective_ceilings: Mapping[str, int]
+    ):
         self.path = Path(path)
+        self.lock_path = self.path.parent / LEDGER_LOCK_FILENAME
+        self.identity = dict(identity)
+        self.effective_ceilings = {k: int(v) for k, v in effective_ceilings.items()}
+        self.path.parent.mkdir(parents=True, exist_ok=True)
         if self.path.is_file():
-            self.state = json.loads(self.path.read_text(encoding="utf-8"))
+            self.state = self._validated(json.loads(self.path.read_text(encoding="utf-8")))
         else:
             self.state = {
                 "schema_version": TOKEN_LEDGER_SCHEMA,
                 "contract_version": CONTRACT_VERSION,
+                "identity": dict(self.identity),
+                "effective_ceilings": dict(self.effective_ceilings),
                 "phase_tokens": {"MB": 0, "LR": 0},
                 "global_tokens": 0,
                 "updates": 0,
             }
+            self._write(self.state)
+
+    def _validated(self, state: Mapping[str, Any]) -> dict[str, Any]:
+        require(state.get("schema_version") == TOKEN_LEDGER_SCHEMA, "token ledger schema mismatch")
+        require(
+            state.get("contract_version") == CONTRACT_VERSION,
+            "token ledger contract version mismatch",
+        )
+        stored = state.get("identity") or {}
+        mismatched = [k for k, v in self.identity.items() if stored.get(k) != v]
+        require(
+            not mismatched,
+            f"token ledger identity does not bind this execution: {sorted(mismatched)}",
+        )
+        require(int(state.get("global_tokens", -1)) >= 0, "token ledger global count invalid")
+        return dict(state)
+
+    def _write(self, state: Mapping[str, Any]) -> None:
+        tmp = self.path.with_suffix(".tmp")
+        with open(tmp, "wb") as handle:
+            handle.write(canonical_json_bytes(state))
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(tmp, self.path)
+
+    def _lock(self):
+        from contextlib import contextmanager
+        import fcntl
+
+        @contextmanager
+        def guard():
+            with open(self.lock_path, "w") as handle:
+                fcntl.flock(handle.fileno(), fcntl.LOCK_EX)
+                try:
+                    yield
+                finally:
+                    fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
+
+        return guard()
+
+    def effective_ceiling(self, phase: str) -> int:
+        """Never larger than the frozen contract ceiling or the authorized ceiling."""
+        return min(int(PHASE_CEILINGS[phase]), int(self.effective_ceilings[phase]))
 
     def check(self, phase: str, tokens: int = EFFECTIVE_BATCH_TOKENS) -> dict[str, Any]:
-        return check_update_within_ceilings(
-            phase=phase,
-            phase_tokens_so_far=int(self.state["phase_tokens"].get(phase, 0)),
-            global_tokens_so_far=int(self.state["global_tokens"]),
-            tokens_this_update=tokens,
-        )
+        phase_after = int(self.state["phase_tokens"].get(phase, 0)) + int(tokens)
+        global_after = int(self.state["global_tokens"]) + int(tokens)
+        breaches = []
+        if phase_after > self.effective_ceiling(phase):
+            breaches.append(f"phase_{phase}_token_ceiling")
+        if global_after > min(GLOBAL_PILOT_TOKEN_CEILING, int(self.effective_ceilings["GLOBAL"])):
+            breaches.append("global_pilot_token_ceiling")
+        return {
+            "phase": phase,
+            "phase_tokens_after": phase_after,
+            "global_tokens_after": global_after,
+            "breaches": breaches,
+            "may_execute": not breaches,
+            "outcome": "PILOT_ABORT" if breaches else "WITHIN_BUDGET",
+        }
 
-    def require_update_allowed(self, phase: str, tokens: int = EFFECTIVE_BATCH_TOKENS) -> None:
-        verdict = self.check(phase, tokens)
-        require(
-            verdict["may_execute"],
-            "PILOT_ABORT: trained-token ceiling would be exceeded: "
-            + ", ".join(verdict["breaches"]),
-        )
+    def commit_update(self, phase: str, tokens: int = EFFECTIVE_BATCH_TOKENS) -> dict[str, Any]:
+        """Steps 1-4 of the atomic protocol, for one completed optimizer update."""
+        with self._lock():
+            if self.path.is_file():
+                self.state = self._validated(json.loads(self.path.read_text(encoding="utf-8")))
+            verdict = self.check(phase, tokens)
+            require(
+                verdict["may_execute"],
+                "PILOT_ABORT: trained-token ceiling would be exceeded: "
+                + ", ".join(verdict["breaches"]),
+            )
+            self.state["phase_tokens"][phase] = verdict["phase_tokens_after"]
+            self.state["global_tokens"] = verdict["global_tokens_after"]
+            self.state["updates"] = int(self.state["updates"]) + 1
+            self._write(self.state)
+            return verdict
 
-    def commit(self, phase: str, tokens: int = EFFECTIVE_BATCH_TOKENS) -> None:
-        """Atomically persist after a completed update."""
-        self.state["phase_tokens"][phase] = int(self.state["phase_tokens"].get(phase, 0)) + tokens
-        self.state["global_tokens"] = int(self.state["global_tokens"]) + tokens
-        self.state["updates"] = int(self.state["updates"]) + 1
-        tmp = self.path.with_suffix(".tmp")
-        self.path.parent.mkdir(parents=True, exist_ok=True)
-        tmp.write_bytes(canonical_json_bytes(self.state))
-        os.replace(tmp, self.path)
+
+def authorized_effective_ceilings(manifest: Mapping[str, Any]) -> dict[str, int]:
+    """Effective ceilings = min(frozen contract ceiling, authorized ceiling)."""
+    authorized = manifest.get("pilot_trained_token_ceiling")
+    require(
+        isinstance(authorized, int) and not isinstance(authorized, bool),
+        f"authorized token ceiling must be an integer, got {authorized!r}",
+    )
+    require(authorized > 0, f"authorized token ceiling must be > 0, got {authorized}")
+    require(
+        authorized <= GLOBAL_PILOT_TOKEN_CEILING,
+        f"authorized token ceiling {authorized} exceeds the frozen global ceiling "
+        f"{GLOBAL_PILOT_TOKEN_CEILING}",
+    )
+    return {
+        "MB": min(PHASE_CEILINGS["MB"], authorized),
+        "LR": min(PHASE_CEILINGS["LR"], authorized),
+        "GLOBAL": min(GLOBAL_PILOT_TOKEN_CEILING, authorized),
+    }
 
 
 # --------------------------------------------------------------------- construction
@@ -422,7 +513,7 @@ def build_pilot_optimizer(model: Any, peak_lr: float) -> Any:
         muon_momentum=MUON_MOMENTUM,
         verbose=False,
     )
-    grouping = verify_realized_grouping(opt)
+    grouping = verify_realized_grouping(opt, model)
     require(
         grouping["matches_frozen_realization"],
         "realized optimizer grouping does not match V2.3: " + ", ".join(grouping["failures"]),
@@ -440,7 +531,7 @@ def apply_scheduled_lr(optimizer: Any, lr: float) -> list[float]:
 
 
 class IndexView:
-    """Fixed-index view over a canonical PackedBinDataset. Order is the contract's, not ours."""
+    """Fixed-index view over a canonical PackedBinDataset, consumed sequentially without wrap."""
 
     def __init__(self, dataset: Any, indices: Sequence[int]):
         self.dataset = dataset
@@ -453,80 +544,238 @@ class IndexView:
         return len(self.indices)
 
     def __getitem__(self, position: int) -> Any:
-        return self.dataset[self.indices[int(position)]]
+        position = int(position)
+        require(
+            0 <= position < len(self.indices),
+            f"pilot train order exhausted at position {position}; no replay or wrap is "
+            f"permitted (have {len(self.indices)} blocks)",
+        )
+        return self.dataset[self.indices[position]]
 
 
-def canonical_loss(logits: Any, labels: Any, loss_mask: Any) -> Any:
-    """Token-mean CE through the canonical production loss function.
+def canonical_loss_components(logits: Any, labels: Any, loss_mask: Any) -> Any:
+    """Weighted CE numerator and effective weight, from the SHARED canonical primitive.
 
-    The mask is the one `PackedBinDataset.__getitem__` already produces (BOS masked, repeated
-    EOS masked, final label supervised by default), and the loss is the trainer's own
-    `masked_weighted_ce_loss` at `eos_weight=1.0` -- the unweighted token-mean form the
-    repository uses for comparable evaluation. Nothing is reimplemented here.
+    R1: imports ``src.canonical_loss`` -- the same module the production trainer imports --
+    rather than the whole trainer, which keeps the execution closure minimal and avoids the
+    trainer's sibling-style imports. Returning the two components (not a normalized value) is
+    what lets evaluation accumulate a correct GLOBAL token mean.
     """
-    from pretrain.train_pretrain_with_bench import masked_weighted_ce_loss
+    from src.canonical_loss import masked_weighted_ce_components
     from src.special_tokens import EOS_ID
 
-    return masked_weighted_ce_loss(
+    return masked_weighted_ce_components(
         logits.float(), labels.long(), loss_mask, eos_id=EOS_ID, eos_weight=1.0
     )
 
 
-# --------------------------------------------------------------------- authorization gate
+def canonical_loss(logits: Any, labels: Any, loss_mask: Any) -> Any:
+    """Normalized token-mean CE for a single batch (training path)."""
+    numerator, weight = canonical_loss_components(logits, labels, loss_mask)
+    return numerator / weight.clamp_min(1.0)
 
 
-def authorize_execution(
-    *, manifest_path: Path | None, requested_scope: str, output_root: Path
-) -> dict[str, Any]:
-    """The single gate every training entry point passes through.
+def to_model_ids(stacked: Any, device: str) -> Any:
+    """Canonical packed storage surfaces as int16; production feeds torch.long index tensors."""
+    import torch
 
-    A later AUTHORIZED manifest bound to this exact reviewed HEAD passes here with no code
-    change. Until then every call refuses.
+    return stacked.to(device=device, dtype=torch.long)
+
+
+# --------------------------------------------------------------------- validated context
+
+
+class ValidatedExecutionContext:
+    """The ONLY object a candidate function accepts.
+
+    R1: constructed exclusively by :func:`build_validated_context` after every binding has been
+    validated. There is no caller-supplied ``authorized`` boolean and no partial-dict path: a
+    candidate cannot be launched from anything but an instance of this class.
     """
+
+    __slots__ = (
+        "scope",
+        "phase",
+        "manifest_sha256",
+        "observed",
+        "indices",
+        "fingerprint",
+        "stage_a",
+        "stage_b",
+        "ledger",
+        "output_root",
+        "train_order_by_seed",
+        "effective_ceilings",
+    )
+
+    def __init__(self, **kwargs: Any):
+        for key in self.__slots__:
+            setattr(self, key, kwargs[key])
+
+    def require_phase_allowed(self, phase: str) -> None:
+        require(phase in ("MB", "LR"), f"unknown phase {phase!r}")
+        if self.scope == "PHASE_MB_ONLY":
+            require(
+                phase == "MB",
+                f"scope PHASE_MB_ONLY may not execute phase {phase}; a FULL_V2_3_PILOT "
+                "authorization is required",
+            )
+
+    def require_binds_candidate(self, candidate: Mapping[str, Any]) -> None:
+        """At candidate entry, re-verify the context still binds this exact request."""
+        self.require_phase_allowed(str(candidate["phase"]))
+        require(
+            candidate["seed_label"] in SEED_SEMANTICS,
+            f"unknown seed label {candidate.get('seed_label')!r}",
+        )
+        require(str(candidate["candidate_id"]).strip() != "", "candidate identity is empty")
+        require_candidate_output_dir(Path(candidate["output_dir"]), self.output_root)
+        require(self.ledger is not None, "context carries no bound token ledger")
+        require(
+            self.ledger.identity.get("authorization_sha256") == self.manifest_sha256,
+            "ledger identity does not bind this authorization",
+        )
+        require(
+            self.fingerprint.get("fingerprint_sha256"), "context carries no runtime fingerprint"
+        )
+
+    def train_view(self, stage_a_dataset: Any, seed_label: str) -> IndexView:
+        return IndexView(stage_a_dataset, self.train_order_by_seed[seed_label])
+
+
+def build_validated_context(
+    *,
+    manifest_path: Path | None,
+    requested_scope: str,
+    output_root: Path,
+    phase: str,
+    gpu_required: bool = True,
+) -> ValidatedExecutionContext:
+    """Validate EVERYTHING, then and only then produce an execution context."""
     require(requested_scope in ALLOWED_SCOPES, f"unknown scope {requested_scope!r}")
     require_numpy_version()
+
     git = git_policy_status()
     require(
         git["policy_satisfied"],
         "pre-launch Git policy not satisfied: " + ", ".join(git["failures"]),
     )
+
     stage_a = verify_accepted_release("stage_a")
     stage_b = verify_accepted_release("stage_b")
-    universes = {"stage_a_blocks": stage_a["blocks"], "stage_b_blocks": stage_b["blocks"]}
-    indices = generate_pilot_indices(**universes)
-    index_manifest_sha = hashlib.sha256(
+    indices = generate_pilot_indices(
+        stage_a_blocks=stage_a["blocks"], stage_b_blocks=stage_b["blocks"]
+    )
+    serialized_index_lists_digest = hashlib.sha256(
         canonical_json_bytes({
             k: indices[k]
             for k in ("stage_a_eval_sha256", "stage_a_train_sha256", "stage_b_eval_sha256")
         })
     ).hexdigest()
+
+    resolved_root = Path(output_root).resolve()
+    manifest = None
+    manifest_sha256 = None
+    if manifest_path is not None and Path(manifest_path).is_file():
+        raw = Path(manifest_path).read_bytes()
+        manifest_sha256 = hashlib.sha256(raw).hexdigest()
+        manifest = json.loads(raw.decode("utf-8"))
+    index_manifest_file_sha256 = (manifest or {}).get("pilot_index_manifest_file_sha256")
+
     observed = {
         "branch": git["branch"],
         "head": git["head"],
         "contract_sha256": contract_sha256(),
         "execution_bundle_sha256": execution_bundle_sha256(),
-        "pilot_index_manifest_sha256": index_manifest_sha,
+        "serialized_index_lists_digest": serialized_index_lists_digest,
+        "pilot_index_manifest_file_sha256": index_manifest_file_sha256,
         "stage_a_meta_sha256": stage_a["meta_sha256"],
         "stage_b_meta_sha256": stage_b["meta_sha256"],
-        "output_root": str(output_root),
+        "output_root": str(resolved_root),
     }
-    manifest = None
-    if manifest_path is not None and Path(manifest_path).is_file():
-        manifest = json.loads(Path(manifest_path).read_text(encoding="utf-8"))
     verdict = validate_authorization(manifest, requested_scope=requested_scope, observed=observed)
     require(
         verdict["authorized"],
         f"pilot execution refused under {CONTRACT_VERSION}: " + ", ".join(verdict["failures"]),
     )
-    fingerprint = base_runtime_fingerprint(gpu_required=True)
-    return {
-        "verdict": verdict,
-        "observed": observed,
-        "indices": indices,
-        "fingerprint": fingerprint,
-        "stage_a": stage_a,
-        "stage_b": stage_b,
+
+    scope = str(manifest["allowed_scope"])
+    if scope == "PHASE_MB_ONLY":
+        require(phase == "MB", "scope PHASE_MB_ONLY may not execute phase " + str(phase))
+
+    fingerprint = base_runtime_fingerprint(gpu_required=gpu_required)
+    ceilings = authorized_effective_ceilings(manifest)
+    identity = {
+        "contract_sha256": observed["contract_sha256"],
+        "head": observed["head"],
+        "execution_bundle_sha256": observed["execution_bundle_sha256"],
+        "serialized_index_lists_digest": serialized_index_lists_digest,
+        "authorization_sha256": manifest_sha256,
+        "authorized_output_root": str(resolved_root),
+        "authorized_scope": scope,
     }
+    ledger = TokenLedger(resolved_root / LEDGER_FILENAME, identity, ceilings)
+
+    return ValidatedExecutionContext(
+        scope=scope,
+        phase=phase,
+        manifest_sha256=manifest_sha256,
+        observed=observed,
+        indices=indices,
+        fingerprint=fingerprint,
+        stage_a=stage_a,
+        stage_b=stage_b,
+        ledger=ledger,
+        output_root=resolved_root,
+        effective_ceilings=ceilings,
+        train_order_by_seed={
+            label: train_order(indices["stage_a_train"], spec["train_order"])
+            for label, spec in SEED_SEMANTICS.items()
+        },
+    )
+
+
+def require_candidate_output_dir(destination: Path, authorized_root: Path) -> Path:
+    """Resolved-path containment beneath the authorized root; new; never an accepted release."""
+    root = repo_root()
+    authorized = Path(authorized_root).resolve()
+    resolved = Path(destination).resolve()
+    require(
+        resolved != authorized and authorized in resolved.parents,
+        f"candidate output must resolve beneath the authorized root {authorized}: {resolved}",
+    )
+    for prefix in PROTECTED_PREFIXES:
+        protected = (root / prefix).resolve()
+        require(
+            resolved != protected and protected not in resolved.parents,
+            f"refusing to write pilot output inside an accepted release: {resolved}",
+        )
+    require(not resolved.exists(), f"candidate output directory must not exist: {resolved}")
+    return resolved
+
+
+def require_new_output_dir(destination: Path) -> Path:
+    """Release-containment check for planning-time paths (no authorized root yet)."""
+    root = repo_root()
+    resolved = Path(destination).resolve()
+    for prefix in PROTECTED_PREFIXES:
+        protected = (root / prefix).resolve()
+        require(
+            resolved != protected and protected not in resolved.parents,
+            f"refusing to write pilot output inside an accepted release: {resolved}",
+        )
+    require(not resolved.exists(), f"pilot output directory must not exist: {destination}")
+    return resolved
+
+
+# --------------------------------------------------------------------- checkpoint policy
+
+
+def require_checkpointing_disabled(action: str) -> None:
+    """V2.3 freezes PILOT_CHECKPOINTING=DISABLED: the executor neither writes nor reads one."""
+    from pretrain.pilot_contract_v2_3 import require_checkpointing_disabled as _refuse
+
+    _refuse(action)
 
 
 # --------------------------------------------------------------------- the real loops
@@ -547,11 +796,14 @@ def _run_updates(
     timed_from: int = 1,
     record_diagnostics: bool = False,
 ) -> dict[str, Any]:
-    """The complete optimizer-update loop: accumulation, clipping, step, metrics.
-
-    Never reached in the materialization segment: callers pass through authorize_execution.
-    """
+    """The complete optimizer-update loop: accumulation, clipping, step, metrics, ledger."""
     import torch
+
+    required_blocks = int(updates) * int(SEQUENCES_PER_OPTIMIZER_UPDATE)
+    require(
+        len(view) >= required_blocks,
+        f"{phase}: need {required_blocks} train blocks without replay, view has {len(view)}",
+    )
 
     model.train()
     losses: dict[int, float] = {}
@@ -561,7 +813,6 @@ def _run_updates(
     diagnostics: list[dict[str, Any]] = []
     cursor = 0
     for u in range(1, int(updates) + 1):
-        ledger.require_update_allowed(phase)
         lr = lr_fn(u)
         realized = apply_scheduled_lr(optimizer, lr)
         if device == "cuda":
@@ -570,10 +821,10 @@ def _run_updates(
         optimizer.zero_grad(set_to_none=True)
         total = 0.0
         for _ in range(int(grad_accum)):
-            batch = [view[(cursor + k) % len(view)] for k in range(int(micro_bsz))]
+            batch = [view[cursor + k] for k in range(int(micro_bsz))]
             cursor += int(micro_bsz)
-            x = torch.stack([b[0] for b in batch]).to(device)
-            y = torch.stack([b[1] for b in batch]).to(device)
+            x = to_model_ids(torch.stack([b[0] for b in batch]), device)
+            y = to_model_ids(torch.stack([b[1] for b in batch]), device)
             m = torch.stack([b[2] for b in batch]).to(device, dtype=torch.float32)
             with torch.autocast(device_type=device, dtype=torch.bfloat16):
                 loss = canonical_loss(model(x), y, m) / int(grad_accum)
@@ -584,7 +835,7 @@ def _run_updates(
         if device == "cuda":
             torch.cuda.synchronize()
         elapsed = time.perf_counter() - t0
-        ledger.commit(phase)
+        ledger.commit_update(phase)
         losses[u] = total / int(grad_accum)
         grad_norms[u] = gnorm
         realized_lrs[u] = realized
@@ -592,6 +843,10 @@ def _run_updates(
             step_seconds.append(elapsed)
         if record_diagnostics:
             diagnostics.append(_group_diagnostics(optimizer, u))
+    require(
+        cursor == required_blocks,
+        f"{phase}: consumed {cursor} blocks, contract requires exactly {required_blocks}",
+    )
     return {
         "losses": losses,
         "grad_norms": grad_norms,
@@ -599,11 +854,12 @@ def _run_updates(
         "step_seconds": step_seconds,
         "diagnostics": diagnostics,
         "completed_updates": int(updates),
+        "blocks_consumed": cursor,
     }
 
 
 def _group_diagnostics(optimizer: Any, update: int) -> dict[str, Any]:
-    """Per-group update/weight RMS diagnostics. Recorded, never used as a selection threshold."""
+    """Per-group update/weight RMS. Recorded, never used as a selection threshold."""
     import torch
 
     out = []
@@ -612,12 +868,8 @@ def _group_diagnostics(optimizer: Any, update: int) -> dict[str, Any]:
         if not weights:
             continue
         wrms = float(torch.sqrt(sum((p.float() ** 2).mean() for p in weights) / len(weights)))
-        state_key = "momentum_buffer" if g.get("use_muon") else "exp_avg"
-        bufs = [
-            optimizer.state[p][state_key]
-            for p in weights
-            if state_key in optimizer.state.get(p, {})
-        ]
+        key = "momentum_buffer" if g.get("use_muon") else "exp_avg"
+        bufs = [optimizer.state[p][key] for p in weights if key in optimizer.state.get(p, {})]
         urms = (
             float(torch.sqrt(sum((b.float() ** 2).mean() for b in bufs) / len(bufs)))
             if bufs
@@ -634,69 +886,99 @@ def _group_diagnostics(optimizer: Any, update: int) -> dict[str, Any]:
 
 
 def evaluate(model: Any, view: IndexView, *, micro_bsz: int, device: str) -> float:
-    """Token-mean CE over every block in ascending index order, canonical mask, eval mode."""
+    """GLOBAL token-mean CE: accumulate numerator and weight, divide once at the end."""
     import torch
 
     model.eval()
-    total, batches = 0.0, 0
+    total_numerator, total_weight = 0.0, 0.0
     with torch.no_grad():
         for start in range(0, len(view), int(micro_bsz)):
             batch = [view[i] for i in range(start, min(start + int(micro_bsz), len(view)))]
-            x = torch.stack([b[0] for b in batch]).to(device)
-            y = torch.stack([b[1] for b in batch]).to(device)
+            x = to_model_ids(torch.stack([b[0] for b in batch]), device)
+            y = to_model_ids(torch.stack([b[1] for b in batch]), device)
             m = torch.stack([b[2] for b in batch]).to(device, dtype=torch.float32)
             with torch.autocast(device_type=device, dtype=torch.bfloat16):
-                total += float(canonical_loss(model(x), y, m))
-            batches += 1
+                numerator, weight = canonical_loss_components(model(x), y, m)
+            total_numerator += float(numerator)
+            total_weight += float(weight)
     model.train()
-    return total / max(1, batches)
+    return total_numerator / max(1.0, total_weight)
+
+
+def global_token_mean(components: Sequence[tuple[float, float]]) -> float:
+    """Reference for the accumulation rule: sum numerators, sum weights, divide once."""
+    n = sum(float(a) for a, _ in components)
+    w = sum(float(b) for _, b in components)
+    return n / max(1.0, w)
+
+
+# --------------------------------------------------------------------- candidate backends
 
 
 def run_phase_mb_candidate(
-    candidate: Mapping[str, Any], context: Mapping[str, Any]
+    candidate: Mapping[str, Any], context: ValidatedExecutionContext
 ) -> dict[str, Any]:
-    """One Phase-MB probe, end to end. Requires an authorized context."""
+    """One Phase-MB probe, end to end, inside a candidate subprocess."""
+    import statistics
+
     import torch
 
-    require(context.get("authorized"), "run_phase_mb_candidate requires an authorized context")
-    out = require_new_output_dir(Path(candidate["output_dir"]))
+    require(
+        isinstance(context, ValidatedExecutionContext),
+        "candidate execution requires a ValidatedExecutionContext, not a plain mapping",
+    )
+    context.require_binds_candidate({**candidate, "phase": "MB"})
+    out = require_candidate_output_dir(Path(candidate["output_dir"]), context.output_root)
     out.mkdir(parents=True)
     os.environ["TORCHINDUCTOR_CACHE_DIR"] = str(out / "inductor_cache")
     torch.cuda.reset_peak_memory_stats()
+
     model = build_pilot_model(candidate["model_init_seed"]).to("cuda")
-    compile_seconds = None
+    compile_wrapper_seconds = None
     if candidate["compile"]:
         t0 = time.perf_counter()
         model = torch.compile(model)
-        compile_seconds = time.perf_counter() - t0
+        compile_wrapper_seconds = time.perf_counter() - t0
     optimizer = build_pilot_optimizer(model, candidate["peak_lr"])
+    view = context.train_view(context.stage_a["dataset"], candidate["seed_label"])
+
+    materialization_start = time.perf_counter()
     result = _run_updates(
         model=model,
         optimizer=optimizer,
-        view=context["train_view"],
+        view=view,
         micro_bsz=candidate["micro_bsz"],
         grad_accum=candidate["grad_accum"],
         updates=MB_PROBE_UPDATES,
         lr_fn=mb_lr,
-        ledger=context["ledger"],
+        ledger=context.ledger,
         phase="MB",
         device="cuda",
-        timed_from=11,
+        timed_from=MB_MEASURED_FIRST_UPDATE,
     )
-    import statistics
+    first_update_seconds = result["step_seconds"][0] if result["step_seconds"] else None
+    first_synchronized_update_seconds = result.get("first_update_seconds", first_update_seconds)
 
-    tokens_per_update = EFFECTIVE_BATCH_TOKENS
-    median_tps = tokens_per_update / statistics.median(result["step_seconds"])
-    grouping = verify_realized_grouping(optimizer)
+    median_tps = EFFECTIVE_BATCH_TOKENS / statistics.median(result["step_seconds"])
+    grouping = verify_realized_grouping(optimizer, model)
     states = verify_optimizer_state(optimizer)
     payload = {
+        "phase": "MB",
         "candidate_id": candidate["candidate_id"],
         "micro_bsz": candidate["micro_bsz"],
         "grad_accum": candidate["grad_accum"],
         "compile": candidate["compile"],
+        "seed_label": candidate["seed_label"],
         "completed_updates": result["completed_updates"],
+        "blocks_consumed": result["blocks_consumed"],
         "median_tokens_per_sec": median_tps,
-        "compile_seconds": compile_seconds,
+        # R1: lazy compilation materializes through model execution, so the near-zero wrapper
+        # call is recorded separately and is NOT presented as compile time.
+        "compile_wrapper_seconds": compile_wrapper_seconds,
+        "first_synchronized_update_seconds": first_synchronized_update_seconds,
+        "compile_materialization_wall_seconds": (
+            (time.perf_counter() - materialization_start) if candidate["compile"] else None
+        ),
         "max_memory_reserved_bytes": int(torch.cuda.max_memory_reserved()),
         "oom": False,
         "uncontrolled_exception": False,
@@ -707,52 +989,59 @@ def run_phase_mb_candidate(
         "all_lr_ratios_are_one": grouping["all_lr_ratios_are_one"],
         "canonical_compile_path": bool(candidate["compile"]),
     }
-    (out / "result.json").write_bytes(canonical_json_bytes(payload))
+    _publish_result(out, payload, candidate, context)
     return payload
 
 
 def run_phase_lr_candidate(
-    candidate: Mapping[str, Any], context: Mapping[str, Any]
+    candidate: Mapping[str, Any], context: ValidatedExecutionContext
 ) -> dict[str, Any]:
-    """One Phase-Muon-LR run, end to end, including both evaluations."""
+    """One Phase-Muon-LR run, end to end, including both global-mean evaluations."""
     import torch
 
     from pretrain.pilot_contract_v2_3 import lr_score, sustained_divergence
 
-    require(context.get("authorized"), "run_phase_lr_candidate requires an authorized context")
-    out = require_new_output_dir(Path(candidate["output_dir"]))
+    require(
+        isinstance(context, ValidatedExecutionContext),
+        "candidate execution requires a ValidatedExecutionContext, not a plain mapping",
+    )
+    context.require_binds_candidate({**candidate, "phase": "LR"})
+    out = require_candidate_output_dir(Path(candidate["output_dir"]), context.output_root)
     out.mkdir(parents=True)
+    os.environ["TORCHINDUCTOR_CACHE_DIR"] = str(out / "inductor_cache")
+
     model = build_pilot_model(candidate["model_init_seed"]).to("cuda")
     if candidate["compile"]:
         model = torch.compile(model)
     optimizer = build_pilot_optimizer(model, candidate["peak_lr"])
+    view = context.train_view(context.stage_a["dataset"], candidate["seed_label"])
     result = _run_updates(
         model=model,
         optimizer=optimizer,
-        view=context["train_view"],
+        view=view,
         micro_bsz=candidate["micro_bsz"],
         grad_accum=candidate["grad_accum"],
         updates=LR_RUN_UPDATES,
         lr_fn=lambda u: lr_schedule(u, candidate["peak_lr"]),
-        ledger=context["ledger"],
+        ledger=context.ledger,
         phase="LR",
         device="cuda",
         record_diagnostics=True,
     )
-    loss_a = evaluate(
-        model, context["eval_a_view"], micro_bsz=candidate["micro_bsz"], device="cuda"
-    )
-    loss_b = evaluate(
-        model, context["eval_b_view"], micro_bsz=candidate["micro_bsz"], device="cuda"
-    )
-    grouping = verify_realized_grouping(optimizer)
+    eval_a = IndexView(context.stage_a["dataset"], context.indices["stage_a_eval"])
+    eval_b = IndexView(context.stage_b["dataset"], context.indices["stage_b_eval"])
+    loss_a = evaluate(model, eval_a, micro_bsz=candidate["micro_bsz"], device="cuda")
+    loss_b = evaluate(model, eval_b, micro_bsz=candidate["micro_bsz"], device="cuda")
+    grouping = verify_realized_grouping(optimizer, model)
     states = verify_optimizer_state(optimizer)
     guard = sustained_divergence(result["losses"])
     payload = {
+        "phase": "LR",
         "candidate_id": candidate["candidate_id"],
         "peak_lr": candidate["peak_lr"],
         "seed_label": candidate["seed_label"],
         "completed_updates": result["completed_updates"],
+        "blocks_consumed": result["blocks_consumed"],
         "all_losses_finite": all(map(_finite, result["losses"].values())),
         "all_grad_norms_finite": all(map(_finite, result["grad_norms"].values())),
         "all_parameters_finite": all(bool(torch.isfinite(p).all()) for p in model.parameters()),
@@ -767,7 +1056,7 @@ def run_phase_lr_candidate(
         "divergence_detail": guard,
         "diagnostics": result["diagnostics"][-1] if result["diagnostics"] else None,
     }
-    (out / "result.json").write_bytes(canonical_json_bytes(payload))
+    _publish_result(out, payload, candidate, context)
     return payload
 
 
@@ -777,37 +1066,297 @@ def _finite(v: float) -> bool:
     return math.isfinite(float(v))
 
 
-# --------------------------------------------------------------------- checkpoints
-
-
-def pilot_checkpoint_identity(
-    candidate: Mapping[str, Any], context: Mapping[str, Any]
+def _publish_result(
+    out: Path,
+    payload: Mapping[str, Any],
+    candidate: Mapping[str, Any],
+    context: ValidatedExecutionContext,
 ) -> dict[str, Any]:
+    """Write run_meta and the result, binding every identity selection will later require."""
+    meta = run_meta(candidate=candidate, context=context)
+    meta_bytes = canonical_json_bytes(meta)
+    (out / "run_meta.json").write_bytes(meta_bytes)
+    bound = dict(payload)
+    bound.update({
+        "run_meta_sha256": hashlib.sha256(meta_bytes).hexdigest(),
+        "contract_sha256": context.observed["contract_sha256"],
+        "implementation_head": context.observed["head"],
+        "execution_bundle_sha256": context.observed["execution_bundle_sha256"],
+        "serialized_index_lists_digest": context.observed["serialized_index_lists_digest"],
+        "runtime_fingerprint_sha256": context.fingerprint["fingerprint_sha256"],
+        "authorization_sha256": context.manifest_sha256,
+        "ledger_identity": dict(context.ledger.identity),
+        "output_dir": str(out),
+    })
+    (out / "result.json").write_bytes(canonical_json_bytes(bound))
+    return bound
+
+
+# --------------------------------------------------------------------- orchestrator
+
+REQUIRED_RESULT_BINDINGS = (
+    "phase",
+    "candidate_id",
+    "seed_label",
+    "run_meta_sha256",
+    "contract_sha256",
+    "implementation_head",
+    "execution_bundle_sha256",
+    "serialized_index_lists_digest",
+    "runtime_fingerprint_sha256",
+    "authorization_sha256",
+    "ledger_identity",
+    "output_dir",
+    "completed_updates",
+)
+
+
+def load_completed_result(output_dir: Path, context: ValidatedExecutionContext) -> dict[str, Any]:
+    """Load one candidate's result artifact and verify it binds THIS validated execution."""
+    path = Path(output_dir) / "result.json"
+    require(path.is_file(), f"no completed result artifact at {path}")
+    result = json.loads(path.read_text(encoding="utf-8"))
+    missing = [f for f in REQUIRED_RESULT_BINDINGS if f not in result]
+    require(not missing, f"result artifact is missing required bindings: {missing}")
+    for field, expected in (
+        ("contract_sha256", context.observed["contract_sha256"]),
+        ("implementation_head", context.observed["head"]),
+        ("execution_bundle_sha256", context.observed["execution_bundle_sha256"]),
+        ("serialized_index_lists_digest", context.observed["serialized_index_lists_digest"]),
+        ("runtime_fingerprint_sha256", context.fingerprint["fingerprint_sha256"]),
+        ("authorization_sha256", context.manifest_sha256),
+    ):
+        require(
+            result.get(field) == expected, f"result artifact {field} does not bind this execution"
+        )
+    require(
+        result.get("ledger_identity") == dict(context.ledger.identity),
+        "result artifact ledger identity does not bind this execution",
+    )
+    return result
+
+
+def orchestrate_phase_mb(
+    context: ValidatedExecutionContext, *, backend: Any = None
+) -> dict[str, Any]:
+    """The single Phase-MB orchestration path.
+
+    Enumerates exactly the frozen ten candidates, launches each, converts candidate-local
+    failures into structured ineligible evidence while continuing the grid, then loads the
+    completed artifacts and performs deterministic selection on that evidence alone.
+    """
+    context.require_phase_allowed("MB")
+    backend = backend or _subprocess_backend
+    candidates = plan_phase_mb(output_root=context.output_root)
+    require(len(candidates) == 10, "the Phase-MB grid must enumerate exactly ten candidates")
+
+    outcomes: list[dict[str, Any]] = []
+    for candidate in candidates:
+        # Phase-level bindings are re-verified before every launch and ABORT if broken.
+        context.require_binds_candidate(candidate)
+        try:
+            backend(candidate, context)
+        except PilotContractError:
+            raise  # phase-level failure: abort, never downgrade
+        except BaseException as exc:  # noqa: BLE001 - candidate-local failure
+            outcomes.append(_ineligible_evidence(candidate, context, exc))
+            continue
+        outcomes.append(load_completed_result(Path(candidate["output_dir"]), context))
+
+    vram = int(context.fingerprint["gpu"]["total_vram_bytes"])
+    selection = mb_select(outcomes, vram)
+    report = {
+        "phase": "MB",
+        "candidates": outcomes,
+        "selection": selection,
+        "ledger": dict(context.ledger.state),
+    }
+    (context.output_root / "PHASE_MB_REPORT.json").write_bytes(canonical_json_bytes(report))
+    return report
+
+
+def _ineligible_evidence(
+    candidate: Mapping[str, Any], context: ValidatedExecutionContext, exc: BaseException
+) -> dict[str, Any]:
+    """Structured candidate-local failure evidence; the grid continues."""
+    reason = (
+        "oom"
+        if exc.__class__.__name__ == "OutOfMemoryError"
+        else "compile_failure"
+        if "compile" in str(exc).lower()
+        else "candidate_runtime_exception"
+    )
     return {
-        "checkpoint_kind": PILOT_CHECKPOINT_KIND,
         "phase": candidate["phase"],
         "candidate_id": candidate["candidate_id"],
         "seed_label": candidate["seed_label"],
-        "contract_sha256": contract_sha256(),
-        "implementation_head": context["observed"]["head"],
-        "execution_bundle_sha256": execution_bundle_sha256(),
-        "pilot_index_manifest_sha256": context["observed"]["pilot_index_manifest_sha256"],
-        "runtime_fingerprint_sha256": context["fingerprint"]["fingerprint_sha256"],
+        "micro_bsz": candidate["micro_bsz"],
+        "grad_accum": candidate["grad_accum"],
+        "compile": candidate["compile"],
+        "eligible": False,
+        "reason": reason,
+        "exception": f"{type(exc).__name__}: {exc}",
+        "completed_updates": 0,
+        "oom": reason == "oom",
+        "uncontrolled_exception": reason == "candidate_runtime_exception",
+        "all_losses_finite": False,
+        "all_grad_norms_finite": False,
+        "all_optimizer_states_instantiated": False,
+        "grouping_matches_contract": False,
+        "all_lr_ratios_are_one": False,
+        "max_memory_reserved_bytes": 0,
+        "median_tokens_per_sec": 0.0,
+        "canonical_compile_path": False,
+        "run_meta_sha256": None,
+        "contract_sha256": context.observed["contract_sha256"],
+        "implementation_head": context.observed["head"],
+        "execution_bundle_sha256": context.observed["execution_bundle_sha256"],
+        "serialized_index_lists_digest": context.observed["serialized_index_lists_digest"],
+        "runtime_fingerprint_sha256": context.fingerprint["fingerprint_sha256"],
+        "authorization_sha256": context.manifest_sha256,
+        "ledger_identity": dict(context.ledger.identity),
+        "output_dir": candidate["output_dir"],
     }
 
 
-def require_not_pilot_checkpoint(checkpoint: Mapping[str, Any], purpose: str) -> None:
-    """Wire into production checkpoint consumers: a pilot checkpoint may never initialize them."""
-    if checkpoint.get("checkpoint_kind") == PILOT_CHECKPOINT_KIND:
-        reject_pilot_checkpoint_as_initialization(purpose)
+def orchestrate_phase_muon_lr(
+    context: ValidatedExecutionContext, *, micro_bsz: int, compile_on: bool, backend: Any = None
+) -> dict[str, Any]:
+    """The single Phase-Muon-LR orchestration path.
+
+    Derives the initial grid, the seed-1 winner, the confirmation pair and the edge candidate
+    ITSELF. Nothing about which candidates run is taken from caller input.
+    """
+    context.require_phase_allowed("LR")
+    backend = backend or _subprocess_backend
+
+    def run(lrs: Sequence[float], seed_label: str) -> list[dict[str, Any]]:
+        out = []
+        for candidate in plan_phase_lr(
+            output_root=context.output_root,
+            micro_bsz=micro_bsz,
+            compile_on=compile_on,
+            peak_lrs=lrs,
+            seed_label=seed_label,
+        ):
+            context.require_binds_candidate(candidate)
+            try:
+                backend(candidate, context)
+            except PilotContractError:
+                raise
+            except BaseException as exc:  # noqa: BLE001
+                out.append({
+                    **_ineligible_evidence(candidate, context, exc),
+                    "peak_lr": candidate["peak_lr"],
+                })
+                continue
+            out.append(load_completed_result(Path(candidate["output_dir"]), context))
+        return out
+
+    seed1 = run(LR_GRID_SEED1, "seed-1")  # authoritative initial grid, internal
+    require_complete_lr_grid(seed1)
+    seed1_verdict = lr_select_seed1(seed1)
+    if seed1_verdict["outcome"] != "SEED1_WINNER":
+        report = {"phase": "LR", "seed1": seed1, "outcome": seed1_verdict}
+        (context.output_root / "PHASE_LR_REPORT.json").write_bytes(canonical_json_bytes(report))
+        return report
+
+    winner_lr = float(seed1_verdict["winner_peak_lr"])
+    neighbour = confirmation_neighbor(winner_lr)  # derived internally
+    seed2 = run([winner_lr, neighbour], "seed-2")
+    by_lr_1 = {float(r["peak_lr"]): r for r in seed1}
+    by_lr_2 = {float(r["peak_lr"]): r for r in seed2}
+    pairs = [
+        {
+            "peak_lr": lr,
+            "seed1_score": float(by_lr_1[lr]["score"]),
+            "seed1_eligible": lr_candidate_eligible(by_lr_1[lr])[0],
+            "seed2_score": float(by_lr_2[lr].get("score", float("inf"))),
+            "seed2_eligible": lr_candidate_eligible(by_lr_2[lr])[0] if lr in by_lr_2 else False,
+        }
+        for lr in (winner_lr, neighbour)
+        if lr in by_lr_1
+    ]
+    confirmed = lr_confirm(pairs)
+    if confirmed["outcome"] != "CONFIRMED":
+        report = {"phase": "LR", "seed1": seed1, "seed2": seed2, "outcome": confirmed}
+        (context.output_root / "PHASE_LR_REPORT.json").write_bytes(canonical_json_bytes(report))
+        return report
+
+    incumbent_lr = float(confirmed["confirmed_peak_lr"])
+    edge_lr = edge_candidate(incumbent_lr)  # derived internally
+    edge_runs: list[dict[str, Any]] = []
+    edge_kwargs: dict[str, Any] = {"edge_lr": edge_lr}
+    if edge_lr is not None:
+        e1 = run([edge_lr], "seed-1")
+        e2 = run([edge_lr], "seed-2")
+        edge_runs = e1 + e2
+        edge_kwargs.update({
+            "edge_seed1_eligible": lr_candidate_eligible(e1[0])[0] if e1 else False,
+            "edge_seed2_eligible": lr_candidate_eligible(e2[0])[0] if e2 else False,
+            "edge_seed1_score": float(e1[0].get("score", float("inf"))) if e1 else None,
+            "edge_seed2_score": float(e2[0].get("score", float("inf"))) if e2 else None,
+        })
+    final = lr_resolve_edge(
+        incumbent_lr=incumbent_lr,
+        incumbent_final_score=float(confirmed["final_score"]),
+        **edge_kwargs,
+    )
+    report = {
+        "phase": "LR",
+        "seed1": seed1,
+        "seed2": seed2,
+        "edge_runs": edge_runs,
+        "seed1_verdict": seed1_verdict,
+        "confirmed": confirmed,
+        "final": final,
+        "ledger": dict(context.ledger.state),
+    }
+    (context.output_root / "PHASE_LR_REPORT.json").write_bytes(canonical_json_bytes(report))
+    return report
 
 
-def resume_pilot_checkpoint(checkpoint: Mapping[str, Any], candidate: Mapping[str, Any]) -> None:
-    verdict = check_pilot_resume(checkpoint, candidate)
-    require(verdict["may_resume"], "pilot resume refused: " + ", ".join(verdict["failures"]))
+def _subprocess_backend(candidate: Mapping[str, Any], context: ValidatedExecutionContext) -> None:
+    """Launch one candidate in a FRESH subprocess with an immutable serialized run spec."""
+    spec_dir = context.output_root / "_specs"
+    spec_dir.mkdir(parents=True, exist_ok=True)
+    spec_path = spec_dir / f"{candidate['candidate_id']}.json"
+    spec_path.write_bytes(
+        canonical_json_bytes({
+            "candidate": dict(candidate),
+            "bound_identity": dict(context.ledger.identity),
+            "authorized_output_root": str(context.output_root),
+            "runtime_fingerprint_sha256": context.fingerprint["fingerprint_sha256"],
+            "contract_sha256": context.observed["contract_sha256"],
+        })
+    )
+    env = dict(os.environ)
+    env["TORCHINDUCTOR_CACHE_DIR"] = str(Path(candidate["output_dir"]) / "inductor_cache")
+    env["PYTHONHASHSEED"] = "0"
+    completed = subprocess.run(
+        [
+            sys.executable,
+            str(Path(ROOT) / "pretrain" / "pilot_runner_v2_3.py"),
+            "execute-candidate",
+            "--spec",
+            str(spec_path),
+        ],
+        env=env,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    (Path(candidate["output_dir"]).parent / f"{candidate['candidate_id']}.stdout").write_text(
+        completed.stdout or "", encoding="utf-8"
+    )
+    if completed.returncode != 0:
+        raise RuntimeError(
+            f"candidate subprocess exited {completed.returncode}: "
+            f"{(completed.stderr or '').strip()[:400]}"
+        )
 
 
-# --------------------------------------------------------------------- planning
+# --------------------------------------------------------------------- planning + meta
 
 
 def plan_phase_mb(*, output_root: Path) -> list[dict[str, Any]]:
@@ -860,17 +1409,11 @@ def plan_phase_lr(
     ]
 
 
-def run_meta(
-    *,
-    candidate: Mapping[str, Any],
-    fingerprint: Mapping[str, Any],
-    indices: Mapping[str, Any],
-    implementation_head: str,
-) -> dict[str, Any]:
+def run_meta(*, candidate: Mapping[str, Any], context: ValidatedExecutionContext) -> dict[str, Any]:
     return {
         "schema_version": RUN_META_SCHEMA,
         "contract_version": CONTRACT_VERSION,
-        "base_fingerprint_sha256": fingerprint["fingerprint_sha256"],
+        "base_fingerprint_sha256": context.fingerprint["fingerprint_sha256"],
         "phase": candidate["phase"],
         "candidate_id": candidate["candidate_id"],
         "micro_bsz": candidate["micro_bsz"],
@@ -891,13 +1434,15 @@ def run_meta(
         "model_seed": candidate["model_init_seed"],
         "train_order_seed": candidate["train_order_seed"],
         "pilot_index_hashes": {
-            k: indices[k]
+            k: context.indices[k]
             for k in ("stage_a_eval_sha256", "stage_a_train_sha256", "stage_b_eval_sha256")
         },
-        "contract_sha256": contract_sha256(),
-        "implementation_head": implementation_head,
-        "execution_implementation_bundle_sha256": execution_bundle_sha256(),
-        "authorization_status": "NOT_AUTHORIZED",
+        "serialized_index_lists_digest": context.observed["serialized_index_lists_digest"],
+        "contract_sha256": context.observed["contract_sha256"],
+        "implementation_head": context.observed["head"],
+        "execution_implementation_bundle_sha256": context.observed["execution_bundle_sha256"],
+        "authorized_scope": context.scope,
+        "authorization_status": "AUTHORIZED_BY_EXTERNAL_MANIFEST",
     }
 
 
@@ -915,11 +1460,15 @@ def main(argv: list[str] | None = None) -> int:
     p = sub.add_parser("plan")
     p.add_argument("--output-root", type=Path, default=Path("runs/PILOT_V2_3_OUTPUT"))
     p.add_argument("--micro-bsz", type=int, default=None)
-    r = sub.add_parser("run")
+    r = sub.add_parser("run", help="the single orchestration entry point")
     r.add_argument("--phase", choices=["MB", "LR"], required=True)
     r.add_argument("--authorization", type=Path, default=None)
     r.add_argument("--scope", choices=list(ALLOWED_SCOPES), default="PHASE_MB_ONLY")
     r.add_argument("--output-root", type=Path, required=True)
+    r.add_argument("--micro-bsz", type=int, default=None)
+    r.add_argument("--compile", action="store_true")
+    e = sub.add_parser("execute-candidate", help="internal: one candidate in a fresh subprocess")
+    e.add_argument("--spec", type=Path, required=True)
 
     args = parser.parse_args(argv)
     if args.command == "contract":
@@ -952,12 +1501,47 @@ def main(argv: list[str] | None = None) -> int:
         )
         sys.stdout.write(canonical_json_bytes(payload).decode())
         return 0
+    if args.command == "execute-candidate":
+        try:
+            spec = json.loads(Path(args.spec).read_text(encoding="utf-8"))
+            candidate = spec["candidate"]
+            context = build_validated_context(
+                manifest_path=None,
+                requested_scope="PHASE_MB_ONLY",
+                output_root=Path(spec["authorized_output_root"]),
+                phase=candidate["phase"],
+            )
+            backend = (
+                run_phase_mb_candidate if candidate["phase"] == "MB" else run_phase_lr_candidate
+            )
+            backend(candidate, context)
+        except PilotContractError as exc:
+            sys.stderr.write(f"{exc}\n")
+            return 2
+        return 0
     if args.command == "run":
         try:
-            authorize_execution(
+            context = build_validated_context(
                 manifest_path=args.authorization,
                 requested_scope=args.scope,
                 output_root=args.output_root,
+                phase=args.phase,
+            )
+            if args.phase == "MB":
+                report = orchestrate_phase_mb(context)
+            else:
+                require(
+                    args.micro_bsz is not None,
+                    "--micro-bsz is required for phase LR and comes from the Phase-MB result",
+                )
+                report = orchestrate_phase_muon_lr(
+                    context, micro_bsz=args.micro_bsz, compile_on=bool(args.compile)
+                )
+            sys.stdout.write(
+                canonical_json_bytes({
+                    "phase": report["phase"],
+                    "output_root": str(args.output_root),
+                }).decode()
             )
         except PilotContractError as exc:
             sys.stderr.write(f"{exc}\n")

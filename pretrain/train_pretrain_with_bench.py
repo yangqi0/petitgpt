@@ -46,6 +46,11 @@ from pretrain.run_plan_contract import (  # noqa: E402
     validate_run_plan_resume_transition,
     validate_run_plan_validation_dataset,
 )
+from src.canonical_loss import (  # noqa: E402
+    masked_weighted_ce_components,
+    masked_weighted_ce_loss,
+)
+from src.canonical_schedule import lr_schedule  # noqa: E402
 from src.model import (  # noqa: E402
     GPT,
     GPTConfig,
@@ -387,50 +392,6 @@ def set_seed(seed: int) -> None:
         np.random.seed(seed)
     torch.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
-
-
-def lr_schedule(
-    step: int,
-    warmup_steps: int,
-    base_lr: float,
-    *,
-    schedule: str = "cosine",
-    schedule_total_steps: int = 0,
-    decay_start_step: int = -1,
-    decay_end_step: int = -1,
-    min_lr_ratio: float = 0.1,
-) -> float:
-    """Absolute-step LR schedule independent of the current stage stop.
-
-    WSD means warmup -> stable -> cosine decay -> floor. Keeping the schedule
-    horizon independent from ``max_steps`` lets Stage A stop and Stage B resume
-    without an LR discontinuity.
-    """
-    if warmup_steps > 0 and step < warmup_steps:
-        return base_lr * float(step + 1) / float(warmup_steps)
-    if schedule == "constant":
-        return base_lr
-    if schedule == "cosine":
-        start = int(warmup_steps)
-        end = int(schedule_total_steps)
-    elif schedule == "wsd":
-        start = int(decay_start_step)
-        end = int(decay_end_step)
-        if step < start:
-            return base_lr
-    else:
-        raise ValueError(f"unknown lr schedule: {schedule}")
-
-    if end <= start:
-        raise ValueError(f"decay end must be greater than start: {end} <= {start}")
-    if step <= start:
-        return base_lr
-    if step >= end:
-        return base_lr * float(min_lr_ratio)
-    t = (step - start) / float(end - start)
-    t = min(max(t, 0.0), 1.0)
-    min_lr = base_lr * float(min_lr_ratio)
-    return min_lr + (base_lr - min_lr) * 0.5 * (1.0 + math.cos(math.pi * t))
 
 
 def validate_schedule_branch(
@@ -856,47 +817,6 @@ def _autocast_dtype(precision: str) -> torch.dtype | None:
     if precision == "fp16":
         return torch.float16
     return None
-
-
-def masked_weighted_ce_components(
-    logits: torch.Tensor,
-    labels: torch.Tensor,
-    loss_mask: torch.Tensor,
-    *,
-    eos_id: int,
-    eos_weight: float,
-) -> tuple[torch.Tensor, torch.Tensor]:
-    """Return the summed weighted CE numerator and its exact target weight."""
-    batch_size, seq_len, vocab_size = logits.shape
-    flat_logits = logits.reshape(batch_size * seq_len, vocab_size)
-    targets = labels.reshape(batch_size * seq_len)
-    weights = loss_mask.reshape(batch_size * seq_len)
-
-    per_token = F.cross_entropy(flat_logits, targets, reduction="none")
-    if eos_weight != 1.0:
-        eos_targets = (targets == int(eos_id)).to(weights.dtype)
-        weights = weights * (1.0 + eos_targets * (float(eos_weight) - 1.0))
-
-    return (per_token * weights).sum(), weights.sum()
-
-
-def masked_weighted_ce_loss(
-    logits: torch.Tensor,
-    labels: torch.Tensor,
-    loss_mask: torch.Tensor,
-    *,
-    eos_id: int,
-    eos_weight: float,
-) -> torch.Tensor:
-    """Compute target-weighted token CE, normalized by effective mask weight."""
-    numerator, target_weight = masked_weighted_ce_components(
-        logits,
-        labels,
-        loss_mask,
-        eos_id=eos_id,
-        eos_weight=eos_weight,
-    )
-    return numerator / target_weight.clamp_min(1.0)
 
 
 @torch.no_grad()

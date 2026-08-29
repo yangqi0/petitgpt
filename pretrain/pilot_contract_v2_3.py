@@ -196,30 +196,113 @@ def realized_muon_config() -> dict[str, Any]:
     }
 
 
-def verify_realized_grouping(optimizer: Any) -> dict[str, Any]:
-    """Verify a constructed optimizer matches the frozen V2.3 realization."""
+def verify_realized_grouping(optimizer: Any, model: Any | None = None) -> dict[str, Any]:
+    """Verify a constructed optimizer matches the frozen V2.3 realization, exhaustively.
+
+    R1: checks group identity, exact parameter-name membership, coverage (no missing and no
+    duplicate parameter), per-group counts, the Muon flag, weight decay, betas, epsilon,
+    momentum, Nesterov, Newton-Schulz steps, RMS-matching semantics, and lr_ratio == 1.0 for
+    every group. Pass ``model`` to enable the name-membership and coverage checks.
+    """
+    from src.optim import ADAM_PARAM_NAME_KEYS, Muon, zeropower_via_newtonschulz5
+
     groups = list(optimizer.param_groups)
     muon_groups = [g for g in groups if g.get("use_muon")]
     aux_groups = [g for g in groups if not g.get("use_muon")]
-    ratios = [float(g.get("lr_ratio", 1.0)) for g in groups]
     failures: list[str] = []
+    ratios = [float(g.get("lr_ratio", 1.0)) for g in groups]
+
+    if not isinstance(optimizer, Muon):
+        failures.append(f"optimizer must be the Muon instance, got {type(optimizer).__name__}")
     if len(muon_groups) != 1:
         failures.append(f"expected exactly one Muon group, got {len(muon_groups)}")
-    if not aux_groups:
-        failures.append("expected at least one auxiliary AdamW group")
+    if len(aux_groups) not in (1, 2):
+        failures.append(f"expected one or two auxiliary AdamW groups, got {len(aux_groups)}")
     if any(r != 1.0 for r in ratios):
         failures.append(f"every group lr_ratio must be 1.0, got {ratios}")
+
     for g in muon_groups:
         if float(g.get("momentum", -1)) != MUON_MOMENTUM:
             failures.append(f"Muon momentum must be {MUON_MOMENTUM}, got {g.get('momentum')}")
-        if not all(getattr(p, "ndim", 0) == 2 for p in g["params"]):
+        if g.get("nesterov") is not True:
+            failures.append("Muon group must use Nesterov momentum")
+        if int(g.get("ns_steps", -1)) != 5:
+            failures.append(f"Newton-Schulz steps must be 5, got {g.get('ns_steps')}")
+        if float(g.get("weight_decay", -1)) != WEIGHT_DECAY:
+            failures.append(f"Muon weight_decay must be {WEIGHT_DECAY}")
+        if any(getattr(p, "ndim", 0) != 2 for p in g["params"]):
             failures.append("Muon group contains a non-2D parameter")
+
+    for g in aux_groups:
+        betas = tuple(g.get("betas", ()))
+        if betas != ADAMW_AUX_BETAS:
+            failures.append(f"auxiliary AdamW betas must be {ADAMW_AUX_BETAS}, got {betas}")
+        if float(g.get("eps", -1)) != ADAMW_AUX_EPS:
+            failures.append(f"auxiliary AdamW eps must be {ADAMW_AUX_EPS}, got {g.get('eps')}")
+
+    membership: dict[str, list[str]] = {}
+    if model is not None:
+        by_id = {id(p): n for n, p in model.named_parameters() if p.requires_grad}
+        expected_muon, expected_decay, expected_no_decay = [], [], []
+        for name, param in model.named_parameters():
+            if not param.requires_grad:
+                continue
+            if param.ndim < 2:
+                expected_no_decay.append(name)
+            elif any(k in name for k in ADAM_PARAM_NAME_KEYS):
+                expected_decay.append(name)
+            else:
+                expected_muon.append(name)
+
+        seen: list[int] = []
+        for g in groups:
+            names = sorted(by_id.get(id(p), "<unknown>") for p in g["params"])
+            key = (
+                "muon_matrices"
+                if g.get("use_muon")
+                else "aux_adamw_decay"
+                if float(g.get("weight_decay", 0.0)) > 0
+                else "aux_adamw_no_decay"
+            )
+            membership[key] = names
+            seen.extend(id(p) for p in g["params"])
+
+        if len(seen) != len(set(seen)):
+            failures.append("a parameter appears in more than one optimizer group")
+        missing = sorted(set(by_id) - set(seen))
+        if missing:
+            failures.append(f"{len(missing)} trainable parameters are in no optimizer group")
+        for key, expected in (
+            ("muon_matrices", expected_muon),
+            ("aux_adamw_decay", expected_decay),
+            ("aux_adamw_no_decay", expected_no_decay),
+        ):
+            if expected and membership.get(key, []) != sorted(expected):
+                failures.append(f"{key} membership differs from the frozen grouping rule")
+        for g in aux_groups:
+            wd = float(g.get("weight_decay", 0.0))
+            names = sorted(by_id.get(id(p), "") for p in g["params"])
+            if wd == 0.0 and any(model.get_parameter(n).ndim >= 2 for n in names if n):
+                failures.append("the no-decay group must contain only ndim<2 parameters")
+
+    rms_ok = callable(zeropower_via_newtonschulz5)
+    if not rms_ok:
+        failures.append("Newton-Schulz orthogonalization helper is missing")
+
     return {
         "group_count": len(groups),
         "muon_group_count": len(muon_groups),
         "aux_adamw_group_count": len(aux_groups),
         "lr_ratios": ratios,
         "all_lr_ratios_are_one": all(r == 1.0 for r in ratios),
+        "parameter_counts": {
+            ("muon" if g.get("use_muon") else f"aux_wd{g.get('weight_decay')}"): sum(
+                p.numel() for p in g["params"]
+            )
+            for g in groups
+        },
+        "membership": membership,
+        "rms_matching_available": rms_ok,
         "failures": failures,
         "matches_frozen_realization": not failures,
     }
@@ -332,24 +415,29 @@ def mb_select(results: Sequence[Mapping[str, Any]], physical_vram_bytes: int) ->
         if (fastest - float(r["median_tokens_per_sec"])) / fastest <= MB_TIE_THROUGHPUT_RELATIVE
     ]
     tie_break = "fastest_unique" if len(tied) == 1 else "throughput_tie"
+
+    # The ladder narrows in order and falls through: lowest peak reserved VRAM, then within a
+    # 256 MiB window prefer compile=off, then prefer the larger micro_bsz.
     if len(tied) > 1:
         lowest = min(int(r["max_memory_reserved_bytes"]) for r in tied)
         window = MB_TIE_VRAM_MIB * 1024 * 1024
-        tied = [r for r in tied if int(r["max_memory_reserved_bytes"]) - lowest <= window]
-        if len(tied) == 1:
+        narrowed = [r for r in tied if int(r["max_memory_reserved_bytes"]) - lowest <= window]
+        if len(narrowed) < len(tied):
             tie_break = "lowest_peak_reserved_vram"
-        else:
-            off = [r for r in tied if not r.get("compile")]
-            if off and len(off) != len(tied):
-                tied, tie_break = off, "compile_off_preferred"
-            else:
-                tied = off or tied
-                if len(tied) > 1:
-                    biggest = max(int(r["micro_bsz"]) for r in tied)
-                    tied = [r for r in tied if int(r["micro_bsz"]) == biggest]
-                    tie_break = "larger_micro_bsz"
-                else:
-                    tie_break = "compile_off_preferred"
+        tied = narrowed
+
+    if len(tied) > 1:
+        off = [r for r in tied if not r.get("compile")]
+        if off and len(off) < len(tied):
+            tied, tie_break = off, "compile_off_preferred"
+
+    if len(tied) > 1:
+        biggest = max(int(r["micro_bsz"]) for r in tied)
+        narrowed = [r for r in tied if int(r["micro_bsz"]) == biggest]
+        if len(narrowed) < len(tied):
+            tie_break = "larger_micro_bsz"
+        tied = narrowed
+
     require(len(tied) == 1, f"Phase-MB tie-break did not resolve: {len(tied)} remain")
     w = tied[0]
     return {
@@ -704,19 +792,23 @@ def wsd_lr(
 ) -> float:
     """The canonical discrete WSD value for a 0-based optimizer update index.
 
-    Mirrors the trainer's schedule: linear warmup, constant stable region, then linear decay to
-    ``min_lr_ratio * peak_lr`` at ``decay_end_step``. The endpoint is the *mathematical* end;
-    the last update actually applied is ``decay_end_step - 1``.
+    R1: this delegates to ``src.canonical_schedule.lr_schedule`` -- the same pure function the
+    production trainer imports -- so the decay is the production **cosine**, not the linear
+    approximation the first V2.3 draft used. The endpoint is the *mathematical* end; the last
+    update actually applied is ``decay_end_step - 1``.
     """
-    update = int(update)
-    if update < warmup_steps:
-        return peak_lr * (update + 1) / warmup_steps if warmup_steps > 0 else peak_lr
-    if update < decay_start_step:
-        return peak_lr
-    span = max(1, int(decay_end_step) - int(decay_start_step))
-    progress = min(1.0, (update - decay_start_step) / span)
-    floor = peak_lr * float(min_lr_ratio)
-    return peak_lr + (floor - peak_lr) * progress
+    from src.canonical_schedule import lr_schedule
+
+    return lr_schedule(
+        int(update),
+        int(warmup_steps),
+        float(peak_lr),
+        schedule="wsd",
+        schedule_total_steps=int(decay_end_step),
+        decay_start_step=int(decay_start_step),
+        decay_end_step=int(decay_end_step),
+        min_lr_ratio=float(min_lr_ratio),
+    )
 
 
 def final_lr_semantics(
@@ -738,13 +830,16 @@ def final_lr_semantics(
         "mathematical_endpoint_lr": mathematical_endpoint,
         "last_applied_optimizer_update": last_applied_update,
         "last_applied_lr": wsd_lr(last_applied_update, **kw),
-        "one_step_before_end_progress": (span - 1) / span,
+        "decay_span_updates": span,
+        "schedule_family": "cosine (src.canonical_schedule.lr_schedule, schedule='wsd')",
         "warmup_boundary_update": int(warmup_steps),
         "lr_at_warmup_boundary": wsd_lr(int(warmup_steps), **kw),
         "lr_at_decay_start": wsd_lr(int(decay_start_step), **kw),
+        "last_applied_ratio": wsd_lr(last_applied_update, **kw) / float(peak_lr),
+        "mathematical_endpoint_ratio": PRODUCTION_MIN_LR_INTENT_RATIO,
         "note": (
             "The last applied update is decay_end_step - 1, so its LR is the exact "
-            "canonical one-step-before-end value, NOT numerically identical to the "
+            "canonical COSINE one-step-before-end value, NOT numerically identical to the "
             "endpoint floor. Trainer scheduler mathematics must not be altered to force "
             "literal last-update equality to the floor."
         ),
@@ -835,31 +930,34 @@ def require_training_authority(gpu: Mapping[str, Any]) -> None:
 
 # --------------------------------------------------------------------- checkpoint isolation
 
+PILOT_CHECKPOINTING = "DISABLED"
 CHECKPOINT_ISOLATION = MappingProxyType({
-    "checkpoint_kind": PILOT_CHECKPOINT_KIND,
+    "PILOT_CHECKPOINTING": PILOT_CHECKPOINTING,
+    "rationale": (
+        "Phase-MB candidates are 40 updates and Muon-LR candidates are 200; "
+        "checkpoint/resume complexity has low value for pilots this bounded."
+    ),
     "candidates_always_start_fresh": True,
-    "required_identity_fields": (
-        "checkpoint_kind",
-        "phase",
-        "candidate_id",
-        "seed_label",
-        "contract_sha256",
-        "implementation_head",
-        "execution_bundle_sha256",
-        "pilot_index_manifest_sha256",
-        "runtime_fingerprint_sha256",
-    ),
-    "resume_requires_exact_match": (
-        "candidate_id",
-        "seed_label",
-        "contract_sha256",
-        "implementation_head",
-        "pilot_index_manifest_sha256",
-    ),
+    "executor_creates_training_checkpoints": False,
+    "executor_accepts_pilot_resume": False,
+    "pilot_resume_cli_options": "rejected",
+    "published_artifacts": ("metrics", "results", "logs", "ledger state"),
     "may_initialize_another_candidate": False,
     "may_initialize_stage_n": False,
     "may_initialize_stage_o": False,
+    "stage_n_o_consumer_integration_required": False,
+    "stage_n_o_consumer_rationale": (
+        "V2.3 never creates a pilot checkpoint kind, so no "
+        "production consumer integration is required for one."
+    ),
 })
+
+
+def require_checkpointing_disabled(action: str) -> None:
+    """V2.3 pilots neither create nor consume training checkpoints."""
+    raise PilotContractError(
+        f"{CONTRACT_VERSION} freezes PILOT_CHECKPOINTING=DISABLED; refusing {action!r}"
+    )
 
 
 def reject_pilot_checkpoint_as_initialization(purpose: str) -> None:
@@ -867,19 +965,6 @@ def reject_pilot_checkpoint_as_initialization(purpose: str) -> None:
         f"{CONTRACT_VERSION} forbids initializing {purpose!r} from a pilot checkpoint "
         f"(checkpoint_kind={PILOT_CHECKPOINT_KIND}); pilot candidates always start fresh"
     )
-
-
-def check_pilot_resume(
-    checkpoint: Mapping[str, Any], candidate: Mapping[str, Any]
-) -> dict[str, Any]:
-    """Resume is allowed only for the exact same candidate under the exact same bindings."""
-    failures = []
-    if checkpoint.get("checkpoint_kind") != PILOT_CHECKPOINT_KIND:
-        failures.append("not_a_pilot_v2_3_checkpoint")
-    for field in CHECKPOINT_ISOLATION["resume_requires_exact_match"]:
-        if checkpoint.get(field) != candidate.get(field):
-            failures.append(f"mismatch:{field}")
-    return {"may_resume": not failures, "failures": failures}
 
 
 # --------------------------------------------------------------------- authorization
@@ -894,7 +979,8 @@ AUTHORIZATION_REQUIRED_FIELDS = (
     "contract_version",
     "contract_sha256",
     "execution_implementation_bundle_sha256",
-    "pilot_index_manifest_sha256",
+    "serialized_index_lists_digest",
+    "pilot_index_manifest_file_sha256",
     "accepted_stage_a_meta_sha256",
     "accepted_stage_b_meta_sha256",
     "allowed_output_root",
@@ -914,7 +1000,8 @@ def authorization_template() -> dict[str, Any]:
         "contract_version": CONTRACT_VERSION,
         "contract_sha256": None,
         "execution_implementation_bundle_sha256": None,
-        "pilot_index_manifest_sha256": None,
+        "serialized_index_lists_digest": None,
+        "pilot_index_manifest_file_sha256": None,
         "accepted_stage_a_meta_sha256": None,
         "accepted_stage_b_meta_sha256": None,
         "allowed_output_root": None,
@@ -960,7 +1047,8 @@ def validate_authorization(
         ("repository_head", "head"),
         ("contract_sha256", "contract_sha256"),
         ("execution_implementation_bundle_sha256", "execution_bundle_sha256"),
-        ("pilot_index_manifest_sha256", "pilot_index_manifest_sha256"),
+        ("serialized_index_lists_digest", "serialized_index_lists_digest"),
+        ("pilot_index_manifest_file_sha256", "pilot_index_manifest_file_sha256"),
         ("accepted_stage_a_meta_sha256", "stage_a_meta_sha256"),
         ("accepted_stage_b_meta_sha256", "stage_b_meta_sha256"),
         ("allowed_output_root", "output_root"),
