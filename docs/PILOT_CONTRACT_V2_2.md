@@ -1,5 +1,13 @@
 # P-PILOT-CONTRACT-V2.2
 
+> **SUPERSEDED IN PART BY P-PILOT-CONTRACT-V2.3 (`docs/PILOT_CONTRACT_V2_3.md`).**
+> V2.3 supersedes the **optimizer decision** in this document: the owner froze the optimizer
+> family directly (`FREEZE_MUON_DIRECTLY`), so §5 below (AdamW) and the Phase-LR grid and run
+> geometry in §6 no longer govern. Everything else V2.2 froze -- effective batch, the Phase-MB
+> grid shape, the deterministic pilot indices, production warmup 500, the WSD family and the
+> owner decay intent -- is retained and restated in V2.3, which is self-sufficient for
+> execution. This document is preserved unchanged below for history.
+
 The canonical, owner-frozen authority for the pre-GPU pilots that freeze the four training
 values the schema-v3 planner requires. This document and its machine-readable twin
 `pretrain/pilot_contract_v2.py` are the **single** current interpretation.

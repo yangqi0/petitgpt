@@ -1,5 +1,6 @@
 # Core numerical / training stack
-numpy>=1.24
+numpy>=1.24  # pilot execution requires EXACTLY 2.2.6; see requirements-pilot-v2_3.txt
+             # (P-PILOT-CONTRACT-V2.3 enforces this at runtime)
 scipy>=1.10
 tqdm>=4.66
 PyYAML>=6.0

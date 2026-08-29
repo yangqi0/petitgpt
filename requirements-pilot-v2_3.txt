@@ -1,0 +1,14 @@
+# P-PILOT-CONTRACT-V2.3 exact pilot execution environment.
+#
+# The broad `numpy>=1.24` in requirements.txt is NOT sufficient for pilot execution: the
+# deterministic pilot-index draw is reproducible only under the exact NumPy version the
+# contract froze, because Generator(PCG64) stream consumption is a library-version property.
+# `pilot_contract_v2_3.require_numpy_version()` fails real execution if this is not installed,
+# so this file makes the required version recoverable on a fresh checkout.
+#
+# Install after requirements.txt:
+#     pip install -r requirements.txt -r requirements-pilot-v2_3.txt
+# then install the CUDA build of torch matching the target 4090 pod separately.
+
+numpy==2.2.6
+tokenizers==0.22.2

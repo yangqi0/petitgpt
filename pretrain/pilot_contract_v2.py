@@ -33,6 +33,9 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
 
+# SUPERSEDED IN PART by P-PILOT-CONTRACT-V2.3 (pretrain/pilot_contract_v2_3.py): the
+# optimizer decision here (adamw) no longer governs. Retained unchanged for history and
+# for the non-optimizer freezes V2.3 restates.
 CONTRACT_VERSION = "P-PILOT-CONTRACT-V2.2"
 CONTRACT_SCHEMA = "petitgpt-pilot-contract-v2.2"
 AUTHORIZATION_TEMPLATE_SCHEMA = "petitgpt-pilot-authorization-template-v1"
