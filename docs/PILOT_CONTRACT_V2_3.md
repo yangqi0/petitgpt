@@ -30,8 +30,17 @@ walks the AST of both modules to prove it.
 No pilot is authorized here. The owner publishes a separate manifest
 (`petitgpt-pilot-authorization-v2.3`) binding the exact reviewed HEAD after independent review.
 **No tracked code change is required for that transition** — `validate_authorization()` already
-consumes that schema, and `authorize_execution()` is the single gate every training entry point
-passes through.
+consumes that schema, and `validate_execution_artifacts()` is the single gate every training
+entry point passes through.
+
+Publishing order for an authorized run:
+
+    1. python pretrain/pilot_runner_v2_3.py write-index-manifest --out <dir>/PILOT_INDICES.json
+    2. record that file's SHA-256 as pilot_index_manifest_file_sha256 in the manifest
+    3. python pretrain/pilot_runner_v2_3.py run --phase MB \
+         --authorization <manifest> --pilot-index-manifest <dir>/PILOT_INDICES.json \
+         --output-root <new authorized root>
+    4. (FULL_V2_3_PILOT only) the same command with --phase LR — no geometry arguments exist
 
 ## 1. Geometry (retained from V2.2)
 
@@ -184,9 +193,13 @@ come only from the canonical planner output.
     Phase Muon-LR ceiling     370,000,000
     global V2.3 hard ceiling  500,000,000
 
-Checked **before** every optimizer update — an update that would breach a ceiling is refused —
-and the actual accounting is atomically persisted **after** every completed update. Reaching a
-ceiling without a frozen result is `PILOT_ABORT`.
+Accounting is **reserve-then-complete**, one documented order per optimizer update. Under an
+exclusive `flock`, the ledger reloads from disk, revalidates its complete identity binding,
+checks the phase and global ceilings, and persists a **reservation** — all *before* the update
+is applied. The reservation moves to `completed` only after the optimizer step returns. A
+process that dies between the two leaves the reservation consumed on purpose: budget is never
+handed back, so a crash can never produce an uncounted optimizer update. Reaching a ceiling
+without a frozen result is `PILOT_ABORT`.
 
 Orchestration verifies that all required Phase-MB candidates are represented with no duplicate
 or unknown identity, that the initial LR grid is complete, and that every selected result comes
@@ -205,15 +218,17 @@ normally on it.
 
 ## 10. Output and checkpoint isolation
 
-Every candidate uses a new candidate-specific output directory, validated at launch, and may
-never write inside the accepted Stage-A or Stage-B releases, the tokenizer release, or any
-accepted upstream production release.
+The **authorized output root** is validated before anything is written under it: it may not be,
+sit inside, or contain an accepted release, and its parent must already exist. Every candidate
+then uses a new candidate-specific directory that must resolve beneath that validated root.
 
-Pilot checkpoints carry `checkpoint_kind=PILOT_V2_3` plus phase, candidate, seed, contract SHA,
-implementation HEAD, execution-bundle SHA, pilot-index manifest SHA and runtime fingerprint.
-Resume is allowed only for the exact same candidate, seed, contract, implementation and indices.
-A pilot checkpoint may **never** initialize another candidate, Stage N, or Stage O;
-`require_not_pilot_checkpoint()` is available to wire into checkpoint consumers.
+    PILOT_CHECKPOINTING    DISABLED
+
+V2.3 writes and reads **no** pilot training checkpoint. There is no save path, no resume path
+and no `--resume` option; `require_checkpointing_disabled()` refuses either action, and
+`reject_pilot_checkpoint_as_initialization()` refuses a pilot checkpoint as the initialization
+for another candidate, Stage N or Stage O. A candidate that fails is rerun from scratch under a
+new authorized root, never resumed.
 
 ## 11. Fingerprint separation
 
@@ -222,3 +237,95 @@ version/build, Python version and executable, NumPy and tokenizers versions, con
 repository branch/HEAD and worktree status, the contract SHA and the execution bundle SHA. It
 carries **no** per-run configuration: `compile`, `micro_bsz`, `grad_accum`, `peak_lr`, `seed` and
 `phase` live in each run_meta instead, and the module asserts their absence.
+
+## 12. Validation at execution (R2)
+
+Nothing is trusted because a caller said so. Every real execution root — the parent orchestrator
+and each candidate worker independently — calls the same
+`validate_execution_artifacts(authorization_path, candidate_spec_path,
+pilot_index_manifest_path, output_dir, requested_phase)` and re-derives its authority from
+artifact **bytes on disk**:
+
+    authorization manifest      loaded and hashed from disk
+    authorized status + scope   from those bytes
+    branch / HEAD / worktree    observed via git, including the allowed-probe rule
+    contract SHA                recomputed
+    execution-bundle SHA        rederived by AST closure walk over the roots
+    pilot-index manifest        FILE SHA-256 computed from disk, never read out of the manifest
+    pilot indices               regenerated and compared list by list
+    accepted Stage A / Stage B  opened through the manifest-required canonical loader
+    authorized output root      validated before any write
+    runtime fingerprint         RTX 4090 gate + exact NumPy
+    token-ledger identity       eight fields, revalidated on every lock-held operation
+    requested phase and scope   PHASE_MB_ONLY may never execute Phase LR
+
+There is no in-memory authorization flag, no caller-supplied hash or count, and no context
+object that grants anything by existing. The parent hands the child only *paths* — the real
+manifest, the real index manifest and the child's own immutable spec — and the child revalidates
+all of them. The session identity the child derives must equal the one recorded in its spec.
+
+### Sessions and scope
+
+A session is `sha256(authorization SHA, scope, output root, contract SHA, bundle SHA)`, recorded
+in `session.json` at the root. One authorization means one session and one ledger.
+`PHASE_MB_ONLY` **terminates** after its Phase-MB report and is never promoted: Phase LR needs a
+new `FULL_V2_3_PILOT` authorization, which implies a new session, a new ledger and a new root.
+
+### Result classes
+
+    SUCCESS               0
+    CANDIDATE_INELIGIBLE  3    candidate-local; the required grid continues
+    PHASE_ABORT           4    the phase cannot continue under the frozen contract
+    BINDING_FAILURE       5    an identity binding is broken; never downgraded
+
+Each candidate subprocess writes a structured terminal result
+(`petitgpt-pilot-candidate-terminal-result-v2.3`: status, error class, error message, completed
+updates, reserved/completed tokens, run_meta SHA) next to its spec, and its stdout and stderr
+are preserved verbatim. A missing terminal result, or a status that disagrees with the exit
+code, is a `PHASE_ABORT` — never a pass.
+
+### The authoritative Phase-MB report
+
+`PHASE_MB_REPORT.json` is published **once**, with a SHA-256 sidecar, and is the only source of
+Phase-LR geometry — the `run` subcommand has no `--micro-bsz` and no `--compile` option. Before
+Phase LR starts, the report is re-hashed against its sidecar, revalidated against every session
+binding, checked for a complete ten-candidate grid, recomputed candidate by candidate, and its
+recorded selection is re-derived and compared.
+
+### Independent recomputation
+
+No selection number is taken on trust:
+
+    Phase MB    median throughput recomputed from the raw per-update wall timings, and the
+                measured-update count checked against the frozen 30 (updates 11..40)
+    Phase LR    both eval losses recomputed from their raw numerator and weight, then SCORE
+                recomputed as (10*loss_A + 3*loss_B)/13
+
+A serialized value that disagrees with its recomputation is a `BINDING_FAILURE`.
+
+### Evidence completeness
+
+The initial LR grid must carry a record for all three grid points; confirmation must carry a
+record for both LRs at **both** seeds; a bounded edge expansion must carry a record at both
+seeds before it is resolved either way. An ineligible record is still a record — a *missing*
+record is an evidence gap and aborts the phase.
+
+### Timing and compile evidence
+
+    torch_compile_wrapper_seconds        the torch.compile() call itself
+    first_optimizer_update_wall_seconds  update 1, which materializes lazy compilation
+    measured_update_wall_seconds         updates 11..40, the throughput sample
+
+No host/device scalar transfer happens inside a timed region: losses and gradient norms stay as
+device tensors and are converted after the loop. `canonical_compile_path` is observed evidence —
+realized module type, TorchDynamo graph counters and Inductor artifacts on disk — checked in
+both directions, not a Boolean copied from the candidate spec.
+
+### Muon RMS matching
+
+`verify_rms_matching()` runs one real Muon step per deterministic shape case and reconstructs
+`p_after = p_before * (1 - lr*wd) - adjusted_lr * NS5(momentum)` with
+`adjusted_lr = lr * 0.2 * sqrt(max(fan_in, fan_out))`. The shape set includes both non-square
+orientations, and each case records the margin by which an unscaled implementation would differ,
+so the check cannot pass vacuously. `pilot_runner_v2_3.py rms-matching` prints the evidence
+without training.
