@@ -10,8 +10,8 @@ publication and deterministic selection. It never writes or reads a pilot checkp
 It is complete but **unexecuted in the materialization segments**: every entry into the training
 path passes through :func:`validate_execution_artifacts`, which requires an external AUTHORIZED
 manifest bound to this exact HEAD, contract, execution bundle, pilot-index manifest and accepted
-releases, and through the exact RTX 4090 runtime gate. No tracked code change is needed for a
-later authorized run: publishing the manifest is sufficient.
+releases, and through the owner-selected hardware and observed-runtime binding. No tracked
+code change is needed for a later authorized run: publishing the manifest is sufficient.
 
 R2 -- validation at execution, not trust in context. Every real execution root, the parent
 orchestrator and each candidate worker alike, calls the SAME artifact-validation function and
@@ -300,17 +300,29 @@ def derive_universes() -> dict[str, int]:
 # --------------------------------------------------------------------- fingerprint
 
 
-def base_runtime_fingerprint(*, gpu_required: bool = False) -> dict[str, Any]:
+def base_runtime_fingerprint(
+    *,
+    gpu_required: bool = False,
+    hardware_binding: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
     """Base runtime identity. Carries no per-run configuration (no compile, LR, seed, phase)."""
     import numpy as np
     import tokenizers
     import torch
 
-    gpu: dict[str, Any] = {"cuda_available": bool(torch.cuda.is_available())}
-    if torch.cuda.is_available():
-        props = torch.cuda.get_device_properties(0)
+    cuda_available = bool(torch.cuda.is_available())
+    device_count = int(torch.cuda.device_count()) if cuda_available else 0
+    gpu: dict[str, Any] = {
+        "cuda_available": cuda_available,
+        "device_count": device_count,
+        "selected_device_index": None,
+    }
+    if cuda_available and device_count > 0:
+        selected_device_index = int(torch.cuda.current_device())
+        props = torch.cuda.get_device_properties(selected_device_index)
         gpu.update({
-            "name": torch.cuda.get_device_name(0),
+            "selected_device_index": selected_device_index,
+            "name": torch.cuda.get_device_name(selected_device_index),
             "total_vram_mib": int(props.total_memory // (1024 * 1024)),
             "total_vram_bytes": int(props.total_memory),
             "capability": f"{props.major}.{props.minor}",
@@ -318,8 +330,6 @@ def base_runtime_fingerprint(*, gpu_required: bool = False) -> dict[str, Any]:
             "cuda_runtime": torch.version.cuda,
             "bf16_supported": bool(torch.cuda.is_bf16_supported()),
         })
-    if gpu_required:
-        require_training_authority(gpu)
     git = git_policy_status()
     fp = {
         "schema_version": BASE_FINGERPRINT_SCHEMA,
@@ -332,6 +342,7 @@ def base_runtime_fingerprint(*, gpu_required: bool = False) -> dict[str, Any]:
         "tokenizers_version": tokenizers.__version__,
         "python_version": platform.python_version(),
         "python_executable": sys.executable,
+        "python_implementation": platform.python_implementation(),
         "platform": platform.platform(),
         "container_template": os.environ.get("RUNPOD_POD_ID") or None,
         "repository": {
@@ -348,6 +359,8 @@ def base_runtime_fingerprint(*, gpu_required: bool = False) -> dict[str, Any]:
     for forbidden in ("compile", "micro_bsz", "grad_accum", "peak_lr", "seed", "phase"):
         require(forbidden not in fp, f"per-run field {forbidden!r} must not be in the fingerprint")
     fp["fingerprint_sha256"] = hashlib.sha256(canonical_json_bytes(fp)).hexdigest()
+    if gpu_required:
+        require_training_authority(fp, hardware_binding)
     return fp
 
 
@@ -835,6 +848,7 @@ def validate_execution_artifacts(
     this layer; a self-declared spec can never become executable on its own.
     """
     require(requested_phase in ("MB", "LR"), f"unknown phase {requested_phase!r}")
+    require(isinstance(gpu_required, bool), "gpu_required must be a Boolean")
     require_numpy_version()
 
     # --- authorization manifest, from disk ---
@@ -885,6 +899,7 @@ def validate_execution_artifacts(
         raise BindingFailure("pre-launch Git policy not satisfied: " + ", ".join(git["failures"]))
 
     authorized_root = validate_authorized_output_root(Path(output_dir))
+    fingerprint = base_runtime_fingerprint()
     observed = {
         "branch": git["branch"],
         "head": git["head"],
@@ -895,6 +910,7 @@ def validate_execution_artifacts(
         "stage_a_meta_sha256": stage_a["meta_sha256"],
         "stage_b_meta_sha256": stage_b["meta_sha256"],
         "output_root": str(authorized_root),
+        "base_runtime_fingerprint": fingerprint,
     }
     verdict = validate_authorization(
         manifest, requested_scope=_scope_for(requested_phase), observed=observed
@@ -911,7 +927,6 @@ def validate_execution_artifacts(
             "promoted or reused for Phase LR; a new FULL_V2_3_PILOT authorization is required"
         )
 
-    fingerprint = base_runtime_fingerprint(gpu_required=gpu_required)
     ceilings = authorized_effective_ceilings(manifest)
     session_id = hashlib.sha256(
         canonical_json_bytes({
@@ -1053,6 +1068,7 @@ def session_manifest_document(validated: Mapping[str, Any]) -> dict[str, Any]:
             },
         },
         "runtime_fingerprint_sha256": validated["fingerprint"]["fingerprint_sha256"],
+        "base_runtime_fingerprint": dict(validated["fingerprint"]),
         "authorized_output_root": str(validated["authorized_root"]),
         "ledger_identity": dict(validated["identity"]),
         "ledger_relpath": LEDGER_FILENAME,
@@ -3256,6 +3272,7 @@ def orchestrate_phase_mb(session: ExecutionSession, *, launcher: Any = None) -> 
         "session_terminates_after_this_phase": session.scope == "PHASE_MB_ONLY",
         "next_phase_requires_new_authorization": session.scope == "PHASE_MB_ONLY",
         "physical_vram_bytes": vram,
+        "base_runtime_fingerprint": dict(session.validated["fingerprint"]),
         **dict(_session_bindings(session)),
     }
     report["report_sha256"] = write_immutable_report(
@@ -3279,6 +3296,29 @@ def load_authoritative_mb_report(session: ExecutionSession) -> dict[str, Any]:
             f"micro_bsz and compile mode are never taken from the command line"
         )
     report, digest = read_immutable_artifact(path, schema_version=MB_REPORT_SCHEMA)
+    reported_fingerprint = report.get("base_runtime_fingerprint")
+    current_fingerprint = session.validated["fingerprint"]
+    if not isinstance(reported_fingerprint, Mapping):
+        raise BindingFailure("Phase-MB report has no bound base runtime fingerprint")
+    fingerprint_payload = dict(reported_fingerprint)
+    recorded_fingerprint_sha256 = fingerprint_payload.pop("fingerprint_sha256", None)
+    recomputed_fingerprint_sha256 = hashlib.sha256(
+        canonical_json_bytes(fingerprint_payload)
+    ).hexdigest()
+    if recorded_fingerprint_sha256 != recomputed_fingerprint_sha256:
+        raise BindingFailure("Phase-MB report base runtime fingerprint self-hash is invalid")
+    if report.get("runtime_fingerprint_sha256") != recorded_fingerprint_sha256:
+        raise BindingFailure("Phase-MB report runtime fingerprint SHA disagrees with its payload")
+    if reported_fingerprint != current_fingerprint:
+        raise BindingFailure(
+            "Phase-MB report runtime fingerprint is incompatible with the current Phase-LR "
+            "runtime; aborting this FULL session without migrating frozen MB geometry"
+        )
+    reported_gpu = reported_fingerprint.get("gpu")
+    if not isinstance(reported_gpu, Mapping):
+        raise BindingFailure("Phase-MB report runtime fingerprint has malformed GPU identity")
+    if report.get("physical_vram_bytes") != reported_gpu.get("total_vram_bytes"):
+        raise BindingFailure("Phase-MB report physical VRAM disagrees with its runtime fingerprint")
     # Phase LR runs under the SAME authorization, session and ledger as the Phase MB it
     # consumes, so every binding -- authorization and session identity included -- must match.
     for field, expected in _session_bindings(session):

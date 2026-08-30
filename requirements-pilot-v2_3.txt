@@ -8,7 +8,7 @@
 #
 # Install after requirements.txt:
 #     pip install -r requirements.txt -r requirements-pilot-v2_3.txt
-# then install the CUDA build of torch matching the target 4090 pod separately.
+# then install the NVIDIA CUDA build of torch for the owner-selected pilot runtime.
 
 numpy==2.2.6
 tokenizers==0.22.2

@@ -18,18 +18,21 @@ import pretrain.pilot_runner_v2_3 as R
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 A_BLOCKS, B_BLOCKS = 4882814, 1464845
-VRAM_4090 = 24564 * 1024 * 1024
+SYNTHETIC_VRAM_BYTES = 24564 * 1024 * 1024
 
 
 # ------------------------------------------------------------------ supersession
 
 
-def test_v2_3_supersedes_only_the_v2_2_optimizer_decision():
+def test_v2_3_records_the_optimizer_and_hardware_policy_amendments():
     d = C.contract_document()
     assert d["contract_version"] == "P-PILOT-CONTRACT-V2.3"
     assert "P-PILOT-CONTRACT-V2.2" in d["supersedes"]
-    assert "optimizer" in d["supersedes"]["P-PILOT-CONTRACT-V2.2"]
+    supersession = d["supersedes"]["P-PILOT-CONTRACT-V2.2"]
+    assert "optimizer" in supersession and "GPU-product" in supersession
     assert d["owner_optimizer_verdict"] == "FREEZE_MUON_DIRECTLY"
+    assert d["runtime_gate"]["TRAINING_GPU_MODEL"] == ("DEFERRED_UNTIL_OWNER_PILOT_AUTHORIZATION")
+    assert d["runtime_gate"]["future_stage_n_o"]["exact_gpu_product_frozen_now"] is False
     assert d["optimizer_family_comparison_required"] is False
     for retained in ("effective-batch geometry", "production warmup 500"):
         assert retained in d["retained_from_v2_2"]
@@ -231,25 +234,26 @@ def _full_grid(**overrides):
 def test_mb_requires_the_complete_grid():
     partial = _full_grid()[:3]
     with pytest.raises(C.PilotContractError, match="incomplete"):
-        C.mb_select(partial, VRAM_4090)
+        C.mb_select(partial, SYNTHETIC_VRAM_BYTES)
 
 
 def test_mb_rejects_duplicate_candidate_identity():
     dup = [*_full_grid(), _mb("mb_micro8_compileoff", 8, False, 9999.0, 8.0)]
     with pytest.raises(C.PilotContractError, match="duplicate"):
-        C.mb_select(dup, VRAM_4090)
+        C.mb_select(dup, SYNTHETIC_VRAM_BYTES)
 
 
 def test_mb_rejects_unknown_candidate_identity():
     grid = _full_grid()
     grid[0] = _mb("mb_micro99_compileoff", 99, False, 1000.0, 8.0)
     with pytest.raises(C.PilotContractError, match="incomplete|unknown"):
-        C.mb_select(grid, VRAM_4090)
+        C.mb_select(grid, SYNTHETIC_VRAM_BYTES)
 
 
 def test_mb_selection_and_tie_ladder():
     out = C.mb_select(
-        _full_grid(mb_micro8_compileoff={"median_update_tokens_per_second": 5000.0}), VRAM_4090
+        _full_grid(mb_micro8_compileoff={"median_update_tokens_per_second": 5000.0}),
+        SYNTHETIC_VRAM_BYTES,
     )
     assert out["FROZEN_MICRO_BSZ"] == 8 and out["FROZEN_GRAD_ACCUM"] == 16
     assert out["FROZEN_COMPILE"] is False and out["tie_break"] == "fastest_unique"
@@ -265,14 +269,15 @@ def test_mb_selection_and_tie_ladder():
                 "max_memory_reserved_bytes": int(8 * 1024**3),
             },
         ),
-        VRAM_4090,
+        SYNTHETIC_VRAM_BYTES,
     )
     assert out2["tie_break"] == "lowest_peak_reserved_vram" and out2["FROZEN_MICRO_BSZ"] == 4
 
 
 def test_mb_all_ineligible_aborts():
     out = C.mb_select(
-        _full_grid(**{c["candidate_id"]: {"oom": True} for c in C.mb_candidate_grid()}), VRAM_4090
+        _full_grid(**{c["candidate_id"]: {"oom": True} for c in C.mb_candidate_grid()}),
+        SYNTHETIC_VRAM_BYTES,
     )
     assert out["outcome"] == "PHASE_MB_ABORT"
 
@@ -286,7 +291,9 @@ def test_mb_all_ineligible_aborts():
     ],
 )
 def test_mb_eligibility_requires_muon_grouping_facts(bad):
-    ok, failures = C.mb_candidate_eligible(_mb("x", 8, False, 1.0, 8.0, **bad), VRAM_4090)
+    ok, failures = C.mb_candidate_eligible(
+        _mb("x", 8, False, 1.0, 8.0, **bad), SYNTHETIC_VRAM_BYTES
+    )
     assert not ok and failures
 
 
@@ -614,69 +621,143 @@ def test_pilot_requirements_file_pins_numpy():
 
 # ------------------------------------------------------------------ runtime gate
 
+SYNTHETIC_GPU_NAME = "Owner-selected synthetic NVIDIA CUDA device"
 
-def test_rtx4090_gate_accepts_only_the_exact_device():
-    ok = C.check_training_authority({
-        "name": "NVIDIA GeForce RTX 4090",
-        "total_vram_mib": 24564,
-        "cuda_available": True,
-        "bf16_supported": True,
-    })
-    assert ok["granted"] and ok["training_authority"] == "GRANTED"
+
+def _synthetic_runtime_fingerprint(
+    *,
+    name=SYNTHETIC_GPU_NAME,
+    device_count=1,
+    cuda_available=True,
+    bf16_supported=True,
+    driver="synthetic-driver",
+):
+    body = {
+        "schema_version": C.BASE_FINGERPRINT_SCHEMA,
+        "contract_version": C.CONTRACT_VERSION,
+        "gpu": {
+            "cuda_available": cuda_available,
+            "device_count": device_count,
+            "selected_device_index": 0,
+            "name": name,
+            "total_vram_mib": SYNTHETIC_VRAM_BYTES // (1024 * 1024),
+            "total_vram_bytes": SYNTHETIC_VRAM_BYTES,
+            "capability": "9.0",
+            "driver": driver,
+            "cuda_runtime": "12.8",
+            "bf16_supported": bf16_supported,
+        },
+        "torch_version": "2.synthetic+cu128",
+        "torch_build": {"cuda": "12.8", "git_version": "synthetic"},
+        "numpy_version": C.REQUIRED_NUMPY_VERSION,
+        "required_numpy_version": C.REQUIRED_NUMPY_VERSION,
+        "tokenizers_version": "synthetic",
+        "python_version": "3.synthetic",
+        "python_executable": "/synthetic/python",
+        "python_implementation": "CPython",
+        "platform": "synthetic-platform",
+        "container_template": "synthetic-container",
+        "repository": {
+            "branch": "agent/retrain-pipeline-contracts",
+            "head": "deadbeef",
+            "tracked_clean": True,
+            "allowed_untracked_sha256": "a" * 64,
+            "allowed_untracked_unchanged": True,
+            "unexpected_untracked": [],
+        },
+        "contract_sha256": C.contract_sha256(),
+        "execution_implementation_bundle_sha256": "b" * 64,
+    }
+    return {
+        **body,
+        "fingerprint_sha256": hashlib.sha256(C.canonical_json_bytes(body)).hexdigest(),
+    }
+
+
+def _hardware_binding(fingerprint, *, expected_name=None):
+    return {
+        "expected_gpu_device_name": expected_name or fingerprint["gpu"]["name"],
+        "expected_cuda_device_count": 1,
+        "cuda_required": True,
+        "bf16_required": True,
+        "expected_base_runtime_fingerprint_sha256": fingerprint["fingerprint_sha256"],
+    }
+
+
+def test_owner_selected_gpu_identity_and_runtime_binding_pass():
+    fingerprint = _synthetic_runtime_fingerprint()
+    verdict = C.check_training_authority(fingerprint, _hardware_binding(fingerprint))
+    assert verdict["granted"] and verdict["training_authority"] == "GRANTED"
+
+
+def test_a_different_gpu_identity_than_the_owner_selected_one_fails():
+    fingerprint = _synthetic_runtime_fingerprint()
+    binding = _hardware_binding(fingerprint, expected_name="A different selected device")
+    verdict = C.check_training_authority(fingerprint, binding)
+    assert not verdict["granted"]
+    assert "gpu_device_identity_mismatch" in verdict["failures"]
 
 
 @pytest.mark.parametrize(
-    "gpu",
+    ("gpu_over", "failure"),
     [
-        {
-            "name": "NVIDIA RTX 4000 Ada Generation",
-            "total_vram_mib": 20146,
-            "cuda_available": True,
-            "bf16_supported": True,
-        },
-        {
-            "name": "NVIDIA GeForce RTX 4090 Laptop GPU",
-            "total_vram_mib": 16384,
-            "cuda_available": True,
-            "bf16_supported": True,
-        },
-        {
-            "name": "NVIDIA GeForce RTX 4090",
-            "total_vram_mib": 24564,
-            "cuda_available": False,
-            "bf16_supported": True,
-        },
-        {
-            "name": "NVIDIA GeForce RTX 4090",
-            "total_vram_mib": 24564,
-            "cuda_available": True,
-            "bf16_supported": False,
-        },
+        ({"device_count": 2}, "cuda_device_count_not_exactly_1"),
+        ({"cuda_available": False}, "cuda_unavailable"),
+        ({"bf16_supported": False}, "bf16_unsupported"),
     ],
 )
-def test_rtx4090_gate_rejects(gpu):
-    verdict = C.check_training_authority(gpu)
-    assert not verdict["granted"] and verdict["training_authority"] == "NONE"
+def test_hardware_independent_runtime_requirements_fail_closed(gpu_over, failure):
+    original = _synthetic_runtime_fingerprint()
+    body = {k: v for k, v in original.items() if k != "fingerprint_sha256"}
+    body["gpu"] = {**body["gpu"], **gpu_over}
+    fingerprint = {
+        **body,
+        "fingerprint_sha256": hashlib.sha256(C.canonical_json_bytes(body)).hexdigest(),
+    }
+    binding = _hardware_binding(fingerprint)
+    verdict = C.check_training_authority(fingerprint, binding)
+    assert not verdict["granted"] and failure in verdict["failures"]
     with pytest.raises(C.PilotContractError, match="no training authority"):
-        C.require_training_authority(gpu)
+        C.require_training_authority(fingerprint, binding)
 
 
-def test_substring_only_check_is_insufficient():
-    """A 4090 Laptop GPU contains '4090' but is not the intended device."""
-    assert "4090" in "NVIDIA GeForce RTX 4090 Laptop GPU"
-    assert not C.check_training_authority({
-        "name": "NVIDIA GeForce RTX 4090 Laptop GPU",
-        "total_vram_mib": 16384,
-        "cuda_available": True,
-        "bf16_supported": True,
-    })["granted"]
-    assert C.contract_document()["runtime_gate"]["substring_check_insufficient"] is True
+def test_incomplete_self_hashed_runtime_fingerprint_fails_closed():
+    original = _synthetic_runtime_fingerprint()
+    body = {k: v for k, v in original.items() if k not in {"fingerprint_sha256", "repository"}}
+    incomplete = {
+        **body,
+        "fingerprint_sha256": hashlib.sha256(C.canonical_json_bytes(body)).hexdigest(),
+    }
+    verdict = C.check_training_authority(incomplete, _hardware_binding(incomplete))
+    assert not verdict["granted"]
+    assert any("base_runtime_fingerprint_missing_fields" in f for f in verdict["failures"])
+
+
+def test_active_v2_3_authority_has_no_permanent_product_gate():
+    authority_surfaces = [
+        (REPO_ROOT / relative).read_text(encoding="utf-8")
+        for relative in (
+            "docs/PILOT_CONTRACT_V2_3.md",
+            "pretrain/pilot_contract_v2_3.py",
+            "pretrain/pilot_runner_v2_3.py",
+            "requirements-pilot-v2_3.txt",
+        )
+    ]
+    authority_surfaces.append(
+        (REPO_ROOT / "README.md").read_text(encoding="utf-8").split("---", 1)[0]
+    )
+    authority = "\n".join(authority_surfaces)
+    assert "REQUIRED_GPU_NAME_EXACT" not in authority
+    assert "required_vram_mib_range" not in authority
+    for product_number in ("40" + "90", "50" + "90"):
+        assert product_number not in authority
 
 
 # ------------------------------------------------------------------ authorization
 
 
 def _authorized(observed, scope="FULL_V2_3_PILOT"):
+    fingerprint = observed["base_runtime_fingerprint"]
     return {
         "schema_version": C.AUTHORIZATION_SCHEMA,
         "authorization_status": "AUTHORIZED",
@@ -692,6 +773,7 @@ def _authorized(observed, scope="FULL_V2_3_PILOT"):
         "accepted_stage_b_meta_sha256": observed["stage_b_meta_sha256"],
         "allowed_output_root": observed["output_root"],
         "pilot_trained_token_ceiling": C.GLOBAL_PILOT_TOKEN_CEILING,
+        "training_hardware": _hardware_binding(fingerprint),
     }
 
 
@@ -701,32 +783,37 @@ def observed():
         "branch": "agent/retrain-pipeline-contracts",
         "head": "deadbeef",
         "contract_sha256": C.contract_sha256(),
-        "execution_bundle_sha256": "bundle",
+        "execution_bundle_sha256": "b" * 64,
         "serialized_index_lists_digest": "idx",
         "pilot_index_manifest_file_sha256": "mfile",
         "stage_a_meta_sha256": "a",
         "stage_b_meta_sha256": "b",
         "output_root": "/tmp/out",
+        "base_runtime_fingerprint": _synthetic_runtime_fingerprint(),
     }
 
 
-def test_authorization_template_is_not_authorized():
-    t = C.authorization_template()
-    assert t["authorization_status"] == "NOT_AUTHORIZED"
-    assert t["allowed_scope"] is None and t["repository_head"] is None
+def test_authorization_template_is_not_authorized_and_selects_no_hardware():
+    template = C.authorization_template()
+    assert template["authorization_status"] == "NOT_AUTHORIZED"
+    assert template["allowed_scope"] is None and template["repository_head"] is None
+    assert template["training_hardware"] is None
+    assert C.TRAINING_GPU_MODEL == "DEFERRED_UNTIL_OWNER_PILOT_AUTHORIZATION"
     assert set(C.ALLOWED_SCOPES) == {"PHASE_MB_ONLY", "FULL_V2_3_PILOT"}
 
 
 def test_authorization_missing_refuses(observed):
-    v = C.validate_authorization(None, requested_scope="PHASE_MB_ONLY", observed=observed)
-    assert not v["authorized"] and v["failures"] == ["authorization_missing"]
+    verdict = C.validate_authorization(None, requested_scope="PHASE_MB_ONLY", observed=observed)
+    assert not verdict["authorized"] and verdict["failures"] == ["authorization_missing"]
 
 
 def test_not_authorized_status_refuses(observed):
-    m = _authorized(observed) | {"authorization_status": "NOT_AUTHORIZED"}
-    v = C.validate_authorization(m, requested_scope="FULL_V2_3_PILOT", observed=observed)
-    assert not v["authorized"]
-    assert "authorization_status_not_authorized" in v["failures"]
+    manifest = _authorized(observed) | {"authorization_status": "NOT_AUTHORIZED"}
+    verdict = C.validate_authorization(
+        manifest, requested_scope="FULL_V2_3_PILOT", observed=observed
+    )
+    assert not verdict["authorized"]
+    assert "authorization_status_not_authorized" in verdict["failures"]
 
 
 @pytest.mark.parametrize(
@@ -744,31 +831,96 @@ def test_not_authorized_status_refuses(observed):
     ],
 )
 def test_authorization_mismatch_refuses(observed, field):
-    m = _authorized(observed) | {field: "WRONG"}
-    v = C.validate_authorization(m, requested_scope="FULL_V2_3_PILOT", observed=observed)
-    assert not v["authorized"] and any(field in f for f in v["failures"])
+    manifest = _authorized(observed) | {field: "WRONG"}
+    verdict = C.validate_authorization(
+        manifest, requested_scope="FULL_V2_3_PILOT", observed=observed
+    )
+    assert not verdict["authorized"] and any(field in f for f in verdict["failures"])
 
 
 def test_scope_escalation_refused(observed):
-    m = _authorized(observed, scope="PHASE_MB_ONLY")
-    v = C.validate_authorization(m, requested_scope="FULL_V2_3_PILOT", observed=observed)
-    assert not v["authorized"]
-    assert "requested_scope_exceeds_authorization" in v["failures"]
+    manifest = _authorized(observed, scope="PHASE_MB_ONLY")
+    verdict = C.validate_authorization(
+        manifest, requested_scope="FULL_V2_3_PILOT", observed=observed
+    )
+    assert not verdict["authorized"]
+    assert "requested_scope_exceeds_authorization" in verdict["failures"]
 
 
 def test_matching_authorized_fixture_passes_without_training(observed):
     """A synthetic matching AUTHORIZED manifest validates -- no candidate is invoked."""
-    v = C.validate_authorization(
+    verdict = C.validate_authorization(
         _authorized(observed), requested_scope="FULL_V2_3_PILOT", observed=observed
     )
-    assert v["authorized"] is True and v["failures"] == []
-    assert v["allowed_scope"] == "FULL_V2_3_PILOT"
+    assert verdict["authorized"] is True and verdict["failures"] == []
+    assert verdict["allowed_scope"] == "FULL_V2_3_PILOT"
+
+
+def test_authorization_rejects_a_mismatching_selected_gpu_identity(observed):
+    manifest = _authorized(observed)
+    manifest["training_hardware"] = {
+        **manifest["training_hardware"],
+        "expected_gpu_device_name": "A different selected device",
+    }
+    verdict = C.validate_authorization(
+        manifest, requested_scope="FULL_V2_3_PILOT", observed=observed
+    )
+    assert "gpu_device_identity_mismatch" in verdict["failures"]
+
+
+@pytest.mark.parametrize(
+    ("runtime_over", "failure"),
+    [
+        ({"cuda_available": False}, "cuda_unavailable"),
+        ({"bf16_supported": False}, "bf16_unsupported"),
+    ],
+)
+def test_authorization_rejects_missing_cuda_or_bf16(observed, runtime_over, failure):
+    bad_observed = dict(observed)
+    bad_fingerprint = _synthetic_runtime_fingerprint(**runtime_over)
+    bad_observed["base_runtime_fingerprint"] = bad_fingerprint
+    manifest = _authorized(bad_observed)
+    verdict = C.validate_authorization(
+        manifest, requested_scope="FULL_V2_3_PILOT", observed=bad_observed
+    )
+    assert failure in verdict["failures"]
+
+
+def test_authorization_rejects_runtime_fingerprint_mismatch(observed):
+    manifest = _authorized(observed)
+    manifest["training_hardware"] = {
+        **manifest["training_hardware"],
+        "expected_base_runtime_fingerprint_sha256": "0" * 64,
+    }
+    verdict = C.validate_authorization(
+        manifest, requested_scope="FULL_V2_3_PILOT", observed=observed
+    )
+    assert "base_runtime_fingerprint_sha256_mismatch" in verdict["failures"]
+
+
+def test_authorization_rejects_fingerprint_repository_identity_divergence(observed):
+    divergent_observed = dict(observed)
+    original = observed["base_runtime_fingerprint"]
+    body = {k: v for k, v in original.items() if k != "fingerprint_sha256"}
+    body["repository"] = {**body["repository"], "head": "different-reviewed-head"}
+    divergent_observed["base_runtime_fingerprint"] = {
+        **body,
+        "fingerprint_sha256": hashlib.sha256(C.canonical_json_bytes(body)).hexdigest(),
+    }
+    verdict = C.validate_authorization(
+        _authorized(divergent_observed),
+        requested_scope="FULL_V2_3_PILOT",
+        observed=divergent_observed,
+    )
+    assert "base_runtime_fingerprint_repository_head_mismatch" in verdict["failures"]
 
 
 def test_token_ceiling_above_contract_refused(observed):
-    m = _authorized(observed) | {"pilot_trained_token_ceiling": 10**12}
-    v = C.validate_authorization(m, requested_scope="FULL_V2_3_PILOT", observed=observed)
-    assert "token_ceiling_invalid_or_above_contract" in v["failures"]
+    manifest = _authorized(observed) | {"pilot_trained_token_ceiling": 10**12}
+    verdict = C.validate_authorization(
+        manifest, requested_scope="FULL_V2_3_PILOT", observed=observed
+    )
+    assert "token_ceiling_invalid_or_above_contract" in verdict["failures"]
 
 
 MEASURED_SECONDS = [0.25] * len(C.MB_MEASURED_UPDATES)
@@ -859,7 +1011,7 @@ def _fake_session(tmp_path, scope="FULL_V2_3_PILOT", root=None):
             "stage_a_train_sha256": "y",
             "stage_b_eval_sha256": "z",
         },
-        "fingerprint": {"fingerprint_sha256": "fp", "gpu": {"total_vram_bytes": VRAM_4090}},
+        "fingerprint": _synthetic_runtime_fingerprint(),
         "stage_a": {"dataset": None, "blocks": 1},
         "stage_b": {"dataset": None, "blocks": 1},
         "effective_ceilings": _ceilings(),
@@ -1307,6 +1459,42 @@ def test_fingerprint_separates_base_from_per_run():
         "fingerprint_sha256",
     ):
         assert required in fp
+
+
+def test_fingerprint_records_and_binds_the_exact_selected_cuda_runtime(monkeypatch):
+    import torch
+
+    props = mock.Mock(total_memory=SYNTHETIC_VRAM_BYTES, major=9, minor=0)
+    monkeypatch.setattr(torch.cuda, "is_available", lambda: True)
+    monkeypatch.setattr(torch.cuda, "device_count", lambda: 1)
+    monkeypatch.setattr(torch.cuda, "current_device", lambda: 0)
+    monkeypatch.setattr(torch.cuda, "get_device_properties", lambda index: props)
+    monkeypatch.setattr(torch.cuda, "get_device_name", lambda index: SYNTHETIC_GPU_NAME)
+    monkeypatch.setattr(torch.cuda, "is_bf16_supported", lambda: True)
+    monkeypatch.setattr(torch.version, "cuda", "12.8")
+    monkeypatch.setattr(R, "_nvidia_smi", lambda field: "synthetic-driver")
+
+    fingerprint = R.base_runtime_fingerprint()
+    assert fingerprint["gpu"] == {
+        "cuda_available": True,
+        "device_count": 1,
+        "selected_device_index": 0,
+        "name": SYNTHETIC_GPU_NAME,
+        "total_vram_mib": SYNTHETIC_VRAM_BYTES // (1024 * 1024),
+        "total_vram_bytes": SYNTHETIC_VRAM_BYTES,
+        "capability": "9.0",
+        "driver": "synthetic-driver",
+        "cuda_runtime": "12.8",
+        "bf16_supported": True,
+    }
+    assert fingerprint["python_implementation"]
+    assert (
+        R.base_runtime_fingerprint(
+            gpu_required=True,
+            hardware_binding=_hardware_binding(fingerprint),
+        )
+        == fingerprint
+    )
 
 
 def test_execution_closure_includes_real_dependencies():
@@ -1955,14 +2143,30 @@ def test_phase_mb_only_session_terminates_after_its_report(tmp_path):
         R.orchestrate_phase_muon_lr(session, launcher=lambda *_: None)
 
 
-def test_full_pilot_runs_both_phases_under_one_session_and_ledger(tmp_path):
+def test_full_pilot_matching_mb_to_lr_runtime_binding_passes(tmp_path):
     session = _fake_session(tmp_path, scope="FULL_V2_3_PILOT")
     report = _frozen_mb_report(session)
     assert report["session_terminates_after_this_phase"] is False
+    assert report["base_runtime_fingerprint"] == session.validated["fingerprint"]
+    assert report["physical_vram_bytes"] == SYNTHETIC_VRAM_BYTES
     frozen = R.load_authoritative_mb_report(session)
     assert frozen["micro_bsz"] == 8
     assert report["session_id"] == session.session_id
     assert session.ledger.identity["session_id"] == session.session_id
+
+
+def test_full_pilot_mb_to_lr_runtime_mismatch_aborts_before_lr(tmp_path):
+    session = _fake_session(tmp_path, scope="FULL_V2_3_PILOT")
+    _frozen_mb_report(session)
+    session.validated["fingerprint"] = _synthetic_runtime_fingerprint(
+        name="A different owner-selected synthetic device",
+        driver="a different synthetic driver",
+    )
+    launched = []
+
+    with pytest.raises(R.BindingFailure, match="runtime fingerprint is incompatible"):
+        R.orchestrate_phase_muon_lr(session, launcher=lambda *args: launched.append(args))
+    assert launched == []
 
 
 def test_a_report_from_another_session_is_refused(tmp_path):
@@ -2939,11 +3143,11 @@ def test_the_contract_rejects_a_compile_candidate_that_fell_back(tmp_path):
     candidate = candidates[1]
     assert candidate["compile"] is True
     result = _bound_mb_result(candidate, session, plan, canonical_compile_path=False)
-    eligible, failures = C.mb_candidate_eligible(result, VRAM_4090)
+    eligible, failures = C.mb_candidate_eligible(result, SYNTHETIC_VRAM_BYTES)
     assert not eligible and "compile_silent_fallback" in failures
     # and the other direction: compile=off that somehow ran a compiled path
     off = _bound_mb_result(candidates[0], session, plan, canonical_compile_path=False)
-    eligible_off, failures_off = C.mb_candidate_eligible(off, VRAM_4090)
+    eligible_off, failures_off = C.mb_candidate_eligible(off, SYNTHETIC_VRAM_BYTES)
     assert not eligible_off and "unrequested_compiled_path" in failures_off
 
 
@@ -3321,6 +3525,7 @@ def test_the_session_manifest_binds_the_whole_execution(tmp_path):
         "serialized_index_lists_digest",
         "accepted_releases",
         "runtime_fingerprint_sha256",
+        "base_runtime_fingerprint",
         "authorized_output_root",
         "ledger_identity",
         "effective_ceilings",
@@ -3329,6 +3534,7 @@ def test_the_session_manifest_binds_the_whole_execution(tmp_path):
         assert field in doc, field
     assert doc["session_hard_ceiling"] == C.FULL_V2_3_PILOT_SESSION_HARD_CEILING
     assert set(doc["accepted_releases"]) == {"stage_a", "stage_b"}
+    assert doc["base_runtime_fingerprint"] == session.validated["fingerprint"]
     path = tmp_path / "SESSION_probe.json"
     R.write_immutable_artifact(path, doc)
     assert R.validate_session_manifest(path, session.validated)[0] == doc
@@ -4157,7 +4363,7 @@ def test_an_honest_silent_fallback_is_ineligible_not_a_phase_abort(tmp_path):
     )
     recomputed = R.verify_recomputed_mb_result(honest)
     assert recomputed["canonical_compile_path"] is False
-    eligible, failures = C.mb_candidate_eligible({**honest, **recomputed}, VRAM_4090)
+    eligible, failures = C.mb_candidate_eligible({**honest, **recomputed}, SYNTHETIC_VRAM_BYTES)
     assert not eligible and "compile_silent_fallback" in failures
 
 

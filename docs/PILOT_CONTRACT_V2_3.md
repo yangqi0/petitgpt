@@ -10,13 +10,14 @@ nothing an executor needs is delegated to an untracked file.
 
 ## Supersession
 
-V2.3 supersedes the **optimizer decision** of P-PILOT-CONTRACT-V2.2 and nothing else. V2.2 froze
-AdamW and required an optimizer-family comparison; the owner has since frozen the family
-directly. Every non-optimizer V2.2 freeze is retained and restated below, so this document alone
-governs execution.
+V2.3 supersedes two P-PILOT-CONTRACT-V2.2 decisions: the optimizer-family decision and the
+permanent training-GPU product choice. The owner froze Muon directly and now defers the exact
+NVIDIA CUDA device to a future pilot authorization. Every other V2.2 freeze is retained and
+restated below, so this document alone governs execution.
 
     OWNER_OPTIMIZER_VERDICT               FREEZE_MUON_DIRECTLY
     optimizer-family comparison required  no
+    TRAINING_GPU_MODEL                     DEFERRED_UNTIL_OWNER_PILOT_AUTHORIZATION
 
 Not reopened: model architecture, tokenizer, Stage-I data, Stage-M data, Stage-A→Stage-B order,
 the effective-batch decision, the production warmup decision, the continuous WSD family.
@@ -28,13 +29,29 @@ walks the AST of both modules to prove it.
 ## Authorization
 
 No pilot is authorized here. The owner publishes a separate manifest
-(`petitgpt-pilot-authorization-v2.3`) binding the exact reviewed HEAD after independent review.
-**No tracked code change is required for that transition** — `validate_authorization()` already
-consumes that schema, and `validate_execution_artifacts()` is the single gate every training
+(`petitgpt-pilot-authorization-v2.3`) binding the exact reviewed HEAD and selected training
+runtime after independent review. The tracked template remains `NOT_AUTHORIZED` and carries
+`training_hardware: null`; it selects no GPU and grants no hardware authority. **No tracked code
+change is required for a later owner authorization** — `validate_authorization()` already
+consumes the schema, and `validate_execution_artifacts()` is the single gate every training
 entry point passes through.
+
+A future `AUTHORIZED` manifest must populate `training_hardware` with:
+
+    expected_gpu_device_name                    exact torch.cuda device-name string
+    expected_cuda_device_count                  exactly 1 (after visibility selection)
+    cuda_required                               true
+    bf16_required                               true
+    expected_base_runtime_fingerprint_sha256    owner-reviewed observed fingerprint SHA-256
+
+The expected name is authorization data, not a permanent allowlist or a generic string rule.
+The fingerprint digest binds the observed name, total VRAM, CUDA capability, NVIDIA driver and
+CUDA runtime, torch version/build, Python identity, and the remaining base-runtime fields.
 
 Publishing order for an authorized run:
 
+    0. on the selected runtime, review `pilot_runner_v2_3.py fingerprint` and bind its identity
+       and SHA-256 in the owner authorization
     1. python pretrain/pilot_runner_v2_3.py write-index-manifest --out <dir>/PILOT_INDICES.json
     2. record that file's SHA-256 as pilot_index_manifest_file_sha256 in the manifest
     3. python pretrain/pilot_runner_v2_3.py run --phase MB \
@@ -222,6 +239,12 @@ Stage N must later verify exact LR values at the warmup boundary, decay start, t
 optimizer update, and the mathematical endpoint. All stage boundaries and total-step integers
 come only from the canonical planner output.
 
+Stage N must also validate the actual production runtime intended for Stage O. No exact GPU
+product is frozen for Stage N/O here. If that production hardware/runtime differs incompatibly
+from the runtime whose Phase-MB geometry was frozen, the hardware-dependent MB result may not be
+silently reused; continuation requires a new owner decision. Designing or executing that future
+migration workflow is outside this amendment.
+
 ## 8. Token budget and session semantics
 
     Phase MB ceiling                       105,000,000   expected maximum 104,857,600
@@ -282,13 +305,29 @@ masquerade as complete evidence.
 
 ## 9. Runtime gates
 
-    required GPU     exactly "NVIDIA GeForce RTX 4090", VRAM in the 24GB class (22000-26000 MiB),
-                     CUDA available, bf16 supported
-    NumPy            exactly 2.2.6 (see requirements-pilot-v2_3.txt)
+    TRAINING_GPU_MODEL              DEFERRED_UNTIL_OWNER_PILOT_AUTHORIZATION
+    selected CUDA device count      exactly 1
+    CUDA available                  required
+    bf16 supported                  required
+    selected device identity        exact match to the future owner authorization
+    base runtime fingerprint        exact match to the future owner authorization
+    NumPy                            exactly 2.2.6 (see requirements-pilot-v2_3.txt)
 
-A substring check is explicitly insufficient: an "RTX 4090 Laptop GPU" contains `4090` and is
-refused. The RTX 4000 Ada has `TRAINING_AUTHORITY=NONE`; non-training tooling and tests run
-normally on it.
+No GPU product name or VRAM class is a permanent V2.3 allow/deny rule. An exact runtime device
+name gains authority only when the owner selected that identity and bound the complete observed
+fingerprint in an `AUTHORIZED` manifest. The runtime must record positive total VRAM, CUDA
+capability, driver/CUDA versions, torch version/build, and Python/runtime identity. A missing or
+malformed field, zero or multiple visible CUDA devices, unavailable CUDA, unsupported bf16,
+identity mismatch, or fingerprint mismatch refuses execution.
+
+The current machine has no authority to run a real pilot because this contract publishes no
+owner `AUTHORIZED` manifest and the owner has not selected it as the pilot runtime. Non-training
+tooling and tests may continue on it.
+
+Phase MB remains the hardware calibration on the selected actual GPU. Its frozen ten-candidate
+grid, eligibility rules and tie ladder determine `FROZEN_MICRO_BSZ`, `FROZEN_GRAD_ACCUM` and
+`FROZEN_COMPILE` from measured throughput and peak VRAM. No GPU model implies eligibility, and
+no eligible candidate yields `PHASE_MB_ABORT`.
 
 ## 10. Output and checkpoint isolation
 
@@ -306,11 +345,19 @@ new authorized root, never resumed.
 
 ## 11. Fingerprint separation
 
-The base runtime fingerprint binds GPU identity and VRAM, driver, CUDA runtime, torch
-version/build, Python version and executable, NumPy and tokenizers versions, container template,
-repository branch/HEAD and worktree status, the contract SHA and the execution bundle SHA. It
-carries **no** per-run configuration: `compile`, `micro_bsz`, `grad_accum`, `peak_lr`, `seed` and
-`phase` live in each run_meta instead, and the module asserts their absence.
+The base runtime fingerprint records the exact selected device index and `torch.cuda` name,
+visible device count, total VRAM in bytes/MiB, CUDA capability, driver and CUDA runtime, torch
+version/build, Python version/implementation/executable, NumPy and tokenizers versions, platform
+and container template, repository branch/HEAD and worktree status, the contract SHA and the
+execution bundle SHA. The owner authorization binds its SHA-256. `SESSION.json` and the Phase-MB
+report record both the full fingerprint and its SHA.
+
+It carries **no** per-run configuration: `compile`, `micro_bsz`, `grad_accum`, `peak_lr`, `seed`
+and `phase` live in each run_meta instead, and the module asserts their absence. Within a
+`FULL_V2_3_PILOT`, the Phase-MB and Phase-Muon-LR runtime fingerprint must remain exactly equal.
+Before LR publishes any plan, the MB report fingerprint is self-hashed, compared with its bound
+SHA and VRAM, and compared in full with the freshly validated LR runtime. An incompatible change
+aborts the session; the executor never migrates the frozen MB geometry automatically.
 
 ## 12. Validation at execution (R3)
 
@@ -327,7 +374,7 @@ output_dir, requested_phase)` re-derives the artifact-bytes layer:
     pilot indices               regenerated and compared list by list
     accepted Stage A / Stage B  opened through the manifest-required canonical loader
     authorized output root      validated before any write
-    runtime fingerprint         RTX 4090 gate + exact NumPy
+    runtime fingerprint         owner hardware binding + complete observed identity + exact NumPy
     token-ledger identity       eight fields, revalidated on every lock-held operation
     requested phase and scope   PHASE_MB_ONLY may never execute Phase LR
 
@@ -365,14 +412,16 @@ sidecar whenever it is read.
 
 `SESSION.json` binds the authorization SHA, the contract SHA, HEAD and branch, the execution
 bundle SHA, the pilot-index-manifest FILE SHA, the serialized-index-lists digest, both accepted
-release identities, the runtime-fingerprint SHA, the authorized output root, the ledger identity
-and relpath, the effective ceilings, the scope and the session ID. The session ID itself is
+release identities, the full base runtime fingerprint and its SHA, the authorized output root,
+the ledger identity and relpath, the effective ceilings, the scope and the session ID. The
+session ID itself is
 `sha256(authorization SHA, scope, output root, contract SHA, bundle SHA)`.
 
 `PHASE_MB_PLAN` binds the SESSION SHA and **exactly the ten frozen candidate specs**, each by
 relative path and SHA-256. `PHASE_MB_REPORT` binds the SESSION SHA, the PHASE_MB_PLAN SHA, all
-ten validated candidate results and terminal outcomes, the selection trace and the selected
-`FROZEN_MICRO_BSZ` / `FROZEN_GRAD_ACCUM` / `FROZEN_COMPILE`.
+ten validated candidate results and terminal outcomes, the selection trace, measured physical
+VRAM, the full base runtime fingerprint and its SHA, and the selected `FROZEN_MICRO_BSZ` /
+`FROZEN_GRAD_ACCUM` / `FROZEN_COMPILE`.
 
 For `FULL_V2_3_PILOT`, `PHASE_LR_INITIAL_PLAN` binds the SESSION SHA, the PHASE_MB_REPORT SHA,
 the frozen MB geometry and exactly the seed-1 initial LR candidate specs. A confirmation plan
@@ -465,7 +514,10 @@ built-in error that would look like an ordinary ineligible candidate.
 Phase-LR geometry — the `run` subcommand has no `--micro-bsz` and no `--compile` option. Before
 Phase LR starts, the report is re-hashed against its sidecar, revalidated against every session
 binding and against its own phase plan, checked for a complete ten-candidate grid, recomputed
-candidate by candidate, and its recorded selection is re-derived and compared.
+candidate by candidate, and its recorded selection is re-derived and compared. Its full runtime
+fingerprint is also self-hashed and required to equal the freshly validated Phase-LR runtime;
+its recorded physical VRAM must equal that fingerprint. Any mismatch aborts before an LR plan or
+candidate can start.
 
 ### Independent recomputation
 

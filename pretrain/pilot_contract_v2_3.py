@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """P-PILOT-CONTRACT-V2.3: Muon-frozen pilot authority, as executable contract.
 
-V2.3 supersedes the V2.2 **optimizer** decision. The owner froze the optimizer family directly
-(``FREEZE_MUON_DIRECTLY``); no AdamW-vs-Muon comparison is run. Everything V2.2 froze outside the
-optimizer -- effective batch, Phase-MB grid shape, deterministic pilot indices, production warmup,
-the continuous WSD family, the accepted data -- is retained unchanged and re-stated here so this
-contract is sufficient by itself for execution.
+V2.3 supersedes the V2.2 optimizer decision and permanent training-GPU product choice. The
+owner froze the optimizer family directly (``FREEZE_MUON_DIRECTLY``) and defers the exact NVIDIA
+CUDA device to a future authorization. Effective batch, Phase-MB grid shape, deterministic pilot
+indices, production warmup, the continuous WSD family and accepted data remain unchanged and are
+re-stated here so this contract is sufficient by itself for execution.
 
 This module is the machine-readable half of ``docs/PILOT_CONTRACT_V2_3.md``. It is pure: frozen
 constants, schedules, eligibility predicates, selection ladders, the token ledger arithmetic, the
@@ -42,9 +42,9 @@ PILOT_CHECKPOINT_KIND = "PILOT_V2_3"
 
 SUPERSEDES = MappingProxyType({
     "P-PILOT-CONTRACT-V2.2": (
-        "optimizer decision only: V2.2 froze adamw and required an optimizer-family "
-        "comparison; V2.3 freezes muon directly and removes that comparison. Every "
-        "non-optimizer V2.2 freeze is retained and restated here."
+        "optimizer and permanent GPU-product decisions: V2.3 freezes muon directly, removes "
+        "the optimizer-family comparison, and defers exact NVIDIA CUDA hardware selection to "
+        "future owner authorization. Every other V2.2 freeze is retained and restated here."
     ),
 })
 RETAINED_FROM_V2_2 = (
@@ -1126,26 +1126,233 @@ require(
 
 # --------------------------------------------------------------------- runtime gates
 
-REQUIRED_GPU_NAME_EXACT = "NVIDIA GeForce RTX 4090"
-REQUIRED_GPU_MIN_VRAM_MIB = 22000
-REQUIRED_GPU_MAX_VRAM_MIB = 26000
+TRAINING_GPU_MODEL = "DEFERRED_UNTIL_OWNER_PILOT_AUTHORIZATION"
+TRAINING_HARDWARE_BINDING_FIELD = "training_hardware"
+TRAINING_HARDWARE_REQUIRED_FIELDS = (
+    "expected_gpu_device_name",
+    "expected_cuda_device_count",
+    "cuda_required",
+    "bf16_required",
+    "expected_base_runtime_fingerprint_sha256",
+)
+REQUIRED_TRAINING_DEVICE_COUNT = 1
 
 
-def check_training_authority(gpu: Mapping[str, Any]) -> dict[str, Any]:
-    """The exact RTX 4090 gate. A substring check alone is explicitly insufficient."""
+def _is_lower_hex_sha256(value: Any) -> bool:
+    return (
+        isinstance(value, str) and len(value) == 64 and all(c in "0123456789abcdef" for c in value)
+    )
+
+
+def check_training_hardware_binding(
+    hardware_binding: Mapping[str, Any] | None,
+) -> list[str]:
+    """Validate the owner-populated hardware portion of an AUTHORIZED manifest."""
+    if not isinstance(hardware_binding, Mapping):
+        return ["training_hardware_binding_missing_or_malformed"]
     failures: list[str] = []
-    name = gpu.get("name")
-    if not isinstance(name, str) or name.strip() != REQUIRED_GPU_NAME_EXACT:
-        failures.append(f"gpu_name_not_exactly_{REQUIRED_GPU_NAME_EXACT!r}")
-    vram = gpu.get("total_vram_mib")
-    if not isinstance(vram, int) or not (
-        REQUIRED_GPU_MIN_VRAM_MIB <= vram <= REQUIRED_GPU_MAX_VRAM_MIB
+    missing = [f for f in TRAINING_HARDWARE_REQUIRED_FIELDS if f not in hardware_binding]
+    if missing:
+        failures.append(f"training_hardware_binding_missing_fields:{sorted(missing)}")
+    expected_name = hardware_binding.get("expected_gpu_device_name")
+    if not isinstance(expected_name, str) or not expected_name.strip():
+        failures.append("expected_gpu_device_name_invalid")
+    expected_device_count = hardware_binding.get("expected_cuda_device_count")
+    if (
+        not isinstance(expected_device_count, int)
+        or isinstance(expected_device_count, bool)
+        or expected_device_count != REQUIRED_TRAINING_DEVICE_COUNT
     ):
-        failures.append("vram_not_24gb_class")
-    if not gpu.get("cuda_available"):
+        failures.append("expected_cuda_device_count_must_equal_1")
+    if hardware_binding.get("cuda_required") is not True:
+        failures.append("cuda_requirement_must_be_true")
+    if hardware_binding.get("bf16_required") is not True:
+        failures.append("bf16_requirement_must_be_true")
+    expected_fingerprint = hardware_binding.get("expected_base_runtime_fingerprint_sha256")
+    if not _is_lower_hex_sha256(expected_fingerprint):
+        failures.append("expected_base_runtime_fingerprint_sha256_invalid")
+    return failures
+
+
+def check_training_authority(
+    runtime_fingerprint: Mapping[str, Any], hardware_binding: Mapping[str, Any] | None
+) -> dict[str, Any]:
+    """Bind a complete observed runtime to the exact hardware selected by the owner.
+
+    Product names are not policy. The expected name is authorization data and is compared with
+    the exact string returned by ``torch.cuda.get_device_name``. The fingerprint SHA also binds
+    VRAM, capability, driver/CUDA, torch, Python and repository/runtime identity, so no device
+    becomes authoritative merely by satisfying a generic name test.
+    """
+    failures = check_training_hardware_binding(hardware_binding)
+    binding: Mapping[str, Any] = hardware_binding if isinstance(hardware_binding, Mapping) else {}
+    if not isinstance(runtime_fingerprint, Mapping):
+        failures.append("base_runtime_fingerprint_malformed")
+        runtime: Mapping[str, Any] = {}
+    else:
+        runtime = runtime_fingerprint
+
+    required_runtime_fields = (
+        "schema_version",
+        "contract_version",
+        "gpu",
+        "torch_version",
+        "torch_build",
+        "numpy_version",
+        "required_numpy_version",
+        "tokenizers_version",
+        "python_version",
+        "python_executable",
+        "python_implementation",
+        "platform",
+        "container_template",
+        "repository",
+        "contract_sha256",
+        "execution_implementation_bundle_sha256",
+        "fingerprint_sha256",
+    )
+    missing_runtime = [f for f in required_runtime_fields if f not in runtime]
+    if missing_runtime:
+        failures.append(f"base_runtime_fingerprint_missing_fields:{missing_runtime}")
+    fingerprint_payload = dict(runtime)
+    recorded_fingerprint = fingerprint_payload.pop("fingerprint_sha256", None)
+    try:
+        recomputed_fingerprint = hashlib.sha256(
+            canonical_json_bytes(fingerprint_payload)
+        ).hexdigest()
+    except (TypeError, ValueError):
+        recomputed_fingerprint = None
+    if recorded_fingerprint != recomputed_fingerprint:
+        failures.append("base_runtime_fingerprint_self_hash_mismatch")
+    expected_fingerprint = binding.get("expected_base_runtime_fingerprint_sha256")
+    if recorded_fingerprint != expected_fingerprint:
+        failures.append("base_runtime_fingerprint_sha256_mismatch")
+
+    if runtime.get("schema_version") != BASE_FINGERPRINT_SCHEMA:
+        failures.append("base_runtime_fingerprint_schema_mismatch")
+    if runtime.get("contract_version") != CONTRACT_VERSION:
+        failures.append("base_runtime_fingerprint_contract_version_mismatch")
+
+    for field in (
+        "torch_version",
+        "tokenizers_version",
+        "python_version",
+        "python_executable",
+        "python_implementation",
+        "platform",
+    ):
+        if not isinstance(runtime.get(field), str) or not runtime.get(field):
+            failures.append(f"base_runtime_fingerprint_{field}_invalid")
+    torch_build = runtime.get("torch_build")
+    if not isinstance(torch_build, Mapping):
+        failures.append("base_runtime_fingerprint_torch_build_invalid")
+        torch_cuda = None
+    else:
+        torch_cuda = torch_build.get("cuda")
+        torch_git_version = torch_build.get("git_version")
+        if (
+            not isinstance(torch_cuda, str)
+            or not torch_cuda
+            or not isinstance(torch_git_version, str)
+            or not torch_git_version
+        ):
+            failures.append("base_runtime_fingerprint_torch_build_invalid")
+
+    if runtime.get("numpy_version") != REQUIRED_NUMPY_VERSION:
+        failures.append("base_runtime_fingerprint_numpy_version_mismatch")
+    if runtime.get("required_numpy_version") != REQUIRED_NUMPY_VERSION:
+        failures.append("base_runtime_fingerprint_required_numpy_version_mismatch")
+    container_template = runtime.get("container_template")
+    if container_template is not None and (
+        not isinstance(container_template, str) or not container_template
+    ):
+        failures.append("base_runtime_fingerprint_container_template_invalid")
+
+    repository = runtime.get("repository")
+    if not isinstance(repository, Mapping):
+        failures.append("base_runtime_fingerprint_repository_malformed")
+        repository = {}
+    required_repository_fields = (
+        "branch",
+        "head",
+        "tracked_clean",
+        "allowed_untracked_sha256",
+        "allowed_untracked_unchanged",
+        "unexpected_untracked",
+    )
+    missing_repository = [f for f in required_repository_fields if f not in repository]
+    if missing_repository:
+        failures.append(f"base_runtime_fingerprint_repository_missing_fields:{missing_repository}")
+    for field in ("branch", "head"):
+        if not isinstance(repository.get(field), str) or not repository.get(field):
+            failures.append(f"base_runtime_fingerprint_repository_{field}_invalid")
+    if not isinstance(repository.get("tracked_clean"), bool):
+        failures.append("base_runtime_fingerprint_repository_tracked_clean_invalid")
+    if not _is_lower_hex_sha256(repository.get("allowed_untracked_sha256")):
+        failures.append("base_runtime_fingerprint_allowed_untracked_sha256_invalid")
+    if not isinstance(repository.get("allowed_untracked_unchanged"), bool):
+        failures.append("base_runtime_fingerprint_allowed_untracked_unchanged_invalid")
+    unexpected_untracked = repository.get("unexpected_untracked")
+    if not isinstance(unexpected_untracked, list) or any(
+        not isinstance(path, str) or not path for path in unexpected_untracked
+    ):
+        failures.append("base_runtime_fingerprint_unexpected_untracked_invalid")
+
+    if not _is_lower_hex_sha256(runtime.get("contract_sha256")):
+        failures.append("base_runtime_fingerprint_contract_sha256_invalid")
+    if not _is_lower_hex_sha256(runtime.get("execution_implementation_bundle_sha256")):
+        failures.append("base_runtime_fingerprint_execution_bundle_sha256_invalid")
+
+    gpu = runtime.get("gpu")
+    if not isinstance(gpu, Mapping):
+        failures.append("base_runtime_fingerprint_gpu_malformed")
+        gpu = {}
+    if gpu.get("cuda_available") is not True:
         failures.append("cuda_unavailable")
-    if not gpu.get("bf16_supported"):
+    device_count = gpu.get("device_count")
+    if (
+        not isinstance(device_count, int)
+        or isinstance(device_count, bool)
+        or device_count != REQUIRED_TRAINING_DEVICE_COUNT
+    ):
+        failures.append("cuda_device_count_not_exactly_1")
+    selected_device_index = gpu.get("selected_device_index")
+    if (
+        not isinstance(selected_device_index, int)
+        or isinstance(selected_device_index, bool)
+        or selected_device_index != 0
+    ):
+        failures.append("selected_cuda_device_index_not_0")
+    observed_name = gpu.get("name")
+    expected_name = binding.get("expected_gpu_device_name")
+    if not isinstance(observed_name, str) or not observed_name.strip():
+        failures.append("gpu_device_name_missing")
+    elif (
+        isinstance(expected_name, str) and expected_name.strip() and observed_name != expected_name
+    ):
+        failures.append("gpu_device_identity_mismatch")
+    total_vram = gpu.get("total_vram_bytes")
+    total_vram_mib = gpu.get("total_vram_mib")
+    if not isinstance(total_vram, int) or isinstance(total_vram, bool) or total_vram <= 0:
+        failures.append("total_vram_missing_or_invalid")
+    if (
+        not isinstance(total_vram_mib, int)
+        or isinstance(total_vram_mib, bool)
+        or total_vram_mib <= 0
+        or (isinstance(total_vram, int) and total_vram_mib != total_vram // (1024 * 1024))
+    ):
+        failures.append("total_vram_mib_missing_or_inconsistent")
+    if not isinstance(gpu.get("capability"), str) or not gpu.get("capability"):
+        failures.append("cuda_capability_missing")
+    if not isinstance(gpu.get("driver"), str) or not gpu.get("driver"):
+        failures.append("driver_version_missing")
+    if not isinstance(gpu.get("cuda_runtime"), str) or not gpu.get("cuda_runtime"):
+        failures.append("cuda_runtime_version_missing")
+    elif torch_cuda is not None and gpu.get("cuda_runtime") != torch_cuda:
+        failures.append("cuda_runtime_torch_build_mismatch")
+    if gpu.get("bf16_supported") is not True:
         failures.append("bf16_unsupported")
+    failures = list(dict.fromkeys(failures))
     return {
         "training_authority": "GRANTED" if not failures else "NONE",
         "failures": failures,
@@ -1153,8 +1360,10 @@ def check_training_authority(gpu: Mapping[str, Any]) -> dict[str, Any]:
     }
 
 
-def require_training_authority(gpu: Mapping[str, Any]) -> None:
-    result = check_training_authority(gpu)
+def require_training_authority(
+    runtime_fingerprint: Mapping[str, Any], hardware_binding: Mapping[str, Any] | None
+) -> None:
+    result = check_training_authority(runtime_fingerprint, hardware_binding)
     require(
         result["granted"],
         f"GPU has no training authority under {CONTRACT_VERSION}: " + ", ".join(result["failures"]),
@@ -1218,6 +1427,7 @@ AUTHORIZATION_REQUIRED_FIELDS = (
     "accepted_stage_b_meta_sha256",
     "allowed_output_root",
     "pilot_trained_token_ceiling",
+    TRAINING_HARDWARE_BINDING_FIELD,
 )
 
 
@@ -1239,12 +1449,16 @@ def authorization_template() -> dict[str, Any]:
         "accepted_stage_b_meta_sha256": None,
         "allowed_output_root": None,
         "pilot_trained_token_ceiling": GLOBAL_PILOT_TOKEN_CEILING,
+        # Intentionally absent as authority: only a future owner AUTHORIZED manifest may bind
+        # a selected runtime. The template chooses no GPU product and authorizes no hardware.
+        TRAINING_HARDWARE_BINDING_FIELD: None,
         "authorized_by": None,
         "authorized_at": None,
         "note": (
             "The owner publishes a separate AUTHORIZED manifest binding the exact reviewed "
-            "HEAD after independent review. No tracked code change is required for that "
-            "transition: validate_authorization() below consumes this same schema."
+            "HEAD and owner-selected training hardware after independent review. No tracked "
+            "code change is required for that transition: validate_authorization() below "
+            "consumes this same schema."
         ),
     }
 
@@ -1291,6 +1505,28 @@ def validate_authorization(
     ceiling = manifest.get("pilot_trained_token_ceiling")
     if not isinstance(ceiling, int) or ceiling > GLOBAL_PILOT_TOKEN_CEILING:
         failures.append("token_ceiling_invalid_or_above_contract")
+
+    hardware_binding = manifest.get(TRAINING_HARDWARE_BINDING_FIELD)
+    runtime_fingerprint = observed.get("base_runtime_fingerprint")
+    if runtime_fingerprint is None:
+        failures.append("base_runtime_fingerprint_missing")
+        failures.extend(check_training_hardware_binding(hardware_binding))
+    else:
+        failures.extend(check_training_authority(runtime_fingerprint, hardware_binding)["failures"])
+        runtime_view = runtime_fingerprint if isinstance(runtime_fingerprint, Mapping) else {}
+        runtime_repository = runtime_view.get("repository", {})
+        for runtime_field, observed_key in (
+            ("contract_sha256", "contract_sha256"),
+            ("execution_implementation_bundle_sha256", "execution_bundle_sha256"),
+        ):
+            if runtime_view.get(runtime_field) != observed.get(observed_key):
+                failures.append(f"base_runtime_fingerprint_{runtime_field}_mismatch")
+        for runtime_field, observed_key in (("branch", "branch"), ("head", "head")):
+            if not isinstance(runtime_repository, Mapping) or runtime_repository.get(
+                runtime_field
+            ) != observed.get(observed_key):
+                failures.append(f"base_runtime_fingerprint_repository_{runtime_field}_mismatch")
+    failures = list(dict.fromkeys(failures))
     return {
         "authorized": not failures,
         "failures": failures,
@@ -1423,10 +1659,24 @@ def contract_document() -> dict[str, Any]:
             "mandatory_precondition_for_first_training_update": True,
         },
         "runtime_gate": {
-            "required_gpu_name_exact": REQUIRED_GPU_NAME_EXACT,
-            "required_vram_mib_range": [REQUIRED_GPU_MIN_VRAM_MIB, REQUIRED_GPU_MAX_VRAM_MIB],
-            "substring_check_insufficient": True,
+            "TRAINING_GPU_MODEL": TRAINING_GPU_MODEL,
+            "required_training_device_count": REQUIRED_TRAINING_DEVICE_COUNT,
+            "gpu_identity_authority": (
+                "exact torch.cuda device-name selected in the future owner authorization"
+            ),
+            "cuda_required": True,
+            "bf16_required": True,
+            "phase_mb_is_hardware_calibration": True,
             "required_numpy_version": REQUIRED_NUMPY_VERSION,
+            "future_stage_n_o": {
+                "stage_n_validates_runtime_intended_for_stage_o": True,
+                "exact_gpu_product_frozen_now": False,
+                "incompatible_production_runtime_or_mb_geometry_reuse_requires_owner_decision": (
+                    True
+                ),
+                "automatic_mb_geometry_migration": False,
+                "migration_workflow_in_scope": False,
+            },
         },
         "checkpoint_isolation": {
             k: (list(v) if isinstance(v, tuple) else v) for k, v in CHECKPOINT_ISOLATION.items()
@@ -1435,6 +1685,8 @@ def contract_document() -> dict[str, Any]:
             "schema": AUTHORIZATION_SCHEMA,
             "allowed_scopes": list(ALLOWED_SCOPES),
             "required_fields": list(AUTHORIZATION_REQUIRED_FIELDS),
+            "training_hardware_required_fields": list(TRAINING_HARDWARE_REQUIRED_FIELDS),
+            "not_authorized_template_selects_hardware": False,
         },
     }
 

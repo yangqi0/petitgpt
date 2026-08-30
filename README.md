@@ -12,7 +12,7 @@ The project covers:
 - DPO (Direct Preference Optimization) post-training,
 - GRPO (Group Relative Policy Optimization) online RL post-training.
 
-The canonical 32k-vocabulary dense model has exactly **124,635,456 parameters** (about **125M**; the MobileLLM/SmolLM2-style deep-thin GQA shape adopted 2026-08-15 — the historical runs described below used the earlier 16-layer/768-dim MHA config with 133,128,960 parameters). The entire training process is designed for a single RTX 4090 GPU. A **Mixture-of-Experts (MoE)** variant (`src/model_moe.py`) and a **Muon** optimizer (`src/optim.py`, now the default) have also been added — see [Section 3](#3-model-overview).
+The canonical 32k-vocabulary dense model has exactly **124,635,456 parameters** (about **125M**; the MobileLLM/SmolLM2-style deep-thin GQA shape adopted 2026-08-15 — the historical runs described below used the earlier 16-layer/768-dim MHA config with 133,128,960 parameters). The training process targets one owner-selected NVIDIA CUDA GPU; the pilot authorization binds the actual hardware and runtime. A **Mixture-of-Experts (MoE)** variant (`src/model_moe.py`) and a **Muon** optimizer (`src/optim.py`, now the default) have also been added — see [Section 3](#3-model-overview).
 
 ---
 
