@@ -1133,6 +1133,8 @@ def _bound_lr_result(candidate, session, plan, base_score, **over):
     weight = 1024.0
     numerator = float(base_score) * weight
     loss = numerator / weight
+    losses_by_update = {str(update): 3.0 for update in range(1, C.LR_RUN_UPDATES + 1)}
+    divergence_detail = C.sustained_divergence({int(k): v for k, v in losses_by_update.items()})
     r = _bound(
         session,
         plan,
@@ -1146,6 +1148,7 @@ def _bound_lr_result(candidate, session, plan, base_score, **over):
             "grad_accum": candidate["grad_accum"],
             "compile": candidate["compile"],
             "completed_updates": 200,
+            "losses_by_update": losses_by_update,
             "all_losses_finite": True,
             "all_grad_norms_finite": True,
             "all_parameters_finite": True,
@@ -1161,6 +1164,7 @@ def _bound_lr_result(candidate, session, plan, base_score, **over):
             "eval_loss_stage_b": loss,
             "score": C.lr_score(loss, loss),
             "sustained_divergence": False,
+            "divergence_detail": divergence_detail,
             "output_dir": candidate["output_dir"],
         },
     )
@@ -1198,7 +1202,7 @@ def _ineligible_mb_result(candidate, session, plan, *, message="simulated failur
 
 
 def _ineligible_lr_result(candidate, session, plan, *, message="simulated failure", oom=False):
-    return _bound_lr_result(
+    result = _bound_lr_result(
         candidate,
         session,
         plan,
@@ -1228,6 +1232,9 @@ def _ineligible_lr_result(candidate, session, plan, *, message="simulated failur
         oom=oom,
         uncontrolled_exception=not oom,
     )
+    result.pop("losses_by_update")
+    result.pop("divergence_detail")
+    return result
 
 
 def _write_result(candidate, session, plan, payload, meta_over=None):

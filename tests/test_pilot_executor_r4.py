@@ -515,6 +515,8 @@ def _synthetic_run_meta(candidate, session, plan):
 def _synthetic_lr_result(candidate, session, plan, *, eligible):
     loss = 3.0
     weight = 1024.0
+    losses_by_update = {str(update): loss for update in range(1, C.LR_RUN_UPDATES + 1)}
+    divergence_detail = C.sustained_divergence({int(k): v for k, v in losses_by_update.items()})
     result = {
         "schema_version": R.CANDIDATE_RESULT_SCHEMA,
         "contract_version": C.CONTRACT_VERSION,
@@ -531,6 +533,7 @@ def _synthetic_lr_result(candidate, session, plan, *, eligible):
         "session_sha256": session.session_sha256,
         "ledger_identity": dict(session.ledger.identity),
         "completed_updates": candidate["updates"] if eligible else 0,
+        "losses_by_update": losses_by_update,
         "all_losses_finite": True,
         "all_grad_norms_finite": True,
         "all_parameters_finite": True,
@@ -546,6 +549,7 @@ def _synthetic_lr_result(candidate, session, plan, *, eligible):
         "eval_loss_stage_b": loss,
         "score": loss,
         "sustained_divergence": False,
+        "divergence_detail": divergence_detail,
         "compile_evidence": {
             "compile_requested": False,
             "forward_invocations_match_geometry": True,

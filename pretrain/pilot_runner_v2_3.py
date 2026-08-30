@@ -105,6 +105,7 @@ from pretrain.pilot_contract_v2_3 import (  # noqa: E402
     require_exact_mb_timing_records,
     require_numpy_version,
     require_training_authority,
+    sustained_divergence,
     train_order,
     validate_authorization,
     verify_optimizer_state,
@@ -1409,7 +1410,12 @@ def write_immutable_artifact(path: Path, payload: Mapping[str, Any]) -> str:
     return digest
 
 
-def read_immutable_artifact(path: Path, *, schema_version: str) -> tuple[dict[str, Any], str]:
+def read_immutable_artifact(
+    path: Path,
+    *,
+    schema_version: str,
+    require_canonical_bytes: bool = False,
+) -> tuple[dict[str, Any], str]:
     """Read a published artifact, re-hash its bytes and check the sidecar agrees."""
     path = Path(path)
     if not path.is_file():
@@ -1433,6 +1439,15 @@ def read_immutable_artifact(path: Path, *, schema_version: str) -> tuple[dict[st
             f"{path.name} SHA-256 {digest} does not match its published sidecar {recorded}"
         )
     doc = load_json_artifact(body, label=str(path))
+    if require_canonical_bytes:
+        try:
+            canonical = canonical_json_bytes(doc)
+        except (TypeError, ValueError) as exc:
+            raise BindingFailure(f"{path.name} is not canonically serializable: {exc}") from exc
+        if body != canonical:
+            raise BindingFailure(
+                f"{path.name} bytes are not canonical JSON; duplicate keys are forbidden"
+            )
     if doc.get("schema_version") != schema_version:
         raise BindingFailure(
             f"{path.name} schema {doc.get('schema_version')!r} != expected {schema_version!r}"
@@ -3257,6 +3272,135 @@ def verify_recomputed_lr_result(result: Mapping[str, Any]) -> dict[str, Any]:
     }
 
 
+def verify_recomputed_lr_loss_result(result: Mapping[str, Any]) -> dict[str, Any]:
+    """R5: validate the complete raw LR loss series and recompute its stored summaries."""
+    cid = result.get("candidate_id")
+    raw_losses = result.get("losses_by_update")
+    if not isinstance(raw_losses, Mapping):
+        raise BindingFailure(
+            f"LR candidate {cid!r} losses_by_update must be a JSON object with one loss for "
+            f"every update 1..{LR_RUN_UPDATES}"
+        )
+
+    parsed: list[tuple[str, int, Any]] = []
+    malformed_keys: list[Any] = []
+    for raw_update, value in raw_losses.items():
+        if (
+            not isinstance(raw_update, str)
+            or not raw_update.isascii()
+            or not raw_update.isdecimal()
+        ):
+            malformed_keys.append(raw_update)
+            continue
+        try:
+            update = int(raw_update)
+        except (OverflowError, ValueError):
+            malformed_keys.append(raw_update)
+            continue
+        parsed.append((raw_update, update, value))
+    if malformed_keys:
+        raise BindingFailure(
+            f"LR candidate {cid!r} losses_by_update has malformed update key(s) {malformed_keys!r}"
+        )
+
+    update_counts: dict[int, int] = {}
+    for _, update, _ in parsed:
+        update_counts[update] = update_counts.get(update, 0) + 1
+    duplicates = sorted(update for update, count in update_counts.items() if count != 1)
+    if duplicates:
+        raise BindingFailure(
+            f"LR candidate {cid!r} losses_by_update has duplicate update(s) {duplicates}"
+        )
+
+    noncanonical_keys = [raw for raw, update, _ in parsed if raw != str(update)]
+    if noncanonical_keys:
+        raise BindingFailure(
+            f"LR candidate {cid!r} losses_by_update has non-canonical update key(s) "
+            f"{noncanonical_keys!r}"
+        )
+
+    expected_updates = set(range(1, LR_RUN_UPDATES + 1))
+    observed_updates = set(update_counts)
+    missing = sorted(expected_updates - observed_updates)
+    extra = sorted(observed_updates - expected_updates)
+    if missing or extra:
+        raise BindingFailure(
+            f"LR candidate {cid!r} losses_by_update must contain exactly updates "
+            f"1..{LR_RUN_UPDATES}; missing={missing}, extra={extra}"
+        )
+
+    losses: dict[int, float] = {}
+    invalid_values: list[int] = []
+    for _, update, value in parsed:
+        if not isinstance(value, (int, float)) or isinstance(value, bool):
+            invalid_values.append(update)
+            continue
+        try:
+            losses[update] = float(value)
+        except (OverflowError, ValueError):
+            invalid_values.append(update)
+    if invalid_values:
+        raise BindingFailure(
+            f"LR candidate {cid!r} losses_by_update has non-numeric value(s) at update(s) "
+            f"{sorted(invalid_values)}"
+        )
+
+    recomputed_all_losses_finite = all(math.isfinite(value) for value in losses.values())
+    if not recomputed_all_losses_finite:
+        non_finite_updates = sorted(
+            update for update, value in losses.items() if not math.isfinite(value)
+        )
+        raise BindingFailure(
+            f"LR candidate {cid!r} losses_by_update has non-finite value(s) at update(s) "
+            f"{non_finite_updates}"
+        )
+
+    recomputed_divergence_detail = sustained_divergence(losses)
+    recomputed_sustained_divergence = bool(recomputed_divergence_detail["diverged"])
+
+    stored_all_losses_finite = result.get("all_losses_finite")
+    if (
+        not isinstance(stored_all_losses_finite, bool)
+        or stored_all_losses_finite is not recomputed_all_losses_finite
+    ):
+        raise BindingFailure(
+            f"LR candidate {cid!r}: stored all_losses_finite "
+            f"{stored_all_losses_finite!r} disagrees with the raw-loss recomputation "
+            f"{recomputed_all_losses_finite!r}"
+        )
+    stored_sustained_divergence = result.get("sustained_divergence")
+    if (
+        not isinstance(stored_sustained_divergence, bool)
+        or stored_sustained_divergence is not recomputed_sustained_divergence
+    ):
+        raise BindingFailure(
+            f"LR candidate {cid!r}: stored sustained_divergence "
+            f"{stored_sustained_divergence!r} disagrees with the raw-loss recomputation "
+            f"{recomputed_sustained_divergence!r}"
+        )
+    stored_divergence_detail = result.get("divergence_detail")
+    try:
+        stored_detail_bytes = canonical_json_bytes(stored_divergence_detail)
+        recomputed_detail_bytes = canonical_json_bytes(recomputed_divergence_detail)
+    except (OverflowError, TypeError, ValueError) as exc:
+        raise BindingFailure(
+            f"LR candidate {cid!r}: stored or recomputed divergence_detail is not canonical JSON"
+        ) from exc
+    if (
+        not isinstance(stored_divergence_detail, Mapping)
+        or stored_detail_bytes != recomputed_detail_bytes
+    ):
+        raise BindingFailure(
+            f"LR candidate {cid!r}: stored divergence_detail disagrees with the canonical "
+            "raw-loss recomputation"
+        )
+    return {
+        "all_losses_finite": recomputed_all_losses_finite,
+        "sustained_divergence": recomputed_sustained_divergence,
+        "divergence_detail": recomputed_divergence_detail,
+    }
+
+
 # --------------------------------------------------------------------- orchestrator
 
 CANDIDATE_RESULT_SCHEMA = "petitgpt-pilot-candidate-result-v2.3-r4"
@@ -3423,7 +3567,9 @@ def load_completed_result(
     output_dir = Path(planned["output_dir"])
     result_path = output_dir / "result.json"
     result, result_sha256 = read_immutable_artifact(
-        result_path, schema_version=CANDIDATE_RESULT_SCHEMA
+        result_path,
+        schema_version=CANDIDATE_RESULT_SCHEMA,
+        require_canonical_bytes=planned["phase"] == "LR",
     )
     if result.get("contract_version") != CONTRACT_VERSION:
         raise BindingFailure("candidate result contract version mismatch")
@@ -3549,6 +3695,11 @@ def load_completed_result(
         vram = int(session.validated["fingerprint"]["gpu"]["total_vram_bytes"])
         eligible, failures = mb_candidate_eligible(recomputed, vram)
     else:
+        # Only a complete 200-update LR result can be eligible. Its two loss-summary verdicts
+        # are authoritative only after reconstruction from the exact raw 1..200 series.
+        if recomputed.get("completed_updates") == LR_RUN_UPDATES:
+            recomputed.update(verify_recomputed_lr_loss_result(recomputed))
+
         raw_components = (
             recomputed.get("eval_stage_a_numerator"),
             recomputed.get("eval_stage_a_weight"),
