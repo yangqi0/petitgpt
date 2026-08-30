@@ -110,6 +110,23 @@ WEIGHT_DECAY = 0.1
 GRAD_CLIP = 1.0
 OPTIMIZER_FAMILY_COMPARISON_REQUIRED = False
 
+# R3 Part 11: the exact realized values every group must carry. These are compared for exact
+# equality, not for plausibility: an auxiliary decay of 0.05 or a no-decay group carrying any
+# nonzero (or negative) decay is a verification FAILURE, not a tolerated variation.
+MUON_NESTEROV = True
+MUON_NS_STEPS = 5
+MUON_LR_RATIO = 1.0
+AUX_ADAMW_DECAY_WEIGHT_DECAY = WEIGHT_DECAY
+AUX_ADAMW_NO_DECAY_WEIGHT_DECAY = 0.0
+OPTIMIZER_GROUP_ROLES = ("muon_matrices", "aux_adamw_decay", "aux_adamw_no_decay")
+ROLE_WEIGHT_DECAY = MappingProxyType({
+    "muon_matrices": WEIGHT_DECAY,
+    "aux_adamw_decay": AUX_ADAMW_DECAY_WEIGHT_DECAY,
+    "aux_adamw_no_decay": AUX_ADAMW_NO_DECAY_WEIGHT_DECAY,
+})
+RMS_MATCHING_CONSTANT = 0.2
+NEWTON_SCHULZ_COEFFICIENTS = (3.4445, -4.7750, 2.0315)
+
 
 def realized_muon_config() -> dict[str, Any]:
     """Bind the COMPLETE realized Muon configuration from the frozen ``src/optim.py``.
@@ -196,17 +213,47 @@ def realized_muon_config() -> dict[str, Any]:
     }
 
 
-def verify_realized_grouping(optimizer: Any, model: Any | None = None) -> dict[str, Any]:
-    """Verify a constructed optimizer matches the frozen V2.3 realization, exhaustively.
+def optimizer_group_role(group: Mapping[str, Any]) -> str:
+    """The structural role of one realized param group.
 
-    R1: checks group identity, exact parameter-name membership, coverage (no missing and no
-    duplicate parameter), per-group counts, the Muon flag, weight decay, betas, epsilon,
-    momentum, Nesterov, Newton-Schulz steps, RMS-matching semantics, and lr_ratio == 1.0 for
-    every group. Pass ``model`` to enable the name-membership and coverage checks.
+    R3 Part 11: the role is derived from ``use_muon`` and from parameter dimensionality ONLY.
+    It is deliberately NOT derived from the stored ``weight_decay``, because a mutated decay
+    value must surface as a wrong value for its role rather than silently reclassifying the
+    group into the role whose decay it happens to carry.
+    """
+    if group.get("use_muon"):
+        return "muon_matrices"
+    params = list(group.get("params") or [])
+    if params and all(int(getattr(p, "ndim", 2)) < 2 for p in params):
+        return "aux_adamw_no_decay"
+    return "aux_adamw_decay"
+
+
+def verify_realized_grouping(optimizer: Any, model: Any | None = None) -> dict[str, Any]:
+    """Verify a constructed optimizer matches the frozen V2.3 realization, EXACTLY.
+
+    R3 Part 11 hardens R1's check into a load-bearing gate. It verifies:
+
+    * the instance is the canonical ``src.optim.Muon``;
+    * exactly one Muon group, and at most one group per auxiliary role, with no unclassifiable
+      group and no duplicated role;
+    * per role, the EXACT weight decay (Muon 0.1, auxiliary decay 0.1, auxiliary no-decay 0.0) --
+      ``0.1 -> 0.05`` and ``0.0 -> anything else`` both fail;
+    * the exact auxiliary AdamW betas and epsilon;
+    * the exact Muon momentum, Nesterov flag and Newton-Schulz step count;
+    * ``lr_ratio == 1.0`` on every group;
+    * with ``model``, complete parameter membership: every trainable parameter in exactly one
+      group, no duplicate, no missing parameter, no parameter foreign to the model, and each
+      role's membership equal to the frozen grouping rule's prediction -- including when a role
+      is predicted empty.
     """
     from src.optim import ADAM_PARAM_NAME_KEYS, Muon, zeropower_via_newtonschulz5
 
     groups = list(optimizer.param_groups)
+    roles = [optimizer_group_role(g) for g in groups]
+    by_role: dict[str, list[Mapping[str, Any]]] = {}
+    for role, group in zip(roles, groups, strict=True):
+        by_role.setdefault(role, []).append(group)
     muon_groups = [g for g in groups if g.get("use_muon")]
     aux_groups = [g for g in groups if not g.get("use_muon")]
     failures: list[str] = []
@@ -216,31 +263,51 @@ def verify_realized_grouping(optimizer: Any, model: Any | None = None) -> dict[s
         failures.append(f"optimizer must be the Muon instance, got {type(optimizer).__name__}")
     if len(muon_groups) != 1:
         failures.append(f"expected exactly one Muon group, got {len(muon_groups)}")
-    if len(aux_groups) not in (1, 2):
-        failures.append(f"expected one or two auxiliary AdamW groups, got {len(aux_groups)}")
-    if any(r != 1.0 for r in ratios):
-        failures.append(f"every group lr_ratio must be 1.0, got {ratios}")
+    for role in OPTIMIZER_GROUP_ROLES:
+        if len(by_role.get(role, [])) > 1:
+            failures.append(f"role {role} is realized by {len(by_role[role])} groups, expected one")
+    unknown_roles = sorted(set(roles) - set(OPTIMIZER_GROUP_ROLES))
+    if unknown_roles:
+        failures.append(f"unclassifiable optimizer group role(s): {unknown_roles}")
+    if any(r != MUON_LR_RATIO for r in ratios):
+        failures.append(f"every group lr_ratio must be {MUON_LR_RATIO}, got {ratios}")
+
+    # Exact per-role weight decay. Checked for EVERY group, keyed on its structural role, so a
+    # decay mutation cannot hide by making the group look like a different role.
+    for role, group in zip(roles, groups, strict=True):
+        expected_wd = ROLE_WEIGHT_DECAY.get(role)
+        if expected_wd is None:
+            continue
+        actual_wd = group.get("weight_decay")
+        if not isinstance(actual_wd, (int, float)) or isinstance(actual_wd, bool):
+            failures.append(f"{role} weight_decay must be a number, got {actual_wd!r}")
+        elif float(actual_wd) != float(expected_wd):
+            failures.append(f"{role} weight_decay must be exactly {expected_wd}, got {actual_wd!r}")
 
     for g in muon_groups:
         if float(g.get("momentum", -1)) != MUON_MOMENTUM:
             failures.append(f"Muon momentum must be {MUON_MOMENTUM}, got {g.get('momentum')}")
-        if g.get("nesterov") is not True:
+        if g.get("nesterov") is not MUON_NESTEROV:
             failures.append("Muon group must use Nesterov momentum")
-        if int(g.get("ns_steps", -1)) != 5:
-            failures.append(f"Newton-Schulz steps must be 5, got {g.get('ns_steps')}")
-        if float(g.get("weight_decay", -1)) != WEIGHT_DECAY:
-            failures.append(f"Muon weight_decay must be {WEIGHT_DECAY}")
-        if any(getattr(p, "ndim", 0) != 2 for p in g["params"]):
+        if int(g.get("ns_steps", -1)) != MUON_NS_STEPS:
+            failures.append(f"Newton-Schulz steps must be {MUON_NS_STEPS}, got {g.get('ns_steps')}")
+        if any(int(getattr(p, "ndim", 0)) != 2 for p in g["params"]):
             failures.append("Muon group contains a non-2D parameter")
 
     for g in aux_groups:
         betas = tuple(g.get("betas", ()))
         if betas != ADAMW_AUX_BETAS:
             failures.append(f"auxiliary AdamW betas must be {ADAMW_AUX_BETAS}, got {betas}")
-        if float(g.get("eps", -1)) != ADAMW_AUX_EPS:
-            failures.append(f"auxiliary AdamW eps must be {ADAMW_AUX_EPS}, got {g.get('eps')}")
+        eps = g.get("eps")
+        if (
+            not isinstance(eps, (int, float))
+            or isinstance(eps, bool)
+            or float(eps) != ADAMW_AUX_EPS
+        ):
+            failures.append(f"auxiliary AdamW eps must be {ADAMW_AUX_EPS}, got {eps!r}")
 
     membership: dict[str, list[str]] = {}
+    expected_membership: dict[str, list[str]] = {}
     if model is not None:
         by_id = {id(p): n for n, p in model.named_parameters() if p.requires_grad}
         expected_muon, expected_decay, expected_no_decay = [], [], []
@@ -253,37 +320,43 @@ def verify_realized_grouping(optimizer: Any, model: Any | None = None) -> dict[s
                 expected_decay.append(name)
             else:
                 expected_muon.append(name)
+        expected_membership = {
+            "muon_matrices": sorted(expected_muon),
+            "aux_adamw_decay": sorted(expected_decay),
+            "aux_adamw_no_decay": sorted(expected_no_decay),
+        }
 
         seen: list[int] = []
-        for g in groups:
-            names = sorted(by_id.get(id(p), "<unknown>") for p in g["params"])
-            key = (
-                "muon_matrices"
-                if g.get("use_muon")
-                else "aux_adamw_decay"
-                if float(g.get("weight_decay", 0.0)) > 0
-                else "aux_adamw_no_decay"
-            )
-            membership[key] = names
-            seen.extend(id(p) for p in g["params"])
+        foreign = 0
+        for role, group in zip(roles, groups, strict=True):
+            names = []
+            for p in group["params"]:
+                name = by_id.get(id(p))
+                if name is None:
+                    foreign += 1
+                else:
+                    names.append(name)
+            membership[role] = sorted(names)
+            seen.extend(id(p) for p in group["params"])
 
+        if foreign:
+            failures.append(f"{foreign} optimizer parameters are not trainable model parameters")
         if len(seen) != len(set(seen)):
             failures.append("a parameter appears in more than one optimizer group")
         missing = sorted(set(by_id) - set(seen))
         if missing:
             failures.append(f"{len(missing)} trainable parameters are in no optimizer group")
-        for key, expected in (
-            ("muon_matrices", expected_muon),
-            ("aux_adamw_decay", expected_decay),
-            ("aux_adamw_no_decay", expected_no_decay),
-        ):
-            if expected and membership.get(key, []) != sorted(expected):
-                failures.append(f"{key} membership differs from the frozen grouping rule")
-        for g in aux_groups:
-            wd = float(g.get("weight_decay", 0.0))
-            names = sorted(by_id.get(id(p), "") for p in g["params"])
-            if wd == 0.0 and any(model.get_parameter(n).ndim >= 2 for n in names if n):
-                failures.append("the no-decay group must contain only ndim<2 parameters")
+        realized_roles = sorted(set(roles))
+        if realized_roles != sorted(r for r in OPTIMIZER_GROUP_ROLES if expected_membership[r]):
+            failures.append(
+                f"realized group roles {realized_roles} do not match the roles the frozen "
+                f"grouping rule predicts for this model"
+            )
+        # Strict on every role, including one the rule predicts empty: an unexpected member is
+        # as much a mismatch as a missing one.
+        for role in OPTIMIZER_GROUP_ROLES:
+            if membership.get(role, []) != expected_membership[role]:
+                failures.append(f"{role} membership differs from the frozen grouping rule")
 
     rms_ok = callable(zeropower_via_newtonschulz5)
     if not rms_ok:
@@ -291,10 +364,14 @@ def verify_realized_grouping(optimizer: Any, model: Any | None = None) -> dict[s
 
     return {
         "group_count": len(groups),
+        "group_roles": list(roles),
         "muon_group_count": len(muon_groups),
         "aux_adamw_group_count": len(aux_groups),
         "lr_ratios": ratios,
-        "all_lr_ratios_are_one": all(r == 1.0 for r in ratios),
+        "all_lr_ratios_are_one": all(r == MUON_LR_RATIO for r in ratios),
+        "realized_weight_decays": {
+            role: g.get("weight_decay") for role, g in zip(roles, groups, strict=True)
+        },
         "parameter_counts": {
             ("muon" if g.get("use_muon") else f"aux_wd{g.get('weight_decay')}"): sum(
                 p.numel() for p in g["params"]
@@ -302,6 +379,8 @@ def verify_realized_grouping(optimizer: Any, model: Any | None = None) -> dict[s
             for g in groups
         },
         "membership": membership,
+        "expected_membership": expected_membership,
+        "membership_verified": model is not None,
         "rms_matching_available": rms_ok,
         "failures": failures,
         "matches_frozen_realization": not failures,
@@ -332,6 +411,19 @@ MB_MODEL_INIT_SEED = 20260829
 MB_VRAM_RESERVED_FRACTION_CEILING = 0.90
 MB_TIE_THROUGHPUT_RELATIVE = 0.03
 MB_TIE_VRAM_MIB = 256
+
+# R3 Part 6: throughput evidence is a per-update RECORD, not a bare list of seconds. Exactly one
+# record must exist for each measured update; the authoritative metric is the MEDIAN OF THE
+# PER-UPDATE RATES, which is not the same statistic as tokens / median(seconds).
+TRAINED_TOKENS_PER_UPDATE = EFFECTIVE_BATCH_TOKENS
+MB_MEASURED_UPDATES = tuple(range(MB_MEASURED_FIRST_UPDATE, MB_PROBE_UPDATES + 1))
+MB_TIMING_RECORD_FIELDS = ("update", "trained_tokens", "wall_seconds")
+MB_THROUGHPUT_STATISTIC = "median(trained_tokens / wall_seconds over updates 11..40)"
+MB_THROUGHPUT_STATISTIC_IS_NOT = "trained_tokens / median(wall_seconds)"
+require(
+    MB_MEASURED_UPDATES == tuple(range(11, 41)),
+    "the Phase-MB measured update window drifted from updates 11..40",
+)
 
 
 def mb_candidate_grid() -> tuple[dict[str, Any], ...]:
@@ -365,6 +457,84 @@ def mb_lr(update: int) -> float:
     return MB_PROBE_PEAK_LR * min(update / MB_PROBE_WARMUP_UPDATES, 1.0)
 
 
+def require_exact_mb_timing_records(
+    records: Sequence[Mapping[str, Any]],
+) -> tuple[dict[str, Any], ...]:
+    """Exactly one well-formed timing record for every measured update 11..40, no more, no less.
+
+    R3 Part 6: a missing, extra or duplicated measured update is an evidence defect, never a
+    tolerated gap, and each record must bind its own update number, its own trained-token count
+    and its own synchronized wall time.
+    """
+    require(
+        isinstance(records, Sequence) and not isinstance(records, (str, bytes)),
+        "Phase-MB timing evidence must be a sequence of per-update records",
+    )
+    seen: dict[int, dict[str, Any]] = {}
+    for raw in records:
+        require(isinstance(raw, Mapping), f"Phase-MB timing record must be a mapping: {raw!r}")
+        missing = [f for f in MB_TIMING_RECORD_FIELDS if f not in raw]
+        require(not missing, f"Phase-MB timing record is missing {missing}: {dict(raw)!r}")
+        update = raw["update"]
+        require(
+            isinstance(update, int) and not isinstance(update, bool),
+            f"Phase-MB timing record update must be an integer, got {update!r}",
+        )
+        require(
+            update not in seen,
+            f"Phase-MB timing evidence records update {update} more than once",
+        )
+        tokens = raw["trained_tokens"]
+        require(
+            isinstance(tokens, int)
+            and not isinstance(tokens, bool)
+            and tokens == TRAINED_TOKENS_PER_UPDATE,
+            f"update {update} recorded {tokens!r} trained tokens; the frozen geometry trains "
+            f"exactly {TRAINED_TOKENS_PER_UPDATE} per optimizer update",
+        )
+        seconds = raw["wall_seconds"]
+        require(
+            isinstance(seconds, (int, float))
+            and not isinstance(seconds, bool)
+            and math.isfinite(float(seconds))
+            and float(seconds) > 0.0,
+            f"update {update} recorded a non-positive or non-finite wall time {seconds!r}",
+        )
+        seen[int(update)] = {
+            "update": int(update),
+            "trained_tokens": int(tokens),
+            "wall_seconds": float(seconds),
+        }
+    missing_updates = [u for u in MB_MEASURED_UPDATES if u not in seen]
+    require(
+        not missing_updates,
+        f"Phase-MB timing evidence has no record for measured update(s) {missing_updates}",
+    )
+    extra = sorted(u for u in seen if u not in set(MB_MEASURED_UPDATES))
+    require(
+        not extra,
+        f"Phase-MB timing evidence records unmeasured update(s) {extra}; the contract measures "
+        f"exactly updates {MB_MEASURED_FIRST_UPDATE}..{MB_PROBE_UPDATES}",
+    )
+    return tuple(seen[u] for u in MB_MEASURED_UPDATES)
+
+
+def mb_update_tokens_per_second(record: Mapping[str, Any]) -> float:
+    """One update's own rate: its trained tokens divided by its own synchronized wall time."""
+    return float(record["trained_tokens"]) / float(record["wall_seconds"])
+
+
+def mb_median_update_tokens_per_second(records: Sequence[Mapping[str, Any]]) -> float:
+    """Authoritative Phase-MB throughput: the MEDIAN OF THE PER-UPDATE RATES over 11..40.
+
+    Deliberately not ``trained_tokens / median(wall_seconds)``. The two agree only when the
+    measured seconds are constant or the sample size is odd and symmetric; the contract names
+    one statistic and this is it.
+    """
+    validated = require_exact_mb_timing_records(records)
+    return float(median(mb_update_tokens_per_second(r) for r in validated))
+
+
 def mb_candidate_eligible(
     result: Mapping[str, Any], physical_vram_bytes: int
 ) -> tuple[bool, tuple[str, ...]]:
@@ -388,8 +558,19 @@ def mb_candidate_eligible(
         failures.append("vram_measurement_missing")
     elif int(reserved) > MB_VRAM_RESERVED_FRACTION_CEILING * int(physical_vram_bytes):
         failures.append("vram_reserved_above_90_percent")
-    if result.get("compile") and not result.get("canonical_compile_path", False):
-        failures.append("compile_silent_fallback")
+    # R3 Part 7: the observed compile path must equal the requested one in BOTH directions --
+    # compile=on that fell back to eager and compile=off that went through Dynamo are both
+    # ineligible, and the verdict comes from the recorded execution-path observation.
+    if not result.get("canonical_compile_path", False):
+        failures.append(
+            "compile_silent_fallback" if result.get("compile") else "unrequested_compiled_path"
+        )
+    # R3 Part 6: eligibility requires the complete per-update timing evidence the authoritative
+    # throughput statistic is recomputed from.
+    try:
+        require_exact_mb_timing_records(result.get("update_timings") or ())
+    except PilotContractError:
+        failures.append("incomplete_per_update_timing_evidence")
     return (not failures), tuple(failures)
 
 
@@ -408,11 +589,12 @@ def mb_select(results: Sequence[Mapping[str, Any]], physical_vram_bytes: int) ->
     eligible = [r for r in results if mb_candidate_eligible(r, physical_vram_bytes)[0]]
     if not eligible:
         return {"outcome": "PHASE_MB_ABORT", "reason": "no eligible candidate", "eligible": 0}
-    fastest = max(float(r["median_tokens_per_sec"]) for r in eligible)
+    fastest = max(float(r["median_update_tokens_per_second"]) for r in eligible)
     tied = [
         r
         for r in eligible
-        if (fastest - float(r["median_tokens_per_sec"])) / fastest <= MB_TIE_THROUGHPUT_RELATIVE
+        if (fastest - float(r["median_update_tokens_per_second"])) / fastest
+        <= MB_TIE_THROUGHPUT_RELATIVE
     ]
     tie_break = "fastest_unique" if len(tied) == 1 else "throughput_tie"
 
@@ -448,7 +630,7 @@ def mb_select(results: Sequence[Mapping[str, Any]], physical_vram_bytes: int) ->
         "FROZEN_GRAD_ACCUM": frozen_grad_accum(int(w["micro_bsz"])),
         "FROZEN_COMPILE": bool(w.get("compile")),
         "winner_candidate_id": w.get("candidate_id"),
-        "winner_median_tokens_per_sec": float(w["median_tokens_per_sec"]),
+        "winner_median_update_tokens_per_second": float(w["median_update_tokens_per_second"]),
     }
 
 
@@ -620,6 +802,12 @@ def lr_candidate_eligible(result: Mapping[str, Any]) -> tuple[bool, tuple[str, .
             failures.append(f"non_finite_{key}")
     if result.get("sustained_divergence", False):
         failures.append("sustained_divergence")
+    # R3 Part 7: the same both-directions compile-path rule the Phase-MB grid applies. An LR run
+    # that silently fell back to eager measured a different implementation and may not win.
+    if not result.get("canonical_compile_path", False):
+        failures.append(
+            "compile_silent_fallback" if result.get("compile") else "unrequested_compiled_path"
+        )
     return (not failures), tuple(failures)
 
 
@@ -853,6 +1041,51 @@ PHASE_MB_EXPECTED_MAX = 104_857_600
 PHASE_MUON_LR_TOKEN_CEILING = 370_000_000
 GLOBAL_PILOT_TOKEN_CEILING = 500_000_000
 PHASE_CEILINGS = MappingProxyType({"MB": PHASE_MB_TOKEN_CEILING, "LR": PHASE_MUON_LR_TOKEN_CEILING})
+
+# R3 Part 12 -- the owner's session/budget clarification, frozen.
+#
+# FULL_V2_3_PILOT is ONE owner-authorized session: Phase MB -> the authoritative verified
+# Phase-MB report -> Phase Muon-LR, under one authorization SHA, one session identity and one
+# token ledger. 500,000,000 trained tokens is the HARD ceiling for that single session, not a
+# per-attempt allowance and not a running cross-authorization total.
+FULL_V2_3_PILOT_SESSION_HARD_CEILING = 500_000_000
+require(
+    FULL_V2_3_PILOT_SESSION_HARD_CEILING == GLOBAL_PILOT_TOKEN_CEILING,
+    "the FULL session hard ceiling and the global pilot ceiling must be the same frozen number",
+)
+require(
+    PHASE_MB_TOKEN_CEILING + PHASE_MUON_LR_TOKEN_CEILING <= FULL_V2_3_PILOT_SESSION_HARD_CEILING,
+    "the two phase ceilings must fit inside one authorized FULL session",
+)
+SESSION_BUDGET_SEMANTICS = MappingProxyType({
+    "FULL_V2_3_PILOT": {
+        "session_shape": "Phase MB -> authoritative verified MB report -> Phase Muon-LR",
+        "one_authorization_sha256": True,
+        "one_session_identity": True,
+        "one_token_ledger": True,
+        "session_hard_ceiling_tokens": FULL_V2_3_PILOT_SESSION_HARD_CEILING,
+        "phase_ceilings": {
+            "MB": PHASE_MB_TOKEN_CEILING,
+            "LR": PHASE_MUON_LR_TOKEN_CEILING,
+        },
+        "automatic_second_session": False,
+        "automatic_cross_authorization_retry": False,
+        "second_authorization_requires": (
+            "a NEW owner decision that explicitly takes the tokens consumed by the failed or "
+            "abandoned prior session into account; this executor never issues one itself and "
+            "keeps no cross-authorization aggregate"
+        ),
+    },
+    "PHASE_MB_ONLY": {
+        "session_shape": "Phase MB -> authoritative verified MB report -> session ends",
+        "diagnostic_scope": True,
+        "may_execute_phase_lr": False,
+        "may_be_promoted_to_full": False,
+        "automatic_mb_only_to_full_transition": False,
+        "phase_ceilings": {"MB": PHASE_MB_TOKEN_CEILING},
+    },
+    "cross_authorization_aggregate_accounting": "NOT_IMPLEMENTED_BY_DESIGN",
+})
 
 
 def check_update_within_ceilings(
@@ -1103,6 +1336,11 @@ def contract_document() -> dict[str, Any]:
             "warmup_updates": MB_PROBE_WARMUP_UPDATES,
             "updates": MB_PROBE_UPDATES,
             "measured_updates": [MB_MEASURED_FIRST_UPDATE, MB_PROBE_UPDATES],
+            "measured_update_ids": list(MB_MEASURED_UPDATES),
+            "timing_record_fields": list(MB_TIMING_RECORD_FIELDS),
+            "trained_tokens_per_update": TRAINED_TOKENS_PER_UPDATE,
+            "throughput_statistic": MB_THROUGHPUT_STATISTIC,
+            "throughput_statistic_is_not": MB_THROUGHPUT_STATISTIC_IS_NOT,
             "model_init_seed": MB_MODEL_INIT_SEED,
             "vram_reserved_fraction_ceiling": MB_VRAM_RESERVED_FRACTION_CEILING,
             "tie_throughput_relative": MB_TIE_THROUGHPUT_RELATIVE,
@@ -1156,8 +1394,33 @@ def contract_document() -> dict[str, Any]:
             "PHASE_MB_EXPECTED_MAX": PHASE_MB_EXPECTED_MAX,
             "PHASE_MUON_LR_TOKEN_CEILING": PHASE_MUON_LR_TOKEN_CEILING,
             "GLOBAL_PILOT_TOKEN_CEILING": GLOBAL_PILOT_TOKEN_CEILING,
+            "FULL_V2_3_PILOT_SESSION_HARD_CEILING": FULL_V2_3_PILOT_SESSION_HARD_CEILING,
+            "TRAINED_TOKENS_PER_UPDATE": TRAINED_TOKENS_PER_UPDATE,
             "checked_before_every_update": True,
             "persisted_after_every_update": True,
+            "reserved_before_every_update": True,
+            "session_semantics": {
+                k: (dict(v) if isinstance(v, Mapping) else v)
+                for k, v in SESSION_BUDGET_SEMANTICS.items()
+            },
+        },
+        "optimizer_verification": {
+            "roles": list(OPTIMIZER_GROUP_ROLES),
+            "role_weight_decay": dict(ROLE_WEIGHT_DECAY),
+            "aux_adamw_betas": list(ADAMW_AUX_BETAS),
+            "aux_adamw_eps": ADAMW_AUX_EPS,
+            "muon_momentum": MUON_MOMENTUM,
+            "muon_nesterov": MUON_NESTEROV,
+            "muon_ns_steps": MUON_NS_STEPS,
+            "lr_ratio": MUON_LR_RATIO,
+            "rms_matching_constant": RMS_MATCHING_CONSTANT,
+            "newton_schulz_coefficients": list(NEWTON_SCHULZ_COEFFICIENTS),
+            "independent_rms_oracle": (
+                "expected_adjusted_lr = lr * 0.2 * sqrt(max(fan_in, fan_out)); the observed "
+                "update is compared against a closed form that never calls the realization "
+                "helper it is verifying"
+            ),
+            "mandatory_precondition_for_first_training_update": True,
         },
         "runtime_gate": {
             "required_gpu_name_exact": REQUIRED_GPU_NAME_EXACT,

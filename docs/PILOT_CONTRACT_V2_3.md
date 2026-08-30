@@ -76,6 +76,24 @@ halves live in one optimizer instance, so the checkpoint schema is unchanged.
 
 `src/optim.py` is the grouping and mechanics authority and was **not** rewritten to match prose.
 
+**Exact realization verification is a precondition for a candidate's first training update.**
+`verify_muon_realization()` runs before update 1 and refuses the candidate as a `PHASE_ABORT` if
+anything below is not exactly true — a realization the pilot cannot describe is not one it may
+measure:
+
+    exactly one Muon group; at most one group per auxiliary role; no unclassifiable group
+    weight_decay        muon 0.1     aux decay 0.1     aux no-decay exactly 0.0
+    aux AdamW           betas (0.9, 0.95)   eps 1e-8
+    Muon                momentum 0.95   nesterov True   ns_steps 5
+    every group         lr_ratio == 1.0
+    membership          every trainable parameter in exactly one group; no duplicate, no
+                        missing parameter, no parameter foreign to the model, and each role's
+                        membership equal to the grouping rule's prediction, empty roles included
+
+A group's role is derived from `use_muon` and parameter dimensionality, never from its stored
+decay, so a mutated decay surfaces as a wrong value for its role instead of silently
+reclassifying the group.
+
 ## 3. Phase MB — microbatch and compile
 
 Ten required probes in this fixed order, each with `--optimizer muon --muon_lr 0.0
@@ -91,15 +109,31 @@ Timing synchronizes CUDA immediately before and after each timed update and meas
 complete end-to-end update — dataloading, accumulation, forward, backward, clipping, step.
 Compile wall time is recorded separately. CUDA peak-memory statistics are reset at process start.
 
+Each measured update contributes one **timing record** binding its own update number, its own
+trained-token count and its own synchronized wall time:
+
+    update           an integer in 11..40
+    trained_tokens   exactly 262144, the frozen per-update geometry
+    wall_seconds     positive, finite, synchronized
+
+Exactly one record must exist for **every** update 11..40 — no missing, extra or duplicated
+measured update.
+
 Eligibility (all): 40 updates completed; no OOM or uncontrolled exception; every token-mean loss
 finite; every logged global grad norm finite; all expected optimizer states instantiated;
 realized grouping matches this contract; every group `lr_ratio == 1.0`;
 `max_memory_reserved <= 90%` of physical VRAM; `compile=on` used the intended path with no
 silent fallback.
 
-Metric: median end-to-end tokens/sec over updates 11–40. Selection: fastest eligible; within 3%
-relative is tied; then lowest peak reserved VRAM; still tied within 256 MiB → `compile=off`;
-still tied → larger `micro_bsz`. No eligible candidate → `PHASE_MB_ABORT`.
+Metric — `median(trained_tokens / wall_seconds)` over the thirty records, i.e. the **median of
+the per-update rates**. It is explicitly **not** `trained_tokens / median(wall_seconds)`: the two
+are different statistics and disagree whenever the sample is not near-constant. The median is
+recomputed from the raw records at admission and a disagreeing stored value is a
+`BINDING_FAILURE`.
+
+Selection: fastest eligible; within 3% relative is tied; then lowest peak reserved VRAM; still
+tied within 256 MiB → `compile=off`; still tied → larger `micro_bsz`. No eligible candidate →
+`PHASE_MB_ABORT`.
 
 Outputs `FROZEN_MICRO_BSZ`, `FROZEN_GRAD_ACCUM`, `FROZEN_COMPILE`.
 
@@ -134,7 +168,8 @@ the Muon and auxiliary AdamW halves.
 
 Eligibility: 200 updates completed; all losses, grad norms and parameters finite; Muon momentum
 states present; auxiliary AdamW `exp_avg`/`exp_avg_sq` present; grouping matches; every
-`lr_ratio == 1.0`; both eval losses finite; no sustained divergence.
+`lr_ratio == 1.0`; both eval losses finite; no sustained divergence; the observed compile path
+equals the requested one, in both directions, exactly as Phase MB requires.
 
 Sustained divergence: `BASELINE = median(updates 41..60)`; every complete 20-update window whose
 **final update lies in 80..200** must satisfy `WINDOW_MEDIAN <= 1.5 * BASELINE`.
@@ -187,11 +222,31 @@ Stage N must later verify exact LR values at the warmup boundary, decay start, t
 optimizer update, and the mathematical endpoint. All stage boundaries and total-step integers
 come only from the canonical planner output.
 
-## 8. Token budget
+## 8. Token budget and session semantics
 
-    Phase MB ceiling          105,000,000    expected maximum 104,857,600
-    Phase Muon-LR ceiling     370,000,000
-    global V2.3 hard ceiling  500,000,000
+    Phase MB ceiling                       105,000,000   expected maximum 104,857,600
+    Phase Muon-LR ceiling                  370,000,000
+    FULL_V2_3_PILOT_SESSION_HARD_CEILING   500,000,000
+    trained tokens per optimizer update    262,144
+
+**`FULL_V2_3_PILOT` is ONE owner-authorized session**, containing exactly:
+
+    Phase MB  ->  authoritative verified Phase-MB report  ->  Phase Muon-LR
+
+with **one** authorization SHA, **one** session identity and **one** token ledger. The
+500,000,000 figure is the hard ceiling for that single authorized session — not a per-attempt
+allowance and not a running cross-authorization total. The phase ceilings are unchanged and both
+fit inside it.
+
+There is **no automatic second FULL session** and **no automatic cross-authorization retry**.
+If a future owner wants to issue another authorization after a failed or abandoned session, that
+is a **new owner decision that must explicitly take the prior session's consumed tokens into
+account**. This executor never issues one, and deliberately keeps no cross-authorization
+aggregate accounting.
+
+`PHASE_MB_ONLY` is a **separate diagnostic authorization scope**. It ends after its Phase-MB
+report, cannot authorize Phase LR and can never be promoted to `FULL_V2_3_PILOT`; there is no
+automatic MB_ONLY → FULL transition anywhere in the executor.
 
 Accounting is **reserve-then-complete**, one documented order per optimizer update. Under an
 exclusive `flock`, the ledger reloads from disk, revalidates its complete identity binding,
@@ -200,6 +255,25 @@ is applied. The reservation moves to `completed` only after the optimizer step r
 process that dies between the two leaves the reservation consumed on purpose: budget is never
 handed back, so a crash can never produce an uncounted optimizer update. Reaching a ceiling
 without a frozen result is `PILOT_ABORT`.
+
+**Every** read of the ledger — including the `snapshot()` parents and reports consume — takes
+the same exclusive lock, reloads the bytes from disk and revalidates identity plus the complete
+structural invariant set, so a parent never reports stale in-memory counters after a child
+advanced the file:
+
+    reserved >= 0, completed >= 0, completed <= reserved, per bucket and globally
+    GLOBAL reserved  == MB reserved  + LR reserved
+    GLOBAL completed == MB completed + LR completed
+    every token figure is a whole number of 262,144-token updates
+    reserved_updates * 262144 == reserved_tokens[GLOBAL];  likewise for completed
+    completed_updates <= reserved_updates
+    stored effective ceilings equal the ceilings frozen for this authorization and session
+    stored session hard ceiling equals FULL_V2_3_PILOT_SESSION_HARD_CEILING
+    no stored value exceeds its ceiling
+
+`reserved > completed` is legal and expected — that is exactly what a crash between the two
+steps leaves behind. Any invariant failure is a phase-level **ledger-integrity failure**, never
+an ineligible candidate.
 
 Orchestration verifies that all required Phase-MB candidates are represented with no duplicate
 or unknown identity, that the initial LR grid is complete, and that every selected result comes
@@ -238,13 +312,11 @@ repository branch/HEAD and worktree status, the contract SHA and the execution b
 carries **no** per-run configuration: `compile`, `micro_bsz`, `grad_accum`, `peak_lr`, `seed` and
 `phase` live in each run_meta instead, and the module asserts their absence.
 
-## 12. Validation at execution (R2)
+## 12. Validation at execution (R3)
 
-Nothing is trusted because a caller said so. Every real execution root — the parent orchestrator
-and each candidate worker independently — calls the same
-`validate_execution_artifacts(authorization_path, candidate_spec_path,
-pilot_index_manifest_path, output_dir, requested_phase)` and re-derives its authority from
-artifact **bytes on disk**:
+Nothing is trusted because a caller said so, and **no constructed object is execution
+authority**. `validate_execution_artifacts(authorization_path, pilot_index_manifest_path,
+output_dir, requested_phase)` re-derives the artifact-bytes layer:
 
     authorization manifest      loaded and hashed from disk
     authorized status + scope   from those bytes
@@ -259,17 +331,88 @@ artifact **bytes on disk**:
     token-ledger identity       eight fields, revalidated on every lock-held operation
     requested phase and scope   PHASE_MB_ONLY may never execute Phase LR
 
-There is no in-memory authorization flag, no caller-supplied hash or count, and no context
-object that grants anything by existing. The parent hands the child only *paths* — the real
-manifest, the real index manifest and the child's own immutable spec — and the child revalidates
-all of them. The session identity the child derives must equal the one recorded in its spec.
+### The real worker takes canonical artifact PATHS only
 
-### Sessions and scope
+`validate_worker_execution()` is the single gate to model construction, a forward, a backward or
+an optimizer update. Its **only** raw inputs are paths:
 
-A session is `sha256(authorization SHA, scope, output root, contract SHA, bundle SHA)`, recorded
-in `session.json` at the root. One authorization means one session and one ledger.
-`PHASE_MB_ONLY` **terminates** after its Phase-MB report and is never promoted: Phase LR needs a
-new `FULL_V2_3_PILOT` authorization, which implies a new session, a new ledger and a new root.
+    authorization_path          session_manifest_path       phase_plan_path
+    candidate_spec_path         pilot_index_manifest_path   accepted_stage_a_path
+    accepted_stage_b_path       ledger_path                 candidate_output_path
+
+It revalidates every one of those from disk and only then mints a `WorkerAuthority`, which the
+training entrypoints require and which no caller can construct. There is no `ExecutionSession`,
+`ValidatedContext`, `authorized` Boolean or equivalent object that grants execution: the
+orchestrator's `ExecutionSession` is **derived metadata** and cannot reach a training backend.
+Fakes used by tests are injected as a launcher with a different signature, which structurally
+cannot invoke the real backend, and the orchestrator refuses a launcher that is one.
+
+The authorized root is taken as the parent of the candidate's own output directory and is then
+checked against the authorization manifest's `allowed_output_root`, so a worker pointed at a
+directory outside the authorized root fails before anything is constructed.
+
+### The immutable artifact chain
+
+    SESSION.json
+      -> PHASE_MB_PLAN            -> PHASE_MB_REPORT
+      -> PHASE_LR_INITIAL_PLAN    -> PHASE_LR_INITIAL_REPORT
+      -> PHASE_LR_CONFIRMATION_PLAN -> PHASE_LR_CONFIRMATION_REPORT
+      -> PHASE_LR_EDGE_PLAN       -> PHASE_LR_EDGE_REPORT
+      -> PHASE_LR_REPORT
+
+Every link is published once, atomically, with a SHA-256 sidecar, and is re-hashed against that
+sidecar whenever it is read.
+
+`SESSION.json` binds the authorization SHA, the contract SHA, HEAD and branch, the execution
+bundle SHA, the pilot-index-manifest FILE SHA, the serialized-index-lists digest, both accepted
+release identities, the runtime-fingerprint SHA, the authorized output root, the ledger identity
+and relpath, the effective ceilings, the scope and the session ID. The session ID itself is
+`sha256(authorization SHA, scope, output root, contract SHA, bundle SHA)`.
+
+`PHASE_MB_PLAN` binds the SESSION SHA and **exactly the ten frozen candidate specs**, each by
+relative path and SHA-256. `PHASE_MB_REPORT` binds the SESSION SHA, the PHASE_MB_PLAN SHA, all
+ten validated candidate results and terminal outcomes, the selection trace and the selected
+`FROZEN_MICRO_BSZ` / `FROZEN_GRAD_ACCUM` / `FROZEN_COMPILE`.
+
+For `FULL_V2_3_PILOT`, `PHASE_LR_INITIAL_PLAN` binds the SESSION SHA, the PHASE_MB_REPORT SHA,
+the frozen MB geometry and exactly the seed-1 initial LR candidate specs. A confirmation plan
+binds the preceding validated LR report and selection SHA plus its internally derived
+confirmation specs; an edge plan binds the preceding confirmation report SHA plus its internally
+derived edge specs.
+
+**No caller chooses candidate membership after a phase plan is published.** A worker validates
+the plan bytes and SHA, the spec bytes and SHA, the spec's membership in that plan, the path and
+output directory the plan assigns it, and every candidate field against a fresh derivation from
+the contract. A candidate spec that is not listed fails **before model construction**. The
+worker is an internal subprocess entrypoint (`internal-worker`); invoking it directly with an
+arbitrary spec therefore confers no execution capability at all, and the old public
+`execute-candidate` command is gone.
+
+That derivation is never taken from the plan's own declarations. For every Phase-LR plan kind the
+worker opens the Phase-MB report the plan binds, re-hashes it, recomputes each candidate's
+throughput from its raw timing records, re-derives the selection ladder, and requires the plan's
+declared geometry to equal the `FROZEN_MICRO_BSZ` / `FROZEN_GRAD_ACCUM` / `FROZEN_COMPILE` it
+reproduces. The LR set is then derived the same way:
+
+    INITIAL        the frozen seed-1 grid {2e-4, 3e-4, 4e-4}, at seed-1
+    CONFIRMATION   [seed-1 winner, confirmation_neighbor(winner)] at seed-2, where the winner is
+                   re-derived from the bound initial report's own recomputed records
+    EDGE           [edge_candidate(confirmed LR)] at both seeds, where the confirmed LR is
+                   re-derived from the bound confirmation report's own pairs
+
+so a plan that declares a geometry or an LR the bound evidence does not produce is refused before
+model construction, and the comparison against the published spec can never be a tautology.
+
+### Completed evidence binds run_meta and the planned candidate
+
+Every admitted candidate result must have a real `run_meta.json` in its own output directory.
+The loader opens it, computes its SHA-256 **from disk**, and requires agreement with both the
+result artifact and the planned candidate identity across: phase, candidate ID, candidate-spec
+SHA, phase-plan SHA, session SHA, seed label, `micro_bsz`, `grad_accum`, `compile`, the LR
+configuration, the output directory, the session ID, the authorization SHA, the contract SHA,
+HEAD, the execution-bundle SHA, the index-manifest FILE SHA, the runtime-fingerprint SHA and the
+ledger identity. A fabricated digest with no file behind it, or any unknown or mismatched field,
+rejects the candidate from authoritative selection.
 
 ### Result classes
 
@@ -284,24 +427,59 @@ updates, reserved/completed tokens, run_meta SHA) next to its spec, and its stdo
 are preserved verbatim. A missing terminal result, or a status that disagrees with the exit
 code, is a `PHASE_ABORT` — never a pass.
 
+**Terminal accounting is real progress.** On success the artifact reports the exact completed
+updates and tokens; after a candidate-local exception with partial progress it reports the
+updates actually completed and the reserved/completed figures from a **fresh locked ledger
+snapshot** — never a reconstructed zero. The parent preserves those fields verbatim in the
+candidate's ineligible evidence and never guesses them.
+
+### Exception classification
+
+Ordinary candidate-local errors — OOM, non-finite loss or gradient, a compile-candidate failure,
+an ordinary runtime error — may become structured candidate-local evidence, and the required
+grid continues. Everything below aborts the phase or propagates non-success and is **never**
+downgraded to an ineligible candidate:
+
+    malformed or missing terminal artifact     authorization mismatch
+    session or phase-plan mismatch             accepted-release mismatch
+    implementation mismatch                    ledger-integrity failure
+    output-root mismatch                       runtime-binding mismatch
+    KeyboardInterrupt                          SystemExit
+
+No `BaseException` handler converts a process-control event into an ordinary outcome:
+`KeyboardInterrupt` and `SystemExit` are not `Exception` subclasses and are deliberately not
+caught, so the worker leaves no terminal artifact and the parent aborts the phase.
+
+Classification is by **execution stage**, not by exception type. A candidate that has not yet
+minted its worker authority has not reached model construction and therefore cannot be
+"candidate-locally ineligible": any failure while the artifacts are still being revalidated is a
+`BINDING_FAILURE`, whatever its type. Every canonical artifact — the authorization manifest, the
+pilot-index manifest, `SESSION.json`, every phase plan, every report, every candidate spec,
+`run_meta.json`, every result and the token ledger — is decoded through one guarded reader, so an
+unreadable or non-object artifact surfaces as a binding failure instead of an unreadable
+built-in error that would look like an ordinary ineligible candidate.
+
 ### The authoritative Phase-MB report
 
 `PHASE_MB_REPORT.json` is published **once**, with a SHA-256 sidecar, and is the only source of
 Phase-LR geometry — the `run` subcommand has no `--micro-bsz` and no `--compile` option. Before
 Phase LR starts, the report is re-hashed against its sidecar, revalidated against every session
-binding, checked for a complete ten-candidate grid, recomputed candidate by candidate, and its
-recorded selection is re-derived and compared.
+binding and against its own phase plan, checked for a complete ten-candidate grid, recomputed
+candidate by candidate, and its recorded selection is re-derived and compared.
 
 ### Independent recomputation
 
 No selection number is taken on trust:
 
-    Phase MB    median throughput recomputed from the raw per-update wall timings, and the
-                measured-update count checked against the frozen 30 (updates 11..40)
-    Phase LR    both eval losses recomputed from their raw numerator and weight, then SCORE
-                recomputed as (10*loss_A + 3*loss_B)/13
+    Phase MB    the median of the per-update RATES, recomputed from the timing records, with
+                exactly one record required for each of updates 11..40
+    Phase LR    loss_A = numerator_A / weight_A, loss_B = numerator_B / weight_B, then
+                SCORE = (10*loss_A + 3*loss_B)/13
 
-A serialized value that disagrees with its recomputation is a `BINDING_FAILURE`.
+Selection consumes only the recomputed values; a stored summary may exist but is never
+authoritative by itself, and must agree with the recomputation to within double round-off
+(`math.isclose`, relative tolerance 1e-12) — canonical JSON round-trips doubles exactly, so
+anything looser would be slack. A serialized value that disagrees is a `BINDING_FAILURE`.
 
 ### Evidence completeness
 
@@ -314,18 +492,52 @@ record is an evidence gap and aborts the phase.
 
     torch_compile_wrapper_seconds        the torch.compile() call itself
     first_optimizer_update_wall_seconds  update 1, which materializes lazy compilation
-    measured_update_wall_seconds         updates 11..40, the throughput sample
+    update_timings                       Phase MB: one record per update 11..40, the throughput
+                                         sample. Phase LR records every update; only Phase MB's
+                                         window is a selection input.
 
 No host/device scalar transfer happens inside a timed region: losses and gradient norms stay as
-device tensors and are converted after the loop. `canonical_compile_path` is observed evidence —
-realized module type, TorchDynamo graph counters and Inductor artifacts on disk — checked in
-both directions, not a Boolean copied from the candidate spec.
+device tensors and are converted after the loop, and scalar logging happens outside it.
 
-### Muon RMS matching
+Compile evidence is a **runtime observation of the execution path**, not a Boolean copied from
+the candidate spec. The update loop invokes the model through a wrapper that records which
+object it called and how many times, so:
 
-`verify_rms_matching()` runs one real Muon step per deterministic shape case and reconstructs
-`p_after = p_before * (1 - lr*wd) - adjusted_lr * NS5(momentum)` with
-`adjusted_lr = lr * 0.2 * sqrt(max(fan_in, fan_out))`. The shape set includes both non-square
-orientations, and each case records the margin by which an unscaled implementation would differ,
-so the check cannot pass vacuously. `pilot_runner_v2_3.py rms-matching` prints the evidence
-without training.
+    compile=on    the object torch.compile() returned must be the callable that was invoked,
+                  the realized module must be the Dynamo wrapper, compilation must have
+                  materialized (graph counters or Inductor artifacts on disk), and the
+                  candidate must have completed the required updates without compile failure
+    compile=off   the uncompiled module must be the callable that was invoked and nothing may
+                  have gone through Dynamo
+
+In both directions the invocation count must equal the geometry the contract derives, never a
+number measured back off the wrapper being checked:
+
+    Phase MB    updates x grad_accum
+    Phase LR    updates x grad_accum, plus one forward per evaluation micro-batch --
+                ceil(4096 / micro_bsz) for each of the Stage-A and Stage-B eval sets, since both
+                evaluations run through the same observed wrapper
+
+The eligibility/selection loader **re-derives** this verdict from the recorded observation
+rather than trusting the stored `canonical_compile_path`, and a candidate whose stored verdict
+disagrees with its own recorded observation is a `BINDING_FAILURE`. A candidate that *honestly*
+records a silent fallback is merely **ineligible** — the contract's own eligibility rule — and
+the required grid continues. Dynamo's counters are used where they are available and are treated
+as corroboration, never as a hard dependency on a private API.
+
+### Muon RMS matching — an independent oracle
+
+`verify_rms_matching()` runs one real Muon step per deterministic shape case and compares it
+with a closed form that never calls the realization it verifies. The gradient is constructed to
+be exactly semi-orthogonal, which collapses the quintic Newton–Schulz iteration to a scalar
+recursion that is written out directly:
+
+    beta_0    = sigma / (||g||_F + 1e-7),  ||g||_F = sqrt(min(fan_in, fan_out)) * sigma
+    beta_k+1  = a*beta_k + b*beta_k^3 + c*beta_k^5     (a, b, c) = (3.4445, -4.7750, 2.0315)
+    expected  = p_before*(1 - lr*wd) - lr*0.2*sqrt(max(fan_in, fan_out)) * beta_5 * g/sigma
+
+Neither half of the expectation comes from `src/optim.py`. The shape set includes both
+non-square orientations, and each case records the margin by which an unscaled implementation
+would differ — five orders of magnitude above the observed residual — so the check cannot pass
+vacuously. `pilot_runner_v2_3.py rms-matching` prints the evidence without training, and
+`pilot_runner_v2_3.py session-budget` prints the frozen session semantics.

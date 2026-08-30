@@ -186,12 +186,22 @@ def test_mb_lr(u, mult):
     assert C.mb_lr(u) == pytest.approx(3e-4 * mult)
 
 
+def _timings(tps):
+    """Per-update records whose median RATE is exactly ``tps`` (updates 11..40)."""
+    seconds = C.TRAINED_TOKENS_PER_UPDATE / float(tps)
+    return [
+        {"update": u, "trained_tokens": C.TRAINED_TOKENS_PER_UPDATE, "wall_seconds": seconds}
+        for u in C.MB_MEASURED_UPDATES
+    ]
+
+
 def _mb(cid, micro, comp, tps, vram_gib, **over):
     r = {
         "candidate_id": cid,
         "micro_bsz": micro,
         "compile": comp,
-        "median_tokens_per_sec": tps,
+        "median_update_tokens_per_second": tps,
+        "update_timings": _timings(tps),
         "max_memory_reserved_bytes": int(vram_gib * 1024**3),
         "completed_updates": 40,
         "oom": False,
@@ -210,8 +220,10 @@ def _mb(cid, micro, comp, tps, vram_gib, **over):
 def _full_grid(**overrides):
     out = []
     for c in C.mb_candidate_grid():
-        r = _mb(c["candidate_id"], c["micro_bsz"], c["compile"], 1000.0, 8.0)
-        r.update(overrides.get(c["candidate_id"], {}))
+        over = dict(overrides.get(c["candidate_id"], {}))
+        tps = over.pop("median_update_tokens_per_second", 1000.0)
+        r = _mb(c["candidate_id"], c["micro_bsz"], c["compile"], tps, 8.0)
+        r.update(over)
         out.append(r)
     return out
 
@@ -223,7 +235,7 @@ def test_mb_requires_the_complete_grid():
 
 
 def test_mb_rejects_duplicate_candidate_identity():
-    dup = _full_grid() + [_mb("mb_micro8_compileoff", 8, False, 9999.0, 8.0)]
+    dup = [*_full_grid(), _mb("mb_micro8_compileoff", 8, False, 9999.0, 8.0)]
     with pytest.raises(C.PilotContractError, match="duplicate"):
         C.mb_select(dup, VRAM_4090)
 
@@ -236,18 +248,20 @@ def test_mb_rejects_unknown_candidate_identity():
 
 
 def test_mb_selection_and_tie_ladder():
-    out = C.mb_select(_full_grid(mb_micro8_compileoff={"median_tokens_per_sec": 5000.0}), VRAM_4090)
+    out = C.mb_select(
+        _full_grid(mb_micro8_compileoff={"median_update_tokens_per_second": 5000.0}), VRAM_4090
+    )
     assert out["FROZEN_MICRO_BSZ"] == 8 and out["FROZEN_GRAD_ACCUM"] == 16
     assert out["FROZEN_COMPILE"] is False and out["tie_break"] == "fastest_unique"
     # VRAM tie-break
     out2 = C.mb_select(
         _full_grid(
             mb_micro8_compileoff={
-                "median_tokens_per_sec": 5000.0,
+                "median_update_tokens_per_second": 5000.0,
                 "max_memory_reserved_bytes": int(12 * 1024**3),
             },
             mb_micro4_compileoff={
-                "median_tokens_per_sec": 4950.0,
+                "median_update_tokens_per_second": 4950.0,
                 "max_memory_reserved_bytes": int(8 * 1024**3),
             },
         ),
@@ -335,6 +349,8 @@ def _lr(peak, score, **over):
         "eval_loss_stage_a": 3.0,
         "eval_loss_stage_b": 3.0,
         "sustained_divergence": False,
+        "compile": False,
+        "canonical_compile_path": True,
     }
     r.update(over)
     return r
@@ -508,8 +524,15 @@ def test_ledger_identity_must_be_complete(tmp_path):
 
 
 def test_ledger_refuses_update_over_ceiling(tmp_path):
+    """A structurally consistent ledger sitting one update below the ceiling refuses the next."""
     ledger = R.TokenLedger(tmp_path / "l.json", _ledger_identity(), _ceilings())
-    ledger.state["reserved_tokens"]["MB"] = C.PHASE_MB_TOKEN_CEILING
+    updates = C.PHASE_MB_TOKEN_CEILING // C.TRAINED_TOKENS_PER_UPDATE
+    tokens = updates * C.TRAINED_TOKENS_PER_UPDATE
+    ledger.state["reserved_tokens"]["MB"] = tokens
+    ledger.state["reserved_tokens"]["GLOBAL"] = tokens
+    ledger.state["completed_tokens"]["MB"] = tokens
+    ledger.state["completed_tokens"]["GLOBAL"] = tokens
+    ledger.state["reserved_updates"] = ledger.state["completed_updates"] = updates
     ledger._write(ledger.state)  # noqa: SLF001 - exercising the persisted path deliberately
     with pytest.raises(C.PilotContractError, match="PILOT_ABORT"):
         ledger.reserve("MB")
@@ -748,16 +771,52 @@ def test_token_ceiling_above_contract_refused(observed):
     assert "token_ceiling_invalid_or_above_contract" in v["failures"]
 
 
-MEASURED_SECONDS = [0.25] * (C.MB_PROBE_UPDATES - C.MB_MEASURED_FIRST_UPDATE + 1)
+MEASURED_SECONDS = [0.25] * len(C.MB_MEASURED_UPDATES)
 MEASURED_TPS = C.EFFECTIVE_BATCH_TOKENS / 0.25
+
+
+def _mb_timings(seconds=None):
+    """R3 Part 6 evidence shape: one record per measured update, 11..40 inclusive."""
+    seconds = list(seconds if seconds is not None else MEASURED_SECONDS)
+    assert len(seconds) == len(C.MB_MEASURED_UPDATES)
+    return [
+        {"update": u, "trained_tokens": C.TRAINED_TOKENS_PER_UPDATE, "wall_seconds": float(sec)}
+        for u, sec in zip(C.MB_MEASURED_UPDATES, seconds, strict=True)
+    ]
+
+
+def _compile_evidence(compile_on):
+    """A recorded execution-path observation consistent with the requested compile mode."""
+    if compile_on:
+        return {
+            "compile_requested": True,
+            "invoked_compiled_callable": True,
+            "invoked_uncompiled_module": False,
+            "realized_module_is_optimized_module": True,
+            "compilation_materialized": True,
+            "dynamo_unique_graphs": 3,
+            "inductor_artifact_count": 7,
+            "forward_invocations_match_geometry": True,
+        }
+    return {
+        "compile_requested": False,
+        "invoked_compiled_callable": False,
+        "invoked_uncompiled_module": True,
+        "realized_module_is_optimized_module": False,
+        "compilation_materialized": False,
+        "dynamo_unique_graphs": 0,
+        "inductor_artifact_count": 0,
+        "forward_invocations_match_geometry": True,
+    }
 
 
 def _fake_session(tmp_path, scope="FULL_V2_3_PILOT", root=None):
     """A validated ExecutionSession assembled directly, as open_session would produce one.
 
-    Building one by hand grants nothing: R2 moved the authority into
-    validate_execution_artifacts, which every real execution root calls on artifact bytes. The
-    tests below prove that separately; this fixture only avoids re-reading a 26 GB release.
+    Building one by hand grants nothing: R3 moved every route to the training backend behind
+    validate_worker_execution(), which mints a WorkerAuthority only from artifact bytes on
+    disk. ExecutionSession is orchestrator metadata; the tests below prove it separately. This
+    fixture only avoids re-reading a 26 GB release.
     """
     root = (Path(root) if root is not None else (tmp_path / "root")).resolve()
     root.mkdir(parents=True, exist_ok=True)
@@ -801,27 +860,91 @@ def _fake_session(tmp_path, scope="FULL_V2_3_PILOT", root=None):
             "stage_b_eval_sha256": "z",
         },
         "fingerprint": {"fingerprint_sha256": "fp", "gpu": {"total_vram_bytes": VRAM_4090}},
-        "stage_a": {"dataset": None},
-        "stage_b": {"dataset": None},
+        "stage_a": {"dataset": None, "blocks": 1},
+        "stage_b": {"dataset": None, "blocks": 1},
         "effective_ceilings": _ceilings(),
         "identity": identity,
     }
+    session_path = root / R.SESSION_FILENAME
+    if session_path.is_file():
+        session_sha256 = hashlib.sha256(session_path.read_bytes()).hexdigest()
+    else:
+        session_sha256 = R.write_immutable_artifact(
+            session_path,
+            {
+                "schema_version": R.SESSION_SCHEMA,
+                "contract_version": C.CONTRACT_VERSION,
+                "session_id": validated["session_id"],
+                "authorized_scope": scope,
+                "authorized_output_root": str(root),
+                "ledger_identity": dict(identity),
+            },
+        )
     ledger = R.TokenLedger(root / R.LEDGER_FILENAME, identity, _ceilings())
-    return R.ExecutionSession(validated, ledger)
+    return R.ExecutionSession(
+        validated, ledger, session_path=session_path, session_sha256=session_sha256
+    )
 
 
-def _bound(session, extra):
+def _plan_entry(plan, candidate_id):
+    return next(e for e in plan["plan"]["candidates"] if e["candidate_id"] == candidate_id)
+
+
+def _bound(session, plan, candidate, extra):
     payload = dict(extra)
     payload.update(dict(R._session_bindings(session)))  # noqa: SLF001
     payload["ledger_identity"] = dict(session.ledger.identity)
     payload["eligible"] = True
-    payload["run_meta_sha256"] = "rm"
+    payload["candidate_spec_sha256"] = _plan_entry(plan, candidate["candidate_id"])[
+        "candidate_spec_sha256"
+    ]
+    payload["phase_plan_sha256"] = plan["plan_sha256"]
+    payload["session_sha256"] = session.session_sha256
+    payload.setdefault("compile_evidence", _compile_evidence(bool(candidate["compile"])))
+    payload.setdefault("canonical_compile_path", True)
     return payload
 
 
-def _bound_mb_result(candidate, session, **over):
+def _run_meta_doc(candidate, session, plan, payload, **over):
+    bindings = dict(R._session_bindings(session))  # noqa: SLF001
+    doc = {
+        "schema_version": C.RUN_META_SCHEMA,
+        "contract_version": C.CONTRACT_VERSION,
+        "phase": candidate["phase"],
+        "candidate_id": candidate["candidate_id"],
+        "seed_label": candidate["seed_label"],
+        "micro_bsz": candidate["micro_bsz"],
+        "grad_accum": candidate["grad_accum"],
+        "compile": bool(candidate["compile"]),
+        "model_seed": candidate["model_init_seed"],
+        "train_order_seed": candidate["train_order_seed"],
+        "output_dir": str(Path(candidate["output_dir"]).resolve()),
+        "candidate_spec_sha256": payload["candidate_spec_sha256"],
+        "phase_plan_sha256": payload["phase_plan_sha256"],
+        "session_sha256": payload["session_sha256"],
+        "session_id": session.session_id,
+        "contract_sha256": bindings["contract_sha256"],
+        "implementation_head": bindings["implementation_head"],
+        "execution_bundle_sha256": bindings["execution_bundle_sha256"],
+        "pilot_index_manifest_file_sha256": bindings["pilot_index_manifest_file_sha256"],
+        "runtime_fingerprint_sha256": bindings["runtime_fingerprint_sha256"],
+        "authorization_sha256": bindings["authorization_sha256"],
+        "lr_configuration": {
+            "peak_lr": candidate["peak_lr"],
+            "warmup_updates": candidate["warmup_updates"],
+            "updates": candidate["updates"],
+        },
+        "ledger_identity": dict(session.ledger.identity),
+    }
+    doc.update(over)
+    return doc
+
+
+def _bound_mb_result(candidate, session, plan, **over):
     r = _bound(
         session,
+        plan,
+        candidate,
         {
             "phase": "MB",
             "candidate_id": candidate["candidate_id"],
@@ -830,8 +953,8 @@ def _bound_mb_result(candidate, session, **over):
             "grad_accum": candidate["grad_accum"],
             "compile": candidate["compile"],
             "completed_updates": 40,
-            "measured_update_wall_seconds": list(MEASURED_SECONDS),
-            "median_tokens_per_sec": MEASURED_TPS,
+            "update_timings": _mb_timings(),
+            "median_update_tokens_per_second": MEASURED_TPS,
             "max_memory_reserved_bytes": 8 * 1024**3,
             "oom": False,
             "uncontrolled_exception": False,
@@ -840,7 +963,6 @@ def _bound_mb_result(candidate, session, **over):
             "all_optimizer_states_instantiated": True,
             "grouping_matches_contract": True,
             "all_lr_ratios_are_one": True,
-            "canonical_compile_path": True,
             "output_dir": candidate["output_dir"],
         },
     )
@@ -848,17 +970,22 @@ def _bound_mb_result(candidate, session, **over):
     return r
 
 
-def _bound_lr_result(candidate, session, score, **over):
+def _bound_lr_result(candidate, session, plan, base_score, **over):
     weight = 1024.0
-    numerator = float(score) * weight
-    loss = numerator / max(1.0, weight)
+    numerator = float(base_score) * weight
+    loss = numerator / weight
     r = _bound(
         session,
+        plan,
+        candidate,
         {
             "phase": "LR",
             "candidate_id": candidate["candidate_id"],
             "peak_lr": candidate["peak_lr"],
             "seed_label": candidate["seed_label"],
+            "micro_bsz": candidate["micro_bsz"],
+            "grad_accum": candidate["grad_accum"],
+            "compile": candidate["compile"],
             "completed_updates": 200,
             "all_losses_finite": True,
             "all_grad_norms_finite": True,
@@ -882,37 +1009,76 @@ def _bound_lr_result(candidate, session, score, **over):
     return r
 
 
-def _write_result(candidate, payload):
+def _write_result(candidate, session, plan, payload, meta_over=None):
+    """Publish the candidate's evidence the way the real worker does: run_meta then result."""
     out = Path(candidate["output_dir"])
-    out.mkdir(parents=True)
-    (out / "result.json").write_bytes(C.canonical_json_bytes(payload))
+    out.mkdir(parents=True, exist_ok=True)
+    meta = _run_meta_doc(candidate, session, plan, payload, **(meta_over or {}))
+    body = C.canonical_json_bytes(meta)
+    (out / "run_meta.json").write_bytes(body)
+    published = dict(payload)
+    published.setdefault("run_meta_sha256", hashlib.sha256(body).hexdigest())
+    (out / "result.json").write_bytes(C.canonical_json_bytes(published))
+    return published
 
 
-def test_candidate_functions_reject_a_plain_authorized_dict(tmp_path):
-    """The `context['authorized'] = True` pattern is gone; a mapping is not a session."""
-    candidate = R.plan_phase_mb(output_root=tmp_path / "root")[0]
-    for fn in (R.run_phase_mb_candidate, R.run_phase_lr_candidate):
-        with pytest.raises(C.PilotContractError, match="validated ExecutionSession"):
-            fn(candidate, {"authorized": True, "train_view": None, "ledger": None})
+def _published_mb_plan(session):
+    """Publish the immutable Phase-MB plan the launcher tests need."""
+    candidates = R.plan_phase_mb(output_root=session.output_root)
+    plan = R.publish_phase_plan(
+        root=session.output_root,
+        plan_kind="PHASE_MB_PLAN",
+        session_sha256=session.session_sha256,
+        session_id=session.session_id,
+        candidates=candidates,
+        derived_from={"source": "the frozen P-PILOT-CONTRACT-V2.3 Phase-MB grid"},
+    )
+    return candidates, plan
+
+
+def _mb_launcher(**over):
+    """A fake launcher. It cannot reach the real training backend: the signature differs."""
+
+    def launcher(candidate, session, plan):
+        _write_result(candidate, session, plan, _bound_mb_result(candidate, session, plan, **over))
+
+    return launcher
+
+
+def test_no_real_backend_accepts_a_constructed_session_or_context(tmp_path):
+    """R3 Part 1: no callable that can reach the model takes a caller-built authority object."""
+    for removed in ("run_phase_mb_candidate", "run_phase_lr_candidate"):
+        assert not hasattr(R, removed), removed
+    session = _fake_session(tmp_path)
+    progress = {"completed_updates": 0, "update_timings": []}
+    for fn in R.REAL_TRAINING_ENTRYPOINTS:
+        for impostor in ({"authorized": True}, session, object()):
+            with pytest.raises(R.BindingFailure, match="WorkerAuthority"):
+                fn(impostor, progress)
+    with pytest.raises(R.BindingFailure, match="WorkerAuthority"):
+        R.execute_validated_candidate(session, progress)
+    with pytest.raises(R.BindingFailure, match="minted only by"):
+        R.WorkerAuthority(object())
 
 
 def test_phase_mb_only_scope_cannot_run_lr(tmp_path):
     session = _fake_session(tmp_path, scope="PHASE_MB_ONLY")
     with pytest.raises(R.BindingFailure, match="PHASE_MB_ONLY"):
-        R.orchestrate_phase_muon_lr(session, backend=lambda *_: None)
+        R.orchestrate_phase_muon_lr(session, launcher=lambda *_: None)
 
 
 def test_orchestrator_runs_exactly_the_ten_candidates(tmp_path):
-    """A fake backend records what the orchestrator chose to launch."""
+    """A fake launcher records what the orchestrator chose to launch."""
     session = _fake_session(tmp_path)
     launched = []
 
-    def backend(candidate, given):
+    def launcher(candidate, given, plan):
         assert isinstance(given, R.ExecutionSession)
+        assert plan["plan"]["plan_kind"] == "PHASE_MB_PLAN"
         launched.append(candidate["candidate_id"])
-        _write_result(candidate, _bound_mb_result(candidate, given))
+        _write_result(candidate, given, plan, _bound_mb_result(candidate, given, plan))
 
-    report = R.orchestrate_phase_mb(session, backend=backend)
+    report = R.orchestrate_phase_mb(session, launcher=launcher)
     assert launched == list(C.MB_REQUIRED_CANDIDATE_IDS)
     assert len(launched) == 10
     assert report["selection"]["outcome"] == "PHASE_MB_FROZEN"
@@ -922,13 +1088,13 @@ def test_candidate_local_failure_becomes_ineligible_evidence_and_grid_continues(
     session = _fake_session(tmp_path)
     launched = []
 
-    def backend(candidate, given):
+    def launcher(candidate, given, plan):
         launched.append(candidate["candidate_id"])
         if candidate["candidate_id"] == "mb_micro16_compileoff":
             raise R.CandidateFailure("simulated candidate-local CUDA failure")
-        _write_result(candidate, _bound_mb_result(candidate, given))
+        _write_result(candidate, given, plan, _bound_mb_result(candidate, given, plan))
 
-    report = R.orchestrate_phase_mb(session, backend=backend)
+    report = R.orchestrate_phase_mb(session, launcher=launcher)
     assert len(launched) == 10, "the grid must continue after a candidate-local failure"
     failed = [c for c in report["candidates"] if c["candidate_id"] == "mb_micro16_compileoff"]
     assert failed and failed[0]["eligible"] is False
@@ -939,40 +1105,49 @@ def test_candidate_local_failure_becomes_ineligible_evidence_and_grid_continues(
 def test_phase_level_binding_failure_aborts(tmp_path):
     session = _fake_session(tmp_path)
 
-    def backend(candidate, given):
+    def launcher(candidate, given, plan):
         raise C.PilotContractError("accepted-release binding failed")
 
     with pytest.raises(R.PhaseAbort, match="accepted-release binding failed"):
-        R.orchestrate_phase_mb(session, backend=backend)
+        R.orchestrate_phase_mb(session, launcher=launcher)
 
 
 def test_result_must_bind_this_execution(tmp_path):
     session = _fake_session(tmp_path)
 
-    def backend(candidate, given):
-        _write_result(candidate, _bound_mb_result(candidate, given, contract_sha256="WRONG"))
+    def launcher(candidate, given, plan):
+        _write_result(
+            candidate,
+            given,
+            plan,
+            _bound_mb_result(candidate, given, plan, contract_sha256="WRONG"),
+        )
 
     with pytest.raises(R.BindingFailure, match="does not bind this execution"):
-        R.orchestrate_phase_mb(session, backend=backend)
+        R.orchestrate_phase_mb(session, launcher=launcher)
 
 
 def _frozen_mb_report(session, micro_bsz=8, compile_on=False):
     """Publish an authoritative Phase-MB report that freezes a specific geometry."""
 
-    def backend(candidate, given):
+    def launcher(candidate, given, plan):
         fast = candidate["micro_bsz"] == micro_bsz and candidate["compile"] is compile_on
-        seconds = [0.25 if fast else 1.0] * len(MEASURED_SECONDS)
+        seconds = [0.25 if fast else 1.0] * len(C.MB_MEASURED_UPDATES)
+        timings = _mb_timings(seconds)
         _write_result(
             candidate,
+            given,
+            plan,
             _bound_mb_result(
                 candidate,
                 given,
-                measured_update_wall_seconds=seconds,
-                median_tokens_per_sec=C.EFFECTIVE_BATCH_TOKENS / seconds[0],
+                plan,
+                update_timings=timings,
+                median_update_tokens_per_second=C.mb_median_update_tokens_per_second(timings),
             ),
         )
 
-    return R.orchestrate_phase_mb(session, backend=backend)
+    return R.orchestrate_phase_mb(session, launcher=launcher)
 
 
 def test_lr_orchestrator_derives_grid_confirmation_and_edge(tmp_path):
@@ -982,12 +1157,17 @@ def test_lr_orchestrator_derives_grid_confirmation_and_edge(tmp_path):
     launched = []
     scores = {2e-4: 3.0, 3e-4: 3.5, 4e-4: 3.9, 1e-4: 2.5}
 
-    def backend(candidate, given):
+    def launcher(candidate, given, plan):
         launched.append((candidate["peak_lr"], candidate["seed_label"]))
         assert candidate["micro_bsz"] == 8 and candidate["compile"] is False
-        _write_result(candidate, _bound_lr_result(candidate, given, scores[candidate["peak_lr"]]))
+        _write_result(
+            candidate,
+            given,
+            plan,
+            _bound_lr_result(candidate, given, plan, scores[candidate["peak_lr"]]),
+        )
 
-    report = R.orchestrate_phase_muon_lr(session, backend=backend)
+    report = R.orchestrate_phase_muon_lr(session, launcher=launcher)
     seed1_lrs = sorted(lr for lr, seed in launched if seed == "seed-1" and lr in C.LR_GRID_SEED1)
     assert seed1_lrs == sorted(C.LR_GRID_SEED1), "initial grid derived internally"
     # winner is 2e-4 (lowest score) -> confirmation neighbour is the HIGHER 3e-4
@@ -1336,7 +1516,10 @@ def test_global_token_mean_rejects_batch_mean_averaging():
 
     src = inspect.getsource(R.evaluate)
     assert "total_numerator" in src and "total_weight" in src
-    assert "/ max(1.0, total_weight)" in src
+    # R3 Part 5: the producer divides by the accumulated weight exactly, guarded by a
+    # positive-weight requirement, so the parent's recomputation can agree exactly.
+    assert "total_numerator / total_weight" in src
+    assert "max(1.0, total_weight)" not in src
 
 
 # ------------------------------------------------------------------ R1: dtype + ordering
@@ -1414,7 +1597,8 @@ def test_run_updates_enforces_exact_consumption_and_ledger(tmp_path):
     view = R.IndexView(_FakeDataset(64), list(range(8)))
     with pytest.raises(C.PilotContractError, match="without replay"):
         R._run_updates(  # noqa: SLF001
-            model=mock.Mock(),
+            module=mock.Mock(),
+            forward=R.ObservedForward(mock.Mock()),
             optimizer=mock.Mock(),
             view=view,
             micro_bsz=2,
@@ -1424,6 +1608,7 @@ def test_run_updates_enforces_exact_consumption_and_ledger(tmp_path):
             ledger=ledger,
             phase="MB",
             device="cpu",
+            progress={"completed_updates": 0, "update_timings": []},
         )
     assert ledger.state["reserved_updates"] == 0, "a refused run must not reserve tokens"
     assert ledger.state["completed_updates"] == 0
@@ -1506,36 +1691,49 @@ def _enclosing_functions(tree, predicate):
 
 
 def test_every_backend_path_passes_through_the_shared_artifact_validator():
-    """R2 Part 1: the real training backends are reachable only from the validated worker."""
+    """R3 Part 1: the real training backends are reachable only from the validated worker."""
     import ast
 
     tree = _runner_ast()
     # The backends are selected by name and then invoked, so a reference is the reachable edge.
     callers = _enclosing_functions(
         tree,
-        lambda n: (
-            isinstance(n, ast.Name) and n.id in ("run_phase_mb_candidate", "run_phase_lr_candidate")
-        ),
+        lambda n: isinstance(n, ast.Name) and n.id in ("_train_phase_mb", "_train_phase_lr"),
     )
-    assert callers == {"_cli_execute_candidate"}, callers
+    assert callers == {"execute_validated_candidate"}, callers
+    dispatcher = _enclosing_functions(
+        tree,
+        lambda n: isinstance(n, ast.Name) and n.id == "execute_validated_candidate",
+    )
+    assert dispatcher == {"_cli_internal_worker", "_require_test_launcher"}, dispatcher
     worker = next(
         n
         for n in ast.walk(tree)
-        if isinstance(n, ast.FunctionDef) and n.name == "_cli_execute_candidate"
+        if isinstance(n, ast.FunctionDef) and n.name == "_cli_internal_worker"
     )
     assert any(
-        isinstance(n, ast.Call) and isinstance(n.func, ast.Name) and n.func.id == "open_session"
+        isinstance(n, ast.Call)
+        and isinstance(n.func, ast.Name)
+        and n.func.id == "validate_worker_execution"
         for n in ast.walk(worker)
     )
-    opener = next(
-        n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef) and n.name == "open_session"
+    validator = next(
+        n
+        for n in ast.walk(tree)
+        if isinstance(n, ast.FunctionDef) and n.name == "validate_worker_execution"
     )
     assert any(
         isinstance(n, ast.Call)
         and isinstance(n.func, ast.Name)
         and n.func.id == "validate_execution_artifacts"
-        for n in ast.walk(opener)
+        for n in ast.walk(validator)
     )
+    # Only the validator mints the authority the training entrypoints require.
+    minters = _enclosing_functions(
+        tree,
+        lambda n: isinstance(n, ast.Name) and n.id == "_WORKER_AUTHORITY_MINT",
+    )
+    assert minters == {"__init__", "validate_worker_execution"}, minters
 
 
 def test_the_validator_accepts_only_artifact_paths_and_the_requested_phase():
@@ -1545,7 +1743,6 @@ def test_the_validator_accepts_only_artifact_paths_and_the_requested_phase():
     params = inspect.signature(R.validate_execution_artifacts).parameters
     assert set(params) == {
         "authorization_path",
-        "candidate_spec_path",
         "pilot_index_manifest_path",
         "output_dir",
         "requested_phase",
@@ -1555,8 +1752,41 @@ def test_the_validator_accepts_only_artifact_paths_and_the_requested_phase():
         assert name not in params
 
 
+def test_the_real_worker_entry_takes_canonical_artifact_paths_only(tmp_path):
+    """R3 Part 1: every raw input to the real worker is a path to a canonical artifact."""
+    import inspect
+
+    params = inspect.signature(R.validate_worker_execution).parameters
+    assert set(params) == set(R.REAL_WORKER_ARTIFACT_INPUTS) | {"gpu_required"}
+    for required in (
+        "authorization_path",
+        "session_manifest_path",
+        "phase_plan_path",
+        "candidate_spec_path",
+        "pilot_index_manifest_path",
+        "accepted_stage_a_path",
+        "accepted_stage_b_path",
+        "ledger_path",
+        "candidate_output_path",
+    ):
+        assert required in params, required
+    for banned in ("session", "context", "validated", "authorized", "candidate", "backend"):
+        assert banned not in params
+    # It revalidates the bytes itself rather than trusting anything about its caller.
+    src = inspect.getsource(R.validate_worker_execution)
+    assert "validate_execution_artifacts(" in src
+    assert "validate_session_manifest(" in src
+    assert "validate_phase_plan(" in src
+    assert "derive_planned_candidates(" in src
+
+
 def test_the_old_trust_in_context_api_is_gone():
-    for removed in ("build_validated_context", "ValidatedExecutionContext"):
+    for removed in (
+        "build_validated_context",
+        "ValidatedExecutionContext",
+        "run_phase_mb_candidate",
+        "run_phase_lr_candidate",
+    ):
         assert not hasattr(R, removed), removed
     src = Path(R.__file__).read_text(encoding="utf-8")
     assert "manifest_path=None" not in src
@@ -1567,7 +1797,6 @@ def test_validator_refuses_when_the_authorization_file_is_absent(tmp_path):
     with pytest.raises(R.BindingFailure, match="NOT_AUTHORIZED"):
         R.validate_execution_artifacts(
             authorization_path=tmp_path / "absent.json",
-            candidate_spec_path=None,
             pilot_index_manifest_path=tmp_path / "absent_indices.json",
             output_dir=tmp_path / "out",
             requested_phase="MB",
@@ -1578,11 +1807,11 @@ def test_validator_refuses_when_the_authorization_file_is_absent(tmp_path):
 def test_binding_failure_is_never_downgraded_to_an_ineligible_candidate(tmp_path):
     session = _fake_session(tmp_path)
 
-    def backend(candidate, given):
+    def launcher(candidate, given, plan):
         raise R.BindingFailure("forged release identity")
 
     with pytest.raises(R.BindingFailure, match="forged release identity"):
-        R.orchestrate_phase_mb(session, backend=backend)
+        R.orchestrate_phase_mb(session, launcher=launcher)
 
 
 # ==================================================== R2 Part 2: real paths reach the child
@@ -1608,78 +1837,105 @@ def _fake_subprocess(monkeypatch, handler):
     return calls
 
 
-def test_parent_hands_the_child_the_real_manifest_spec_and_index_paths(tmp_path, monkeypatch):
+def test_parent_hands_the_child_only_canonical_artifact_paths(tmp_path, monkeypatch):
     session = _fake_session(tmp_path)
-    candidate = R.plan_phase_mb(output_root=session.output_root)[0]
+    candidates, plan = _published_mb_plan(session)
+    candidate = candidates[0]
 
     def handler(argv, kwargs):
-        spec_path = Path(argv[argv.index("--spec") + 1])
-        R.write_terminal_result(
-            spec_path,
-            {
-                "terminal_status": "SUCCESS",
-                "error_class": None,
-                "error_message": None,
-                "completed_updates": 40,
-                "reserved_tokens": {},
-                "completed_tokens": {},
-                "run_meta_sha256": "rm",
-                "candidate_id": candidate["candidate_id"],
-                "phase": "MB",
-            },
-        )
+        spec_path = Path(argv[argv.index("--candidate-spec") + 1])
+        R.write_terminal_result(spec_path, _terminal(candidate_id=candidate["candidate_id"]))
         return _FakeCompleted(0, "out", "err")
 
     calls = _fake_subprocess(monkeypatch, handler)
-    R._subprocess_backend(candidate, session)  # noqa: SLF001
+    R._subprocess_launcher(candidate, session, plan)  # noqa: SLF001
     argv = calls[0][0]
-    assert argv[argv.index("--authorization") + 1] == session.validated["authorization_path"]
-    assert (
-        argv[argv.index("--pilot-index-manifest") + 1] == session.validated["index_manifest_path"]
-    )
-    spec = json.loads(Path(argv[argv.index("--spec") + 1]).read_text(encoding="utf-8"))
-    assert spec["authorization_path"] == session.validated["authorization_path"]
-    assert spec["pilot_index_manifest_path"] == session.validated["index_manifest_path"]
-    # The spec carries no hashes, counts or authority the child could take on trust.
-    assert set(spec) == {
-        "candidate",
-        "authorization_path",
-        "pilot_index_manifest_path",
-        "authorized_output_root",
-        "session_id",
+    assert argv[2] == "internal-worker"
+    flags = {argv[i]: argv[i + 1] for i in range(len(argv)) if str(argv[i]).startswith("--")}
+    assert flags["--authorization"] == session.validated["authorization_path"]
+    assert flags["--pilot-index-manifest"] == session.validated["index_manifest_path"]
+    assert flags["--session-manifest"] == str(session.session_path)
+    assert flags["--phase-plan"] == str(plan["plan_path"])
+    assert flags["--ledger"] == str(session.output_root / R.LEDGER_FILENAME)
+    assert flags["--candidate-output"] == candidate["output_dir"]
+    assert flags["--accepted-stage-a"].endswith(R.ACCEPTED_STAGE_A)
+    assert flags["--accepted-stage-b"].endswith(R.ACCEPTED_STAGE_B)
+    # Every raw input is a path; nothing else is passed at all.
+    assert set(flags) == {f"--{n.rsplit('_path', 1)[0].replace('_', '-')}" for n in ()} | {
+        "--authorization",
+        "--session-manifest",
+        "--phase-plan",
+        "--candidate-spec",
+        "--pilot-index-manifest",
+        "--accepted-stage-a",
+        "--accepted-stage-b",
+        "--ledger",
+        "--candidate-output",
     }
+    spec = json.loads(Path(flags["--candidate-spec"]).read_text(encoding="utf-8"))
+    # The spec carries the candidate and its session binding -- no hashes, counts or authority.
+    assert set(spec) == {
+        "schema_version",
+        "contract_version",
+        "session_id",
+        "session_sha256",
+        "plan_kind",
+        "phase",
+        "candidate",
+    }
+    assert spec["candidate"] == candidate
 
 
-def test_the_child_cli_requires_both_artifact_paths(tmp_path):
+def test_the_worker_cli_requires_every_artifact_path(tmp_path):
+    """R3 Part 2: the internal worker has no optional inputs and no legacy public command."""
     with pytest.raises(SystemExit) as excinfo:
         R.main(["execute-candidate", "--spec", str(tmp_path / "s.json")])
+    assert excinfo.value.code == 2  # the old public command no longer exists
+    with pytest.raises(SystemExit) as excinfo:
+        R.main(["internal-worker", "--candidate-spec", str(tmp_path / "s.json")])
     assert excinfo.value.code == 2
 
 
-def test_child_refuses_a_spec_whose_paths_disagree_with_its_launch(tmp_path):
-    spec = tmp_path / "spec.json"
-    spec.write_bytes(
-        C.canonical_json_bytes({
-            "candidate": {"phase": "MB", "candidate_id": "mb_micro8_compileoff"},
-            "authorization_path": "/somewhere/else.json",
-            "pilot_index_manifest_path": str(tmp_path / "PILOT_INDICES.json"),
-            "authorized_output_root": str(tmp_path / "root"),
-            "session_id": "s",
-        })
-    )
-    code = R.main([
-        "execute-candidate",
-        "--spec",
-        str(spec),
-        "--authorization",
-        str(tmp_path / "auth.json"),
-        "--pilot-index-manifest",
-        str(tmp_path / "PILOT_INDICES.json"),
-    ])
+def _worker_argv(tmp_path, spec, **over):
+    argv = {
+        "--authorization": str(tmp_path / "auth.json"),
+        "--session-manifest": str(tmp_path / "root" / R.SESSION_FILENAME),
+        "--phase-plan": str(tmp_path / "root" / R.PHASE_MB_PLAN_FILENAME),
+        "--candidate-spec": str(spec),
+        "--pilot-index-manifest": str(tmp_path / "PILOT_INDICES.json"),
+        "--accepted-stage-a": str(REPO_ROOT / R.ACCEPTED_STAGE_A),
+        "--accepted-stage-b": str(REPO_ROOT / R.ACCEPTED_STAGE_B),
+        "--ledger": str(tmp_path / "root" / R.LEDGER_FILENAME),
+        "--candidate-output": str(tmp_path / "root" / "mb_micro8_compileoff"),
+    }
+    argv.update(over)
+    return ["internal-worker", *[v for kv in argv.items() for v in kv]]
+
+
+def _self_declared_spec(tmp_path, **over):
+    spec = tmp_path / "self_declared.json"
+    doc = {
+        "schema_version": R.CANDIDATE_SPEC_SCHEMA,
+        "contract_version": C.CONTRACT_VERSION,
+        "session_id": "s",
+        "session_sha256": "deadbeef",
+        "plan_kind": "PHASE_MB_PLAN",
+        "phase": "MB",
+        "candidate": R.plan_phase_mb(output_root=tmp_path / "root")[4],
+    }
+    doc.update(over)
+    spec.write_bytes(C.canonical_json_bytes(doc))
+    return spec
+
+
+def test_a_self_declared_candidate_spec_is_never_executable(tmp_path):
+    """R3 Part 2: invoking the worker directly with an unlisted spec confers no capability."""
+    spec = _self_declared_spec(tmp_path)
+    code = R.main(_worker_argv(tmp_path, spec))
     assert code == R.BINDING_FAILURE
-    terminal = json.loads(R.terminal_result_path(spec).read_text(encoding="utf-8"))
+    terminal = R.read_terminal_result(spec)
     assert terminal["terminal_status"] == "BINDING_FAILURE"
-    assert "does not match the path this process was launched with" in terminal["error_message"]
+    assert terminal["completed_updates"] == 0
 
 
 # ================================================= R2 Part 3: session and scope semantics
@@ -1696,7 +1952,7 @@ def test_phase_mb_only_session_terminates_after_its_report(tmp_path):
     assert report["session_terminates_after_this_phase"] is True
     assert report["next_phase_requires_new_authorization"] is True
     with pytest.raises(R.BindingFailure, match="never promoted"):
-        R.orchestrate_phase_muon_lr(session, backend=lambda *_: None)
+        R.orchestrate_phase_muon_lr(session, launcher=lambda *_: None)
 
 
 def test_full_pilot_runs_both_phases_under_one_session_and_ledger(tmp_path):
@@ -1722,16 +1978,20 @@ def test_a_report_from_another_session_is_refused(tmp_path):
 def test_a_new_authorization_may_not_reuse_an_existing_session_root(tmp_path, monkeypatch):
     root = tmp_path / "root"
     root.mkdir()
-    (root / R.SESSION_FILENAME).write_bytes(
-        C.canonical_json_bytes({"session_id": "OLD", "scope": "PHASE_MB_ONLY"})
+    R.write_immutable_artifact(
+        root / R.SESSION_FILENAME,
+        {
+            "schema_version": R.SESSION_SCHEMA,
+            "session_id": "OLD",
+            "authorized_scope": "PHASE_MB_ONLY",
+        },
     )
     validated = _fake_session(tmp_path, root=tmp_path / "other").validated
     validated["authorized_root"] = root.resolve()
     monkeypatch.setattr(R, "validate_execution_artifacts", lambda **kw: validated)
-    with pytest.raises(R.BindingFailure, match="different session"):
+    with pytest.raises(R.BindingFailure, match="does not bind this execution"):
         R.open_session(
             authorization_path=tmp_path / "a.json",
-            candidate_spec_path=None,
             pilot_index_manifest_path=tmp_path / "i.json",
             output_dir=root,
             phase="MB",
@@ -1761,10 +2021,10 @@ def test_result_classes_subcommand_reports_the_mapping(capsys):
 def test_phase_abort_when_no_candidate_is_eligible(tmp_path):
     session = _fake_session(tmp_path)
 
-    def backend(candidate, given):
+    def launcher(candidate, given, plan):
         raise R.CandidateFailure("CUDA out of memory")
 
-    report = R.orchestrate_phase_mb(session, backend=backend)
+    report = R.orchestrate_phase_mb(session, launcher=launcher)
     assert report["selection"]["outcome"] == "PHASE_MB_ABORT"
     assert all(c["reason"] == "oom" for c in report["candidates"])
     with pytest.raises(R.PhaseAbort, match="did not freeze a geometry"):
@@ -1815,8 +2075,10 @@ def test_the_ledger_reserves_before_the_optimizer_update_and_completes_after(tmp
     observations = []
     optimizer = _observing_optimizer(model, ledger, observations)
     view = R.IndexView(_FakeDataset(300), list(range(256)))
+    progress = {"completed_updates": 0, "update_timings": []}
     result = R._run_updates(  # noqa: SLF001
-        model=model,
+        module=model,
+        forward=R.ObservedForward(model),
         optimizer=optimizer,
         view=view,
         micro_bsz=2,
@@ -1826,12 +2088,16 @@ def test_the_ledger_reserves_before_the_optimizer_update_and_completes_after(tmp
         ledger=ledger,
         phase="MB",
         device="cpu",
+        progress=progress,
     )
     assert result["completed_updates"] == 2
     assert observations == [(1, 0), (2, 1)], observations
-    assert ledger.state["reserved_updates"] == ledger.state["completed_updates"] == 2
-    assert ledger.state["reserved_tokens"]["MB"] == 2 * C.EFFECTIVE_BATCH_TOKENS
-    assert ledger.state["completed_tokens"]["GLOBAL"] == 2 * C.EFFECTIVE_BATCH_TOKENS
+    assert progress["completed_updates"] == 2
+    assert [t["update"] for t in progress["update_timings"]] == [1, 2]
+    snapshot = ledger.snapshot()
+    assert snapshot["reserved_updates"] == snapshot["completed_updates"] == 2
+    assert snapshot["reserved_tokens"]["MB"] == 2 * C.EFFECTIVE_BATCH_TOKENS
+    assert snapshot["completed_tokens"]["GLOBAL"] == 2 * C.EFFECTIVE_BATCH_TOKENS
 
 
 def test_completed_tokens_can_never_exceed_reserved(tmp_path):
@@ -1869,11 +2135,11 @@ def test_phase_lr_geometry_comes_only_from_the_verified_report(tmp_path):
     assert frozen["grad_accum"] == C.frozen_grad_accum(4)
     launched = []
 
-    def backend(candidate, given):
+    def launcher(candidate, given, plan):
         launched.append((candidate["micro_bsz"], candidate["compile"]))
-        _write_result(candidate, _bound_lr_result(candidate, given, 3.0))
+        _write_result(candidate, given, plan, _bound_lr_result(candidate, given, plan, 3.0))
 
-    R.orchestrate_phase_muon_lr(session, backend=backend)
+    R.orchestrate_phase_muon_lr(session, launcher=launcher)
     assert set(launched) == {(4, True)}
 
 
@@ -1915,7 +2181,7 @@ def test_run_subcommand_requires_both_artifact_paths():
 def test_lr_refuses_without_an_authoritative_report(tmp_path):
     session = _fake_session(tmp_path)
     with pytest.raises(R.BindingFailure, match="never taken from the command line"):
-        R.orchestrate_phase_muon_lr(session, backend=lambda *_: None)
+        R.orchestrate_phase_muon_lr(session, launcher=lambda *_: None)
 
 
 def test_lr_refuses_a_report_whose_bytes_changed(tmp_path):
@@ -1960,50 +2226,207 @@ def test_lr_refuses_a_report_with_an_incomplete_grid(tmp_path):
 # ================================ R2 Part 7: every selection number is recomputed from evidence
 
 
-def test_mb_throughput_is_recomputed_from_the_raw_per_update_timings():
-    seconds = [0.2, 0.4, 0.3]
-    assert R.median_tokens_per_sec(seconds) == C.EFFECTIVE_BATCH_TOKENS / 0.3
+def test_mb_throughput_is_the_median_of_the_per_update_rates():
+    """R3 Part 6: median(tokens/seconds), computed from records -- not tokens/median(seconds)."""
+    records = _mb_timings([0.2, 0.4] + [0.3] * 28)
+    rates = [C.TRAINED_TOKENS_PER_UPDATE / r["wall_seconds"] for r in records]
+    import statistics
+
+    assert C.mb_median_update_tokens_per_second(records) == statistics.median(rates)
+    assert [C.mb_update_tokens_per_second(r) for r in records] == rates
+
+
+def test_median_of_rates_is_not_tokens_over_median_seconds():
+    """A regression fixture where the two statistics genuinely disagree."""
+    import statistics
+
+    # An even sample: the median averages the two middle values, and averaging rates is not
+    # the reciprocal of averaging seconds.
+    seconds = [0.10] * 15 + [1.00] * 15
+    records = _mb_timings(seconds)
+    median_of_rates = C.mb_median_update_tokens_per_second(records)
+    tokens_over_median_seconds = C.TRAINED_TOKENS_PER_UPDATE / statistics.median(seconds)
+    assert median_of_rates == pytest.approx(
+        (C.TRAINED_TOKENS_PER_UPDATE / 0.10 + C.TRAINED_TOKENS_PER_UPDATE / 1.00) / 2
+    )
+    assert tokens_over_median_seconds == pytest.approx(C.TRAINED_TOKENS_PER_UPDATE / 0.55)
+    assert median_of_rates != pytest.approx(tokens_over_median_seconds, rel=0.1)
+    # The contract names the former; the recomputation must reproduce exactly that.
+    assert median_of_rates > tokens_over_median_seconds
+
+
+@pytest.mark.parametrize(
+    "mutate, message",
+    [
+        (lambda t: t[:-1], "no record for measured update"),
+        (lambda t: [*t, dict(t[-1])], "more than once"),
+        (lambda t: [*t, {**t[-1], "update": 41}], "unmeasured update"),
+        (lambda t: [{**r, "update": r["update"] + 1} for r in t], "no record for measured update"),
+        (lambda t: [{**t[0], "trained_tokens": 1}, *t[1:]], "trained tokens"),
+        (lambda t: [{**t[0], "wall_seconds": 0.0}, *t[1:]], "non-positive"),
+        (lambda t: [{k: v for k, v in t[0].items() if k != "update"}, *t[1:]], "is missing"),
+    ],
+)
+def test_mb_timing_records_must_cover_11_to_40_exactly(mutate, message):
+    with pytest.raises(C.PilotContractError, match=message):
+        C.require_exact_mb_timing_records(mutate(_mb_timings()))
+
+
+def test_mb_timing_records_accept_exactly_the_measured_window():
+    records = C.require_exact_mb_timing_records(_mb_timings())
+    assert [r["update"] for r in records] == list(range(11, 41))
+    assert len(records) == 30
 
 
 def test_mb_recomputation_rejects_a_forged_median(tmp_path):
     session = _fake_session(tmp_path)
-    candidate = R.plan_phase_mb(output_root=session.output_root)[0]
-    forged = _bound_mb_result(candidate, session, median_tokens_per_sec=1e9)
-    with pytest.raises(R.BindingFailure, match="disagrees with the value recomputed"):
+    candidates, plan = _published_mb_plan(session)
+    forged = _bound_mb_result(candidates[0], session, plan, median_update_tokens_per_second=1e9)
+    with pytest.raises(R.BindingFailure, match="disagrees with the median of the per-update rates"):
         R.verify_recomputed_mb_result(forged)
+
+
+def test_mb_recomputation_rejects_a_median_computed_the_wrong_way(tmp_path):
+    """tokens / median(seconds) is a different statistic and is refused as a stored median."""
+    import statistics
+
+    session = _fake_session(tmp_path)
+    candidates, plan = _published_mb_plan(session)
+    seconds = [0.10] * 15 + [1.00] * 15
+    timings = _mb_timings(seconds)
+    wrong = C.TRAINED_TOKENS_PER_UPDATE / statistics.median(seconds)
+    forged = _bound_mb_result(
+        candidates[0],
+        session,
+        plan,
+        update_timings=timings,
+        median_update_tokens_per_second=wrong,
+    )
+    with pytest.raises(R.BindingFailure, match="disagrees with the median of the per-update rates"):
+        R.verify_recomputed_mb_result(forged)
+    good = _bound_mb_result(
+        candidates[0],
+        session,
+        plan,
+        update_timings=timings,
+        median_update_tokens_per_second=C.mb_median_update_tokens_per_second(timings),
+    )
+    assert R.verify_recomputed_mb_result(good)["measured_updates"] == 30
 
 
 def test_mb_recomputation_rejects_the_wrong_number_of_measured_updates(tmp_path):
     session = _fake_session(tmp_path)
-    candidate = R.plan_phase_mb(output_root=session.output_root)[0]
-    short = _bound_mb_result(
-        candidate,
-        session,
-        measured_update_wall_seconds=[0.25] * 5,
-        median_tokens_per_sec=C.EFFECTIVE_BATCH_TOKENS / 0.25,
-    )
-    with pytest.raises(R.BindingFailure, match="the contract measures exactly"):
+    candidates, plan = _published_mb_plan(session)
+    short = _bound_mb_result(candidates[0], session, plan, update_timings=_mb_timings()[:5])
+    with pytest.raises(R.BindingFailure, match="timing evidence is unusable"):
         R.verify_recomputed_mb_result(short)
 
 
 def test_mb_recomputation_rejects_missing_timings(tmp_path):
     session = _fake_session(tmp_path)
-    candidate = R.plan_phase_mb(output_root=session.output_root)[0]
-    with pytest.raises(C.PilotContractError, match="no measured per-update wall timings"):
+    candidates, plan = _published_mb_plan(session)
+    with pytest.raises(R.BindingFailure, match="timing evidence is unusable"):
         R.verify_recomputed_mb_result(
-            _bound_mb_result(candidate, session, measured_update_wall_seconds=[])
+            _bound_mb_result(candidates[0], session, plan, update_timings=[])
         )
+
+
+def _lr_plan(session, peak_lrs=(2e-4,), seed_label="seed-1", plan_kind="PHASE_LR_INITIAL_PLAN"):
+    candidates = R.plan_phase_lr(
+        output_root=session.output_root,
+        micro_bsz=8,
+        compile_on=False,
+        peak_lrs=list(peak_lrs),
+        seed_label=seed_label,
+    )
+    plan = R.publish_phase_plan(
+        root=session.output_root,
+        plan_kind=plan_kind,
+        session_sha256=session.session_sha256,
+        session_id=session.session_id,
+        candidates=candidates,
+        derived_from={
+            "frozen_geometry": {"micro_bsz": 8, "grad_accum": 16, "compile": False},
+            "peak_lrs": [float(v) for v in peak_lrs],
+            "seed_labels": [seed_label],
+        },
+    )
+    return candidates, plan
 
 
 def test_lr_score_is_recomputed_from_the_raw_evaluation_components(tmp_path):
     session = _fake_session(tmp_path)
-    candidate = R.plan_phase_lr(
-        output_root=session.output_root, micro_bsz=8, compile_on=False, peak_lrs=[2e-4]
-    )[0]
-    good = _bound_lr_result(candidate, session, 3.25)
+    candidates, plan = _lr_plan(session)
+    good = _bound_lr_result(candidates[0], session, plan, 3.25)
     recomputed = R.verify_recomputed_lr_result(good)
     assert recomputed["score"] == good["score"]
     assert recomputed["score_weights"] == [10, 3]
+    assert recomputed["score_formula"] == "(10*loss_A + 3*loss_B)/13"
+
+
+def test_lr_score_is_the_weighted_recomputation_of_the_raw_components(tmp_path):
+    """R3 Part 5: SCORE = (10*loss_A + 3*loss_B)/13, from the raw numerators and weights."""
+    session = _fake_session(tmp_path)
+    candidates, plan = _lr_plan(session)
+    result = _bound_lr_result(
+        candidates[0],
+        session,
+        plan,
+        3.0,
+        eval_stage_a_numerator=2400.0,
+        eval_stage_a_weight=800.0,
+        eval_stage_b_numerator=1200.0,
+        eval_stage_b_weight=300.0,
+        eval_loss_stage_a=3.0,
+        eval_loss_stage_b=4.0,
+        score=(10 * 3.0 + 3 * 4.0) / 13,
+    )
+    recomputed = R.verify_recomputed_lr_result(result)
+    assert recomputed["eval_loss_stage_a"] == 2400.0 / 800.0
+    assert recomputed["eval_loss_stage_b"] == 1200.0 / 300.0
+    assert recomputed["score"] == pytest.approx((10 * 3.0 + 3 * 4.0) / 13)
+
+
+def test_internally_consistent_losses_with_a_wrong_stored_score_are_rejected(tmp_path):
+    """The raw losses agree with their own numerators; only the summary SCORE is forged."""
+    session = _fake_session(tmp_path)
+    candidates, plan = _lr_plan(session)
+    result = _bound_lr_result(
+        candidates[0],
+        session,
+        plan,
+        3.0,
+        eval_stage_a_numerator=2400.0,
+        eval_stage_a_weight=800.0,
+        eval_stage_b_numerator=1200.0,
+        eval_stage_b_weight=300.0,
+        eval_loss_stage_a=3.0,
+        eval_loss_stage_b=4.0,
+        score=0.5,  # internally consistent losses, deliberately wrong summary
+    )
+    with pytest.raises(R.BindingFailure, match="serialized score"):
+        R.verify_recomputed_lr_result(result)
+
+
+def test_selectors_consume_only_the_recomputed_lr_values(tmp_path):
+    """The admitted record carries the recomputed score, so a stored one cannot be selected on."""
+    session = _fake_session(tmp_path)
+    _frozen_mb_report(session)
+    seen = {}
+
+    def launcher(candidate, given, plan):
+        payload = _bound_lr_result(candidate, given, plan, 3.0 + candidate["peak_lr"] * 1000)
+        seen[candidate["candidate_id"]] = payload["score"]
+        _write_result(candidate, given, plan, payload)
+
+    report = R.orchestrate_phase_muon_lr(session, launcher=launcher)
+    for record in report["seed1"]:
+        recomputed = C.lr_score(
+            record["eval_stage_a_numerator"] / record["eval_stage_a_weight"],
+            record["eval_stage_b_numerator"] / record["eval_stage_b_weight"],
+        )
+        assert record["score"] == recomputed
+        assert record["score_formula"] == "(10*loss_A + 3*loss_B)/13"
 
 
 @pytest.mark.parametrize(
@@ -2018,10 +2441,8 @@ def test_lr_score_is_recomputed_from_the_raw_evaluation_components(tmp_path):
 )
 def test_lr_recomputation_rejects_disagreeing_or_missing_evidence(tmp_path, over, message):
     session = _fake_session(tmp_path)
-    candidate = R.plan_phase_lr(
-        output_root=session.output_root, micro_bsz=8, compile_on=False, peak_lrs=[2e-4]
-    )[0]
-    forged = _bound_lr_result(candidate, session, 3.25)
+    candidates, plan = _lr_plan(session)
+    forged = _bound_lr_result(candidates[0], session, plan, 3.25)
     forged.update(over)
     with pytest.raises(R.BindingFailure, match=message):
         R.verify_recomputed_lr_result(forged)
@@ -2030,11 +2451,16 @@ def test_lr_recomputation_rejects_disagreeing_or_missing_evidence(tmp_path, over
 def test_a_forged_result_is_caught_by_the_orchestrator_not_only_in_isolation(tmp_path):
     session = _fake_session(tmp_path)
 
-    def backend(candidate, given):
-        _write_result(candidate, _bound_mb_result(candidate, given, median_tokens_per_sec=1e9))
+    def launcher(candidate, given, plan):
+        _write_result(
+            candidate,
+            given,
+            plan,
+            _bound_mb_result(candidate, given, plan, median_update_tokens_per_second=1e9),
+        )
 
-    with pytest.raises(R.BindingFailure, match="disagrees with the value recomputed"):
-        R.orchestrate_phase_mb(session, backend=backend)
+    with pytest.raises(R.BindingFailure, match="disagrees with the median of the per-update rates"):
+        R.orchestrate_phase_mb(session, launcher=launcher)
 
 
 # ==================================================== R2 Part 8: evidence completeness
@@ -2044,13 +2470,13 @@ def test_the_initial_lr_grid_must_be_complete_evidence(tmp_path):
     session = _fake_session(tmp_path)
     _frozen_mb_report(session)
 
-    def backend(candidate, given):
+    def launcher(candidate, given, plan):
         if candidate["peak_lr"] == 4e-4:
             raise R.CandidateFailure("simulated")
-        _write_result(candidate, _bound_lr_result(candidate, given, 3.0))
+        _write_result(candidate, given, plan, _bound_lr_result(candidate, given, plan, 3.0))
 
     # An ineligible record is still a record: the grid is complete and selection may proceed.
-    report = R.orchestrate_phase_muon_lr(session, backend=backend)
+    report = R.orchestrate_phase_muon_lr(session, launcher=launcher)
     assert {float(r["peak_lr"]) for r in report["seed1"]} == set(C.LR_GRID_SEED1)
 
 
@@ -2061,7 +2487,7 @@ def test_a_missing_initial_grid_record_aborts(tmp_path):
         with pytest.raises(C.PilotContractError, match="initial grid incomplete"):
             R.orchestrate_phase_muon_lr(
                 session,
-                backend=lambda c, s: _write_result(c, _bound_lr_result(c, s, 3.0)),
+                launcher=lambda c, s, pl: _write_result(c, s, pl, _bound_lr_result(c, s, pl, 3.0)),
             )
 
 
@@ -2090,7 +2516,9 @@ def test_incomplete_confirmation_evidence_aborts(tmp_path):
         with pytest.raises(R.PhaseAbort, match="confirmation evidence incomplete"):
             R.orchestrate_phase_muon_lr(
                 session,
-                backend=lambda c, s: _write_result(c, _bound_lr_result(c, s, scores[c["peak_lr"]])),
+                launcher=lambda c, s, pl: _write_result(
+                    c, s, pl, _bound_lr_result(c, s, pl, scores[c["peak_lr"]])
+                ),
             )
 
 
@@ -2110,7 +2538,9 @@ def test_incomplete_edge_evidence_aborts(tmp_path):
         with pytest.raises(R.PhaseAbort, match="edge evidence incomplete"):
             R.orchestrate_phase_muon_lr(
                 session,
-                backend=lambda c, s: _write_result(c, _bound_lr_result(c, s, scores[c["peak_lr"]])),
+                launcher=lambda c, s, pl: _write_result(
+                    c, s, pl, _bound_lr_result(c, s, pl, scores[c["peak_lr"]])
+                ),
             )
 
 
@@ -2300,8 +2730,11 @@ def test_the_terminal_status_decides_how_the_parent_proceeds(
     session = _fake_session(tmp_path)
     candidate = R.plan_phase_mb(output_root=session.output_root)[0]
 
+    candidates, plan = _published_mb_plan(session)
+    candidate = candidates[0]
+
     def handler(argv, kwargs):
-        spec_path = Path(argv[argv.index("--spec") + 1])
+        spec_path = Path(argv[argv.index("--candidate-spec") + 1])
         R.write_terminal_result(
             spec_path,
             _terminal(
@@ -2315,65 +2748,51 @@ def test_the_terminal_status_decides_how_the_parent_proceeds(
 
     _fake_subprocess(monkeypatch, handler)
     with pytest.raises(expected):
-        R._subprocess_backend(candidate, session)  # noqa: SLF001
+        R._subprocess_launcher(candidate, session, plan)  # noqa: SLF001
 
 
 def test_a_terminal_status_that_disagrees_with_the_exit_code_aborts(tmp_path, monkeypatch):
     session = _fake_session(tmp_path)
-    candidate = R.plan_phase_mb(output_root=session.output_root)[0]
+    candidates, plan = _published_mb_plan(session)
+    candidate = candidates[0]
 
     def handler(argv, kwargs):
-        spec_path = Path(argv[argv.index("--spec") + 1])
+        spec_path = Path(argv[argv.index("--candidate-spec") + 1])
         R.write_terminal_result(spec_path, _terminal(terminal_status="SUCCESS"))
         return _FakeCompleted(3, "", "")  # claims success, exits ineligible
 
     _fake_subprocess(monkeypatch, handler)
     with pytest.raises(R.PhaseAbort, match="terminal protocol is broken"):
-        R._subprocess_backend(candidate, session)  # noqa: SLF001
+        R._subprocess_launcher(candidate, session, plan)  # noqa: SLF001
 
 
 def test_child_stdout_and_stderr_are_preserved_verbatim(tmp_path, monkeypatch):
     session = _fake_session(tmp_path)
-    candidate = R.plan_phase_mb(output_root=session.output_root)[0]
+    candidates, plan = _published_mb_plan(session)
+    candidate = candidates[0]
 
     def handler(argv, kwargs):
-        spec_path = Path(argv[argv.index("--spec") + 1])
+        spec_path = Path(argv[argv.index("--candidate-spec") + 1])
         R.write_terminal_result(spec_path, _terminal(candidate_id=candidate["candidate_id"]))
         return _FakeCompleted(0, "child stdout line\n", "child stderr line\n")
 
     _fake_subprocess(monkeypatch, handler)
-    R._subprocess_backend(candidate, session)  # noqa: SLF001
-    spec_dir = session.output_root / "_specs"
+    R._subprocess_launcher(candidate, session, plan)  # noqa: SLF001
+    spec_dir = session.output_root / R.SPEC_DIRNAME
     stem = candidate["candidate_id"]
     assert (spec_dir / f"{stem}.stdout").read_text(encoding="utf-8") == "child stdout line\n"
     assert (spec_dir / f"{stem}.stderr").read_text(encoding="utf-8") == "child stderr line\n"
 
 
 def test_the_worker_writes_a_terminal_result_even_when_it_fails_early(tmp_path):
-    spec = tmp_path / "spec.json"
-    spec.write_bytes(
-        C.canonical_json_bytes({
-            "candidate": {"phase": "MB", "candidate_id": "mb_micro8_compileoff"},
-            "authorization_path": str(tmp_path / "auth.json"),
-            "pilot_index_manifest_path": str(tmp_path / "PILOT_INDICES.json"),
-            "authorized_output_root": str(tmp_path / "root"),
-            "session_id": "s",
-        })
-    )
-    code = R.main([
-        "execute-candidate",
-        "--spec",
-        str(spec),
-        "--authorization",
-        str(tmp_path / "auth.json"),
-        "--pilot-index-manifest",
-        str(tmp_path / "PILOT_INDICES.json"),
-    ])
+    spec = _self_declared_spec(tmp_path)
+    code = R.main(_worker_argv(tmp_path, spec))
     assert code == R.BINDING_FAILURE
     doc = R.read_terminal_result(spec)
     assert doc["terminal_status"] == "BINDING_FAILURE"
     assert doc["error_class"] == "BindingFailure"
     assert doc["reserved_tokens"] is None and doc["completed_tokens"] is None
+    assert doc["completed_updates"] == 0
 
 
 # ============================================ R2 Part 12: timing names and honest evidence
@@ -2382,17 +2801,22 @@ def test_the_worker_writes_a_terminal_result_even_when_it_fails_early(tmp_path):
 def test_timing_fields_use_their_r2_names(tmp_path):
     import inspect
 
-    src = inspect.getsource(R.run_phase_mb_candidate)
+    src = inspect.getsource(R._train_phase_mb)  # noqa: SLF001
     for name in (
         "torch_compile_wrapper_seconds",
         "first_optimizer_update_wall_seconds",
-        "measured_update_wall_seconds",
+        "update_timings",
     ):
         assert f'"{name}"' in src, name
-    for retired in ('"compile_wrapper_seconds"', "compile_materialization_wall_seconds"):
+    for retired in (
+        '"compile_wrapper_seconds"',
+        "compile_materialization_wall_seconds",
+        '"measured_update_wall_seconds"',
+        '"median_tokens_per_sec"',
+    ):
         assert retired not in src, retired
     result = R._run_updates  # noqa: SLF001
-    assert "measured_update_wall_seconds" in inspect.getsource(result)
+    assert "update_timings" in inspect.getsource(result)
 
 
 def test_no_host_device_scalar_transfer_inside_the_timed_region():
@@ -2426,6 +2850,7 @@ def test_no_host_device_scalar_transfer_inside_the_timed_region():
 
 
 def test_compile_evidence_is_observed_not_self_reported(tmp_path):
+    """R3 Part 7: compile=off must prove the UNCOMPILED callable was the one invoked."""
     import torch
 
     class _Plain(torch.nn.Module):
@@ -2434,43 +2859,92 @@ def test_compile_evidence_is_observed_not_self_reported(tmp_path):
 
     cache = tmp_path / "inductor_cache"
     plain = _Plain()
-    off = R.compile_path_evidence(plain, requested=False, cache_dir=cache)
+    forward = R.ObservedForward(plain)
+    forward(torch.zeros(1))
+    off = R.compile_path_evidence(
+        plain, forward, requested=False, cache_dir=cache, expected_forward_invocations=1
+    )
     assert off["canonical_compile_path"] is True
-    assert off["compiled_module_is_optimized_module"] is False
-    # requesting compile while eager silently ran: no graphs, no artifacts -> rejected
-    on = R.compile_path_evidence(plain, requested=True, cache_dir=cache)
-    assert on["observed_compiled_execution"] is False
+    assert off["invoked_uncompiled_module"] is True
+    assert off["realized_module_is_optimized_module"] is False
+    assert off["forward_invocations"] == 1
+    # requesting compile while eager silently ran: no compiled object was ever invoked
+    on = R.compile_path_evidence(
+        plain, forward, requested=True, cache_dir=cache, expected_forward_invocations=1
+    )
+    assert on["invoked_compiled_callable"] is False
     assert on["canonical_compile_path"] is False
     assert on["inductor_artifact_count"] == 0
 
 
-def test_a_compiled_module_with_artifacts_is_accepted(tmp_path):
+def test_the_compiled_callable_must_be_the_one_actually_invoked(tmp_path):
+    """R3 Part 7: compile=on binds the object torch.compile returned, not a Boolean."""
+
     class _OptimizedModule:  # the name torch._dynamo gives its wrapper
-        pass
+        def __call__(self, x):
+            return x
 
     cache = tmp_path / "inductor_cache"
     cache.mkdir()
     (cache / "output_code.py").write_text("# compiled", encoding="utf-8")
-    evidence = R.compile_path_evidence(_OptimizedModule(), requested=True, cache_dir=cache)
-    assert evidence["compiled_module_is_optimized_module"] is True
+    compiled = _OptimizedModule()
+    forward = R.ObservedForward(compiled, compiled_object=compiled)
+    for _ in range(3):
+        forward(0)
+    evidence = R.compile_path_evidence(
+        compiled, forward, requested=True, cache_dir=cache, expected_forward_invocations=3
+    )
+    assert evidence["realized_module_is_optimized_module"] is True
+    assert evidence["invoked_compiled_callable"] is True
     assert evidence["inductor_artifact_count"] == 1
     assert evidence["canonical_compile_path"] is True
+    assert R.recheck_compile_path_evidence({"compile": True, "compile_evidence": evidence}) is True
     # the same module with compile=off is a silent-compile failure in the other direction
+    off = R.compile_path_evidence(
+        compiled, forward, requested=False, cache_dir=cache, expected_forward_invocations=3
+    )
+    assert off["canonical_compile_path"] is False
+    # a compiled object that was NOT the invoked callable is rejected too
+    eager = R.ObservedForward(object(), compiled_object=compiled)
+    stray = R.compile_path_evidence(
+        compiled, eager, requested=True, cache_dir=cache, expected_forward_invocations=0
+    )
+    assert stray["invoked_compiled_callable"] is False
+    assert stray["canonical_compile_path"] is False
+
+
+def test_forward_invocation_count_must_match_the_frozen_geometry(tmp_path):
+    """The observed callable must have been invoked exactly updates x grad_accum times."""
+
+    class _Plain:
+        def __call__(self, x):
+            return x
+
+    plain = _Plain()
+    forward = R.ObservedForward(plain)
+    forward(0)
+    evidence = R.compile_path_evidence(
+        plain, forward, requested=False, cache_dir=tmp_path / "c", expected_forward_invocations=640
+    )
+    assert evidence["forward_invocations_match_geometry"] is False
+    assert evidence["canonical_compile_path"] is False
     assert (
-        R.compile_path_evidence(_OptimizedModule(), requested=False, cache_dir=cache)[
-            "canonical_compile_path"
-        ]
-        is False
+        R.recheck_compile_path_evidence({"compile": False, "compile_evidence": evidence}) is False
     )
 
 
 def test_the_contract_rejects_a_compile_candidate_that_fell_back(tmp_path):
     session = _fake_session(tmp_path)
-    candidate = R.plan_phase_mb(output_root=session.output_root)[1]
+    candidates, plan = _published_mb_plan(session)
+    candidate = candidates[1]
     assert candidate["compile"] is True
-    result = _bound_mb_result(candidate, session, canonical_compile_path=False)
+    result = _bound_mb_result(candidate, session, plan, canonical_compile_path=False)
     eligible, failures = C.mb_candidate_eligible(result, VRAM_4090)
     assert not eligible and "compile_silent_fallback" in failures
+    # and the other direction: compile=off that somehow ran a compiled path
+    off = _bound_mb_result(candidates[0], session, plan, canonical_compile_path=False)
+    eligible_off, failures_off = C.mb_candidate_eligible(off, VRAM_4090)
+    assert not eligible_off and "unrequested_compiled_path" in failures_off
 
 
 # ================================================= R2 Part 13: Muon RMS-matching verification
@@ -2563,20 +3037,22 @@ def test_the_same_bundle_hash_binds_authorization_parent_child_and_fingerprint(t
     validator = inspect.getsource(R.validate_execution_artifacts)
     assert '"execution_bundle_sha256": execution_bundle_sha256()' in validator
     session = _fake_session(tmp_path)
-    candidate = R.plan_phase_mb(output_root=session.output_root)[0]
-    meta = R.run_meta(candidate=candidate, session=session)
+    candidates, plan = _published_mb_plan(session)
+    payload = _bound_mb_result(candidates[0], session, plan)
+    meta = _run_meta_doc(candidates[0], session, plan, payload)
     assert (
-        meta["execution_implementation_bundle_sha256"]
-        == session.validated["observed"]["execution_bundle_sha256"]
+        meta["execution_bundle_sha256"] == session.validated["observed"]["execution_bundle_sha256"]
     )
+    assert "execution_bundle_sha256" in R.RUN_META_RESULT_BINDINGS
     assert "execution_bundle_sha256" in dict(R._session_bindings(session))  # noqa: SLF001
     assert "execution_bundle_sha256" in R.REQUIRED_RESULT_BINDINGS
 
 
 def test_run_meta_binds_the_session_and_the_index_manifest_file_hash(tmp_path):
     session = _fake_session(tmp_path)
-    candidate = R.plan_phase_mb(output_root=session.output_root)[0]
-    meta = R.run_meta(candidate=candidate, session=session)
+    candidates, plan = _published_mb_plan(session)
+    payload = _bound_mb_result(candidates[0], session, plan)
+    meta = _run_meta_doc(candidates[0], session, plan, payload)
     assert meta["session_id"] == session.session_id
     assert (
         meta["pilot_index_manifest_file_sha256"]
@@ -2584,6 +3060,12 @@ def test_run_meta_binds_the_session_and_the_index_manifest_file_hash(tmp_path):
     )
     assert meta["authorization_sha256"] == session.validated["authorization_sha256"]
     assert meta["schema_version"] == C.RUN_META_SCHEMA
+    # run_meta is produced only from a minted worker authority.
+    import inspect
+
+    assert set(inspect.signature(R.run_meta).parameters) == {"worker"}
+    with pytest.raises(R.BindingFailure, match="WorkerAuthority"):
+        R.run_meta(session)
 
 
 # ================================================ R2: nothing in this file trains a real model
@@ -2605,17 +3087,20 @@ def test_accepted_release_identity_mismatch_is_a_binding_failure(monkeypatch):
 
 
 def test_evaluate_returns_the_raw_components_the_parent_recomputes_from():
-    """R2 Part 7 depends on this shape: the numerator and weight, plus the single division."""
+    """R3 Part 5 depends on this shape: the numerator and weight, plus the single division."""
     model = _TinyLM()
     view = R.IndexView(_FakeDataset(20), [0, 1, 2, 3])
-    out = R.evaluate(model, view, micro_bsz=2, device="cpu")
+    out = R.evaluate(model, R.ObservedForward(model), view, micro_bsz=2, device="cpu")
     assert set(out) == {"numerator", "weight", "loss", "blocks"}
     assert out["blocks"] == 4
     assert out["weight"] > 0.0
-    assert out["loss"] == out["numerator"] / max(1.0, out["weight"])
+    assert out["loss"] == out["numerator"] / out["weight"]
     # the same shape the LR candidate serializes and the parent recomputes
     assert R.verify_recomputed_lr_result({
         "candidate_id": "probe",
+        "compile": False,
+        "compile_evidence": _compile_evidence(False),
+        "canonical_compile_path": True,
         "eval_stage_a_numerator": out["numerator"],
         "eval_stage_a_weight": out["weight"],
         "eval_stage_b_numerator": out["numerator"],
@@ -2629,10 +3114,9 @@ def test_evaluate_returns_the_raw_components_the_parent_recomputes_from():
 def test_a_stale_terminal_result_is_cleared_before_a_launch(tmp_path, monkeypatch):
     """A terminal result left by an earlier attempt may not be read as this launch's."""
     session = _fake_session(tmp_path)
-    candidate = R.plan_phase_mb(output_root=session.output_root)[0]
-    spec_dir = session.output_root / "_specs"
-    spec_dir.mkdir(parents=True)
-    stale = spec_dir / f"{candidate['candidate_id']}.json"
+    candidates, plan = _published_mb_plan(session)
+    candidate = candidates[0]
+    stale = plan["specs"][candidate["candidate_id"]]["path"]
     R.write_terminal_result(stale, _terminal(terminal_status="SUCCESS"))
 
     def handler(argv, kwargs):
@@ -2640,4 +3124,1403 @@ def test_a_stale_terminal_result_is_cleared_before_a_launch(tmp_path, monkeypatc
 
     _fake_subprocess(monkeypatch, handler)
     with pytest.raises(R.PhaseAbort, match="left no terminal result"):
-        R._subprocess_backend(candidate, session)  # noqa: SLF001
+        R._subprocess_launcher(candidate, session, plan)  # noqa: SLF001
+
+
+# ==================================================================================== R3
+# ============================ R3 Part 1/2/3: the immutable session and phase-plan chain
+
+
+def _worker_validated(session, monkeypatch):
+    """Isolate the plan/spec/ledger layer by stubbing the artifact-bytes layer beneath it.
+
+    The artifact-bytes layer has its own coverage above; opening the real 26 GB accepted
+    releases here would prove nothing extra about phase-plan membership.
+    """
+    validated = dict(session.validated)
+
+    def fake(**kwargs):
+        assert set(kwargs) == {
+            "authorization_path",
+            "pilot_index_manifest_path",
+            "output_dir",
+            "requested_phase",
+            "gpu_required",
+        }
+        assert Path(kwargs["output_dir"]).resolve() == session.output_root
+        return validated
+
+    monkeypatch.setattr(R, "validate_execution_artifacts", fake)
+    return validated
+
+
+def _worker_kwargs(session, plan, candidate, **over):
+    kwargs = {
+        "authorization_path": Path(session.validated["authorization_path"]),
+        "session_manifest_path": session.session_path,
+        "phase_plan_path": plan["plan_path"],
+        "candidate_spec_path": plan["specs"][candidate["candidate_id"]]["path"],
+        "pilot_index_manifest_path": Path(session.validated["index_manifest_path"]),
+        "accepted_stage_a_path": REPO_ROOT / R.ACCEPTED_STAGE_A,
+        "accepted_stage_b_path": REPO_ROOT / R.ACCEPTED_STAGE_B,
+        "ledger_path": session.output_root / R.LEDGER_FILENAME,
+        "candidate_output_path": Path(candidate["output_dir"]),
+    }
+    kwargs.update(over)
+    return kwargs
+
+
+def _session_for_worker(tmp_path, monkeypatch, scope="FULL_V2_3_PILOT"):
+    session = _fake_session(tmp_path, scope=scope)
+    monkeypatch.setattr(
+        R,
+        "validate_session_manifest",
+        lambda path, validated: (
+            json.loads(Path(path).read_bytes().decode("utf-8")),
+            hashlib.sha256(Path(path).read_bytes()).hexdigest(),
+        ),
+    )
+    _worker_validated(session, monkeypatch)
+    return session
+
+
+def test_a_valid_plan_and_matching_spec_mint_a_worker_authority(tmp_path, monkeypatch):
+    """R3 Part 2: the only route to the backend, exercised end to end with a FAKE backend."""
+    session = _session_for_worker(tmp_path, monkeypatch)
+    candidates, plan = _published_mb_plan(session)
+    candidate = candidates[0]
+    worker = R.validate_worker_execution(
+        **_worker_kwargs(session, plan, candidate), gpu_required=False
+    )
+    assert isinstance(worker, R.WorkerAuthority)
+    assert worker.candidate == candidate
+    assert worker.plan_sha256 == plan["plan_sha256"]
+    assert (
+        worker.spec_sha256 == _plan_entry(plan, candidate["candidate_id"])["candidate_spec_sha256"]
+    )
+    assert worker.output_dir == Path(candidate["output_dir"]).resolve()
+    assert worker.phase == "MB"
+
+    reached = []
+    monkeypatch.setattr(R, "_train_phase_mb", lambda w, p: reached.append(w) or {"ok": True})
+    assert R.execute_validated_candidate(worker, {"completed_updates": 0}) == {"ok": True}
+    assert reached == [worker]
+
+
+def test_an_unlisted_candidate_spec_is_refused_before_model_construction(tmp_path, monkeypatch):
+    session = _session_for_worker(tmp_path, monkeypatch)
+    candidates, plan = _published_mb_plan(session)
+    rogue = tmp_path / "rogue.json"
+    doc = json.loads(
+        plan["specs"][candidates[0]["candidate_id"]]["path"].read_bytes().decode("utf-8")
+    )
+    doc["candidate"] = {**doc["candidate"], "updates": 1}  # a cheaper, self-declared candidate
+    rogue.write_bytes(C.canonical_json_bytes(doc))
+    with pytest.raises(R.BindingFailure, match="is not listed in"):
+        R.validate_worker_execution(
+            **_worker_kwargs(session, plan, candidates[0], candidate_spec_path=rogue),
+            gpu_required=False,
+        )
+
+
+@pytest.mark.parametrize(
+    "field, value",
+    [
+        ("micro_bsz", 3),
+        ("grad_accum", 1),
+        ("compile", True),
+        ("updates", 1),
+        ("peak_lr", 9e-4),
+        ("model_init_seed", 1),
+        ("seed_label", "seed-2"),
+    ],
+)
+def test_a_spec_whose_fields_leave_the_contract_derivation_is_refused(
+    tmp_path, monkeypatch, field, value
+):
+    """R3 Part 2: every candidate field is re-derived, not accepted as published."""
+    session = _session_for_worker(tmp_path, monkeypatch)
+    candidates = R.plan_phase_mb(output_root=session.output_root)
+    tampered = [{**candidates[0], field: value}, *candidates[1:]]
+    plan = R.publish_phase_plan(
+        root=session.output_root,
+        plan_kind="PHASE_MB_PLAN",
+        session_sha256=session.session_sha256,
+        session_id=session.session_id,
+        candidates=tampered,
+        derived_from={"source": "tampered"},
+    )
+    with pytest.raises(R.BindingFailure, match="differ from the contract derivation"):
+        R.validate_worker_execution(
+            **_worker_kwargs(session, plan, tampered[0]), gpu_required=False
+        )
+
+
+@pytest.mark.parametrize(
+    "over, message",
+    [
+        ({"ledger_path": "elsewhere"}, "token ledger must be"),
+        ({"session_manifest_path": "elsewhere"}, "session manifest must be"),
+        ({"accepted_stage_a_path": "elsewhere"}, "is not the frozen release"),
+        ({"accepted_stage_b_path": "elsewhere"}, "is not the frozen release"),
+        ({"phase_plan_path": "elsewhere"}, "must live directly under"),
+    ],
+)
+def test_the_worker_refuses_a_path_that_is_not_the_canonical_artifact(
+    tmp_path, monkeypatch, over, message
+):
+    session = _session_for_worker(tmp_path, monkeypatch)
+    candidates, plan = _published_mb_plan(session)
+    resolved = {k: tmp_path / "elsewhere" / k for k in over}
+    with pytest.raises(R.BindingFailure, match=message):
+        R.validate_worker_execution(
+            **_worker_kwargs(session, plan, candidates[0], **resolved), gpu_required=False
+        )
+
+
+def test_the_worker_refuses_an_output_directory_the_plan_did_not_assign(tmp_path, monkeypatch):
+    session = _session_for_worker(tmp_path, monkeypatch)
+    candidates, plan = _published_mb_plan(session)
+    with pytest.raises(R.BindingFailure, match="is not the directory the phase plan assigns"):
+        R.validate_worker_execution(
+            **_worker_kwargs(
+                session,
+                plan,
+                candidates[0],
+                candidate_output_path=session.output_root / "somewhere_else",
+            ),
+            gpu_required=False,
+        )
+
+
+def test_the_worker_refuses_a_spec_bound_to_another_session(tmp_path, monkeypatch):
+    session = _session_for_worker(tmp_path, monkeypatch)
+    candidates, plan = _published_mb_plan(session)
+    spec_path = plan["specs"][candidates[0]["candidate_id"]]["path"]
+    doc = json.loads(spec_path.read_bytes().decode("utf-8"))
+    doc["session_sha256"] = "0" * 64
+    spec_path.write_bytes(C.canonical_json_bytes(doc))
+    with pytest.raises(R.BindingFailure, match="does not bind the session manifest"):
+        R.validate_worker_execution(
+            **_worker_kwargs(session, plan, candidates[0]), gpu_required=False
+        )
+
+
+def test_the_session_manifest_binds_the_whole_execution(tmp_path):
+    """R3 Part 3: SESSION.json is derived from the validated artifacts, byte for byte."""
+    session = _fake_session(tmp_path)
+    doc = R.session_manifest_document(session.validated)
+    for field in (
+        "session_id",
+        "authorized_scope",
+        "authorization_sha256",
+        "contract_sha256",
+        "implementation_head",
+        "execution_bundle_sha256",
+        "pilot_index_manifest_file_sha256",
+        "serialized_index_lists_digest",
+        "accepted_releases",
+        "runtime_fingerprint_sha256",
+        "authorized_output_root",
+        "ledger_identity",
+        "effective_ceilings",
+        "session_hard_ceiling",
+    ):
+        assert field in doc, field
+    assert doc["session_hard_ceiling"] == C.FULL_V2_3_PILOT_SESSION_HARD_CEILING
+    assert set(doc["accepted_releases"]) == {"stage_a", "stage_b"}
+    path = tmp_path / "SESSION_probe.json"
+    R.write_immutable_artifact(path, doc)
+    assert R.validate_session_manifest(path, session.validated)[0] == doc
+    tampered = dict(session.validated)
+    tampered["session_id"] = "OTHER"
+    with pytest.raises(R.BindingFailure, match="does not bind this execution"):
+        R.validate_session_manifest(path, tampered)
+
+
+def test_the_phase_mb_plan_lists_exactly_the_ten_required_specs(tmp_path):
+    session = _fake_session(tmp_path)
+    _, plan = _published_mb_plan(session)
+    doc = plan["plan"]
+    assert doc["plan_kind"] == "PHASE_MB_PLAN"
+    assert doc["session_sha256"] == session.session_sha256
+    assert doc["candidate_ids"] == list(C.MB_REQUIRED_CANDIDATE_IDS)
+    assert len(doc["candidate_spec_sha256s"]) == 10
+    assert len(set(doc["candidate_spec_sha256s"])) == 10
+    for entry in doc["candidates"]:
+        spec = session.output_root / entry["candidate_spec_relpath"]
+        assert hashlib.sha256(spec.read_bytes()).hexdigest() == entry["candidate_spec_sha256"]
+    # published once
+    with pytest.raises(R.BindingFailure, match="already exists"):
+        R.publish_phase_plan(
+            root=session.output_root,
+            plan_kind="PHASE_MB_PLAN",
+            session_sha256=session.session_sha256,
+            session_id=session.session_id,
+            candidates=R.plan_phase_mb(output_root=session.output_root),
+            derived_from={},
+        )
+
+
+def _lr_chain(tmp_path, scores=None):
+    """Run a full FULL-scope Phase-LR orchestration and return (session, report)."""
+    session = _fake_session(tmp_path)
+    _frozen_mb_report(session, micro_bsz=8, compile_on=False)
+    scores = scores or {2e-4: 3.0, 3e-4: 3.5, 4e-4: 3.9, 1e-4: 2.5}
+
+    def launcher(candidate, given, plan):
+        _write_result(
+            candidate,
+            given,
+            plan,
+            _bound_lr_result(candidate, given, plan, scores[candidate["peak_lr"]]),
+        )
+
+    return session, R.orchestrate_phase_muon_lr(session, launcher=launcher)
+
+
+def test_the_lr_plan_chain_binds_only_validated_preceding_evidence(tmp_path):
+    """R3 Part 3: initial <- MB report; confirmation <- initial report; edge <- confirmation."""
+    session, report = _lr_chain(tmp_path)
+    root = session.output_root
+    mb_report_sha = hashlib.sha256((root / R.MB_REPORT_FILENAME).read_bytes()).hexdigest()
+
+    initial = json.loads((root / R.PHASE_LR_INITIAL_PLAN_FILENAME).read_text(encoding="utf-8"))
+    assert initial["plan_kind"] == "PHASE_LR_INITIAL_PLAN"
+    assert initial["session_sha256"] == session.session_sha256
+    assert initial["derived_from"]["phase_mb_report_sha256"] == mb_report_sha
+    assert initial["derived_from"]["frozen_geometry"] == {
+        "micro_bsz": 8,
+        "grad_accum": 16,
+        "compile": False,
+    }
+    assert initial["derived_from"]["peak_lrs"] == list(C.LR_GRID_SEED1)
+    assert initial["derived_from"]["seed_labels"] == ["seed-1"]
+    assert len(initial["candidates"]) == 3
+
+    initial_report_sha = hashlib.sha256(
+        (root / R.LR_INITIAL_REPORT_FILENAME).read_bytes()
+    ).hexdigest()
+    confirm = json.loads((root / R.PHASE_LR_CONFIRMATION_PLAN_FILENAME).read_text(encoding="utf-8"))
+    assert confirm["derived_from"]["preceding_report_sha256"] == initial_report_sha
+    assert confirm["derived_from"]["seed_labels"] == ["seed-2"]
+    assert sorted(confirm["derived_from"]["peak_lrs"]) == [2e-4, 3e-4]
+
+    confirmation_report_sha = hashlib.sha256(
+        (root / R.LR_CONFIRMATION_REPORT_FILENAME).read_bytes()
+    ).hexdigest()
+    edge = json.loads((root / R.PHASE_LR_EDGE_PLAN_FILENAME).read_text(encoding="utf-8"))
+    assert edge["derived_from"]["preceding_report_sha256"] == confirmation_report_sha
+    assert edge["derived_from"]["peak_lrs"] == [1e-4]
+    assert sorted(edge["derived_from"]["seed_labels"]) == ["seed-1", "seed-2"]
+    assert report["terminal_status"] == "SUCCESS"
+    for name in (
+        R.LR_INITIAL_REPORT_FILENAME,
+        R.LR_CONFIRMATION_REPORT_FILENAME,
+        R.LR_EDGE_REPORT_FILENAME,
+        R.LR_REPORT_FILENAME,
+    ):
+        assert (root / name).is_file() and (root / name).with_suffix(".sha256").is_file()
+
+
+def test_a_plan_referencing_a_tampered_prior_report_is_refused(tmp_path, monkeypatch):
+    session, _ = _lr_chain(tmp_path)
+    root = session.output_root
+    plan_path = root / R.PHASE_LR_CONFIRMATION_PLAN_FILENAME
+    plan = json.loads(plan_path.read_text(encoding="utf-8"))
+    candidate_id = plan["candidates"][0]["candidate_id"]
+    candidate = next(
+        c
+        for c in R.plan_phase_lr(
+            output_root=root,
+            micro_bsz=8,
+            compile_on=False,
+            peak_lrs=plan["derived_from"]["peak_lrs"],
+            seed_label="seed-2",
+        )
+        if c["candidate_id"] == candidate_id
+    )
+    # rewrite the preceding report's bytes; the plan's recorded SHA no longer matches
+    report_path = root / R.LR_INITIAL_REPORT_FILENAME
+    report_path.write_bytes(
+        report_path.read_bytes().replace(b'"step":"INITIAL"', b'"step":"FORGED"')
+    )
+    _worker_validated(session, monkeypatch)
+    monkeypatch.setattr(
+        R,
+        "validate_session_manifest",
+        lambda path, validated: (
+            json.loads(Path(path).read_bytes().decode("utf-8")),
+            hashlib.sha256(Path(path).read_bytes()).hexdigest(),
+        ),
+    )
+    bundle = {
+        "plan": plan,
+        "plan_path": plan_path,
+        "plan_sha256": hashlib.sha256(plan_path.read_bytes()).hexdigest(),
+        "specs": {
+            candidate_id: {
+                "path": root / plan["candidates"][0]["candidate_spec_relpath"],
+                "candidate_spec_sha256": plan["candidates"][0]["candidate_spec_sha256"],
+            }
+        },
+    }
+    with pytest.raises(R.BindingFailure, match="preceding_lr_report SHA-256"):
+        R.validate_worker_execution(
+            **_worker_kwargs(session, bundle, candidate), gpu_required=False
+        )
+
+
+# ============================================ R3 Part 4: run_meta and planned-candidate binding
+
+
+def _admit(session, plan, candidate):
+    return R.load_completed_result(session, planned=candidate, plan=plan)
+
+
+def test_an_admitted_result_requires_a_real_run_meta_file(tmp_path):
+    session = _fake_session(tmp_path)
+    candidates, plan = _published_mb_plan(session)
+    candidate = candidates[0]
+    payload = _write_result(candidate, session, plan, _bound_mb_result(candidate, session, plan))
+    assert _admit(session, plan, candidate)["run_meta_verified_from_disk"] is True
+    (Path(candidate["output_dir"]) / "run_meta.json").unlink()
+    with pytest.raises(R.BindingFailure, match="has no run_meta.json"):
+        _admit(session, plan, candidate)
+    assert payload["run_meta_sha256"]
+
+
+def test_a_fabricated_run_meta_digest_without_a_file_is_rejected(tmp_path):
+    """The literal ``run_meta_sha256='rm'`` shortcut can never be admitted again."""
+    session = _fake_session(tmp_path)
+    candidates, plan = _published_mb_plan(session)
+    candidate = candidates[0]
+    out = Path(candidate["output_dir"])
+    out.mkdir(parents=True)
+    payload = _bound_mb_result(candidate, session, plan, run_meta_sha256="rm")
+    (out / "result.json").write_bytes(C.canonical_json_bytes(payload))
+    with pytest.raises(R.BindingFailure, match="has no run_meta.json"):
+        _admit(session, plan, candidate)
+
+
+def test_the_run_meta_sha_is_recomputed_from_the_bytes_on_disk(tmp_path):
+    session = _fake_session(tmp_path)
+    candidates, plan = _published_mb_plan(session)
+    candidate = candidates[0]
+    _write_result(candidate, session, plan, _bound_mb_result(candidate, session, plan))
+    meta_path = Path(candidate["output_dir"]) / "run_meta.json"
+    meta = json.loads(meta_path.read_text(encoding="utf-8"))
+    meta["injected"] = "after the digest was recorded"
+    meta_path.write_bytes(C.canonical_json_bytes(meta))
+    with pytest.raises(R.BindingFailure, match="does not match the SHA-256 of the bytes"):
+        _admit(session, plan, candidate)
+
+
+@pytest.mark.parametrize(
+    "meta_over, message",
+    [
+        ({"candidate_id": "mb_micro1_compileon"}, "disagrees with the result artifact"),
+        ({"phase": "LR"}, "disagrees with the result artifact"),
+        ({"seed_label": "seed-2"}, "disagrees with the result artifact"),
+        ({"micro_bsz": 4}, "disagrees with the result artifact"),
+        ({"grad_accum": 4}, "disagrees with the result artifact"),
+        ({"compile": True}, "disagrees with the result artifact"),
+        ({"model_seed": 1}, "does not match the planned candidate"),
+        ({"train_order_seed": 1}, "does not match the planned candidate"),
+        ({"phase_plan_sha256": "0" * 64}, "disagrees with the result artifact"),
+        ({"candidate_spec_sha256": "0" * 64}, "disagrees with the result artifact"),
+        ({"session_sha256": "0" * 64}, "disagrees with the result artifact"),
+        ({"session_id": "OTHER"}, "disagrees with the result artifact"),
+        ({"output_dir": "/tmp/elsewhere"}, "disagrees with the result artifact"),
+        ({"runtime_fingerprint_sha256": "x"}, "disagrees with the result artifact"),
+        ({"lr_configuration": {"peak_lr": 1.0}}, "LR configuration"),
+        ({"ledger_identity": {}}, "ledger identity does not bind"),
+        ({"schema_version": "other"}, "schema mismatch"),
+        ({"contract_version": "other"}, "contract version mismatch"),
+    ],
+)
+def test_run_meta_that_does_not_describe_the_planned_candidate_is_rejected(
+    tmp_path, meta_over, message
+):
+    session = _fake_session(tmp_path)
+    candidates, plan = _published_mb_plan(session)
+    candidate = candidates[0]
+    _write_result(
+        candidate, session, plan, _bound_mb_result(candidate, session, plan), meta_over=meta_over
+    )
+    with pytest.raises(R.BindingFailure, match=message):
+        _admit(session, plan, candidate)
+
+
+@pytest.mark.parametrize(
+    "over, message",
+    [
+        ({"candidate_id": "mb_micro1_compileon"}, "does not match the planned candidate"),
+        ({"phase_plan_sha256": "0" * 64}, "does not match the planned candidate"),
+        ({"candidate_spec_sha256": "0" * 64}, "does not match the planned candidate"),
+        ({"session_sha256": "0" * 64}, "does not match the planned candidate"),
+        ({"micro_bsz": 2}, "does not match the planned candidate"),
+        ({"grad_accum": 2}, "does not match the planned candidate"),
+        ({"compile": True}, "does not match the planned candidate"),
+        ({"seed_label": "seed-2"}, "does not match the planned candidate"),
+        ({"output_dir": "/tmp/elsewhere"}, "does not match the planned candidate"),
+    ],
+)
+def test_a_result_that_does_not_match_its_planned_identity_is_rejected(tmp_path, over, message):
+    session = _fake_session(tmp_path)
+    candidates, plan = _published_mb_plan(session)
+    candidate = candidates[0]
+    _write_result(candidate, session, plan, _bound_mb_result(candidate, session, plan, **over))
+    with pytest.raises(R.BindingFailure, match=message):
+        _admit(session, plan, candidate)
+
+
+# ============================================================= R3 Part 8: ledger invariants
+
+
+def _consistent_state(ledger, mb_updates=2, lr_updates=1, completed_updates=2):
+    t = C.TRAINED_TOKENS_PER_UPDATE
+    reserved_updates = mb_updates + lr_updates
+    state = dict(ledger.state)
+    state["reserved_tokens"] = {
+        "MB": mb_updates * t,
+        "LR": lr_updates * t,
+        "GLOBAL": reserved_updates * t,
+    }
+    state["completed_tokens"] = {
+        "MB": completed_updates * t,
+        "LR": 0,
+        "GLOBAL": completed_updates * t,
+    }
+    state["reserved_updates"] = reserved_updates
+    state["completed_updates"] = completed_updates
+    return state
+
+
+def test_the_parent_snapshot_reloads_state_a_child_wrote(tmp_path):
+    """R3 Part 8: snapshot() never answers from stale in-memory counters."""
+    parent = R.TokenLedger(tmp_path / "l.json", _ledger_identity(), _ceilings())
+    child = R.TokenLedger(tmp_path / "l.json", _ledger_identity(), _ceilings())
+    stale = dict(parent.state["reserved_tokens"])
+    child.reserve("MB")
+    child.complete("MB")
+    assert parent.state["reserved_tokens"] == stale, "the parent's in-memory copy is stale"
+    fresh = parent.snapshot()
+    assert fresh["reloaded_from_disk"] is True
+    assert fresh["reserved_tokens"]["MB"] == C.TRAINED_TOKENS_PER_UPDATE
+    assert fresh["completed_tokens"]["GLOBAL"] == C.TRAINED_TOKENS_PER_UPDATE
+    assert fresh["reserved_updates"] == fresh["completed_updates"] == 1
+    assert fresh["session_hard_ceiling"] == C.FULL_V2_3_PILOT_SESSION_HARD_CEILING
+    assert fresh["trained_tokens_per_update"] == C.TRAINED_TOKENS_PER_UPDATE
+
+
+def test_a_crash_between_reserve_and_complete_stays_legal(tmp_path):
+    ledger = R.TokenLedger(tmp_path / "l.json", _ledger_identity(), _ceilings())
+    ledger.reserve("MB")  # the process dies here
+    reopened = R.TokenLedger(tmp_path / "l.json", _ledger_identity(), _ceilings())
+    snap = reopened.snapshot()
+    assert snap["reserved_updates"] == 1 and snap["completed_updates"] == 0
+    assert snap["reserved_tokens"]["MB"] == C.TRAINED_TOKENS_PER_UPDATE
+    assert snap["completed_tokens"]["MB"] == 0
+
+
+def test_the_ledger_snapshot_is_reentrant_under_the_lock(tmp_path):
+    """The lock guard must not deadlock a nested read on the same process."""
+    ledger = R.TokenLedger(tmp_path / "l.json", _ledger_identity(), _ceilings())
+    ledger.reserve("MB")
+    with ledger._lock():  # noqa: SLF001
+        assert ledger.snapshot()["reserved_updates"] == 1
+
+
+@pytest.mark.parametrize(
+    "mutate, message",
+    [
+        (
+            lambda st: st["completed_tokens"].__setitem__("MB", 99 * C.TRAINED_TOKENS_PER_UPDATE),
+            "exceeds reserved_tokens",
+        ),
+        (
+            lambda st: st["reserved_tokens"].__setitem__(
+                "GLOBAL", 99 * C.TRAINED_TOKENS_PER_UPDATE
+            ),
+            "not the sum of the per-phase reservations",
+        ),
+        (
+            lambda st: st["completed_tokens"].__setitem__("GLOBAL", 0),
+            "not the sum of the per-phase completions",
+        ),
+        (lambda st: st.__setitem__("reserved_updates", 99), "disagrees with reserved_tokens"),
+        (lambda st: st.__setitem__("completed_updates", 99), "exceeds reserved_updates"),
+        (
+            lambda st: st["reserved_tokens"].__setitem__("MB", -C.TRAINED_TOKENS_PER_UPDATE),
+            "is negative",
+        ),
+        (
+            lambda st: st["reserved_tokens"].__setitem__("MB", 5),
+            "not a whole number of optimizer updates",
+        ),
+        (
+            lambda st: st.__setitem__("trained_tokens_per_update", 1),
+            "does not equal the frozen batch geometry",
+        ),
+        (
+            lambda st: st.__setitem__("session_hard_ceiling", 1),
+            "does not equal the frozen FULL-session ceiling",
+        ),
+        (
+            lambda st: st["effective_ceilings"].__setitem__("MB", 7),
+            "do not equal the ceilings frozen",
+        ),
+        (
+            lambda st: st["reserved_tokens"].__setitem__(
+                "MB",
+                (C.PHASE_MB_TOKEN_CEILING // C.TRAINED_TOKENS_PER_UPDATE + 1)
+                * C.TRAINED_TOKENS_PER_UPDATE,
+            ),
+            "exceeds its ceiling",
+        ),
+    ],
+)
+def test_every_structural_invariant_is_enforced_on_reload(tmp_path, mutate, message):
+    ledger = R.TokenLedger(tmp_path / "l.json", _ledger_identity(), _ceilings())
+    state = _consistent_state(ledger)
+    mutate(state)
+    ledger._write(state)  # noqa: SLF001 - a corrupted ledger on disk is exactly the case
+    with pytest.raises(R.LedgerIntegrityFailure, match=message):
+        ledger.snapshot()
+    with pytest.raises(R.LedgerIntegrityFailure, match=message):
+        R.TokenLedger(tmp_path / "l.json", _ledger_identity(), _ceilings())
+
+
+def test_a_consistent_ledger_passes_every_invariant(tmp_path):
+    ledger = R.TokenLedger(tmp_path / "l.json", _ledger_identity(), _ceilings())
+    ledger._write(_consistent_state(ledger))  # noqa: SLF001
+    snap = ledger.snapshot()
+    t = C.TRAINED_TOKENS_PER_UPDATE
+    assert snap["reserved_tokens"]["GLOBAL"] == 3 * t
+    assert snap["completed_tokens"]["GLOBAL"] == 2 * t
+    assert snap["reserved_updates"] == 3 and snap["completed_updates"] == 2
+
+
+def test_ledger_integrity_failure_is_a_phase_level_failure():
+    assert issubclass(R.LedgerIntegrityFailure, R.PhaseAbort)
+    assert not issubclass(R.LedgerIntegrityFailure, R.CandidateFailure)
+
+
+def test_the_ledger_refuses_a_non_geometry_token_amount(tmp_path):
+    ledger = R.TokenLedger(tmp_path / "l.json", _ledger_identity(), _ceilings())
+    with pytest.raises(C.PilotContractError, match="refusing to reserve"):
+        ledger.reserve("MB", tokens=1)
+    ledger.reserve("MB")
+    with pytest.raises(C.PilotContractError, match="refusing to complete"):
+        ledger.complete("MB", tokens=1)
+
+
+# =============================================== R3 Part 9/10: terminal accounting and process
+
+
+def test_partial_progress_survives_a_candidate_local_exception(tmp_path):
+    """R3 Part 9: the loop advances `progress`, so a mid-run failure reports real updates."""
+    ledger = R.TokenLedger(tmp_path / "l.json", _ledger_identity(), _ceilings())
+    model = _TinyLM()
+    progress = {"completed_updates": 0, "update_timings": []}
+
+    class _Exploding:
+        def __init__(self):
+            self.calls = 0
+
+        def zero_grad(self, **kwargs):
+            pass
+
+        @property
+        def param_groups(self):
+            return [{"lr_ratio": 1.0, "lr": 0.0}]
+
+        def step(self):
+            self.calls += 1
+            if self.calls == 3:
+                raise RuntimeError("simulated candidate-local CUDA failure")
+
+    view = R.IndexView(_FakeDataset(600), list(range(512)))
+    with pytest.raises(RuntimeError, match="simulated candidate-local"):
+        R._run_updates(  # noqa: SLF001
+            module=model,
+            forward=R.ObservedForward(model),
+            optimizer=_Exploding(),
+            view=view,
+            micro_bsz=2,
+            grad_accum=64,
+            updates=4,
+            lr_fn=C.mb_lr,
+            ledger=ledger,
+            phase="MB",
+            device="cpu",
+            progress=progress,
+        )
+    assert progress["completed_updates"] == 2, "two updates really finished"
+    snap = ledger.snapshot()
+    assert snap["reserved_updates"] == 3 and snap["completed_updates"] == 2
+
+
+def test_the_parent_preserves_the_child_terminal_token_and_update_fields(tmp_path):
+    """R3 Part 9: the parent records the child's numbers; it never reconstructs them."""
+    session = _fake_session(tmp_path)
+    candidates, plan = _published_mb_plan(session)
+    candidate = candidates[0]
+    terminal = _terminal(
+        terminal_status="CANDIDATE_INELIGIBLE",
+        error_class="RuntimeError",
+        error_message="CUDA out of memory",
+        completed_updates=17,
+        reserved_tokens={
+            "MB": 18 * C.TRAINED_TOKENS_PER_UPDATE,
+            "LR": 0,
+            "GLOBAL": 18 * C.TRAINED_TOKENS_PER_UPDATE,
+        },
+        completed_tokens={
+            "MB": 17 * C.TRAINED_TOKENS_PER_UPDATE,
+            "LR": 0,
+            "GLOBAL": 17 * C.TRAINED_TOKENS_PER_UPDATE,
+        },
+        candidate_id=candidate["candidate_id"],
+    )
+
+    def launcher(c, s, pl):
+        raise R.CandidateTerminalFailure(terminal)
+
+    evidence = R._launch(candidate, session, plan, launcher)  # noqa: SLF001
+    assert evidence["eligible"] is False
+    assert evidence["completed_updates"] == 17
+    assert evidence["terminal_reserved_tokens"] == terminal["reserved_tokens"]
+    assert evidence["terminal_completed_tokens"] == terminal["completed_tokens"]
+    assert evidence["terminal_status"] == "CANDIDATE_INELIGIBLE"
+    assert evidence["reason"] == "oom" and evidence["oom"] is True
+
+
+@pytest.mark.parametrize(
+    "message, reason",
+    [
+        ("CUDA out of memory", "oom"),
+        ("TorchDynamo failed to compile the graph", "compile_failure"),
+        ("loss became non-finite at update 12", "nonfinite"),
+        ("some other candidate-local runtime problem", "candidate_runtime_exception"),
+    ],
+)
+def test_candidate_local_failure_classification(tmp_path, message, reason):
+    session = _fake_session(tmp_path)
+    candidates, plan = _published_mb_plan(session)
+
+    def launcher(c, s, pl):
+        raise R.CandidateFailure(message)
+
+    evidence = R._launch(candidates[0], session, plan, launcher)  # noqa: SLF001
+    assert evidence["reason"] == reason
+    assert evidence["eligible"] is False
+
+
+@pytest.mark.parametrize("exc", [KeyboardInterrupt, SystemExit])
+def test_process_control_events_are_never_downgraded_to_ineligible(tmp_path, exc):
+    """R3 Part 10: no BaseException handler turns process control into candidate evidence."""
+    session = _fake_session(tmp_path)
+    candidates, plan = _published_mb_plan(session)
+
+    def launcher(c, s, pl):
+        raise exc("interrupted")
+
+    with pytest.raises(exc):
+        R._launch(candidates[0], session, plan, launcher)  # noqa: SLF001
+
+
+def test_no_broad_base_exception_handler_remains_on_the_candidate_paths():
+    import ast
+    import inspect
+
+    for fn in (R._launch, R._cli_internal_worker, R._cli_run):  # noqa: SLF001
+        tree = ast.parse(inspect.getsource(fn).lstrip())
+        for node in ast.walk(tree):
+            if isinstance(node, ast.ExceptHandler) and node.type is not None:
+                names = [n.id for n in ast.walk(node.type) if isinstance(n, ast.Name)]
+                assert "BaseException" not in names, (fn.__name__, names)
+
+
+@pytest.mark.parametrize(
+    "body",
+    [b"not json at all", C.canonical_json_bytes({"schema_version": "wrong"}), b"[]"],
+)
+def test_a_malformed_terminal_artifact_aborts_the_phase(tmp_path, body):
+    spec = tmp_path / "spec.json"
+    R.terminal_result_path(spec).write_bytes(body)
+    with pytest.raises(R.PhaseAbort):
+        R.read_terminal_result(spec)
+
+
+def test_a_terminal_artifact_with_an_unusable_progress_count_aborts(tmp_path):
+    spec = tmp_path / "spec.json"
+    doc = {"schema_version": R.TERMINAL_RESULT_SCHEMA, **_terminal()}
+    doc["completed_updates"] = -1
+    R.terminal_result_path(spec).write_bytes(C.canonical_json_bytes(doc))
+    with pytest.raises(R.PhaseAbort, match="unusable completed_updates"):
+        R.read_terminal_result(spec)
+
+
+# ======================================================== R3 Part 11: the exact Muon verifier
+
+
+def _tiny_muon():
+    import torch
+
+    from src.model import GPT, GPTConfig
+    from src.optim import build_optimizer
+
+    torch.manual_seed(0)
+    model = GPT(
+        GPTConfig(
+            vocab_size=64, n_layers=2, d_model=32, n_heads=4, n_kv_heads=2, d_ff=64, max_seq_len=16
+        )
+    )
+    opt = build_optimizer(
+        model,
+        name="muon",
+        lr=3e-4,
+        weight_decay=C.WEIGHT_DECAY,
+        betas=C.ADAMW_AUX_BETAS,
+        muon_lr=C.MUON_LR_ARG,
+        muon_momentum=C.MUON_MOMENTUM,
+        verbose=False,
+    )
+    return model, opt
+
+
+def _group_of(opt, role):
+    return next(g for g in opt.param_groups if C.optimizer_group_role(g) == role)
+
+
+def test_the_exact_verifier_accepts_the_canonical_realization():
+    model, opt = _tiny_muon()
+    v = C.verify_realized_grouping(opt, model)
+    assert v["matches_frozen_realization"], v["failures"]
+    assert v["membership_verified"] is True
+    assert sorted(v["group_roles"]) == sorted(C.OPTIMIZER_GROUP_ROLES)
+    assert v["membership"] == v["expected_membership"]
+
+
+@pytest.mark.parametrize(
+    "role, key, value, fragment",
+    [
+        ("aux_adamw_decay", "weight_decay", 0.05, "aux_adamw_decay weight_decay must be exactly"),
+        ("aux_adamw_decay", "weight_decay", 0.0, "aux_adamw_decay weight_decay must be exactly"),
+        ("aux_adamw_no_decay", "weight_decay", 1e-9, "aux_adamw_no_decay weight_decay"),
+        ("aux_adamw_no_decay", "weight_decay", -0.1, "aux_adamw_no_decay weight_decay"),
+        ("muon_matrices", "weight_decay", 0.05, "muon_matrices weight_decay must be exactly"),
+        ("aux_adamw_decay", "betas", (0.9, 0.999), "betas must be"),
+        ("aux_adamw_no_decay", "betas", (0.95, 0.95), "betas must be"),
+        ("aux_adamw_decay", "eps", 1e-6, "eps must be"),
+        ("aux_adamw_no_decay", "eps", 0.0, "eps must be"),
+        ("muon_matrices", "momentum", 0.9, "momentum must be"),
+        ("muon_matrices", "nesterov", False, "Nesterov"),
+        ("muon_matrices", "ns_steps", 4, "Newton-Schulz steps must be"),
+        ("muon_matrices", "lr_ratio", 1.5, "lr_ratio must be"),
+    ],
+)
+def test_the_exact_verifier_rejects_every_single_field_mutation(role, key, value, fragment):
+    model, opt = _tiny_muon()
+    _group_of(opt, role)[key] = value
+    v = C.verify_realized_grouping(opt, model)
+    assert not v["matches_frozen_realization"], (role, key, value)
+    assert any(fragment in f for f in v["failures"]), v["failures"]
+
+
+def test_the_exact_verifier_rejects_membership_damage():
+    model, opt = _tiny_muon()
+    muon = _group_of(opt, "muon_matrices")
+    decay = _group_of(opt, "aux_adamw_decay")
+    # a parameter in two groups at once
+    muon["params"] = [*muon["params"], decay["params"][0]]
+    assert any(
+        "more than one optimizer group" in f
+        for f in C.verify_realized_grouping(opt, model)["failures"]
+    )
+    model, opt = _tiny_muon()
+    muon = _group_of(opt, "muon_matrices")
+    dropped = muon["params"].pop()
+    v = C.verify_realized_grouping(opt, model)
+    assert any("in no optimizer group" in f for f in v["failures"])
+    assert dropped is not None
+    model, opt = _tiny_muon()
+    import torch
+
+    _group_of(opt, "muon_matrices")["params"].append(torch.nn.Parameter(torch.zeros(4, 4)))
+    assert any(
+        "not trainable model parameters" in f
+        for f in C.verify_realized_grouping(opt, model)["failures"]
+    )
+
+
+def test_the_role_of_a_group_is_not_derived_from_its_weight_decay():
+    """A mutated decay must not let a group masquerade as the role whose decay it carries."""
+    model, opt = _tiny_muon()
+    no_decay = _group_of(opt, "aux_adamw_no_decay")
+    no_decay["weight_decay"] = C.WEIGHT_DECAY
+    assert C.optimizer_group_role(no_decay) == "aux_adamw_no_decay"
+    v = C.verify_realized_grouping(opt, model)
+    assert not v["matches_frozen_realization"]
+    assert any("aux_adamw_no_decay weight_decay" in f for f in v["failures"])
+
+
+def _executable_names(fn):
+    """Every name the function's CODE references, with docstrings and comments excluded."""
+    import ast
+    import inspect
+
+    tree = ast.parse(inspect.getsource(fn).lstrip())
+    return (
+        {n.id for n in ast.walk(tree) if isinstance(n, ast.Name)}
+        | {n.attr for n in ast.walk(tree) if isinstance(n, ast.Attribute)}
+        | {
+            alias.name
+            for n in ast.walk(tree)
+            if isinstance(n, (ast.Import, ast.ImportFrom))
+            for alias in n.names
+        }
+    )
+
+
+def test_the_rms_oracle_never_calls_the_realization_it_verifies():
+    """R3 Part 11: neither half of the expectation comes from src.optim."""
+    import ast
+    import inspect
+
+    for fn in (R.expected_rms_matched_lr, R.expected_newton_schulz_scalar_gain):
+        names = _executable_names(fn)
+        assert "zeropower_via_newtonschulz5" not in names
+        assert not any(n.startswith("src") for n in names), names
+    verifier = ast.parse(inspect.getsource(R.verify_rms_matching).lstrip())
+    imported = {
+        alias.name
+        for node in ast.walk(verifier)
+        if isinstance(node, ast.ImportFrom)
+        for alias in node.names
+    }
+    assert imported == {"Muon"}, imported  # the optimizer under test, never its NS helper
+    assert "zeropower_via_newtonschulz5" not in _executable_names(R.verify_rms_matching)
+
+
+def test_the_independent_closed_form_matches_the_realized_muon_update():
+    evidence = R.verify_rms_matching()
+    assert evidence["all_cases_match"] and evidence["all_cases_discriminating"]
+    for case in evidence["cases"]:
+        assert case["relative_error"] <= R.RMS_MATCHING_RELATIVE_TOLERANCE
+        # the margin an unscaled implementation would leave is orders of magnitude larger
+        assert case["unscaled_lr_would_differ_by"] > 1000.0 * max(case["max_abs_error"], 1e-15)
+        assert case["expected_adjusted_lr"] == R.expected_rms_matched_lr(
+            evidence["lr"], case["fan_out"], case["fan_in"]
+        )
+
+
+def test_the_closed_form_newton_schulz_gain_is_a_pure_scalar_recursion():
+    a, b, c = C.NEWTON_SCHULZ_COEFFICIENTS
+    beta = 1.0 / ((24.0) + 1e-7)  # sigma = 1, short side 576 -> sqrt = 24
+    for _ in range(5):
+        beta = a * beta + b * beta**3 + c * beta**5
+    assert R.expected_newton_schulz_scalar_gain(576) == pytest.approx(beta, rel=1e-12)
+
+
+def test_optimizer_verification_failure_blocks_the_first_training_update(monkeypatch):
+    """R3 Part 11: a candidate must not enter update 1 with an unverified realization."""
+    model, opt = _tiny_muon()
+    started = []
+    monkeypatch.setattr(
+        C,
+        "verify_realized_grouping",
+        lambda o, m=None: {
+            "failures": ["aux_adamw_decay weight_decay must be exactly 0.1, got 0.05"],
+            "matches_frozen_realization": False,
+            "all_lr_ratios_are_one": True,
+        },
+    )
+    monkeypatch.setattr(R, "verify_realized_grouping", C.verify_realized_grouping)
+    monkeypatch.setattr(R, "_run_updates", lambda **kw: started.append(True))
+    with pytest.raises(R.PhaseAbort, match="optimizer realization verification FAILED"):
+        R.verify_muon_realization(model, opt, peak_lr=3e-4)
+    assert started == [], "no training update may run after a failed realization check"
+    # the same gate is wired into both real training entrypoints, before _run_updates
+    import inspect
+
+    for fn in R.REAL_TRAINING_ENTRYPOINTS:
+        src = inspect.getsource(fn)
+        assert src.index("verify_muon_realization(") < src.index("_run_updates(")
+
+
+def test_build_pilot_optimizer_refuses_a_non_canonical_realization(monkeypatch):
+    model, _ = _tiny_muon()
+    monkeypatch.setattr(
+        R,
+        "verify_realized_grouping",
+        lambda o, m=None: {
+            "failures": ["muon_matrices weight_decay must be exactly 0.1, got 0.05"],
+            "matches_frozen_realization": False,
+        },
+    )
+    with pytest.raises(R.PhaseAbort, match="does not match V2.3"):
+        R.build_pilot_optimizer(model, 3e-4)
+
+
+# ================================================= R3 Part 12: the FULL session budget semantics
+
+
+def test_full_session_hard_ceiling_and_semantics():
+    assert C.FULL_V2_3_PILOT_SESSION_HARD_CEILING == 500_000_000
+    assert C.FULL_V2_3_PILOT_SESSION_HARD_CEILING == C.GLOBAL_PILOT_TOKEN_CEILING
+    full = C.SESSION_BUDGET_SEMANTICS["FULL_V2_3_PILOT"]
+    assert full["session_hard_ceiling_tokens"] == 500_000_000
+    assert full["phase_ceilings"] == {"MB": 105_000_000, "LR": 370_000_000}
+    assert full["one_authorization_sha256"] is True
+    assert full["one_session_identity"] is True
+    assert full["one_token_ledger"] is True
+    assert full["automatic_second_session"] is False
+    assert full["automatic_cross_authorization_retry"] is False
+    assert "NEW owner decision" in full["second_authorization_requires"]
+    assert "consumed" in full["second_authorization_requires"]
+    mb_only = C.SESSION_BUDGET_SEMANTICS["PHASE_MB_ONLY"]
+    assert mb_only["may_execute_phase_lr"] is False
+    assert mb_only["may_be_promoted_to_full"] is False
+    assert mb_only["automatic_mb_only_to_full_transition"] is False
+    assert C.SESSION_BUDGET_SEMANTICS["cross_authorization_aggregate_accounting"] == (
+        "NOT_IMPLEMENTED_BY_DESIGN"
+    )
+    budget = C.contract_document()["token_budget"]
+    assert budget["FULL_V2_3_PILOT_SESSION_HARD_CEILING"] == 500_000_000
+    assert budget["TRAINED_TOKENS_PER_UPDATE"] == 262144
+
+
+def test_session_budget_subcommand_reports_the_frozen_semantics(capsys):
+    assert R.main(["session-budget"]) == 0
+    out = json.loads(capsys.readouterr().out)
+    assert out["FULL_V2_3_PILOT_SESSION_HARD_CEILING"] == 500_000_000
+    assert out["phase_ceilings"] == {"MB": 105_000_000, "LR": 370_000_000}
+    assert out["semantics"]["FULL_V2_3_PILOT"]["automatic_second_session"] is False
+
+
+def test_no_automatic_mb_only_to_full_transition_exists(tmp_path):
+    """A PHASE_MB_ONLY session ends at its report; nothing promotes it."""
+    session = _fake_session(tmp_path, scope="PHASE_MB_ONLY")
+    report = _frozen_mb_report(session)
+    assert report["session_terminates_after_this_phase"] is True
+    assert report["next_phase_requires_new_authorization"] is True
+    with pytest.raises(R.BindingFailure, match="never promoted"):
+        R.orchestrate_phase_muon_lr(session, launcher=lambda *_: None)
+    # and the artifact layer refuses the scope outright, before any orchestration
+    src = Path(R.__file__).read_text(encoding="utf-8")
+    assert "can never be" in src and "promoted" in src
+
+
+def test_the_documented_session_semantics_are_in_the_contract_document():
+    doc = Path(REPO_ROOT / "docs" / "PILOT_CONTRACT_V2_3.md").read_text(encoding="utf-8")
+    assert "FULL_V2_3_PILOT_SESSION_HARD_CEILING   500,000,000" in doc
+    assert "no automatic second FULL session" in doc
+    assert "new owner decision that must explicitly take the prior session" in doc
+
+
+# ==================================================== R3 Part 7: compile evidence at admission
+
+
+def test_admission_revalidates_the_compile_observation(tmp_path):
+    session = _fake_session(tmp_path)
+    candidates, plan = _published_mb_plan(session)
+    candidate = candidates[1]
+    assert candidate["compile"] is True
+    forged = _bound_mb_result(
+        candidate,
+        session,
+        plan,
+        compile_evidence={**_compile_evidence(True), "invoked_compiled_callable": False},
+    )
+    with pytest.raises(R.BindingFailure, match="does not support the verdict recomputed"):
+        R.verify_recomputed_mb_result(forged)
+    missing = _bound_mb_result(candidate, session, plan, compile_evidence=None)
+    with pytest.raises(R.BindingFailure, match="does not support the verdict recomputed"):
+        R.verify_recomputed_mb_result(missing)
+
+
+def test_an_honest_silent_fallback_is_ineligible_not_a_phase_abort(tmp_path):
+    """A candidate that truthfully recorded an eager fallback is ineligible, not fatal."""
+    session = _fake_session(tmp_path)
+    candidates, plan = _published_mb_plan(session)
+    candidate = candidates[1]
+    assert candidate["compile"] is True
+    honest = _bound_mb_result(
+        candidate,
+        session,
+        plan,
+        compile_evidence={**_compile_evidence(True), "invoked_compiled_callable": False},
+        canonical_compile_path=False,
+    )
+    recomputed = R.verify_recomputed_mb_result(honest)
+    assert recomputed["canonical_compile_path"] is False
+    eligible, failures = C.mb_candidate_eligible({**honest, **recomputed}, VRAM_4090)
+    assert not eligible and "compile_silent_fallback" in failures
+
+
+def test_a_silent_fallback_candidate_does_not_abort_the_grid(tmp_path):
+    """The Phase-MB grid completes and simply selects one of the eligible candidates."""
+    session = _fake_session(tmp_path)
+
+    def launcher(candidate, given, plan):
+        payload = _bound_mb_result(candidate, given, plan)
+        if candidate["candidate_id"] == "mb_micro16_compileon":
+            payload = _bound_mb_result(
+                candidate,
+                given,
+                plan,
+                compile_evidence={
+                    **_compile_evidence(True),
+                    "invoked_compiled_callable": False,
+                    "compilation_materialized": False,
+                },
+                canonical_compile_path=False,
+            )
+        _write_result(candidate, given, plan, payload)
+
+    report = R.orchestrate_phase_mb(session, launcher=launcher)
+    assert report["selection"]["outcome"] == "PHASE_MB_FROZEN"
+    fell_back = next(c for c in report["candidates"] if c["candidate_id"] == "mb_micro16_compileon")
+    assert fell_back["canonical_compile_path"] is False
+    assert (
+        "compile_silent_fallback"
+        in report["selection_trace"]["eligibility"]["mb_micro16_compileon"]
+    )
+
+
+def test_selection_uses_only_the_measured_window(tmp_path):
+    """Throughput is measured over updates 11..40 and nothing else."""
+    session = _fake_session(tmp_path)
+    candidates, plan = _published_mb_plan(session)
+    timings = _mb_timings()
+    result = _bound_mb_result(
+        candidates[0],
+        session,
+        plan,
+        update_timings=timings,
+        # a very slow "update 1" is recorded but is NOT part of the measured window
+        per_update_wall_seconds={"1": 900.0},
+        first_optimizer_update_wall_seconds=900.0,
+    )
+    recomputed = R.verify_recomputed_mb_result(result)
+    assert recomputed["measured_update_ids"] == list(range(11, 41))
+    assert recomputed["median_update_tokens_per_second"] == MEASURED_TPS
+
+
+# ==================== R3 re-review closure: the LR chain is derived, never echoed back
+
+
+def _mb_report_for_worker(session, micro_bsz=8, compile_on=False):
+    """Publish a real Phase-MB report the worker can derive the frozen geometry from."""
+    report = _frozen_mb_report(session, micro_bsz=micro_bsz, compile_on=compile_on)
+    path = session.output_root / R.MB_REPORT_FILENAME
+    return {
+        "phase_mb_report_relpath": R.MB_REPORT_FILENAME,
+        "phase_mb_report_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+    }, report
+
+
+def _publish_lr_plan(session, *, plan_kind, peak_lrs, seed_labels, derived_from):
+    candidates = []
+    geometry = derived_from["frozen_geometry"]
+    for seed_label in seed_labels:
+        candidates.extend(
+            R.plan_phase_lr(
+                output_root=session.output_root,
+                micro_bsz=geometry["micro_bsz"],
+                compile_on=geometry["compile"],
+                peak_lrs=list(peak_lrs),
+                seed_label=seed_label,
+            )
+        )
+    return candidates, R.publish_phase_plan(
+        root=session.output_root,
+        plan_kind=plan_kind,
+        session_sha256=session.session_sha256,
+        session_id=session.session_id,
+        candidates=candidates,
+        derived_from={
+            **derived_from,
+            "peak_lrs": [float(v) for v in peak_lrs],
+            "seed_labels": list(seed_labels),
+        },
+    )
+
+
+def test_an_lr_plan_with_no_bound_mb_report_is_refused(tmp_path, monkeypatch):
+    """The worker never accepts a plan's own declared geometry as the derivation."""
+    session = _session_for_worker(tmp_path, monkeypatch)
+    candidates, plan = _publish_lr_plan(
+        session,
+        plan_kind="PHASE_LR_CONFIRMATION_PLAN",
+        peak_lrs=[0.5],
+        seed_labels=["seed-1"],
+        derived_from={"frozen_geometry": {"micro_bsz": 1, "grad_accum": 128, "compile": True}},
+    )
+    with pytest.raises(R.BindingFailure, match="does not bind the phase_mb_report"):
+        R.validate_worker_execution(
+            **_worker_kwargs(session, plan, candidates[0]), gpu_required=False
+        )
+
+
+def test_an_lr_plan_whose_geometry_contradicts_the_mb_report_is_refused(tmp_path, monkeypatch):
+    """Even a correctly hash-bound Phase-MB report is CONSULTED, not merely re-hashed."""
+    session = _fake_session(tmp_path)
+    mb, _ = _mb_report_for_worker(session, micro_bsz=8, compile_on=False)
+    _worker_validated(session, monkeypatch)
+    monkeypatch.setattr(
+        R,
+        "validate_session_manifest",
+        lambda path, validated: (
+            json.loads(Path(path).read_bytes().decode("utf-8")),
+            hashlib.sha256(Path(path).read_bytes()).hexdigest(),
+        ),
+    )
+    candidates, plan = _publish_lr_plan(
+        session,
+        plan_kind="PHASE_LR_INITIAL_PLAN",
+        peak_lrs=C.LR_GRID_SEED1,
+        seed_labels=["seed-1"],
+        # a geometry the bound report does not freeze
+        derived_from={
+            **mb,
+            "frozen_geometry": {"micro_bsz": 1, "grad_accum": 128, "compile": True},
+        },
+    )
+    with pytest.raises(R.BindingFailure, match="the Phase-MB report it binds freezes"):
+        R.validate_worker_execution(
+            **_worker_kwargs(session, plan, candidates[0]), gpu_required=False
+        )
+
+
+def test_an_lr_plan_with_an_underived_peak_lr_is_refused(tmp_path, monkeypatch):
+    session = _fake_session(tmp_path)
+    mb, _ = _mb_report_for_worker(session, micro_bsz=8, compile_on=False)
+    _worker_validated(session, monkeypatch)
+    monkeypatch.setattr(
+        R,
+        "validate_session_manifest",
+        lambda path, validated: (
+            json.loads(Path(path).read_bytes().decode("utf-8")),
+            hashlib.sha256(Path(path).read_bytes()).hexdigest(),
+        ),
+    )
+    geometry = {"micro_bsz": 8, "grad_accum": 16, "compile": False}
+    candidates, plan = _publish_lr_plan(
+        session,
+        plan_kind="PHASE_LR_INITIAL_PLAN",
+        peak_lrs=[0.5],
+        seed_labels=["seed-1"],
+        derived_from={**mb, "frozen_geometry": geometry},
+    )
+    with pytest.raises(R.BindingFailure, match="but the contract derives"):
+        R.validate_worker_execution(
+            **_worker_kwargs(session, plan, candidates[0]), gpu_required=False
+        )
+
+
+def test_a_confirmation_plan_must_match_the_lr_the_initial_report_selected(tmp_path):
+    """CONFIRMATION LRs are re-derived from the bound initial report, not declared."""
+    session, report = _lr_chain(tmp_path)
+    root = session.output_root
+    assert report["terminal_status"] == "SUCCESS"
+    published = json.loads(
+        (root / R.PHASE_LR_CONFIRMATION_PLAN_FILENAME).read_text(encoding="utf-8")
+    )
+    derived = R.derive_planned_candidates(plan=published, authorized_root=root)
+    # the seed-1 winner is 2e-4, so the neighbour is the higher 3e-4, both at seed-2
+    assert sorted({c["peak_lr"] for c in derived}) == [2e-4, 3e-4]
+    assert {c["seed_label"] for c in derived} == {"seed-2"}
+    assert {c["micro_bsz"] for c in derived} == {8}
+    assert {c["compile"] for c in derived} == {False}
+    # forging the confirmation LR set is refused by the derivation from the bound report
+    forged = {**published, "derived_from": {**published["derived_from"], "peak_lrs": [4e-4, 3e-4]}}
+    with pytest.raises(R.BindingFailure, match="but the contract derives"):
+        R.derive_planned_candidates(plan=forged, authorized_root=root)
+    # so is running the confirmation at seed-1
+    wrong_seed = {
+        **published,
+        "derived_from": {**published["derived_from"], "seed_labels": ["seed-1"]},
+    }
+    with pytest.raises(R.BindingFailure, match="but the contract derives"):
+        R.derive_planned_candidates(plan=wrong_seed, authorized_root=root)
+    # and so is pointing it at a preceding report whose bytes no longer hash to the recorded SHA
+    initial = root / R.LR_INITIAL_REPORT_FILENAME
+    initial.write_bytes(initial.read_bytes().replace(b'"step":"INITIAL"', b'"step":"FORGED!"'))
+    with pytest.raises(R.BindingFailure, match="preceding_lr_report SHA-256"):
+        R.derive_planned_candidates(plan=published, authorized_root=root)
+
+
+def test_an_edge_plan_must_match_the_edge_the_confirmation_report_implies(tmp_path):
+    """EDGE LRs are re-derived from the bound confirmation report's own pairs."""
+    session, _ = _lr_chain(tmp_path)
+    root = session.output_root
+    edge_plan = json.loads((root / R.PHASE_LR_EDGE_PLAN_FILENAME).read_text(encoding="utf-8"))
+    derived = R.derive_planned_candidates(plan=edge_plan, authorized_root=root)
+    assert sorted({c["peak_lr"] for c in derived}) == [1e-4]
+    assert sorted({c["seed_label"] for c in derived}) == ["seed-1", "seed-2"]
+    # forge the edge LR: the derivation from the bound confirmation report refuses it
+    forged = dict(edge_plan)
+    forged["derived_from"] = {**edge_plan["derived_from"], "peak_lrs": [6e-4]}
+    with pytest.raises(R.BindingFailure, match="but the contract derives"):
+        R.derive_planned_candidates(plan=forged, authorized_root=root)
+    # forge the geometry: the bound Phase-MB report refuses it
+    forged2 = dict(edge_plan)
+    forged2["derived_from"] = {
+        **edge_plan["derived_from"],
+        "frozen_geometry": {"micro_bsz": 1, "grad_accum": 128, "compile": True},
+    }
+    with pytest.raises(R.BindingFailure, match="the Phase-MB report it binds freezes"):
+        R.derive_planned_candidates(plan=forged2, authorized_root=root)
+
+
+def test_the_mb_report_verifier_is_session_free_and_recomputes(tmp_path):
+    session = _fake_session(tmp_path)
+    _frozen_mb_report(session, micro_bsz=4, compile_on=True)
+    report = json.loads((session.output_root / R.MB_REPORT_FILENAME).read_text(encoding="utf-8"))
+    frozen = R.verify_mb_report_document(report)
+    assert (frozen["micro_bsz"], frozen["compile"]) == (4, True)
+    assert frozen["grad_accum"] == C.frozen_grad_accum(4)
+    forged = dict(report)
+    forged["selection"] = {**report["selection"], "FROZEN_MICRO_BSZ": 1}
+    with pytest.raises(R.BindingFailure, match="does not reproduce the published selection"):
+        R.verify_mb_report_document(forged)
+    with pytest.raises(R.BindingFailure, match="unusable physical VRAM"):
+        R.verify_mb_report_document({**report, "physical_vram_bytes": None})
+
+
+# ================= R3 re-review closure: unreadable artifacts are binding failures
+
+
+@pytest.mark.parametrize("body", [b"", b"{", b"not json", b"[]", b'"a string"', b"\xff\xfe\x00"])
+def test_an_unreadable_canonical_artifact_is_a_binding_failure(tmp_path, body):
+    path = tmp_path / "artifact.json"
+    path.write_bytes(body)
+    with pytest.raises(R.BindingFailure):
+        R.load_json_artifact(path, label="probe artifact")
+    with pytest.raises(R.BindingFailure, match="could not be read"):
+        R.load_json_artifact(tmp_path / "absent.json", label="probe artifact")
+
+
+def test_a_corrupt_immutable_artifact_is_a_binding_failure(tmp_path):
+    path = tmp_path / "PROBE.json"
+    digest = R.write_immutable_artifact(path, {"schema_version": "probe", "a": 1})
+    assert R.read_immutable_artifact(path, schema_version="probe")[1] == digest
+    path.with_suffix(".sha256").write_text("", encoding="utf-8")
+    with pytest.raises(R.BindingFailure, match="unreadable or empty"):
+        R.read_immutable_artifact(path, schema_version="probe")
+    path.with_suffix(".sha256").write_text("not-a-digest  PROBE.json\n", encoding="utf-8")
+    with pytest.raises(R.BindingFailure, match="not a hex digest"):
+        R.read_immutable_artifact(path, schema_version="probe")
+
+
+def test_an_unpublishable_payload_is_a_named_phase_abort(tmp_path):
+    """A non-finite value may never enter the immutable chain as a raw ValueError."""
+    with pytest.raises(R.PhaseAbort, match="not canonically serializable"):
+        R.write_immutable_artifact(tmp_path / "BAD.json", {"score": float("inf")})
+    assert not (tmp_path / "BAD.json").exists()
+
+
+def test_a_referenced_artifact_may_not_escape_the_authorized_root(tmp_path):
+    root = tmp_path / "root"
+    (root / "inner").mkdir(parents=True)
+    outside = tmp_path / "outside.json"
+    outside.write_bytes(b"{}")
+    with pytest.raises(R.BindingFailure, match="resolves outside the authorized root"):
+        R._require_referenced_artifact(  # noqa: SLF001
+            root, "../outside.json", hashlib.sha256(b"{}").hexdigest(), "probe"
+        )
+
+
+def test_a_pre_execution_fault_is_never_an_ineligible_candidate(tmp_path):
+    """R3 Part 10: classification is by stage. Nothing before model construction is candidate-local."""
+    import inspect
+
+    src = inspect.getsource(R._cli_internal_worker)  # noqa: SLF001
+    assert 'stage = "VALIDATION"' in src
+    assert 'stage = "EXECUTION"' in src
+    assert 'elif stage == "VALIDATION":' in src
+    # a spec that is not even readable JSON exits BINDING_FAILURE, not CANDIDATE_INELIGIBLE
+    spec = tmp_path / "corrupt.json"
+    spec.write_bytes(b"{ this is not json")
+    code = R.main(_worker_argv(tmp_path, spec))
+    assert code == R.BINDING_FAILURE
+    terminal = R.read_terminal_result(spec)
+    assert terminal["terminal_status"] == "BINDING_FAILURE"
+    assert terminal["completed_updates"] == 0
+
+
+# ============ R3 re-review closure: an ineligible confirmation neighbour still publishes
+
+
+def test_an_ineligible_confirmation_neighbour_still_publishes_its_report(tmp_path):
+    """The confirmation pairs must stay canonically serializable (no inf)."""
+    session = _fake_session(tmp_path)
+    _frozen_mb_report(session, micro_bsz=8, compile_on=False)
+    scores = {2e-4: 3.0, 3e-4: 3.5, 4e-4: 3.9, 1e-4: 2.5}
+
+    def launcher(candidate, given, plan):
+        # the seed-2 rerun of the confirmation NEIGHBOUR fails locally
+        if candidate["seed_label"] == "seed-2" and candidate["peak_lr"] == 3e-4:
+            raise R.CandidateFailure("CUDA out of memory")
+        _write_result(
+            candidate,
+            given,
+            plan,
+            _bound_lr_result(candidate, given, plan, scores[candidate["peak_lr"]]),
+        )
+
+    report = R.orchestrate_phase_muon_lr(session, launcher=launcher)
+    root = session.output_root
+    confirmation = json.loads(
+        (root / R.LR_CONFIRMATION_REPORT_FILENAME).read_text(encoding="utf-8")
+    )
+    neighbour = next(p for p in confirmation["confirmation_pairs"] if p["peak_lr"] == 3e-4)
+    assert neighbour["seed2_score"] is None and neighbour["seed2_eligible"] is False
+    assert confirmation["selection"]["outcome"] == "CONFIRMED"
+    assert confirmation["selection"]["confirmed_peak_lr"] == 2e-4
+    assert report["terminal_status"] == "SUCCESS"
+    # every published artifact in the chain round-trips through canonical JSON
+    for name in (
+        R.LR_INITIAL_REPORT_FILENAME,
+        R.LR_CONFIRMATION_REPORT_FILENAME,
+        R.LR_EDGE_REPORT_FILENAME,
+        R.LR_REPORT_FILENAME,
+    ):
+        body = (root / name).read_bytes()
+        assert C.canonical_json_bytes(json.loads(body.decode("utf-8"))) == body
+
+
+def test_lr_eligibility_enforces_the_compile_path_in_both_directions():
+    fell_back = _lr(3e-4, 3.0, compile=True, canonical_compile_path=False)
+    ok, failures = C.lr_candidate_eligible(fell_back)
+    assert not ok and "compile_silent_fallback" in failures
+    unrequested = _lr(3e-4, 3.0, compile=False, canonical_compile_path=False)
+    ok2, failures2 = C.lr_candidate_eligible(unrequested)
+    assert not ok2 and "unrequested_compiled_path" in failures2
+    assert C.lr_candidate_eligible(_lr(3e-4, 3.0))[0] is True
+
+
+def test_ineligible_evidence_marks_a_missing_terminal_artifact(tmp_path):
+    """An invented zero may never look like a real measurement."""
+    session = _fake_session(tmp_path)
+    candidates, plan = _published_mb_plan(session)
+
+    def launcher(c, s, pl):
+        raise R.CandidateFailure("simulated parent-side fault")
+
+    evidence = R._launch(candidates[0], session, plan, launcher)  # noqa: SLF001
+    assert evidence["terminal_evidence_present"] is False
+    assert evidence["completed_updates"] == 0
+    assert evidence["terminal_reserved_tokens"] is None
+
+
+def test_the_launcher_reads_the_terminal_artifact_before_the_logs():
+    """A fault while preserving logs must not discard the child's progress accounting."""
+    import inspect
+
+    src = inspect.getsource(R._subprocess_launcher)  # noqa: SLF001
+    assert src.index("read_terminal_result(spec_path)") < src.index(".stdout")
