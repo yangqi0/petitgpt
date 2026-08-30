@@ -256,16 +256,15 @@ def git_policy_status() -> dict[str, Any]:
 
 
 def verify_accepted_release(stage: str) -> dict[str, Any]:
-    """Open the canonical manifest-required release and derive its identity from disk."""
-    from pretrain.dataset_pretrain import PackedBinDataset
-
+    """Validate every frozen release byte without constructing a packed dataset."""
+    if stage not in {"stage_a", "stage_b"}:
+        raise BindingFailure(f"unknown accepted release stage {stage!r}")
     rel = ACCEPTED_STAGE_A if stage == "stage_a" else ACCEPTED_STAGE_B
     expected_meta = (
         ACCEPTED_STAGE_A_META_SHA256 if stage == "stage_a" else ACCEPTED_STAGE_B_META_SHA256
     )
     root = repo_root() / rel
     meta_path = root / "meta.json"
-    # Release identity is a binding, not a runtime condition: a mismatch is BINDING_FAILURE.
     if not meta_path.is_file():
         raise BindingFailure(f"accepted release manifest missing: {rel}/meta.json")
     meta_sha = file_sha256(meta_path)
@@ -273,19 +272,35 @@ def verify_accepted_release(stage: str) -> dict[str, Any]:
         raise BindingFailure(
             f"{stage} meta SHA-256 mismatch: expected {expected_meta}, got {meta_sha}"
         )
-    meta = json.loads(meta_path.read_text(encoding="utf-8"))
-    dataset = PackedBinDataset(str(root / "train"), seq_len=2048, require_release_manifest=True)
+    meta = load_json_artifact(meta_path, label=f"accepted {stage} release manifest")
+    try:
+        # This canonical validator hashes every declared shard and rejects gaps, extras,
+        # symlinks, geometry drift, failed/ambiguous releases, and manifest-contract drift.
+        # It constructs no Dataset and opens no memmap, so the complete release is proven
+        # before the worker is allowed to construct either a model or a dataset.
+        from pretrain.dataset_pretrain import validate_shard_release
+
+        release = validate_shard_release(root / "train")
+    except Exception as exc:
+        raise BindingFailure(f"accepted {stage} release byte validation failed: {exc}") from exc
+    if Path(release["manifest_path"]) != meta_path.resolve():
+        raise BindingFailure(f"accepted {stage} release resolved a noncanonical manifest")
+    if release["manifest_sha256"] != meta_sha:
+        raise BindingFailure(f"accepted {stage} release manifest changed during validation")
     declared = meta["shard_files"]["train"]
+    stored_token_ids = int(release["expected_tokens"])
+    if stored_token_ids != sum(int(shard["token_count"]) for shard in declared):
+        raise BindingFailure(f"accepted {stage} release token accounting is inconsistent")
     return {
         "stage": stage,
         "release_dir": rel,
         "meta_sha256": meta_sha,
         "status": meta.get("status"),
-        "shard_count": len(declared),
+        "shard_count": int(release["expected_shards"]),
         "shard_sha256s": [s["sha256"] for s in declared],
-        "stored_token_ids": sum(s["token_count"] for s in declared),
-        "blocks": len(dataset),
-        "dataset": dataset,
+        "stored_token_ids": stored_token_ids,
+        "blocks": max(0, (stored_token_ids - 1) // 2048),
+        "dataset": None,
     }
 
 
@@ -452,6 +467,7 @@ LEDGER_LOCK_FILENAME = "token_ledger.lock"
 SESSION_FILENAME = "SESSION.json"
 LEDGER_PHASES = ("MB", "LR")
 LEDGER_BUCKETS = ("MB", "LR", "GLOBAL")
+LEDGER_RECEIPT_SCHEMA = "petitgpt-pilot-candidate-ledger-receipt-v2.3-r4"
 
 
 class LedgerIntegrityFailure(PhaseAbort):
@@ -519,6 +535,9 @@ class TokenLedger:
                 "completed_tokens": {k: 0 for k in LEDGER_BUCKETS},
                 "reserved_updates": 0,
                 "completed_updates": 0,
+                "active_candidate": None,
+                "candidate_receipts": [],
+                "receipt_chain_head_sha256": None,
             }
             self._write(self.state)
 
@@ -618,6 +637,212 @@ class TokenLedger:
             fail(
                 "completed_updates disagrees with completed_tokens[GLOBAL] under the fixed geometry"
             )
+        self._require_receipt_invariants(state, fail, integer)
+
+    def _require_receipt_invariants(
+        self, state: Mapping[str, Any], fail: Any, integer: Any
+    ) -> None:
+        """Validate the complete immutable candidate-receipt chain on every ledger reload."""
+
+        def sha256(value: Any, label: str) -> str:
+            if (
+                not isinstance(value, str)
+                or len(value) != 64
+                or value.lower() != value
+                or any(c not in "0123456789abcdef" for c in value)
+            ):
+                fail(f"{label} must be a lowercase SHA-256 digest, got {value!r}")
+            return value
+
+        def token_map(value: Any, label: str) -> dict[str, int]:
+            if not isinstance(value, Mapping) or sorted(value) != sorted(LEDGER_BUCKETS):
+                fail(f"{label} must carry exactly the buckets {sorted(LEDGER_BUCKETS)}")
+            out = {k: integer(value.get(k), f"{label}[{k}]") for k in LEDGER_BUCKETS}
+            if any(v < 0 or v % TRAINED_TOKENS_PER_UPDATE for v in out.values()):
+                fail(f"{label} contains a negative or partial-update token count")
+            if out["GLOBAL"] != out["MB"] + out["LR"]:
+                fail(f"{label}[GLOBAL] is not the sum of its phase buckets")
+            return out
+
+        receipts = state.get("candidate_receipts")
+        if not isinstance(receipts, list):
+            fail("candidate_receipts is missing or malformed")
+        previous_sha: str | None = None
+        previous_after: tuple[dict[str, int], dict[str, int], int, int] | None = None
+        for sequence, raw_receipt in enumerate(receipts, start=1):
+            if not isinstance(raw_receipt, Mapping):
+                fail(f"candidate_receipts[{sequence - 1}] is malformed")
+            receipt = dict(raw_receipt)
+            if receipt.get("schema_version") != LEDGER_RECEIPT_SCHEMA:
+                fail(f"candidate receipt {sequence} schema mismatch")
+            if integer(receipt.get("sequence"), f"receipt[{sequence}].sequence") != sequence:
+                fail(f"candidate receipt {sequence} has the wrong sequence")
+            if receipt.get("previous_receipt_sha256") != previous_sha:
+                fail(f"candidate receipt {sequence} breaks the hash chain")
+            receipt_sha = sha256(
+                receipt.get("receipt_sha256"), f"receipt[{sequence}].receipt_sha256"
+            )
+            unhashed = {k: v for k, v in receipt.items() if k != "receipt_sha256"}
+            if _sha256_bytes(canonical_json_bytes(unhashed)) != receipt_sha:
+                fail(f"candidate receipt {sequence} content hash mismatch")
+            if receipt.get("ledger_identity") != self.identity:
+                fail(f"candidate receipt {sequence} ledger identity mismatch")
+            phase = receipt.get("phase")
+            if phase not in LEDGER_PHASES:
+                fail(f"candidate receipt {sequence} has invalid phase {phase!r}")
+            if not isinstance(receipt.get("candidate_id"), str) or not receipt["candidate_id"]:
+                fail(f"candidate receipt {sequence} candidate_id is malformed")
+            if not isinstance(receipt.get("session_id"), str) or not receipt["session_id"]:
+                fail(f"candidate receipt {sequence} session_id is malformed")
+            peak_lr = receipt.get("peak_lr")
+            if (
+                not isinstance(peak_lr, (int, float))
+                or isinstance(peak_lr, bool)
+                or not math.isfinite(float(peak_lr))
+                or float(peak_lr) <= 0
+            ):
+                fail(f"candidate receipt {sequence} peak_lr is malformed")
+            planned = integer(
+                receipt.get("planned_updates"), f"receipt[{sequence}].planned_updates"
+            )
+            local_reserved = integer(
+                receipt.get("candidate_reserved_updates"),
+                f"receipt[{sequence}].candidate_reserved_updates",
+            )
+            local_completed = integer(
+                receipt.get("candidate_completed_updates"),
+                f"receipt[{sequence}].candidate_completed_updates",
+            )
+            if not (0 <= local_completed <= local_reserved <= planned):
+                fail(f"candidate receipt {sequence} has impossible local update counts")
+            for name in (
+                "candidate_spec_sha256",
+                "phase_plan_sha256",
+                "session_sha256",
+                "authorization_sha256",
+                "run_meta_sha256",
+                "result_sha256",
+            ):
+                sha256(receipt.get(name), f"receipt[{sequence}].{name}")
+            before_reserved = token_map(
+                receipt.get("before_reserved_tokens"), f"receipt[{sequence}].before_reserved_tokens"
+            )
+            before_completed = token_map(
+                receipt.get("before_completed_tokens"),
+                f"receipt[{sequence}].before_completed_tokens",
+            )
+            after_reserved = token_map(
+                receipt.get("after_reserved_tokens"), f"receipt[{sequence}].after_reserved_tokens"
+            )
+            after_completed = token_map(
+                receipt.get("after_completed_tokens"),
+                f"receipt[{sequence}].after_completed_tokens",
+            )
+            before_ru = integer(
+                receipt.get("before_reserved_updates"),
+                f"receipt[{sequence}].before_reserved_updates",
+            )
+            before_cu = integer(
+                receipt.get("before_completed_updates"),
+                f"receipt[{sequence}].before_completed_updates",
+            )
+            after_ru = integer(
+                receipt.get("after_reserved_updates"), f"receipt[{sequence}].after_reserved_updates"
+            )
+            after_cu = integer(
+                receipt.get("after_completed_updates"),
+                f"receipt[{sequence}].after_completed_updates",
+            )
+            if after_ru - before_ru != local_reserved or after_cu - before_cu != local_completed:
+                fail(f"candidate receipt {sequence} update deltas disagree with local counts")
+            unit = TRAINED_TOKENS_PER_UPDATE
+            for bucket in LEDGER_BUCKETS:
+                reserved_delta = local_reserved * unit if bucket in (phase, "GLOBAL") else 0
+                completed_delta = local_completed * unit if bucket in (phase, "GLOBAL") else 0
+                if after_reserved[bucket] - before_reserved[bucket] != reserved_delta:
+                    fail(f"candidate receipt {sequence} reserved-token delta is inconsistent")
+                if after_completed[bucket] - before_completed[bucket] != completed_delta:
+                    fail(f"candidate receipt {sequence} completed-token delta is inconsistent")
+            before = (before_reserved, before_completed, before_ru, before_cu)
+            if previous_after is not None and before != previous_after:
+                fail(f"candidate receipt {sequence} does not continue the prior receipt")
+            previous_after = (after_reserved, after_completed, after_ru, after_cu)
+            previous_sha = receipt_sha
+
+        if state.get("receipt_chain_head_sha256") != previous_sha:
+            fail("receipt_chain_head_sha256 does not equal the validated receipt chain head")
+        active = state.get("active_candidate")
+        if active is not None and not isinstance(active, Mapping):
+            fail("active_candidate is malformed")
+        current = (
+            dict(state["reserved_tokens"]),
+            dict(state["completed_tokens"]),
+            int(state["reserved_updates"]),
+            int(state["completed_updates"]),
+        )
+        if isinstance(active, Mapping):
+            phase = active.get("phase")
+            if phase not in LEDGER_PHASES:
+                fail(f"active candidate has invalid phase {phase!r}")
+            if not isinstance(active.get("candidate_id"), str) or not active["candidate_id"]:
+                fail("active candidate_id is malformed")
+            if not isinstance(active.get("session_id"), str) or not active["session_id"]:
+                fail("active session_id is malformed")
+            peak_lr = active.get("peak_lr")
+            if (
+                not isinstance(peak_lr, (int, float))
+                or isinstance(peak_lr, bool)
+                or not math.isfinite(float(peak_lr))
+                or float(peak_lr) <= 0
+            ):
+                fail("active peak_lr is malformed")
+            planned = integer(active.get("planned_updates"), "active.planned_updates")
+            local_reserved = integer(
+                active.get("candidate_reserved_updates"), "active.candidate_reserved_updates"
+            )
+            local_completed = integer(
+                active.get("candidate_completed_updates"), "active.candidate_completed_updates"
+            )
+            if not (0 <= local_completed <= local_reserved <= planned):
+                fail("active candidate update counts are impossible")
+            for name in (
+                "candidate_spec_sha256",
+                "phase_plan_sha256",
+                "session_sha256",
+                "authorization_sha256",
+            ):
+                sha256(active.get(name), f"active.{name}")
+            before_reserved = token_map(
+                active.get("before_reserved_tokens"), "active.before_reserved_tokens"
+            )
+            before_completed = token_map(
+                active.get("before_completed_tokens"), "active.before_completed_tokens"
+            )
+            before_ru = integer(
+                active.get("before_reserved_updates"), "active.before_reserved_updates"
+            )
+            before_cu = integer(
+                active.get("before_completed_updates"), "active.before_completed_updates"
+            )
+            before = (before_reserved, before_completed, before_ru, before_cu)
+            if previous_after is not None and before != previous_after:
+                fail("active candidate does not continue the last sealed receipt")
+            unit = TRAINED_TOKENS_PER_UPDATE
+            for bucket in LEDGER_BUCKETS:
+                rd = local_reserved * unit if bucket in (phase, "GLOBAL") else 0
+                cd = local_completed * unit if bucket in (phase, "GLOBAL") else 0
+                if current[0][bucket] - before_reserved[bucket] != rd:
+                    fail("active candidate reserved-token delta is inconsistent")
+                if current[1][bucket] - before_completed[bucket] != cd:
+                    fail("active candidate completed-token delta is inconsistent")
+            if (
+                current[2] - before_ru != local_reserved
+                or current[3] - before_cu != local_completed
+            ):
+                fail("active candidate aggregate update delta is inconsistent")
+        elif previous_after is not None:
+            if current != previous_after:
+                fail("aggregate accounting has advanced beyond the last candidate receipt")
 
     # ---------------------------------------------------------------- io
 
@@ -667,6 +892,59 @@ class TokenLedger:
 
     # ---------------------------------------------------------------- transitions
 
+    def begin_candidate(self, binding: Mapping[str, Any]) -> dict[str, Any]:
+        """Bind subsequent reservations to one independently validated plan member."""
+        required = (
+            "phase",
+            "candidate_id",
+            "peak_lr",
+            "planned_updates",
+            "candidate_spec_sha256",
+            "phase_plan_sha256",
+            "session_id",
+            "session_sha256",
+            "authorization_sha256",
+        )
+        missing = [name for name in required if name not in binding]
+        require(not missing, f"candidate ledger binding is incomplete: {missing}")
+        require(binding["phase"] in LEDGER_PHASES, f"unknown phase {binding['phase']!r}")
+        require(
+            isinstance(binding["candidate_id"], str) and bool(binding["candidate_id"]),
+            "candidate_id must be a nonempty string",
+        )
+        require(
+            isinstance(binding["peak_lr"], (int, float))
+            and not isinstance(binding["peak_lr"], bool)
+            and math.isfinite(float(binding["peak_lr"]))
+            and float(binding["peak_lr"]) > 0,
+            "peak_lr must be a positive finite number",
+        )
+        require(
+            isinstance(binding["planned_updates"], int)
+            and not isinstance(binding["planned_updates"], bool)
+            and binding["planned_updates"] > 0,
+            "planned_updates must be a positive integer",
+        )
+        with self._lock():
+            self._reload_locked()
+            require(
+                self.state.get("active_candidate") is None,
+                "the token ledger already has an active candidate; partial execution is a "
+                "phase-level integrity failure",
+            )
+            self.state["active_candidate"] = {
+                **{name: binding[name] for name in required},
+                "before_reserved_tokens": dict(self.state["reserved_tokens"]),
+                "before_completed_tokens": dict(self.state["completed_tokens"]),
+                "before_reserved_updates": int(self.state["reserved_updates"]),
+                "before_completed_updates": int(self.state["completed_updates"]),
+                "candidate_reserved_updates": 0,
+                "candidate_completed_updates": 0,
+            }
+            self._require_structural_invariants(self.state)
+            self._write(self.state)
+            return dict(self.state["active_candidate"])
+
     def reserve(self, phase: str, tokens: int = TRAINED_TOKENS_PER_UPDATE) -> dict[str, Any]:
         """Step one: reserve BEFORE the optimizer update is applied."""
         require(phase in PHASE_CEILINGS, f"unknown phase {phase!r}")
@@ -677,6 +955,13 @@ class TokenLedger:
         )
         with self._lock():
             self._reload_locked()
+            active = self.state.get("active_candidate")
+            if active is not None:
+                require(active["phase"] == phase, "reservation phase differs from active candidate")
+                require(
+                    int(active["candidate_reserved_updates"]) < int(active["planned_updates"]),
+                    "candidate cannot reserve beyond its planned update count",
+                )
             phase_after = int(self.state["reserved_tokens"].get(phase, 0)) + int(tokens)
             global_after = int(self.state["reserved_tokens"].get("GLOBAL", 0)) + int(tokens)
             breaches = []
@@ -691,6 +976,8 @@ class TokenLedger:
             self.state["reserved_tokens"][phase] = phase_after
             self.state["reserved_tokens"]["GLOBAL"] = global_after
             self.state["reserved_updates"] = int(self.state["reserved_updates"]) + 1
+            if active is not None:
+                active["candidate_reserved_updates"] = int(active["candidate_reserved_updates"]) + 1
             self._require_structural_invariants(self.state)
             self._write(self.state)
             return {
@@ -710,6 +997,14 @@ class TokenLedger:
         )
         with self._lock():
             self._reload_locked()
+            active = self.state.get("active_candidate")
+            if active is not None:
+                require(active["phase"] == phase, "completion phase differs from active candidate")
+                require(
+                    int(active["candidate_completed_updates"])
+                    < int(active["candidate_reserved_updates"]),
+                    "candidate completion requires its own prior reservation",
+                )
             completed_after = int(self.state["completed_tokens"].get(phase, 0)) + int(tokens)
             require(
                 completed_after <= int(self.state["reserved_tokens"].get(phase, 0)),
@@ -721,9 +1016,109 @@ class TokenLedger:
                 self.state["completed_tokens"].get("GLOBAL", 0)
             ) + int(tokens)
             self.state["completed_updates"] = int(self.state["completed_updates"]) + 1
+            if active is not None:
+                active["candidate_completed_updates"] = (
+                    int(active["candidate_completed_updates"]) + 1
+                )
             self._require_structural_invariants(self.state)
             self._write(self.state)
             return {"phase": phase, "completed_tokens_after": completed_after}
+
+    def finalize_candidate(
+        self,
+        *,
+        terminal_status: str,
+        run_meta_sha256: str,
+        result_sha256: str,
+    ) -> dict[str, Any]:
+        """Seal a hash-chained receipt for the active candidate's historical accounting."""
+        require(
+            terminal_status
+            in {"SUCCESS", "CANDIDATE_INELIGIBLE", "PHASE_ABORT", "BINDING_FAILURE"},
+            f"unknown candidate terminal status {terminal_status!r}",
+        )
+        for label, value in (
+            ("run_meta_sha256", run_meta_sha256),
+            ("result_sha256", result_sha256),
+        ):
+            require(
+                isinstance(value, str)
+                and len(value) == 64
+                and value.lower() == value
+                and all(c in "0123456789abcdef" for c in value),
+                f"{label} must be a lowercase SHA-256 digest",
+            )
+        with self._lock():
+            self._reload_locked()
+            active = self.state.get("active_candidate")
+            require(isinstance(active, Mapping), "no active candidate exists to finalize")
+            active = dict(active)
+            local_reserved = int(active["candidate_reserved_updates"])
+            local_completed = int(active["candidate_completed_updates"])
+            planned = int(active["planned_updates"])
+            require(
+                0 <= local_completed <= local_reserved <= planned,
+                "candidate update counts are invalid",
+            )
+            if terminal_status == "SUCCESS":
+                require(
+                    local_completed == planned and local_reserved == planned,
+                    "a successful candidate must complete every planned update",
+                )
+            else:
+                require(
+                    local_reserved in (local_completed, local_completed + 1),
+                    "a failed candidate may retain at most its one in-flight reservation",
+                )
+            receipts = list(self.state["candidate_receipts"])
+            body = {
+                "schema_version": LEDGER_RECEIPT_SCHEMA,
+                "sequence": len(receipts) + 1,
+                "previous_receipt_sha256": self.state.get("receipt_chain_head_sha256"),
+                "phase": active["phase"],
+                "candidate_id": active["candidate_id"],
+                "peak_lr": active["peak_lr"],
+                "planned_updates": planned,
+                "candidate_spec_sha256": active["candidate_spec_sha256"],
+                "phase_plan_sha256": active["phase_plan_sha256"],
+                "session_id": active["session_id"],
+                "session_sha256": active["session_sha256"],
+                "authorization_sha256": active["authorization_sha256"],
+                "ledger_identity": dict(self.identity),
+                "terminal_status": terminal_status,
+                "before_reserved_tokens": dict(active["before_reserved_tokens"]),
+                "before_completed_tokens": dict(active["before_completed_tokens"]),
+                "after_reserved_tokens": dict(self.state["reserved_tokens"]),
+                "after_completed_tokens": dict(self.state["completed_tokens"]),
+                "before_reserved_updates": int(active["before_reserved_updates"]),
+                "before_completed_updates": int(active["before_completed_updates"]),
+                "after_reserved_updates": int(self.state["reserved_updates"]),
+                "after_completed_updates": int(self.state["completed_updates"]),
+                "candidate_reserved_updates": local_reserved,
+                "candidate_completed_updates": local_completed,
+                "run_meta_sha256": run_meta_sha256,
+                "result_sha256": result_sha256,
+            }
+            receipt = {**body, "receipt_sha256": _sha256_bytes(canonical_json_bytes(body))}
+            receipts.append(receipt)
+            self.state["candidate_receipts"] = receipts
+            self.state["receipt_chain_head_sha256"] = receipt["receipt_sha256"]
+            self.state["active_candidate"] = None
+            self._require_structural_invariants(self.state)
+            self._write(self.state)
+            return dict(receipt)
+
+    def receipt(self, receipt_sha256: str) -> dict[str, Any]:
+        """Return a historical receipt only after a fresh locked chain validation."""
+        with self._lock():
+            self._reload_locked()
+            matches = [
+                dict(receipt)
+                for receipt in self.state["candidate_receipts"]
+                if receipt.get("receipt_sha256") == receipt_sha256
+            ]
+            require(len(matches) == 1, f"ledger receipt {receipt_sha256!r} is not unique/present")
+            return matches[0]
 
     # ---------------------------------------------------------------- reporting
 
@@ -753,6 +1148,11 @@ class TokenLedger:
                 "session_hard_ceiling": int(state["session_hard_ceiling"]),
                 "trained_tokens_per_update": int(state["trained_tokens_per_update"]),
                 "identity": dict(self.identity),
+                "active_candidate": dict(state["active_candidate"])
+                if state["active_candidate"]
+                else None,
+                "candidate_receipt_count": len(state["candidate_receipts"]),
+                "receipt_chain_head_sha256": state["receipt_chain_head_sha256"],
                 "reloaded_from_disk": True,
             }
 
@@ -1301,46 +1701,13 @@ def open_session(
 # --------------------------------------------------------------------- construction
 
 
-def build_pilot_model(seed: int) -> Any:
-    """The frozen 124,635,456-parameter model at a fixed init seed."""
-    import torch
-
-    from src.model import GPT, GPTConfig, audit_gpt_parameter_count
-
-    torch.manual_seed(int(seed))
-    cfg = GPTConfig()
-    model = GPT(cfg)
-    audit_gpt_parameter_count(model, cfg)
-    return model
-
-
-def build_pilot_optimizer(model: Any, peak_lr: float) -> Any:
-    """Muon, exactly as V2.3 freezes it, through the canonical builder."""
-    from src.optim import build_optimizer
-
-    opt = build_optimizer(
-        model,
-        name="muon",
-        lr=float(peak_lr),
-        weight_decay=WEIGHT_DECAY,
-        betas=(0.9, 0.95),
-        muon_lr=MUON_LR_ARG,
-        muon_momentum=MUON_MOMENTUM,
-        verbose=False,
-    )
-    grouping = verify_realized_grouping(opt, model)
-    if not grouping["matches_frozen_realization"]:
-        raise PhaseAbort(
-            "realized optimizer grouping does not match V2.3: " + ", ".join(grouping["failures"])
-        )
-    return opt
-
-
 def apply_scheduled_lr(optimizer: Any, lr: float) -> list[float]:
     """One scalar schedule drives all groups via lr_ratio (all 1.0 under V2.3)."""
     realized = []
-    for pg in optimizer.param_groups:
-        pg["lr"] = float(lr) * float(pg.get("lr_ratio", 1.0))
+    for index, pg in enumerate(optimizer.param_groups):
+        require("lr_ratio" in pg, f"optimizer group {index} is missing required lr_ratio")
+        require(not isinstance(pg["lr_ratio"], bool), "lr_ratio must be numeric, not Boolean")
+        pg["lr"] = float(lr) * float(pg["lr_ratio"])
         realized.append(pg["lr"])
     return realized
 
@@ -1627,114 +1994,6 @@ class ObservedForward:
         return self.target(*args, **kwargs)
 
 
-def _run_updates(
-    *,
-    module: Any,
-    forward: ObservedForward,
-    optimizer: Any,
-    view: IndexView,
-    micro_bsz: int,
-    grad_accum: int,
-    updates: int,
-    lr_fn: Any,
-    ledger: TokenLedger,
-    phase: str,
-    device: str,
-    progress: dict[str, Any],
-    timed_from: int = 1,
-    record_diagnostics: bool = False,
-) -> dict[str, Any]:
-    """The complete optimizer-update loop: accumulation, clipping, step, timing, ledger.
-
-    R2 Part 5: the ledger reservation is taken BEFORE the update is applied and completed only
-    after the optimizer step returns, so a crash mid-update can never leave an applied update
-    unaccounted for.
-
-    R2 Part 12: no device-to-host scalar transfer happens inside a timed region. Losses and
-    gradient norms are retained as device tensors and converted after the loop, so the recorded
-    per-update wall time measures the training step and nothing else.
-
-    R3 Part 6: each measured update contributes a RECORD binding its own update number, its own
-    trained-token count and its own synchronized wall time.
-
-    R3 Part 9: ``progress`` is mutated in place as updates complete, so a candidate that raises
-    part-way through still reports the number of updates it actually finished.
-    """
-    import torch
-
-    required_blocks = int(updates) * int(SEQUENCES_PER_OPTIMIZER_UPDATE)
-    require(
-        len(view) >= required_blocks,
-        f"{phase}: need {required_blocks} train blocks without replay, view has {len(view)}",
-    )
-
-    module.train()
-    loss_tensors: dict[int, Any] = {}
-    grad_norm_tensors: dict[int, Any] = {}
-    realized_lrs: dict[int, list[float]] = {}
-    per_update_seconds: dict[int, float] = {}
-    diagnostics: list[dict[str, Any]] = []
-    cursor = 0
-    for u in range(1, int(updates) + 1):
-        lr = lr_fn(u)
-        realized = apply_scheduled_lr(optimizer, lr)
-        ledger.reserve(phase)
-        if device == "cuda":
-            torch.cuda.synchronize()
-        t0 = time.perf_counter()
-        optimizer.zero_grad(set_to_none=True)
-        accumulated = None
-        for _ in range(int(grad_accum)):
-            batch = [view[cursor + k] for k in range(int(micro_bsz))]
-            cursor += int(micro_bsz)
-            x = to_model_ids(torch.stack([b[0] for b in batch]), device)
-            y = to_model_ids(torch.stack([b[1] for b in batch]), device)
-            m = torch.stack([b[2] for b in batch]).to(device, dtype=torch.float32)
-            with torch.autocast(device_type=device, dtype=torch.bfloat16):
-                loss = canonical_loss(forward(x), y, m) / int(grad_accum)
-            loss.backward()
-            detached = loss.detach()
-            accumulated = detached if accumulated is None else accumulated + detached
-        gnorm = torch.nn.utils.clip_grad_norm_(module.parameters(), GRAD_CLIP)
-        optimizer.step()
-        if device == "cuda":
-            torch.cuda.synchronize()
-        per_update_seconds[u] = time.perf_counter() - t0
-        ledger.complete(phase)
-        loss_tensors[u] = accumulated
-        grad_norm_tensors[u] = gnorm.detach() if hasattr(gnorm, "detach") else gnorm
-        realized_lrs[u] = realized
-        progress["completed_updates"] = u
-        if u >= int(timed_from):
-            progress["update_timings"].append({
-                "update": u,
-                "trained_tokens": TRAINED_TOKENS_PER_UPDATE,
-                "wall_seconds": per_update_seconds[u],
-            })
-        if record_diagnostics:
-            diagnostics.append(_group_diagnostics(optimizer, u))
-    require(
-        cursor == required_blocks,
-        f"{phase}: consumed {cursor} blocks, contract requires exactly {required_blocks}",
-    )
-
-    losses = {u: float(t) for u, t in loss_tensors.items()}
-    grad_norms = {u: float(t) for u, t in grad_norm_tensors.items()}
-    return {
-        "losses": losses,
-        "grad_norms": grad_norms,
-        "realized_lrs": realized_lrs,
-        "per_update_wall_seconds": {str(u): per_update_seconds[u] for u in per_update_seconds},
-        "update_timings": list(progress["update_timings"]),
-        "first_optimizer_update_wall_seconds": per_update_seconds.get(1),
-        "measured_first_update": int(timed_from),
-        "forward_invocations": forward.invocations,
-        "diagnostics": diagnostics,
-        "completed_updates": int(updates),
-        "blocks_consumed": cursor,
-    }
-
-
 def _group_diagnostics(optimizer: Any, update: int) -> dict[str, Any]:
     """Per-group update/weight RMS. Recorded, never used as a selection threshold."""
     import torch
@@ -1932,52 +2191,6 @@ REAL_WORKER_ARTIFACT_INPUTS = (
     "candidate_output_path",
 )
 
-_WORKER_AUTHORITY_MINT = object()
-
-
-class WorkerAuthority:
-    """Proof that the artifact bytes on disk were revalidated by THIS process.
-
-    R3 Part 1: only :func:`validate_worker_execution` mints one. It cannot be constructed by a
-    caller, so no hand-assembled session, context object or ``authorized`` flag can reach model
-    construction, a forward, a backward or an optimizer update.
-    """
-
-    __slots__ = (
-        "validated",
-        "candidate",
-        "spec",
-        "spec_sha256",
-        "spec_path",
-        "plan",
-        "plan_sha256",
-        "plan_path",
-        "session_doc",
-        "session_sha256",
-        "session_path",
-        "ledger",
-        "output_dir",
-        "train_order",
-        "phase",
-    )
-
-    def __init__(self, mint: Any, **fields: Any):
-        if mint is not _WORKER_AUTHORITY_MINT:
-            raise BindingFailure(
-                "WorkerAuthority is minted only by validate_worker_execution() after the "
-                "canonical artifact bytes have been revalidated; it cannot be constructed"
-            )
-        for key in self.__slots__:
-            setattr(self, key, fields[key])
-
-    @property
-    def session_id(self) -> str:
-        return str(self.validated["session_id"])
-
-    @property
-    def scope(self) -> str:
-        return str(self.validated["scope"])
-
 
 def verify_mb_report_document(report: Mapping[str, Any]) -> dict[str, Any]:
     """Re-derive the frozen Phase-MB geometry from a report's OWN candidate evidence.
@@ -1993,10 +2206,28 @@ def verify_mb_report_document(report: Mapping[str, Any]) -> dict[str, Any]:
         raise BindingFailure(f"Phase-MB report records an unusable physical VRAM {vram!r}")
     verified = []
     for record in candidates:
-        if record.get("eligible"):
-            verified.append({**record, **verify_recomputed_mb_result(record)})
+        recomputed = dict(record)
+        observed_compile = recheck_compile_path_evidence(recomputed)
+        if recomputed.get("canonical_compile_path") is not observed_compile:
+            raise BindingFailure("Phase-MB stored compile verdict disagrees with raw observation")
+        recomputed["canonical_compile_path"] = observed_compile
+        try:
+            require_exact_mb_timing_records(recomputed.get("update_timings") or ())
+        except PilotContractError:
+            pass
         else:
-            verified.append(dict(record))
+            recomputed.update(verify_recomputed_mb_result(recomputed))
+        eligible, failures = mb_candidate_eligible(recomputed, vram)
+        if not isinstance(record.get("eligible"), bool) or record["eligible"] != eligible:
+            raise BindingFailure(
+                f"Phase-MB candidate {record.get('candidate_id')!r} stored eligibility "
+                f"disagrees with recomputed verdict {eligible!r}"
+            )
+        if "eligibility_failures" in record and record["eligibility_failures"] != list(failures):
+            raise BindingFailure("Phase-MB stored failure summary disagrees with recomputation")
+        recomputed["eligible"] = eligible
+        recomputed["eligibility_failures"] = list(failures)
+        verified.append(recomputed)
     reselected = mb_select(verified, vram)
     if reselected != report.get("selection"):
         raise BindingFailure(
@@ -2017,13 +2248,45 @@ def verify_mb_report_document(report: Mapping[str, Any]) -> dict[str, Any]:
 
 
 def _recomputed_lr_records(records: Sequence[Mapping[str, Any]]) -> list[dict[str, Any]]:
-    """Recompute every eligible LR record from its own raw evaluation components."""
+    """Recompute raw LR metrics and eligibility without consulting the stored verdict first."""
     out = []
     for record in records or ():
-        if record.get("eligible"):
-            out.append({**record, **verify_recomputed_lr_result(record)})
+        recomputed = dict(record)
+        observed_compile = recheck_compile_path_evidence(recomputed)
+        if recomputed.get("canonical_compile_path") is not observed_compile:
+            raise BindingFailure("LR stored compile verdict disagrees with raw observation")
+        recomputed["canonical_compile_path"] = observed_compile
+        raw = (
+            recomputed.get("eval_stage_a_numerator"),
+            recomputed.get("eval_stage_a_weight"),
+            recomputed.get("eval_stage_b_numerator"),
+            recomputed.get("eval_stage_b_weight"),
+        )
+        raw_complete = (
+            all(
+                isinstance(value, (int, float))
+                and not isinstance(value, bool)
+                and math.isfinite(float(value))
+                for value in raw
+            )
+            and float(raw[1]) > 0
+            and float(raw[3]) > 0
+        )
+        if raw_complete:
+            recomputed.update(verify_recomputed_lr_result(recomputed))
         else:
-            out.append(dict(record))
+            recomputed.update({"eval_loss_stage_a": None, "eval_loss_stage_b": None, "score": None})
+        eligible, failures = lr_candidate_eligible(recomputed)
+        if not isinstance(record.get("eligible"), bool) or record["eligible"] != eligible:
+            raise BindingFailure(
+                f"LR candidate {record.get('candidate_id')!r} stored eligibility disagrees with "
+                f"recomputed verdict {eligible!r}"
+            )
+        if "eligibility_failures" in record and record["eligibility_failures"] != list(failures):
+            raise BindingFailure("LR stored failure summary disagrees with recomputation")
+        recomputed["eligible"] = eligible
+        recomputed["eligibility_failures"] = list(failures)
+        out.append(recomputed)
     return out
 
 
@@ -2042,7 +2305,7 @@ def _bound_report(
 
 
 def derive_planned_candidates(
-    *, plan: Mapping[str, Any], authorized_root: Path
+    *, plan: Mapping[str, Any], session: ExecutionSession, authorized_root: Path | None = None
 ) -> list[dict[str, Any]]:
     """Re-derive, from the contract and the BOUND evidence, exactly the candidates a plan may hold.
 
@@ -2062,20 +2325,26 @@ def derive_planned_candidates(
     comparison against the published spec can never be a tautology.
     """
     kind = str(plan["plan_kind"])
-    root = Path(authorized_root)
+    root = session.output_root.resolve()
+    if authorized_root is not None and Path(authorized_root).resolve() != root:
+        raise BindingFailure("phase-plan derivation root does not equal the validated session root")
     derived_from = plan.get("derived_from") or {}
     if kind == "PHASE_MB_PLAN":
         return plan_phase_mb(output_root=root)
 
     # --- the frozen geometry, re-derived from the Phase-MB report this plan binds ---
-    mb_report = _bound_report(
+    _require_referenced_artifact(
         root,
-        derived_from,
-        ("phase_mb_report_relpath", "phase_mb_report_sha256"),
+        derived_from.get("phase_mb_report_relpath"),
+        derived_from.get("phase_mb_report_sha256"),
         "phase_mb_report",
-        MB_REPORT_SCHEMA,
     )
-    frozen = verify_mb_report_document(mb_report)
+    frozen = load_authoritative_mb_report(session)
+    if (
+        derived_from.get("phase_mb_report_relpath") != frozen["report_relpath"]
+        or derived_from.get("phase_mb_report_sha256") != frozen["report_sha256"]
+    ):
+        raise BindingFailure("the phase plan does not bind the reconstructed Phase-MB report")
     declared = derived_from.get("frozen_geometry")
     expected_geometry = {
         "micro_bsz": frozen["micro_bsz"],
@@ -2093,20 +2362,18 @@ def derive_planned_candidates(
         expected_lrs = [float(v) for v in LR_GRID_SEED1]
         expected_seeds = ["seed-1"]
     elif kind == "PHASE_LR_CONFIRMATION_PLAN":
-        previous = _bound_report(
+        _require_referenced_artifact(
             root,
-            derived_from,
-            ("preceding_report_relpath", "preceding_report_sha256"),
+            derived_from.get("preceding_report_relpath"),
+            derived_from.get("preceding_report_sha256"),
             "preceding_lr_report",
-            LR_REPORT_SCHEMA,
         )
-        seed1 = _recomputed_lr_records(previous.get("seed1") or ())
-        verdict = lr_select_seed1(seed1)
-        if verdict != previous.get("selection"):
-            raise BindingFailure(
-                "re-deriving the seed-1 selection from the bound initial report's recomputed "
-                "evidence does not reproduce its published selection"
-            )
+        previous = load_authoritative_lr_initial_report(
+            session, expected_sha256=derived_from.get("preceding_report_sha256")
+        )
+        if derived_from.get("preceding_report_relpath") != LR_INITIAL_REPORT_FILENAME:
+            raise BindingFailure("confirmation plan must bind the canonical initial LR report")
+        verdict = previous["selection"]
         if verdict["outcome"] != "SEED1_WINNER":
             raise PhaseAbort(
                 f"the bound initial report did not name a seed-1 winner ({verdict['outcome']}); "
@@ -2116,19 +2383,18 @@ def derive_planned_candidates(
         expected_lrs = [winner, confirmation_neighbor(winner)]
         expected_seeds = ["seed-2"]
     elif kind == "PHASE_LR_EDGE_PLAN":
-        previous = _bound_report(
+        _require_referenced_artifact(
             root,
-            derived_from,
-            ("preceding_report_relpath", "preceding_report_sha256"),
+            derived_from.get("preceding_report_relpath"),
+            derived_from.get("preceding_report_sha256"),
             "preceding_lr_report",
-            LR_REPORT_SCHEMA,
         )
-        confirmed = lr_confirm(previous.get("confirmation_pairs") or ())
-        if confirmed != previous.get("selection"):
-            raise BindingFailure(
-                "re-deriving the confirmation outcome from the bound confirmation report's own "
-                "pairs does not reproduce its published selection"
-            )
+        previous = load_authoritative_lr_confirmation_report(
+            session, expected_sha256=derived_from.get("preceding_report_sha256")
+        )
+        if derived_from.get("preceding_report_relpath") != LR_CONFIRMATION_REPORT_FILENAME:
+            raise BindingFailure("edge plan must bind the canonical confirmation LR report")
+        confirmed = previous["selection"]
         if confirmed["outcome"] != "CONFIRMED":
             raise PhaseAbort(
                 f"the bound confirmation report did not confirm an LR ({confirmed['outcome']}); "
@@ -2171,6 +2437,102 @@ def derive_planned_candidates(
     return out
 
 
+def validate_complete_phase_plan_membership(
+    *, plan: Mapping[str, Any], session: ExecutionSession, authorized_root: Path | None = None
+) -> dict[str, dict[str, Any]]:
+    """Reopen every spec and require the plan to equal the full contract-derived candidate set."""
+    root = session.output_root.resolve()
+    if authorized_root is not None and Path(authorized_root).resolve() != root:
+        raise BindingFailure("phase-plan membership root does not equal the validated session root")
+    expected = derive_planned_candidates(plan=plan, session=session, authorized_root=root)
+    entries = plan.get("candidates")
+    if not isinstance(entries, list) or not all(isinstance(e, Mapping) for e in entries):
+        raise BindingFailure("phase plan candidates must be an ordered list of objects")
+    expected_ids = [str(candidate["candidate_id"]) for candidate in expected]
+    listed_ids = [entry.get("candidate_id") for entry in entries]
+    if listed_ids != expected_ids:
+        raise BindingFailure(
+            f"{plan.get('plan_kind')} candidate membership/order {listed_ids!r} does not equal "
+            f"the complete contract-derived set {expected_ids!r}"
+        )
+    listed_hashes = [entry.get("candidate_spec_sha256") for entry in entries]
+    if plan.get("candidate_ids") != listed_ids:
+        raise BindingFailure("phase plan candidate_ids does not exactly mirror candidate entries")
+    if plan.get("candidate_spec_sha256s") != listed_hashes:
+        raise BindingFailure(
+            "phase plan candidate_spec_sha256s does not exactly mirror candidate entries"
+        )
+    for label, values in (
+        ("candidate IDs", listed_ids),
+        ("candidate spec hashes", listed_hashes),
+        ("candidate spec paths", [entry.get("candidate_spec_relpath") for entry in entries]),
+        ("candidate output paths", [entry.get("output_relpath") for entry in entries]),
+    ):
+        if len(values) != len(set(values)):
+            raise BindingFailure(f"phase plan contains duplicate {label}: {values!r}")
+
+    validated_entries: dict[str, dict[str, Any]] = {}
+    for expected_candidate, raw_entry in zip(expected, entries, strict=True):
+        entry = dict(raw_entry)
+        candidate_id = str(expected_candidate["candidate_id"])
+        if set(entry) != {
+            "candidate_id",
+            "candidate_spec_relpath",
+            "candidate_spec_sha256",
+            "output_relpath",
+        }:
+            raise BindingFailure(
+                f"phase plan entry for {candidate_id!r} has unknown/missing fields"
+            )
+        canonical_spec_relpath = f"{SPEC_DIRNAME}/{candidate_id}.json"
+        if entry["candidate_spec_relpath"] != canonical_spec_relpath:
+            raise BindingFailure(
+                f"candidate {candidate_id!r} spec must be {canonical_spec_relpath!r}"
+            )
+        spec_path = (root / canonical_spec_relpath).resolve()
+        if root not in spec_path.parents or not spec_path.is_file():
+            raise BindingFailure(
+                f"candidate {candidate_id!r} spec is missing or outside the authorized root"
+            )
+        spec_bytes = spec_path.read_bytes()
+        spec_sha256 = _sha256_bytes(spec_bytes)
+        if entry["candidate_spec_sha256"] != spec_sha256:
+            raise BindingFailure(f"candidate {candidate_id!r} spec SHA does not match its bytes")
+        expected_spec = {
+            "schema_version": CANDIDATE_SPEC_SCHEMA,
+            "contract_version": CONTRACT_VERSION,
+            "session_id": plan["session_id"],
+            "session_sha256": plan["session_sha256"],
+            "plan_kind": plan["plan_kind"],
+            "phase": plan["phase"],
+            "candidate": dict(expected_candidate),
+        }
+        if spec_bytes != canonical_json_bytes(expected_spec):
+            raise BindingFailure(
+                f"candidate {candidate_id!r} spec bytes differ from the contract derivation"
+            )
+        try:
+            expected_output_relpath = _relpath(Path(expected_candidate["output_dir"]), root)
+        except ValueError as exc:
+            raise BindingFailure(
+                f"contract-derived candidate {candidate_id!r} output escapes the authorized root"
+            ) from exc
+        if entry["output_relpath"] != expected_output_relpath:
+            raise BindingFailure(
+                f"candidate {candidate_id!r} output path differs from the contract derivation"
+            )
+        output_path = (root / expected_output_relpath).resolve()
+        if root not in output_path.parents:
+            raise BindingFailure(f"candidate {candidate_id!r} output escapes the authorized root")
+        validated_entries[candidate_id] = {
+            **entry,
+            "candidate": dict(expected_candidate),
+            "spec_path": spec_path,
+            "output_path": output_path,
+        }
+    return validated_entries
+
+
 def _require_referenced_artifact(
     root: Path, relpath: Any, expected_sha256: Any, label: str
 ) -> None:
@@ -2198,15 +2560,15 @@ def validate_worker_execution(
     ledger_path: Path,
     candidate_output_path: Path,
     gpu_required: bool = True,
-) -> WorkerAuthority:
-    """THE single gate to the real model-training backend. Canonical artifact PATHS only.
+) -> dict[str, Any]:
+    """Validate every canonical artifact byte and return non-authorizing derived data.
 
     R3 Parts 1-4: it accepts no session object, no validated context, no ``authorized`` flag and
     no caller-supplied hash. It revalidates the authorization manifest, the pilot-index
     manifest, both accepted releases, the runtime, the authorized root, the immutable session
     manifest, the immutable phase plan, this candidate's immutable spec, the spec's membership
     in that plan, every candidate field against a fresh contract derivation, and the ledger --
-    all from bytes on disk -- before minting the authority that the training entry requires.
+    all from bytes on disk. Only the path-only executor consumes this derived mapping.
     """
     spec_path = Path(candidate_spec_path)
     if not spec_path.is_file():
@@ -2274,47 +2636,6 @@ def validate_worker_execution(
             f"against ({plan.get('plan_kind')!r})"
         )
 
-    entries = [e for e in (plan.get("candidates") or []) if isinstance(e, Mapping)]
-    matched = [e for e in entries if e.get("candidate_spec_sha256") == spec_sha256]
-    if not matched:
-        raise BindingFailure(
-            f"candidate spec {spec_path} (sha256 {spec_sha256}) is not listed in "
-            f"{plan['plan_kind']}; a self-declared candidate is never executable"
-        )
-    if len(matched) != 1:
-        raise BindingFailure(f"{plan['plan_kind']} lists the same candidate spec more than once")
-    entry = matched[0]
-    if entry.get("candidate_id") != candidate.get("candidate_id"):
-        raise BindingFailure("the planned candidate identity does not match the spec it points at")
-    if (root / str(entry.get("candidate_spec_relpath"))).resolve() != spec_path.resolve():
-        raise BindingFailure("the candidate spec is not at the path the phase plan lists for it")
-    if (root / str(entry.get("output_relpath"))).resolve() != output_dir:
-        raise BindingFailure(
-            f"candidate output {output_dir} is not the directory the phase plan assigns to "
-            f"{candidate.get('candidate_id')!r}"
-        )
-
-    # Every candidate field is re-derived from the contract and from the evidence the plan binds
-    # (which derive_planned_candidates re-hashes and re-verifies), never echoed back from the plan.
-    expected = {
-        c["candidate_id"]: c for c in derive_planned_candidates(plan=plan, authorized_root=root)
-    }
-    if candidate.get("candidate_id") not in expected:
-        raise BindingFailure(
-            f"candidate {candidate.get('candidate_id')!r} is not one the contract derives for "
-            f"{plan['plan_kind']}"
-        )
-    if candidate != expected[candidate["candidate_id"]]:
-        differing = sorted(
-            k
-            for k in set(candidate) | set(expected[candidate["candidate_id"]])
-            if candidate.get(k) != expected[candidate["candidate_id"]].get(k)
-        )
-        raise BindingFailure(
-            f"candidate {candidate['candidate_id']!r} fields differ from the contract "
-            f"derivation: {differing}"
-        )
-
     if Path(ledger_path).resolve() != (root / LEDGER_FILENAME).resolve():
         raise BindingFailure(
             f"the token ledger must be {root / LEDGER_FILENAME}, got {ledger_path}"
@@ -2324,268 +2645,454 @@ def validate_worker_execution(
             f"no token ledger at {ledger_path}; a candidate never creates the session's "
             f"accounting file, it joins the one its authorized session opened"
         )
-    # Nothing is written and no accounting is opened until the output directory is proven to be
-    # the one this plan assigns, and to not already exist.
-    require_candidate_output_dir(output_dir, root)
     ledger = TokenLedger(Path(ledger_path), validated["identity"], validated["effective_ceilings"])
+    derived_session = ExecutionSession(
+        validated,
+        ledger,
+        session_path=Path(session_manifest_path).resolve(),
+        session_sha256=session_sha256,
+    )
+
+    entries = validate_complete_phase_plan_membership(
+        plan=plan, session=derived_session, authorized_root=root
+    )
+    candidate_id = candidate.get("candidate_id")
+    entry = entries.get(str(candidate_id))
+    if entry is None:
+        raise BindingFailure(f"candidate {candidate_id!r} is not in the complete derived plan")
+    if entry["candidate_spec_sha256"] != spec_sha256:
+        raise BindingFailure("the launched spec SHA is not the plan member's canonical spec SHA")
+    if entry["spec_path"] != spec_path.resolve():
+        raise BindingFailure("the candidate spec is not at the path the phase plan lists for it")
+    if entry["output_path"] != output_dir:
+        raise BindingFailure(
+            f"candidate output {output_dir} is not the directory the phase plan assigns to "
+            f"{candidate_id!r}"
+        )
+    if candidate != entry["candidate"]:
+        raise BindingFailure("the launched candidate does not equal its derived identity")
+
+    # Nothing is written until the output directory is proven to be the plan-assigned path.
+    require_candidate_output_dir(output_dir, root)
+    ledger_snapshot = ledger.snapshot()
+    if ledger_snapshot.get("active_candidate") is not None:
+        raise LedgerIntegrityFailure("token ledger contains an unfinished active candidate")
     order = train_order(
         validated["indices"]["stage_a_train"],
         SEED_SEMANTICS[candidate["seed_label"]]["train_order"],
     )
-    return WorkerAuthority(
-        _WORKER_AUTHORITY_MINT,
-        validated=validated,
-        candidate=candidate,
-        spec=spec,
-        spec_sha256=spec_sha256,
-        spec_path=spec_path,
-        plan=plan,
-        plan_sha256=plan_sha256,
-        plan_path=plan_path,
-        session_doc=session_doc,
-        session_sha256=session_sha256,
-        session_path=Path(session_manifest_path),
-        ledger=ledger,
-        output_dir=output_dir,
-        train_order=order,
-        phase=phase,
-    )
-
-
-def _require_worker_authority(worker: Any) -> WorkerAuthority:
-    if not isinstance(worker, WorkerAuthority):
-        raise BindingFailure(
-            "the real training backend accepts only a WorkerAuthority minted by "
-            "validate_worker_execution() from canonical artifact paths"
-        )
-    return worker
-
-
-def _train_phase_mb(worker: Any, progress: dict[str, Any]) -> dict[str, Any]:
-    """One Phase-MB probe, end to end, inside a revalidated candidate process."""
-    import torch
-
-    worker = _require_worker_authority(worker)
-    candidate = worker.candidate
-    require(str(candidate.get("phase")) == "MB", "Phase-MB backend received a non-MB candidate")
-    out = worker.output_dir
-    out.mkdir(parents=True)
-    cache_dir = out / "inductor_cache"
-    os.environ["TORCHINDUCTOR_CACHE_DIR"] = str(cache_dir)
-    _reset_dynamo_counters()
-    torch.cuda.reset_peak_memory_stats()
-
-    module = build_pilot_model(candidate["model_init_seed"]).to("cuda")
-    torch_compile_wrapper_seconds = None
-    compiled_object = None
-    if candidate["compile"]:
-        t0 = time.perf_counter()
-        compiled_object = torch.compile(module)
-        torch_compile_wrapper_seconds = time.perf_counter() - t0
-        module = compiled_object
-    forward = ObservedForward(module, compiled_object=compiled_object)
-    optimizer = build_pilot_optimizer(module, candidate["peak_lr"])
-    # R3 Part 11: exact optimizer-realization verification is a PRECONDITION for update 1.
-    realization = verify_muon_realization(module, optimizer, peak_lr=float(candidate["peak_lr"]))
-    view = IndexView(worker.validated["stage_a"]["dataset"], worker.train_order)
-
-    result = _run_updates(
-        module=module,
-        forward=forward,
-        optimizer=optimizer,
-        view=view,
-        micro_bsz=candidate["micro_bsz"],
-        grad_accum=candidate["grad_accum"],
-        updates=MB_PROBE_UPDATES,
-        lr_fn=mb_lr,
-        ledger=worker.ledger,
-        phase="MB",
-        device="cuda",
-        progress=progress,
-        timed_from=MB_MEASURED_FIRST_UPDATE,
-    )
-    grouping = verify_realized_grouping(optimizer, module)
-    states = verify_optimizer_state(optimizer)
-    compile_evidence = compile_path_evidence(
-        module,
-        forward,
-        requested=bool(candidate["compile"]),
-        cache_dir=cache_dir,
-        expected_forward_invocations=MB_PROBE_UPDATES * int(candidate["grad_accum"]),
-    )
-    payload = {
-        "phase": "MB",
-        "candidate_id": candidate["candidate_id"],
-        "micro_bsz": candidate["micro_bsz"],
-        "grad_accum": candidate["grad_accum"],
-        "compile": bool(candidate["compile"]),
-        "seed_label": candidate["seed_label"],
-        "completed_updates": result["completed_updates"],
-        "blocks_consumed": result["blocks_consumed"],
-        # R3 Part 6: the per-update timing records the parent recomputes the median from. The
-        # serialized median below is a convenience the parent independently re-derives.
-        "update_timings": result["update_timings"],
-        "measured_first_update": result["measured_first_update"],
-        "per_update_wall_seconds": result["per_update_wall_seconds"],
-        "median_update_tokens_per_second": mb_median_update_tokens_per_second(
-            result["update_timings"]
-        ),
-        # R2 Part 12: three separately named, separately measured quantities.
-        "torch_compile_wrapper_seconds": torch_compile_wrapper_seconds,
-        "first_optimizer_update_wall_seconds": result["first_optimizer_update_wall_seconds"],
-        "max_memory_reserved_bytes": int(torch.cuda.max_memory_reserved()),
-        "oom": False,
-        "uncontrolled_exception": False,
-        "all_losses_finite": all(map(_finite, result["losses"].values())),
-        "all_grad_norms_finite": all(map(_finite, result["grad_norms"].values())),
-        "all_optimizer_states_instantiated": states["all_states_instantiated"],
-        "grouping_matches_contract": grouping["matches_frozen_realization"],
-        "all_lr_ratios_are_one": grouping["all_lr_ratios_are_one"],
-        "compile_evidence": compile_evidence,
-        "canonical_compile_path": compile_evidence["canonical_compile_path"],
-        "optimizer_realization_verified": realization["verified"],
-        "rms_matching": realization["rms_matching"],
+    return {
+        "validated": validated,
+        "candidate": candidate,
+        "spec": spec,
+        "spec_sha256": spec_sha256,
+        "spec_path": spec_path.resolve(),
+        "plan": plan,
+        "plan_sha256": plan_sha256,
+        "plan_path": plan_path,
+        "session_doc": session_doc,
+        "session_sha256": session_sha256,
+        "session_path": Path(session_manifest_path).resolve(),
+        "ledger": ledger,
+        "output_dir": output_dir,
+        "train_order": order,
+        "phase": phase,
     }
-    return _publish_result(payload, worker)
 
 
-def _train_phase_lr(worker: Any, progress: dict[str, Any]) -> dict[str, Any]:
-    """One Phase-Muon-LR run, end to end, including both global-mean evaluations."""
+def execute_candidate_from_artifact_paths(
+    *,
+    authorization_path: Path,
+    session_manifest_path: Path,
+    phase_plan_path: Path,
+    candidate_spec_path: Path,
+    pilot_index_manifest_path: Path,
+    accepted_stage_a_path: Path,
+    accepted_stage_b_path: Path,
+    ledger_path: Path,
+    candidate_output_path: Path,
+    gpu_required: bool = True,
+) -> dict[str, Any]:
+    """The sole real candidate executor: canonical paths in, strict terminal evidence out.
+
+    The functions that construct the model/optimizer and perform forward, backward, and
+    ``optimizer.step`` are lexical locals created only after every supplied artifact, complete
+    phase-plan membership, ledger, and resolved output path have been validated from disk.
+    """
+    try:
+        execution = validate_worker_execution(
+            authorization_path=Path(authorization_path),
+            session_manifest_path=Path(session_manifest_path),
+            phase_plan_path=Path(phase_plan_path),
+            candidate_spec_path=Path(candidate_spec_path),
+            pilot_index_manifest_path=Path(pilot_index_manifest_path),
+            accepted_stage_a_path=Path(accepted_stage_a_path),
+            accepted_stage_b_path=Path(accepted_stage_b_path),
+            ledger_path=Path(ledger_path),
+            candidate_output_path=Path(candidate_output_path),
+            gpu_required=gpu_required,
+        )
+    except (BindingFailure, PhaseAbort):
+        raise
+    except Exception as exc:
+        raise BindingFailure(
+            f"canonical artifact validation failed before execution: {type(exc).__name__}: {exc}"
+        ) from exc
+
     import torch
 
+    from pretrain.dataset_pretrain import PackedBinDataset
     from pretrain.pilot_contract_v2_3 import sustained_divergence
+    from src.model import GPT, GPTConfig, audit_gpt_parameter_count
+    from src.optim import build_optimizer
 
-    worker = _require_worker_authority(worker)
-    candidate = worker.candidate
-    validated = worker.validated
-    require(str(candidate.get("phase")) == "LR", "Phase-LR backend received a non-LR candidate")
-    out = worker.output_dir
-    out.mkdir(parents=True)
-    cache_dir = out / "inductor_cache"
-    os.environ["TORCHINDUCTOR_CACHE_DIR"] = str(cache_dir)
-    _reset_dynamo_counters()
+    candidate = execution["candidate"]
+    validated = execution["validated"]
+    ledger: TokenLedger = execution["ledger"]
+    output_dir = Path(execution["output_dir"])
+    phase = str(execution["phase"])
+    progress: dict[str, Any] = {"completed_updates": 0, "update_timings": []}
 
-    module = build_pilot_model(candidate["model_init_seed"]).to("cuda")
-    torch_compile_wrapper_seconds = None
-    compiled_object = None
-    if candidate["compile"]:
-        t0 = time.perf_counter()
-        compiled_object = torch.compile(module)
-        torch_compile_wrapper_seconds = time.perf_counter() - t0
-        module = compiled_object
-    forward = ObservedForward(module, compiled_object=compiled_object)
-    optimizer = build_pilot_optimizer(module, candidate["peak_lr"])
-    realization = verify_muon_realization(module, optimizer, peak_lr=float(candidate["peak_lr"]))
-    view = IndexView(validated["stage_a"]["dataset"], worker.train_order)
-    result = _run_updates(
-        module=module,
-        forward=forward,
-        optimizer=optimizer,
-        view=view,
-        micro_bsz=candidate["micro_bsz"],
-        grad_accum=candidate["grad_accum"],
-        updates=LR_RUN_UPDATES,
-        lr_fn=lambda u: lr_schedule(u, candidate["peak_lr"]),
-        ledger=worker.ledger,
-        phase="LR",
-        device="cuda",
-        progress=progress,
-        record_diagnostics=True,
-    )
-    eval_a = IndexView(validated["stage_a"]["dataset"], validated["indices"]["stage_a_eval"])
-    eval_b = IndexView(validated["stage_b"]["dataset"], validated["indices"]["stage_b_eval"])
-    a = evaluate(module, forward, eval_a, micro_bsz=candidate["micro_bsz"], device="cuda")
-    b = evaluate(module, forward, eval_b, micro_bsz=candidate["micro_bsz"], device="cuda")
-    grouping = verify_realized_grouping(optimizer, module)
-    states = verify_optimizer_state(optimizer)
-    guard = sustained_divergence(result["losses"])
-    # R3 Part 7: the expectation is DERIVED from the frozen geometry and the fixed evaluation
-    # block counts -- never measured back off the wrapper it is meant to check.
-    micro = int(candidate["micro_bsz"])
-    expected_eval_forwards = -(-len(eval_a) // micro) + -(-len(eval_b) // micro)
-    compile_evidence = compile_path_evidence(
-        module,
-        forward,
-        requested=bool(candidate["compile"]),
-        cache_dir=cache_dir,
-        expected_forward_invocations=(
-            LR_RUN_UPDATES * int(candidate["grad_accum"]) + expected_eval_forwards
-        ),
-    )
-    payload = {
-        "phase": "LR",
+    def construct_model() -> Any:
+        torch.manual_seed(int(candidate["model_init_seed"]))
+        config = GPTConfig()
+        model = GPT(config)
+        audit_gpt_parameter_count(model, config)
+        return model
+
+    def construct_optimizer(model: Any) -> Any:
+        optimizer = build_optimizer(
+            model,
+            name="muon",
+            lr=float(candidate["peak_lr"]),
+            weight_decay=WEIGHT_DECAY,
+            betas=(0.9, 0.95),
+            muon_lr=MUON_LR_ARG,
+            muon_momentum=MUON_MOMENTUM,
+            verbose=False,
+        )
+        grouping = verify_realized_grouping(optimizer, model)
+        if not grouping["matches_frozen_realization"]:
+            raise PhaseAbort(
+                "realized optimizer grouping does not match V2.3: "
+                + ", ".join(grouping["failures"])
+            )
+        return optimizer
+
+    def run_updates(
+        *,
+        module: Any,
+        forward: ObservedForward,
+        optimizer: Any,
+        view: IndexView,
+        updates: int,
+        lr_fn: Any,
+        timed_from: int = 1,
+        record_diagnostics: bool = False,
+    ) -> dict[str, Any]:
+        required_blocks = int(updates) * SEQUENCES_PER_OPTIMIZER_UPDATE
+        require(
+            len(view) >= required_blocks,
+            f"{phase}: need {required_blocks} train blocks without replay, view has {len(view)}",
+        )
+        module.train()
+        loss_tensors: dict[int, Any] = {}
+        grad_norm_tensors: dict[int, Any] = {}
+        realized_lrs: dict[int, list[float]] = {}
+        per_update_seconds: dict[int, float] = {}
+        diagnostics: list[dict[str, Any]] = []
+        cursor = 0
+        for update in range(1, int(updates) + 1):
+            realized_lrs[update] = apply_scheduled_lr(optimizer, lr_fn(update))
+            ledger.reserve(phase)
+            if gpu_required:
+                torch.cuda.synchronize()
+            started = time.perf_counter()
+            optimizer.zero_grad(set_to_none=True)
+            accumulated = None
+            for _ in range(int(candidate["grad_accum"])):
+                batch = [view[cursor + offset] for offset in range(int(candidate["micro_bsz"]))]
+                cursor += int(candidate["micro_bsz"])
+                x = to_model_ids(torch.stack([item[0] for item in batch]), "cuda")
+                y = to_model_ids(torch.stack([item[1] for item in batch]), "cuda")
+                mask = torch.stack([item[2] for item in batch]).to("cuda", dtype=torch.float32)
+                with torch.autocast(device_type="cuda", dtype=torch.bfloat16):
+                    loss = canonical_loss(forward(x), y, mask) / int(candidate["grad_accum"])
+                loss.backward()
+                detached = loss.detach()
+                accumulated = detached if accumulated is None else accumulated + detached
+            grad_norm = torch.nn.utils.clip_grad_norm_(module.parameters(), GRAD_CLIP)
+            optimizer.step()
+            if gpu_required:
+                torch.cuda.synchronize()
+            per_update_seconds[update] = time.perf_counter() - started
+            ledger.complete(phase)
+            loss_tensors[update] = accumulated
+            grad_norm_tensors[update] = (
+                grad_norm.detach() if hasattr(grad_norm, "detach") else grad_norm
+            )
+            progress["completed_updates"] = update
+            if update >= int(timed_from):
+                progress["update_timings"].append({
+                    "update": update,
+                    "trained_tokens": TRAINED_TOKENS_PER_UPDATE,
+                    "wall_seconds": per_update_seconds[update],
+                })
+            if record_diagnostics:
+                diagnostics.append(_group_diagnostics(optimizer, update))
+        require(
+            cursor == required_blocks,
+            f"{phase}: consumed {cursor} blocks, expected exactly {required_blocks}",
+        )
+        return {
+            "losses": {u: float(value) for u, value in loss_tensors.items()},
+            "grad_norms": {u: float(value) for u, value in grad_norm_tensors.items()},
+            "realized_lrs": realized_lrs,
+            "per_update_wall_seconds": {
+                str(u): seconds for u, seconds in per_update_seconds.items()
+            },
+            "update_timings": list(progress["update_timings"]),
+            "first_optimizer_update_wall_seconds": per_update_seconds.get(1),
+            "measured_first_update": int(timed_from),
+            "forward_invocations": forward.invocations,
+            "diagnostics": diagnostics,
+            "completed_updates": int(updates),
+            "blocks_consumed": cursor,
+        }
+
+    def train_candidate(stage_a: Any, stage_b: Any) -> dict[str, Any]:
+        cache_dir = output_dir / "inductor_cache"
+        os.environ["TORCHINDUCTOR_CACHE_DIR"] = str(cache_dir)
+        _reset_dynamo_counters()
+        if phase == "MB":
+            torch.cuda.reset_peak_memory_stats()
+        module = construct_model().to("cuda")
+        wrapper_seconds = None
+        compiled_object = None
+        if candidate["compile"]:
+            started = time.perf_counter()
+            compiled_object = torch.compile(module)
+            wrapper_seconds = time.perf_counter() - started
+            module = compiled_object
+        forward = ObservedForward(module, compiled_object=compiled_object)
+        optimizer = construct_optimizer(module)
+        realization = verify_muon_realization(
+            module, optimizer, peak_lr=float(candidate["peak_lr"])
+        )
+        train_view = IndexView(stage_a, execution["train_order"])
+        updates = MB_PROBE_UPDATES if phase == "MB" else LR_RUN_UPDATES
+        update_result = run_updates(
+            module=module,
+            forward=forward,
+            optimizer=optimizer,
+            view=train_view,
+            updates=updates,
+            lr_fn=(mb_lr if phase == "MB" else lambda u: lr_schedule(u, candidate["peak_lr"])),
+            timed_from=MB_MEASURED_FIRST_UPDATE if phase == "MB" else 1,
+            record_diagnostics=phase == "LR",
+        )
+        grouping = verify_realized_grouping(optimizer, module)
+        states = verify_optimizer_state(optimizer)
+        expected_training_forwards = updates * int(candidate["grad_accum"])
+        common = {
+            "phase": phase,
+            "candidate_id": candidate["candidate_id"],
+            "peak_lr": candidate["peak_lr"],
+            "seed_label": candidate["seed_label"],
+            "micro_bsz": candidate["micro_bsz"],
+            "grad_accum": candidate["grad_accum"],
+            "compile": bool(candidate["compile"]),
+            "completed_updates": update_result["completed_updates"],
+            "blocks_consumed": update_result["blocks_consumed"],
+            "update_timings": update_result["update_timings"],
+            "torch_compile_wrapper_seconds": wrapper_seconds,
+            "first_optimizer_update_wall_seconds": update_result[
+                "first_optimizer_update_wall_seconds"
+            ],
+            "all_losses_finite": all(map(_finite, update_result["losses"].values())),
+            "all_grad_norms_finite": all(map(_finite, update_result["grad_norms"].values())),
+            "grouping_matches_contract": grouping["matches_frozen_realization"],
+            "all_lr_ratios_are_one": grouping["all_lr_ratios_are_one"],
+            "optimizer_realization_verified": realization["verified"],
+            "rms_matching": realization["rms_matching"],
+            "oom": False,
+            "uncontrolled_exception": False,
+        }
+        if phase == "MB":
+            compile_evidence = compile_path_evidence(
+                module,
+                forward,
+                requested=bool(candidate["compile"]),
+                cache_dir=cache_dir,
+                expected_forward_invocations=expected_training_forwards,
+            )
+            return {
+                **common,
+                "measured_first_update": update_result["measured_first_update"],
+                "per_update_wall_seconds": update_result["per_update_wall_seconds"],
+                "median_update_tokens_per_second": mb_median_update_tokens_per_second(
+                    update_result["update_timings"]
+                ),
+                "max_memory_reserved_bytes": int(torch.cuda.max_memory_reserved()),
+                "all_optimizer_states_instantiated": states["all_states_instantiated"],
+                "compile_evidence": compile_evidence,
+                "canonical_compile_path": compile_evidence["canonical_compile_path"],
+            }
+        eval_a = IndexView(stage_a, validated["indices"]["stage_a_eval"])
+        eval_b = IndexView(stage_b, validated["indices"]["stage_b_eval"])
+        a = evaluate(module, forward, eval_a, micro_bsz=candidate["micro_bsz"], device="cuda")
+        b = evaluate(module, forward, eval_b, micro_bsz=candidate["micro_bsz"], device="cuda")
+        micro = int(candidate["micro_bsz"])
+        expected_eval_forwards = -(-len(eval_a) // micro) + -(-len(eval_b) // micro)
+        compile_evidence = compile_path_evidence(
+            module,
+            forward,
+            requested=bool(candidate["compile"]),
+            cache_dir=cache_dir,
+            expected_forward_invocations=expected_training_forwards + expected_eval_forwards,
+        )
+        divergence = sustained_divergence(update_result["losses"])
+        return {
+            **common,
+            "losses_by_update": {str(u): value for u, value in update_result["losses"].items()},
+            "all_parameters_finite": all(
+                bool(torch.isfinite(p).all()) for p in module.parameters()
+            ),
+            "muon_momentum_states_present": states["all_states_instantiated"],
+            "aux_adamw_states_present": states["all_states_instantiated"],
+            "eval_stage_a_numerator": a["numerator"],
+            "eval_stage_a_weight": a["weight"],
+            "eval_stage_a_blocks": a["blocks"],
+            "eval_stage_b_numerator": b["numerator"],
+            "eval_stage_b_weight": b["weight"],
+            "eval_stage_b_blocks": b["blocks"],
+            "eval_loss_stage_a": a["loss"],
+            "eval_loss_stage_b": b["loss"],
+            "score": lr_score(a["loss"], b["loss"]),
+            "sustained_divergence": divergence["diverged"],
+            "divergence_detail": divergence,
+            "compile_evidence": compile_evidence,
+            "canonical_compile_path": compile_evidence["canonical_compile_path"],
+            "diagnostics": (
+                update_result["diagnostics"][-1] if update_result["diagnostics"] else None
+            ),
+        }
+
+    def failure_payload(exc: Exception) -> dict[str, Any]:
+        reason, detail = _classify_candidate_failure(exc)
+        common = {
+            "phase": phase,
+            "candidate_id": candidate["candidate_id"],
+            "peak_lr": candidate["peak_lr"],
+            "seed_label": candidate["seed_label"],
+            "micro_bsz": candidate["micro_bsz"],
+            "grad_accum": candidate["grad_accum"],
+            "compile": bool(candidate["compile"]),
+            "completed_updates": int(progress["completed_updates"]),
+            "update_timings": list(progress["update_timings"]),
+            "reason": reason,
+            "detail": detail,
+            "oom": reason == "oom",
+            "uncontrolled_exception": reason == "candidate_runtime_exception",
+            "all_losses_finite": False,
+            "all_grad_norms_finite": False,
+            "grouping_matches_contract": False,
+            "all_lr_ratios_are_one": False,
+            "canonical_compile_path": False,
+        }
+        if phase == "MB":
+            try:
+                failure_median = mb_median_update_tokens_per_second(common["update_timings"])
+            except PilotContractError:
+                failure_median = 0.0
+            return {
+                **common,
+                "all_optimizer_states_instantiated": False,
+                "max_memory_reserved_bytes": 0,
+                "median_update_tokens_per_second": failure_median,
+            }
+        return {
+            **common,
+            "all_parameters_finite": False,
+            "muon_momentum_states_present": False,
+            "aux_adamw_states_present": False,
+            "eval_stage_a_numerator": None,
+            "eval_stage_a_weight": None,
+            "eval_stage_b_numerator": None,
+            "eval_stage_b_weight": None,
+            "eval_loss_stage_a": None,
+            "eval_loss_stage_b": None,
+            "score": None,
+            "sustained_divergence": False,
+        }
+
+    ledger.begin_candidate({
+        "phase": phase,
         "candidate_id": candidate["candidate_id"],
         "peak_lr": candidate["peak_lr"],
-        "seed_label": candidate["seed_label"],
-        "micro_bsz": candidate["micro_bsz"],
-        "grad_accum": candidate["grad_accum"],
-        "compile": bool(candidate["compile"]),
-        "completed_updates": result["completed_updates"],
-        "blocks_consumed": result["blocks_consumed"],
-        "losses_by_update": {str(u): v for u, v in result["losses"].items()},
-        "update_timings": result["update_timings"],
-        "torch_compile_wrapper_seconds": torch_compile_wrapper_seconds,
-        "first_optimizer_update_wall_seconds": result["first_optimizer_update_wall_seconds"],
-        "all_losses_finite": all(map(_finite, result["losses"].values())),
-        "all_grad_norms_finite": all(map(_finite, result["grad_norms"].values())),
-        "all_parameters_finite": all(bool(torch.isfinite(p).all()) for p in module.parameters()),
-        "muon_momentum_states_present": states["all_states_instantiated"],
-        "aux_adamw_states_present": states["all_states_instantiated"],
-        "grouping_matches_contract": grouping["matches_frozen_realization"],
-        "all_lr_ratios_are_one": grouping["all_lr_ratios_are_one"],
-        # R3 Part 5: raw evaluation components. SCORE is recomputed from these by the parent.
-        "eval_stage_a_numerator": a["numerator"],
-        "eval_stage_a_weight": a["weight"],
-        "eval_stage_a_blocks": a["blocks"],
-        "eval_stage_b_numerator": b["numerator"],
-        "eval_stage_b_weight": b["weight"],
-        "eval_stage_b_blocks": b["blocks"],
-        "eval_loss_stage_a": a["loss"],
-        "eval_loss_stage_b": b["loss"],
-        "score": lr_score(a["loss"], b["loss"]),
-        "sustained_divergence": guard["diverged"],
-        "divergence_detail": guard,
-        "compile_evidence": compile_evidence,
-        "canonical_compile_path": compile_evidence["canonical_compile_path"],
-        "optimizer_realization_verified": realization["verified"],
-        "diagnostics": result["diagnostics"][-1] if result["diagnostics"] else None,
-        "rms_matching": realization["rms_matching"],
-    }
-    return _publish_result(payload, worker)
+        "planned_updates": candidate["updates"],
+        "candidate_spec_sha256": execution["spec_sha256"],
+        "phase_plan_sha256": execution["plan_sha256"],
+        "session_id": validated["session_id"],
+        "session_sha256": execution["session_sha256"],
+        "authorization_sha256": validated["authorization_sha256"],
+    })
+    output_dir.mkdir(parents=False)
+    meta_sha256 = write_immutable_artifact(output_dir / "run_meta.json", run_meta(execution))
+    error: Exception | None = None
+    try:
+        stage_a_dataset = PackedBinDataset(
+            str(repo_root() / ACCEPTED_STAGE_A / "train"),
+            seq_len=2048,
+            require_release_manifest=True,
+        )
+        stage_b_dataset = PackedBinDataset(
+            str(repo_root() / ACCEPTED_STAGE_B / "train"),
+            seq_len=2048,
+            require_release_manifest=True,
+        )
+        require(
+            len(stage_a_dataset) == validated["stage_a"]["blocks"]
+            and len(stage_b_dataset) == validated["stage_b"]["blocks"],
+            "accepted release block count changed after artifact validation",
+        )
+        payload = train_candidate(stage_a_dataset, stage_b_dataset)
+        if phase == "MB":
+            vram = int(validated["fingerprint"]["gpu"]["total_vram_bytes"])
+            eligible, failures = mb_candidate_eligible(payload, vram)
+        else:
+            eligible, failures = lr_candidate_eligible(payload)
+        status = "SUCCESS" if eligible else "CANDIDATE_INELIGIBLE"
+    except Exception as exc:  # ordinary execution errors become evidence; process control escapes
+        error = exc
+        payload = failure_payload(exc)
+        eligible = False
+        if isinstance(exc, BindingFailure):
+            status = "BINDING_FAILURE"
+        elif isinstance(exc, (PhaseAbort, PilotContractError)):
+            status = "PHASE_ABORT"
+        else:
+            status = "CANDIDATE_INELIGIBLE"
+        if phase == "MB":
+            failures = mb_candidate_eligible(
+                payload, int(validated["fingerprint"]["gpu"]["total_vram_bytes"])
+            )[1]
+        else:
+            failures = lr_candidate_eligible(payload)[1]
 
-
-REAL_TRAINING_ENTRYPOINTS = (_train_phase_mb, _train_phase_lr)
-
-
-def execute_validated_candidate(worker: Any, progress: dict[str, Any]) -> dict[str, Any]:
-    """Dispatch to the real training backend for an already-minted worker authority."""
-    worker = _require_worker_authority(worker)
-    backend = _train_phase_mb if worker.phase == "MB" else _train_phase_lr
-    return backend(worker, progress)
-
-
-def _finite(v: float) -> bool:
-    import math
-
-    return math.isfinite(float(v))
-
-
-def _publish_result(payload: Mapping[str, Any], worker: WorkerAuthority) -> dict[str, Any]:
-    """Write run_meta and the result, binding every identity selection will later require."""
-    worker = _require_worker_authority(worker)
-    validated = worker.validated
-    out = worker.output_dir
-    meta = run_meta(worker)
-    meta_bytes = canonical_json_bytes(meta)
-    (out / "run_meta.json").write_bytes(meta_bytes)
-    bound = dict(payload)
-    bound.update({
-        "eligible": True,
-        "run_meta_sha256": _sha256_bytes(meta_bytes),
-        "candidate_spec_sha256": worker.spec_sha256,
-        "phase_plan_sha256": worker.plan_sha256,
-        "phase_plan_kind": worker.plan["plan_kind"],
-        "session_sha256": worker.session_sha256,
+    snapshot = ledger.snapshot()
+    result = {
+        "schema_version": CANDIDATE_RESULT_SCHEMA,
+        "contract_version": CONTRACT_VERSION,
+        **payload,
+        "eligible": bool(eligible),
+        "eligibility_failures": list(failures),
+        "terminal_status": status,
+        "run_meta_sha256": meta_sha256,
+        "candidate_spec_sha256": execution["spec_sha256"],
+        "phase_plan_sha256": execution["plan_sha256"],
+        "phase_plan_kind": execution["plan"]["plan_kind"],
+        "session_sha256": execution["session_sha256"],
         "contract_sha256": validated["observed"]["contract_sha256"],
         "implementation_head": validated["observed"]["head"],
         "execution_bundle_sha256": validated["observed"]["execution_bundle_sha256"],
@@ -2593,13 +3100,49 @@ def _publish_result(payload: Mapping[str, Any], worker: WorkerAuthority) -> dict
         "pilot_index_manifest_file_sha256": validated["pilot_index_manifest_file_sha256"],
         "runtime_fingerprint_sha256": validated["fingerprint"]["fingerprint_sha256"],
         "authorization_sha256": validated["authorization_sha256"],
-        "session_id": worker.session_id,
-        "ledger_identity": dict(worker.ledger.identity),
-        "ledger_snapshot": worker.ledger.snapshot(),
-        "output_dir": str(out),
-    })
-    (out / "result.json").write_bytes(canonical_json_bytes(bound))
-    return bound
+        "session_id": validated["session_id"],
+        "ledger_identity": dict(ledger.identity),
+        "ledger_snapshot": snapshot,
+        "output_dir": str(output_dir),
+    }
+    result_sha256 = write_immutable_artifact(output_dir / "result.json", result)
+    receipt = ledger.finalize_candidate(
+        terminal_status=status,
+        run_meta_sha256=meta_sha256,
+        result_sha256=result_sha256,
+    )
+    terminal = {
+        "terminal_status": status,
+        "error_class": type(error).__name__ if error is not None else None,
+        "error_message": str(error) if error is not None else None,
+        "phase": phase,
+        "candidate_id": candidate["candidate_id"],
+        "peak_lr": candidate["peak_lr"],
+        "planned_updates": candidate["updates"],
+        "candidate_spec_sha256": execution["spec_sha256"],
+        "phase_plan_sha256": execution["plan_sha256"],
+        "session_id": validated["session_id"],
+        "session_sha256": execution["session_sha256"],
+        "authorization_sha256": validated["authorization_sha256"],
+        "ledger_identity": dict(ledger.identity),
+        "ledger_receipt_sha256": receipt["receipt_sha256"],
+        "reserved_updates": receipt["candidate_reserved_updates"],
+        "completed_updates": receipt["candidate_completed_updates"],
+        "reserved_tokens": receipt["after_reserved_tokens"],
+        "completed_tokens": receipt["after_completed_tokens"],
+        "ledger_reserved_updates": receipt["after_reserved_updates"],
+        "ledger_completed_updates": receipt["after_completed_updates"],
+        "run_meta_sha256": meta_sha256,
+        "result_sha256": result_sha256,
+    }
+    write_terminal_result(output_dir, terminal)
+    return terminal
+
+
+def _finite(v: float) -> bool:
+    import math
+
+    return math.isfinite(float(v))
 
 
 # --------------------------------------------------------------- independent recomputation
@@ -2716,8 +3259,9 @@ def verify_recomputed_lr_result(result: Mapping[str, Any]) -> dict[str, Any]:
 
 # --------------------------------------------------------------------- orchestrator
 
-MB_REPORT_SCHEMA = "petitgpt-pilot-phase-mb-report-v2.3"
-LR_REPORT_SCHEMA = "petitgpt-pilot-phase-lr-report-v2.3"
+CANDIDATE_RESULT_SCHEMA = "petitgpt-pilot-candidate-result-v2.3-r4"
+MB_REPORT_SCHEMA = "petitgpt-pilot-phase-mb-report-v2.3-r4"
+LR_REPORT_SCHEMA = "petitgpt-pilot-phase-lr-report-v2.3-r4"
 MB_REPORT_FILENAME = "PHASE_MB_REPORT.json"
 LR_REPORT_FILENAME = "PHASE_LR_REPORT.json"
 LR_INITIAL_REPORT_FILENAME = "PHASE_LR_INITIAL_REPORT.json"
@@ -2728,6 +3272,7 @@ REQUIRED_RESULT_BINDINGS = (
     "phase",
     "candidate_id",
     "seed_label",
+    "peak_lr",
     "run_meta_sha256",
     "candidate_spec_sha256",
     "phase_plan_sha256",
@@ -2743,6 +3288,9 @@ REQUIRED_RESULT_BINDINGS = (
     "ledger_identity",
     "output_dir",
     "completed_updates",
+    "eligible",
+    "eligibility_failures",
+    "terminal_status",
 )
 
 # R3 Part 4: the fields run_meta.json must agree on with BOTH the result artifact and the
@@ -2751,6 +3299,7 @@ RUN_META_RESULT_BINDINGS = (
     "phase",
     "candidate_id",
     "candidate_spec_sha256",
+    "peak_lr",
     "phase_plan_sha256",
     "session_sha256",
     "micro_bsz",
@@ -2770,6 +3319,7 @@ RUN_META_CANDIDATE_BINDINGS = (
     "phase",
     "candidate_id",
     "micro_bsz",
+    "peak_lr",
     "grad_accum",
     "compile",
     "seed_label",
@@ -2792,26 +3342,92 @@ def _session_bindings(session: ExecutionSession) -> tuple[tuple[str, Any], ...]:
     )
 
 
+def _expected_result_ledger_snapshot(
+    session: ExecutionSession, receipt: Mapping[str, Any]
+) -> dict[str, Any]:
+    """Derive the exact pre-finalization snapshot stored in one immutable result."""
+    active_fields = (
+        "phase",
+        "candidate_id",
+        "peak_lr",
+        "planned_updates",
+        "candidate_spec_sha256",
+        "phase_plan_sha256",
+        "session_id",
+        "session_sha256",
+        "authorization_sha256",
+        "before_reserved_tokens",
+        "before_completed_tokens",
+        "before_reserved_updates",
+        "before_completed_updates",
+        "candidate_reserved_updates",
+        "candidate_completed_updates",
+    )
+    active = {field: receipt[field] for field in active_fields}
+    return {
+        "reserved_tokens": dict(receipt["after_reserved_tokens"]),
+        "completed_tokens": dict(receipt["after_completed_tokens"]),
+        "reserved_updates": int(receipt["after_reserved_updates"]),
+        "completed_updates": int(receipt["after_completed_updates"]),
+        "effective_ceilings": dict(session.ledger.effective_ceilings),
+        "session_hard_ceiling": FULL_V2_3_PILOT_SESSION_HARD_CEILING,
+        "trained_tokens_per_update": TRAINED_TOKENS_PER_UPDATE,
+        "identity": dict(session.ledger.identity),
+        "active_candidate": active,
+        "candidate_receipt_count": int(receipt["sequence"]) - 1,
+        "receipt_chain_head_sha256": receipt["previous_receipt_sha256"],
+        "reloaded_from_disk": True,
+    }
+
+
 def load_completed_result(
     session: ExecutionSession, *, planned: Mapping[str, Any], plan: Mapping[str, Any]
 ) -> dict[str, Any]:
-    """Load one candidate's evidence and bind it to its run_meta file and its PLANNED identity.
-
-    ``plan`` is the published-plan bundle returned by :func:`publish_phase_plan`: the plan
-    document, its path, its SHA-256 and the specs it lists.
-
-    R3 Part 4: ``run_meta.json`` is opened from the candidate's own output directory, hashed
-    from disk, and required to agree with both the result artifact and the candidate the phase
-    plan authorized. Unknown or mismatched metadata rejects the candidate from authoritative
-    selection.
-    """
+    """Admit one raw candidate only after reopening its full plan/spec/result evidence chain."""
     document = plan["plan"]
+    on_disk_plan, on_disk_plan_sha256 = read_immutable_artifact(
+        Path(plan["plan_path"]), schema_version=PHASE_PLAN_SCHEMA
+    )
+    if on_disk_plan_sha256 != plan["plan_sha256"] or on_disk_plan != document:
+        raise BindingFailure("phase-plan bytes no longer match the plan bundle used for admission")
+    entry = next(
+        (
+            item
+            for item in document.get("candidates") or ()
+            if item.get("candidate_id") == planned["candidate_id"]
+        ),
+        None,
+    )
+    if entry is None:
+        raise BindingFailure(
+            f"candidate {planned['candidate_id']!r} is not listed in {document.get('plan_kind')!r}"
+        )
+
+    spec_path = Path(plan["specs"][planned["candidate_id"]]["path"])
+    spec_bytes = spec_path.read_bytes()
+    spec_sha256 = _sha256_bytes(spec_bytes)
+    if spec_sha256 != entry.get("candidate_spec_sha256"):
+        raise BindingFailure("candidate spec hash does not match its phase-plan entry")
+    expected_spec = {
+        "schema_version": CANDIDATE_SPEC_SCHEMA,
+        "contract_version": CONTRACT_VERSION,
+        "session_id": session.session_id,
+        "session_sha256": session.session_sha256,
+        "plan_kind": document["plan_kind"],
+        "phase": planned["phase"],
+        "candidate": dict(planned),
+    }
+    if spec_bytes != canonical_json_bytes(expected_spec):
+        raise BindingFailure("candidate spec bytes do not equal the planned candidate identity")
+
     output_dir = Path(planned["output_dir"])
-    path = output_dir / "result.json"
-    if not path.is_file():
-        raise BindingFailure(f"no completed result artifact at {path}")
-    result = load_json_artifact(path, label=f"candidate result at {path}")
-    missing = [f for f in REQUIRED_RESULT_BINDINGS if f not in result]
+    result_path = output_dir / "result.json"
+    result, result_sha256 = read_immutable_artifact(
+        result_path, schema_version=CANDIDATE_RESULT_SCHEMA
+    )
+    if result.get("contract_version") != CONTRACT_VERSION:
+        raise BindingFailure("candidate result contract version mismatch")
+    missing = [field for field in REQUIRED_RESULT_BINDINGS if field not in result]
     if missing:
         raise BindingFailure(f"result artifact is missing required bindings: {missing}")
     for field, expected in _session_bindings(session):
@@ -2820,30 +3436,18 @@ def load_completed_result(
     if result.get("ledger_identity") != dict(session.ledger.identity):
         raise BindingFailure("result artifact ledger identity does not bind this execution")
 
-    # --- the planned identity the phase plan authorized ---
-    entry = next(
-        (
-            e
-            for e in (document.get("candidates") or [])
-            if e.get("candidate_id") == planned["candidate_id"]
-        ),
-        None,
-    )
-    if entry is None:
-        raise BindingFailure(
-            f"candidate {planned['candidate_id']!r} is not listed in {document.get('plan_kind')!r}"
-        )
     planned_identity = {
         "phase": planned["phase"],
         "candidate_id": planned["candidate_id"],
-        "candidate_spec_sha256": entry["candidate_spec_sha256"],
+        "peak_lr": planned["peak_lr"],
+        "candidate_spec_sha256": spec_sha256,
         "phase_plan_sha256": plan["plan_sha256"],
         "session_sha256": session.session_sha256,
         "micro_bsz": planned["micro_bsz"],
         "grad_accum": planned["grad_accum"],
         "compile": bool(planned["compile"]),
         "seed_label": planned["seed_label"],
-        "output_dir": str(Path(planned["output_dir"]).resolve()),
+        "output_dir": str(output_dir.resolve()),
         "session_id": session.session_id,
     }
     for field, expected in planned_identity.items():
@@ -2852,30 +3456,34 @@ def load_completed_result(
             actual = str(Path(str(actual)).resolve()) if actual is not None else None
         if actual != expected:
             raise BindingFailure(
-                f"result artifact {field} {actual!r} does not match the planned candidate "
-                f"identity {expected!r}"
+                f"result artifact {field} {actual!r} does not match planned {expected!r}"
             )
 
-    # --- the real run_meta.json file, hashed from disk ---
+    terminal = read_terminal_result(
+        output_dir,
+        expected=terminal_expectations(session, planned=planned, plan=plan),
+        ledger=session.ledger,
+    )
+    if terminal["result_sha256"] != result_sha256:
+        raise BindingFailure("terminal result hash does not match the admitted result bytes")
+    if result.get("terminal_status") != terminal["terminal_status"]:
+        raise BindingFailure("result terminal_status disagrees with terminal evidence")
+    if result.get("completed_updates") != terminal["completed_updates"]:
+        raise BindingFailure("result completed_updates disagrees with terminal evidence")
+    receipt = session.ledger.receipt(terminal["ledger_receipt_sha256"])
+    expected_ledger_snapshot = _expected_result_ledger_snapshot(session, receipt)
+    if result.get("ledger_snapshot") != expected_ledger_snapshot:
+        raise BindingFailure(
+            "result ledger_snapshot does not equal the receipt-derived pre-finalization "
+            "accounting state"
+        )
+
     meta_path = output_dir / "run_meta.json"
-    if not meta_path.is_file():
-        raise BindingFailure(
-            f"candidate {planned['candidate_id']!r} has no run_meta.json at {meta_path}; a "
-            f"result without real run metadata may not inform an authoritative selection"
-        )
-    meta_bytes = meta_path.read_bytes()
-    meta_sha256 = _sha256_bytes(meta_bytes)
-    if result.get("run_meta_sha256") != meta_sha256:
-        raise BindingFailure(
-            f"candidate {planned['candidate_id']!r}: result run_meta_sha256 "
-            f"{result.get('run_meta_sha256')!r} does not match the SHA-256 of the bytes at "
-            f"{meta_path} ({meta_sha256})"
-        )
-    meta = load_json_artifact(meta_bytes, label=f"run metadata at {meta_path}")
-    if meta.get("schema_version") != RUN_META_SCHEMA:
-        raise BindingFailure(f"run_meta.json schema mismatch at {meta_path}")
+    meta, meta_sha256 = read_immutable_artifact(meta_path, schema_version=RUN_META_SCHEMA)
     if meta.get("contract_version") != CONTRACT_VERSION:
         raise BindingFailure(f"run_meta.json contract version mismatch at {meta_path}")
+    if result.get("run_meta_sha256") != meta_sha256 or terminal["run_meta_sha256"] != meta_sha256:
+        raise BindingFailure("result/terminal run_meta hash does not match the immutable bytes")
     for field in RUN_META_RESULT_BINDINGS:
         if field not in meta:
             raise BindingFailure(f"run_meta.json at {meta_path} is missing {field!r}")
@@ -2886,11 +3494,12 @@ def load_completed_result(
             actual = str(Path(str(actual)).resolve()) if actual is not None else None
         if actual != expected:
             raise BindingFailure(
-                f"run_meta.json {field} {actual!r} disagrees with the result artifact {expected!r}"
+                f"run_meta.json {field} {actual!r} disagrees with result {expected!r}"
             )
     planned_meta = {
         "phase": planned["phase"],
         "candidate_id": planned["candidate_id"],
+        "peak_lr": planned["peak_lr"],
         "micro_bsz": planned["micro_bsz"],
         "grad_accum": planned["grad_accum"],
         "compile": bool(planned["compile"]),
@@ -2901,32 +3510,98 @@ def load_completed_result(
     for field in RUN_META_CANDIDATE_BINDINGS:
         if meta.get(field) != planned_meta[field]:
             raise BindingFailure(
-                f"run_meta.json {field} {meta.get(field)!r} does not match the planned candidate "
-                f"identity {planned_meta[field]!r}"
+                f"run_meta.json {field} {meta.get(field)!r} does not match planned "
+                f"{planned_meta[field]!r}"
             )
-    lr_configuration = meta.get("lr_configuration")
-    if not isinstance(lr_configuration, Mapping):
-        raise BindingFailure(f"run_meta.json at {meta_path} records no LR configuration")
     expected_lr = {
         "peak_lr": planned["peak_lr"],
         "warmup_updates": planned["warmup_updates"],
         "updates": planned["updates"],
     }
-    if {k: lr_configuration.get(k) for k in expected_lr} != expected_lr:
-        raise BindingFailure(
-            f"run_meta.json LR configuration {dict(lr_configuration)!r} does not match the "
-            f"planned candidate configuration {expected_lr!r}"
-        )
+    lr_configuration = meta.get("lr_configuration")
+    if (
+        not isinstance(lr_configuration, Mapping)
+        or {key: lr_configuration.get(key) for key in expected_lr} != expected_lr
+    ):
+        raise BindingFailure("run_meta.json LR configuration does not match the planned candidate")
     if meta.get("ledger_identity") != dict(session.ledger.identity):
         raise BindingFailure("run_meta.json ledger identity does not bind this execution")
 
-    if str(result["phase"]) == "MB":
-        result.update(verify_recomputed_mb_result(result))
+    recomputed = dict(result)
+    observed_compile_path = recheck_compile_path_evidence(recomputed)
+    if recomputed.get("canonical_compile_path") is not observed_compile_path:
+        raise BindingFailure("stored compile-path verdict disagrees with raw compile evidence")
+    recomputed["canonical_compile_path"] = observed_compile_path
+    if recomputed["phase"] == "MB":
+        try:
+            require_exact_mb_timing_records(recomputed.get("update_timings") or ())
+        except PilotContractError:
+            recomputed.update({
+                "median_update_tokens_per_second": None,
+                "measured_updates": 0,
+                "measured_update_ids": [],
+                "update_tokens_per_second": [],
+            })
+        else:
+            # A complete raw window always binds the stored summary, even when some unrelated
+            # eligibility rule already makes the candidate ineligible.
+            recomputed.update(verify_recomputed_mb_result(recomputed))
+        vram = int(session.validated["fingerprint"]["gpu"]["total_vram_bytes"])
+        eligible, failures = mb_candidate_eligible(recomputed, vram)
     else:
-        result.update(verify_recomputed_lr_result(result))
-    result["run_meta_verified_from_disk"] = True
-    result["run_meta_path"] = str(meta_path)
-    return result
+        raw_components = (
+            recomputed.get("eval_stage_a_numerator"),
+            recomputed.get("eval_stage_a_weight"),
+            recomputed.get("eval_stage_b_numerator"),
+            recomputed.get("eval_stage_b_weight"),
+        )
+        raw_complete = (
+            all(
+                isinstance(value, (int, float))
+                and not isinstance(value, bool)
+                and math.isfinite(float(value))
+                for value in raw_components
+            )
+            and float(raw_components[1]) > 0
+            and float(raw_components[3]) > 0
+        )
+        if raw_complete:
+            recomputed.update(verify_recomputed_lr_result(recomputed))
+        else:
+            recomputed["eval_loss_stage_a"] = None
+            recomputed["eval_loss_stage_b"] = None
+            recomputed["score"] = None
+        eligible, failures = lr_candidate_eligible(recomputed)
+
+    stored_eligible = result.get("eligible")
+    if not isinstance(stored_eligible, bool) or stored_eligible != eligible:
+        raise BindingFailure(
+            f"stored eligible={stored_eligible!r} disagrees with recomputed verdict {eligible!r}"
+        )
+    stored_failures = result.get("eligibility_failures")
+    if not isinstance(stored_failures, list) or stored_failures != list(failures):
+        raise BindingFailure(
+            "stored eligibility_failures disagrees with the contract-recomputed failure list"
+        )
+    expected_status = "SUCCESS" if eligible else "CANDIDATE_INELIGIBLE"
+    if terminal["terminal_status"] != expected_status:
+        raise BindingFailure(
+            f"terminal status {terminal['terminal_status']!r} disagrees with recomputed "
+            f"eligibility {eligible!r}"
+        )
+    recomputed.update({
+        "eligible": eligible,
+        "eligibility_failures": list(failures),
+        "candidate_spec_sha256": spec_sha256,
+        "run_meta_sha256": meta_sha256,
+        "result_sha256": result_sha256,
+        "terminal_sha256": file_sha256(terminal_result_path(output_dir)),
+        "ledger_receipt_sha256": terminal["ledger_receipt_sha256"],
+        "run_meta_verified_from_disk": True,
+        "terminal_verified_from_disk": True,
+        "run_meta_path": str(meta_path),
+    })
+    return recomputed
 
 
 def _ineligible_evidence(
@@ -2996,68 +3671,249 @@ TERMINAL_RESULT_FIELDS = (
     "terminal_status",
     "error_class",
     "error_message",
+    "phase",
+    "candidate_id",
+    "peak_lr",
+    "planned_updates",
+    "candidate_spec_sha256",
+    "phase_plan_sha256",
+    "session_id",
+    "session_sha256",
+    "authorization_sha256",
+    "ledger_identity",
+    "ledger_receipt_sha256",
+    "reserved_updates",
     "completed_updates",
     "reserved_tokens",
     "completed_tokens",
+    "ledger_reserved_updates",
+    "ledger_completed_updates",
     "run_meta_sha256",
-    "candidate_id",
-    "phase",
+    "result_sha256",
 )
-TERMINAL_RESULT_SCHEMA = "petitgpt-pilot-candidate-terminal-result-v2.3"
+TERMINAL_RESULT_SCHEMA = "petitgpt-pilot-candidate-terminal-result-v2.3-r4"
 
 
-def terminal_result_path(spec_path: Path) -> Path:
-    return Path(spec_path).with_suffix(".terminal.json")
+def terminal_result_path(candidate_output_path: Path) -> Path:
+    return Path(candidate_output_path) / "terminal.json"
 
 
-def write_terminal_result(spec_path: Path, payload: Mapping[str, Any]) -> Path:
-    path = terminal_result_path(spec_path)
+def write_terminal_result(candidate_output_path: Path, payload: Mapping[str, Any]) -> Path:
+    path = terminal_result_path(candidate_output_path)
     doc = {"schema_version": TERMINAL_RESULT_SCHEMA, **dict(payload)}
-    missing = [f for f in TERMINAL_RESULT_FIELDS if f not in doc]
+    missing = [field for field in TERMINAL_RESULT_FIELDS if field not in doc]
     require(not missing, f"terminal result is incomplete: {missing}")
     require(
         doc["terminal_status"] in TERMINAL_STATUSES,
         f"unknown terminal status {doc['terminal_status']!r}",
     )
-    path.write_bytes(canonical_json_bytes(doc))
+    write_immutable_artifact(path, doc)
     return path
 
 
-def read_terminal_result(spec_path: Path) -> dict[str, Any]:
-    """A missing or malformed terminal result is itself a phase-level failure, never a pass."""
-    path = terminal_result_path(spec_path)
-    if not path.is_file():
+def _terminal_sha256(value: Any, label: str) -> str:
+    if (
+        not isinstance(value, str)
+        or len(value) != 64
+        or value.lower() != value
+        or any(character not in "0123456789abcdef" for character in value)
+    ):
+        raise PhaseAbort(f"terminal {label} must be a lowercase SHA-256 digest, got {value!r}")
+    return value
+
+
+def _terminal_integer(value: Any, label: str) -> int:
+    if not isinstance(value, int) or isinstance(value, bool) or value < 0:
+        raise PhaseAbort(f"terminal {label} must be a nonnegative integer, got {value!r}")
+    return int(value)
+
+
+def _terminal_token_map(value: Any, label: str) -> dict[str, int]:
+    if not isinstance(value, Mapping) or sorted(value) != sorted(LEDGER_BUCKETS):
         raise PhaseAbort(
-            f"candidate subprocess left no terminal result at {path}; a candidate that cannot "
-            f"report its own terminal state may not be treated as merely ineligible"
+            f"terminal {label} must contain exactly {sorted(LEDGER_BUCKETS)}, got {value!r}"
         )
-    try:
-        doc = json.loads(path.read_text(encoding="utf-8"))
-    except (json.JSONDecodeError, UnicodeDecodeError) as exc:
-        raise PhaseAbort(f"terminal result at {path} is not readable JSON: {exc}") from exc
-    if not isinstance(doc, Mapping):
-        raise PhaseAbort(f"terminal result at {path} is not an object")
+    out = {key: _terminal_integer(value.get(key), f"{label}[{key}]") for key in LEDGER_BUCKETS}
+    if any(tokens % TRAINED_TOKENS_PER_UPDATE for tokens in out.values()):
+        raise PhaseAbort(f"terminal {label} contains a partial-update token count")
+    if out["GLOBAL"] != out["MB"] + out["LR"]:
+        raise PhaseAbort(f"terminal {label}[GLOBAL] is not the sum of its phase buckets")
+    return out
+
+
+def validate_terminal_document(
+    document: Mapping[str, Any], *, expected: Mapping[str, Any], ledger: TokenLedger
+) -> dict[str, Any]:
+    """Strictly validate every load-bearing terminal field and its durable ledger receipt."""
+    if not isinstance(document, Mapping):
+        raise PhaseAbort("terminal result is not a JSON object")
+    doc = dict(document)
     if doc.get("schema_version") != TERMINAL_RESULT_SCHEMA:
-        raise PhaseAbort(f"terminal result schema mismatch at {path}")
-    missing = [f for f in TERMINAL_RESULT_FIELDS if f not in doc]
+        raise PhaseAbort("terminal result schema mismatch")
+    missing = [field for field in TERMINAL_RESULT_FIELDS if field not in doc]
     if missing:
-        raise PhaseAbort(f"terminal result at {path} is missing {missing}")
-    if doc["terminal_status"] not in TERMINAL_STATUSES:
-        raise PhaseAbort(f"unknown terminal status {doc['terminal_status']!r} at {path}")
-    completed = doc.get("completed_updates")
-    if not isinstance(completed, int) or isinstance(completed, bool) or completed < 0:
-        raise PhaseAbort(
-            f"terminal result at {path} reports an unusable completed_updates {completed!r}"
-        )
-    return dict(doc)
+        raise PhaseAbort(f"terminal result is missing {missing}")
+    if set(doc) != set(TERMINAL_RESULT_FIELDS):
+        unknown = sorted(set(doc) - set(TERMINAL_RESULT_FIELDS))
+        raise PhaseAbort(f"terminal result has unknown fields {unknown}")
+    status = doc["terminal_status"]
+    if not isinstance(status, str) or status not in TERMINAL_STATUSES:
+        raise PhaseAbort(f"unknown terminal status {status!r}")
+    for name in ("error_class", "error_message"):
+        if doc[name] is not None and not isinstance(doc[name], str):
+            raise PhaseAbort(f"terminal {name} must be a string or null")
+    if status == "SUCCESS" and (doc["error_class"] is not None or doc["error_message"] is not None):
+        raise PhaseAbort("successful terminal evidence cannot carry an error")
+    for name in ("phase", "candidate_id", "session_id"):
+        if not isinstance(doc[name], str) or not doc[name]:
+            raise PhaseAbort(f"terminal {name} must be a nonempty string")
+    for name in (
+        "candidate_spec_sha256",
+        "phase_plan_sha256",
+        "session_sha256",
+        "authorization_sha256",
+        "ledger_receipt_sha256",
+        "run_meta_sha256",
+        "result_sha256",
+    ):
+        _terminal_sha256(doc[name], name)
+    peak_lr = doc["peak_lr"]
+    if (
+        not isinstance(peak_lr, (int, float))
+        or isinstance(peak_lr, bool)
+        or not math.isfinite(float(peak_lr))
+        or float(peak_lr) <= 0
+    ):
+        raise PhaseAbort(f"terminal peak_lr is unusable: {peak_lr!r}")
+    for name in (
+        "phase",
+        "candidate_id",
+        "peak_lr",
+        "planned_updates",
+        "candidate_spec_sha256",
+        "phase_plan_sha256",
+        "session_id",
+        "session_sha256",
+        "authorization_sha256",
+        "ledger_identity",
+    ):
+        if doc[name] != expected[name]:
+            raise PhaseAbort(
+                f"terminal {name} {doc[name]!r} does not match planned {expected[name]!r}"
+            )
+    planned = _terminal_integer(doc["planned_updates"], "planned_updates")
+    reserved_updates = _terminal_integer(doc["reserved_updates"], "reserved_updates")
+    completed_updates = _terminal_integer(doc["completed_updates"], "completed_updates")
+    ledger_reserved_updates = _terminal_integer(
+        doc["ledger_reserved_updates"], "ledger_reserved_updates"
+    )
+    ledger_completed_updates = _terminal_integer(
+        doc["ledger_completed_updates"], "ledger_completed_updates"
+    )
+    if not (completed_updates <= reserved_updates <= planned):
+        raise PhaseAbort("terminal candidate update counts are impossible")
+    if reserved_updates not in (completed_updates, completed_updates + 1):
+        raise PhaseAbort("terminal retains more than one in-flight reservation")
+    if status == "SUCCESS" and (completed_updates != planned or reserved_updates != planned):
+        raise PhaseAbort("successful terminal did not complete every planned update")
+    reserved_tokens = _terminal_token_map(doc["reserved_tokens"], "reserved_tokens")
+    completed_tokens = _terminal_token_map(doc["completed_tokens"], "completed_tokens")
+    for bucket in LEDGER_BUCKETS:
+        if completed_tokens[bucket] > reserved_tokens[bucket]:
+            raise PhaseAbort(f"terminal completed_tokens[{bucket}] exceeds reserved tokens")
+    if reserved_tokens["GLOBAL"] != ledger_reserved_updates * TRAINED_TOKENS_PER_UPDATE:
+        raise PhaseAbort("terminal ledger reserved counter disagrees with reserved tokens")
+    if completed_tokens["GLOBAL"] != ledger_completed_updates * TRAINED_TOKENS_PER_UPDATE:
+        raise PhaseAbort("terminal ledger completed counter disagrees with completed tokens")
+    if doc["ledger_identity"] != dict(ledger.identity):
+        raise PhaseAbort("terminal ledger identity does not bind this execution")
+    try:
+        receipt = ledger.receipt(doc["ledger_receipt_sha256"])
+        current = ledger.snapshot()
+    except Exception as exc:
+        raise PhaseAbort(f"terminal ledger receipt cannot be validated: {exc}") from exc
+    receipt_bindings = {
+        "terminal_status": status,
+        "phase": doc["phase"],
+        "candidate_id": doc["candidate_id"],
+        "peak_lr": doc["peak_lr"],
+        "planned_updates": planned,
+        "candidate_spec_sha256": doc["candidate_spec_sha256"],
+        "phase_plan_sha256": doc["phase_plan_sha256"],
+        "session_id": doc["session_id"],
+        "session_sha256": doc["session_sha256"],
+        "authorization_sha256": doc["authorization_sha256"],
+        "ledger_identity": doc["ledger_identity"],
+        "candidate_reserved_updates": reserved_updates,
+        "candidate_completed_updates": completed_updates,
+        "after_reserved_tokens": reserved_tokens,
+        "after_completed_tokens": completed_tokens,
+        "after_reserved_updates": ledger_reserved_updates,
+        "after_completed_updates": ledger_completed_updates,
+        "run_meta_sha256": doc["run_meta_sha256"],
+        "result_sha256": doc["result_sha256"],
+    }
+    mismatched = [name for name, value in receipt_bindings.items() if receipt.get(name) != value]
+    if mismatched:
+        raise PhaseAbort(f"terminal evidence disagrees with its ledger receipt: {mismatched}")
+    for name in ("reserved_tokens", "completed_tokens"):
+        current_map = current[name]
+        terminal_map = doc[name]
+        if any(int(current_map[bucket]) < int(terminal_map[bucket]) for bucket in LEDGER_BUCKETS):
+            raise PhaseAbort(f"fresh ledger {name} predates the terminal receipt")
+    return doc
 
 
-class CandidateTerminalFailure(CandidateFailure):
-    """A candidate-local failure carrying the child's own structured terminal artifact."""
+def terminal_expectations(
+    session: ExecutionSession, *, planned: Mapping[str, Any], plan: Mapping[str, Any]
+) -> dict[str, Any]:
+    entry = next(
+        (
+            item
+            for item in plan["plan"]["candidates"]
+            if item.get("candidate_id") == planned["candidate_id"]
+        ),
+        None,
+    )
+    if entry is None:
+        raise BindingFailure(f"candidate {planned['candidate_id']!r} is absent from its plan")
+    return {
+        "phase": planned["phase"],
+        "candidate_id": planned["candidate_id"],
+        "peak_lr": planned["peak_lr"],
+        "planned_updates": planned["updates"],
+        "candidate_spec_sha256": entry["candidate_spec_sha256"],
+        "phase_plan_sha256": plan["plan_sha256"],
+        "session_id": session.session_id,
+        "session_sha256": session.session_sha256,
+        "authorization_sha256": session.validated["authorization_sha256"],
+        "ledger_identity": dict(session.ledger.identity),
+    }
 
-    def __init__(self, terminal: Mapping[str, Any]):
-        super().__init__(f"{terminal.get('error_class')}: {terminal.get('error_message')}")
-        self.terminal = dict(terminal)
+
+def read_terminal_result(
+    candidate_output_path: Path,
+    *,
+    expected: Mapping[str, Any],
+    ledger: TokenLedger,
+) -> dict[str, Any]:
+    """Load an immutable terminal; malformed evidence is always a phase-level failure."""
+    path = terminal_result_path(candidate_output_path)
+    try:
+        doc, _ = read_immutable_artifact(path, schema_version=TERMINAL_RESULT_SCHEMA)
+        validated = validate_terminal_document(doc, expected=expected, ledger=ledger)
+        for filename, digest_field in (
+            ("run_meta.json", "run_meta_sha256"),
+            ("result.json", "result_sha256"),
+        ):
+            artifact = Path(candidate_output_path) / filename
+            if not artifact.is_file() or file_sha256(artifact) != validated[digest_field]:
+                raise PhaseAbort(f"terminal {digest_field} does not match {artifact}")
+        return validated
+    except (BindingFailure, PhaseAbort):
+        raise
+    except Exception as exc:
+        raise PhaseAbort(f"terminal result at {path} is unusable: {exc}") from exc
 
 
 def _worker_argv(
@@ -3096,18 +3952,9 @@ def _worker_argv(
 
 def _subprocess_launcher(
     candidate: Mapping[str, Any], session: ExecutionSession, plan: Mapping[str, Any]
-) -> None:
-    """Launch one candidate in a FRESH subprocess that revalidates every artifact itself.
-
-    R3 Parts 1/2: the child receives ONLY canonical artifact paths -- the authorization
-    manifest, the session manifest, the immutable phase plan, its own published spec, the
-    pilot-index manifest, both accepted releases, the ledger and its own output directory. It
-    revalidates all of them from disk. The parent passes no hashes, no counts and no authority
-    the child could take on trust, and the child gains nothing from being invoked directly.
-    """
+) -> dict[str, Any]:
+    """Launch one path-only worker and strictly validate its candidate-local terminal."""
     spec_path = plan["specs"][candidate["candidate_id"]]["path"]
-    # A stale terminal result from an earlier attempt must never be read as this launch's.
-    terminal_result_path(spec_path).unlink(missing_ok=True)
     env = dict(os.environ)
     env["TORCHINDUCTOR_CACHE_DIR"] = str(Path(candidate["output_dir"]) / "inductor_cache")
     env["PYTHONHASHSEED"] = "0"
@@ -3118,16 +3965,20 @@ def _subprocess_launcher(
         text=True,
         check=False,
     )
-    # R3 Part 9: the child's own terminal artifact is read FIRST. A fault while preserving the
-    # logs must never discard the candidate's real progress accounting.
-    terminal = read_terminal_result(spec_path)
-    spec_dir = Path(spec_path).parent
-    (spec_dir / f"{candidate['candidate_id']}.stdout").write_text(
-        completed.stdout or "", encoding="utf-8"
+    output_dir = Path(candidate["output_dir"])
+    terminal_path = terminal_result_path(output_dir)
+    if not terminal_path.is_file() and int(completed.returncode) == BINDING_FAILURE:
+        raise BindingFailure(
+            f"candidate {candidate['candidate_id']} failed artifact validation before output: "
+            f"{completed.stderr or completed.stdout}"
+        )
+    terminal = read_terminal_result(
+        output_dir,
+        expected=terminal_expectations(session, planned=candidate, plan=plan),
+        ledger=session.ledger,
     )
-    (spec_dir / f"{candidate['candidate_id']}.stderr").write_text(
-        completed.stderr or "", encoding="utf-8"
-    )
+    (output_dir / "worker.stdout").write_text(completed.stdout or "", encoding="utf-8")
+    (output_dir / "worker.stderr").write_text(completed.stderr or "", encoding="utf-8")
     status = terminal["terminal_status"]
     expected_exit = RESULT_CLASSES[status]
     if int(completed.returncode) != expected_exit:
@@ -3143,16 +3994,12 @@ def _subprocess_launcher(
         raise PhaseAbort(
             f"candidate {candidate['candidate_id']} phase abort: {terminal['error_message']}"
         )
-    if status == "CANDIDATE_INELIGIBLE":
-        raise CandidateTerminalFailure(terminal)
+    return terminal
 
 
 def _classify_candidate_failure(exc: Exception) -> tuple[str, str]:
     name = type(exc).__name__
     text = str(exc)
-    if isinstance(exc, CandidateTerminalFailure):
-        name = str(exc.terminal.get("error_class") or name)
-        text = str(exc.terminal.get("error_message") or text)
     lowered = text.lower()
     if "OutOfMemory" in name or "out of memory" in lowered:
         return "oom", f"{name}: {text}"
@@ -3180,9 +4027,6 @@ def _launch(
         launcher(candidate, session, plan)
     except (BindingFailure, PhaseAbort):
         raise
-    except CandidateTerminalFailure as exc:
-        reason, detail = _classify_candidate_failure(exc)
-        return _ineligible_evidence(candidate, session, reason, detail, terminal=exc.terminal)
     except PilotContractError as exc:
         raise PhaseAbort(f"{candidate['candidate_id']}: {exc}") from exc
     except CandidateFailure as exc:
@@ -3202,14 +4046,496 @@ def write_immutable_report(path: Path, payload: Mapping[str, Any]) -> str:
     return write_immutable_artifact(path, payload)
 
 
+def _require_report_view(
+    report: Mapping[str, Any], expected: Mapping[str, Any], *, label: str
+) -> None:
+    missing = sorted(set(expected) - set(report))
+    unexpected = sorted(set(report) - set(expected))
+    mismatched = [field for field, value in expected.items() if report.get(field) != value]
+    if missing or unexpected or mismatched:
+        raise BindingFailure(
+            f"{label} does not equal the view reconstructed from raw candidate evidence: "
+            f"missing={missing}, unexpected={unexpected}, mismatched={sorted(mismatched)}"
+        )
+
+
+def _validate_report_session_bindings(
+    report: Mapping[str, Any], session: ExecutionSession, *, phase: str, label: str
+) -> None:
+    if report.get("contract_version") != CONTRACT_VERSION:
+        raise BindingFailure(f"{label} contract version mismatch")
+    if report.get("phase") != phase:
+        raise BindingFailure(f"{label} phase mismatch")
+    if report.get("session_sha256") != session.session_sha256:
+        raise BindingFailure(f"{label} does not bind this session manifest")
+    for field, expected in _session_bindings(session):
+        if report.get(field) != expected:
+            raise BindingFailure(f"{label} {field} does not bind this execution")
+
+
+def _load_phase_plan_bundle(
+    session: ExecutionSession, plan_kind: str
+) -> tuple[dict[str, Any], dict[str, dict[str, Any]]]:
+    if plan_kind not in PLAN_KINDS:
+        raise BindingFailure(f"unknown phase-plan kind {plan_kind!r}")
+    definition = PLAN_KINDS[plan_kind]
+    plan_path = session.output_root / definition["filename"]
+    plan, plan_sha256 = validate_phase_plan(
+        plan_path,
+        session_sha256=session.session_sha256,
+        session_id=session.session_id,
+        expected_phase=definition["phase"],
+    )
+    if plan.get("plan_kind") != plan_kind:
+        raise BindingFailure(
+            f"{plan_path.name} declares {plan.get('plan_kind')!r}, expected {plan_kind!r}"
+        )
+    entries = validate_complete_phase_plan_membership(
+        plan=plan, session=session, authorized_root=session.output_root
+    )
+    bundle = {
+        "plan": plan,
+        "plan_path": plan_path,
+        "plan_sha256": plan_sha256,
+        "specs": {
+            candidate_id: {
+                "path": entry["spec_path"],
+                "candidate_spec_sha256": entry["candidate_spec_sha256"],
+            }
+            for candidate_id, entry in entries.items()
+        },
+    }
+    return bundle, entries
+
+
+def _reconstruct_plan_results(
+    session: ExecutionSession, plan_kind: str
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    bundle, entries = _load_phase_plan_bundle(session, plan_kind)
+    results = [
+        load_completed_result(
+            session,
+            planned=entries[str(raw_entry["candidate_id"])]["candidate"],
+            plan=bundle,
+        )
+        for raw_entry in bundle["plan"]["candidates"]
+    ]
+    return results, bundle
+
+
+def _candidate_artifact_hashes(
+    records: Sequence[Mapping[str, Any]],
+) -> dict[str, dict[str, Any]]:
+    fields = (
+        "candidate_spec_sha256",
+        "run_meta_sha256",
+        "result_sha256",
+        "terminal_sha256",
+        "ledger_receipt_sha256",
+    )
+    return {
+        str(record["candidate_id"]): {field: record.get(field) for field in fields}
+        for record in records
+    }
+
+
+def _historical_report_ledger_snapshot(
+    session: ExecutionSession,
+    records: Sequence[Mapping[str, Any]],
+    *,
+    label: str,
+) -> dict[str, Any]:
+    """Reconstruct the ledger view at publication from the report's final receipt."""
+    if not records:
+        raise BindingFailure(f"{label} has no reconstructed candidate receipt")
+    final_record = records[-1]
+    receipt_sha256 = final_record.get("ledger_receipt_sha256")
+    if not isinstance(receipt_sha256, str):
+        raise BindingFailure(f"{label} final candidate has no ledger receipt SHA-256")
+    receipt = session.ledger.receipt(receipt_sha256)
+    if (
+        receipt.get("candidate_id") != final_record.get("candidate_id")
+        or receipt.get("receipt_sha256") != receipt_sha256
+    ):
+        raise BindingFailure(f"{label} final candidate does not bind its historical receipt")
+    return {
+        "reserved_tokens": dict(receipt["after_reserved_tokens"]),
+        "completed_tokens": dict(receipt["after_completed_tokens"]),
+        "reserved_updates": int(receipt["after_reserved_updates"]),
+        "completed_updates": int(receipt["after_completed_updates"]),
+        "effective_ceilings": dict(session.ledger.effective_ceilings),
+        "session_hard_ceiling": FULL_V2_3_PILOT_SESSION_HARD_CEILING,
+        "trained_tokens_per_update": TRAINED_TOKENS_PER_UPDATE,
+        "identity": dict(session.ledger.identity),
+        "active_candidate": None,
+        "candidate_receipt_count": int(receipt["sequence"]),
+        "receipt_chain_head_sha256": receipt_sha256,
+        "reloaded_from_disk": True,
+    }
+
+
+def _expected_lr_report_document(
+    session: ExecutionSession,
+    *,
+    frozen: Mapping[str, Any],
+    records: Sequence[Mapping[str, Any]],
+    payload: Mapping[str, Any],
+    label: str,
+) -> dict[str, Any]:
+    """Build the exact LR report bytes derivable from immutable evidence."""
+    return {
+        "schema_version": LR_REPORT_SCHEMA,
+        "contract_version": CONTRACT_VERSION,
+        "phase": "LR",
+        "session_sha256": session.session_sha256,
+        "frozen_geometry": dict(frozen),
+        "ledger": _historical_report_ledger_snapshot(session, records, label=label),
+        **dict(_session_bindings(session)),
+        **dict(payload),
+    }
+
+
+def _mb_selection_trace(
+    records: Sequence[Mapping[str, Any]], physical_vram_bytes: int
+) -> dict[str, Any]:
+    return {
+        "physical_vram_bytes": int(physical_vram_bytes),
+        "throughput_statistic": "median of the per-update rates over updates 11..40",
+        "eligibility": {
+            str(record["candidate_id"]): list(mb_candidate_eligible(record, physical_vram_bytes)[1])
+            for record in records
+        },
+        "median_update_tokens_per_second": {
+            str(record["candidate_id"]): record.get("median_update_tokens_per_second")
+            for record in records
+        },
+    }
+
+
+def _read_lr_report(
+    session: ExecutionSession,
+    filename: str,
+    *,
+    step: str,
+    expected_sha256: Any = None,
+) -> tuple[dict[str, Any], str, dict[str, Any]]:
+    path = session.output_root / filename
+    report, digest = read_immutable_artifact(path, schema_version=LR_REPORT_SCHEMA)
+    if expected_sha256 is not None and digest != expected_sha256:
+        raise BindingFailure(
+            f"{filename} SHA-256 {digest} does not match the bound digest {expected_sha256!r}"
+        )
+    _validate_report_session_bindings(
+        report, session, phase="LR", label=f"LR {step.lower()} report"
+    )
+    if report.get("step") != step:
+        raise BindingFailure(f"{filename} does not declare LR report step {step!r}")
+    frozen = load_authoritative_mb_report(session)
+    if report.get("frozen_geometry") != frozen:
+        raise BindingFailure(
+            f"{filename} frozen geometry does not equal the reconstructed Phase-MB outcome"
+        )
+    return report, digest, frozen
+
+
+def load_authoritative_lr_initial_report(
+    session: ExecutionSession, *, expected_sha256: Any = None
+) -> dict[str, Any]:
+    report, digest, frozen = _read_lr_report(
+        session,
+        LR_INITIAL_REPORT_FILENAME,
+        step="INITIAL",
+        expected_sha256=expected_sha256,
+    )
+    seed1, plan = _reconstruct_plan_results(session, "PHASE_LR_INITIAL_PLAN")
+    require_complete_lr_grid(seed1)
+    if any(record.get("seed_label") != "seed-1" for record in seed1):
+        raise BindingFailure("initial LR plan contains a non-seed-1 candidate")
+    selection = lr_select_seed1(seed1)
+    expected = _expected_lr_report_document(
+        session,
+        frozen=frozen,
+        records=seed1,
+        label="initial LR report",
+        payload={
+            "step": "INITIAL",
+            "phase_plan_kind": "PHASE_LR_INITIAL_PLAN",
+            "phase_plan_sha256": plan["plan_sha256"],
+            "candidate_spec_sha256s": list(plan["plan"]["candidate_spec_sha256s"]),
+            "candidate_artifact_sha256s": _candidate_artifact_hashes(seed1),
+            "seed1": seed1,
+            "selection": selection,
+        },
+    )
+    _require_report_view(report, expected, label="initial LR report")
+    return {
+        "report": report,
+        "report_relpath": LR_INITIAL_REPORT_FILENAME,
+        "report_sha256": digest,
+        "frozen_geometry": frozen,
+        "plan": plan,
+        "seed1": seed1,
+        "selection": selection,
+    }
+
+
+def _confirmation_pairs(
+    seed1: Sequence[Mapping[str, Any]],
+    seed2: Sequence[Mapping[str, Any]],
+    peak_lrs: Sequence[float],
+) -> list[dict[str, Any]]:
+    by_lr_1 = {float(record["peak_lr"]): record for record in seed1}
+    by_lr_2 = {float(record["peak_lr"]): record for record in seed2}
+    missing = [lr for lr in peak_lrs if float(lr) not in by_lr_1 or float(lr) not in by_lr_2]
+    if missing:
+        raise PhaseAbort(f"confirmation evidence incomplete; no raw record for peak_lr {missing}")
+    pairs = []
+    for raw_lr in peak_lrs:
+        lr = float(raw_lr)
+        first, second = by_lr_1[lr], by_lr_2[lr]
+        first_eligible = bool(first["eligible"])
+        second_eligible = bool(second["eligible"])
+        pairs.append({
+            "peak_lr": lr,
+            "seed1_score": float(first["score"]) if first_eligible else None,
+            "seed1_eligible": first_eligible,
+            "seed2_score": float(second["score"]) if second_eligible else None,
+            "seed2_eligible": second_eligible,
+        })
+    return pairs
+
+
+def load_authoritative_lr_confirmation_report(
+    session: ExecutionSession, *, expected_sha256: Any = None
+) -> dict[str, Any]:
+    report, digest, frozen = _read_lr_report(
+        session,
+        LR_CONFIRMATION_REPORT_FILENAME,
+        step="CONFIRMATION",
+        expected_sha256=expected_sha256,
+    )
+    initial = load_authoritative_lr_initial_report(session)
+    seed2, plan = _reconstruct_plan_results(session, "PHASE_LR_CONFIRMATION_PLAN")
+    if any(record.get("seed_label") != "seed-2" for record in seed2):
+        raise BindingFailure("confirmation LR plan contains a non-seed-2 candidate")
+    winner = initial["selection"]
+    if winner.get("outcome") != "SEED1_WINNER":
+        raise PhaseAbort("confirmation report exists without a reconstructed seed-1 winner")
+    winner_lr = float(winner["winner_peak_lr"])
+    peak_lrs = [winner_lr, confirmation_neighbor(winner_lr)]
+    pairs = _confirmation_pairs(initial["seed1"], seed2, peak_lrs)
+    selection = lr_confirm(pairs)
+    expected = _expected_lr_report_document(
+        session,
+        frozen=frozen,
+        records=seed2,
+        label="confirmation LR report",
+        payload={
+            "step": "CONFIRMATION",
+            "phase_plan_kind": "PHASE_LR_CONFIRMATION_PLAN",
+            "phase_plan_sha256": plan["plan_sha256"],
+            "candidate_spec_sha256s": list(plan["plan"]["candidate_spec_sha256s"]),
+            "candidate_artifact_sha256s": _candidate_artifact_hashes(seed2),
+            "initial_report_sha256": initial["report_sha256"],
+            "seed2": seed2,
+            "confirmation_pairs": pairs,
+            "selection": selection,
+        },
+    )
+    _require_report_view(report, expected, label="confirmation LR report")
+    return {
+        "report": report,
+        "report_relpath": LR_CONFIRMATION_REPORT_FILENAME,
+        "report_sha256": digest,
+        "frozen_geometry": frozen,
+        "plan": plan,
+        "initial": initial,
+        "seed2": seed2,
+        "confirmation_pairs": pairs,
+        "selection": selection,
+    }
+
+
+def _edge_selection_inputs(
+    edge_runs: Sequence[Mapping[str, Any]], edge_lr: float
+) -> dict[str, Any]:
+    seed1 = [record for record in edge_runs if record.get("seed_label") == "seed-1"]
+    seed2 = [record for record in edge_runs if record.get("seed_label") == "seed-2"]
+    if len(seed1) != 1 or len(seed2) != 1:
+        raise PhaseAbort(
+            f"edge evidence incomplete for peak_lr {edge_lr}: "
+            f"{len(seed1)} seed-1 and {len(seed2)} seed-2 raw records"
+        )
+    first, second = seed1[0], seed2[0]
+    first_eligible = bool(first["eligible"])
+    second_eligible = bool(second["eligible"])
+    return {
+        "edge_lr": float(edge_lr),
+        "edge_seed1_eligible": first_eligible,
+        "edge_seed2_eligible": second_eligible,
+        "edge_seed1_score": float(first["score"]) if first_eligible else None,
+        "edge_seed2_score": float(second["score"]) if second_eligible else None,
+    }
+
+
+def load_authoritative_lr_edge_report(
+    session: ExecutionSession, *, expected_sha256: Any = None
+) -> dict[str, Any]:
+    report, digest, frozen = _read_lr_report(
+        session,
+        LR_EDGE_REPORT_FILENAME,
+        step="EDGE",
+        expected_sha256=expected_sha256,
+    )
+    confirmation = load_authoritative_lr_confirmation_report(session)
+    confirmed = confirmation["selection"]
+    if confirmed.get("outcome") != "CONFIRMED":
+        raise PhaseAbort("edge report exists without a reconstructed confirmed LR")
+    edge_lr = edge_candidate(float(confirmed["confirmed_peak_lr"]))
+    if edge_lr is None:
+        raise BindingFailure("edge report exists although the confirmed LR defines no edge")
+    edge_runs, plan = _reconstruct_plan_results(session, "PHASE_LR_EDGE_PLAN")
+    if {float(record["peak_lr"]) for record in edge_runs} != {float(edge_lr)}:
+        raise BindingFailure("edge plan raw evidence does not hold exactly the derived edge LR")
+    selection = _edge_selection_inputs(edge_runs, float(edge_lr))
+    expected = _expected_lr_report_document(
+        session,
+        frozen=frozen,
+        records=edge_runs,
+        label="edge LR report",
+        payload={
+            "step": "EDGE",
+            "phase_plan_kind": "PHASE_LR_EDGE_PLAN",
+            "phase_plan_sha256": plan["plan_sha256"],
+            "candidate_spec_sha256s": list(plan["plan"]["candidate_spec_sha256s"]),
+            "candidate_artifact_sha256s": _candidate_artifact_hashes(edge_runs),
+            "confirmation_report_sha256": confirmation["report_sha256"],
+            "edge_runs": edge_runs,
+            "selection": selection,
+        },
+    )
+    _require_report_view(report, expected, label="edge LR report")
+    return {
+        "report": report,
+        "report_relpath": LR_EDGE_REPORT_FILENAME,
+        "report_sha256": digest,
+        "frozen_geometry": frozen,
+        "plan": plan,
+        "confirmation": confirmation,
+        "edge_runs": edge_runs,
+        "selection": selection,
+    }
+
+
+def load_authoritative_lr_final_report(
+    session: ExecutionSession, *, expected_sha256: Any = None
+) -> dict[str, Any]:
+    report, digest, frozen = _read_lr_report(
+        session,
+        LR_REPORT_FILENAME,
+        step="FINAL",
+        expected_sha256=expected_sha256,
+    )
+    initial = load_authoritative_lr_initial_report(session)
+    seed1 = initial["seed1"]
+    seed1_verdict = initial["selection"]
+    if report.get("initial_report_sha256") != initial["report_sha256"]:
+        raise BindingFailure("final LR report does not bind the reconstructed initial report")
+
+    if seed1_verdict.get("outcome") != "SEED1_WINNER":
+        expected = _expected_lr_report_document(
+            session,
+            frozen=frozen,
+            records=seed1,
+            label="final LR report",
+            payload={
+                "step": "FINAL",
+                "initial_report_sha256": initial["report_sha256"],
+                "seed1": seed1,
+                "outcome": seed1_verdict,
+                "terminal_status": "PHASE_ABORT",
+            },
+        )
+        _require_report_view(report, expected, label="final LR report")
+        return {**report, "report_sha256": digest, "frozen_geometry": frozen}
+
+    confirmation = load_authoritative_lr_confirmation_report(session)
+    confirmed = confirmation["selection"]
+    seed2 = confirmation["seed2"]
+    pairs = confirmation["confirmation_pairs"]
+    if report.get("confirmation_report_sha256") != confirmation["report_sha256"]:
+        raise BindingFailure("final LR report does not bind the reconstructed confirmation report")
+    if confirmed.get("outcome") != "CONFIRMED":
+        expected = _expected_lr_report_document(
+            session,
+            frozen=frozen,
+            records=seed2,
+            label="final LR report",
+            payload={
+                "step": "FINAL",
+                "initial_report_sha256": initial["report_sha256"],
+                "confirmation_report_sha256": confirmation["report_sha256"],
+                "seed1": seed1,
+                "seed2": seed2,
+                "confirmation_pairs": pairs,
+                "seed1_verdict": seed1_verdict,
+                "outcome": confirmed,
+                "terminal_status": "PHASE_ABORT",
+            },
+        )
+        _require_report_view(report, expected, label="final LR report")
+        return {**report, "report_sha256": digest, "frozen_geometry": frozen}
+
+    incumbent_lr = float(confirmed["confirmed_peak_lr"])
+    edge_lr = edge_candidate(incumbent_lr)
+    edge_runs: list[dict[str, Any]] = []
+    edge_report_sha256 = None
+    edge_inputs: dict[str, Any] = {"edge_lr": edge_lr}
+    if edge_lr is not None:
+        edge = load_authoritative_lr_edge_report(session)
+        edge_runs = edge["edge_runs"]
+        edge_report_sha256 = edge["report_sha256"]
+        edge_inputs = dict(edge["selection"])
+    final = lr_resolve_edge(
+        incumbent_lr=incumbent_lr,
+        incumbent_final_score=float(confirmed["final_score"]),
+        **edge_inputs,
+    )
+    latest_records = edge_runs if edge_runs else seed2
+    expected = _expected_lr_report_document(
+        session,
+        frozen=frozen,
+        records=latest_records,
+        label="final LR report",
+        payload={
+            "step": "FINAL",
+            "initial_report_sha256": initial["report_sha256"],
+            "confirmation_report_sha256": confirmation["report_sha256"],
+            "edge_report_sha256": edge_report_sha256,
+            "seed1": seed1,
+            "seed2": seed2,
+            "confirmation_pairs": pairs,
+            "edge_runs": edge_runs,
+            "seed1_verdict": seed1_verdict,
+            "confirmed": confirmed,
+            "final": final,
+            "outcome": final,
+            "terminal_status": (
+                "SUCCESS" if final["outcome"] == "PHASE_MUON_LR_FROZEN" else "PHASE_ABORT"
+            ),
+        },
+    )
+    _require_report_view(report, expected, label="final LR report")
+    return {**report, "report_sha256": digest, "frozen_geometry": frozen}
+
+
 def _require_test_launcher(launcher: Any) -> Any:
     """A non-default launcher is a fake/test hook, never a route into the real backend."""
     if launcher is None:
         return _subprocess_launcher
-    if launcher in REAL_TRAINING_ENTRYPOINTS or launcher is execute_validated_candidate:
+    if launcher is execute_candidate_from_artifact_paths:
         raise BindingFailure(
-            "the real training backend is reachable only from validate_worker_execution(); it "
-            "may not be injected as an orchestrator launcher"
+            "the real path-only executor may not be injected as an in-process launcher"
         )
     return launcher
 
@@ -3250,18 +4576,10 @@ def orchestrate_phase_mb(session: ExecutionSession, *, launcher: Any = None) -> 
         "phase_plan_kind": "PHASE_MB_PLAN",
         "phase_plan_sha256": plan["plan_sha256"],
         "candidate_spec_sha256s": list(plan["plan"]["candidate_spec_sha256s"]),
+        "candidate_artifact_sha256s": _candidate_artifact_hashes(outcomes),
         "candidates": outcomes,
         "selection": selection,
-        "selection_trace": {
-            "physical_vram_bytes": vram,
-            "throughput_statistic": "median of the per-update rates over updates 11..40",
-            "eligibility": {
-                str(r["candidate_id"]): list(mb_candidate_eligible(r, vram)[1]) for r in outcomes
-            },
-            "median_update_tokens_per_second": {
-                str(r["candidate_id"]): r.get("median_update_tokens_per_second") for r in outcomes
-            },
-        },
+        "selection_trace": _mb_selection_trace(outcomes, vram),
         "FROZEN_MICRO_BSZ": selection.get("FROZEN_MICRO_BSZ"),
         "FROZEN_GRAD_ACCUM": selection.get("FROZEN_GRAD_ACCUM"),
         "FROZEN_COMPILE": selection.get("FROZEN_COMPILE"),
@@ -3278,6 +4596,7 @@ def orchestrate_phase_mb(session: ExecutionSession, *, launcher: Any = None) -> 
     report["report_sha256"] = write_immutable_report(
         session.output_root / MB_REPORT_FILENAME, report
     )
+    load_authoritative_mb_report(session)
     return report
 
 
@@ -3329,22 +4648,55 @@ def load_authoritative_mb_report(session: ExecutionSession) -> dict[str, Any]:
             )
     if report.get("session_sha256") != session.session_sha256:
         raise BindingFailure("Phase-MB report does not bind this session manifest")
-    plan_path = session.output_root / PHASE_MB_PLAN_FILENAME
-    plan, plan_sha256 = validate_phase_plan(
-        plan_path,
-        session_sha256=session.session_sha256,
-        session_id=session.session_id,
-        expected_phase="MB",
-    )
-    if report.get("phase_plan_sha256") != plan_sha256:
-        raise BindingFailure("Phase-MB report does not bind the phase plan it was produced under")
-    frozen = verify_mb_report_document(report)
+    _validate_report_session_bindings(report, session, phase="MB", label="Phase-MB report")
+    candidates, plan = _reconstruct_plan_results(session, "PHASE_MB_PLAN")
+    require_complete_mb_grid(candidates)
+    vram = int(reported_gpu["total_vram_bytes"])
+    selection = mb_select(candidates, vram)
+    trace = _mb_selection_trace(candidates, vram)
+    if report.get("selection") != selection:
+        raise BindingFailure(
+            "re-deriving the Phase-MB selection from raw candidate evidence does not "
+            "reproduce the published selection"
+        )
+    expected = {
+        "schema_version": MB_REPORT_SCHEMA,
+        "contract_version": CONTRACT_VERSION,
+        "phase": "MB",
+        "session_sha256": session.session_sha256,
+        "phase_plan_kind": "PHASE_MB_PLAN",
+        "phase_plan_sha256": plan["plan_sha256"],
+        "candidate_spec_sha256s": list(plan["plan"]["candidate_spec_sha256s"]),
+        "candidate_artifact_sha256s": _candidate_artifact_hashes(candidates),
+        "candidates": candidates,
+        "selection": selection,
+        "selection_trace": trace,
+        "FROZEN_MICRO_BSZ": selection.get("FROZEN_MICRO_BSZ"),
+        "FROZEN_GRAD_ACCUM": selection.get("FROZEN_GRAD_ACCUM"),
+        "FROZEN_COMPILE": selection.get("FROZEN_COMPILE"),
+        "ledger": _historical_report_ledger_snapshot(session, candidates, label="Phase-MB report"),
+        "authorized_scope": session.scope,
+        "session_terminates_after_this_phase": session.scope == "PHASE_MB_ONLY",
+        "next_phase_requires_new_authorization": session.scope == "PHASE_MB_ONLY",
+        "physical_vram_bytes": vram,
+        "base_runtime_fingerprint": dict(current_fingerprint),
+        **dict(_session_bindings(session)),
+    }
+    _require_report_view(report, expected, label="Phase-MB report")
+    if selection.get("outcome") != "PHASE_MB_FROZEN":
+        raise PhaseAbort(
+            f"Phase MB did not freeze a geometry ({selection.get('outcome')}); "
+            "Phase LR cannot start"
+        )
     return {
         "report_relpath": MB_REPORT_FILENAME,
         "report_sha256": digest,
-        "phase_plan_sha256": plan_sha256,
-        "plan_kind": plan["plan_kind"],
-        **frozen,
+        "phase_plan_sha256": plan["plan_sha256"],
+        "plan_kind": plan["plan"]["plan_kind"],
+        "selection": selection,
+        "micro_bsz": int(selection["FROZEN_MICRO_BSZ"]),
+        "grad_accum": int(selection["FROZEN_GRAD_ACCUM"]),
+        "compile": bool(selection["FROZEN_COMPILE"]),
     }
 
 
@@ -3430,7 +4782,7 @@ def orchestrate_phase_muon_lr(session: ExecutionSession, *, launcher: Any = None
     )
     require_complete_lr_grid(seed1)  # R2 Part 8: the initial grid must be complete evidence
     seed1_verdict = lr_select_seed1(seed1)
-    initial_report = publish(
+    publish(
         LR_INITIAL_REPORT_FILENAME,
         LR_REPORT_SCHEMA,
         {
@@ -3438,12 +4790,16 @@ def orchestrate_phase_muon_lr(session: ExecutionSession, *, launcher: Any = None
             "phase_plan_kind": "PHASE_LR_INITIAL_PLAN",
             "phase_plan_sha256": initial_plan["plan_sha256"],
             "candidate_spec_sha256s": list(initial_plan["plan"]["candidate_spec_sha256s"]),
+            "candidate_artifact_sha256s": _candidate_artifact_hashes(seed1),
             "seed1": seed1,
             "selection": seed1_verdict,
         },
     )
+    initial_report = load_authoritative_lr_initial_report(session)
+    seed1 = initial_report["seed1"]
+    seed1_verdict = initial_report["selection"]
     if seed1_verdict["outcome"] != "SEED1_WINNER":
-        return publish(
+        publish(
             LR_REPORT_FILENAME,
             LR_REPORT_SCHEMA,
             {
@@ -3454,6 +4810,7 @@ def orchestrate_phase_muon_lr(session: ExecutionSession, *, launcher: Any = None
                 "terminal_status": "PHASE_ABORT",
             },
         )
+        return load_authoritative_lr_final_report(session)
 
     winner_lr = float(seed1_verdict["winner_peak_lr"])
     neighbour = confirmation_neighbor(winner_lr)
@@ -3469,30 +4826,9 @@ def orchestrate_phase_muon_lr(session: ExecutionSession, *, launcher: Any = None
             "preceding_selection": dict(seed1_verdict),
         },
     )
-    by_lr_1 = {float(r["peak_lr"]): r for r in seed1}
-    by_lr_2 = {float(r["peak_lr"]): r for r in seed2}
-    # R2 Part 8: confirmation evidence must be COMPLETE -- both LRs must have a recorded run at
-    # both seeds. A missing record is an evidence gap, never an implicit ineligibility.
-    missing = [lr for lr in confirm_lrs if lr not in by_lr_1 or lr not in by_lr_2]
-    if missing:
-        raise PhaseAbort(f"confirmation evidence incomplete; no record for peak_lr {missing}")
-    # R3: an ineligible run records a null score, never a non-finite one -- these pairs are
-    # serialized into the immutable confirmation and final reports, and canonical JSON forbids
-    # NaN/Infinity, so an inf here would make the report unpublishable.
-    pairs = [
-        {
-            "peak_lr": lr,
-            "seed1_score": float(by_lr_1[lr]["score"]) if by_lr_1[lr].get("eligible") else None,
-            "seed1_eligible": bool(by_lr_1[lr].get("eligible"))
-            and lr_candidate_eligible(by_lr_1[lr])[0],
-            "seed2_score": float(by_lr_2[lr]["score"]) if by_lr_2[lr].get("eligible") else None,
-            "seed2_eligible": bool(by_lr_2[lr].get("eligible"))
-            and lr_candidate_eligible(by_lr_2[lr])[0],
-        }
-        for lr in confirm_lrs
-    ]
+    pairs = _confirmation_pairs(seed1, seed2, confirm_lrs)
     confirmed = lr_confirm(pairs)
-    confirmation_report = publish(
+    publish(
         LR_CONFIRMATION_REPORT_FILENAME,
         LR_REPORT_SCHEMA,
         {
@@ -3500,14 +4836,19 @@ def orchestrate_phase_muon_lr(session: ExecutionSession, *, launcher: Any = None
             "phase_plan_kind": "PHASE_LR_CONFIRMATION_PLAN",
             "phase_plan_sha256": confirm_plan["plan_sha256"],
             "candidate_spec_sha256s": list(confirm_plan["plan"]["candidate_spec_sha256s"]),
+            "candidate_artifact_sha256s": _candidate_artifact_hashes(seed2),
             "initial_report_sha256": initial_report["report_sha256"],
             "seed2": seed2,
             "confirmation_pairs": pairs,
             "selection": confirmed,
         },
     )
+    confirmation_report = load_authoritative_lr_confirmation_report(session)
+    seed2 = confirmation_report["seed2"]
+    pairs = confirmation_report["confirmation_pairs"]
+    confirmed = confirmation_report["selection"]
     if confirmed["outcome"] != "CONFIRMED":
-        return publish(
+        publish(
             LR_REPORT_FILENAME,
             LR_REPORT_SCHEMA,
             {
@@ -3522,6 +4863,7 @@ def orchestrate_phase_muon_lr(session: ExecutionSession, *, launcher: Any = None
                 "terminal_status": "PHASE_ABORT",
             },
         )
+        return load_authoritative_lr_final_report(session)
 
     incumbent_lr = float(confirmed["confirmed_peak_lr"])
     edge_lr = edge_candidate(incumbent_lr)
@@ -3540,22 +4882,8 @@ def orchestrate_phase_muon_lr(session: ExecutionSession, *, launcher: Any = None
                 "preceding_selection": dict(confirmed),
             },
         )
-        e1 = [r for r in edge_runs if r["seed_label"] == "seed-1"]
-        e2 = [r for r in edge_runs if r["seed_label"] == "seed-2"]
-        # R2 Part 8: a bounded edge expansion needs a recorded run at BOTH seeds before it can
-        # be resolved either way.
-        if len(e1) != 1 or len(e2) != 1:
-            raise PhaseAbort(
-                f"edge evidence incomplete for peak_lr {edge_lr}: "
-                f"{len(e1)} seed-1 and {len(e2)} seed-2 records"
-            )
-        edge_kwargs.update({
-            "edge_seed1_eligible": bool(e1[0].get("eligible")) and lr_candidate_eligible(e1[0])[0],
-            "edge_seed2_eligible": bool(e2[0].get("eligible")) and lr_candidate_eligible(e2[0])[0],
-            "edge_seed1_score": float(e1[0]["score"]) if e1[0].get("eligible") else None,
-            "edge_seed2_score": float(e2[0]["score"]) if e2[0].get("eligible") else None,
-        })
-        edge_report_sha256 = publish(
+        edge_kwargs = _edge_selection_inputs(edge_runs, float(edge_lr))
+        publish(
             LR_EDGE_REPORT_FILENAME,
             LR_REPORT_SCHEMA,
             {
@@ -3563,17 +4891,22 @@ def orchestrate_phase_muon_lr(session: ExecutionSession, *, launcher: Any = None
                 "phase_plan_kind": "PHASE_LR_EDGE_PLAN",
                 "phase_plan_sha256": edge_plan["plan_sha256"],
                 "candidate_spec_sha256s": list(edge_plan["plan"]["candidate_spec_sha256s"]),
+                "candidate_artifact_sha256s": _candidate_artifact_hashes(edge_runs),
                 "confirmation_report_sha256": confirmation_report["report_sha256"],
                 "edge_runs": edge_runs,
                 "selection": {k: v for k, v in edge_kwargs.items()},
             },
-        )["report_sha256"]
+        )
+        edge_report = load_authoritative_lr_edge_report(session)
+        edge_runs = edge_report["edge_runs"]
+        edge_kwargs = dict(edge_report["selection"])
+        edge_report_sha256 = edge_report["report_sha256"]
     final = lr_resolve_edge(
         incumbent_lr=incumbent_lr,
         incumbent_final_score=float(confirmed["final_score"]),
         **edge_kwargs,
     )
-    return publish(
+    publish(
         LR_REPORT_FILENAME,
         LR_REPORT_SCHEMA,
         {
@@ -3594,6 +4927,7 @@ def orchestrate_phase_muon_lr(session: ExecutionSession, *, launcher: Any = None
             ),
         },
     )
+    return load_authoritative_lr_final_report(session)
 
 
 # --------------------------------------------------------------------- checkpoint policy
@@ -3673,16 +5007,15 @@ def plan_phase_lr(
     ]
 
 
-def run_meta(worker: WorkerAuthority) -> dict[str, Any]:
+def run_meta(execution: Mapping[str, Any]) -> dict[str, Any]:
     """The candidate's real run metadata, written to disk next to its result.
 
     R3 Part 4: every field here is one the admission loader recomputes or cross-checks against
     the result artifact and the planned candidate identity, so a result whose metadata does not
     describe the candidate the phase plan authorized is rejected from selection.
     """
-    worker = _require_worker_authority(worker)
-    v = worker.validated
-    candidate = worker.candidate
+    v = execution["validated"]
+    candidate = execution["candidate"]
     return {
         "schema_version": RUN_META_SCHEMA,
         "contract_version": CONTRACT_VERSION,
@@ -3694,6 +5027,7 @@ def run_meta(worker: WorkerAuthority) -> dict[str, Any]:
         "micro_bsz": candidate["micro_bsz"],
         "grad_accum": candidate["grad_accum"],
         "compile": bool(candidate["compile"]),
+        "peak_lr": candidate["peak_lr"],
         "optimizer": {
             "name": "muon",
             "muon_lr": MUON_LR_ARG,
@@ -3711,11 +5045,11 @@ def run_meta(worker: WorkerAuthority) -> dict[str, Any]:
         },
         "model_seed": candidate["model_init_seed"],
         "train_order_seed": candidate["train_order_seed"],
-        "output_dir": str(worker.output_dir),
-        "candidate_spec_sha256": worker.spec_sha256,
-        "phase_plan_kind": worker.plan["plan_kind"],
-        "phase_plan_sha256": worker.plan_sha256,
-        "session_sha256": worker.session_sha256,
+        "output_dir": str(execution["output_dir"]),
+        "candidate_spec_sha256": execution["spec_sha256"],
+        "phase_plan_kind": execution["plan"]["plan_kind"],
+        "phase_plan_sha256": execution["plan_sha256"],
+        "session_sha256": execution["session_sha256"],
         "pilot_index_hashes": {
             k: v["indices"][k]
             for k in ("stage_a_eval_sha256", "stage_a_train_sha256", "stage_b_eval_sha256")
@@ -3728,10 +5062,10 @@ def run_meta(worker: WorkerAuthority) -> dict[str, Any]:
         "execution_implementation_bundle_sha256": v["observed"]["execution_bundle_sha256"],
         "accepted_stage_a_meta_sha256": v["observed"]["stage_a_meta_sha256"],
         "accepted_stage_b_meta_sha256": v["observed"]["stage_b_meta_sha256"],
-        "authorized_scope": worker.scope,
-        "session_id": worker.session_id,
+        "authorized_scope": v["scope"],
+        "session_id": v["session_id"],
         "authorization_sha256": v["authorization_sha256"],
-        "ledger_identity": dict(worker.ledger.identity),
+        "ledger_identity": dict(execution["ledger"].identity),
         "authorization_status": "AUTHORIZED_BY_EXTERNAL_MANIFEST",
     }
 
@@ -3817,93 +5151,33 @@ def _emit(value: Any) -> None:
 
 
 def _cli_internal_worker(args: argparse.Namespace) -> int:
-    """One candidate, in its own process, revalidating every canonical artifact from disk.
+    """Thin CLI wrapper over the sole artifact-path executor.
 
-    R3 Part 1/2: the ONLY inputs are artifact paths. There is no way to hand this process a
-    constructed session, a validation object or an ``authorized`` flag, and a candidate spec
-    that the immutable phase plan does not list is refused before model construction.
-
-    R3 Part 9: ``progress`` is advanced by the training loop itself, so a candidate that raises
-    after partial progress reports the updates it really completed and the ledger state read
-    back under the lock -- never a reconstructed zero.
-
-    R3 Part 10: ``KeyboardInterrupt`` and ``SystemExit`` are deliberately NOT caught. A
-    process-control event leaves no terminal artifact, which the parent treats as a phase-level
-    failure rather than as an ordinary ineligible candidate.
+    Validation failures write only stderr and an exit status. The executor itself creates all
+    postvalidation artifacts beneath the already-validated candidate output directory.
     """
-    spec_path = Path(args.candidate_spec)
-    worker: WorkerAuthority | None = None
-    candidate: Mapping[str, Any] = {}
-    progress: dict[str, Any] = {"completed_updates": 0, "update_timings": []}
-    # R3 Part 10: a candidate that never reached model construction cannot be "candidate-locally
-    # ineligible". Anything that goes wrong while the artifacts are still being revalidated is an
-    # identity/binding failure by definition of WHERE it happened, regardless of its type.
-    stage = "VALIDATION"
     try:
-        worker = validate_worker_execution(
+        terminal = execute_candidate_from_artifact_paths(
             authorization_path=Path(args.authorization),
             session_manifest_path=Path(args.session_manifest),
             phase_plan_path=Path(args.phase_plan),
-            candidate_spec_path=spec_path,
+            candidate_spec_path=Path(args.candidate_spec),
             pilot_index_manifest_path=Path(args.pilot_index_manifest),
             accepted_stage_a_path=Path(args.accepted_stage_a),
             accepted_stage_b_path=Path(args.accepted_stage_b),
             ledger_path=Path(args.ledger),
             candidate_output_path=Path(args.candidate_output),
         )
-        candidate = worker.candidate
-        stage = "EXECUTION"
-        result = execute_validated_candidate(worker, progress)
-        snapshot = worker.ledger.snapshot()
-        write_terminal_result(
-            spec_path,
-            {
-                "terminal_status": "SUCCESS",
-                "error_class": None,
-                "error_message": None,
-                "completed_updates": int(result["completed_updates"]),
-                "reserved_tokens": snapshot["reserved_tokens"],
-                "completed_tokens": snapshot["completed_tokens"],
-                "run_meta_sha256": result["run_meta_sha256"],
-                "candidate_id": result["candidate_id"],
-                "phase": result["phase"],
-            },
-        )
-        return SUCCESS
-    except Exception as exc:  # noqa: BLE001 - every ordinary exit is a structured terminal result
-        if isinstance(exc, BindingFailure):
-            status = "BINDING_FAILURE"
-        elif isinstance(exc, (PhaseAbort, PilotContractError)):
-            status = "PHASE_ABORT"
-        elif stage == "VALIDATION":
-            # An unreadable artifact, a missing release, an OS fault -- whatever it is, it broke
-            # before this process had any authority, so it is never merely an ineligible run.
-            status = "BINDING_FAILURE"
-        else:
-            status = "CANDIDATE_INELIGIBLE"
-        # R3 Part 9: a fresh, locked ledger snapshot -- not a stale in-memory counter.
-        snapshot: dict[str, Any] = {}
-        if worker is not None:
-            try:
-                snapshot = worker.ledger.snapshot()
-            except Exception:  # noqa: BLE001 - a broken ledger must not mask the real failure
-                snapshot = {}
-        write_terminal_result(
-            spec_path,
-            {
-                "terminal_status": status,
-                "error_class": type(exc).__name__,
-                "error_message": str(exc),
-                "completed_updates": int(progress.get("completed_updates") or 0),
-                "reserved_tokens": snapshot.get("reserved_tokens"),
-                "completed_tokens": snapshot.get("completed_tokens"),
-                "run_meta_sha256": None,
-                "candidate_id": candidate.get("candidate_id"),
-                "phase": candidate.get("phase"),
-            },
-        )
-        sys.stderr.write(f"{type(exc).__name__}: {exc}\n")
-        return RESULT_CLASSES[status]
+        return RESULT_CLASSES[terminal["terminal_status"]]
+    except BindingFailure as exc:
+        sys.stderr.write(f"BINDING_FAILURE: {exc}\n")
+        return BINDING_FAILURE
+    except (PhaseAbort, PilotContractError) as exc:
+        sys.stderr.write(f"PHASE_ABORT: {exc}\n")
+        return PHASE_ABORT
+    except Exception as exc:  # no terminal means postvalidation integrity could not be sealed
+        sys.stderr.write(f"PHASE_ABORT: {type(exc).__name__}: {exc}\n")
+        return PHASE_ABORT
 
 
 def _cli_run(args: argparse.Namespace) -> int:

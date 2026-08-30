@@ -35,9 +35,9 @@ CONTRACT_VERSION = "P-PILOT-CONTRACT-V2.3"
 CONTRACT_SCHEMA = "petitgpt-pilot-contract-v2.3"
 AUTHORIZATION_SCHEMA = "petitgpt-pilot-authorization-v2.3"
 BASE_FINGERPRINT_SCHEMA = "petitgpt-pilot-base-runtime-fingerprint-v2.3"
-RUN_META_SCHEMA = "petitgpt-pilot-run-meta-v2.3"
+RUN_META_SCHEMA = "petitgpt-pilot-run-meta-v2.3-r4"
 PILOT_INDEX_SCHEMA = "petitgpt-pilot-indices-v2.3"
-TOKEN_LEDGER_SCHEMA = "petitgpt-pilot-token-ledger-v2.3"
+TOKEN_LEDGER_SCHEMA = "petitgpt-pilot-token-ledger-v2.3-r4"
 PILOT_CHECKPOINT_KIND = "PILOT_V2_3"
 
 SUPERSEDES = MappingProxyType({
@@ -116,6 +116,8 @@ OPTIMIZER_FAMILY_COMPARISON_REQUIRED = False
 MUON_NESTEROV = True
 MUON_NS_STEPS = 5
 MUON_LR_RATIO = 1.0
+MUON_LR_RATIO_EXPLICITLY_REQUIRED = True
+MISSING_MUON_LR_RATIO_DEFAULT_PERMITTED = False
 AUX_ADAMW_DECAY_WEIGHT_DECAY = WEIGHT_DECAY
 AUX_ADAMW_NO_DECAY_WEIGHT_DECAY = 0.0
 OPTIMIZER_GROUP_ROLES = ("muon_matrices", "aux_adamw_decay", "aux_adamw_no_decay")
@@ -157,6 +159,11 @@ def realized_muon_config() -> dict[str, Any]:
             "float(lr); ratio = muon_lr / lr. With --muon_lr 0.0 this yields muon_lr == lr and "
             "ratio == 1.0, so there is no separate Muon-LR search dimension."
         ),
+        "lr_ratio_policy": {
+            "required_on_every_realized_group": MUON_LR_RATIO_EXPLICITLY_REQUIRED,
+            "missing_field_default_permitted": MISSING_MUON_LR_RATIO_DEFAULT_PERMITTED,
+            "required_value": MUON_LR_RATIO,
+        },
         "param_groups": [
             {
                 "name": "muon_matrices",
@@ -241,7 +248,8 @@ def verify_realized_grouping(optimizer: Any, model: Any | None = None) -> dict[s
       ``0.1 -> 0.05`` and ``0.0 -> anything else`` both fail;
     * the exact auxiliary AdamW betas and epsilon;
     * the exact Muon momentum, Nesterov flag and Newton-Schulz step count;
-    * ``lr_ratio == 1.0`` on every group;
+    * an explicitly present, numeric ``lr_ratio == 1.0`` on every group, with no missing-field
+      default;
     * with ``model``, complete parameter membership: every trainable parameter in exactly one
       group, no duplicate, no missing parameter, no parameter foreign to the model, and each
       role's membership equal to the frozen grouping rule's prediction -- including when a role
@@ -257,7 +265,20 @@ def verify_realized_grouping(optimizer: Any, model: Any | None = None) -> dict[s
     muon_groups = [g for g in groups if g.get("use_muon")]
     aux_groups = [g for g in groups if not g.get("use_muon")]
     failures: list[str] = []
-    ratios = [float(g.get("lr_ratio", 1.0)) for g in groups]
+    ratios: list[Any] = []
+    for index, group in enumerate(groups):
+        if "lr_ratio" not in group:
+            failures.append(f"optimizer group {index} is missing required lr_ratio")
+            ratios.append(None)
+            continue
+        ratio = group["lr_ratio"]
+        if not isinstance(ratio, (int, float)) or isinstance(ratio, bool):
+            failures.append(
+                f"optimizer group {index} lr_ratio must be a real number, got {ratio!r}"
+            )
+            ratios.append(repr(ratio))
+            continue
+        ratios.append(float(ratio))
 
     if not isinstance(optimizer, Muon):
         failures.append(f"optimizer must be the Muon instance, got {type(optimizer).__name__}")
@@ -1649,6 +1670,8 @@ def contract_document() -> dict[str, Any]:
             "muon_nesterov": MUON_NESTEROV,
             "muon_ns_steps": MUON_NS_STEPS,
             "lr_ratio": MUON_LR_RATIO,
+            "lr_ratio_explicitly_required": MUON_LR_RATIO_EXPLICITLY_REQUIRED,
+            "missing_lr_ratio_default_permitted": MISSING_MUON_LR_RATIO_DEFAULT_PERMITTED,
             "rms_matching_constant": RMS_MATCHING_CONSTANT,
             "newton_schulz_coefficients": list(NEWTON_SCHULZ_COEFFICIENTS),
             "independent_rms_oracle": (

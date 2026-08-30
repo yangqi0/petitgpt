@@ -33,8 +33,10 @@ No pilot is authorized here. The owner publishes a separate manifest
 runtime after independent review. The tracked template remains `NOT_AUTHORIZED` and carries
 `training_hardware: null`; it selects no GPU and grants no hardware authority. **No tracked code
 change is required for a later owner authorization** — `validate_authorization()` already
-consumes the schema, and `validate_execution_artifacts()` is the single gate every training
-entry point passes through.
+consumes the schema. `execute_candidate_from_artifact_paths()` is the sole real candidate
+executor; it independently reloads the complete canonical artifact path set and finishes all
+validation before defining or invoking model, dataset, forward/backward, or optimizer-step
+operations.
 
 A future `AUTHORIZED` manifest must populate `training_hardware` with:
 
@@ -76,7 +78,9 @@ Publishing order for an authorized run:
     --weight_decay 0.1      --grad_clip 1.0
 
 `build_optimizer` resolves `muon_lr = lr` when `--muon_lr 0.0`, so `ratio = 1.0` and **every**
-realized group carries `lr_ratio == 1.0`. There is no separate Muon-LR search dimension.
+realized group must carry its own explicit, numeric `lr_ratio == 1.0` field. A missing field is a
+verification failure; it is never accepted via a default of `1.0`. There is no separate Muon-LR
+search dimension.
 
 Realized grouping, read from `src/optim.py` rather than asserted:
 
@@ -102,7 +106,8 @@ measure:
     weight_decay        muon 0.1     aux decay 0.1     aux no-decay exactly 0.0
     aux AdamW           betas (0.9, 0.95)   eps 1e-8
     Muon                momentum 0.95   nesterov True   ns_steps 5
-    every group         lr_ratio == 1.0
+    every group         lr_ratio field explicitly present and numeric; exactly 1.0;
+                        no missing-field default is permitted
     membership          every trainable parameter in exactly one group; no duplicate, no
                         missing parameter, no parameter foreign to the model, and each role's
                         membership equal to the grouping rule's prediction, empty roles included
@@ -298,6 +303,13 @@ advanced the file:
 steps leaves behind. Any invariant failure is a phase-level **ledger-integrity failure**, never
 an ineligible candidate.
 
+The R4 ledger also binds one active candidate at a time and appends one immutable receipt when
+that candidate terminates. Each receipt binds the complete candidate identity (including
+`peak_lr`), its before/after local and aggregate accounting, its run-meta/result hashes, and the
+previous receipt hash. The chain head and every receipt hash are revalidated on every locked
+reload. A terminal is authoritative only when a fresh locked lookup finds its exact durable
+receipt; a later candidate may advance the ledger without invalidating that historical receipt.
+
 Orchestration verifies that all required Phase-MB candidates are represented with no duplicate
 or unknown identity, that the initial LR grid is complete, and that every selected result comes
 from an eligible completed run. A caller-supplied partial grid or derived-result JSON cannot
@@ -335,6 +347,12 @@ The **authorized output root** is validated before anything is written under it:
 sit inside, or contain an accepted release, and its parent must already exist. Every candidate
 then uses a new candidate-specific directory that must resolve beneath that validated root.
 
+Before that validation succeeds, the worker writes nothing beside a candidate spec, phase plan,
+authorization, index manifest, accepted release or any other input artifact. Pre-validation
+failure is communicated only by process exit status and captured stdout/stderr. After validation,
+all candidate artifacts, including the strict `terminal.json` and preserved worker logs, remain
+beneath the resolved candidate directory under the authorized root.
+
     PILOT_CHECKPOINTING    DISABLED
 
 V2.3 writes and reads **no** pilot training checkpoint. There is no save path, no resume path
@@ -359,7 +377,7 @@ Before LR publishes any plan, the MB report fingerprint is self-hashed, compared
 SHA and VRAM, and compared in full with the freshly validated LR runtime. An incompatible change
 aborts the session; the executor never migrates the frozen MB geometry automatically.
 
-## 12. Validation at execution (R3)
+## 12. Validation at execution (R4)
 
 Nothing is trusted because a caller said so, and **no constructed object is execution
 authority**. `validate_execution_artifacts(authorization_path, pilot_index_manifest_path,
@@ -372,27 +390,32 @@ output_dir, requested_phase)` re-derives the artifact-bytes layer:
     execution-bundle SHA        rederived by AST closure walk over the roots
     pilot-index manifest        FILE SHA-256 computed from disk, never read out of the manifest
     pilot indices               regenerated and compared list by list
-    accepted Stage A / Stage B  opened through the manifest-required canonical loader
+    accepted Stage A / Stage B  frozen manifest SHA plus a pre-construction canonical scan of
+                                every declared shard's path, geometry and bytes; gaps, extras,
+                                symlinks and hash drift are binding failures
     authorized output root      validated before any write
     runtime fingerprint         owner hardware binding + complete observed identity + exact NumPy
     token-ledger identity       eight fields, revalidated on every lock-held operation
     requested phase and scope   PHASE_MB_ONLY may never execute Phase LR
 
-### The real worker takes canonical artifact PATHS only
+### The sole real executor takes canonical artifact PATHS only
 
-`validate_worker_execution()` is the single gate to model construction, a forward, a backward or
-an optimizer update. Its **only** raw inputs are paths:
+`execute_candidate_from_artifact_paths()` is the only supported route to model construction, a
+forward, a backward or an optimizer update. Its **only** raw inputs are paths:
 
     authorization_path          session_manifest_path       phase_plan_path
     candidate_spec_path         pilot_index_manifest_path   accepted_stage_a_path
     accepted_stage_b_path       ledger_path                 candidate_output_path
 
-It revalidates every one of those from disk and only then mints a `WorkerAuthority`, which the
-training entrypoints require and which no caller can construct. There is no `ExecutionSession`,
-`ValidatedContext`, `authorized` Boolean or equivalent object that grants execution: the
-orchestrator's `ExecutionSession` is **derived metadata** and cannot reach a training backend.
-Fakes used by tests are injected as a launcher with a different signature, which structurally
-cannot invoke the real backend, and the orchestrator refuses a launcher that is one.
+It calls `validate_worker_execution()`, which revalidates every artifact from disk and returns
+only non-authorizing decoded data. Only after that call succeeds does the same lexical executor
+define and invoke its local model/dataset construction and update-loop operations. Those
+training-capable operations have no module-level callable alternative. There is no
+`WorkerAuthority`, private-constructor token, caller-created `ExecutionSession`,
+`ValidatedContext`, `authorized` Boolean or equivalent mutable object that grants execution;
+the orchestrator's `ExecutionSession` is metadata that cannot reach a training backend. Fakes
+used by tests are injected as launchers with a different signature and cannot invoke the real
+executor.
 
 The authorized root is taken as the parent of the candidate's own output directory and is then
 checked against the authorization manifest's `allowed_output_root`, so a worker pointed at a
@@ -401,14 +424,20 @@ directory outside the authorized root fails before anything is constructed.
 ### The immutable artifact chain
 
     SESSION.json
-      -> PHASE_MB_PLAN            -> PHASE_MB_REPORT
-      -> PHASE_LR_INITIAL_PLAN    -> PHASE_LR_INITIAL_REPORT
-      -> PHASE_LR_CONFIRMATION_PLAN -> PHASE_LR_CONFIRMATION_REPORT
-      -> PHASE_LR_EDGE_PLAN       -> PHASE_LR_EDGE_REPORT
-      -> PHASE_LR_REPORT
+      -> phase plan
+        -> canonical candidate spec
+          -> run_meta.json
+          -> result.json
+          -> durable hash-chained ledger receipt
+          -> candidate-local terminal.json
+        -> authoritative phase report
+          -> next internally derived plan
 
-Every link is published once, atomically, with a SHA-256 sidecar, and is re-hashed against that
-sidecar whenever it is read.
+Every immutable file is published once, atomically, with a SHA-256 sidecar and is re-hashed
+whenever it is read. The ledger itself advances atomically under its lock; its immutable receipt
+records form the durable bridge from raw candidate evidence to the terminal and authoritative
+report. Report JSON is a derived view of that underlying chain, never an independent source of
+geometry or eligibility.
 
 `SESSION.json` binds the authorization SHA, the contract SHA, HEAD and branch, the execution
 bundle SHA, the pilot-index-manifest FILE SHA, the serialized-index-lists digest, both accepted
@@ -429,13 +458,18 @@ binds the preceding validated LR report and selection SHA plus its internally de
 confirmation specs; an edge plan binds the preceding confirmation report SHA plus its internally
 derived edge specs.
 
-**No caller chooses candidate membership after a phase plan is published.** A worker validates
-the plan bytes and SHA, the spec bytes and SHA, the spec's membership in that plan, the path and
-output directory the plan assigns it, and every candidate field against a fresh derivation from
-the contract. A candidate spec that is not listed fails **before model construction**. The
-worker is an internal subprocess entrypoint (`internal-worker`); invoking it directly with an
-arbitrary spec therefore confers no execution capability at all, and the old public
-`execute-candidate` command is gone.
+**No caller chooses candidate membership after a phase plan is published.** Before validating a
+chosen candidate spec, the worker validates the **entire** phase plan as the exact contract-derived
+ordered candidate set: no missing, extra or duplicate candidate identity, spec hash, spec path or
+output path is permitted, and the aggregate candidate-ID and candidate-spec-SHA lists must match
+that order exactly. It opens every canonical `_specs/<candidate_id>.json` file and compares its
+bytes with a fresh contract derivation.
+
+Only then does the worker validate the chosen spec's SHA, membership, canonical path and output
+directory. A spec that is unlisted, self-declared or inconsistent with any contract-derived field
+fails **before model construction**. The worker is an internal subprocess entrypoint
+(`internal-worker`); invoking it directly with an arbitrary spec therefore confers no execution
+capability at all, and the old public `execute-candidate` command is gone.
 
 That derivation is never taken from the plan's own declarations. For every Phase-LR plan kind the
 worker opens the Phase-MB report the plan binds, re-hashes it, recomputes each candidate's
@@ -456,12 +490,16 @@ model construction, and the comparison against the published spec can never be a
 
 Every admitted candidate result must have a real `run_meta.json` in its own output directory.
 The loader opens it, computes its SHA-256 **from disk**, and requires agreement with both the
-result artifact and the planned candidate identity across: phase, candidate ID, candidate-spec
-SHA, phase-plan SHA, session SHA, seed label, `micro_bsz`, `grad_accum`, `compile`, the LR
-configuration, the output directory, the session ID, the authorization SHA, the contract SHA,
-HEAD, the execution-bundle SHA, the index-manifest FILE SHA, the runtime-fingerprint SHA and the
-ledger identity. A fabricated digest with no file behind it, or any unknown or mismatched field,
-rejects the candidate from authoritative selection.
+result artifact, immutable terminal, durable ledger receipt and planned candidate identity
+across: phase, candidate ID, candidate-spec SHA, phase-plan SHA, session SHA, seed label,
+`micro_bsz`, `grad_accum`, `compile`, the output directory, and—independently of nested
+diagnostics—the top-level `peak_lr`. The exact planned LR must therefore agree in the plan
+identity, candidate spec, run meta, raw result, terminal, receipt and admission record.
+
+The same chain binds the session ID, authorization SHA, contract SHA, HEAD, execution-bundle SHA,
+index-manifest FILE SHA, runtime-fingerprint SHA and ledger identity. A fabricated digest with no
+file behind it, an LR-label permutation, or any unknown or mismatched field rejects the candidate
+from authoritative selection.
 
 ### Result classes
 
@@ -470,17 +508,31 @@ rejects the candidate from authoritative selection.
     PHASE_ABORT           4    the phase cannot continue under the frozen contract
     BINDING_FAILURE       5    an identity binding is broken; never downgraded
 
-Each candidate subprocess writes a structured terminal result
-(`petitgpt-pilot-candidate-terminal-result-v2.3`: status, error class, error message, completed
-updates, reserved/completed tokens, run_meta SHA) next to its spec, and its stdout and stderr
-are preserved verbatim. A missing terminal result, or a status that disagrees with the exit
-code, is a `PHASE_ABORT` — never a pass.
+Each validated candidate subprocess writes one immutable structured terminal
+(`petitgpt-pilot-candidate-terminal-result-v2.3-r4`) at
+`<candidate_output>/terminal.json`. It is published only after immutable `run_meta.json`
+and `result.json` artifacts and the matching durable ledger receipt exist.
 
-**Terminal accounting is real progress.** On success the artifact reports the exact completed
-updates and tokens; after a candidate-local exception with partial progress it reports the
-updates actually completed and the reserved/completed figures from a **fresh locked ledger
-snapshot** — never a reconstructed zero. The parent preserves those fields verbatim in the
-candidate's ineligible evidence and never guesses them.
+Its exact field set binds status/error data; phase; candidate ID; top-level `peak_lr`;
+candidate-spec, phase-plan, session and authorization SHAs; planned, reserved and completed
+updates; candidate-local reserved/completed update counts; aggregate reserved/completed token
+maps; the full ledger identity; the ledger-receipt SHA; and the run-meta/result SHAs.
+
+JSON types, integer ranges, SHA syntax, map keys and accounting geometry are strict. A fresh
+locked receipt lookup must exactly reproduce the terminal's identity and accounting; the fresh
+ledger snapshot must be at least as advanced as that receipt, so historical terminals remain
+valid after later candidates. A malformed or ledger-inconsistent terminal is a phase-level
+integrity failure. A missing terminal or exit/status disagreement is a `PHASE_ABORT`, never a
+pass.
+
+The pre-finalization ledger snapshot embedded in each raw result is also redundant evidence: the
+admission loader reconstructs its exact active-candidate and aggregate state from the durable
+receipt and rejects any mismatch before that result can enter a report.
+
+**Terminal accounting is real progress.** On success it reports exact completed updates and
+tokens; after a validated candidate-local exception it reports the actual partial local and
+aggregate figures from the durable receipt—never a reconstructed zero. The parent preserves
+those fields verbatim in candidate evidence and never guesses them.
 
 ### Exception classification
 
@@ -500,24 +552,36 @@ No `BaseException` handler converts a process-control event into an ordinary out
 caught, so the worker leaves no terminal artifact and the parent aborts the phase.
 
 Classification is by **execution stage**, not by exception type. A candidate that has not yet
-minted its worker authority has not reached model construction and therefore cannot be
-"candidate-locally ineligible": any failure while the artifacts are still being revalidated is a
+completed the full artifact validation and entered the validation-owned lexical executor has not
+reached model construction and therefore cannot be "candidate-locally ineligible": any failure
+while the artifacts are still being revalidated is a
 `BINDING_FAILURE`, whatever its type. Every canonical artifact — the authorization manifest, the
 pilot-index manifest, `SESSION.json`, every phase plan, every report, every candidate spec,
 `run_meta.json`, every result and the token ledger — is decoded through one guarded reader, so an
 unreadable or non-object artifact surfaces as a binding failure instead of an unreadable
 built-in error that would look like an ordinary ineligible candidate.
 
-### The authoritative Phase-MB report
+### Authoritative reports are reconstructed views
 
 `PHASE_MB_REPORT.json` is published **once**, with a SHA-256 sidecar, and is the only source of
 Phase-LR geometry — the `run` subcommand has no `--micro-bsz` and no `--compile` option. Before
-Phase LR starts, the report is re-hashed against its sidecar, revalidated against every session
-binding and against its own phase plan, checked for a complete ten-candidate grid, recomputed
-candidate by candidate, and its recorded selection is re-derived and compared. Its full runtime
-fingerprint is also self-hashed and required to equal the freshly validated Phase-LR runtime;
-its recorded physical VRAM must equal that fingerprint. Any mismatch aborts before an LR plan or
-candidate can start.
+Phase LR starts, the report is re-hashed against its sidecar and session binding. The loader then
+reopens and hashes the bound immutable Phase-MB plan, every canonical candidate spec, every raw
+`result.json`, every `run_meta.json`, every strict terminal and every durable ledger receipt.
+It recomputes exact ten-candidate completeness, compile evidence, eligibility, median throughput
+and the canonical tie-break selector. The reconstructed candidates, artifact-hash maps, selection
+trace and frozen geometry must exactly reproduce the published report.
+
+Every LR report is reconstructed the same way, recursively from its bound Phase-MB report, phase
+plan and preceding LR report. The loader reopens the required candidate/seed set and recomputes
+raw evaluation losses, SCORE, eligibility, confirmation-neighbour and edge derivation, and the
+canonical selectors through the final winner. Only that reconstructed outcome may authorize a
+downstream plan. Editing report JSON and its sidecar without matching raw evidence therefore
+cannot change a decision.
+
+The MB report's full runtime fingerprint is also self-hashed and required to equal the freshly
+validated Phase-LR runtime; its recorded physical VRAM must equal that fingerprint. Any mismatch
+aborts before an LR plan or candidate can start.
 
 ### Independent recomputation
 
@@ -528,10 +592,12 @@ No selection number is taken on trust:
     Phase LR    loss_A = numerator_A / weight_A, loss_B = numerator_B / weight_B, then
                 SCORE = (10*loss_A + 3*loss_B)/13
 
-Selection consumes only the recomputed values; a stored summary may exist but is never
-authoritative by itself, and must agree with the recomputation to within double round-off
+Selection consumes only recomputed values. A stored `eligible` is redundant summary data:
+`false` never skips raw-evidence recomputation, `true` never overrides it, and when present it
+must exactly equal the recomputed Boolean verdict. Stored metric and selector summaries are also
+non-authoritative and must agree with recomputation to within double round-off
 (`math.isclose`, relative tolerance 1e-12) — canonical JSON round-trips doubles exactly, so
-anything looser would be slack. A serialized value that disagrees is a `BINDING_FAILURE`.
+anything looser would be slack. Any serialized value that disagrees is a `BINDING_FAILURE`.
 
 ### Evidence completeness
 
