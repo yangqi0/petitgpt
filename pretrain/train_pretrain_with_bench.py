@@ -479,6 +479,71 @@ def normalize_save_steps(
     return parsed
 
 
+def normalize_eval_steps(
+    raw_values: object,
+    *,
+    schedule_total_steps: int,
+) -> list[int]:
+    """Parse repeatable/comma-separated absolute evaluation milestones.
+
+    Mirrors :func:`normalize_save_steps`. Explicit evaluation milestones let a governed
+    production run evaluate at exactly the owner-frozen steps instead of on a periodic
+    cadence, which no interval value can express.
+    """
+    if raw_values is None:
+        values: list[object] = []
+    elif isinstance(raw_values, (str, int)):
+        values = [raw_values]
+    else:
+        try:
+            values = list(raw_values)  # type: ignore[arg-type]
+        except TypeError as e:
+            raise ValueError("--eval_steps must be integers separated by commas") from e
+
+    parsed: list[int] = []
+    for value in values:
+        if isinstance(value, int):
+            parsed.append(int(value))
+            continue
+        text = str(value).strip()
+        if not text:
+            raise ValueError("--eval_steps entries must not be empty")
+        fields = text.split(",")
+        if any(not field.strip() for field in fields):
+            raise ValueError("--eval_steps contains an empty comma-separated entry")
+        try:
+            parsed.extend(int(field.strip()) for field in fields)
+        except ValueError as e:
+            raise ValueError("--eval_steps must contain only integer steps") from e
+
+    if any(step <= 0 for step in parsed):
+        raise ValueError("--eval_steps must contain positive absolute optimizer steps")
+    if parsed != sorted(parsed) or len(parsed) != len(set(parsed)):
+        raise ValueError("--eval_steps must be strictly increasing and unique")
+    if parsed and int(schedule_total_steps) > 0 and parsed[-1] > int(schedule_total_steps):
+        raise ValueError(
+            "--eval_steps cannot exceed --schedule_total_steps "
+            f"({parsed[-1]} > {int(schedule_total_steps)})"
+        )
+    return parsed
+
+
+def should_evaluate(
+    step: int,
+    *,
+    eval_every: int,
+    eval_steps: list[int] | tuple[int, ...] | set[int],
+) -> bool:
+    """Evaluate at an explicit milestone, or on a periodic cadence when one is enabled.
+
+    ``eval_every == 0`` disables the periodic cadence entirely, which is what an
+    explicit-milestones-only policy requires.
+    """
+    if step in eval_steps:
+        return True
+    return int(eval_every) > 0 and step % int(eval_every) == 0
+
+
 def should_save_checkpoint(
     global_step: int,
     *,
@@ -487,7 +552,11 @@ def should_save_checkpoint(
 ) -> bool:
     """Return true once when a periodic or explicit absolute milestone is hit."""
     step = int(global_step)
-    return step % int(save_every) == 0 or step in save_steps
+    if step in save_steps:
+        return True
+    # ``save_every == 0`` disables the periodic cadence: an exact-milestones-only
+    # checkpoint policy must not emit checkpoints the plan never named.
+    return int(save_every) > 0 and step % int(save_every) == 0
 
 
 def should_retain_step_checkpoint(
@@ -509,6 +578,11 @@ def validate_training_args(args: argparse.Namespace) -> None:
         args.schedule_total_steps = int(args.max_steps)
     if int(args.schedule_total_steps) < int(args.max_steps):
         raise ValueError("--schedule_total_steps must be >= the absolute --max_steps stop")
+    args.eval_steps = normalize_eval_steps(
+        getattr(args, "eval_steps", []),
+        schedule_total_steps=int(getattr(args, "schedule_total_steps", 0))
+        or int(getattr(args, "max_steps", 0)),
+    )
     args.save_steps = normalize_save_steps(
         getattr(args, "save_steps", []),
         schedule_total_steps=int(args.schedule_total_steps),
@@ -565,9 +639,14 @@ def validate_training_args(args: argparse.Namespace) -> None:
         raise ValueError("--num_workers must be >= 0")
     if int(args.eos_weight_warmup_steps) < 0 or float(args.eos_weight) < 0.0:
         raise ValueError("EOS weight and warmup must be non-negative")
-    for interval_name in ("log_every", "eval_every", "save_every", "debug_every"):
+    for interval_name in ("log_every", "debug_every"):
         if int(getattr(args, interval_name)) <= 0:
             raise ValueError(f"--{interval_name} must be positive")
+    # 0 disables the periodic cadence (the existing --bench_eval_every idiom). Explicit
+    # milestone lists remain available through --eval_steps / --save_steps.
+    for interval_name in ("eval_every", "save_every"):
+        if int(getattr(args, interval_name)) < 0:
+            raise ValueError(f"--{interval_name} must be >= 0 (0 disables the cadence)")
     if int(args.resume_step) < -1:
         raise ValueError("--resume_step must be -1 or a non-negative checkpoint step")
     if bool(args.mask_last_label_in_loss):
@@ -682,6 +761,16 @@ def build_run_contract(
         "validation_selection": {
             "combined_samples": int(getattr(args, "val_samples", 200)),
             "samples_per_source": int(getattr(args, "val_samples_per_source", 80)),
+        },
+        # Adjacent governed-policy block. The reviewed `rng_consumers`, `checkpointing` and
+        # seed fields above keep their exact shape: P-PRODUCTION-LAUNCH-CONTRACT-V1 completes
+        # the run contract without changing what was already accepted.
+        "governed_policy": {
+            "eval_steps": [int(step) for step in getattr(args, "eval_steps", [])],
+            "periodic_eval_enabled": int(args.eval_every) > 0,
+            "periodic_save_enabled": int(args.save_every) > 0,
+            "stage_a_sampler_seed": int(getattr(args, "stage_a_sampler_seed", -1)),
+            "stage_b_sampler_seed": int(getattr(args, "stage_b_sampler_seed", -1)),
         },
         "tokenizer_sha256": str(tokenizer_sha256),
         "run_plan": dict(run_plan_binding) if run_plan_binding is not None else None,
@@ -1327,6 +1416,36 @@ def parse_args() -> argparse.Namespace:
         help="Model initialization and training-RNG seed; does not select data blocks.",
     )
     ap.add_argument(
+        "--stage_a_sampler_seed",
+        type=int,
+        default=-1,
+        help=(
+            "Stage-A data-order seed. Governed production runs set this explicitly; -1 "
+            "falls back to the legacy shared --sampler_seed for ungoverned/debug runs."
+        ),
+    )
+    ap.add_argument(
+        "--stage_b_sampler_seed",
+        type=int,
+        default=-1,
+        help=(
+            "Stage-B data-order seed. Stage B never reuses the Stage-A seed on the "
+            "governed path; -1 falls back to the legacy shared --sampler_seed."
+        ),
+    )
+    ap.add_argument(
+        "--launch_contract_json",
+        type=str,
+        default="",
+        help="Governed production launch-contract artifact (enables the governed path).",
+    )
+    ap.add_argument(
+        "--stage_authorization_json",
+        type=str,
+        default="",
+        help="External STAGE_N/STAGE_O authorization manifest for the governed path.",
+    )
+    ap.add_argument(
         "--sampler_seed",
         type=int,
         default=1234,
@@ -1353,7 +1472,23 @@ def parse_args() -> argparse.Namespace:
 
     # Logging / eval / save
     ap.add_argument("--log_every", type=int, default=20)
-    ap.add_argument("--eval_every", type=int, default=1000)
+    ap.add_argument(
+        "--eval_every",
+        type=int,
+        default=1000,
+        help="Periodic evaluation cadence in optimizer steps (0 disables it).",
+    )
+    ap.add_argument(
+        "--eval_steps",
+        action="append",
+        default=[],
+        metavar="STEP[,STEP...]",
+        help=(
+            "Repeatable absolute evaluation milestones. Comma-separated values are "
+            "accepted; the complete list must be strictly increasing and unique. A governed "
+            "production run evaluates at exactly these steps with --eval_every 0."
+        ),
+    )
     ap.add_argument(
         "--save_every",
         type=int,
@@ -1459,9 +1594,79 @@ def parse_args() -> argparse.Namespace:
 # -----------------------------------------------------------------------------
 # Main
 # -----------------------------------------------------------------------------
+def resolve_stage_sampler_seed(args: argparse.Namespace, stage: str | None) -> int:
+    """The one sampler seed this stage may use.
+
+    Stage A and Stage B never share a mutable seed on the governed path. The legacy
+    ``--sampler_seed`` remains only for ungoverned/debug runs that set neither per-stage
+    seed, and it can never override an explicitly supplied stage seed.
+    """
+    per_stage = {
+        "stage_a": int(getattr(args, "stage_a_sampler_seed", -1)),
+        "stage_b": int(getattr(args, "stage_b_sampler_seed", -1)),
+    }
+    if stage in per_stage and per_stage[stage] >= 0:
+        return per_stage[stage]
+    if stage is None and any(v >= 0 for v in per_stage.values()):
+        raise ValueError(
+            "per-stage sampler seeds require --run_plan_stage so the stage is unambiguous"
+        )
+    return int(getattr(args, "sampler_seed", 1234))
+
+
+def enforce_governed_launch(args: argparse.Namespace) -> dict | None:
+    """Validate the governed production launch contract, or return None when ungoverned."""
+    contract_path = str(getattr(args, "launch_contract_json", "") or "").strip()
+    authorization_path = str(getattr(args, "stage_authorization_json", "") or "").strip()
+    if not contract_path and not authorization_path:
+        return None
+
+    from production_launch_contract_v1 import (
+        observed_training_runtime,
+        require_governed_launch,
+    )
+
+    if not contract_path or not authorization_path:
+        raise ValueError(
+            "--launch_contract_json and --stage_authorization_json must be supplied together"
+        )
+    stage = str(getattr(args, "run_plan_stage", "") or "").strip()
+    if stage not in ("stage_a", "stage_b"):
+        raise ValueError("a governed launch requires --run_plan_stage stage_a|stage_b")
+
+    contract_doc = json.loads(Path(contract_path).read_text(encoding="utf-8"))
+    authorization = json.loads(Path(authorization_path).read_text(encoding="utf-8"))
+    plan_sha = _sha256_file(Path(_resolve_path(str(args.run_plan_json))))
+    acceptance_sha = _sha256_file(
+        Path(contract_doc["accepted_stage_p_inputs"]["pilot_owner_acceptance_relpath"])
+    )
+    result = require_governed_launch(
+        args=args,
+        stage=stage,
+        launch_contract=contract_doc,
+        authorization=authorization,
+        exact_plan_sha256=plan_sha,
+        pilot_owner_acceptance_sha256=acceptance_sha,
+        observed_runtime=observed_training_runtime(),
+    )
+    result["stage_authorization_sha256"] = _sha256_file(Path(authorization_path))
+    print(
+        f"[governed] P-PRODUCTION-LAUNCH-CONTRACT-V1 accepted: stage={stage} "
+        f"scope={result['requested_scope']} "
+        f"contract={result['launch_contract_sha256'][:16]}..."
+    )
+    return result
+
+
 def main() -> None:
     args = parse_args()
     validate_training_args(args)
+
+    # P-PRODUCTION-LAUNCH-CONTRACT-V1: the governed gate runs before a model, optimizer,
+    # sampler or training dataset exists, so a mismatched CLI value can never reach the
+    # backend. Ungoverned/debug runs (no --launch_contract_json) are unaffected.
+    governed_launch = enforce_governed_launch(args)
+
     set_seed(args.seed)
 
     train_dir = Path(_resolve_path(args.train_dir))
@@ -1668,7 +1873,7 @@ def main() -> None:
     )
     train_sampler = ResumablePermutationSampler(
         train_ds,
-        seed=int(args.sampler_seed),
+        seed=resolve_stage_sampler_seed(args, getattr(args, "run_plan_stage", None)),
         start_position=stage_sample_position,
         num_samples=remaining_samples,
     )
@@ -1689,7 +1894,9 @@ def main() -> None:
         batch_size=int(args.micro_bsz),
         sampler=train_sampler,
         shuffle=False,
-        generator=torch.Generator(device="cpu").manual_seed(int(args.sampler_seed) + 17),
+        generator=torch.Generator(device="cpu").manual_seed(
+            resolve_stage_sampler_seed(args, getattr(args, "run_plan_stage", None)) + 17
+        ),
         num_workers=int(args.num_workers),
         pin_memory=True,
         drop_last=True,
@@ -1711,12 +1918,29 @@ def main() -> None:
         str(tok_path),
     )
 
+    compile_evidence: dict = {"compile_requested": bool(args.compile), "compiled": False}
     if args.compile:
-        try:
-            model = torch.compile(model)  # type: ignore[attr-defined]
-            print("[compile] torch.compile enabled")
-        except Exception as e:
-            print(f"[compile] torch.compile failed: {e}")
+        if governed_launch is not None:
+            # Governed runs fail closed: an eager fallback would make the run contract's
+            # compile=true a false claim, so the run aborts instead of continuing.
+            from production_launch_contract_v1 import bind_compiled_callable
+
+            compile_evidence = bind_compiled_callable(model, compile_requested=True)
+            model = compile_evidence.pop("module")
+            print("[compile] torch.compile enabled (governed, fail-closed)")
+        else:
+            try:
+                model = torch.compile(model)  # type: ignore[attr-defined]
+                compile_evidence = {"compile_requested": True, "compiled": True,
+                                    "eager_fallback_occurred": False,
+                                    "compiled_callable_is_training_callable": True}
+                print("[compile] torch.compile enabled")
+            except Exception as e:
+                compile_evidence = {"compile_requested": True, "compiled": False,
+                                    "eager_fallback_occurred": True,
+                                    "compiled_callable_is_training_callable": False,
+                                    "error": repr(e)}
+                print(f"[compile] torch.compile failed: {e}")
 
     out_dir.mkdir(parents=True, exist_ok=True)
     config_snapshot = {
@@ -1925,7 +2149,11 @@ def main() -> None:
             window_serialized_positions = 0
             window_supervised_positions = 0
 
-        if global_step % int(args.eval_every) == 0:
+        if should_evaluate(
+            global_step,
+            eval_every=int(args.eval_every),
+            eval_steps=args.eval_steps,
+        ):
             val_loss = evaluate(
                 model=model,
                 dl=val_dl,
