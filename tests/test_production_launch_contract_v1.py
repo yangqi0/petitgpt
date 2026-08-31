@@ -42,6 +42,7 @@ def _runtime() -> dict:
         "trainer_head": "0" * 40,
         "trainer_execution_bundle_sha256": "1" * 64,
         "canonical_cwd": C.CANONICAL_CWD,
+        "num_workers": 2,
     }
 
 
@@ -80,7 +81,9 @@ def governed_args(stage: str = "stage_a", **overrides) -> argparse.Namespace:
         val_seed=C.VALIDATION_SEED,
         stage_a_sampler_seed=C.STAGE_A_SAMPLER_SEED,
         stage_b_sampler_seed=C.STAGE_B_SAMPLER_SEED,
-        sampler_seed=1234,
+        # R1 owner clarification 4: the governed path normalizes the legacy field to the
+        # ACTIVE stage seed, so a correct governed namespace carries that value.
+        sampler_seed=(C.STAGE_A_SAMPLER_SEED if stage == "stage_a" else C.STAGE_B_SAMPLER_SEED),
         eval_steps=list(C.EVALUATION_MILESTONES),
         eval_every=0,
         bench_eval_every=0,
@@ -99,6 +102,26 @@ def governed_args(stage: str = "stage_a", **overrides) -> argparse.Namespace:
         allow_schedule_branch=False,
         strict_resume_contract=True,
         out_dir=str(REPO / "outputs" / "governed"),
+        bos_id=C.CANONICAL_BOS_ID,
+        eos_id=C.CANONICAL_EOS_ID,
+        num_workers=2,
+        resume_path="",
+        resume_full=False,
+        resume_step=-1,
+        log_every=20,
+        debug_every=500,
+        bench_eval_script="pretrain/eval_bench_v5.py",
+        bench_eval_out_dir="",
+        bench_eval_max_seq_len=1024,
+        bench_eval_max_new_tokens=192,
+        bench_eval_min_new_tokens=1,
+        bench_eval_ban_first_steps=4,
+        add_bos_to_prompts=True,
+        sample_temperature=0.7,
+        sample_top_p=0.9,
+        sample_top_k=0,
+        sample_max_new_tokens=256,
+        sample_min_new_tokens=0,
     )
     for key, value in overrides.items():
         setattr(ns, key, value)
@@ -119,6 +142,7 @@ def authorization(scope: str = "STAGE_N", **overrides) -> dict:
         "allowed_output_root": str(REPO / "outputs" / "governed"),
         "canonical_cwd": C.CANONICAL_CWD,
         "training_runtime": _runtime(),
+        "resume": {"mode": "FRESH"},
         "authorized_by": "Yang Qi",
         "authorized_at": "2026-08-31T00:00:00Z",
     })
@@ -285,11 +309,20 @@ def test_stage_seeds_are_distinct_and_stage_scoped():
         C.stage_sampler_seed("stage_c")
 
 
-def test_legacy_shared_sampler_seed_cannot_carry_a_governed_stage_seed():
-    failures = C.validate_governed_args(
+def test_legacy_shared_sampler_seed_is_normalized_not_an_independent_authority():
+    """R1 owner clarification 4 supersedes the earlier 'must not equal a stage seed' rule.
+
+    The legacy field is mechanically normalized to the ACTIVE stage seed and validated, so it
+    can never select a different permutation. A value that would select a different
+    permutation is still rejected.
+    """
+    normalized = C.validate_governed_args(
         governed_args(sampler_seed=C.STAGE_A_SAMPLER_SEED), stage="stage_a"
     )
-    assert any("legacy --sampler_seed" in f for f in failures)
+    assert not any("sampler_seed" in f for f in normalized)
+
+    divergent = C.validate_governed_args(governed_args(sampler_seed=999999), stage="stage_a")
+    assert any("different permutation" in f for f in divergent)
 
 
 def test_trainer_resolves_only_the_matching_stage_seed():

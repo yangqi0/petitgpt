@@ -11,8 +11,8 @@ Tests: `tests/test_production_launch_contract_v1.py`.
 **This contract authorizes no training.** Execution additionally requires an external
 `authorization_status="AUTHORIZED"` manifest scoped to exactly one stage.
 
-    launch contract SHA-256          ae3ff587cdc06e38bc0cd112c1c6ff3b1bb0af77912a08e21138d63fca851c9f
-    trainer execution bundle SHA-256 2e57897456bdb3635e6819c1357d1a6eb37adb8cb4e383c7e1097599ecbac417
+    launch contract SHA-256          f52303d1fa9dbca7df415afad7677c3ee6489d4a65746d30f3a91e7754b2ea94
+    trainer execution bundle SHA-256 9639b7cbe2bb95505d052dd151f8f9719020d9b37ca3be944031e436dacb9df7
     authorization status             NOT_AUTHORIZED
 
 ## Accepted immutable Stage-P inputs
@@ -141,3 +141,95 @@ SHA, trainer HEAD/bundle, the complete frozen model/training values, the full se
 evaluation and checkpoint policy, runtime fingerprint including GPU UUID/PCI, and the stage
 scope and stop boundary. Every checkpoint binds the same digest. Resume rejects any drift in
 those fields, and no CLI flag may override a checkpoint-bound governed value.
+
+
+---
+
+# R1 real-path repair
+
+The contract above is now wired into the **real** trainer, checkpoint and resume paths, not
+only into standalone helpers. Three gates run in `main()`:
+
+    Gate A   before any model, optimizer, sampler or dataset exists
+    Gate B   after model and optimizer construction, before any forward or update
+    Gate C   compile realization, then atomic run-contract publication, before the
+             first optimizer update
+
+## Launch-contract artifact authentication
+
+A governed launch supplies `--launch_contract_json` as a **path**. The bytes are read from
+disk, parsed as canonical JSON, hashed, and every load-bearing field is compared with the
+code authority. A supplied document with an altered `peak_lr`, `authorizes_training`, seed,
+cadence or model value fails before construction. A self-declared `launch_contract_sha256`
+inside the artifact is never the authority.
+
+## Owner clarifications realized
+
+1. **`num_workers`** is authorization-bound, not freely mutable. It enters the runtime
+   fingerprint, the governed run contract and the Stage-N→Stage-O runtime comparison.
+2. **Resume** has exactly two modes, both authorization-bound: `FRESH` (no checkpoint path
+   or step) and `RESUME_EXACT_CHECKPOINT` (exact path, SHA, expected step, stage and
+   governed run-contract digest). No arbitrary CLI override is permitted.
+3. **Diagnostic fields** must equal the exact allowed value recorded in the contract. A
+   diagnostic classification is not permission to accept arbitrary values; all 13 carry an
+   explicit allowed value.
+4. **Legacy `--sampler_seed`** is mechanically normalized to the active stage seed and then
+   validated, so it can never select a different permutation. This **supersedes** the
+   earlier V1 rule that rejected a legacy value equal to a stage seed; that rule would have
+   made a correctly normalized governed run unlaunchable.
+
+## Compile: lazy realization, fail closed
+
+`torch.compile` returns a wrapper eagerly and compiles on first call, so a distinct wrapper
+proves nothing. Gate C invokes the compiled callable once on a tiny governed-geometry probe
+(batch 1, real `seq_len` and vocab, `no_grad`, no optimizer state) and then requires
+TorchDynamo to have produced a graph, or Inductor to have left artifacts. An immediate
+exception, an identity/eager return, an unrealized wrapper, or a recompile-limit fallback
+all abort. Structured evidence is persisted and its SHA-256 bound into the run contract and
+every checkpoint.
+
+Compile evidence is a **per-process observation**, so it is deliberately excluded from the
+immutable resume identity: a legitimate resume recompiles and produces different counters.
+What resume does require is that a governed checkpoint claiming `compile=true` carries
+realized evidence.
+
+## Governed run contract, checkpoints and resume
+
+The normalized governed run contract is published **atomically, exactly once**, before the
+first optimizer update. The legacy `config.json` snapshot remains for ungoverned/debug
+compatibility and is explicitly not the governed publication proof.
+
+Every governed checkpoint binds the full document, its digest, and is marked
+`kind = PETITGPT_GOVERNED_V1`, so it is unmistakably distinguishable from a legacy one. An
+ungoverned checkpoint cannot resume a governed run.
+
+Resume validates **metadata before any executable state is restored** — before
+`model.load_state_dict`, `optimizer.load_state_dict`, scaler restore and RNG restore — so a
+mismatched checkpoint can never partially mutate the process.
+
+## Sampler persistence
+
+`build_data_contract` records the **active stage** sampler seed, not the legacy shared
+field, alongside both per-stage seeds and the active stage name. The governed run contract
+carries the permutation identity, `range_start_position`, `range_stop_position` and cursor.
+Same-stage resume validates `range_start_position` as well as seed, permutation and range.
+The A→B transition additionally requires a Stage-A source, the correct saved Stage-A seed, a
+complete consumed range, and a cursor exactly at the plan boundary.
+
+## Selected-device UUID/PCI
+
+The first `nvidia-smi` row is **not** assumed to be the selected device. Torch's selected
+logical index is resolved through `CUDA_VISIBLE_DEVICES` in either index or UUID form to its
+physical NVML record, and an ambiguous, unresolvable or inconsistent mapping fails.
+
+## Stage-N result and Stage-O chain
+
+A completed Stage N publishes a machine-readable result binding its authorization, contract,
+plan, acceptance, trainer identity, governed run-contract digest, final checkpoint identity,
+runtime fingerprint, GPU UUID/PCI and `num_workers`.
+
+A Stage-O authorization must carry the accepted Stage-N chain and is validated by **loading
+the accepted Stage-N result from disk** and comparing it with the currently observed
+runtime. Because the accepted result is read from bytes rather than taken from the
+authorization, changing both the Stage-O authorization and the runtime cannot make them
+agree with each other and evade comparison. Any runtime difference requires a new Stage N.

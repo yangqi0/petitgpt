@@ -205,7 +205,12 @@ def build_data_contract(
         "total_raw_tokens": int(dataset.total_raw_tokens),
         "usable_transitions": int(dataset.usable_transitions),
         "sampling_mode": str(dataset.sampling_mode),
-        "sampler_seed": int(getattr(args, "sampler_seed", getattr(args, "seed", 1234))),
+        # R1 Part 7: the ACTIVE stage sampler seed, never the legacy shared field. Stage A
+        # and Stage B must be distinguishable in the persisted data contract.
+        "sampler_seed": resolve_stage_sampler_seed(args, getattr(args, "run_plan_stage", None)),
+        "stage_a_sampler_seed": int(getattr(args, "stage_a_sampler_seed", -1)),
+        "stage_b_sampler_seed": int(getattr(args, "stage_b_sampler_seed", -1)),
+        "active_stage": str(getattr(args, "run_plan_stage", "") or ""),
         "data_stage_start_step": int(args.data_stage_start_step),
         "samples_per_optimizer_step": int(args.micro_bsz) * int(args.grad_accum),
     }
@@ -1028,6 +1033,8 @@ def save_ckpt(
     sampler_state: dict,
     data_contract: dict,
     retain_step: bool = True,
+    governed_run_contract: dict | None = None,
+    governed_run_contract_sha256: str | None = None,
 ) -> None:
     """Atomically update latest and optionally retain a named full-state checkpoint."""
     out_dir = Path(out_dir)
@@ -1050,6 +1057,12 @@ def save_ckpt(
         "checkpoint_retention": {"retain_step": bool(retain_step)},
         "saved_at_unix": int(time.time()),
     }
+    # R1 Part 5: a governed checkpoint is unmistakably distinguishable from a legacy one and
+    # carries the full normalized governed run contract plus its digest.
+    if governed_run_contract is not None:
+        ckpt["governed_run_contract"] = governed_run_contract
+        ckpt["governed_run_contract_sha256"] = governed_run_contract_sha256
+        ckpt["kind"] = governed_run_contract.get("kind")
 
     latest_path = out_dir / "latest.pt"
     step_path = out_dir / f"step_{global_step:06d}.pt"
@@ -1078,8 +1091,36 @@ def load_ckpt(
     strict_resume_contract: bool,
     allow_schedule_branch: bool,
     allow_data_branch: bool = False,
+    governed_run_contract: dict | None = None,
+    governed_expected_resume: dict | None = None,
+    governed_sampler_identity: dict | None = None,
 ) -> tuple[int, int, dict[str, int], dict]:
     ckpt = torch.load(resume_path, map_location="cpu")
+
+    # R1 Part 6: governed metadata is validated BEFORE model/optimizer/scaler/RNG state is
+    # restored, so a mismatched checkpoint can never partially mutate this process.
+    if governed_run_contract is not None:
+        from production_launch_contract_v1 import (
+            LaunchContractError,
+            validate_governed_checkpoint_before_restore,
+        )
+
+        verdict = validate_governed_checkpoint_before_restore(
+            ckpt,
+            governed_run_contract,
+            expected_resume=governed_expected_resume,
+            current_sampler_identity=governed_sampler_identity,
+        )
+        if not verdict["compatible"]:
+            raise LaunchContractError(
+                "governed resume refused before restoring any state:\n  - "
+                + "\n  - ".join(verdict["failures"])
+            )
+        print(
+            "[governed] resume validated before state restoration: digest="
+            f"{verdict['checkpoint_governed_run_contract_sha256'][:16]}..."
+        )
+
     global_step = int(ckpt.get("global_step", 0))
     if resume_full:
         saved_optimizer = ((ckpt.get("run_contract") or {}).get("optimizer") or {}).get("name")
@@ -1133,6 +1174,8 @@ def load_ckpt(
             if key in saved_stats:
                 position_stats[key] = int(saved_stats[key])
     resume_metadata = {
+        "governed_run_contract": ckpt.get("governed_run_contract"),
+        "governed_run_contract_sha256": ckpt.get("governed_run_contract_sha256"),
         "data_sampler": ckpt.get("data_sampler"),
         "data_contract": ckpt.get("data_contract"),
         "train_args": ckpt.get("train_args"),
@@ -1615,47 +1658,151 @@ def resolve_stage_sampler_seed(args: argparse.Namespace, stage: str | None) -> i
 
 
 def enforce_governed_launch(args: argparse.Namespace) -> dict | None:
-    """Validate the governed production launch contract, or return None when ungoverned."""
+    """Gate A. Runs before any model, optimizer, sampler or dataset is constructed.
+
+    Authenticates the launch-contract artifact from its ACTUAL bytes on disk, binds the stage
+    authorization, the exact plan and the pilot acceptance, and validates the complete parser
+    namespace, seeds, policies, resume mode, num_workers, CWD and runtime identity.
+    """
     contract_path = str(getattr(args, "launch_contract_json", "") or "").strip()
     authorization_path = str(getattr(args, "stage_authorization_json", "") or "").strip()
     if not contract_path and not authorization_path:
         return None
-
-    from production_launch_contract_v1 import (
-        observed_training_runtime,
-        require_governed_launch,
-    )
-
     if not contract_path or not authorization_path:
         raise ValueError(
             "--launch_contract_json and --stage_authorization_json must be supplied together"
         )
+
+    from production_launch_contract_v1 import (
+        gate_a_pre_construction,
+        normalize_legacy_sampler_seed,
+        observed_training_runtime,
+    )
+
     stage = str(getattr(args, "run_plan_stage", "") or "").strip()
     if stage not in ("stage_a", "stage_b"):
         raise ValueError("a governed launch requires --run_plan_stage stage_a|stage_b")
 
-    contract_doc = json.loads(Path(contract_path).read_text(encoding="utf-8"))
-    authorization = json.loads(Path(authorization_path).read_text(encoding="utf-8"))
-    plan_sha = _sha256_file(Path(_resolve_path(str(args.run_plan_json))))
-    acceptance_sha = _sha256_file(
-        Path(contract_doc["accepted_stage_p_inputs"]["pilot_owner_acceptance_relpath"])
-    )
-    result = require_governed_launch(
-        args=args,
+    # Owner clarification 4: the legacy field is mechanically normalized to the active stage
+    # seed before validation, so it can never select a different permutation.
+    normalize_legacy_sampler_seed(args, stage)
+
+    gate_a = gate_a_pre_construction(
+        args,
         stage=stage,
-        launch_contract=contract_doc,
-        authorization=authorization,
-        exact_plan_sha256=plan_sha,
-        pilot_owner_acceptance_sha256=acceptance_sha,
-        observed_runtime=observed_training_runtime(),
+        launch_contract_path=contract_path,
+        stage_authorization_path=authorization_path,
+        exact_plan_path=_resolve_path(str(args.run_plan_json)),
+        pilot_acceptance_path=(
+            PROJECT_ROOT
+            / "runs/p_pilot_acceptance_and_exact_run_plan_v1_2026-08-31/evidence"
+            / "PILOT_RESULT_OWNER_ACCEPTANCE.json"
+        ),
+        observed_runtime=observed_training_runtime(num_workers=int(args.num_workers)),
     )
-    result["stage_authorization_sha256"] = _sha256_file(Path(authorization_path))
     print(
-        f"[governed] P-PRODUCTION-LAUNCH-CONTRACT-V1 accepted: stage={stage} "
-        f"scope={result['requested_scope']} "
-        f"contract={result['launch_contract_sha256'][:16]}..."
+        f"[governed] Gate A passed: stage={stage} scope={gate_a['scope']} "
+        f"contract={gate_a['launch_contract_sha256'][:16]}... "
+        f"authorization={gate_a['stage_authorization_sha256'][:16]}..."
     )
-    return result
+    return gate_a
+
+
+def enforce_governed_construction(
+    gate_a: dict | None, model: object, optimizer: object
+) -> dict | None:
+    """Gate B. The ACTUAL constructed model and optimizer, before any forward or update."""
+    if gate_a is None:
+        return None
+    from production_launch_contract_v1 import gate_b_post_construction
+
+    gate_b = gate_b_post_construction(model, optimizer)
+    print(
+        f"[governed] Gate B passed: parameter_count={gate_b['parameter_count']:,} "
+        f"tied_embeddings={gate_b['tied_embeddings']} "
+        f"groups={gate_b['optimizer_group_roles']}"
+    )
+    return gate_b
+
+
+def publish_governed_run_contract_now(
+    *,
+    args: argparse.Namespace,
+    gate_a: dict,
+    gate_b: dict,
+    model: object,
+    eager_module: object,
+    sampler: object,
+    out_dir: Path,
+    device: torch.device,
+    identity: dict | None = None,
+) -> tuple[dict, str]:
+    """Gate C: realize compile, then atomically publish the governed run contract.
+
+    Compile realization is observed by invoking the compiled callable once on a tiny governed
+    -geometry batch and requiring TorchDynamo to actually produce a graph (or Inductor to
+    leave artifacts). A wrapper that never compiles, an identity return, or a recompile-limit
+    fallback to eager all abort here, before any optimizer update.
+    """
+    from production_launch_contract_v1 import (
+        LaunchContractError,
+        ObservedForward,
+        build_governed_run_contract,
+        compile_realization_evidence,
+        governed_digest,
+        publish_governed_run_contract,
+        require_compile_realized,
+        reset_dynamo_counters,
+        sampler_identity_document,
+    )
+
+    stage = str(args.run_plan_stage)
+    forward = ObservedForward(model, compiled_object=model)
+    cache_dir = os.environ.get("TORCHINDUCTOR_CACHE_DIR")
+
+    reset_dynamo_counters()
+    # One tiny governed-geometry probe: real vocab and seq_len, batch 1, no gradients, no
+    # optimizer state. This forces lazy compilation to materialize.
+    probe = torch.randint(
+        0, int(args.vocab_size), (1, int(args.seq_len)), dtype=torch.long, device=device
+    )
+    with torch.no_grad():
+        forward(probe)
+    if device.type == "cuda":
+        torch.cuda.synchronize()
+
+    evidence = compile_realization_evidence(
+        model,
+        forward,
+        requested=True,
+        cache_dir=cache_dir,
+        expected_forward_invocations=1,
+    )
+    require_compile_realized(evidence)
+    print(
+        f"[governed] Gate C passed: compile realized "
+        f"(graphs={evidence['dynamo_unique_graphs']}, "
+        f"artifacts={evidence['inductor_artifact_count']})"
+    )
+
+    contract = build_governed_run_contract(
+        gate_a=gate_a,
+        gate_b=gate_b,
+        stage=stage,
+        sampler_identity=sampler_identity_document(stage, sampler),
+        compile_evidence=evidence,
+    )
+    # The immutable identity must be unchanged by attaching compile/sampler observations.
+    if identity is not None and governed_digest(identity) != governed_digest(contract):
+        raise LaunchContractError(
+            "governed identity changed between Gate B and publication; refusing to publish"
+        )
+    published = publish_governed_run_contract(out_dir, contract)
+    print(
+        f"[governed] run contract published atomically at {published['path']} "
+        f"digest={published['governed_run_contract_sha256'][:16]}..."
+    )
+    return contract, published["governed_run_contract_sha256"]
 
 
 def main() -> None:
@@ -1743,6 +1890,24 @@ def main() -> None:
         muon_lr=float(args.muon_lr),
         muon_momentum=float(args.muon_momentum),
     )
+
+    # R1 Gate B: the ACTUAL constructed model and optimizer, before any training forward or
+    # optimizer update. Parameter count, architecture, tied embeddings and the complete
+    # realized Muon grouping are verified here, not only in tests.
+    governed_gate_b = enforce_governed_construction(governed_launch, model, optim)
+    governed_run_contract = None
+    governed_run_contract_sha256 = None
+    if governed_launch is not None:
+        from production_launch_contract_v1 import build_governed_run_contract as _build_grc
+
+        # The governed identity exists from here on, so resume can be validated against it
+        # before any state is restored. Compile evidence and sampler position are attached at
+        # publication; neither is part of the immutable identity digest.
+        governed_run_contract = _build_grc(
+            gate_a=governed_launch,
+            gate_b=governed_gate_b,
+            stage=str(args.run_plan_stage),
+        )
 
     common_dataset_args = {
         "seq_len": int(args.seq_len),
@@ -1844,6 +2009,11 @@ def main() -> None:
             strict_resume_contract=bool(args.strict_resume_contract),
             allow_schedule_branch=bool(args.allow_schedule_branch),
             allow_data_branch=bool(args.allow_data_branch),
+            governed_run_contract=governed_run_contract,
+            governed_expected_resume=(
+                (governed_launch or {}).get("resume") if governed_launch else None
+            ),
+            governed_sampler_identity=None,
         )
         synchronize_validated_run_plan_binding(run_contract, run_plan_binding)
         print(f"[resume] loaded {resolved} (global_step={global_step})")
@@ -1919,27 +2089,31 @@ def main() -> None:
     )
 
     compile_evidence: dict = {"compile_requested": bool(args.compile), "compiled": False}
+    governed_eager_module = model
     if args.compile:
         if governed_launch is not None:
-            # Governed runs fail closed: an eager fallback would make the run contract's
-            # compile=true a false claim, so the run aborts instead of continuing.
-            from production_launch_contract_v1 import bind_compiled_callable
+            # Governed runs fail closed. torch.compile returns a wrapper eagerly and compiles
+            # on first call, so a distinct wrapper proves nothing: realization is proven later
+            # by observing the compiled callable actually run (Gate C, below).
+            from production_launch_contract_v1 import bind_compiled_callable_governed
 
-            compile_evidence = bind_compiled_callable(model, compile_requested=True)
-            model = compile_evidence.pop("module")
-            print("[compile] torch.compile enabled (governed, fail-closed)")
+            bound = bind_compiled_callable_governed(model)
+            governed_eager_module = bound["eager_module"]
+            model = bound["compiled_module"]
+            print("[compile] torch.compile wrapper bound (governed; realization pending)")
         else:
             try:
                 model = torch.compile(model)  # type: ignore[attr-defined]
-                compile_evidence = {"compile_requested": True, "compiled": True,
-                                    "eager_fallback_occurred": False,
-                                    "compiled_callable_is_training_callable": True}
                 print("[compile] torch.compile enabled")
             except Exception as e:
-                compile_evidence = {"compile_requested": True, "compiled": False,
-                                    "eager_fallback_occurred": True,
-                                    "compiled_callable_is_training_callable": False,
-                                    "error": repr(e)}
+                # Ungoverned/debug only. A governed run never reaches this branch: it fails
+                # closed in bind_compiled_callable_governed and Gate C.
+                compile_evidence.update({
+                    "compiled": False,
+                    "eager_fallback_occurred": True,
+                    "compiled_callable_is_training_callable": False,
+                    "error": repr(e),
+                })
                 print(f"[compile] torch.compile failed: {e}")
 
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -1953,10 +2127,27 @@ def main() -> None:
         "samples_per_optimizer_step": samples_per_step,
         "stage_sample_position_at_start": stage_sample_position,
     }
+    # Legacy snapshot: retained for ungoverned/debug compatibility. It is explicitly NOT the
+    # governed publication proof (non-atomic, unhashed).
     (out_dir / "config.json").write_text(
         json.dumps(config_snapshot, indent=2),
         encoding="utf-8",
     )
+
+    # R1 Gate C + Part 4: realize compile, then atomically publish the normalized governed
+    # run contract. Both complete BEFORE the first optimizer update.
+    if governed_launch is not None:
+        governed_run_contract, governed_run_contract_sha256 = publish_governed_run_contract_now(
+            args=args,
+            gate_a=governed_launch,
+            gate_b=governed_gate_b,
+            model=model,
+            eager_module=governed_eager_module,
+            sampler=train_sampler,
+            out_dir=out_dir,
+            device=device,
+            identity=governed_run_contract,
+        )
 
     best_val_path = out_dir / "best_val.json"
     best_val = float("inf")
@@ -2246,6 +2437,8 @@ def main() -> None:
                 sampler_state=train_sampler.state_dict(),
                 data_contract=data_contract,
                 retain_step=retain_step,
+                governed_run_contract=governed_run_contract,
+                governed_run_contract_sha256=governed_run_contract_sha256,
             )
             last_checkpoint_step = global_step
             last_checkpoint_retained = retain_step
@@ -2310,6 +2503,8 @@ def main() -> None:
             sampler_state=train_sampler.state_dict(),
             data_contract=data_contract,
             retain_step=True,
+            governed_run_contract=governed_run_contract,
+            governed_run_contract_sha256=governed_run_contract_sha256,
         )
     tracker.render()
     print(f"[done] saved final checkpoint to {out_dir}")
