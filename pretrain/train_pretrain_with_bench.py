@@ -1035,6 +1035,7 @@ def save_ckpt(
     retain_step: bool = True,
     governed_run_contract: dict | None = None,
     governed_run_contract_sha256: str | None = None,
+    governed_checkpoint_state: dict | None = None,
 ) -> None:
     """Atomically update latest and optionally retain a named full-state checkpoint."""
     out_dir = Path(out_dir)
@@ -1063,6 +1064,10 @@ def save_ckpt(
         ckpt["governed_run_contract"] = governed_run_contract
         ckpt["governed_run_contract_sha256"] = governed_run_contract_sha256
         ckpt["kind"] = governed_run_contract.get("kind")
+        # R2 Parts 3/4: dynamic state derived from the LIVE sampler and trainer at save time,
+        # kept separate from the immutable run identity above.
+        if governed_checkpoint_state is not None:
+            ckpt["governed_checkpoint_state"] = governed_checkpoint_state
 
     latest_path = out_dir / "latest.pt"
     step_path = out_dir / f"step_{global_step:06d}.pt"
@@ -1094,6 +1099,7 @@ def load_ckpt(
     governed_run_contract: dict | None = None,
     governed_expected_resume: dict | None = None,
     governed_sampler_identity: dict | None = None,
+    governed_stage_transition: str | None = None,
 ) -> tuple[int, int, dict[str, int], dict]:
     ckpt = torch.load(resume_path, map_location="cpu")
 
@@ -1105,11 +1111,26 @@ def load_ckpt(
             validate_governed_checkpoint_before_restore,
         )
 
+        # R2 Part 5: the authorized checkpoint's actual bytes are verified before anything
+        # executable is restored. Path and step alone are never trusted.
+        if (governed_expected_resume or {}).get("mode") == "RESUME_EXACT_CHECKPOINT":
+            from production_launch_contract_v1 import verify_authorized_checkpoint_bytes
+
+            byte_check = verify_authorized_checkpoint_bytes(
+                governed_expected_resume, resume_path
+            )
+            if not byte_check["verified"]:
+                raise LaunchContractError(
+                    "governed resume refused before restoring any state:\n  - "
+                    + "\n  - ".join(byte_check["failures"])
+                )
+
         verdict = validate_governed_checkpoint_before_restore(
             ckpt,
             governed_run_contract,
             expected_resume=governed_expected_resume,
             current_sampler_identity=governed_sampler_identity,
+            stage_transition=governed_stage_transition,
         )
         if not verdict["compatible"]:
             raise LaunchContractError(
@@ -1176,6 +1197,7 @@ def load_ckpt(
     resume_metadata = {
         "governed_run_contract": ckpt.get("governed_run_contract"),
         "governed_run_contract_sha256": ckpt.get("governed_run_contract_sha256"),
+        "governed_checkpoint_state": ckpt.get("governed_checkpoint_state"),
         "data_sampler": ckpt.get("data_sampler"),
         "data_contract": ckpt.get("data_contract"),
         "train_args": ckpt.get("train_args"),
@@ -1737,52 +1759,49 @@ def publish_governed_run_contract_now(
     device: torch.device,
     identity: dict | None = None,
 ) -> tuple[dict, str]:
-    """Gate C: realize compile, then atomically publish the governed run contract.
+    """Gate C: realize compile at PRODUCTION shape, then publish the run contract atomically.
 
-    Compile realization is observed by invoking the compiled callable once on a tiny governed
-    -geometry batch and requiring TorchDynamo to actually produce a graph (or Inductor to
-    leave artifacts). A wrapper that never compiles, an identity return, or a recompile-limit
-    fallback to eager all abort here, before any optimizer update.
+    R2 Parts 8-10: the probe uses the frozen ``micro_bsz x seq_len`` geometry, not batch 1,
+    runs in a process-isolated Inductor cache that must be empty beforehand, and arms
+    ``fail_on_recompile`` afterwards so a later recompile or eager fallback aborts.
     """
     from production_launch_contract_v1 import (
         LaunchContractError,
-        ObservedForward,
+        arm_fail_on_recompile,
         build_governed_run_contract,
-        compile_realization_evidence,
+        enforce_compile_fail_closed_stance,
         governed_digest,
+        isolated_inductor_cache,
         publish_governed_run_contract,
+        realize_compile_production_shape,
         require_compile_realized,
-        reset_dynamo_counters,
         sampler_identity_document,
     )
 
     stage = str(args.run_plan_stage)
-    forward = ObservedForward(model, compiled_object=model)
-    cache_dir = os.environ.get("TORCHINDUCTOR_CACHE_DIR")
+    stance = enforce_compile_fail_closed_stance()
+    run_token = hashlib.sha256(
+        f"{os.getpid()}:{gate_a['stage_authorization_sha256']}:{stage}".encode()
+    ).hexdigest()[:24]
+    cache = isolated_inductor_cache(run_token)
 
-    reset_dynamo_counters()
-    # One tiny governed-geometry probe: real vocab and seq_len, batch 1, no gradients, no
-    # optimizer state. This forces lazy compilation to materialize.
-    probe = torch.randint(
-        0, int(args.vocab_size), (1, int(args.seq_len)), dtype=torch.long, device=device
-    )
-    with torch.no_grad():
-        forward(probe)
-    if device.type == "cuda":
-        torch.cuda.synchronize()
-
-    evidence = compile_realization_evidence(
+    evidence = realize_compile_production_shape(
         model,
-        forward,
-        requested=True,
-        cache_dir=cache_dir,
-        expected_forward_invocations=1,
+        device=device,
+        micro_bsz=int(args.micro_bsz),
+        seq_len=int(args.seq_len),
+        vocab_size=int(args.vocab_size),
+        cache=cache,
     )
+    evidence["fail_closed_stance"] = stance
     require_compile_realized(evidence)
+    evidence["post_realization_stance"] = arm_fail_on_recompile()
     print(
-        f"[governed] Gate C passed: compile realized "
+        f"[governed] Gate C passed: compile realized at production shape "
+        f"{args.micro_bsz}x{args.seq_len} "
         f"(graphs={evidence['dynamo_unique_graphs']}, "
-        f"artifacts={evidence['inductor_artifact_count']})"
+        f"artifacts={evidence['inductor_artifact_count']}, "
+        f"isolated_cache={cache['cache_dir']})"
     )
 
     contract = build_governed_run_contract(
@@ -1792,7 +1811,6 @@ def publish_governed_run_contract_now(
         sampler_identity=sampler_identity_document(stage, sampler),
         compile_evidence=evidence,
     )
-    # The immutable identity must be unchanged by attaching compile/sampler observations.
     if identity is not None and governed_digest(identity) != governed_digest(contract):
         raise LaunchContractError(
             "governed identity changed between Gate B and publication; refusing to publish"
@@ -1803,6 +1821,30 @@ def publish_governed_run_contract_now(
         f"digest={published['governed_run_contract_sha256'][:16]}..."
     )
     return contract, published["governed_run_contract_sha256"]
+
+
+def governed_checkpoint_state(
+    *,
+    args: argparse.Namespace,
+    sampler: object,
+    global_step: int,
+    completed_eval_milestones: list,
+    completed_save_milestones: list,
+    rng_state: dict | None,
+    compile_evidence: dict | None,
+) -> dict:
+    """R2 Part 4: dynamic checkpoint state from the LIVE sampler, never launch-time values."""
+    from production_launch_contract_v1 import build_checkpoint_state
+
+    return build_checkpoint_state(
+        stage=str(args.run_plan_stage),
+        sampler=sampler,
+        global_step=int(global_step),
+        completed_evaluation_milestones=completed_eval_milestones,
+        completed_checkpoint_milestones=completed_save_milestones,
+        rng_state=rng_state,
+        compile_evidence=compile_evidence,
+    )
 
 
 def main() -> None:

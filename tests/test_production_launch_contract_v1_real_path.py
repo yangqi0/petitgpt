@@ -58,6 +58,7 @@ def write_authorization(tmp_path: Path, contract_path: Path, **overrides) -> Pat
         "trainer_head": repo["head"],
         "trainer_execution_bundle_sha256": C.trainer_execution_bundle_sha256(),
     }
+    runtime["runtime_fingerprint_sha256"] = C.runtime_fingerprint_sha256(runtime)
     manifest["training_runtime"] = runtime
     manifest.update(overrides)
     path = tmp_path / "STAGE_AUTHORIZATION.json"
@@ -67,11 +68,14 @@ def write_authorization(tmp_path: Path, contract_path: Path, **overrides) -> Pat
 
 def live_runtime() -> dict:
     repo = C.observed_repository()
-    return {
+    runtime = {
         **_runtime(),
         "trainer_head": repo["head"],
         "trainer_execution_bundle_sha256": C.trainer_execution_bundle_sha256(),
     }
+    # R2 Part 3: the self-hash must be recomputed after any field is overridden.
+    runtime["runtime_fingerprint_sha256"] = C.runtime_fingerprint_sha256(runtime)
+    return runtime
 
 
 def gate_a(tmp_path: Path, *, args=None, contract_path=None, auth_path=None, stage="stage_a"):
@@ -626,10 +630,27 @@ def test_governed_resume_rejects_drift(tmp_path, field, value):
 
 
 def test_governed_checkpoint_cannot_claim_compile_without_evidence(tmp_path):
+    """R2 Part 11: stored evidence is verified by schema, SHA and verdict."""
     doc = _contract(tmp_path)
     doc["compile_evidence"] = {"compile_realized": False}
     verdict = C.validate_governed_checkpoint_before_restore(_ckpt(doc), doc)
-    assert any("without_realized_evidence" in f for f in verdict["failures"])
+    assert any("compile_evidence" in f for f in verdict["failures"]), verdict["failures"]
+
+
+def test_compile_evidence_sha_mutation_is_rejected():
+    evidence = _evidence()
+    assert C.verify_compile_evidence_document(evidence) == []
+    tampered = {**evidence, "dynamo_unique_graphs": 99}
+    assert any("sha256_does_not_match" in f for f in C.verify_compile_evidence_document(tampered))
+    assert C.verify_compile_evidence_document(None) == ["compile_evidence_missing_or_malformed"]
+
+
+def test_compile_evidence_recording_an_eager_fallback_is_rejected():
+    evidence = _evidence(graphs=0)
+    assert any(
+        "eager_fallback" in f or "not_represent_a_realized" in f
+        for f in C.verify_compile_evidence_document(evidence)
+    )
 
 
 def test_resume_rejects_a_wrong_expected_step(tmp_path):
@@ -750,63 +771,131 @@ NVML = [
 ]
 
 
-def test_cuda_visible_devices_index_form_selects_the_right_physical_device():
-    resolved = C.resolve_selected_gpu_identity(cuda_visible_devices="1", records=NVML)
+def _cuda(uuid="GPU-bbbb", pci="00000000:02:00.0"):
+    return {
+        "logical_index": 0,
+        "gpu_uuid": uuid,
+        "gpu_pci_bus_id": pci,
+        "gpu_name": "NVIDIA GeForce RTX 4090",
+        "source": "test",
+    }
+
+
+def test_numeric_cvd_ordinal_is_not_treated_as_an_nvml_index():
+    """R2 Part 16: CUDA_VISIBLE_DEVICES='1' must NOT select NVML index 1 by ordinal.
+
+    The physical device is whatever CUDA logical device 0 actually is. Here CUDA reports
+    GPU-aaaa, so that must be selected even though the ordinal reads '1'.
+    """
+    resolved = C.resolve_selected_gpu_identity(
+        cuda_visible_devices="1",
+        records=NVML,
+        cuda_identity=_cuda(uuid="GPU-aaaa", pci="00000000:01:00.0"),
+    )
     assert resolved["resolved"] is True
-    assert resolved["gpu_uuid"] == "GPU-bbbb"
-    assert resolved["gpu_pci_bus_id"] == "00000000:02:00.0"
-    assert resolved["mapping_form"] == "index"
+    assert resolved["gpu_uuid"] == "GPU-aaaa"
+    assert resolved["selected_physical_index"] == 0
+    assert resolved["mapping_method"].startswith("cuda_logical_device_identity")
 
 
-def test_cuda_visible_devices_uuid_form_selects_the_right_physical_device():
-    resolved = C.resolve_selected_gpu_identity(cuda_visible_devices="GPU-bbbb", records=NVML)
+def test_cuda_visible_devices_uuid_form_maps_correctly():
+    resolved = C.resolve_selected_gpu_identity(
+        cuda_visible_devices="GPU-bbbb", records=NVML, cuda_identity=_cuda()
+    )
     assert resolved["resolved"] is True
     assert resolved["gpu_uuid"] == "GPU-bbbb"
     assert resolved["mapping_form"] == "uuid"
 
 
-def test_first_nvidia_smi_row_is_not_assumed():
-    """With CUDA_VISIBLE_DEVICES=1 the first row is the WRONG device."""
-    resolved = C.resolve_selected_gpu_identity(cuda_visible_devices="1", records=NVML)
-    assert resolved["gpu_uuid"] != NVML[0]["uuid"]
+def test_unset_cuda_visible_devices_still_maps_by_cuda_identity():
+    resolved = C.resolve_selected_gpu_identity(
+        cuda_visible_devices="", records=[NVML[1]], cuda_identity=_cuda()
+    )
+    assert resolved["resolved"] is True
+    assert resolved["gpu_uuid"] == "GPU-bbbb"
 
 
 def test_multi_visible_device_is_rejected_under_governed_policy():
-    resolved = C.resolve_selected_gpu_identity(cuda_visible_devices="0,1", records=NVML)
+    resolved = C.resolve_selected_gpu_identity(
+        cuda_visible_devices="0,1", records=NVML, cuda_identity=_cuda()
+    )
     assert resolved["resolved"] is False
     assert any("visible_device_count_not_exactly_1" in f for f in resolved["failures"])
 
 
-def test_unresolvable_or_ambiguous_mapping_fails():
-    assert (
-        C.resolve_selected_gpu_identity(cuda_visible_devices="GPU-zzzz", records=NVML)["resolved"]
-        is False
+def test_unmatched_cuda_identity_fails_closed():
+    resolved = C.resolve_selected_gpu_identity(
+        cuda_visible_devices="0",
+        records=NVML,
+        cuda_identity=_cuda(uuid="GPU-zzzz", pci="00000000:09:00.0"),
     )
-    assert (
-        C.resolve_selected_gpu_identity(cuda_visible_devices="7", records=NVML)["resolved"] is False
+    assert resolved["resolved"] is False
+    assert any("unmatched_in_nvml" in f for f in resolved["failures"])
+
+
+def test_ambiguous_nvml_match_fails_closed():
+    dupes = [dict(NVML[0]), dict(NVML[0], physical_index=1)]
+    resolved = C.resolve_selected_gpu_identity(
+        cuda_visible_devices="0",
+        records=dupes,
+        cuda_identity=_cuda(uuid="GPU-aaaa", pci="00000000:01:00.0"),
     )
+    assert resolved["resolved"] is False
+    assert any("ambiguous_in_nvml" in f for f in resolved["failures"])
+
+
+def test_cuda_pci_disagreeing_with_nvml_fails_closed():
+    resolved = C.resolve_selected_gpu_identity(
+        cuda_visible_devices="0",
+        records=NVML,
+        cuda_identity=_cuda(uuid="GPU-bbbb", pci="00000000:07:00.0"),
+    )
+    assert resolved["resolved"] is False
+    assert any("pci_disagrees_with_nvml" in f for f in resolved["failures"])
 
 
 def test_inconsistent_torch_name_is_rejected():
     resolved = C.resolve_selected_gpu_identity(
-        cuda_visible_devices="0", records=NVML, torch_device_name="NVIDIA A100"
+        cuda_visible_devices="0",
+        records=NVML,
+        torch_device_name="NVIDIA A100",
+        cuda_identity=_cuda(),
     )
     assert resolved["resolved"] is False
     assert any("name_inconsistent" in f for f in resolved["failures"])
 
 
+def test_live_runtime_maps_logical_device_zero_to_one_physical_device():
+    import torch
+
+    if not torch.cuda.is_available():
+        pytest.skip("no CUDA device")
+    resolved = C.resolve_selected_gpu_identity()
+    assert resolved["resolved"] is True, resolved["failures"]
+    assert resolved["gpu_uuid"].startswith("GPU-")
+    assert resolved["cuda_identity"]["source"] == "torch.cuda.get_device_properties"
+
+
 # --------------------------------------------------------------------- Part 9: Stage N/O
+
+
+def _fake_checkpoint(tmp_path: Path) -> tuple[Path, str]:
+    """A tiny stand-in checkpoint file; never a real training checkpoint."""
+    path = tmp_path / "step_038146.pt"
+    path.write_bytes(b"fake-governed-checkpoint-bytes")
+    return path, C.file_sha256(path)
 
 
 def _stage_n_result(tmp_path, **over):
     doc = _contract(tmp_path)
+    ckpt_path, ckpt_sha = _fake_checkpoint(tmp_path)
     result = C.stage_n_result_document(
         governed_run_contract=doc,
-        final_checkpoint_path="/out/step_038146.pt",
-        final_checkpoint_sha256="c" * 64,
+        final_checkpoint_path=str(ckpt_path),
+        final_checkpoint_sha256=ckpt_sha,
         final_checkpoint_step=38146,
-        smoke_results={"status": "PASS"},
-        resume_results={"status": "PASS"},
+        smoke_results={"status": "PASS", "updates": 0},
+        resume_results={"status": "PASS", "verified": True},
     )
     result.update(over)
     return result
@@ -816,12 +905,85 @@ def test_stage_n_result_schema_is_complete(tmp_path):
     assert C.validate_stage_n_result(_stage_n_result(tmp_path)) == []
 
 
+def test_stage_n_result_with_artifacts_validates_checkpoint_bytes(tmp_path):
+    assert C.validate_stage_n_result(_stage_n_result(tmp_path), require_artifacts=True) == []
+
+
+@pytest.mark.parametrize(
+    "field,value",
+    [
+        ("stage_authorization_sha256", None),
+        ("launch_contract_sha256", ""),
+        ("trainer_head", ""),
+        ("final_checkpoint_path", None),
+        ("gpu_uuid", None),
+        ("gpu_pci_bus_id", ""),
+        ("runtime_fingerprint_sha256", None),
+    ],
+)
+def test_status_complete_never_makes_an_empty_result_valid(tmp_path, field, value):
+    """R2 Part 12: a null/empty load-bearing field must fail even with status=COMPLETE."""
+    result = _stage_n_result(tmp_path, **{field: value})
+    assert result["status"] == "COMPLETE"
+    failures = C.validate_stage_n_result(result)
+    assert any(field in f for f in failures), failures
+
+
+def test_malformed_sha_and_invalid_scalars_are_rejected(tmp_path):
+    assert any(
+        "malformed_sha256" in f
+        for f in C.validate_stage_n_result(
+            _stage_n_result(tmp_path, trainer_head="x" * 40, launch_contract_sha256="nothex")
+        )
+    )
+    assert any(
+        "final_checkpoint_step_invalid" in f
+        for f in C.validate_stage_n_result(_stage_n_result(tmp_path, final_checkpoint_step=0))
+    )
+    assert any(
+        "num_workers_invalid" in f
+        for f in C.validate_stage_n_result(_stage_n_result(tmp_path, num_workers=None))
+    )
+
+
+def test_smoke_and_resume_results_must_pass(tmp_path):
+    assert any(
+        "smoke_results_not_pass" in f
+        for f in C.validate_stage_n_result(
+            _stage_n_result(tmp_path, smoke_results={"status": "FAIL"})
+        )
+    )
+    assert any(
+        "resume_results_empty" in f
+        for f in C.validate_stage_n_result(_stage_n_result(tmp_path, resume_results={}))
+    )
+
+
 def test_incomplete_stage_n_result_is_rejected(tmp_path):
     assert C.validate_stage_n_result(_stage_n_result(tmp_path, status="ABORTED"))
     assert C.validate_stage_n_result(None) == ["stage_n_result_missing_or_malformed"]
 
 
-def _stage_o_chain(tmp_path, *, accept=True, result_over=None, runtime_over=None):
+def test_stage_n_result_publication_is_atomic_and_validated(tmp_path):
+    """R2 Part 13: publication validates first and is atomic and single-shot."""
+    out = tmp_path / "stage_n"
+    published = C.publish_stage_n_result(out, _stage_n_result(tmp_path))
+    assert published["atomic"] is True
+    assert published["status"] == "PUBLISHED_AWAITING_OWNER_ACCEPTANCE"
+    assert (out / C.STAGE_N_RESULT_FILENAME).is_file()
+    assert not list(out.glob("*.tmp"))
+    with pytest.raises(C.LaunchContractError, match="already exists"):
+        C.publish_stage_n_result(out, _stage_n_result(tmp_path))
+
+
+def test_invalid_stage_n_result_is_never_published(tmp_path):
+    with pytest.raises(C.LaunchContractError, match="refusing to publish"):
+        C.publish_stage_n_result(tmp_path / "bad", _stage_n_result(tmp_path, gpu_uuid=None))
+
+
+def _stage_o_chain(
+    tmp_path, *, accept=True, result_over=None, runtime_over=None, chain_over=None, resume_over=None
+):
     result = _stage_n_result(tmp_path, **(result_over or {}))
     rpath = tmp_path / "STAGE_N_RESULT.json"
     rbytes = C.canonical_json_bytes(result)
@@ -844,14 +1006,30 @@ def _stage_o_chain(tmp_path, *, accept=True, result_over=None, runtime_over=None
         "stage_n_authorization_sha256": result["stage_authorization_sha256"],
         "stage_n_governed_run_contract_sha256": result["governed_run_contract_sha256"],
         "stage_n_runtime_fingerprint": result["runtime_fingerprint"],
+        "stage_n_runtime_fingerprint_sha256": result["runtime_fingerprint_sha256"],
         "stage_n_gpu_uuid": result["gpu_uuid"],
         "stage_n_gpu_pci_bus_id": result["gpu_pci_bus_id"],
         "stage_n_trainer_head": result["trainer_head"],
         "stage_n_trainer_execution_bundle_sha256": result["trainer_execution_bundle_sha256"],
         "stage_n_exact_run_plan_sha256": result["exact_run_plan_sha256"],
+        "stage_n_final_checkpoint_path": result["final_checkpoint_path"],
+        "stage_n_final_checkpoint_sha256": result["final_checkpoint_sha256"],
+        "stage_n_final_checkpoint_step": result["final_checkpoint_step"],
     }
+    chain.update(chain_over or {})
+    resume = {
+        "mode": "RESUME_EXACT_CHECKPOINT",
+        "checkpoint_path": result["final_checkpoint_path"],
+        "checkpoint_sha256": result["final_checkpoint_sha256"],
+        "expected_step": result["final_checkpoint_step"],
+        "stage": "stage_a",
+        "governed_run_contract_sha256": result["governed_run_contract_sha256"],
+    }
+    resume.update(resume_over or {})
     observed = {**result["runtime_fingerprint"], **(runtime_over or {})}
-    return {"stage_n_chain": chain}, observed
+    if runtime_over:
+        observed["runtime_fingerprint_sha256"] = C.runtime_fingerprint_sha256(observed)
+    return {"stage_n_chain": chain, "resume": resume}, observed
 
 
 def test_stage_o_without_a_stage_n_chain_is_rejected():
@@ -882,6 +1060,9 @@ def test_stage_o_rejects_an_unaccepted_stage_n_result(tmp_path):
         ("num_workers", 8),
         ("torch_version", "2.10.0"),
         ("trainer_head", "f" * 40),
+        ("visible_cuda_device_count", 2),
+        ("total_vram_bytes", 123),
+        ("numpy_version", "2.0.0"),
     ],
 )
 def test_stage_o_rejects_a_runtime_change_versus_accepted_stage_n(tmp_path, field, value):
@@ -891,13 +1072,50 @@ def test_stage_o_rejects_a_runtime_change_versus_accepted_stage_n(tmp_path, fiel
     assert verdict["requires_new_stage_n"] is True
 
 
+def test_stage_o_rejects_a_full_runtime_fingerprint_sha_mismatch(tmp_path):
+    auth, observed_runtime = _stage_o_chain(tmp_path)
+    observed_runtime = {**observed_runtime, "runtime_fingerprint_sha256": "0" * 64}
+    verdict = C.validate_stage_o_chain(auth, observed_runtime=observed_runtime)
+    assert any("runtime_fingerprint_sha256" in f for f in verdict["failures"])
+
+
+@pytest.mark.parametrize(
+    "resume_over",
+    [
+        {"checkpoint_path": "/wrong/path.pt"},
+        {"checkpoint_sha256": "0" * 64},
+        {"expected_step": 1},
+        {"mode": "FRESH"},
+    ],
+)
+def test_stage_o_rejects_a_wrong_stage_n_checkpoint_binding(tmp_path, resume_over):
+    """R2 Part 14: Stage-O resume must BE the accepted Stage-N checkpoint."""
+    auth, observed_runtime = _stage_o_chain(tmp_path, resume_over=resume_over)
+    verdict = C.validate_stage_o_chain(auth, observed_runtime=observed_runtime)
+    assert verdict["valid"] is False
+
+
+def test_stage_o_rejects_tampered_checkpoint_bytes(tmp_path):
+    auth, observed_runtime = _stage_o_chain(tmp_path)
+    Path(auth["resume"]["checkpoint_path"]).write_bytes(b"tampered")
+    verdict = C.validate_stage_o_chain(auth, observed_runtime=observed_runtime)
+    assert verdict["valid"] is False
+    assert any(
+        "do_not_match_accepted_sha256" in f or "sha256_mismatch" in f for f in verdict["failures"]
+    )
+
+
 def test_changing_both_authorization_and_runtime_cannot_evade_comparison(tmp_path):
     """The accepted Stage-N result is loaded from disk, so a self-consistent lie still fails."""
     auth, _ = _stage_o_chain(tmp_path)
-    forged_runtime = {**_runtime(), "gpu_uuid": "GPU-forged", "num_workers": 2}
+    forged = {**_runtime(), "gpu_uuid": "GPU-forged", "num_workers": 2}
+    forged["runtime_fingerprint_sha256"] = C.runtime_fingerprint_sha256(forged)
     auth["stage_n_chain"]["stage_n_gpu_uuid"] = "GPU-forged"
-    auth["stage_n_chain"]["stage_n_runtime_fingerprint"] = forged_runtime
-    verdict = C.validate_stage_o_chain(auth, observed_runtime=forged_runtime)
+    auth["stage_n_chain"]["stage_n_runtime_fingerprint"] = forged
+    auth["stage_n_chain"]["stage_n_runtime_fingerprint_sha256"] = forged[
+        "runtime_fingerprint_sha256"
+    ]
+    verdict = C.validate_stage_o_chain(auth, observed_runtime=forged)
     assert verdict["valid"] is False
     assert any("contradicts_accepted_stage_n_result" in f for f in verdict["failures"])
 

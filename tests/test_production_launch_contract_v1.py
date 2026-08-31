@@ -27,7 +27,7 @@ ACCEPTANCE_SHA = C.PILOT_OWNER_ACCEPTANCE_SHA256
 
 
 def _runtime() -> dict:
-    return {
+    base = {
         "gpu_uuid": "GPU-0000dead-beef-0000-0000-000000000000",
         "gpu_pci_bus_id": "00000000:02:00.0",
         "gpu_name": "NVIDIA GeForce RTX 4090",
@@ -44,6 +44,9 @@ def _runtime() -> dict:
         "canonical_cwd": C.CANONICAL_CWD,
         "num_workers": 2,
     }
+    # R2 Part 3: the complete runtime document carries its own canonical SHA.
+    base["runtime_fingerprint_sha256"] = C.runtime_fingerprint_sha256(base)
+    return base
 
 
 def governed_args(stage: str = "stage_a", **overrides) -> argparse.Namespace:
@@ -102,6 +105,7 @@ def governed_args(stage: str = "stage_a", **overrides) -> argparse.Namespace:
         allow_schedule_branch=False,
         strict_resume_contract=True,
         out_dir=str(REPO / "outputs" / "governed"),
+        samples_dir=str(REPO / "outputs" / "governed" / "samples"),
         bos_id=C.CANONICAL_BOS_ID,
         eos_id=C.CANONICAL_EOS_ID,
         num_workers=2,
@@ -140,6 +144,7 @@ def authorization(scope: str = "STAGE_N", **overrides) -> dict:
         "exact_run_plan_sha256": EXACT_PLAN_SHA,
         "pilot_owner_acceptance_sha256": ACCEPTANCE_SHA,
         "allowed_output_root": str(REPO / "outputs" / "governed"),
+        "allowed_samples_dir": str(REPO / "outputs" / "governed" / "samples"),
         "canonical_cwd": C.CANONICAL_CWD,
         "training_runtime": _runtime(),
         "resume": {"mode": "FRESH"},

@@ -299,10 +299,12 @@ PARSER_FIELD_CLASSIFICATION: Mapping[str, Mapping[str, Any]] = MappingProxyType(
     "train_dir": {"class": EXACT_PLAN_DERIVED, "value": None, "affects": ("data order",)},
     "val_dir": {"class": OWNER_FROZEN, "value": ACCEPTED_VAL_RELPATH, "affects": ("evaluation",)},
     "out_dir": {"class": LAUNCH_AUTHORIZATION_BOUND, "value": None, "affects": ("checkpointing",)},
+    # R2 Part 1: authorization-bound to an exact path that must resolve INSIDE the
+    # authorized governed output root. Not arbitrary even when sampling is disabled.
     "samples_dir": {
         "class": LAUNCH_AUTHORIZATION_BOUND,
         "value": None,
-        "affects": ("checkpointing",),
+        "affects": ("checkpointing", "runtime identity"),
     },
     "tokenizer_path": {
         "class": OWNER_FROZEN,
@@ -474,7 +476,12 @@ PARSER_FIELD_CLASSIFICATION: Mapping[str, Mapping[str, Any]] = MappingProxyType(
         "value": "pretrain/eval_bench_v5.py",
         "affects": (),
     },
-    "bench_eval_out_dir": {"class": FORBIDDEN_OR_UNSET, "value": "", "affects": ()},
+    # R2 Part 1: benchmark evaluation is DISABLED, so any non-empty value fails Gate A.
+    "bench_eval_out_dir": {
+        "class": FORBIDDEN_OR_UNSET,
+        "value": "",
+        "affects": ("evaluation",),
+    },
     "bench_eval_max_seq_len": {"class": DIAGNOSTIC_ONLY, "value": 1024, "affects": ()},
     "bench_eval_max_new_tokens": {"class": DIAGNOSTIC_ONLY, "value": 192, "affects": ()},
     "bench_eval_min_new_tokens": {"class": DIAGNOSTIC_ONLY, "value": 1, "affects": ()},
@@ -656,8 +663,12 @@ def verify_realized_optimizer(optimizer: Any, model: Any | None = None) -> dict[
                 failures.append(f"auxiliary AdamW eps must be {ADAMW_AUX_EPS}")
 
     membership: dict[str, list[str]] = {}
+    foreign_count = 0
     if model is not None:
+        # R2 Part 2: EXACT membership. Unknown optimizer parameters are never filtered out
+        # before comparison -- a foreign Parameter must surface as a failure, not vanish.
         by_id = {id(p): n for n, p in model.named_parameters() if p.requires_grad}
+        all_model_ids = {id(p) for p in model.parameters()}
         expected: dict[str, list[str]] = {r: [] for r in OPTIMIZER_GROUP_ROLES}
         for name, param in model.named_parameters():
             if not param.requires_grad:
@@ -668,15 +679,35 @@ def verify_realized_optimizer(optimizer: Any, model: Any | None = None) -> dict[
                 expected["aux_adamw_decay"].append(name)
             else:
                 expected["muon_matrices"].append(name)
+
         seen: list[int] = []
         for role, group in zip(roles, groups, strict=True):
-            names = [by_id[id(p)] for p in group["params"] if id(p) in by_id]
+            names: list[str] = []
+            for param in group["params"]:
+                pid = id(param)
+                seen.append(pid)
+                if pid in by_id:
+                    names.append(by_id[pid])
+                else:
+                    foreign_count += 1
+                    names.append(f"<foreign:{pid}>")
             membership[role] = sorted(names)
-            seen.extend(id(p) for p in group["params"])
-        if len(seen) != len(set(seen)):
-            failures.append("a parameter appears in more than one optimizer group")
-        if sorted(set(by_id) - set(seen)):
-            failures.append("a trainable parameter is in no optimizer group")
+
+        if foreign_count:
+            failures.append(
+                f"{foreign_count} optimizer parameter(s) are not trainable model parameters"
+            )
+        duplicates = len(seen) - len(set(seen))
+        if duplicates:
+            failures.append(f"{duplicates} parameter(s) appear in more than one optimizer group")
+        missing = sorted(set(by_id) - set(seen))
+        if missing:
+            failures.append(f"{len(missing)} trainable parameter(s) are in no optimizer group")
+        untracked = sorted(all_model_ids - set(by_id) - set(seen))
+        if untracked:
+            failures.append(
+                f"{len(untracked)} model parameter(s) are neither trainable nor optimized"
+            )
         for role in OPTIMIZER_GROUP_ROLES:
             if membership.get(role, []) != sorted(expected[role]):
                 failures.append(f"{role} membership differs from the frozen grouping rule")
@@ -684,6 +715,7 @@ def verify_realized_optimizer(optimizer: Any, model: Any | None = None) -> dict[
     return {
         "group_roles": roles,
         "membership": membership,
+        "foreign_parameter_count": foreign_count,
         "failures": failures,
         "matches_governed_realization": not failures,
     }
@@ -835,6 +867,7 @@ AUTHORIZATION_REQUIRED_FIELDS = (
     "exact_run_plan_sha256",
     "pilot_owner_acceptance_sha256",
     "allowed_output_root",
+    "allowed_samples_dir",
     "canonical_cwd",
     "training_runtime",
     "resume",
@@ -883,6 +916,7 @@ def authorization_template() -> dict[str, Any]:
         "exact_run_plan_sha256": EXACT_RUN_PLAN_SHA256,
         "pilot_owner_acceptance_sha256": PILOT_OWNER_ACCEPTANCE_SHA256,
         "allowed_output_root": None,
+        "allowed_samples_dir": None,
         "canonical_cwd": CANONICAL_CWD,
         "training_runtime": None,
         "authorized_by": None,
@@ -1173,7 +1207,7 @@ def observed_training_runtime(*, num_workers: int | None = None) -> dict[str, An
             gpu["gpu_pci_bus_id"] = None
             gpu["selected_device_resolution_failures"] = resolved.get("failures", [])
     repo = observed_repository()
-    return {
+    document = {
         **gpu,
         # Owner clarification 1: num_workers is part of the bound runtime identity.
         "num_workers": num_workers,
@@ -1184,6 +1218,16 @@ def observed_training_runtime(*, num_workers: int | None = None) -> dict[str, An
         "trainer_execution_bundle_sha256": trainer_execution_bundle_sha256(),
         "canonical_cwd": CANONICAL_CWD,
     }
+    # R2 Part 3: the COMPLETE runtime document gets one cryptographic identity, so the
+    # immutable governed identity binds the whole fingerprint rather than a chosen subset.
+    document["runtime_fingerprint_sha256"] = runtime_fingerprint_sha256(document)
+    return document
+
+
+def runtime_fingerprint_sha256(document: Mapping[str, Any]) -> str:
+    """SHA-256 over the complete runtime document, excluding its own self-hash."""
+    payload = {k: v for k, v in document.items() if k != "runtime_fingerprint_sha256"}
+    return _sha256_bytes(canonical_json_bytes(payload))
 
 
 # --------------------------------------------------------------- the enforcement gate
@@ -1668,19 +1712,46 @@ def _nvml_records() -> list[dict[str, Any]]:
     return records
 
 
+def cuda_logical_device_identity(index: int = 0) -> dict[str, Any]:
+    """The physical identity of Torch/CUDA LOGICAL device ``index``, from CUDA itself.
+
+    R2 Part 16: a numeric ``CUDA_VISIBLE_DEVICES`` ordinal is NOT an NVML index, and mapping
+    one to the other because both are numeric is wrong. CUDA already knows which physical
+    device it selected, so the UUID and PCI identity are read from
+    ``torch.cuda.get_device_properties`` and only THEN matched against NVML.
+    """
+    import torch
+
+    props = torch.cuda.get_device_properties(index)
+    raw_uuid = str(getattr(props, "uuid", "") or "")
+    uuid = raw_uuid if raw_uuid.startswith("GPU-") else (f"GPU-{raw_uuid}" if raw_uuid else "")
+    domain = int(getattr(props, "pci_domain_id", 0))
+    bus = int(getattr(props, "pci_bus_id", 0))
+    device = int(getattr(props, "pci_device_id", 0))
+    return {
+        "logical_index": int(index),
+        "gpu_uuid": uuid,
+        "gpu_pci_bus_id": f"{domain:08X}:{bus:02X}:{device:02X}.0",
+        "gpu_name": str(props.name),
+        "total_vram_bytes": int(props.total_memory),
+        "compute_capability": f"{props.major}.{props.minor}",
+        "source": "torch.cuda.get_device_properties",
+    }
+
+
 def resolve_selected_gpu_identity(
     *,
     cuda_visible_devices: str | None = None,
     records: Sequence[Mapping[str, Any]] | None = None,
     torch_device_name: str | None = None,
     selected_index: int = 0,
+    cuda_identity: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Resolve Torch's selected logical device to its physical NVML record.
+    """Match CUDA's own logical-device identity to exactly one physical NVML record.
 
-    The first ``nvidia-smi`` row is NOT the selected device in general.
-    ``CUDA_VISIBLE_DEVICES`` reorders and filters the visible set, and it may be written as
-    indices or as UUIDs. This resolves the logical index Torch actually selected through that
-    mapping, and refuses to guess when the mapping is ambiguous or inconsistent.
+    The mapping is driven by the CUDA-reported UUID/PCI of logical device 0, never by
+    interpreting a ``CUDA_VISIBLE_DEVICES`` ordinal as an NVML index. It fails closed when
+    the identity is ambiguous, unmatched, or contradicted by NVML.
     """
     physical = [dict(r) for r in (records if records is not None else _nvml_records())]
     raw = (
@@ -1698,66 +1769,79 @@ def resolve_selected_gpu_identity(
             "physical_record_count": 0,
         }
 
-    if raw is None or not str(raw).strip():
-        # No filtering: logical order equals physical order.
-        visible = physical
-        mapping_form = "unset_all_physical_visible"
-    else:
-        tokens = [t.strip() for t in str(raw).split(",") if t.strip()]
-        mapping_form = "index" if all(t.isdigit() for t in tokens) else "uuid"
-        visible = []
-        for token in tokens:
-            if token.isdigit():
-                match = [r for r in physical if r["physical_index"] == int(token)]
-            else:
-                # UUID form; NVML accepts a full or unambiguous prefix.
-                match = [r for r in physical if r["uuid"] == token]
-                if not match:
-                    match = [r for r in physical if r["uuid"].startswith(token)]
-            if len(match) != 1:
-                failures.append(
-                    f"cuda_visible_devices_token_unresolvable:{token}"
-                    if not match
-                    else f"cuda_visible_devices_token_ambiguous:{token}"
-                )
-            else:
-                visible.append(match[0])
+    identity = dict(cuda_identity) if cuda_identity is not None else None
+    if identity is None:
+        try:
+            identity = cuda_logical_device_identity(selected_index)
+        except Exception as exc:  # noqa: BLE001
+            return {
+                "resolved": False,
+                "failures": [f"cuda_logical_device_identity_unavailable:{exc!r}"],
+                "cuda_visible_devices": raw,
+            }
+
+    cvd_form = (
+        "unset"
+        if raw is None or not str(raw).strip()
+        else (
+            "index"
+            if all(t.strip().isdigit() for t in str(raw).split(",") if t.strip())
+            else "uuid"
+        )
+    )
+    visible_count = (
+        len(physical) if cvd_form == "unset" else len([t for t in str(raw).split(",") if t.strip()])
+    )
+
+    # Match NVML by the CUDA-reported UUID first, then by PCI identity. Never by ordinal.
+    cuda_uuid = str(identity.get("gpu_uuid") or "")
+    cuda_pci = str(identity.get("gpu_pci_bus_id") or "")
+    by_uuid = [r for r in physical if cuda_uuid and r["uuid"] == cuda_uuid]
+    if not by_uuid and cuda_uuid:
+        by_uuid = [r for r in physical if r["uuid"].startswith(cuda_uuid)]
+    by_pci = [r for r in physical if cuda_pci and r["pci_bus_id"].upper() == cuda_pci.upper()]
+
+    matched: list[dict[str, Any]] = by_uuid or by_pci
+    if len(matched) != 1:
+        failures.append(
+            "cuda_logical_device_unmatched_in_nvml"
+            if not matched
+            else f"cuda_logical_device_ambiguous_in_nvml:{len(matched)}"
+        )
+    elif by_uuid and by_pci and by_uuid[0]["uuid"] != by_pci[0]["uuid"]:
+        failures.append("cuda_uuid_and_pci_disagree_with_nvml")
 
     if failures:
         return {
             "resolved": False,
             "failures": failures,
             "cuda_visible_devices": raw,
-            "mapping_form": mapping_form,
+            "mapping_form": cvd_form,
+            "cuda_identity": identity,
             "physical_record_count": len(physical),
         }
 
-    if selected_index < 0 or selected_index >= len(visible):
-        return {
-            "resolved": False,
-            "failures": [f"selected_logical_index_out_of_visible_range:{selected_index}"],
-            "cuda_visible_devices": raw,
-            "mapping_form": mapping_form,
-            "visible_device_count": len(visible),
-        }
-
-    chosen = visible[selected_index]
+    chosen = matched[0]
     if torch_device_name is not None and chosen["name"] != torch_device_name:
         failures.append(
             f"selected_device_name_inconsistent:nvml={chosen['name']!r},torch={torch_device_name!r}"
         )
-    if len(visible) != REQUIRED_TRAINING_DEVICE_COUNT:
-        failures.append(f"visible_device_count_not_exactly_1:{len(visible)}")
+    if chosen["pci_bus_id"].upper() != cuda_pci.upper():
+        failures.append(f"cuda_pci_disagrees_with_nvml:cuda={cuda_pci},nvml={chosen['pci_bus_id']}")
+    if visible_count != REQUIRED_TRAINING_DEVICE_COUNT:
+        failures.append(f"visible_device_count_not_exactly_1:{visible_count}")
 
     return {
         "resolved": not failures,
         "failures": failures,
         "cuda_visible_devices": raw,
-        "mapping_form": mapping_form,
+        "mapping_form": cvd_form,
+        "mapping_method": "cuda_logical_device_identity_matched_to_nvml_by_uuid_then_pci",
         "physical_record_count": len(physical),
-        "visible_device_count": len(visible),
+        "visible_device_count": visible_count,
         "selected_logical_index": selected_index,
         "selected_physical_index": chosen["physical_index"],
+        "cuda_identity": identity,
         "gpu_uuid": chosen["uuid"],
         "gpu_pci_bus_id": chosen["pci_bus_id"],
         "gpu_name": chosen["name"],
@@ -1964,6 +2048,40 @@ def validate_resume_binding(
     return failures
 
 
+def validate_samples_dir_binding(
+    args: argparse.Namespace, authorized_samples_dir: Any, authorized_output_root: Any
+) -> list[str]:
+    """R2 Part 1: samples_dir is an exact authorized path INSIDE the governed output root."""
+    if authorized_samples_dir in (None, ""):
+        return ["samples_dir_not_bound_by_authorization"]
+    actual = str(getattr(args, "samples_dir", "") or "").strip()
+    if not actual:
+        return ["samples_dir must be the exact contract-authorized value, not empty"]
+    failures: list[str] = []
+    resolved = Path(actual).expanduser().resolve()
+    expected = Path(str(authorized_samples_dir)).expanduser().resolve()
+    if resolved != expected:
+        failures.append(f"samples_dir: expected {expected}, got {resolved}")
+    if authorized_output_root not in (None, ""):
+        root = Path(str(authorized_output_root)).expanduser().resolve()
+        if resolved != root and root not in resolved.parents:
+            failures.append(
+                f"samples_dir must resolve inside the authorized output root {root}: {resolved}"
+            )
+    return failures
+
+
+def validate_bench_eval_out_dir(args: argparse.Namespace) -> list[str]:
+    """R2 Part 1: benchmark evaluation is DISABLED; any non-empty value fails."""
+    value = getattr(args, "bench_eval_out_dir", "")
+    if value not in (None, "") and str(value).strip():
+        return [
+            f"bench_eval_out_dir must be unset in governed execution (benchmark evaluation "
+            f"is DISABLED), got {value!r}"
+        ]
+    return []
+
+
 def validate_num_workers_binding(
     args: argparse.Namespace, authorized_num_workers: Any
 ) -> list[str]:
@@ -2126,7 +2244,9 @@ def compile_realization_evidence(
         "compile_realized": not failures,
     }
     evidence["compile_evidence_sha256"] = _sha256_bytes(
-        canonical_json_bytes({k: v for k, v in evidence.items() if k != "failures"})
+        canonical_json_bytes({
+            k: v for k, v in evidence.items() if k not in ("failures", "compile_evidence_sha256")
+        })
     )
     return evidence
 
@@ -2138,6 +2258,170 @@ def require_compile_realized(evidence: Mapping[str, Any]) -> None:
         "governed run requires compile=true to be lazily realized before the first "
         "optimizer update; observed failures: " + ", ".join(evidence.get("failures", [])),
     )
+
+
+COMPILE_PROBE_MICRO_BSZ = MICRO_BSZ  # production shape, not batch 1
+COMPILE_PROBE_SEQ_LEN = MODEL_CONTRACT["seq_len"]
+
+
+def enforce_compile_fail_closed_stance() -> dict[str, Any]:
+    """R2 Part 10: supported PyTorch 2.11 fail-closed compile configuration.
+
+    ``suppress_errors=False`` makes a compile error raise instead of degrading to eager;
+    ``fail_on_recompile_limit_hit=True`` turns a recompile-limit fallback into a hard error;
+    ``torch.compiler.set_stance("fail_on_recompile")`` makes any later recompile a hard
+    error. All three are supported public/stable configuration in this runtime.
+    """
+    import torch
+    import torch._dynamo as dynamo
+
+    applied: dict[str, Any] = {}
+    require(
+        hasattr(dynamo.config, "suppress_errors"),
+        "governed compile requires dynamo.config.suppress_errors in this runtime",
+    )
+    dynamo.config.suppress_errors = False
+    applied["suppress_errors"] = dynamo.config.suppress_errors
+
+    if hasattr(dynamo.config, "fail_on_recompile_limit_hit"):
+        dynamo.config.fail_on_recompile_limit_hit = True
+        applied["fail_on_recompile_limit_hit"] = dynamo.config.fail_on_recompile_limit_hit
+
+    stance_available = hasattr(torch.compiler, "set_stance")
+    applied["set_stance_available"] = stance_available
+    require(
+        stance_available or "fail_on_recompile_limit_hit" in applied,
+        "no supported deterministic fail-closed compile mechanism is available in this "
+        "runtime; refusing to weaken compile=true semantics",
+    )
+    return applied
+
+
+def arm_fail_on_recompile() -> dict[str, Any]:
+    """Arm ``fail_on_recompile`` AFTER initial realization, so later recompiles abort."""
+    import torch
+
+    if not hasattr(torch.compiler, "set_stance"):
+        return {"armed": False, "reason": "set_stance_unavailable"}
+    torch.compiler.set_stance("fail_on_recompile")
+    return {"armed": True, "stance": "fail_on_recompile"}
+
+
+def isolated_inductor_cache(run_token: str) -> dict[str, Any]:
+    """R2 Part 9: a process/run-specific Inductor cache that must be empty beforehand.
+
+    Pre-existing artifacts in a shared cache can never stand in for evidence that THIS
+    process realized compilation.
+    """
+    import tempfile
+
+    root = Path(tempfile.gettempdir()) / f"petitgpt_governed_inductor_{run_token}"
+    require(
+        not root.exists() or not any(root.rglob("*")),
+        f"governed compile requires an empty isolated Inductor cache, found artifacts at {root}",
+    )
+    root.mkdir(parents=True, exist_ok=True)
+    triton = root / "triton"
+    triton.mkdir(parents=True, exist_ok=True)
+    os.environ["TORCHINDUCTOR_CACHE_DIR"] = str(root)
+    os.environ["TRITON_CACHE_DIR"] = str(triton)
+    return {
+        "cache_dir": str(root),
+        "triton_cache_dir": str(triton),
+        "was_empty_before_realization": True,
+        "isolated": True,
+    }
+
+
+def realize_compile_production_shape(
+    compiled_callable: Any,
+    *,
+    device: Any,
+    micro_bsz: int = COMPILE_PROBE_MICRO_BSZ,
+    seq_len: int = COMPILE_PROBE_SEQ_LEN,
+    vocab_size: int = MODEL_CONTRACT["vocab_size"],
+    cache: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
+    """R2 Part 8/9: realize compile at the FROZEN production input geometry.
+
+    Batch-1 is insufficient: the shape the training loop actually compiles for is
+    ``micro_bsz x seq_len``. This invokes the real compiled callable at that shape under
+    ``no_grad`` -- no optimizer update, no gradients -- and requires evidence attributable
+    to this process.
+    """
+    import torch
+
+    forward = ObservedForward(compiled_callable, compiled_object=compiled_callable)
+    before = dynamo_counters_snapshot()
+    reset_dynamo_counters()
+
+    probe = torch.randint(
+        0, int(vocab_size), (int(micro_bsz), int(seq_len)), dtype=torch.long, device=device
+    )
+    with torch.no_grad():
+        forward(probe)
+    if getattr(device, "type", None) == "cuda":
+        torch.cuda.synchronize()
+
+    after = dynamo_counters_snapshot()
+    evidence = compile_realization_evidence(
+        compiled_callable,
+        forward,
+        requested=True,
+        cache_dir=(cache or {}).get("cache_dir"),
+        expected_forward_invocations=1,
+        counters=after,
+    )
+    evidence["probe_geometry"] = {"micro_bsz": int(micro_bsz), "seq_len": int(seq_len)}
+    evidence["production_shape_probe"] = (
+        int(micro_bsz) == MICRO_BSZ and int(seq_len) == MODEL_CONTRACT["seq_len"]
+    )
+    evidence["counters_before"] = before
+    evidence["isolated_cache"] = dict(cache) if cache else None
+    evidence["cache_was_empty_before_realization"] = bool(
+        (cache or {}).get("was_empty_before_realization")
+    )
+    if not evidence["production_shape_probe"]:
+        evidence.setdefault("failures", []).append("compile_probe_not_at_production_shape")
+        evidence["compile_realized"] = False
+    if cache is not None and not evidence["cache_was_empty_before_realization"]:
+        evidence.setdefault("failures", []).append("inductor_cache_not_isolated_or_not_empty")
+        evidence["compile_realized"] = False
+    evidence["compile_evidence_sha256"] = _sha256_bytes(
+        canonical_json_bytes({k: v for k, v in evidence.items() if k != "failures"})
+    )
+    return evidence
+
+
+def verify_compile_evidence_document(evidence: Mapping[str, Any] | None) -> list[str]:
+    """R2 Part 11: recompute the stored evidence SHA and check its schema and verdict."""
+    if not isinstance(evidence, Mapping):
+        return ["compile_evidence_missing_or_malformed"]
+    failures: list[str] = []
+    if evidence.get("schema_version") != "petitgpt-governed-compile-evidence-v1":
+        failures.append("compile_evidence_schema_mismatch")
+    for field in (
+        "compile_requested",
+        "compile_realized",
+        "compilation_materialized",
+        "invoked_compiled_callable",
+        "compile_evidence_sha256",
+    ):
+        if field not in evidence:
+            failures.append(f"compile_evidence_missing_field:{field}")
+    stored = evidence.get("compile_evidence_sha256")
+    recomputed = _sha256_bytes(
+        canonical_json_bytes({
+            k: v for k, v in evidence.items() if k not in ("failures", "compile_evidence_sha256")
+        })
+    )
+    if stored != recomputed:
+        failures.append("compile_evidence_sha256_does_not_match_its_own_document")
+    if not evidence.get("compile_realized"):
+        failures.append("compile_evidence_does_not_represent_a_realized_compile")
+    if evidence.get("eager_fallback_occurred"):
+        failures.append("compile_evidence_records_an_eager_fallback")
+    return failures
 
 
 def bind_compiled_callable_governed(model: Any) -> dict[str, Any]:
@@ -2220,6 +2504,25 @@ def gate_a_pre_construction(
         )
     )
     failures.extend(validate_resume_binding(args, authorization.get("resume")))
+    # R2 Part 1: the last two previously classification-only fields.
+    failures.extend(
+        validate_samples_dir_binding(
+            args,
+            authorization.get("allowed_samples_dir"),
+            authorization.get("allowed_output_root"),
+        )
+    )
+    failures.extend(validate_bench_eval_out_dir(args))
+
+    # R2 Part 5: when the authorization pins an exact checkpoint, its BYTES are verified here,
+    # long before any executable state could be restored.
+    resume_binding = authorization.get("resume") or {}
+    checkpoint_verification: dict[str, Any] | None = None
+    if resume_binding.get("mode") == "RESUME_EXACT_CHECKPOINT":
+        checkpoint_verification = verify_authorized_checkpoint_bytes(
+            resume_binding, resume_binding.get("checkpoint_path", "")
+        )
+        failures.extend(checkpoint_verification["failures"])
 
     # 6. authorization vs observed runtime
     scope = "STAGE_N" if stage == "stage_a" else "STAGE_O"
@@ -2270,7 +2573,9 @@ def gate_a_pre_construction(
         "trainer_branch": repo["branch"],
         "trainer_execution_bundle_sha256": observed["trainer_execution_bundle_sha256"],
         "resume": dict(authorization.get("resume") or {}),
+        "authorized_checkpoint_verification": checkpoint_verification,
         "num_workers": (authorization.get("training_runtime") or {}).get("num_workers"),
+        "samples_dir": authorization.get("allowed_samples_dir"),
         "runtime": dict(observed_runtime),
         "authorization": authorization,
         "passed": True,
@@ -2413,8 +2718,13 @@ def build_governed_run_contract(
         },
         "canonical_cwd": CANONICAL_CWD,
         "num_workers": gate_a["num_workers"],
+        "samples_dir": gate_a.get("samples_dir"),
         "resume": dict(gate_a["resume"]),
         "runtime_fingerprint": runtime,
+        "runtime_fingerprint_sha256": (
+            runtime.get("runtime_fingerprint_sha256") or runtime_fingerprint_sha256(runtime)
+        ),
+        "compile_intent": COMPILE,
         "gpu_uuid": runtime.get("gpu_uuid"),
         "gpu_pci_bus_id": runtime.get("gpu_pci_bus_id"),
         "stage_start_step": STAGE_BOUNDARIES[stage]["start_step"],
@@ -2428,19 +2738,72 @@ def build_governed_run_contract(
             if compile_evidence is not None
             else None
         ),
-        "completed_evaluation_milestones": [],
-        "completed_checkpoint_milestones": [],
+    }
+
+
+DYNAMIC_CHECKPOINT_STATE_FIELDS = (
+    "active_stage",
+    "active_stage_sampler_seed",
+    "permutation_identity",
+    "range_start_position",
+    "range_stop_position",
+    "cursor",
+    "global_step",
+    "completed_evaluation_milestones",
+    "completed_checkpoint_milestones",
+    "rng_state",
+    "compile_evidence",
+    "compile_evidence_sha256",
+)
+
+
+def build_checkpoint_state(
+    *,
+    stage: str,
+    sampler: Any,
+    global_step: int,
+    completed_evaluation_milestones: Sequence[int],
+    completed_checkpoint_milestones: Sequence[int],
+    rng_state: Mapping[str, Any] | None,
+    compile_evidence: Mapping[str, Any] | None,
+) -> dict[str, Any]:
+    """R2 Part 4: dynamic state derived from the LIVE sampler/trainer, never launch-time."""
+    identity = sampler_identity_document(stage, sampler)
+    return {
+        "schema_version": "petitgpt-governed-checkpoint-state-v1",
+        "active_stage": stage,
+        "active_stage_sampler_seed": identity["sampler_seed"],
+        "permutation_identity": identity["permutation_identity"],
+        "range_start_position": identity["range_start_position"],
+        "range_stop_position": identity["range_stop_position"],
+        "cursor": identity["cursor"],
+        "consumed": identity["consumed"],
+        "remaining": identity["remaining"],
+        "global_step": int(global_step),
+        "completed_evaluation_milestones": [int(v) for v in completed_evaluation_milestones],
+        "completed_checkpoint_milestones": [int(v) for v in completed_checkpoint_milestones],
+        "rng_state_present": rng_state is not None,
+        "rng_state_streams": sorted(rng_state) if isinstance(rng_state, Mapping) else [],
+        "compile_evidence": dict(compile_evidence) if compile_evidence is not None else None,
+        "compile_evidence_sha256": (
+            compile_evidence.get("compile_evidence_sha256") if compile_evidence else None
+        ),
     }
 
 
 # Fields a resume may never differ on. `sampler_identity` moves legitimately as training
 # advances, so it is validated separately against the stage/range/cursor rules.
+# R2 Part 3: immutable RUN IDENTITY only. Anything that legitimately advances during
+# training -- cursor, milestones, global step, RNG, per-process compile evidence -- lives in
+# the separate dynamic checkpoint-state block and is deliberately absent here.
 GOVERNED_IMMUTABLE_FIELDS = (
     "schema_version",
     "contract_version",
     "kind",
     "stage",
     "scope",
+    "runtime_fingerprint_sha256",
+    "compile_intent",
     "launch_contract_sha256",
     "stage_authorization_sha256",
     "exact_run_plan_sha256",
@@ -2458,6 +2821,7 @@ GOVERNED_IMMUTABLE_FIELDS = (
     "checkpoint_policy",
     "canonical_cwd",
     "num_workers",
+    "samples_dir",
     "gpu_uuid",
     "gpu_pci_bus_id",
     "stage_start_step",
@@ -2571,6 +2935,13 @@ def validate_stage_a_to_b_transition(
     identity = stage_a_checkpoint_contract.get("sampler_identity") or {}
     if identity.get("sampler_seed") != STAGE_A_SAMPLER_SEED:
         failures.append("stage_a_to_b: sampler_identity does not carry the Stage-A seed")
+    # The checkpoint's DYNAMIC state must also say Stage A. A checkpoint whose contract says
+    # stage_a while its live state says stage_b is internally inconsistent and must fail.
+    if identity.get("stage") not in (None, "stage_a"):
+        failures.append(
+            f"stage_a_to_b: checkpoint state active_stage is {identity.get('stage')!r}, "
+            f"expected 'stage_a'"
+        )
     cursor = int(identity.get("cursor", -1))
     stop = int(identity.get("range_stop_position", -2))
     if cursor != stop:
@@ -2586,9 +2957,58 @@ def validate_stage_a_to_b_transition(
     return failures
 
 
+def verify_authorized_checkpoint_bytes(
+    resume_binding: Mapping[str, Any], checkpoint_path: str | Path
+) -> dict[str, Any]:
+    """R2 Part 5: hash the checkpoint on disk and require the authorized SHA.
+
+    Path and step alone are not trusted: a changed byte must fail before any executable
+    state is restored.
+    """
+    path = Path(checkpoint_path)
+    failures: list[str] = []
+    if not path.is_file():
+        return {"verified": False, "failures": [f"authorized_checkpoint_not_found:{path}"]}
+
+    authorized_path = str(resume_binding.get("checkpoint_path", ""))
+    if authorized_path and Path(authorized_path).expanduser().resolve() != path.resolve():
+        failures.append(
+            f"resume path is not the authorized checkpoint: authorized={authorized_path}, "
+            f"opened={path}"
+        )
+    observed = file_sha256(path)
+    authorized_sha = str(resume_binding.get("checkpoint_sha256", ""))
+    if observed != authorized_sha:
+        failures.append(
+            f"authorized checkpoint SHA-256 mismatch: authorized={authorized_sha}, "
+            f"observed={observed}"
+        )
+    return {
+        "verified": not failures,
+        "failures": failures,
+        "observed_sha256": observed,
+        "authorized_sha256": authorized_sha,
+        "path": str(path),
+    }
+
+
 def is_governed_checkpoint(ckpt: Mapping[str, Any]) -> bool:
     contract = ckpt.get("governed_run_contract")
     return isinstance(contract, Mapping) and contract.get("kind") == GOVERNED_CHECKPOINT_KIND
+
+
+# R2 Part 7: fields that legitimately DIFFER across an intentional Stage-A -> Stage-B
+# transition. Comparing these with the ordinary same-stage rule would reject the legal
+# transition, so they are excluded only when stage_transition == "A_TO_B".
+A_TO_B_PERMITTED_DIFFERENCES = (
+    "stage",
+    "scope",
+    "stage_start_step",
+    "stage_stop_step",
+    # The active stage seed legitimately changes 20260832 -> 20260833 across the transition;
+    # omitting it here would reject the legal A -> B handoff.
+    "active_stage_sampler_seed",
+)
 
 
 def validate_governed_checkpoint_before_restore(
@@ -2597,6 +3017,7 @@ def validate_governed_checkpoint_before_restore(
     *,
     expected_resume: Mapping[str, Any] | None = None,
     current_sampler_identity: Mapping[str, Any] | None = None,
+    stage_transition: str | None = None,
 ) -> dict[str, Any]:
     """Validate metadata BEFORE any executable state is restored.
 
@@ -2610,14 +3031,11 @@ def validate_governed_checkpoint_before_restore(
             "failures": ["ungoverned_checkpoint_cannot_resume_a_governed_run"],
         }
     saved = ckpt["governed_run_contract"]
-
-    # A governed checkpoint may never claim compile=true without realized evidence.
-    if bool((saved.get("training") or {}).get("compile")):
-        saved_evidence = saved.get("compile_evidence") or {}
-        if not saved_evidence.get("compile_realized"):
-            failures.append("governed_checkpoint_claims_compile_true_without_realized_evidence")
+    a_to_b = stage_transition == "A_TO_B"
 
     for field in GOVERNED_IMMUTABLE_FIELDS:
+        if a_to_b and field in A_TO_B_PERMITTED_DIFFERENCES:
+            continue
         if saved.get(field) != current_contract.get(field):
             failures.append(f"governed_resume_mismatch:{field}")
 
@@ -2627,7 +3045,9 @@ def validate_governed_checkpoint_before_restore(
     recomputed = governed_digest(saved)
     if saved_digest != recomputed:
         failures.append("governed_run_contract_digest_does_not_match_its_own_document")
-    if recomputed != governed_digest(current_contract):
+    if not a_to_b and recomputed != governed_digest(current_contract):
+        # Across an intentional A -> B transition the digest legitimately moves, because the
+        # stage fields it covers change. The transition is validated by its own rule instead.
         failures.append("governed_run_contract_digest_mismatch")
 
     if expected_resume is not None:
@@ -2644,12 +3064,39 @@ def validate_governed_checkpoint_before_restore(
         if want_digest is not None and recomputed != want_digest:
             failures.append("resume_governed_run_contract_sha256_mismatch")
 
-    if current_sampler_identity is not None:
-        failures.extend(
-            validate_same_stage_resume(
-                saved.get("sampler_identity") or {}, current_sampler_identity
-            )
+    # R2 Part 6/7: full sampler state is validated HERE, before any executable restoration.
+    # The saved dynamic state block is authoritative when present; the launch-time
+    # sampler_identity remains a fallback for contracts written before R2.
+    saved_state = ckpt.get("governed_checkpoint_state") or {}
+    saved_sampler = (
+        {
+            "stage": saved_state.get("active_stage"),
+            "sampler_seed": saved_state.get("active_stage_sampler_seed"),
+            "permutation_identity": saved_state.get("permutation_identity"),
+            "range_start_position": saved_state.get("range_start_position"),
+            "range_stop_position": saved_state.get("range_stop_position"),
+            "cursor": saved_state.get("cursor"),
+        }
+        if saved_state
+        else (saved.get("sampler_identity") or {})
+    )
+
+    if a_to_b:
+        # An A -> B transition is validated by its own rule, never by same-stage comparison.
+        transition_source = dict(saved)
+        transition_source["sampler_identity"] = saved_sampler
+        transition_source["global_step"] = int(
+            saved_state.get("global_step", ckpt.get("global_step", -1))
         )
+        failures.extend(validate_stage_a_to_b_transition(transition_source))
+    elif current_sampler_identity is not None:
+        failures.extend(validate_same_stage_resume(saved_sampler, current_sampler_identity))
+
+    # R2 Part 11: a checkpoint claiming compile=true must carry verifiable evidence whose
+    # SHA recomputes from its own document.
+    if bool((saved.get("training") or {}).get("compile")):
+        stored_evidence = saved_state.get("compile_evidence") or saved.get("compile_evidence")
+        failures.extend(verify_compile_evidence_document(stored_evidence))
 
     failures = list(dict.fromkeys(failures))
     return {
@@ -2657,6 +3104,8 @@ def validate_governed_checkpoint_before_restore(
         "failures": failures,
         "checkpoint_governed_run_contract_sha256": recomputed,
         "current_governed_run_contract_sha256": governed_digest(current_contract),
+        "stage_transition": stage_transition,
+        "saved_sampler_state": saved_sampler,
     }
 
 
@@ -2677,6 +3126,7 @@ STAGE_N_RESULT_REQUIRED_FIELDS = (
     "final_checkpoint_sha256",
     "final_checkpoint_step",
     "runtime_fingerprint",
+    "runtime_fingerprint_sha256",
     "gpu_uuid",
     "gpu_pci_bus_id",
     "num_workers",
@@ -2693,11 +3143,16 @@ STAGE_O_REQUIRED_CHAIN_FIELDS = (
     "stage_n_authorization_sha256",
     "stage_n_governed_run_contract_sha256",
     "stage_n_runtime_fingerprint",
+    "stage_n_runtime_fingerprint_sha256",
     "stage_n_gpu_uuid",
     "stage_n_gpu_pci_bus_id",
     "stage_n_trainer_head",
     "stage_n_trainer_execution_bundle_sha256",
     "stage_n_exact_run_plan_sha256",
+    # R2 Part 14: the exact checkpoint Stage O will resume from.
+    "stage_n_final_checkpoint_path",
+    "stage_n_final_checkpoint_sha256",
+    "stage_n_final_checkpoint_step",
 )
 
 # Runtime fields Stage O must match against the ACCEPTED Stage-N result, not merely against
@@ -2706,6 +3161,8 @@ STAGE_N_O_RUNTIME_COMPARISON_FIELDS = (
     "gpu_uuid",
     "gpu_pci_bus_id",
     "gpu_name",
+    "visible_cuda_device_count",
+    "total_vram_bytes",
     "num_workers",
     "compute_capability",
     "driver_version",
@@ -2747,6 +3204,9 @@ def stage_n_result_document(
         "final_checkpoint_sha256": str(final_checkpoint_sha256),
         "final_checkpoint_step": int(final_checkpoint_step),
         "runtime_fingerprint": runtime,
+        "runtime_fingerprint_sha256": (
+            runtime.get("runtime_fingerprint_sha256") or runtime_fingerprint_sha256(runtime)
+        ),
         "gpu_uuid": runtime.get("gpu_uuid"),
         "gpu_pci_bus_id": runtime.get("gpu_pci_bus_id"),
         "num_workers": governed_run_contract.get("num_workers"),
@@ -2755,7 +3215,32 @@ def stage_n_result_document(
     }
 
 
-def validate_stage_n_result(document: Mapping[str, Any] | None) -> list[str]:
+STAGE_N_SHA256_FIELDS = (
+    "stage_authorization_sha256",
+    "launch_contract_sha256",
+    "exact_run_plan_sha256",
+    "pilot_owner_acceptance_sha256",
+    "trainer_execution_bundle_sha256",
+    "governed_run_contract_sha256",
+    "final_checkpoint_sha256",
+    "runtime_fingerprint_sha256",
+)
+STAGE_N_NON_EMPTY_FIELDS = (
+    *STAGE_N_SHA256_FIELDS,
+    "trainer_head",
+    "final_checkpoint_path",
+    "gpu_uuid",
+    "gpu_pci_bus_id",
+)
+
+
+def validate_stage_n_result(
+    document: Mapping[str, Any] | None, *, require_artifacts: bool = False
+) -> list[str]:
+    """R2 Part 12: status=COMPLETE never makes an empty result valid.
+
+    Every load-bearing field must be present, non-null, non-empty and well-formed.
+    """
     if not isinstance(document, Mapping):
         return ["stage_n_result_missing_or_malformed"]
     failures = [
@@ -2767,7 +3252,88 @@ def validate_stage_n_result(document: Mapping[str, Any] | None) -> list[str]:
         failures.append("stage_n_result_schema_mismatch")
     if document.get("status") != "COMPLETE":
         failures.append(f"stage_n_result_status_not_complete:{document.get('status')!r}")
-    return failures
+
+    for field in STAGE_N_NON_EMPTY_FIELDS:
+        value = document.get(field)
+        if value is None or (isinstance(value, str) and not value.strip()):
+            failures.append(f"stage_n_result_empty_field:{field}")
+    for field in STAGE_N_SHA256_FIELDS:
+        value = document.get(field)
+        if isinstance(value, str) and value.strip() and not _is_sha256(value):
+            failures.append(f"stage_n_result_malformed_sha256:{field}")
+
+    step = document.get("final_checkpoint_step")
+    if not isinstance(step, int) or isinstance(step, bool) or step <= 0:
+        failures.append("stage_n_result_final_checkpoint_step_invalid")
+    workers = document.get("num_workers")
+    if not isinstance(workers, int) or isinstance(workers, bool) or workers < 0:
+        failures.append("stage_n_result_num_workers_invalid")
+
+    runtime = document.get("runtime_fingerprint")
+    if not isinstance(runtime, Mapping) or not runtime:
+        failures.append("stage_n_result_runtime_fingerprint_empty")
+    else:
+        for field in RUNTIME_BINDING_REQUIRED_FIELDS:
+            if runtime.get(field) in (None, ""):
+                failures.append(f"stage_n_result_runtime_missing:{field}")
+        stored_sha = document.get("runtime_fingerprint_sha256")
+        if stored_sha and stored_sha != runtime_fingerprint_sha256(runtime):
+            failures.append("stage_n_result_runtime_fingerprint_sha256_mismatch")
+
+    for block in ("smoke_results", "resume_results"):
+        value = document.get(block)
+        if not isinstance(value, Mapping) or not value:
+            failures.append(f"stage_n_result_{block}_empty")
+        elif value.get("status") != "PASS":
+            failures.append(f"stage_n_result_{block}_not_pass:{value.get('status')!r}")
+
+    if require_artifacts:
+        path = document.get("final_checkpoint_path")
+        if isinstance(path, str) and path.strip():
+            candidate = Path(path)
+            if not candidate.is_file():
+                failures.append(f"stage_n_result_final_checkpoint_absent:{path}")
+            elif file_sha256(candidate) != document.get("final_checkpoint_sha256"):
+                failures.append("stage_n_result_final_checkpoint_sha256_mismatch")
+    return list(dict.fromkeys(failures))
+
+
+def _is_sha256(value: Any) -> bool:
+    return (
+        isinstance(value, str)
+        and len(value) == 64
+        and all(c in "0123456789abcdef" for c in value.lower())
+    )
+
+
+STAGE_N_RESULT_FILENAME = "STAGE_N_RESULT.json"
+
+
+def publish_stage_n_result(out_dir: str | Path, document: Mapping[str, Any]) -> dict[str, Any]:
+    """R2 Part 13: validate, then publish the Stage-N result atomically, exactly once."""
+    failures = validate_stage_n_result(document, require_artifacts=True)
+    require(
+        not failures,
+        "refusing to publish an invalid Stage-N result:\n  - " + "\n  - ".join(failures),
+    )
+    directory = Path(out_dir)
+    directory.mkdir(parents=True, exist_ok=True)
+    path = directory / STAGE_N_RESULT_FILENAME
+    require(not path.exists(), f"{STAGE_N_RESULT_FILENAME} already exists at {path}")
+    body = canonical_json_bytes(document)
+    tmp = path.with_suffix(".json.tmp")
+    with open(tmp, "wb") as handle:
+        handle.write(body)
+        handle.flush()
+        os.fsync(handle.fileno())
+    os.replace(tmp, path)
+    return {
+        "path": str(path),
+        "stage_n_result_sha256": _sha256_bytes(body),
+        "atomic": True,
+        "owner_acceptance_required": True,
+        "status": "PUBLISHED_AWAITING_OWNER_ACCEPTANCE",
+    }
 
 
 def validate_stage_o_chain(
@@ -2821,6 +3387,16 @@ def validate_stage_o_chain(
         if acceptance.get("stage_n_result_owner_verdict") != "ACCEPTED":
             failures.append("stage_n_result_not_owner_accepted")
 
+    # R2 Part 15: the COMPLETE runtime fingerprint SHA must match, not only chosen fields.
+    accepted_fp_sha = stage_n.get("runtime_fingerprint_sha256")
+    if chain.get("stage_n_runtime_fingerprint_sha256") != accepted_fp_sha:
+        failures.append("stage_o_chain_runtime_fingerprint_sha256_contradicts_accepted_result")
+    observed_fp_sha = observed_runtime.get("runtime_fingerprint_sha256") or (
+        runtime_fingerprint_sha256(observed_runtime) if observed_runtime else None
+    )
+    if accepted_fp_sha and observed_fp_sha and accepted_fp_sha != observed_fp_sha:
+        failures.append("stage_o_runtime_differs_from_accepted_stage_n:runtime_fingerprint_sha256")
+
     # The chain's claims must equal the accepted result itself.
     for chain_field, result_field in (
         ("stage_n_authorization_sha256", "stage_authorization_sha256"),
@@ -2830,6 +3406,9 @@ def validate_stage_o_chain(
         ("stage_n_trainer_head", "trainer_head"),
         ("stage_n_trainer_execution_bundle_sha256", "trainer_execution_bundle_sha256"),
         ("stage_n_exact_run_plan_sha256", "exact_run_plan_sha256"),
+        ("stage_n_final_checkpoint_path", "final_checkpoint_path"),
+        ("stage_n_final_checkpoint_sha256", "final_checkpoint_sha256"),
+        ("stage_n_final_checkpoint_step", "final_checkpoint_step"),
     ):
         if chain.get(chain_field) != stage_n.get(result_field):
             failures.append(f"stage_o_chain_contradicts_accepted_stage_n_result:{chain_field}")
@@ -2842,6 +3421,29 @@ def validate_stage_o_chain(
                 f"stage_o_runtime_differs_from_accepted_stage_n:{field}: "
                 f"stage_n={accepted_runtime.get(field)!r}, observed={observed_runtime.get(field)!r}"
             )
+
+    # R2 Part 14: the authorized Stage-O resume binding must BE the accepted Stage-N
+    # checkpoint, and the bytes on disk must hash to the accepted SHA.
+    resume = authorization.get("resume") or {}
+    if resume.get("mode") != "RESUME_EXACT_CHECKPOINT":
+        failures.append("stage_o_requires_resume_mode_RESUME_EXACT_CHECKPOINT")
+    else:
+        for resume_field, chain_field in (
+            ("checkpoint_path", "stage_n_final_checkpoint_path"),
+            ("checkpoint_sha256", "stage_n_final_checkpoint_sha256"),
+            ("expected_step", "stage_n_final_checkpoint_step"),
+        ):
+            if resume.get(resume_field) != chain.get(chain_field):
+                failures.append(
+                    f"stage_o_resume_binding_is_not_the_accepted_stage_n_checkpoint:{resume_field}"
+                )
+        ckpt_path = resume.get("checkpoint_path")
+        if isinstance(ckpt_path, str) and ckpt_path.strip():
+            candidate = Path(ckpt_path)
+            if not candidate.is_file():
+                failures.append(f"stage_o_resume_checkpoint_absent:{ckpt_path}")
+            elif file_sha256(candidate) != resume.get("checkpoint_sha256"):
+                failures.append("stage_o_resume_checkpoint_bytes_do_not_match_accepted_sha256")
 
     failures = list(dict.fromkeys(failures))
     return {
