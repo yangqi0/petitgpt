@@ -378,8 +378,10 @@ def test_real_save_ckpt_records_live_sampler_cursor_and_milestones(governed, tmp
     import torch
 
     class _Sampler:
-        def __init__(self, cursor):
-            self.start_position = 0
+        """R3 Part 3: the canonical field is range_start_position, not start_position."""
+
+        def __init__(self, cursor, range_start=0):
+            self.range_start_position = range_start
             self.end_position = 4882688
             self.committed_position = cursor
 
@@ -516,14 +518,7 @@ def _state(stage="stage_a", **over):
     base = {
         "active_stage": stage,
         "active_stage_sampler_seed": seed,
-        "permutation_identity": C._sha256_bytes(
-            C.canonical_json_bytes({
-                "stage": stage,
-                "sampler_seed": seed,
-                "range_start_position": 0,
-                "range_stop_position": 4882688,
-            })
-        ),
+        "permutation_identity": C.permutation_identity(stage, seed, 4882688),
         "range_start_position": 0,
         "range_stop_position": 4882688,
         "cursor": 4882688,
@@ -589,7 +584,7 @@ def test_resume_rejects_a_wrong_checkpoint_sha_before_load_state_dict(
     [
         ("active_stage_sampler_seed", 1234),
         ("permutation_identity", "q" * 64),
-        ("range_start_position", 128),
+        ("cursor", 4882560),  # near-miss: in range, but not where the resume starts
         ("range_stop_position", 999),
         ("cursor", 999999999),
     ],
@@ -622,7 +617,7 @@ def test_resume_rejects_sampler_drift_before_any_restore(
                 "stage": "stage_a",
                 "sampler_seed": C.STAGE_A_SAMPLER_SEED,
                 "permutation_identity": _state()["permutation_identity"],
-                "range_start_position": 0,
+                "range_start_position": 4882688,
                 "range_stop_position": 4882688,
                 "cursor": 4882688,
             },
@@ -646,7 +641,7 @@ def test_valid_same_stage_resume_reaches_the_post_restore_boundary(governed, tmp
             "stage": "stage_a",
             "sampler_seed": C.STAGE_A_SAMPLER_SEED,
             "permutation_identity": _state()["permutation_identity"],
-            "range_start_position": 0,
+            "range_start_position": 4882688,
             "range_stop_position": 4882688,
             "cursor": 4882688,
         },
@@ -773,24 +768,239 @@ def test_simulated_recompile_fallback_aborts():
 # --------------------------------------------------------------------- Stage N publication
 
 
-def test_canonical_stage_n_completion_publishes_a_valid_result(governed, tmp_path):
-    """R2 Part 13: publication is reachable from the governed completion path."""
+def _stage_n_artifacts(governed, tmp_path):
+    """The real bound artifacts a canonical Stage-N completion publishes from."""
     doc = _governed_doc(governed, governed["out"])
+
+    grc_dir = tmp_path / "grc"
+    published = C.publish_governed_run_contract(grc_dir, doc)
+    grc_path = Path(published["path"])
+
+    rt_path = tmp_path / "RUNTIME_FINGERPRINT.json"
+    rt_path.write_bytes(C.canonical_json_bytes(doc["runtime_fingerprint"]))
+
+    auth_path = Path(governed["auth"])
+    authorization = json.loads(auth_path.read_bytes())
+
     ckpt = tmp_path / "step_038146.pt"
     ckpt.write_bytes(b"final-stage-n-checkpoint")
-    result = C.stage_n_result_document(
-        governed_run_contract=doc,
-        final_checkpoint_path=str(ckpt),
-        final_checkpoint_sha256=C.file_sha256(ckpt),
+    return {
+        "doc": doc,
+        "grc_path": grc_path,
+        "rt_path": rt_path,
+        "auth_path": auth_path,
+        "authorization": authorization,
+        "ckpt": ckpt,
+    }
+
+
+def test_canonical_stage_n_completion_publishes_a_semantically_bound_result(governed, tmp_path):
+    """R3 Parts 12-14: publication reconstructs from real artifacts and validates against them."""
+    a = _stage_n_artifacts(governed, tmp_path)
+    published = C.publish_stage_n_completion(
+        tmp_path / "out",
+        governed_run_contract=a["doc"],
+        governed_run_contract_path=a["grc_path"],
+        authorization=a["authorization"],
+        authorization_path=a["auth_path"],
+        runtime_fingerprint_path=a["rt_path"],
+        final_checkpoint_path=a["ckpt"],
         final_checkpoint_step=C.STAGE_A_STOP_STEP,
         smoke_results={"status": "PASS"},
         resume_results={"status": "PASS"},
+        final_sampler_state={
+            "permutation_identity": C.permutation_identity(
+                "stage_a", C.STAGE_A_SAMPLER_SEED, 4882688
+            ),
+            "range_start_position": 0,
+            "range_stop_position": 4882688,
+            "cursor": 4882688,
+        },
     )
-    assert C.validate_stage_n_result(result, require_artifacts=True) == []
-    published = C.publish_stage_n_result(tmp_path / "out", result)
     assert published["status"] == "PUBLISHED_AWAITING_OWNER_ACCEPTANCE"
+    assert published["stage_o_authorized"] is False
+    assert published["hard_stop"] == "STOPPED_FOR_INDEPENDENT_OWNER_REVIEW"
+
     on_disk = json.loads((tmp_path / "out" / C.STAGE_N_RESULT_FILENAME).read_text())
     assert on_disk["status"] == "COMPLETE"
+    assert on_disk["scope"] == "STAGE_N"
+    assert on_disk["runtime_fingerprint_artifact_sha256"] == C.file_sha256(a["rt_path"])
+    assert on_disk["final_checkpoint_sha256"] == C.file_sha256(a["ckpt"])
     assert published["stage_n_result_sha256"] == C.file_sha256(
         tmp_path / "out" / C.STAGE_N_RESULT_FILENAME
     )
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    [
+        {"trainer_head": "zz"},  # malformed HEAD
+        {"final_checkpoint_step": 999},  # wrong step
+        {"gpu_uuid": "GPU-contradictory"},  # contradicts run contract
+        {"launch_contract_sha256": "0" * 64},  # wrong-but-well-formed SHA
+        {"smoke_results": {}},  # empty smoke result
+        {"resume_results": None},  # null field
+    ],
+)
+def test_stage_n_result_semantic_binding_rejects_contradictions(governed, tmp_path, mutation):
+    """R3 Part 12: well-formed-but-wrong values must be rejected against real artifacts."""
+    a = _stage_n_artifacts(governed, tmp_path)
+    result = C.stage_n_result_document(
+        governed_run_contract=a["doc"],
+        final_checkpoint_path=str(a["ckpt"]),
+        final_checkpoint_sha256=C.file_sha256(a["ckpt"]),
+        final_checkpoint_step=C.STAGE_A_STOP_STEP,
+        smoke_results={"status": "PASS"},
+        resume_results={"status": "PASS"},
+        final_sampler_state={
+            "permutation_identity": C.permutation_identity(
+                "stage_a", C.STAGE_A_SAMPLER_SEED, 4882688
+            ),
+            "range_start_position": 0,
+            "range_stop_position": 4882688,
+            "cursor": 4882688,
+        },
+    )
+    result["scope"] = "STAGE_N"
+    result["runtime_fingerprint_path"] = str(a["rt_path"])
+    result["runtime_fingerprint_artifact_sha256"] = C.file_sha256(a["rt_path"])
+    result["stage_authorization_sha256"] = C.file_sha256(a["auth_path"])
+    result.update(mutation)
+
+    failures = C.validate_stage_n_result_against_artifacts(
+        result,
+        authorization=a["authorization"],
+        authorization_path=a["auth_path"],
+        governed_run_contract=a["doc"],
+        governed_run_contract_path=a["grc_path"],
+        runtime_fingerprint_path=a["rt_path"],
+        checkpoint_path=a["ckpt"],
+    )
+    assert failures, f"{mutation} was not rejected"
+
+
+def test_stage_o_resume_fields_are_derived_not_caller_selected(governed, tmp_path):
+    """R3 Part 15: Stage-O resume is mechanically derived from the accepted Stage-N result."""
+    a = _stage_n_artifacts(governed, tmp_path)
+    published = C.publish_stage_n_completion(
+        tmp_path / "out",
+        governed_run_contract=a["doc"],
+        governed_run_contract_path=a["grc_path"],
+        authorization=a["authorization"],
+        authorization_path=a["auth_path"],
+        runtime_fingerprint_path=a["rt_path"],
+        final_checkpoint_path=a["ckpt"],
+        final_checkpoint_step=C.STAGE_A_STOP_STEP,
+        smoke_results={"status": "PASS"},
+        resume_results={"status": "PASS"},
+        final_sampler_state={
+            "permutation_identity": C.permutation_identity(
+                "stage_a", C.STAGE_A_SAMPLER_SEED, 4882688
+            ),
+            "range_start_position": 0,
+            "range_stop_position": 4882688,
+            "cursor": 4882688,
+        },
+    )
+    result = json.loads((tmp_path / "out" / C.STAGE_N_RESULT_FILENAME).read_text())
+    derived = C.derive_stage_o_resume_binding(result)
+    assert derived["mode"] == "RESUME_EXACT_CHECKPOINT"
+    assert derived["checkpoint_path"] == str(a["ckpt"])
+    assert derived["checkpoint_sha256"] == C.file_sha256(a["ckpt"])
+    assert derived["expected_step"] == C.STAGE_A_STOP_STEP
+    assert published["stage_n_result_sha256"]
+
+
+def test_derived_stage_o_binding_makes_the_a_to_b_source_checks_live(governed, tmp_path):
+    """R3 Part 18: the source_* expectations must be populated, not absent.
+
+    ``validate_stage_a_to_b_transition`` guards each source check with ``is not None``, so a
+    binding that omits them does not fail -- it silently skips the strongest checks the A->B
+    transition has. The Stage-N result therefore records the final sampler state, and the
+    derived Stage-O binding carries it forward.
+    """
+    a = _stage_n_artifacts(governed, tmp_path)
+    C.publish_stage_n_completion(
+        tmp_path / "out",
+        governed_run_contract=a["doc"],
+        governed_run_contract_path=a["grc_path"],
+        authorization=a["authorization"],
+        authorization_path=a["auth_path"],
+        runtime_fingerprint_path=a["rt_path"],
+        final_checkpoint_path=a["ckpt"],
+        final_checkpoint_step=C.STAGE_A_STOP_STEP,
+        smoke_results={"status": "PASS"},
+        resume_results={"status": "PASS"},
+        final_sampler_state={
+            "permutation_identity": C.permutation_identity(
+                "stage_a", C.STAGE_A_SAMPLER_SEED, 4882688
+            ),
+            "range_start_position": 0,
+            "range_stop_position": 4882688,
+            "cursor": 4882688,
+        },
+    )
+    result = json.loads((tmp_path / "out" / C.STAGE_N_RESULT_FILENAME).read_text())
+    derived = C.derive_stage_o_resume_binding(result)
+
+    for field in (
+        "source_permutation_identity",
+        "source_range_start_position",
+        "source_range_stop_position",
+    ):
+        assert derived.get(field) is not None, f"{field} must be derived, not left absent"
+
+    stage_a_doc = _governed_doc(governed, governed["out"])
+    stage_b_doc = _governed_doc(governed, governed["out"], stage="stage_b")
+    ckpt = {
+        "governed_run_contract": stage_a_doc,
+        "governed_run_contract_sha256": C.governed_digest(stage_a_doc),
+        "governed_checkpoint_state": _state("stage_a"),
+        "global_step": C.STAGE_A_STOP_STEP,
+    }
+    assert C.validate_governed_checkpoint_before_restore(
+        ckpt, stage_b_doc, expected_resume=derived, stage_transition="A_TO_B"
+    )["compatible"]
+
+    # A source permutation the accepted Stage N did not end on must now be caught.
+    wrong = {**derived, "source_permutation_identity": "z" * 64}
+    verdict = C.validate_governed_checkpoint_before_restore(
+        ckpt, stage_b_doc, expected_resume=wrong, stage_transition="A_TO_B"
+    )
+    assert not verdict["compatible"]
+
+
+def test_invocation_run_contracts_do_not_collide_across_invocations(governed, tmp_path):
+    """R3 Part 8: Stage-B must not collide with Stage-A's single-publication artifact."""
+    stage_a_doc = _governed_doc(governed, governed["out"])
+    stage_b_doc = {
+        **stage_a_doc,
+        "stage": "stage_b",
+        "scope": "STAGE_O",
+        "stage_authorization_sha256": "b" * 64,
+        "active_stage_sampler_seed": C.STAGE_B_SAMPLER_SEED,
+    }
+    run_root = tmp_path / "run_root"
+    a = C.publish_invocation_run_contract(run_root, stage_a_doc)
+    b = C.publish_invocation_run_contract(run_root, stage_b_doc)
+    assert a["invocation_dir"] != b["invocation_dir"]
+    assert Path(a["path"]).is_file() and Path(b["path"]).is_file()
+    # Same BASE identity, different INVOCATION identity.
+    assert a["base_governed_identity_sha256"] == b["base_governed_identity_sha256"]
+    assert a["invocation_identity_sha256"] != b["invocation_identity_sha256"]
+
+
+def test_base_identity_is_stable_while_invocation_identity_changes(governed, tmp_path):
+    stage_a_doc = _governed_doc(governed, governed["out"])
+    stage_b_doc = {
+        **stage_a_doc,
+        "stage": "stage_b",
+        "scope": "STAGE_O",
+        "stage_authorization_sha256": "b" * 64,
+        "active_stage_sampler_seed": C.STAGE_B_SAMPLER_SEED,
+        "samples_dir": str(governed["out"] / "samples_b"),
+    }
+    assert C.base_governed_identity_sha256(stage_a_doc) == C.base_governed_identity_sha256(
+        stage_b_doc
+    )
+    assert C.invocation_identity_sha256(stage_a_doc) != C.invocation_identity_sha256(stage_b_doc)

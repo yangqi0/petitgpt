@@ -457,6 +457,36 @@ def test_wrapper_that_never_compiles_is_rejected():
         C.require_compile_realized(evidence)
 
 
+@pytest.mark.parametrize(
+    "contradiction",
+    [
+        {"compilation_materialized": False},
+        {"invoked_compiled_callable": False},
+        {"realized_module_is_optimized_module": False},
+        {"eager_fallback_occurred": True},
+    ],
+)
+def test_a_compile_verdict_contradicting_its_own_subfacts_is_rejected(contradiction):
+    """R3 Part 18: Gate C re-derives the verdict instead of trusting the boolean.
+
+    A document that asserts compile_realized while its own sub-facts say compile never
+    materialized is a contradiction. Reading it as the answer it claims is precisely the
+    trust-the-flag pattern this contract exists to prevent.
+    """
+    evidence = dict(_evidence())
+    assert evidence["compile_realized"] is True
+    evidence.update(contradiction)
+    with pytest.raises(C.LaunchContractError):
+        C.require_compile_realized(evidence)
+
+
+def test_compile_evidence_missing_its_subfacts_cannot_be_accepted():
+    evidence = dict(_evidence())
+    del evidence["compilation_materialized"]
+    with pytest.raises(C.LaunchContractError, match="sub-facts"):
+        C.require_compile_realized(evidence)
+
+
 def test_recompile_limit_fallback_is_rejected():
     evidence = _evidence(recompile=True)
     assert evidence["recompile_limit_fallback_detected"] is True
@@ -604,8 +634,27 @@ def _ckpt(doc, **over):
 
 
 def test_matching_governed_checkpoint_resumes(tmp_path):
+    """R3 Part 5: a governed resume must supply the expected sampler identity."""
     doc = _contract(tmp_path)
-    assert C.validate_governed_checkpoint_before_restore(_ckpt(doc), doc)["compatible"] is True
+    ckpt = _ckpt(doc)
+    ckpt["governed_checkpoint_state"] = _source_state()
+    # A resuming sampler begins its range AT the recovered cursor -- copying the saved
+    # range start would not be a shape the trainer can actually produce.
+    identity = {
+        "stage": "stage_a",
+        "sampler_seed": C.STAGE_A_SAMPLER_SEED,
+        "permutation_identity": "p" * 64,
+        "range_start_position": 4882688,
+        "range_stop_position": 4882688,
+        "cursor": 4882688,
+    }
+    verdict = C.validate_governed_checkpoint_before_restore(
+        ckpt, doc, current_sampler_identity=identity
+    )
+    assert verdict["compatible"] is True, verdict["failures"]
+
+    # passing no identity is itself a refusal
+    assert C.validate_governed_checkpoint_before_restore(ckpt, doc)["compatible"] is False
 
 
 @pytest.mark.parametrize(
@@ -666,24 +715,44 @@ def test_resume_rejects_a_wrong_expected_step(tmp_path):
 # --------------------------------------------------------------------- sampler persistence
 
 
+CURSOR = 1280000  # a mid-stage crash point, not the stage end
+
+
 def _identity(stage, **over):
+    """The SAVED shape: a run that started its range at 0 and committed up to CURSOR."""
     base = {
         "stage": stage,
         "sampler_seed": C.stage_sampler_seed(stage),
         "range_start_position": 0,
         "range_stop_position": 4882688,
-        "cursor": 4882688,
+        "cursor": CURSOR,
         "permutation_identity": "p" * 64,
     }
     base.update(over)
     return base
 
 
-def test_same_stage_resume_validates_range_start_position():
+def _resumed(stage, **over):
+    """The CURRENT shape: a resuming run whose range legitimately begins at the cursor.
+
+    The trainer builds its sampler with ``start_position=stage_sample_position``, so this --
+    not a copy of the saved dict -- is what a real same-stage resume actually presents.
+    """
+    over.setdefault("range_start_position", CURSOR)
+    return _identity(stage, **over)
+
+
+def test_same_stage_resume_accepts_a_real_resumed_sampler_shape():
+    """The permutation depends on seed and epoch only, so a moved range start is legitimate."""
+    assert C.validate_same_stage_resume(_identity("stage_a"), _resumed("stage_a")) == []
+
+
+@pytest.mark.parametrize("drift", [-128, 128])
+def test_same_stage_resume_rejects_a_discontinuous_range_start(drift):
+    """Starting before the committed cursor replays data; starting after it skips data."""
     saved = _identity("stage_a")
-    assert C.validate_same_stage_resume(saved, saved) == []
-    moved = _identity("stage_a", range_start_position=128)
-    assert any("range_start_position" in f for f in C.validate_same_stage_resume(saved, moved))
+    moved = _resumed("stage_a", range_start_position=CURSOR + drift, cursor=CURSOR + drift)
+    assert any("discontinuity" in f for f in C.validate_same_stage_resume(saved, moved))
 
 
 @pytest.mark.parametrize(
@@ -697,55 +766,108 @@ def test_same_stage_resume_validates_range_start_position():
 )
 def test_same_stage_resume_rejects_sampler_drift(field, value):
     saved = _identity("stage_a")
-    drifted = dict(saved)
+    drifted = _resumed("stage_a")
     drifted[field] = value
     assert C.validate_same_stage_resume(saved, drifted)
 
 
 def test_cursor_outside_its_range_is_rejected():
     saved = _identity("stage_a", cursor=99999999)
+    current = _resumed("stage_a", range_start_position=99999999, cursor=99999999)
     assert any(
-        "outside its committed range" in f for f in C.validate_same_stage_resume(saved, saved)
+        "outside its committed range" in f for f in C.validate_same_stage_resume(saved, current)
     )
 
 
-def test_stage_a_to_b_requires_a_complete_stage_a_endpoint(tmp_path):
-    doc = _contract(tmp_path)
-    doc["sampler_identity"] = _identity("stage_a")
-    doc["global_step"] = C.STAGE_A_STOP_STEP
-    assert C.validate_stage_a_to_b_transition(doc) == []
+def _source_state(**over):
+    state = {
+        "active_stage": "stage_a",
+        "active_stage_sampler_seed": C.STAGE_A_SAMPLER_SEED,
+        "permutation_identity": "p" * 64,
+        "range_start_position": 0,
+        "range_stop_position": 4882688,
+        "cursor": 4882688,
+        "global_step": C.STAGE_A_STOP_STEP,
+    }
+    state.update(over)
+    return state
 
 
-def test_stage_a_to_b_rejects_a_wrong_saved_stage_a_seed(tmp_path):
-    doc = _contract(tmp_path)
-    doc["sampler_identity"] = _identity("stage_a", sampler_seed=C.STAGE_B_SAMPLER_SEED)
-    doc["active_stage_sampler_seed"] = C.STAGE_B_SAMPLER_SEED
-    doc["global_step"] = C.STAGE_A_STOP_STEP
-    failures = C.validate_stage_a_to_b_transition(doc)
-    assert any("Stage-A sampler seed" in f or "Stage-A seed" in f for f in failures)
+def _source_contract(**over):
+    contract = {
+        "kind": C.GOVERNED_CHECKPOINT_KIND,
+        "stage": "stage_a",
+        "active_stage_sampler_seed": C.STAGE_A_SAMPLER_SEED,
+    }
+    contract.update(over)
+    return contract
 
 
-def test_stage_a_to_b_rejects_an_incomplete_consumed_range(tmp_path):
-    doc = _contract(tmp_path)
-    doc["sampler_identity"] = _identity("stage_a", cursor=100)
-    doc["global_step"] = C.STAGE_A_STOP_STEP
-    assert any("incomplete" in f for f in C.validate_stage_a_to_b_transition(doc))
+def test_stage_a_to_b_accepts_a_complete_stage_a_endpoint():
+    assert C.validate_stage_a_to_b_transition(_source_contract(), _source_state()) == []
 
 
-def test_stage_a_to_b_rejects_a_cursor_off_the_plan_boundary(tmp_path):
-    doc = _contract(tmp_path)
-    doc["sampler_identity"] = _identity("stage_a")
-    doc["global_step"] = 12345
-    assert any("plan boundary" in f for f in C.validate_stage_a_to_b_transition(doc))
+@pytest.mark.parametrize(
+    "state_over,expect",
+    [
+        ({"active_stage_sampler_seed": C.STAGE_B_SAMPLER_SEED}, "Stage-A seed"),
+        ({"cursor": 100}, "incomplete"),
+        ({"global_step": 12345}, "plan boundary"),
+        ({"active_stage": "stage_b"}, "active_stage"),
+        ({"range_stop_position": 0}, "empty or inverted"),
+    ],
+)
+def test_stage_a_to_b_rejects_an_invalid_source_state(state_over, expect):
+    failures = C.validate_stage_a_to_b_transition(_source_contract(), _source_state(**state_over))
+    assert any(expect in f for f in failures), failures
 
 
-def test_stage_a_to_b_rejects_a_stage_b_source(tmp_path):
-    # Built directly: a Stage-B contract cannot come through Gate A without the STAGE_O chain.
-    doc = _contract(tmp_path)
-    doc["stage"] = "stage_b"
-    doc["sampler_identity"] = _identity("stage_b")
-    doc["active_stage_sampler_seed"] = C.STAGE_B_SAMPLER_SEED
-    assert any("expected 'stage_a'" in f for f in C.validate_stage_a_to_b_transition(doc))
+@pytest.mark.parametrize(
+    "field",
+    [
+        "active_stage",
+        "active_stage_sampler_seed",
+        "permutation_identity",
+        "range_start_position",
+        "range_stop_position",
+        "cursor",
+        "global_step",
+    ],
+)
+def test_stage_a_to_b_requires_every_field_present(field):
+    """R3 Part 6: a missing/null value is a failure, never an accepted default."""
+    state = _source_state()
+    state[field] = None
+    failures = C.validate_stage_a_to_b_transition(_source_contract(), state)
+    assert any(f"missing required field:{field}" in f for f in failures), failures
+
+
+def test_stage_a_to_b_rejects_a_non_governed_or_stage_b_source():
+    assert any(
+        "not a governed checkpoint" in f
+        for f in C.validate_stage_a_to_b_transition(
+            _source_contract(kind="LEGACY"), _source_state()
+        )
+    )
+    assert any(
+        "expected 'stage_a'" in f
+        for f in C.validate_stage_a_to_b_transition(
+            _source_contract(stage="stage_b"), _source_state()
+        )
+    )
+
+
+def test_stage_a_to_b_compares_exact_expected_permutation_and_range():
+    failures = C.validate_stage_a_to_b_transition(
+        _source_contract(),
+        _source_state(),
+        expected_permutation_identity="q" * 64,
+        expected_range_start_position=128,
+        expected_range_stop_position=999,
+    )
+    assert any("permutation identity mismatch" in f for f in failures)
+    assert any("range_start_position" in f for f in failures)
+    assert any("range_stop_position" in f for f in failures)
 
 
 # --------------------------------------------------------------------- Part 10: device map
@@ -845,13 +967,48 @@ def test_ambiguous_nvml_match_fails_closed():
 
 
 def test_cuda_pci_disagreeing_with_nvml_fails_closed():
+    """R3 Part 16: with both identities present, a PCI that resolves nowhere fails closed."""
     resolved = C.resolve_selected_gpu_identity(
         cuda_visible_devices="0",
         records=NVML,
         cuda_identity=_cuda(uuid="GPU-bbbb", pci="00000000:07:00.0"),
     )
     assert resolved["resolved"] is False
-    assert any("pci_disagrees_with_nvml" in f for f in resolved["failures"])
+    assert any(
+        "unmatched_in_nvml" in f or "resolve_to_different_devices" in f
+        for f in resolved["failures"]
+    ), resolved["failures"]
+
+
+def test_cuda_uuid_and_pci_resolving_to_different_devices_fails_closed():
+    """No `by_uuid or by_pci` fallback: disagreement is a hard failure."""
+    resolved = C.resolve_selected_gpu_identity(
+        cuda_visible_devices="0",
+        records=NVML,
+        cuda_identity=_cuda(uuid="GPU-aaaa", pci="00000000:02:00.0"),
+    )
+    assert resolved["resolved"] is False
+    assert any("resolve_to_different_devices" in f for f in resolved["failures"])
+
+
+def test_unknown_cuda_uuid_is_not_rescued_by_a_matching_pci():
+    resolved = C.resolve_selected_gpu_identity(
+        cuda_visible_devices="0",
+        records=NVML,
+        cuda_identity=_cuda(uuid="GPU-zzzz", pci="00000000:01:00.0"),
+    )
+    assert resolved["resolved"] is False
+
+
+def test_contradictory_cvd_uuid_fails_closed():
+    """R3 Part 17: a UUID-form CVD must agree with logical device 0's CUDA UUID."""
+    resolved = C.resolve_selected_gpu_identity(
+        cuda_visible_devices="GPU-bbbb",
+        records=NVML,
+        cuda_identity=_cuda(uuid="GPU-aaaa", pci="00000000:01:00.0"),
+    )
+    assert resolved["resolved"] is False
+    assert any("contradicts_logical_device_0" in f for f in resolved["failures"])
 
 
 def test_inconsistent_torch_name_is_rejected():
@@ -896,7 +1053,21 @@ def _stage_n_result(tmp_path, **over):
         final_checkpoint_step=38146,
         smoke_results={"status": "PASS", "updates": 0},
         resume_results={"status": "PASS", "verified": True},
+        final_sampler_state={
+            "permutation_identity": C.permutation_identity(
+                "stage_a", C.STAGE_A_SAMPLER_SEED, 4882688
+            ),
+            "range_start_position": 0,
+            "range_stop_position": 4882688,
+            "cursor": 4882688,
+        },
     )
+    # R3 Part 14: the runtime fingerprint is a real artifact whose SHA the result binds.
+    rt = tmp_path / "STAGE_N_RUNTIME.json"
+    rt_bytes = C.canonical_json_bytes(result["runtime_fingerprint"])
+    rt.write_bytes(rt_bytes)
+    result["runtime_fingerprint_path"] = str(rt)
+    result["runtime_fingerprint_artifact_sha256"] = C._sha256_bytes(rt_bytes)
     result.update(over)
     return result
 
@@ -1015,6 +1186,10 @@ def _stage_o_chain(
         "stage_n_final_checkpoint_path": result["final_checkpoint_path"],
         "stage_n_final_checkpoint_sha256": result["final_checkpoint_sha256"],
         "stage_n_final_checkpoint_step": result["final_checkpoint_step"],
+        "stage_n_runtime_fingerprint_path": result["runtime_fingerprint_path"],
+        "stage_n_runtime_fingerprint_artifact_sha256": result[
+            "runtime_fingerprint_artifact_sha256"
+        ],
     }
     chain.update(chain_over or {})
     resume = {
@@ -1030,6 +1205,23 @@ def _stage_o_chain(
     if runtime_over:
         observed["runtime_fingerprint_sha256"] = C.runtime_fingerprint_sha256(observed)
     return {"stage_n_chain": chain, "resume": resume}, observed
+
+
+def test_a_stage_n_authorization_may_not_declare_the_a_to_b_transition():
+    """R3 Part 18: A_TO_B is the declaration that suppresses invocation-identity matching.
+
+    If a STAGE_N authorization could declare it, a same-stage resume would be judged by the
+    transition rule instead of the same-stage rule -- choosing the weaker check for its own
+    case. The transition is therefore pinned to the scope.
+    """
+    assert C.validate_transition_declaration({"transition": "A_TO_B"}, scope="STAGE_N")
+    assert C.validate_transition_declaration({}, scope="STAGE_N") == []
+
+
+def test_a_stage_o_authorization_must_declare_the_a_to_b_transition():
+    assert C.validate_transition_declaration({}, scope="STAGE_O")
+    assert C.validate_transition_declaration({"transition": "SAME_STAGE"}, scope="STAGE_O")
+    assert C.validate_transition_declaration({"transition": "A_TO_B"}, scope="STAGE_O") == []
 
 
 def test_stage_o_without_a_stage_n_chain_is_rejected():
@@ -1249,6 +1441,10 @@ def test_real_trainer_save_ckpt_binds_the_governed_contract(tmp_path, monkeypatc
     saved = captured["obj"]
     assert saved["governed_run_contract"] == doc
     assert saved["governed_run_contract_sha256"] == digest
+    # R3 Part 2: a governed save may carry the live dynamic state block.
+    assert "governed_checkpoint_state" not in saved or isinstance(
+        saved["governed_checkpoint_state"], dict
+    )
     assert saved["kind"] == C.GOVERNED_CHECKPOINT_KIND
     assert C.is_governed_checkpoint(saved) is True
     assert "rng_state" in saved and "data_sampler" in saved

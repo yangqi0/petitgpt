@@ -1100,6 +1100,7 @@ def load_ckpt(
     governed_expected_resume: dict | None = None,
     governed_sampler_identity: dict | None = None,
     governed_stage_transition: str | None = None,
+    governed_expected_global_step: int | None = None,
 ) -> tuple[int, int, dict[str, int], dict]:
     ckpt = torch.load(resume_path, map_location="cpu")
 
@@ -1116,9 +1117,7 @@ def load_ckpt(
         if (governed_expected_resume or {}).get("mode") == "RESUME_EXACT_CHECKPOINT":
             from production_launch_contract_v1 import verify_authorized_checkpoint_bytes
 
-            byte_check = verify_authorized_checkpoint_bytes(
-                governed_expected_resume, resume_path
-            )
+            byte_check = verify_authorized_checkpoint_bytes(governed_expected_resume, resume_path)
             if not byte_check["verified"]:
                 raise LaunchContractError(
                     "governed resume refused before restoring any state:\n  - "
@@ -1131,6 +1130,7 @@ def load_ckpt(
             expected_resume=governed_expected_resume,
             current_sampler_identity=governed_sampler_identity,
             stage_transition=governed_stage_transition,
+            expected_global_step=governed_expected_global_step,
         )
         if not verdict["compatible"]:
             raise LaunchContractError(
@@ -2041,6 +2041,48 @@ def main() -> None:
     position_stats = empty_position_stats()
     resume_metadata: dict = {}
     if resolved is not None:
+        # R3 Parts 5-7: derive the expected sampler identity and transition kind BEFORE the
+        # checkpoint is opened, so pre-restore validation has something exact to compare.
+        governed_transition = None
+        governed_expected_sampler_identity = None
+        governed_expected_step = None
+        if governed_launch is not None:
+            from production_launch_contract_v1 import (
+                expected_sampler_identity_for_resume,
+            )
+
+            governed_transition = governed_launch.get("transition")
+            governed_expected_step = int(
+                (governed_launch.get("resume") or {}).get("expected_step", -1)
+            )
+            if governed_expected_step < 0:
+                governed_expected_step = None
+            if governed_transition != "A_TO_B" and governed_expected_step is not None:
+                # The training sampler is constructed after this block, so the expectation is
+                # DERIVED from the frozen policy plus the authorized resume step rather than
+                # read off an object that does not exist yet.
+                governed_planned_stage_samples, _ = resolve_run_plan_sample_budget(
+                    run_plan_binding,
+                    stage_sample_position=(
+                        (governed_expected_step - int(args.data_stage_start_step))
+                        * int(args.micro_bsz)
+                        * int(args.grad_accum)
+                    ),
+                    step_derived_stage_samples=(
+                        (int(args.max_steps) - int(args.data_stage_start_step))
+                        * int(args.micro_bsz)
+                        * int(args.grad_accum)
+                    ),
+                )
+                governed_expected_sampler_identity = expected_sampler_identity_for_resume(
+                    str(args.run_plan_stage),
+                    expected_step=governed_expected_step,
+                    data_stage_start_step=int(args.data_stage_start_step),
+                    micro_bsz=int(args.micro_bsz),
+                    grad_accum=int(args.grad_accum),
+                    planned_stage_samples=int(governed_planned_stage_samples),
+                )
+
         global_step, _, position_stats, resume_metadata = load_ckpt(
             resume_path=resolved,
             model=model,
@@ -2055,7 +2097,12 @@ def main() -> None:
             governed_expected_resume=(
                 (governed_launch or {}).get("resume") if governed_launch else None
             ),
-            governed_sampler_identity=None,
+            # R3 Part 5: the EXPECTED sampler identity is derived here and validated before
+            # any state is restored. Passing None because "later validation exists" is
+            # exactly the ordering defect this replaces.
+            governed_sampler_identity=governed_expected_sampler_identity,
+            governed_stage_transition=governed_transition,
+            governed_expected_global_step=governed_expected_step,
         )
         synchronize_validated_run_plan_binding(run_contract, run_plan_binding)
         print(f"[resume] loaded {resolved} (global_step={global_step})")
@@ -2178,6 +2225,11 @@ def main() -> None:
 
     # R1 Gate C + Part 4: realize compile, then atomically publish the normalized governed
     # run contract. Both complete BEFORE the first optimizer update.
+    # R3 Part 2: live milestone tracking, so every governed checkpoint records what has
+    # ACTUALLY completed rather than a stale launch-time value.
+    completed_eval_milestones: list[int] = []
+    completed_save_milestones: list[int] = []
+
     if governed_launch is not None:
         governed_run_contract, governed_run_contract_sha256 = publish_governed_run_contract_now(
             args=args,
@@ -2395,6 +2447,8 @@ def main() -> None:
                 eos_id=int(args.eos_id),
                 eos_weight=1.0,
             )
+            if global_step in args.eval_steps and global_step not in completed_eval_milestones:
+                completed_eval_milestones.append(int(global_step))
             print(f"[eval] step={global_step} val_loss={val_loss:.4f}")
             val_ppl = maybe_ppl(val_loss, 1.0)
             if val_loss < best_val:
@@ -2465,6 +2519,8 @@ def main() -> None:
                 save_steps=args.save_steps,
                 invocation_final_step=int(args.max_steps),
             )
+            if global_step in args.save_steps and global_step not in completed_save_milestones:
+                completed_save_milestones.append(int(global_step))
             save_ckpt(
                 out_dir=out_dir,
                 global_step=global_step,
@@ -2481,6 +2537,19 @@ def main() -> None:
                 retain_step=retain_step,
                 governed_run_contract=governed_run_contract,
                 governed_run_contract_sha256=governed_run_contract_sha256,
+                governed_checkpoint_state=(
+                    governed_checkpoint_state(
+                        args=args,
+                        sampler=train_sampler,
+                        global_step=global_step,
+                        completed_eval_milestones=completed_eval_milestones,
+                        completed_save_milestones=completed_save_milestones,
+                        rng_state=capture_rng_state(),
+                        compile_evidence=compile_evidence,
+                    )
+                    if governed_launch is not None
+                    else None
+                ),
             )
             last_checkpoint_step = global_step
             last_checkpoint_retained = retain_step
@@ -2547,6 +2616,19 @@ def main() -> None:
             retain_step=True,
             governed_run_contract=governed_run_contract,
             governed_run_contract_sha256=governed_run_contract_sha256,
+            governed_checkpoint_state=(
+                governed_checkpoint_state(
+                    args=args,
+                    sampler=train_sampler,
+                    global_step=global_step,
+                    completed_eval_milestones=completed_eval_milestones,
+                    completed_save_milestones=completed_save_milestones,
+                    rng_state=capture_rng_state(),
+                    compile_evidence=compile_evidence,
+                )
+                if governed_launch is not None
+                else None
+            ),
         )
     tracker.render()
     print(f"[done] saved final checkpoint to {out_dir}")

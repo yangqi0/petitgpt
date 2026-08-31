@@ -193,6 +193,13 @@ immutable resume identity: a legitimate resume recompiles and produces different
 What resume does require is that a governed checkpoint claiming `compile=true` carries
 realized evidence.
 
+**R3 correction — Gate C re-derives its verdict.** `require_compile_realized` no longer
+trusts the `compile_realized` boolean. It re-derives the verdict from the sub-facts recorded
+in the same document — the compiled callable was actually invoked, the realized module is an
+`OptimizedModule`, and compilation materialized — refuses a document missing any of them,
+and rejects a recorded eager fallback. A document asserting realization while its own
+sub-facts deny it is a contradiction and aborts the run.
+
 ## Governed run contract, checkpoints and resume
 
 The normalized governed run contract is published **atomically, exactly once**, before the
@@ -212,9 +219,35 @@ mismatched checkpoint can never partially mutate the process.
 `build_data_contract` records the **active stage** sampler seed, not the legacy shared
 field, alongside both per-stage seeds and the active stage name. The governed run contract
 carries the permutation identity, `range_start_position`, `range_stop_position` and cursor.
-Same-stage resume validates `range_start_position` as well as seed, permutation and range.
 The A→B transition additionally requires a Stage-A source, the correct saved Stage-A seed, a
 complete consumed range, and a cursor exactly at the plan boundary.
+
+**R3 correction — what a permutation identity identifies.** `ResumablePermutationSampler`
+derives each epoch's order from `seed` and the epoch index alone; `range_start_position` is
+per-invocation bookkeeping for the planned remainder. The identity digest therefore covers
+`(stage, sampler_seed, range_stop_position)` only. Keying it on the range start — and
+requiring that start to be equal across a resume — would have declared every legitimate
+restart a different permutation, because a resuming sampler necessarily begins its range at
+the recovered cursor rather than at 0.
+
+What replaces it is stricter, not weaker: same-stage resume requires **exact continuity** —
+the resuming sampler's `range_start_position` and cursor must both equal the checkpoint's
+committed cursor. Starting one batch early replays data; starting one batch late skips it;
+both now fail. Seed, stage, permutation identity and `range_stop_position` must still match
+exactly.
+
+**R3 correction — a restart is a new invocation.** `stage_authorization_sha256` and `resume`
+are INVOCATION-identity fields, and a crash restart necessarily differs in both: it is
+authorized by a new file, and it resumes a checkpoint written under a `FRESH`-mode
+authorization. Requiring them to match made a same-stage restart structurally impossible —
+an interrupted multi-day Stage A could never have been continued. Same-stage resume
+therefore compares `SAME_STAGE_INVOCATION_MATCH_FIELDS` (stage, scope, `out_dir`,
+`samples_dir`, active sampler seed, and both absolute stage boundaries) plus the complete
+BASE identity.
+
+The compensating control is that the restart authorization must still name the run it
+claims to continue: its `resume.governed_run_contract_sha256` must equal the checkpoint's
+own recomputed contract digest. A restart cannot point at an unrelated run's checkpoint.
 
 ## Selected-device UUID/PCI
 
@@ -227,6 +260,13 @@ physical NVML record, and an ambiguous, unresolvable or inconsistent mapping fai
 A completed Stage N publishes a machine-readable result binding its authorization, contract,
 plan, acceptance, trainer identity, governed run-contract digest, final checkpoint identity,
 runtime fingerprint, GPU UUID/PCI and `num_workers`.
+
+**R3 correction — the A→B source checks must be populated to run.** The Stage-N result also
+records the final sampler permutation identity, range and cursor, and
+`derive_stage_o_resume_binding` carries them into the Stage-O binding as `source_*` fields.
+Each source check inside `validate_stage_a_to_b_transition` is guarded by `is not None`, so
+a binding that omitted them did not fail — it silently skipped the strongest checks the A→B
+transition has. Publishing a Stage-N result without the final sampler state is now refused.
 
 A Stage-O authorization must carry the accepted Stage-N chain and is validated by **loading
 the accepted Stage-N result from disk** and comparing it with the currently observed
