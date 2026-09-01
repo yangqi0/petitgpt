@@ -9,6 +9,7 @@
 from __future__ import annotations
 
 import argparse
+from contextlib import contextmanager
 from dataclasses import asdict
 import hashlib
 import json
@@ -225,6 +226,8 @@ def validate_data_resume_state(
     global_step: int,
     data_stage_start_step: int,
     strict: bool,
+    preserve_invocation_range_start: bool = False,
+    governed_checkpoint_state: dict | None = None,
 ) -> None:
     """Restore sampler state only for a proven same-stage exact continuation."""
     at_stage_boundary = int(global_step) == int(data_stage_start_step)
@@ -234,6 +237,22 @@ def validate_data_resume_state(
         and saved_data_contract.get("data_stage_start_step")
         == current_data_contract.get("data_stage_start_step")
     )
+    if preserve_invocation_range_start:
+        # Defense in depth: load_ckpt already runs this exact check before restoring model,
+        # optimizer, scaler, or RNG state. Re-run it at the data boundary before the v2
+        # loader can normalize/coerce any raw field.
+        from production_launch_contract_v1 import (
+            validate_governed_operational_sampler_state,
+        )
+
+        sampler_mismatches = validate_governed_operational_sampler_state(
+            saved_sampler_state, governed_checkpoint_state, saved_data_contract
+        )
+        if sampler_mismatches:
+            raise RuntimeError(
+                "[resume] governed operational/dynamic sampler state mismatch:\n  - "
+                + "\n  - ".join(sampler_mismatches)
+            )
     if at_stage_boundary and not same_stage:
         boundary_issues = []
         if not isinstance(saved_data_contract, dict):
@@ -244,12 +263,18 @@ def validate_data_resume_state(
             if int(saved_sampler_state.get("version", 0)) != 2:
                 boundary_issues.append("previous-stage sampler state is not schema version 2")
             try:
-                range_start = int(saved_sampler_state["range_start_position"])
+                invocation_start = int(saved_sampler_state["range_start_position"])
                 committed = int(saved_sampler_state["committed_position"])
                 end_position = int(saved_sampler_state["end_position"])
             except (KeyError, TypeError, ValueError):
                 boundary_issues.append("previous-stage sampler positions are missing or invalid")
             else:
+                if not 0 <= invocation_start <= committed <= end_position:
+                    boundary_issues.append(
+                        "previous-stage sampler positions are inconsistent: "
+                        f"invocation_start={invocation_start}, committed={committed}, "
+                        f"planned_end={end_position}"
+                    )
                 if committed != end_position:
                     boundary_issues.append(
                         "previous-stage sampler is incomplete: "
@@ -259,9 +284,11 @@ def validate_data_resume_state(
                     try:
                         previous_start = int(saved_data_contract["data_stage_start_step"])
                         samples_per_step = int(saved_data_contract["samples_per_optimizer_step"])
-                        expected_committed = (
-                            range_start + (int(global_step) - previous_start) * samples_per_step
-                        )
+                        # Sampler positions are absolute within the canonical stage
+                        # permutation. ``range_start_position`` is the source invocation's
+                        # restart boundary, so adding it here would double-count every sample
+                        # consumed before that restart and reject a completed restarted stage.
+                        expected_committed = (int(global_step) - previous_start) * samples_per_step
                     except (KeyError, TypeError, ValueError):
                         boundary_issues.append(
                             "previous-stage data contract cannot prove committed exposure"
@@ -330,7 +357,18 @@ def validate_data_resume_state(
         )
         return
 
+    invocation_start = int(expected_sampler["range_start_position"])
     current_sampler.load_state_dict(saved_sampler_state)
+    if preserve_invocation_range_start:
+        # ``load_state_dict`` restores the source invocation's original planned range. A
+        # governed restart is a new invocation whose exact start is the mechanically derived
+        # checkpoint cursor. Retain the validated source cursor/end/seed while keeping this
+        # new invocation boundary live for Gate C publication and every later checkpoint.
+        if int(current_sampler.committed_position) != invocation_start:
+            raise RuntimeError(
+                "[resume] governed sampler cursor changed while restoring its verified state"
+            )
+        current_sampler.range_start_position = invocation_start
     print(
         f"[resume] restored verified sampler position={current_sampler.position:,} "
         f"remaining={len(current_sampler):,}"
@@ -790,6 +828,7 @@ def validate_resume_contract(
     checkpoint_step: int,
     allow_schedule_branch: bool,
     allow_data_branch: bool = False,
+    governed_stage_transition: str | None = None,
 ) -> None:
     saved = checkpoint.get("run_contract")
     if allow_data_branch and allow_schedule_branch:
@@ -808,6 +847,24 @@ def validate_resume_contract(
     mismatches = []
     for key, expected in current.items():
         actual = saved.get(key)
+        if key == "sampler_seed" and governed_stage_transition == "A_TO_B":
+            saved_policy = saved.get("governed_policy") or {}
+            current_policy = current.get("governed_policy") or {}
+            saved_stage_a_seed = saved_policy.get("stage_a_sampler_seed")
+            current_stage_b_seed = current_policy.get("stage_b_sampler_seed")
+            if not all(
+                type(value) is int
+                for value in (actual, expected, saved_stage_a_seed, current_stage_b_seed)
+            ):
+                mismatches.append(
+                    "sampler_seed: governed A_TO_B sampler seeds must be exact integers"
+                )
+            elif actual != saved_stage_a_seed or expected != current_stage_b_seed:
+                mismatches.append(
+                    "sampler_seed: governed A_TO_B must change exactly from the saved "
+                    "Stage-A seed to the current Stage-B seed"
+                )
+            continue
         if key == "run_plan" and actual != expected:
             try:
                 validate_run_plan_resume_transition(
@@ -960,6 +1017,19 @@ def restore_rng_state(state: dict | None) -> None:
         raise RuntimeError("[resume] --resume_full requires rng_state in checkpoint")
     if state.get("python") is None or state.get("torch_cpu") is None:
         raise RuntimeError("[resume] checkpoint RNG state is incomplete")
+
+    # Prove the CUDA bytes against an isolated generator before mutating any process-global
+    # RNG stream. A malformed CUDA state must not leave Python/NumPy/CPU partially restored.
+    from production_launch_contract_v1 import validate_cuda_rng_states
+
+    if torch.cuda.is_available():
+        cuda_failures = validate_cuda_rng_states(
+            state.get("torch_cuda"), require_live_validation=True
+        )
+        if cuda_failures:
+            raise RuntimeError(
+                "[resume] CUDA RNG state is incompatible: " + ", ".join(cuda_failures)
+            )
     random.setstate(state["python"])
     torch.set_rng_state(state["torch_cpu"])
 
@@ -1041,6 +1111,68 @@ def save_ckpt(
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
+    if governed_run_contract is not None:
+        from production_launch_contract_v1 import (
+            LaunchContractError,
+            validate_governed_checkpoint_resume_envelope,
+            validate_governed_checkpoint_state,
+            validate_governed_operational_sampler_state,
+        )
+
+        dynamic_failures = validate_governed_checkpoint_state(
+            governed_checkpoint_state,
+            governed_run_contract=governed_run_contract,
+            checkpoint_global_step=int(global_step),
+            require_live_cuda_validation=True,
+        )
+        if dynamic_failures:
+            raise LaunchContractError(
+                "governed checkpoint save refused because live dynamic state is not fully "
+                "resumable:\n  - " + "\n  - ".join(dynamic_failures)
+            )
+        sampler_failures = validate_governed_operational_sampler_state(
+            sampler_state, governed_checkpoint_state, data_contract
+        )
+        if sampler_failures:
+            raise LaunchContractError(
+                "governed checkpoint save refused because operational sampler state does not "
+                "match live dynamic state:\n  - " + "\n  - ".join(sampler_failures)
+            )
+        # Use one exact RNG capture in both ordinary and governed state. A second capture at
+        # serialization time could otherwise describe a different resume point.
+        checkpoint_rng_state = governed_checkpoint_state["rng_state"]
+
+        training_contract = governed_run_contract.get("training") or {}
+        compile_claimed = bool(
+            governed_run_contract.get("compile_intent") or training_contract.get("compile")
+        )
+        if compile_claimed:
+            from production_launch_contract_v1 import require_compile_realized
+
+            if not isinstance(governed_checkpoint_state, dict):
+                raise LaunchContractError(
+                    "a governed compile=true checkpoint requires live dynamic state"
+                )
+            live_compile_evidence = governed_checkpoint_state.get("compile_evidence")
+            if not isinstance(live_compile_evidence, dict):
+                raise LaunchContractError(
+                    "a governed compile=true checkpoint requires current-process realized "
+                    "compile evidence"
+                )
+            require_compile_realized(live_compile_evidence)
+            live_sha = live_compile_evidence.get("compile_evidence_sha256")
+            if governed_checkpoint_state.get("compile_evidence_sha256") != live_sha:
+                raise LaunchContractError(
+                    "dynamic checkpoint compile-evidence SHA does not match its live document"
+                )
+            if governed_run_contract.get("compile_evidence_sha256") != live_sha:
+                raise LaunchContractError(
+                    "checkpoint compile evidence is not the verified evidence published by "
+                    "this invocation"
+                )
+    else:
+        checkpoint_rng_state = capture_rng_state()
+
     model_to_save = model._orig_mod if hasattr(model, "_orig_mod") else model
     ckpt = {
         "model": model_to_save.state_dict(),
@@ -1052,7 +1184,7 @@ def save_ckpt(
         "train_args": train_args,
         "run_contract": run_contract,
         "data_contract": data_contract,
-        "rng_state": capture_rng_state(),
+        "rng_state": checkpoint_rng_state,
         "position_stats": {k: int(v) for k, v in position_stats.items()},
         "data_sampler": sampler_state,
         "checkpoint_retention": {"retain_step": bool(retain_step)},
@@ -1068,6 +1200,13 @@ def save_ckpt(
         # kept separate from the immutable run identity above.
         if governed_checkpoint_state is not None:
             ckpt["governed_checkpoint_state"] = governed_checkpoint_state
+
+        envelope_failures = validate_governed_checkpoint_resume_envelope(ckpt)
+        if envelope_failures:
+            raise LaunchContractError(
+                "governed checkpoint save refused because the real resume envelope is "
+                "incomplete or inconsistent:\n  - " + "\n  - ".join(envelope_failures)
+            )
 
     latest_path = out_dir / "latest.pt"
     step_path = out_dir / f"step_{global_step:06d}.pt"
@@ -1101,8 +1240,13 @@ def load_ckpt(
     governed_sampler_identity: dict | None = None,
     governed_stage_transition: str | None = None,
     governed_expected_global_step: int | None = None,
+    governed_verified_source_authority: dict | None = None,
 ) -> tuple[int, int, dict[str, int], dict]:
-    ckpt = torch.load(resume_path, map_location="cpu")
+    # Governed full checkpoints intentionally contain Python/NumPy RNG tuples in addition to
+    # tensors. PyTorch 2.6+ defaults to ``weights_only=True``, which cannot deserialize those
+    # restorable states. Gate A has already authenticated the exact checkpoint bytes before
+    # this call, so the authorized full-state document is loaded explicitly.
+    ckpt = torch.load(resume_path, map_location="cpu", weights_only=False)
 
     # R1 Part 6: governed metadata is validated BEFORE model/optimizer/scaler/RNG state is
     # restored, so a mismatched checkpoint can never partially mutate this process.
@@ -1131,6 +1275,8 @@ def load_ckpt(
             current_sampler_identity=governed_sampler_identity,
             stage_transition=governed_stage_transition,
             expected_global_step=governed_expected_global_step,
+            verified_source_authority=governed_verified_source_authority,
+            require_live_cuda_validation=True,
         )
         if not verdict["compatible"]:
             raise LaunchContractError(
@@ -1158,6 +1304,7 @@ def load_ckpt(
         checkpoint_step=global_step,
         allow_data_branch=bool(allow_data_branch),
         allow_schedule_branch=bool(allow_schedule_branch),
+        governed_stage_transition=governed_stage_transition,
     )
     if "model" not in ckpt:
         raise RuntimeError(f"[resume] checkpoint has no model state: {resume_path}")
@@ -1185,7 +1332,12 @@ def load_ckpt(
                 raise RuntimeError(f"[resume] scaler state is incompatible: {e}") from e
 
     if resume_full:
-        restore_rng_state(ckpt.get("rng_state"))
+        governed_state = ckpt.get("governed_checkpoint_state")
+        restore_rng_state(
+            governed_state.get("rng_state")
+            if governed_run_contract is not None and isinstance(governed_state, dict)
+            else ckpt.get("rng_state")
+        )
 
     position_stats = empty_position_stats()
     resume_metadata: dict = {}
@@ -1201,7 +1353,11 @@ def load_ckpt(
         "data_sampler": ckpt.get("data_sampler"),
         "data_contract": ckpt.get("data_contract"),
         "train_args": ckpt.get("train_args"),
-        "rng_state": ckpt.get("rng_state"),
+        "rng_state": (
+            (ckpt.get("governed_checkpoint_state") or {}).get("rng_state")
+            if governed_run_contract is not None
+            else ckpt.get("rng_state")
+        ),
     }
     return global_step, local_step, position_stats, resume_metadata
 
@@ -1218,25 +1374,38 @@ def causal_leak_check(
     vocab_size: int,
     check_pos: int = 128,
     delta_pos: int = 8,
+    max_abs_tolerance: float | None = None,
 ) -> float:
     """
     Perturb ONE token at position (check_pos + delta_pos) and measure how much
     the logits on prefix [0:check_pos] change. For a strictly causal model,
     this should be ~0.
     """
-    model.eval()
-    x = input_ids.to(device, non_blocking=True)
-    logits1 = model(x).float()
+    was_training = bool(model.training)
+    try:
+        model.eval()
+        x = input_ids.to(device, non_blocking=True)
+        logits1 = model(x).float()
 
-    x2 = x.clone()
-    p = min(x2.shape[1] - 1, int(check_pos + delta_pos))
-    x2[:, p] = (x2[:, p] + 123) % int(vocab_size)
-    logits2 = model(x2).float()
+        x2 = x.clone()
+        p = min(x2.shape[1] - 1, int(check_pos + delta_pos))
+        x2[:, p] = (x2[:, p] + 123) % int(vocab_size)
+        logits2 = model(x2).float()
 
-    diff = (logits1[:, :check_pos, :] - logits2[:, :check_pos, :]).abs().max().item()
-    print(f"[dbg] local_future_leak_check max_abs_diff={diff:.6f} (expect ~0)")
-
-    model.train()
+        diff = (logits1[:, :check_pos, :] - logits2[:, :check_pos, :]).abs().max().item()
+        print(f"[dbg] local_future_leak_check max_abs_diff={diff:.6f} (expect ~0)")
+    finally:
+        # Diagnostics must be mode-transparent. In particular, the governed training
+        # callable is realized only after this eager diagnostic restores training mode.
+        model.train(was_training)
+    if max_abs_tolerance is not None and (
+        not math.isfinite(float(diff)) or float(diff) > float(max_abs_tolerance)
+    ):
+        raise RuntimeError(
+            "causal leak diagnostic failed: "
+            f"max_abs_difference={float(diff):.9g} exceeds "
+            f"tolerance={float(max_abs_tolerance):.9g}"
+        )
     return float(diff)
 
 
@@ -1264,6 +1433,43 @@ def label_shift_sanity(
 # -----------------------------------------------------------------------------
 # Eval + dataset stats
 # -----------------------------------------------------------------------------
+def select_inference_model(
+    training_model: torch.nn.Module,
+    eager_model: torch.nn.Module,
+    *,
+    governed: bool,
+    compile_enabled: bool,
+) -> torch.nn.Module:
+    """Keep mandatory inference signatures off the armed training-only compiled graph.
+
+    A governed compiled wrapper and its ``_orig_mod`` share the same Parameters. Evaluation
+    and autoregressive sampling require eval/no-grad and variable-length signatures that are
+    intentionally different from the single frozen training graph. Routing those calls through
+    the shared eager base preserves model semantics without requesting a post-arm graph.
+    """
+    if not governed or not compile_enabled:
+        return training_model
+    if (
+        training_model is eager_model
+        or getattr(training_model, "_orig_mod", None) is not eager_model
+    ):
+        raise RuntimeError(
+            "governed inference requires the exact eager base shared by the compiled "
+            "training wrapper"
+        )
+    return eager_model
+
+
+@contextmanager
+def preserve_model_training_mode(model: torch.nn.Module):
+    """Make inference helpers mode-transparent even when they do not restore ``train()``."""
+    was_training = bool(model.training)
+    try:
+        yield model
+    finally:
+        model.train(was_training)
+
+
 @torch.no_grad()
 def evaluate(
     model: torch.nn.Module,
@@ -1758,7 +1964,7 @@ def publish_governed_run_contract_now(
     out_dir: Path,
     device: torch.device,
     identity: dict | None = None,
-) -> tuple[dict, str]:
+) -> tuple[dict, dict]:
     """Gate C: realize compile at PRODUCTION shape, then publish the run contract atomically.
 
     R2 Parts 8-10: the probe uses the frozen ``micro_bsz x seq_len`` geometry, not batch 1,
@@ -1766,16 +1972,22 @@ def publish_governed_run_contract_now(
     ``fail_on_recompile`` afterwards so a later recompile or eager fallback aborts.
     """
     from production_launch_contract_v1 import (
+        CAUSAL_DIAGNOSTIC_CHECK_POS,
+        CAUSAL_DIAGNOSTIC_DELTA_POS,
+        CAUSAL_DIAGNOSTIC_SEQ_LEN,
+        CAUSAL_LEAK_MAX_ABS_TOLERANCE,
         LaunchContractError,
         arm_fail_on_recompile,
         build_governed_run_contract,
         enforce_compile_fail_closed_stance,
+        finalize_compile_evidence,
         governed_digest,
         isolated_inductor_cache,
-        publish_governed_run_contract,
+        publish_invocation_run_contract,
         realize_compile_production_shape,
         require_compile_realized,
         sampler_identity_document,
+        verify_compile_evidence_document,
     )
 
     stage = str(args.run_plan_stage)
@@ -1785,17 +1997,78 @@ def publish_governed_run_contract_now(
     ).hexdigest()[:24]
     cache = isolated_inductor_cache(run_token)
 
-    evidence = realize_compile_production_shape(
+    # The step-zero causality diagnostic intentionally runs through the uncompiled base
+    # model. Its eval/no-grad signature must never become a second compiled graph after the
+    # governed fail-on-recompile stance is armed.
+    diagnostic_seq_len = CAUSAL_DIAGNOSTIC_SEQ_LEN
+    if int(args.seq_len) < diagnostic_seq_len:
+        raise LaunchContractError(
+            "governed precompile causal diagnostic requires a sequence at least "
+            f"{diagnostic_seq_len} tokens long"
+        )
+    diagnostic_input = torch.arange(diagnostic_seq_len, dtype=torch.long, device=device).unsqueeze(
+        0
+    ) % int(args.vocab_size)
+    eager_mode_before = bool(getattr(eager_module, "training", False))
+    if eager_module is model:
+        raise LaunchContractError("governed causal diagnostic requires the uncompiled base model")
+    if not eager_mode_before:
+        raise LaunchContractError(
+            "governed training model was not in training mode before its causal diagnostic"
+        )
+    causal_difference = causal_leak_check(
+        eager_module,
+        diagnostic_input,
+        device,
+        vocab_size=int(args.vocab_size),
+        check_pos=CAUSAL_DIAGNOSTIC_CHECK_POS,
+        delta_pos=CAUSAL_DIAGNOSTIC_DELTA_POS,
+        max_abs_tolerance=CAUSAL_LEAK_MAX_ABS_TOLERANCE,
+    )
+    eager_mode_after = bool(getattr(eager_module, "training", False))
+    eager_mode_restored = eager_mode_after == eager_mode_before
+    if not eager_mode_restored:
+        raise LaunchContractError(
+            "precompile causal diagnostic did not restore the eager module's exact mode"
+        )
+    precompile_causal_diagnostic = {
+        "executed": True,
+        "used_uncompiled_base_model": eager_module is not model,
+        "executed_before_training_compile_realization": True,
+        "grad_enabled": False,
+        "input_shape": [1, diagnostic_seq_len],
+        "check_pos": CAUSAL_DIAGNOSTIC_CHECK_POS,
+        "delta_pos": CAUSAL_DIAGNOSTIC_DELTA_POS,
+        "max_abs_difference": float(causal_difference),
+        "max_abs_tolerance": CAUSAL_LEAK_MAX_ABS_TOLERANCE,
+        "within_tolerance": bool(
+            math.isfinite(float(causal_difference))
+            and float(causal_difference) <= CAUSAL_LEAK_MAX_ABS_TOLERANCE
+        ),
+        "mode_before": "train" if eager_mode_before else "eval",
+        "mode_after": "train" if eager_mode_after else "eval",
+        "mode_restored": eager_mode_restored,
+    }
+
+    evidence_draft = realize_compile_production_shape(
         model,
         device=device,
         micro_bsz=int(args.micro_bsz),
         seq_len=int(args.seq_len),
         vocab_size=int(args.vocab_size),
         cache=cache,
+        finalize=False,
     )
-    evidence["fail_closed_stance"] = stance
+    evidence_draft["precompile_causal_diagnostic"] = precompile_causal_diagnostic
+    evidence_draft["fail_closed_stance"] = stance
+    evidence_draft["post_realization_stance"] = arm_fail_on_recompile()
+    evidence = finalize_compile_evidence(evidence_draft)
+    verification_failures = verify_compile_evidence_document(evidence)
+    if verification_failures:
+        raise LaunchContractError(
+            "Gate C refused its final sealed compile evidence: " + ", ".join(verification_failures)
+        )
     require_compile_realized(evidence)
-    evidence["post_realization_stance"] = arm_fail_on_recompile()
     print(
         f"[governed] Gate C passed: compile realized at production shape "
         f"{args.micro_bsz}x{args.seq_len} "
@@ -1815,12 +2088,12 @@ def publish_governed_run_contract_now(
         raise LaunchContractError(
             "governed identity changed between Gate B and publication; refusing to publish"
         )
-    published = publish_governed_run_contract(out_dir, contract)
+    published = publish_invocation_run_contract(contract, gate_a=gate_a)
     print(
         f"[governed] run contract published atomically at {published['path']} "
         f"digest={published['governed_run_contract_sha256'][:16]}..."
     )
-    return contract, published["governed_run_contract_sha256"]
+    return contract, published
 
 
 def governed_checkpoint_state(
@@ -1844,6 +2117,30 @@ def governed_checkpoint_state(
         completed_checkpoint_milestones=completed_save_milestones,
         rng_state=rng_state,
         compile_evidence=compile_evidence,
+    )
+
+
+def is_stage_n_terminal_zero_update_resume(
+    governed_launch: dict | None, completed_step: int
+) -> bool:
+    """Return whether this invocation is the terminal Stage-N verification resume.
+
+    A same-stage checkpoint may also be a legitimate crash-restart source.  Only an
+    invocation that starts from the checkpoint step it finishes on can prove the required
+    zero-update resume.  A mid-stage restart that advances to the final step instead becomes
+    a new completed invocation and must await its own independent smoke/resume checks.
+    """
+    if not isinstance(governed_launch, dict):
+        return False
+    resume = governed_launch.get("resume") or {}
+    verified_source = governed_launch.get("verified_source_authority") or {}
+    source_step = resume.get("source_checkpoint_step")
+    return (
+        resume.get("mode") == "RESUME_EXACT_CHECKPOINT"
+        and governed_launch.get("transition") != "A_TO_B"
+        and bool(verified_source.get("verified"))
+        and type(source_step) is int
+        and source_step == int(completed_step)
     )
 
 
@@ -1939,6 +2236,8 @@ def main() -> None:
     governed_gate_b = enforce_governed_construction(governed_launch, model, optim)
     governed_run_contract = None
     governed_run_contract_sha256 = None
+    governed_run_contract_publication: dict | None = None
+    stage_n_runtime_publication: dict | None = None
     if governed_launch is not None:
         from production_launch_contract_v1 import build_governed_run_contract as _build_grc
 
@@ -2103,6 +2402,11 @@ def main() -> None:
             governed_sampler_identity=governed_expected_sampler_identity,
             governed_stage_transition=governed_transition,
             governed_expected_global_step=governed_expected_step,
+            governed_verified_source_authority=(
+                (governed_launch or {}).get("verified_source_authority")
+                if governed_launch
+                else None
+            ),
         )
         synchronize_validated_run_plan_binding(run_contract, run_plan_binding)
         print(f"[resume] loaded {resolved} (global_step={global_step})")
@@ -2147,6 +2451,12 @@ def main() -> None:
             global_step=global_step,
             data_stage_start_step=int(args.data_stage_start_step),
             strict=bool(args.strict_resume_contract),
+            preserve_invocation_range_start=governed_launch is not None,
+            governed_checkpoint_state=(
+                resume_metadata.get("governed_checkpoint_state")
+                if governed_launch is not None
+                else None
+            ),
         )
     train_dl = DataLoader(
         train_ds,
@@ -2177,7 +2487,7 @@ def main() -> None:
         str(tok_path),
     )
 
-    compile_evidence: dict = {"compile_requested": bool(args.compile), "compiled": False}
+    compile_evidence: dict | None = None
     governed_eager_module = model
     if args.compile:
         if governed_launch is not None:
@@ -2197,13 +2507,20 @@ def main() -> None:
             except Exception as e:
                 # Ungoverned/debug only. A governed run never reaches this branch: it fails
                 # closed in bind_compiled_callable_governed and Gate C.
-                compile_evidence.update({
+                compile_evidence = {
                     "compiled": False,
                     "eager_fallback_occurred": True,
                     "compiled_callable_is_training_callable": False,
                     "error": repr(e),
-                })
+                }
                 print(f"[compile] torch.compile failed: {e}")
+
+    inference_model = select_inference_model(
+        model,
+        governed_eager_module,
+        governed=governed_launch is not None,
+        compile_enabled=bool(args.compile),
+    )
 
     out_dir.mkdir(parents=True, exist_ok=True)
     config_snapshot = {
@@ -2227,21 +2544,59 @@ def main() -> None:
     # run contract. Both complete BEFORE the first optimizer update.
     # R3 Part 2: live milestone tracking, so every governed checkpoint records what has
     # ACTUALLY completed rather than a stale launch-time value.
-    completed_eval_milestones: list[int] = []
-    completed_save_milestones: list[int] = []
+    saved_governed_state = resume_metadata.get("governed_checkpoint_state") or {}
+    completed_eval_milestones: list[int] = list(
+        saved_governed_state.get("completed_evaluation_milestones", [])
+    )
+    completed_save_milestones: list[int] = list(
+        saved_governed_state.get("completed_checkpoint_milestones", [])
+    )
 
     if governed_launch is not None:
-        governed_run_contract, governed_run_contract_sha256 = publish_governed_run_contract_now(
-            args=args,
-            gate_a=governed_launch,
-            gate_b=governed_gate_b,
-            model=model,
-            eager_module=governed_eager_module,
-            sampler=train_sampler,
-            out_dir=out_dir,
-            device=device,
-            identity=governed_run_contract,
+        governed_run_contract, governed_run_contract_publication = (
+            publish_governed_run_contract_now(
+                args=args,
+                gate_a=governed_launch,
+                gate_b=governed_gate_b,
+                model=model,
+                eager_module=governed_eager_module,
+                sampler=train_sampler,
+                out_dir=out_dir,
+                device=device,
+                identity=governed_run_contract,
+            )
         )
+        governed_run_contract_sha256 = governed_run_contract_publication[
+            "governed_run_contract_sha256"
+        ]
+        published_compile_evidence = governed_run_contract.get("compile_evidence")
+        if not isinstance(published_compile_evidence, dict):
+            raise RuntimeError("published governed contract omitted realized compile evidence")
+        from production_launch_contract_v1 import require_compile_realized
+
+        require_compile_realized(published_compile_evidence)
+        # This exact verified document is the live evidence supplied to every later save.
+        # The pre-realization placeholder must never enter a governed checkpoint.
+        compile_evidence = dict(published_compile_evidence)
+
+        completion = (governed_launch.get("authorization") or {}).get("stage_n_completion")
+        if governed_launch.get("scope") == "STAGE_N" and isinstance(completion, dict):
+            expected_final_step = completion.get("expected_final_step")
+            if (
+                not isinstance(expected_final_step, int)
+                or isinstance(expected_final_step, bool)
+                or expected_final_step != int(args.max_steps)
+            ):
+                raise RuntimeError(
+                    "Stage-N completion expected_final_step must be explicitly authorized "
+                    "and equal the governed invocation stop"
+                )
+            from production_launch_contract_v1 import publish_stage_n_runtime_artifact
+
+            stage_n_runtime_publication = publish_stage_n_runtime_artifact(
+                governed_run_contract_publication["invocation_dir"],
+                governed_run_contract["runtime_fingerprint"],
+            )
 
     best_val_path = out_dir / "best_val.json"
     best_val = float("inf")
@@ -2378,9 +2733,15 @@ def main() -> None:
                     reduction="mean",
                 )
                 print(f"[dbg] ce_nomask_128: {float(ce_nomask.item()):.6f}")
-                causal_leak_check(
-                    model, input_ids, device, vocab_size=cfg.vocab_size, check_pos=128, delta_pos=8
-                )
+                if governed_launch is None:
+                    causal_leak_check(
+                        model,
+                        input_ids,
+                        device,
+                        vocab_size=cfg.vocab_size,
+                        check_pos=128,
+                        delta_pos=8,
+                    )
                 label_shift_sanity(input_ids, labels, loss_mask)
 
         if float(args.grad_clip) > 0:
@@ -2440,7 +2801,7 @@ def main() -> None:
             eval_steps=args.eval_steps,
         ):
             val_loss = evaluate(
-                model=model,
+                model=inference_model,
                 dl=val_dl,
                 device=device,
                 precision=args.precision,
@@ -2464,7 +2825,7 @@ def main() -> None:
             dom_metrics: dict[str, float] = {}
             for dom_name, dom_dl in domain_val:
                 dom_loss = evaluate(
-                    model=model,
+                    model=inference_model,
                     dl=dom_dl,
                     device=device,
                     precision=args.precision,
@@ -2487,24 +2848,25 @@ def main() -> None:
             samples_dir.mkdir(parents=True, exist_ok=True)
             out_path = samples_dir / f"step_{global_step:06d}.txt"
             try:
-                generate_default_samples(
-                    model=model,
-                    tokenizer_path=str(tok_path),
-                    device=device,
-                    max_seq_len=int(args.seq_len),
-                    precision=args.precision,
-                    out_path=out_path,
-                    temperature=float(args.sample_temperature),
-                    top_p=float(args.sample_top_p),
-                    top_k=int(args.sample_top_k),
-                    max_new_tokens=int(args.sample_max_new_tokens),
-                    min_new_tokens=int(args.sample_min_new_tokens),
-                    eos_id=int(args.eos_id),
-                    add_bos=bool(args.add_bos_to_prompts),
-                    bos_id=int(args.bos_id),
-                    greedy=False,
-                    debug=True,
-                )
+                with preserve_model_training_mode(inference_model):
+                    generate_default_samples(
+                        model=inference_model,
+                        tokenizer_path=str(tok_path),
+                        device=device,
+                        max_seq_len=int(args.seq_len),
+                        precision=args.precision,
+                        out_path=out_path,
+                        temperature=float(args.sample_temperature),
+                        top_p=float(args.sample_top_p),
+                        top_k=int(args.sample_top_k),
+                        max_new_tokens=int(args.sample_max_new_tokens),
+                        min_new_tokens=int(args.sample_min_new_tokens),
+                        eos_id=int(args.eos_id),
+                        add_bos=bool(args.add_bos_to_prompts),
+                        bos_id=int(args.bos_id),
+                        greedy=False,
+                        debug=True,
+                    )
                 print(f"[sample] wrote {out_path}")
             except Exception as e:
                 print(f"[sample] failed: {e}")
@@ -2632,6 +2994,125 @@ def main() -> None:
         )
     tracker.render()
     print(f"[done] saved final checkpoint to {out_dir}")
+
+    # Stage-N completion is deliberately two-phase. The fresh invocation stops after its
+    # governed final save while independent smoke/resume checks are absent. A later
+    # source-bound same-stage resume can prove restoration, publish the canonical resume
+    # evidence into the SOURCE invocation, and complete that source result once the
+    # independently produced smoke result is also present. No CLI switch or owner training
+    # choice is introduced, and nothing here authorizes or advances to Stage O.
+    if governed_launch is not None and governed_launch.get("scope") == "STAGE_N":
+        from production_launch_contract_v1 import (
+            STAGE_N_RESUME_RESULT_FILENAME,
+            STAGE_N_RUNTIME_FILENAME,
+            STAGE_N_SMOKE_RESULT_FILENAME,
+            publish_stage_n_completion,
+            publish_stage_n_resume_check_from_verified_invocation,
+        )
+
+        source_authorization = governed_launch.get("authorization") or {}
+        source_authorization_path = governed_launch.get("stage_authorization_path")
+        source_contract = governed_run_contract
+        source_contract_path = (governed_run_contract_publication or {}).get("path")
+        source_checkpoint_path = out_dir / f"step_{global_step:06d}.pt"
+        source_invocation_dir = out_dir
+        source_runtime_path = (
+            Path(stage_n_runtime_publication["path"])
+            if stage_n_runtime_publication is not None
+            else source_invocation_dir / STAGE_N_RUNTIME_FILENAME
+        )
+
+        resume_binding = governed_launch.get("resume") or {}
+        verified_source = governed_launch.get("verified_source_authority") or {}
+        if is_stage_n_terminal_zero_update_resume(governed_launch, global_step):
+            source_authorization = verified_source.get("source_authorization") or {}
+            source_authorization_path = verified_source.get("source_authorization_path")
+            source_contract = verified_source.get("source_invocation_run_contract")
+            source_contract_path = verified_source.get("source_invocation_run_contract_path")
+            source_checkpoint_path = Path(verified_source["source_checkpoint_path"])
+            source_invocation_dir = Path(source_contract_path).parent
+            source_runtime_path = source_invocation_dir / STAGE_N_RUNTIME_FILENAME
+            completion = source_authorization.get("stage_n_completion")
+            if isinstance(completion, dict):
+                if governed_run_contract_publication is None:
+                    raise RuntimeError(
+                        "Stage-N resume check is missing current invocation publication metadata"
+                    )
+                current_checkpoint_path = out_dir / f"step_{global_step:06d}.pt"
+                resume_result_path = source_invocation_dir / STAGE_N_RESUME_RESULT_FILENAME
+                if not resume_result_path.is_file():
+                    published_resume = publish_stage_n_resume_check_from_verified_invocation(
+                        verified_source_authority=verified_source,
+                        authorized_checkpoint_verification=(
+                            governed_launch.get("authorized_checkpoint_verification") or {}
+                        ),
+                        source_resume_binding=resume_binding,
+                        resume_authorization_path=governed_launch["stage_authorization_path"],
+                        resume_governed_run_contract_path=(
+                            governed_run_contract_publication["path"]
+                        ),
+                        resume_final_checkpoint_path=current_checkpoint_path,
+                        completed_step=global_step,
+                    )
+                    print(
+                        "[governed] verified Stage-N resume check published into source "
+                        f"invocation: {published_resume['result']['path']}"
+                    )
+
+        completion = (
+            source_authorization.get("stage_n_completion")
+            if isinstance(source_authorization, dict)
+            else None
+        )
+        if isinstance(completion, dict):
+            if not isinstance(source_contract, dict) or source_contract_path is None:
+                raise RuntimeError("Stage-N completion is missing verified source metadata")
+            expected_final_step = completion.get("expected_final_step")
+            if (
+                not isinstance(expected_final_step, int)
+                or isinstance(expected_final_step, bool)
+                or expected_final_step <= 0
+            ):
+                raise RuntimeError("Stage-N source authorization has no valid expected_final_step")
+            if source_checkpoint_path.name != f"step_{expected_final_step:06d}.pt":
+                raise RuntimeError(
+                    "Stage-N source checkpoint filename differs from the authorized step"
+                )
+            smoke_path = source_invocation_dir / STAGE_N_SMOKE_RESULT_FILENAME
+            resume_path = source_invocation_dir / STAGE_N_RESUME_RESULT_FILENAME
+            missing_checks = [path.name for path in (smoke_path, resume_path) if not path.is_file()]
+            if missing_checks:
+                print(
+                    "[governed] Stage-N final save complete; "
+                    "AWAITING_SMOKE_AND_RESUME_CHECKS: " + ", ".join(missing_checks)
+                )
+            else:
+                # Reopen the exact source checkpoint and derive the final sampler from its
+                # authenticated dynamic state. A current-resume sampler must never replace
+                # the source invocation's canonical start/range in the accepted result.
+                source_checkpoint = torch.load(
+                    source_checkpoint_path, map_location="cpu", weights_only=False
+                )
+                source_final_state = source_checkpoint.get("governed_checkpoint_state")
+                if not isinstance(source_final_state, dict):
+                    raise RuntimeError("Stage-N source checkpoint has no governed dynamic state")
+                published_result = publish_stage_n_completion(
+                    source_invocation_dir,
+                    governed_run_contract=source_contract,
+                    governed_run_contract_path=source_contract_path,
+                    authorization=source_authorization,
+                    authorization_path=source_authorization_path,
+                    runtime_fingerprint_path=source_runtime_path,
+                    final_checkpoint_path=source_checkpoint_path,
+                    final_checkpoint_step=expected_final_step,
+                    smoke_results_path=smoke_path,
+                    resume_results_path=resume_path,
+                    final_sampler_state=source_final_state,
+                )
+                print(
+                    "[governed] Stage-N result published; hard stop for independent review: "
+                    f"{published_result['path']}"
+                )
 
 
 if __name__ == "__main__":

@@ -10,6 +10,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 import sys
+from types import SimpleNamespace
 
 import pytest
 
@@ -422,6 +423,63 @@ class _FakeCompiled:
         return None
 
 
+def _production_compile_facts() -> dict:
+    """Canonical synthetic observations for bounded compile-contract fixtures."""
+    cache_dir = "/tmp/petitgpt-governed-test-cache"
+    return {
+        "probe_geometry": {
+            "micro_bsz": C.MICRO_BSZ,
+            "seq_len": C.MODEL_CONTRACT["seq_len"],
+        },
+        "probe_signature": {
+            "device_type": "cuda",
+            "module_training_mode": True,
+            "grad_enabled": True,
+            "autocast_enabled": True,
+            "autocast": "bf16",
+            "autocast_dtype": "torch.bfloat16",
+            "input_dtype": "torch.int64",
+            "input_shape": [C.MICRO_BSZ, C.MODEL_CONTRACT["seq_len"]],
+            "output_dtype": "torch.bfloat16",
+            "output_requires_grad": True,
+            "optimizer_step_taken": False,
+            "matches_training_forward_signature": True,
+        },
+        "production_shape_probe": True,
+        "isolated_cache": {
+            "cache_dir": cache_dir,
+            "triton_cache_dir": f"{cache_dir}/triton",
+            "was_empty_before_realization": True,
+            "isolated": True,
+        },
+        "cache_was_empty_before_realization": True,
+        "precompile_causal_diagnostic": {
+            "executed": True,
+            "used_uncompiled_base_model": True,
+            "executed_before_training_compile_realization": True,
+            "grad_enabled": False,
+            "input_shape": [1, C.CAUSAL_DIAGNOSTIC_SEQ_LEN],
+            "check_pos": C.CAUSAL_DIAGNOSTIC_CHECK_POS,
+            "delta_pos": C.CAUSAL_DIAGNOSTIC_DELTA_POS,
+            "max_abs_difference": 0.0,
+            "max_abs_tolerance": C.CAUSAL_LEAK_MAX_ABS_TOLERANCE,
+            "within_tolerance": True,
+            "mode_before": "train",
+            "mode_after": "train",
+            "mode_restored": True,
+        },
+        "fail_closed_stance": {
+            "suppress_errors": False,
+            "fail_on_recompile_limit_hit": True,
+            "set_stance_available": True,
+        },
+        "post_realization_stance": {
+            "armed": True,
+            "stance": "fail_on_recompile",
+        },
+    }
+
+
 def _evidence(*, requested=True, invocations=1, graphs=1, compiled=True, recompile=False):
     module = _FakeCompiled() if compiled else object()
     forward = C.ObservedForward(module, compiled_object=module if compiled else None)
@@ -430,14 +488,19 @@ def _evidence(*, requested=True, invocations=1, graphs=1, compiled=True, recompi
     counters = {"stats": {"unique_graphs": graphs}}
     if recompile:
         counters["recompile_reasons"] = {"cache_size_limit exceeded": 1}
-    return C.compile_realization_evidence(
+    draft = C.compile_realization_evidence(
         module,
         forward,
         requested=requested,
         cache_dir=None,
         expected_forward_invocations=1,
         counters=counters,
+        finalize=False,
     )
+    observed_failures = draft.pop("failures")
+    draft.update(_production_compile_facts())
+    draft["inductor_cache_dir"] = draft["isolated_cache"]["cache_dir"]
+    return C.finalize_compile_evidence(draft, additional_failures=observed_failures)
 
 
 def test_lazy_compile_realization_produces_evidence():
@@ -518,8 +581,33 @@ def test_identity_return_aborts(monkeypatch):
 # --------------------------------------------------------------------- Parts 4-7
 
 
-def _contract(tmp_path, stage="stage_a", **over):
-    a = gate_a(tmp_path, stage=stage, args=governed_args(stage))
+def _contract(tmp_path, stage="stage_a", *, stage_n_completion=False, **over):
+    if stage_n_completion:
+        fixture_number = len(list(tmp_path.glob("STAGE_AUTHORIZATION_*.json")))
+        run_root = tmp_path / f"governed_{fixture_number}"
+        args = governed_args(stage)
+        args.out_dir = str(run_root)
+        args.samples_dir = str(run_root / "samples")
+        contract_path = write_contract(tmp_path)
+        generated_auth = write_authorization(
+            tmp_path,
+            contract_path,
+            stage_n_completion={"expected_final_step": C.STAGE_A_STOP_STEP},
+            test_fixture_invocation_number=fixture_number,
+            allowed_output_root=str(run_root),
+            allowed_samples_dir=str(run_root / "samples"),
+        )
+        auth_path = tmp_path / f"STAGE_AUTHORIZATION_{fixture_number}.json"
+        auth_path.write_bytes(generated_auth.read_bytes())
+        a = gate_a(
+            tmp_path,
+            stage=stage,
+            args=args,
+            contract_path=contract_path,
+            auth_path=auth_path,
+        )
+    else:
+        a = gate_a(tmp_path, stage=stage, args=governed_args(stage))
     b = {
         "parameter_count": C.MODEL_PARAMETER_COUNT,
         "tied_embeddings": True,
@@ -535,9 +623,12 @@ def _contract(tmp_path, stage="stage_a", **over):
             "stage": stage,
             "sampler_seed": C.stage_sampler_seed(stage),
             "range_start_position": 0,
+            "invocation_range_start_position": 0,
             "range_stop_position": 100,
             "cursor": 0,
-            "permutation_identity": "p" * 64,
+            "consumed": 0,
+            "remaining": 100,
+            "permutation_identity": C.permutation_identity(stage, C.stage_sampler_seed(stage), 100),
         },
         compile_evidence=_evidence(),
     )
@@ -628,6 +719,31 @@ def _ckpt(doc, **over):
         "governed_run_contract": doc,
         "governed_run_contract_sha256": C.governed_digest(doc),
         "global_step": 38146,
+        "model": {},
+        "optim": {},
+        "scaler": None,
+        "run_contract": {
+            "schema_version": 3,
+            "sampler_seed": C.STAGE_A_SAMPLER_SEED,
+            "run_plan": {"stage": "stage_a", "plan_sha256": C.EXACT_RUN_PLAN_SHA256},
+        },
+        "data_contract": {
+            "fingerprint": "a" * 64,
+            "dataset_length": 1,
+            "sampling_mode": "deterministic",
+            "sampler_seed": C.STAGE_A_SAMPLER_SEED,
+            "active_stage": "stage_a",
+            "data_stage_start_step": 0,
+            "samples_per_optimizer_step": C.SEQUENCES_PER_UPDATE,
+        },
+        "data_sampler": {
+            "version": 2,
+            "data_length": 1,
+            "seed": C.STAGE_A_SAMPLER_SEED,
+            "range_start_position": 0,
+            "committed_position": C.STAGE_A_TERMINAL_RANGE_STOP,
+            "end_position": C.STAGE_A_TERMINAL_RANGE_STOP,
+        },
     }
     ckpt.update(over)
     return ckpt
@@ -643,10 +759,13 @@ def test_matching_governed_checkpoint_resumes(tmp_path):
     identity = {
         "stage": "stage_a",
         "sampler_seed": C.STAGE_A_SAMPLER_SEED,
-        "permutation_identity": "p" * 64,
-        "range_start_position": 4882688,
-        "range_stop_position": 4882688,
-        "cursor": 4882688,
+        "permutation_identity": C.permutation_identity(
+            "stage_a", C.STAGE_A_SAMPLER_SEED, C.STAGE_A_TERMINAL_RANGE_STOP
+        ),
+        "range_start_position": 0,
+        "invocation_range_start_position": C.STAGE_A_TERMINAL_RANGE_STOP,
+        "range_stop_position": C.STAGE_A_TERMINAL_RANGE_STOP,
+        "cursor": C.STAGE_A_TERMINAL_RANGE_STOP,
     }
     verdict = C.validate_governed_checkpoint_before_restore(
         ckpt, doc, current_sampler_identity=identity
@@ -724,6 +843,7 @@ def _identity(stage, **over):
         "stage": stage,
         "sampler_seed": C.stage_sampler_seed(stage),
         "range_start_position": 0,
+        "invocation_range_start_position": 0,
         "range_stop_position": 4882688,
         "cursor": CURSOR,
         "permutation_identity": "p" * 64,
@@ -738,12 +858,12 @@ def _resumed(stage, **over):
     The trainer builds its sampler with ``start_position=stage_sample_position``, so this --
     not a copy of the saved dict -- is what a real same-stage resume actually presents.
     """
-    over.setdefault("range_start_position", CURSOR)
+    over.setdefault("invocation_range_start_position", CURSOR)
     return _identity(stage, **over)
 
 
 def test_same_stage_resume_accepts_a_real_resumed_sampler_shape():
-    """The permutation depends on seed and epoch only, so a moved range start is legitimate."""
+    """The canonical permutation start stays zero while the invocation starts at the cursor."""
     assert C.validate_same_stage_resume(_identity("stage_a"), _resumed("stage_a")) == []
 
 
@@ -751,7 +871,11 @@ def test_same_stage_resume_accepts_a_real_resumed_sampler_shape():
 def test_same_stage_resume_rejects_a_discontinuous_range_start(drift):
     """Starting before the committed cursor replays data; starting after it skips data."""
     saved = _identity("stage_a")
-    moved = _resumed("stage_a", range_start_position=CURSOR + drift, cursor=CURSOR + drift)
+    moved = _resumed(
+        "stage_a",
+        invocation_range_start_position=CURSOR + drift,
+        cursor=CURSOR + drift,
+    )
     assert any("discontinuity" in f for f in C.validate_same_stage_resume(saved, moved))
 
 
@@ -773,24 +897,98 @@ def test_same_stage_resume_rejects_sampler_drift(field, value):
 
 def test_cursor_outside_its_range_is_rejected():
     saved = _identity("stage_a", cursor=99999999)
-    current = _resumed("stage_a", range_start_position=99999999, cursor=99999999)
+    current = _resumed(
+        "stage_a",
+        invocation_range_start_position=99999999,
+        cursor=99999999,
+    )
     assert any(
-        "outside its committed range" in f for f in C.validate_same_stage_resume(saved, current)
+        "sampler positions are inconsistent" in f
+        for f in C.validate_same_stage_resume(saved, current)
     )
 
 
+def _valid_cuda_rng_state(seed: int = 20260831):
+    import torch
+
+    if torch.cuda.is_available():
+        return torch.Generator(device="cuda:0").manual_seed(seed).get_state()
+    encoded = seed.to_bytes(8, "little") + (0).to_bytes(8, "little")
+    return torch.tensor(list(encoded), dtype=torch.uint8)
+
+
+def _restorable_rng_state():
+    import random
+
+    import numpy as np
+    import torch
+
+    torch_cpu = torch.Generator(device="cpu").manual_seed(20260831).get_state()
+    return {
+        "python": random.Random(20260831).getstate(),
+        "numpy": np.random.RandomState(20260831).get_state(),
+        "torch_cpu": torch_cpu,
+        "torch_cuda": [_valid_cuda_rng_state()],
+    }
+
+
 def _source_state(**over):
+    compile_evidence = _evidence()
+    permutation = C.permutation_identity(
+        "stage_a", C.STAGE_A_SAMPLER_SEED, C.STAGE_A_TERMINAL_RANGE_STOP
+    )
     state = {
+        "schema_version": "petitgpt-governed-checkpoint-state-v1",
         "active_stage": "stage_a",
         "active_stage_sampler_seed": C.STAGE_A_SAMPLER_SEED,
-        "permutation_identity": "p" * 64,
+        "permutation_identity": permutation,
         "range_start_position": 0,
-        "range_stop_position": 4882688,
-        "cursor": 4882688,
+        "invocation_range_start_position": 0,
+        "range_stop_position": C.STAGE_A_TERMINAL_RANGE_STOP,
+        "cursor": C.STAGE_A_TERMINAL_RANGE_STOP,
+        "consumed": C.STAGE_A_TERMINAL_RANGE_STOP,
+        "remaining": 0,
         "global_step": C.STAGE_A_STOP_STEP,
+        "completed_evaluation_milestones": [
+            step for step in C.EVALUATION_MILESTONES if step <= C.STAGE_A_STOP_STEP
+        ],
+        "completed_checkpoint_milestones": [
+            step for step in C.CHECKPOINT_MILESTONES if step <= C.STAGE_A_STOP_STEP
+        ],
+        "rng_state": _restorable_rng_state(),
+        "rng_state_present": True,
+        "rng_state_streams": ["numpy", "python", "torch_cpu", "torch_cuda"],
+        "compile_evidence": compile_evidence,
+        "compile_evidence_sha256": compile_evidence["compile_evidence_sha256"],
     }
     state.update(over)
     return state
+
+
+def _source_binding(**over):
+    state = _source_state()
+    binding = {
+        "source_stage_authorization_path": "/tmp/r4-source/STAGE_AUTHORIZATION.json",
+        "source_stage_authorization_sha256": "a" * 64,
+        "source_invocation_run_contract_path": (
+            f"/tmp/r4-source/{C.GOVERNED_RUN_CONTRACT_FILENAME}"
+        ),
+        "source_invocation_run_contract_sha256": "b" * 64,
+        "source_base_governed_identity_digest": "c" * 64,
+        "source_checkpoint_path": "/tmp/r4-source/ckpt_38146.pt",
+        "source_checkpoint_sha256": "d" * 64,
+        "source_checkpoint_step": state["global_step"],
+        "source_checkpoint_stage": "stage_a",
+        "source_active_stage": state["active_stage"],
+        "source_sampler_seed": state["active_stage_sampler_seed"],
+        "source_permutation_identity": state["permutation_identity"],
+        "source_range_start_position": state["range_start_position"],
+        "source_invocation_range_start_position": state["invocation_range_start_position"],
+        "source_range_stop_position": state["range_stop_position"],
+        "source_cursor": state["cursor"],
+    }
+    binding.update(over)
+    return binding
 
 
 def _source_contract(**over):
@@ -804,7 +1002,12 @@ def _source_contract(**over):
 
 
 def test_stage_a_to_b_accepts_a_complete_stage_a_endpoint():
-    assert C.validate_stage_a_to_b_transition(_source_contract(), _source_state()) == []
+    assert (
+        C.validate_stage_a_to_b_transition(
+            _source_contract(), _source_state(), source_binding=_source_binding()
+        )
+        == []
+    )
 
 
 @pytest.mark.parametrize(
@@ -818,7 +1021,11 @@ def test_stage_a_to_b_accepts_a_complete_stage_a_endpoint():
     ],
 )
 def test_stage_a_to_b_rejects_an_invalid_source_state(state_over, expect):
-    failures = C.validate_stage_a_to_b_transition(_source_contract(), _source_state(**state_over))
+    failures = C.validate_stage_a_to_b_transition(
+        _source_contract(),
+        _source_state(**state_over),
+        source_binding=_source_binding(),
+    )
     assert any(expect in f for f in failures), failures
 
 
@@ -829,6 +1036,7 @@ def test_stage_a_to_b_rejects_an_invalid_source_state(state_over, expect):
         "active_stage_sampler_seed",
         "permutation_identity",
         "range_start_position",
+        "invocation_range_start_position",
         "range_stop_position",
         "cursor",
         "global_step",
@@ -838,7 +1046,9 @@ def test_stage_a_to_b_requires_every_field_present(field):
     """R3 Part 6: a missing/null value is a failure, never an accepted default."""
     state = _source_state()
     state[field] = None
-    failures = C.validate_stage_a_to_b_transition(_source_contract(), state)
+    failures = C.validate_stage_a_to_b_transition(
+        _source_contract(), state, source_binding=_source_binding()
+    )
     assert any(f"missing required field:{field}" in f for f in failures), failures
 
 
@@ -846,24 +1056,40 @@ def test_stage_a_to_b_rejects_a_non_governed_or_stage_b_source():
     assert any(
         "not a governed checkpoint" in f
         for f in C.validate_stage_a_to_b_transition(
-            _source_contract(kind="LEGACY"), _source_state()
+            _source_contract(kind="LEGACY"),
+            _source_state(),
+            source_binding=_source_binding(),
         )
     )
     assert any(
         "expected 'stage_a'" in f
         for f in C.validate_stage_a_to_b_transition(
-            _source_contract(stage="stage_b"), _source_state()
+            _source_contract(stage="stage_b"),
+            _source_state(),
+            source_binding=_source_binding(),
         )
     )
 
 
 def test_stage_a_to_b_compares_exact_expected_permutation_and_range():
+    state = _source_state(
+        permutation_identity="q" * 64,
+        range_start_position=128,
+        invocation_range_start_position=128,
+        range_stop_position=999,
+        cursor=999,
+    )
+    binding = _source_binding(
+        source_permutation_identity="q" * 64,
+        source_range_start_position=128,
+        source_invocation_range_start_position=128,
+        source_range_stop_position=999,
+        source_cursor=999,
+    )
     failures = C.validate_stage_a_to_b_transition(
         _source_contract(),
-        _source_state(),
-        expected_permutation_identity="q" * 64,
-        expected_range_start_position=128,
-        expected_range_stop_position=999,
+        state,
+        source_binding=binding,
     )
     assert any("permutation identity mismatch" in f for f in failures)
     assert any("range_start_position" in f for f in failures)
@@ -1036,38 +1262,139 @@ def test_live_runtime_maps_logical_device_zero_to_one_physical_device():
 # --------------------------------------------------------------------- Part 9: Stage N/O
 
 
-def _fake_checkpoint(tmp_path: Path) -> tuple[Path, str]:
-    """A tiny stand-in checkpoint file; never a real training checkpoint."""
-    path = tmp_path / "step_038146.pt"
-    path.write_bytes(b"fake-governed-checkpoint-bytes")
-    return path, C.file_sha256(path)
-
-
 def _stage_n_result(tmp_path, **over):
-    doc = _contract(tmp_path)
-    ckpt_path, ckpt_sha = _fake_checkpoint(tmp_path)
+    import torch
+
+    doc = _contract(tmp_path, stage_n_completion=True)
+    initial_sampler = SimpleNamespace(
+        seed=C.STAGE_A_SAMPLER_SEED,
+        range_start_position=0,
+        end_position=4882688,
+        committed_position=0,
+    )
+    doc["sampler_identity"] = C.sampler_identity_document("stage_a", initial_sampler)
+    invocation = Path(doc["invocation_root"])
+    publication = C.publish_governed_run_contract(invocation, doc)
+    runtime_publication = C.publish_stage_n_runtime_artifact(invocation, doc["runtime_fingerprint"])
+    sampler = SimpleNamespace(
+        seed=C.STAGE_A_SAMPLER_SEED,
+        range_start_position=0,
+        end_position=4882688,
+        committed_position=4882688,
+    )
+    dynamic = C.build_checkpoint_state(
+        stage="stage_a",
+        sampler=sampler,
+        global_step=C.STAGE_A_STOP_STEP,
+        completed_evaluation_milestones=[
+            step for step in C.EVALUATION_MILESTONES if step <= C.STAGE_A_STOP_STEP
+        ],
+        completed_checkpoint_milestones=[
+            step for step in C.CHECKPOINT_MILESTONES if step <= C.STAGE_A_STOP_STEP
+        ],
+        rng_state=_restorable_rng_state(),
+        compile_evidence=doc["compile_evidence"],
+    )
+    ckpt_path = invocation / "step_038146.pt"
+    torch.save(
+        {
+            "kind": C.GOVERNED_CHECKPOINT_KIND,
+            "global_step": C.STAGE_A_STOP_STEP,
+            "local_step": C.STAGE_A_STOP_STEP,
+            "governed_run_contract": doc,
+            "governed_run_contract_sha256": C.governed_digest(doc),
+            "governed_checkpoint_state": dynamic,
+            "run_contract": {
+                "schema_version": 3,
+                "sampler_seed": C.STAGE_A_SAMPLER_SEED,
+                "run_plan": {
+                    "stage": "stage_a",
+                    "plan_sha256": C.EXACT_RUN_PLAN_SHA256,
+                },
+            },
+            "data_contract": {
+                "fingerprint": "a" * 64,
+                "dataset_length": 1,
+                "sampling_mode": "deterministic",
+                "sampler_seed": C.STAGE_A_SAMPLER_SEED,
+                "active_stage": "stage_a",
+                "data_stage_start_step": 0,
+                "samples_per_optimizer_step": C.SEQUENCES_PER_UPDATE,
+            },
+            "data_sampler": {
+                "version": 2,
+                "data_length": 1,
+                "seed": C.STAGE_A_SAMPLER_SEED,
+                "range_start_position": 0,
+                "committed_position": C.STAGE_A_TERMINAL_RANGE_STOP,
+                "end_position": C.STAGE_A_TERMINAL_RANGE_STOP,
+            },
+            "model": {"fixture_weight": torch.tensor([1.0, 2.0])},
+            "optim": {"state": {}, "param_groups": []},
+            "scaler": None,
+        },
+        ckpt_path,
+    )
+    smoke_log = invocation / "smoke.log"
+    smoke_log.write_bytes(b"smoke\n")
+    smoke_publication = C.publish_stage_n_check_result(
+        invocation,
+        kind=C.STAGE_N_SMOKE_RESULT_KIND,
+        authorization_path=doc["stage_authorization_path"],
+        governed_run_contract_path=publication["path"],
+        runtime_fingerprint_path=runtime_publication["path"],
+        checkpoint_path=ckpt_path,
+        checkpoint_step=C.STAGE_A_STOP_STEP,
+        evidence_artifact_path=smoke_log,
+    )
+    smoke_path = Path(smoke_publication["path"])
+    smoke = json.loads(smoke_path.read_bytes())
+
+    from .test_production_launch_contract_v1_trainer_main import (
+        _publish_fixture_resume_check,
+    )
+
+    fixture_governed = {
+        "contract": Path(doc["launch_contract_path"]),
+        "auth": Path(doc["stage_authorization_path"]),
+        "out": Path(doc["governed_run_root"]),
+        "runtime": doc["runtime_fingerprint"],
+    }
+    resume_path = _publish_fixture_resume_check(
+        {
+            "doc": doc,
+            "dynamic": dynamic,
+            "ckpt": ckpt_path,
+            "auth_path": Path(doc["stage_authorization_path"]),
+            "grc_path": Path(publication["path"]),
+            "rt_path": Path(runtime_publication["path"]),
+            "invocation": invocation,
+        },
+        fixture_governed,
+        tmp_path,
+    )
+    resume = json.loads(resume_path.read_bytes())
     result = C.stage_n_result_document(
         governed_run_contract=doc,
+        governed_run_contract_path=publication["path"],
         final_checkpoint_path=str(ckpt_path),
-        final_checkpoint_sha256=ckpt_sha,
+        final_checkpoint_sha256=C.file_sha256(ckpt_path),
         final_checkpoint_step=38146,
-        smoke_results={"status": "PASS", "updates": 0},
-        resume_results={"status": "PASS", "verified": True},
+        smoke_results=smoke,
+        smoke_results_path=smoke_path,
+        resume_results=resume,
+        resume_results_path=resume_path,
+        runtime_fingerprint_path=runtime_publication["path"],
         final_sampler_state={
             "permutation_identity": C.permutation_identity(
                 "stage_a", C.STAGE_A_SAMPLER_SEED, 4882688
             ),
             "range_start_position": 0,
+            "invocation_range_start_position": 0,
             "range_stop_position": 4882688,
             "cursor": 4882688,
         },
     )
-    # R3 Part 14: the runtime fingerprint is a real artifact whose SHA the result binds.
-    rt = tmp_path / "STAGE_N_RUNTIME.json"
-    rt_bytes = C.canonical_json_bytes(result["runtime_fingerprint"])
-    rt.write_bytes(rt_bytes)
-    result["runtime_fingerprint_path"] = str(rt)
-    result["runtime_fingerprint_artifact_sha256"] = C._sha256_bytes(rt_bytes)
     result.update(over)
     return result
 
@@ -1119,7 +1446,7 @@ def test_malformed_sha_and_invalid_scalars_are_rejected(tmp_path):
 
 def test_smoke_and_resume_results_must_pass(tmp_path):
     assert any(
-        "smoke_results_not_pass" in f
+        "smoke" in f
         for f in C.validate_stage_n_result(
             _stage_n_result(tmp_path, smoke_results={"status": "FAIL"})
         )
@@ -1176,6 +1503,9 @@ def _stage_o_chain(
         "stage_n_owner_acceptance_sha256": C._sha256_bytes(abytes),
         "stage_n_authorization_sha256": result["stage_authorization_sha256"],
         "stage_n_governed_run_contract_sha256": result["governed_run_contract_sha256"],
+        "stage_n_governed_run_contract_artifact_sha256": result[
+            "governed_run_contract_artifact_sha256"
+        ],
         "stage_n_runtime_fingerprint": result["runtime_fingerprint"],
         "stage_n_runtime_fingerprint_sha256": result["runtime_fingerprint_sha256"],
         "stage_n_gpu_uuid": result["gpu_uuid"],
@@ -1192,14 +1522,7 @@ def _stage_o_chain(
         ],
     }
     chain.update(chain_over or {})
-    resume = {
-        "mode": "RESUME_EXACT_CHECKPOINT",
-        "checkpoint_path": result["final_checkpoint_path"],
-        "checkpoint_sha256": result["final_checkpoint_sha256"],
-        "expected_step": result["final_checkpoint_step"],
-        "stage": "stage_a",
-        "governed_run_contract_sha256": result["governed_run_contract_sha256"],
-    }
+    resume = C.derive_stage_o_resume_binding(result)
     resume.update(resume_over or {})
     observed = {**result["runtime_fingerprint"], **(runtime_over or {})}
     if runtime_over:
@@ -1421,6 +1744,21 @@ def test_real_trainer_save_ckpt_binds_the_governed_contract(tmp_path, monkeypatc
 
     model = _M()
     optim = torch.optim.SGD(model.parameters(), lr=0.1)
+    sampler = SimpleNamespace(
+        seed=C.STAGE_A_SAMPLER_SEED,
+        range_start_position=0,
+        end_position=100,
+        committed_position=1,
+    )
+    dynamic = C.build_checkpoint_state(
+        stage="stage_a",
+        sampler=sampler,
+        global_step=1,
+        completed_evaluation_milestones=[],
+        completed_checkpoint_milestones=[],
+        rng_state=_restorable_rng_state(),
+        compile_evidence=doc["compile_evidence"],
+    )
     trainer.save_ckpt(
         out_dir=tmp_path / "out",
         global_step=1,
@@ -1430,21 +1768,38 @@ def test_real_trainer_save_ckpt_binds_the_governed_contract(tmp_path, monkeypatc
         scaler=None,
         model_config={},
         train_args={},
-        run_contract={},
+        run_contract={
+            "schema_version": 3,
+            "sampler_seed": C.STAGE_A_SAMPLER_SEED,
+            "run_plan": {"stage": "stage_a", "plan_sha256": C.EXACT_RUN_PLAN_SHA256},
+        },
         position_stats={},
-        sampler_state={},
-        data_contract={},
+        sampler_state={
+            "version": 2,
+            "data_length": 7,
+            "seed": C.STAGE_A_SAMPLER_SEED,
+            "range_start_position": 0,
+            "committed_position": 1,
+            "end_position": 100,
+        },
+        data_contract={
+            "fingerprint": "a" * 64,
+            "dataset_length": 7,
+            "sampling_mode": "deterministic",
+            "sampler_seed": C.STAGE_A_SAMPLER_SEED,
+            "active_stage": "stage_a",
+            "data_stage_start_step": 0,
+            "samples_per_optimizer_step": C.SEQUENCES_PER_UPDATE,
+        },
         retain_step=True,
         governed_run_contract=doc,
         governed_run_contract_sha256=digest,
+        governed_checkpoint_state=dynamic,
     )
     saved = captured["obj"]
     assert saved["governed_run_contract"] == doc
     assert saved["governed_run_contract_sha256"] == digest
-    # R3 Part 2: a governed save may carry the live dynamic state block.
-    assert "governed_checkpoint_state" not in saved or isinstance(
-        saved["governed_checkpoint_state"], dict
-    )
+    assert saved["governed_checkpoint_state"] == dynamic
     assert saved["kind"] == C.GOVERNED_CHECKPOINT_KIND
     assert C.is_governed_checkpoint(saved) is True
     assert "rng_state" in saved and "data_sampler" in saved

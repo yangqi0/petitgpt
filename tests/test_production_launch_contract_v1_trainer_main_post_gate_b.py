@@ -38,12 +38,15 @@ from .test_production_launch_contract_v1_real_path import write_authorization  #
 from .test_production_launch_contract_v1_trainer_main import (  # noqa: E402
     _Boundary,
     _compile_evidence,
+    _ordinary_stage_a_run_contract,
+    _stage_a_data_contract_for_fixture,
     governed,  # noqa: F401,F811  (pytest fixture re-export)
     governed_argv,
     run_main,
 )
 
 STAGE_A_SAMPLES = C.STAGE_A_STOP_STEP * 128  # micro_bsz 8 x grad_accum 16
+STAGE_B_SAMPLES = (C.STAGE_B_GLOBAL_STOP_STEP - C.STAGE_B_START_STEP) * 128
 
 
 def _tiny_model():
@@ -123,7 +126,7 @@ def past_gate_b(monkeypatch):
     # Gate C's realization is the one genuinely expensive step; record its arguments instead
     # of compiling. Everything it feeds -- require_compile_realized, the stance arming, the
     # evidence seal and the published contract -- still runs for real.
-    def fake_realize(m, *, device, micro_bsz, seq_len, vocab_size, cache):
+    def fake_realize(m, *, device, micro_bsz, seq_len, vocab_size, cache, finalize=True):
         record["realize"].append({
             "micro_bsz": int(micro_bsz),
             "seq_len": int(seq_len),
@@ -131,7 +134,11 @@ def past_gate_b(monkeypatch):
             "cache_dir": cache.get("cache_dir"),
         })
         record["order"].append("compile_realized")
-        return dict(_compile_evidence())
+        assert finalize is False, "Gate C must receive observations before the one final seal"
+        evidence = dict(_compile_evidence())
+        for final_field in ("compile_evidence_sha256", "compile_realized", "verdict"):
+            evidence.pop(final_field)
+        return evidence
 
     monkeypatch.setattr(TRAINER_C, "realize_compile_production_shape", fake_realize)
 
@@ -187,7 +194,8 @@ def test_main_reaches_gate_c_and_publishes_before_any_optimizer_update(governed,
 
     assert record["order"] == ["gate_b", "compile_realized", "publish"]
     assert record["updates"] == 0
-    assert (governed["out"] / C.GOVERNED_RUN_CONTRACT_FILENAME).is_file()
+    invocation = C.invocation_directory(governed["out"], "stage_a", C.file_sha256(governed["auth"]))
+    assert (invocation / C.GOVERNED_RUN_CONTRACT_FILENAME).is_file()
     assert record["published"]["atomic"] is True
 
 
@@ -229,12 +237,14 @@ def test_main_aborts_when_gate_c_realization_is_not_evidenced(governed, monkeypa
     """An unrealized compile must stop main() at Gate C, before publication."""
     record = past_gate_b(monkeypatch)
 
-    def unrealized(m, *, device, micro_bsz, seq_len, vocab_size, cache):
+    def unrealized(m, *, device, micro_bsz, seq_len, vocab_size, cache, finalize=True):
         # The authoritative sub-facts, not a cosmetic flag: this is what an eager fallback
         # actually looks like.
+        assert finalize is False
         evidence = dict(_compile_evidence())
+        for final_field in ("compile_evidence_sha256", "compile_realized", "verdict"):
+            evidence.pop(final_field)
         evidence.update({
-            "compile_realized": False,
             "compilation_materialized": False,
             "dynamo_unique_graphs": 0,
             "failures": ["compile_never_materialized_lazily_eager_fallback"],
@@ -262,23 +272,46 @@ def _fresh_doc(governed):  # noqa: F811
     """The governed contract the interrupted FRESH invocation would have published."""
     from .test_production_launch_contract_v1_trainer_main import _governed_doc
 
-    return _governed_doc(governed, governed["out"])
+    doc = _governed_doc(governed, governed["out"])
+    doc["sampler_identity"] = {
+        "stage": "stage_a",
+        "sampler_seed": C.STAGE_A_SAMPLER_SEED,
+        "permutation_identity": C.permutation_identity(
+            "stage_a", C.STAGE_A_SAMPLER_SEED, STAGE_A_SAMPLES
+        ),
+        "range_start_position": 0,
+        "invocation_range_start_position": 0,
+        "range_stop_position": STAGE_A_SAMPLES,
+        "cursor": 0,
+        "consumed": 0,
+        "remaining": STAGE_A_SAMPLES,
+    }
+    return doc
 
 
 def _saved_state(doc, **over):
     """The sampler state a FRESH Stage-A run holds after committing RESUME_CURSOR samples."""
     state = {
+        "schema_version": "petitgpt-governed-checkpoint-state-v1",
         "active_stage": "stage_a",
         "active_stage_sampler_seed": C.STAGE_A_SAMPLER_SEED,
         "permutation_identity": C.permutation_identity(
             "stage_a", C.STAGE_A_SAMPLER_SEED, STAGE_A_SAMPLES
         ),
         "range_start_position": 0,
+        "invocation_range_start_position": 0,
         "range_stop_position": STAGE_A_SAMPLES,
         "cursor": RESUME_CURSOR,
+        "consumed": RESUME_CURSOR,
+        "remaining": STAGE_A_SAMPLES - RESUME_CURSOR,
         "global_step": RESUME_STEP,
-        "completed_evaluation_milestones": [],
-        "completed_checkpoint_milestones": [],
+        "completed_evaluation_milestones": [
+            value for value in C.EVALUATION_MILESTONES if value <= RESUME_STEP
+        ],
+        "completed_checkpoint_milestones": [
+            value for value in C.CHECKPOINT_MILESTONES if value <= RESUME_STEP
+        ],
+        "rng_state": trainer.capture_rng_state(),
         "compile_evidence": _compile_evidence(),
     }
     state["compile_evidence_sha256"] = state["compile_evidence"]["compile_evidence_sha256"]
@@ -293,8 +326,8 @@ def _restart(tmp_path, governed, monkeypatch, **state_over):  # noqa: F811
     interrupted run's contract digest. That is what a real crash restart looks like.
     """
     doc = _fresh_doc(governed)
-    ckpt_dir = tmp_path / "interrupted"
-    ckpt_dir.mkdir(parents=True, exist_ok=True)
+    publication = C.publish_invocation_run_contract(doc)
+    ckpt_dir = Path(publication["invocation_dir"])
     ckpt_path = ckpt_dir / f"step_{RESUME_STEP:06d}.pt"
     ckpt_path.write_bytes(b"opaque governed checkpoint bytes")
 
@@ -313,16 +346,47 @@ def _restart(tmp_path, governed, monkeypatch, **state_over):  # noqa: F811
             "expected_step": RESUME_STEP,
             "stage": "stage_a",
             "governed_run_contract_sha256": C.governed_digest(doc),
+            "source_stage_authorization_path": doc["stage_authorization_path"],
+            "source_stage_authorization_sha256": doc["stage_authorization_sha256"],
+            "source_invocation_run_contract_path": publication["path"],
+            "source_invocation_run_contract_sha256": publication["file_sha256"],
+            "source_base_governed_identity_digest": C.base_governed_identity_sha256(doc),
+            "source_checkpoint_path": str(ckpt_path),
+            "source_checkpoint_sha256": C.file_sha256(ckpt_path),
+            "source_checkpoint_step": RESUME_STEP,
+            "source_checkpoint_stage": "stage_a",
+            "source_active_stage": "stage_a",
+            "source_sampler_seed": C.STAGE_A_SAMPLER_SEED,
+            "source_permutation_identity": C.permutation_identity(
+                "stage_a", C.STAGE_A_SAMPLER_SEED, STAGE_A_SAMPLES
+            ),
+            "source_range_start_position": 0,
+            "source_invocation_range_start_position": 0,
+            "source_range_stop_position": STAGE_A_SAMPLES,
+            "source_cursor": RESUME_CURSOR,
         },
     )
+    state = _saved_state(doc, **state_over)
+    data_contract = _stage_a_data_contract_for_fixture(governed)
     ckpt = {
         "governed_run_contract": doc,
         "governed_run_contract_sha256": C.governed_digest(doc),
-        "governed_checkpoint_state": _saved_state(doc, **state_over),
+        "governed_checkpoint_state": state,
         "global_step": RESUME_STEP,
         "local_step": RESUME_STEP,
         "model": {},
-        "run_contract": {"optimizer": {"name": "muon"}},
+        "optim": {},
+        "scaler": None,
+        "run_contract": _ordinary_stage_a_run_contract(governed, governed["out"]),
+        "data_contract": data_contract,
+        "data_sampler": {
+            "version": 2,
+            "data_length": data_contract["dataset_length"],
+            "seed": C.STAGE_A_SAMPLER_SEED,
+            "range_start_position": 0,
+            "committed_position": state["cursor"],
+            "end_position": STAGE_A_SAMPLES,
+        },
     }
     monkeypatch.setattr(trainer.torch, "load", lambda *a, **k: ckpt)
     return auth, ckpt_path, ckpt
@@ -371,12 +435,21 @@ def test_main_accepts_a_real_same_stage_restart(governed, tmp_path, monkeypatch)
 @pytest.mark.parametrize(
     "over,expected",
     [
-        ({"cursor": RESUME_CURSOR - 128}, "discontinuity"),
-        ({"cursor": RESUME_CURSOR + 128}, "discontinuity"),
-        ({"global_step": RESUME_STEP + 1}, "sampler_resume_mismatch:global_step"),
-        ({"active_stage_sampler_seed": C.STAGE_B_SAMPLER_SEED}, "sampler_resume_mismatch"),
-        ({"range_stop_position": 999}, "sampler_resume_mismatch"),
-        ({"active_stage": "stage_b"}, "sampler_resume_mismatch"),
+        ({"cursor": RESUME_CURSOR - 128}, "checkpoint_state_differs_from_source_authority"),
+        ({"cursor": RESUME_CURSOR + 128}, "checkpoint_state_differs_from_source_authority"),
+        (
+            {"global_step": RESUME_STEP + 1},
+            "checkpoint_state_differs_from_source_authority",
+        ),
+        (
+            {"active_stage_sampler_seed": C.STAGE_B_SAMPLER_SEED},
+            "checkpoint_state_differs_from_source_authority",
+        ),
+        (
+            {"range_stop_position": 999},
+            "checkpoint_state_differs_from_source_authority",
+        ),
+        ({"active_stage": "stage_b"}, "checkpoint_state_differs_from_source_authority"),
     ],
 )
 def test_main_refuses_a_drifted_restart_before_restoring_state(
@@ -420,7 +493,7 @@ def test_restart_authorization_is_still_pinned_to_the_interrupted_contract(
     with pytest.raises(TRAINER_C.LaunchContractError) as excinfo:
         run_main(_resume_argv(governed, auth, ckpt_path), monkeypatch)
 
-    assert "resume_governed_run_contract_sha256_mismatch" in str(excinfo.value)
+    assert "source_authority_resume_run_contract_digest_mismatch" in str(excinfo.value)
     assert "governed_resume_validated" not in record["order"]
 
 
@@ -434,7 +507,7 @@ def test_main_refuses_a_checkpoint_at_the_wrong_step(governed, tmp_path, monkeyp
     with pytest.raises(TRAINER_C.LaunchContractError) as excinfo:
         run_main(_resume_argv(governed, auth, ckpt_path), monkeypatch)
 
-    assert "resume_step_mismatch" in str(excinfo.value)
+    assert "checkpoint_step_differs_from_source_authority" in str(excinfo.value)
     assert "governed_resume_validated" not in record["order"]
     assert record["updates"] == 0
 
@@ -450,40 +523,37 @@ def _stage_o(tmp_path, governed, monkeypatch):  # noqa: F811
     Everything is derived from the SAME live runtime the trainer observes, so the BASE
     identity genuinely matches across the transition rather than matching by construction.
     """
-    from .test_production_launch_contract_v1_trainer_main import _governed_doc
+    from .test_production_launch_contract_v1_trainer_main import _stage_n_artifacts
 
-    stage_a_doc = _governed_doc(governed, governed["out"])
     work = tmp_path / "stage_n"
     work.mkdir(parents=True, exist_ok=True)
-
-    rt_path = work / "RUNTIME_FINGERPRINT.json"
-    rt_path.write_bytes(C.canonical_json_bytes(stage_a_doc["runtime_fingerprint"]))
-    grc_path = work / C.GOVERNED_RUN_CONTRACT_FILENAME
-    grc_path.write_bytes(C.canonical_json_bytes(stage_a_doc))
-    ckpt_path = work / f"step_{C.STAGE_A_STOP_STEP:06d}.pt"
-    ckpt_path.write_bytes(b"opaque stage-a final checkpoint")
+    artifacts = _stage_n_artifacts(governed, work)
+    stage_a_doc = artifacts["doc"]
+    ckpt_path = artifacts["ckpt"]
+    source_invocation = artifacts["invocation"]
 
     C.publish_stage_n_completion(
-        work / "result",
+        source_invocation,
         governed_run_contract=stage_a_doc,
-        governed_run_contract_path=grc_path,
-        authorization=json.loads(governed["auth"].read_bytes()),
-        authorization_path=governed["auth"],
-        runtime_fingerprint_path=rt_path,
+        governed_run_contract_path=artifacts["grc_path"],
+        authorization=artifacts["authorization"],
+        authorization_path=artifacts["auth_path"],
+        runtime_fingerprint_path=artifacts["rt_path"],
         final_checkpoint_path=ckpt_path,
         final_checkpoint_step=C.STAGE_A_STOP_STEP,
-        smoke_results={"status": "PASS"},
-        resume_results={"status": "PASS"},
+        smoke_results_path=artifacts["smoke_path"],
+        resume_results_path=artifacts["resume_path"],
         final_sampler_state={
             "permutation_identity": C.permutation_identity(
                 "stage_a", C.STAGE_A_SAMPLER_SEED, STAGE_A_SAMPLES
             ),
             "range_start_position": 0,
+            "invocation_range_start_position": 0,
             "range_stop_position": STAGE_A_SAMPLES,
             "cursor": STAGE_A_SAMPLES,
         },
     )
-    result_path = work / "result" / C.STAGE_N_RESULT_FILENAME
+    result_path = source_invocation / C.STAGE_N_RESULT_FILENAME
     result_bytes = result_path.read_bytes()
     result = json.loads(result_bytes)
 
@@ -502,6 +572,9 @@ def _stage_o(tmp_path, governed, monkeypatch):  # noqa: F811
         "stage_n_owner_acceptance_sha256": C._sha256_bytes(acc_bytes),
         "stage_n_authorization_sha256": result["stage_authorization_sha256"],
         "stage_n_governed_run_contract_sha256": result["governed_run_contract_sha256"],
+        "stage_n_governed_run_contract_artifact_sha256": result[
+            "governed_run_contract_artifact_sha256"
+        ],
         "stage_n_runtime_fingerprint": result["runtime_fingerprint"],
         "stage_n_runtime_fingerprint_sha256": result["runtime_fingerprint_sha256"],
         "stage_n_gpu_uuid": result["gpu_uuid"],
@@ -518,7 +591,9 @@ def _stage_o(tmp_path, governed, monkeypatch):  # noqa: F811
         ],
     }
 
-    out_b = tmp_path / "run_b"
+    # Stage B is a new invocation under the SAME governed production run root. Its
+    # authorization SHA derives a collision-free invocation directory.
+    out_b = governed["out"]
     auth_dir = tmp_path / "stage_o"
     auth_dir.mkdir(parents=True, exist_ok=True)
     auth_b = write_authorization(
@@ -533,22 +608,15 @@ def _stage_o(tmp_path, governed, monkeypatch):  # noqa: F811
         resume=C.derive_stage_o_resume_binding(result),
     )
 
-    stage_a_ckpt = {
-        "governed_run_contract": stage_a_doc,
-        "governed_run_contract_sha256": C.governed_digest(stage_a_doc),
-        "governed_checkpoint_state": _saved_state(
-            stage_a_doc,
-            range_start_position=0,
-            range_stop_position=STAGE_A_SAMPLES,
-            cursor=STAGE_A_SAMPLES,
-            global_step=C.STAGE_A_STOP_STEP,
-        ),
-        "global_step": C.STAGE_A_STOP_STEP,
-        "local_step": C.STAGE_A_STOP_STEP,
-        "model": {},
-        "run_contract": {"optimizer": {"name": "muon"}},
-    }
-    monkeypatch.setattr(trainer.torch, "load", lambda *a, **k: stage_a_ckpt)
+    real_torch_load = torch.load
+    stage_a_ckpt = real_torch_load(ckpt_path, map_location="cpu", weights_only=False)
+
+    def load_stage_a_fixture(path, *args, **kwargs):
+        if Path(path).resolve() == ckpt_path.resolve():
+            return stage_a_ckpt
+        return real_torch_load(path, *args, **kwargs)
+
+    monkeypatch.setattr(trainer.torch, "load", load_stage_a_fixture)
     return {"auth": auth_b, "out": out_b, "ckpt": ckpt_path, "state": stage_a_ckpt}
 
 
@@ -586,6 +654,67 @@ def test_main_accepts_the_authorized_a_to_b_transition(
     assert record["updates"] == 0
 
 
+def test_main_a_to_b_reaches_the_verified_stage_b_sampler_boundary(
+    governed,  # noqa: F811
+    tmp_path,
+    monkeypatch,
+):
+    """Real main restores the accepted source, then builds and verifies Stage B at cursor 0."""
+    record = past_gate_b(monkeypatch)
+    o = _stage_o(tmp_path, governed, monkeypatch)
+
+    # The tiny Stage-N artifact carries a real ordinary Stage-A run contract. Delegate the
+    # complete generic plus governed load_ckpt control flow while making only the two
+    # tensor-container restores compatible with the tiny objects.
+
+    def restore_model(state, *, strict=True):
+        assert strict is True
+        assert set(state) == {"fixture_weight"}
+        record["order"].append("model_restored")
+
+    def restore_optim(state):
+        assert state == {"state": {}, "param_groups": []}
+        record["order"].append("optimizer_restored")
+
+    monkeypatch.setattr(record["model"], "load_state_dict", restore_model)
+    monkeypatch.setattr(record["optim"], "load_state_dict", restore_optim)
+
+    real_restore_rng_state = trainer.restore_rng_state
+
+    def restore_rng_state_spy(state):
+        real_restore_rng_state(state)
+        record["order"].append("rng_restored")
+
+    monkeypatch.setattr(trainer, "restore_rng_state", restore_rng_state_spy)
+
+    real_validate_data_resume_state = trainer.validate_data_resume_state
+
+    def validate_stage_b_sampler(**kwargs):
+        real_validate_data_resume_state(**kwargs)
+        sampler = kwargs["current_sampler"]
+        record["stage_b_sampler"] = sampler.state_dict()
+        record["order"].append("stage_b_sampler_verified")
+        raise _Boundary("verified Stage-B sampler boundary")
+
+    monkeypatch.setattr(trainer, "validate_data_resume_state", validate_stage_b_sampler)
+
+    with pytest.raises(_Boundary, match="verified Stage-B sampler boundary"):
+        run_main(_stage_b_argv(governed, o), monkeypatch)
+
+    assert record["order"][-4:] == [
+        "model_restored",
+        "optimizer_restored",
+        "rng_restored",
+        "stage_b_sampler_verified",
+    ]
+    sampler = record["stage_b_sampler"]
+    assert sampler["seed"] == C.STAGE_B_SAMPLER_SEED
+    assert sampler["range_start_position"] == 0
+    assert sampler["committed_position"] == 0
+    assert sampler["end_position"] == STAGE_B_SAMPLES
+    assert record["updates"] == 0
+
+
 def test_main_refuses_an_a_to_b_source_the_accepted_stage_n_did_not_end_on(
     governed,  # noqa: F811
     tmp_path,
@@ -600,5 +729,5 @@ def test_main_refuses_an_a_to_b_source_the_accepted_stage_n_did_not_end_on(
     with pytest.raises(TRAINER_C.LaunchContractError) as excinfo:
         run_main(_stage_b_argv(governed, o), monkeypatch)
 
-    assert "before restoring any state" in str(excinfo.value)
+    assert "stage_n_final_checkpoint" in str(excinfo.value)
     assert "governed_resume_validated" not in record["order"]
