@@ -26,6 +26,9 @@ import subprocess
 from types import MappingProxyType
 from typing import Any
 
+# The reviewed code root and the immutable execution/data CWD are distinct for the one
+# successor-head bridge incident. Git and closure observation use ROOT; every governed
+# process must still *actually* run from the historical canonical CWD.
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 CONTRACT_VERSION = "P-PRODUCTION-LAUNCH-CONTRACT-V1"
@@ -67,7 +70,7 @@ ACCEPTED_VAL_RELPATH = "runs/g2_production_2026-08-21/release/val"
 TOKENIZER_RELPATH = "runs/g_production_2026-08-21/release/tokenizer.json"
 TOKENIZER_SHA256 = "d8f84df58928023edebd809e152b3b38a0dac53b9f887bd2455f427661e9b9ce"
 
-CANONICAL_CWD = ROOT
+CANONICAL_CWD = "/workspace/petitgpt"
 
 # --------------------------------------------------------------- owner-frozen model
 
@@ -1244,7 +1247,7 @@ def observed_training_runtime(*, num_workers: int | None = None) -> dict[str, An
         "numpy_version": np.__version__,
         "trainer_head": repo["head"],
         "trainer_execution_bundle_sha256": trainer_execution_bundle_sha256(),
-        "canonical_cwd": CANONICAL_CWD,
+        "canonical_cwd": str(Path.cwd().resolve()),
     }
     # R2 Part 3: the COMPLETE runtime document gets one cryptographic identity, so the
     # immutable governed identity binds the whole fingerprint rather than a chosen subset.
@@ -2992,13 +2995,15 @@ def validate_stage_n_completion_binding(
     The block does not authorize training by itself. If present, however, it must bind the
     already frozen invocation stop before the one-shot GRC can be published.
     """
-    completion = authorization.get("stage_n_completion")
-    if completion is None:
+    if "stage_n_completion" not in authorization:
         return []
+    completion = authorization.get("stage_n_completion")
     if stage != "stage_a":
         return ["stage_n_completion_is_only_valid_for_stage_a"]
     if not isinstance(completion, Mapping):
         return ["stage_n_completion_must_be_an_object"]
+    if set(completion) != {"expected_final_step"}:
+        return ["stage_n_completion_field_set_mismatch"]
     expected = completion.get("expected_final_step")
     if not isinstance(expected, int) or isinstance(expected, bool) or expected <= 0:
         return ["stage_n_completion_expected_final_step_invalid"]
@@ -4303,6 +4308,225 @@ def verify_authorized_checkpoint_bytes(
     }
 
 
+def _verify_successor_bridge_resume_source_authority(
+    resume_binding: Mapping[str, Any],
+    *,
+    source_authorization: Mapping[str, Any],
+    authorization_path: Path,
+    source_contract: Mapping[str, Any],
+    contract_path: Path,
+    transition: str | None,
+    inherited_failures: Sequence[str] = (),
+) -> dict[str, Any]:
+    """Authenticate the one dedicated N3 source without weakening ordinary resumes."""
+
+    from pretrain import stage_n_successor_head_compatibility_bridge_v1 as bridge
+
+    failures = list(inherited_failures)
+    if source_authorization.get("schema_version") != STAGE_N_SUCCESSOR_BRIDGE_AUTHORIZATION_SCHEMA:
+        failures.append("successor_bridge_source_authorization_schema_mismatch")
+    if source_authorization.get("scope") != STAGE_N_SUCCESSOR_BRIDGE_SCOPE:
+        failures.append("successor_bridge_source_authorization_scope_mismatch")
+    if source_authorization.get("authorization_status") != "AUTHORIZED":
+        failures.append("successor_bridge_source_authorization_not_authorized")
+    if source_authorization.get("authorizes_bridge_execution") is not True:
+        failures.append("successor_bridge_source_authorization_execution_not_authorized")
+    if source_authorization.get("authorizes_training") is not False:
+        failures.append("successor_bridge_source_authorization_training_flag_invalid")
+
+    authoritative_preflight = bridge.validate_bridge_authorization(authorization_path)
+    if authoritative_preflight.get("authorized") is not True:
+        observed_failures = authoritative_preflight.get("failures")
+        if isinstance(observed_failures, Sequence) and not isinstance(
+            observed_failures, (str, bytes)
+        ):
+            failures.extend(
+                f"successor_bridge_source_authoritative_preflight:{failure}"
+                for failure in observed_failures
+            )
+        else:
+            failures.append("successor_bridge_source_authoritative_preflight_failed")
+
+    authorization_sha = file_sha256(authorization_path) if authorization_path.is_file() else None
+    if resume_binding.get("source_stage_authorization_sha256") != authorization_sha:
+        failures.append("successor_bridge_source_authorization_sha256_mismatch")
+    if source_contract.get("schema_version") != RUN_CONTRACT_SCHEMA:
+        failures.append("successor_bridge_source_run_contract_schema_mismatch")
+    for field, expected in (
+        ("kind", GOVERNED_CHECKPOINT_KIND),
+        ("stage", "stage_a"),
+        ("scope", "STAGE_N"),
+        ("stage_authorization_path", str(authorization_path)),
+        ("stage_authorization_sha256", authorization_sha),
+        # The GRC continues to describe the complete Stage-A governed range.  N3's
+        # zero-length invocation is recorded in its dedicated compatibility block.
+        ("stage_start_step", STAGE_A_START_STEP),
+        ("stage_stop_step", STAGE_A_STOP_STEP),
+        ("exact_run_plan_sha256", EXACT_RUN_PLAN_SHA256),
+        ("pilot_owner_acceptance_sha256", PILOT_OWNER_ACCEPTANCE_SHA256),
+    ):
+        actual = source_contract.get(field)
+        if field.endswith("_path"):
+            matches = _paths_equal(actual, expected)
+        else:
+            matches = actual == expected
+        if not matches:
+            failures.append(f"successor_bridge_source_run_contract_mismatch:{field}")
+    successor = source_authorization.get("successor")
+    if not isinstance(successor, Mapping):
+        failures.append("successor_bridge_source_successor_identity_missing")
+        successor = {}
+    for auth_field, contract_field in (
+        ("branch", "trainer_branch"),
+        ("repository_root", "successor_repository_root"),
+        ("head", "trainer_head"),
+        ("trainer_execution_bundle_sha256", "trainer_execution_bundle_sha256"),
+        ("bridge_tool_bundle_sha256", "bridge_tool_bundle_sha256"),
+        ("runtime_fingerprint_sha256", "runtime_fingerprint_sha256"),
+    ):
+        if successor.get(auth_field) != source_contract.get(contract_field):
+            failures.append(
+                "successor_bridge_source_authorization_run_contract_mismatch:"
+                f"{auth_field}!={contract_field}"
+            )
+    if source_contract.get("runtime_fingerprint") is None:
+        failures.append("successor_bridge_source_runtime_missing")
+
+    compatibility = source_contract.get("compatibility_bridge")
+    expected_compatibility = {
+        "schema_version": bridge.BRIDGE_GRC_SCHEMA,
+        "source_head": bridge.HISTORICAL_TRAINING_HEAD,
+        "source_bundle_sha256": bridge.HISTORICAL_TRAINING_BUNDLE_SHA256,
+        "source_checkpoint_sha256": bridge.N2_TERMINAL_CHECKPOINT_SHA256,
+        "successor_repository_root": successor.get("repository_root"),
+        "successor_head": successor.get("head"),
+        "successor_trainer_execution_bundle_sha256": successor.get(
+            "trainer_execution_bundle_sha256"
+        ),
+        "successor_bridge_tool_bundle_sha256": successor.get("bridge_tool_bundle_sha256"),
+        "successor_runtime_fingerprint_sha256": successor.get("runtime_fingerprint_sha256"),
+        "semantic_comparison_manifest_path": (
+            source_authorization.get("semantic_comparison_manifest") or {}
+        ).get("path"),
+        "semantic_comparison_manifest_sha256": (
+            source_authorization.get("semantic_comparison_manifest") or {}
+        ).get("sha256"),
+        "start_step": STAGE_A_STOP_STEP,
+        "stop_step": STAGE_A_STOP_STEP,
+        **dict(bridge.ZERO_EXECUTION_COUNTERS),
+    }
+    if not isinstance(compatibility, Mapping) or dict(compatibility) != (expected_compatibility):
+        failures.append("successor_bridge_source_compatibility_record_mismatch")
+    compile_evidence = source_contract.get("compile_evidence")
+    failures.extend(
+        f"successor_bridge_source:{failure}"
+        for failure in verify_compile_evidence_document(compile_evidence)
+    )
+    if isinstance(compile_evidence, Mapping) and source_contract.get(
+        "compile_evidence_sha256"
+    ) != compile_evidence.get("compile_evidence_sha256"):
+        failures.append("successor_bridge_source_compile_evidence_sha256_mismatch")
+
+    semantic_digest = governed_digest(source_contract)
+    if source_contract.get("governed_run_contract_sha256") != semantic_digest:
+        failures.append("successor_bridge_source_run_contract_semantic_digest_mismatch")
+    if resume_binding.get("governed_run_contract_sha256") != semantic_digest:
+        failures.append("successor_bridge_resume_run_contract_digest_mismatch")
+    base_digest = base_governed_identity_sha256(source_contract)
+    if resume_binding.get("source_base_governed_identity_digest") != base_digest:
+        failures.append("successor_bridge_source_base_identity_mismatch")
+
+    destination = source_authorization.get("destination")
+    if not isinstance(destination, Mapping):
+        failures.append("successor_bridge_source_destination_missing")
+        destination = {}
+    if not _paths_equal(destination.get("governed_run_contract_path"), contract_path):
+        failures.append("successor_bridge_source_run_contract_path_not_authorized")
+    output_root = Path(str(destination.get("output_root", ""))).expanduser().resolve()
+    if contract_path.parent != output_root:
+        failures.append("successor_bridge_source_run_contract_location_mismatch")
+    for field in ("invocation_root", "out_dir"):
+        if not _paths_equal(source_contract.get(field), output_root):
+            failures.append(f"successor_bridge_source_run_contract_{field}_mismatch")
+    if not _paths_equal(source_contract.get("samples_dir"), output_root / "samples"):
+        failures.append("successor_bridge_source_run_contract_samples_dir_mismatch")
+
+    sampler = source_contract.get("sampler_identity")
+    if not isinstance(sampler, Mapping):
+        failures.append("successor_bridge_source_sampler_identity_missing")
+        sampler = {}
+    for binding_field, sampler_field in (
+        ("source_active_stage", "stage"),
+        ("source_sampler_seed", "sampler_seed"),
+        ("source_permutation_identity", "permutation_identity"),
+        ("source_range_start_position", "range_start_position"),
+        ("source_invocation_range_start_position", "invocation_range_start_position"),
+        ("source_range_stop_position", "range_stop_position"),
+        ("source_cursor", "cursor"),
+    ):
+        if resume_binding.get(binding_field) != sampler.get(sampler_field):
+            failures.append(f"successor_bridge_source_sampler_mismatch:{binding_field}")
+
+    checkpoint_path = Path(str(resume_binding.get("source_checkpoint_path", ""))).resolve()
+    checkpoint_sha: str | None = None
+    if not checkpoint_path.is_file():
+        failures.append(f"successor_bridge_source_checkpoint_not_found:{checkpoint_path}")
+    else:
+        checkpoint_sha = file_sha256(checkpoint_path)
+        if checkpoint_sha != resume_binding.get("source_checkpoint_sha256"):
+            failures.append("successor_bridge_source_checkpoint_sha256_mismatch")
+    if not _paths_equal(destination.get("terminal_checkpoint_path"), checkpoint_path):
+        failures.append("successor_bridge_source_checkpoint_path_not_authorized")
+    if checkpoint_path.parent != contract_path.parent:
+        failures.append("successor_bridge_source_checkpoint_not_with_run_contract")
+    for current_field, source_field in (
+        ("checkpoint_path", "source_checkpoint_path"),
+        ("checkpoint_sha256", "source_checkpoint_sha256"),
+        ("expected_step", "source_checkpoint_step"),
+        ("stage", "source_checkpoint_stage"),
+    ):
+        if resume_binding.get(current_field) != resume_binding.get(source_field):
+            failures.append(
+                f"successor_bridge_source_resume_alias_mismatch:{current_field}!={source_field}"
+            )
+    if transition != "A_TO_B":
+        failures.append("successor_bridge_source_requires_a_to_b_transition")
+    for field, expected in (
+        ("source_checkpoint_stage", "stage_a"),
+        ("source_active_stage", "stage_a"),
+        ("source_sampler_seed", STAGE_A_SAMPLER_SEED),
+        ("source_range_start_position", 0),
+        ("source_range_stop_position", STAGE_A_TERMINAL_RANGE_STOP),
+        ("source_cursor", STAGE_A_TERMINAL_RANGE_STOP),
+        ("source_checkpoint_step", STAGE_A_STOP_STEP),
+    ):
+        if resume_binding.get(field) != expected:
+            failures.append(f"successor_bridge_source_endpoint_mismatch:{field}")
+    expected_permutation = permutation_identity(
+        "stage_a", STAGE_A_SAMPLER_SEED, STAGE_A_TERMINAL_RANGE_STOP
+    )
+    if resume_binding.get("source_permutation_identity") != expected_permutation:
+        failures.append("successor_bridge_source_permutation_identity_mismatch")
+
+    failures = list(dict.fromkeys(failures))
+    return {
+        "verified": not failures,
+        "failures": failures,
+        "source_authorization_path": str(authorization_path),
+        "source_authorization_sha256": authorization_sha,
+        "source_authorization": dict(source_authorization),
+        "source_invocation_run_contract_path": str(contract_path),
+        "source_invocation_run_contract_sha256": resume_binding.get(
+            "source_invocation_run_contract_sha256"
+        ),
+        "source_invocation_run_contract": dict(source_contract),
+        "source_base_governed_identity_digest": base_digest,
+        "source_checkpoint_path": str(checkpoint_path),
+        "source_checkpoint_sha256": checkpoint_sha,
+        "successor_bridge_source": True,
+    }
+
+
 def verify_resume_source_authority(
     resume_binding: Mapping[str, Any],
     *,
@@ -4360,6 +4584,17 @@ def verify_resume_source_authority(
         "source_invocation_run_contract_sha256",
         "invocation_contract",
     )
+
+    if source_authorization.get("schema_version") == STAGE_N_SUCCESSOR_BRIDGE_AUTHORIZATION_SCHEMA:
+        return _verify_successor_bridge_resume_source_authority(
+            resume_binding,
+            source_authorization=source_authorization,
+            authorization_path=auth_path,
+            source_contract=source_contract,
+            contract_path=contract_path,
+            transition=transition,
+            inherited_failures=failures,
+        )
 
     if source_authorization:
         if source_authorization.get("schema_version") != AUTHORIZATION_SCHEMA:
@@ -4898,6 +5133,327 @@ STAGE_N_RUNTIME_FILENAME = "STAGE_N_RUNTIME_FINGERPRINT.json"
 STAGE_N_SMOKE_RESULT_FILENAME = "STAGE_N_SMOKE_RESULT.json"
 STAGE_N_RESUME_RESULT_FILENAME = "STAGE_N_RESUME_RESULT.json"
 STAGE_N_RESUME_EVIDENCE_FILENAME = "STAGE_N_RESUME_EVIDENCE.json"
+STAGE_N_SUCCESSOR_BRIDGE_AUTHORIZATION_SCHEMA = (
+    "petitgpt-stage-n-successor-head-compatibility-bridge-authorization-v1"
+)
+STAGE_N_SUCCESSOR_BRIDGE_SCOPE = "STAGE_N_SUCCESSOR_HEAD_COMPATIBILITY_BRIDGE"
+STAGE_N_SUCCESSOR_COMPATIBILITY_BRANCH = "agent/stage-n-result-publication-recovery-v1"
+STAGE_N_SUCCESSOR_COMPATIBILITY_SOURCE_HEAD = "6d80423adc16d4a160a7fe42660020c585b5185d"
+STAGE_N_SUCCESSOR_COMPATIBILITY_SOURCE_BUNDLE_SHA256 = (
+    "bbd49b9d73d3cb2fa18aacb3eee861a901e5a7511ed334b85b37239ab1d50043"
+)
+STAGE_N_SUCCESSOR_COMPATIBILITY_SOURCE_N2_TERMINAL_CHECKPOINT_SHA256 = (
+    "d1a8008e7d1cb4ffda63f596126aadb0bfce46f71ec4a63e66d42cd0225623d4"
+)
+STAGE_N_SUCCESSOR_PROVENANCE_REQUIRED_FIELDS = (
+    "stage_n_training_execution_head",
+    "stage_n_training_execution_bundle",
+    "stage_n_compatibility_bridge_head",
+    "stage_n_compatibility_bridge_bundle",
+    "stage_o_execution_head",
+    "stage_o_execution_bundle",
+    "stage_n_source_history",
+    "stage_n_compatibility_bridge",
+)
+STAGE_N_SUCCESSOR_BRIDGE_REQUIRED_FIELDS = (
+    "schema_version",
+    "authorization_path",
+    "authorization_sha256",
+    "semantic_comparison_manifest_path",
+    "semantic_comparison_manifest_sha256",
+    "governed_run_contract_path",
+    "governed_run_contract_artifact_sha256",
+    "governed_run_contract_sha256",
+    "terminal_checkpoint_path",
+    "terminal_checkpoint_sha256",
+    "terminal_checkpoint_step",
+    "runtime_fingerprint_path",
+    "runtime_fingerprint_artifact_sha256",
+    "runtime_fingerprint_sha256",
+    "bridge_tool_bundle_sha256",
+    "optimizer_updates",
+    "trained_tokens",
+    "sampler_advances",
+    "training_loop_iterations",
+    "backward_calls",
+    "scheduler_advances",
+    "data_batches_consumed",
+    "state_equivalence",
+)
+
+
+def derive_stage_n_completion_boundary(exact_plan: Mapping[str, Any]) -> dict[str, Any]:
+    """Purely derive the Stage-N endpoint from the validated exact Stage-P plan.
+
+    The accepted plan is the primary authority. The frozen launch constants remain an
+    independent cross-check, while the arithmetic below prevents a self-consistent edit to
+    only one of the plan's redundant boundary fields from selecting a different endpoint.
+    """
+
+    require(isinstance(exact_plan, Mapping), "exact Stage-P plan must be an object")
+    require(exact_plan.get("schema_version") == 3, "exact Stage-P plan schema_version mismatch")
+    require(
+        exact_plan.get("plan_type") == "deterministic_no_replacement_stage_a_b",
+        "exact Stage-P plan type mismatch",
+    )
+
+    def plan_mapping(value: Any, field: str) -> Mapping[str, Any]:
+        require(isinstance(value, Mapping), f"exact Stage-P plan {field} must be an object")
+        return value
+
+    def plan_int(value: Any, field: str, *, positive: bool = False) -> int:
+        require(
+            isinstance(value, int) and not isinstance(value, bool),
+            f"exact Stage-P plan {field} must be an integer",
+        )
+        result = int(value)
+        require(
+            result > 0 if positive else result >= 0,
+            f"exact Stage-P plan {field} is outside its valid range",
+        )
+        return result
+
+    invariants = plan_mapping(exact_plan.get("invariants"), "invariants")
+    require(
+        invariants.get("sampling_mode") == "deterministic"
+        and invariants.get("replacement") is False
+        and invariants.get("implicit_replay") is False
+        and invariants.get("explicit_replay") is False,
+        "exact Stage-P plan sampling invariants mismatch",
+    )
+
+    inputs = plan_mapping(exact_plan.get("inputs"), "inputs")
+    micro_bsz = plan_int(inputs.get("micro_bsz"), "inputs.micro_bsz", positive=True)
+    grad_accum = plan_int(inputs.get("grad_accum"), "inputs.grad_accum", positive=True)
+    seq_len = plan_int(inputs.get("seq_len"), "inputs.seq_len", positive=True)
+
+    batch = plan_mapping(exact_plan.get("batch"), "batch")
+    sequences_per_step = plan_int(
+        batch.get("sequences_per_optimizer_step"),
+        "batch.sequences_per_optimizer_step",
+        positive=True,
+    )
+    serialized_positions_per_step = plan_int(
+        batch.get("serialized_target_positions_per_optimizer_step"),
+        "batch.serialized_target_positions_per_optimizer_step",
+        positive=True,
+    )
+    require(
+        sequences_per_step == micro_bsz * grad_accum == SEQUENCES_PER_UPDATE,
+        "exact Stage-P plan optimizer-step batch arithmetic mismatch",
+    )
+    require(
+        serialized_positions_per_step == sequences_per_step * seq_len,
+        "exact Stage-P plan serialized-position batch arithmetic mismatch",
+    )
+
+    boundaries = plan_mapping(exact_plan.get("boundaries"), "boundaries")
+    stage_a_start = plan_int(boundaries.get("stage_a_start_step"), "boundaries.stage_a_start_step")
+    stage_a_stop = plan_int(
+        boundaries.get("stage_a_stop_step"),
+        "boundaries.stage_a_stop_step",
+        positive=True,
+    )
+    stage_b_start = plan_int(
+        boundaries.get("stage_b_start_step"),
+        "boundaries.stage_b_start_step",
+        positive=True,
+    )
+    stage_b_stop = plan_int(
+        boundaries.get("stage_b_global_stop_step"),
+        "boundaries.stage_b_global_stop_step",
+        positive=True,
+    )
+    schedule_stop = plan_int(
+        boundaries.get("schedule_total_steps"),
+        "boundaries.schedule_total_steps",
+        positive=True,
+    )
+    require(
+        stage_a_start == 0 and stage_a_stop == stage_b_start and stage_b_stop == schedule_stop,
+        "exact Stage-P plan Stage-A/Stage-B timeline is not contiguous",
+    )
+
+    stages = plan_mapping(exact_plan.get("stages"), "stages")
+    stage_a = plan_mapping(stages.get("stage_a"), "stages.stage_a")
+    planned_steps = plan_int(
+        stage_a.get("planned_optimizer_steps"),
+        "stages.stage_a.planned_optimizer_steps",
+        positive=True,
+    )
+    sampler_endpoint = plan_int(
+        stage_a.get("consumed_blocks"), "stages.stage_a.consumed_blocks", positive=True
+    )
+    exposure_endpoint = plan_int(
+        stage_a.get("consumed_exposure_blocks"),
+        "stages.stage_a.consumed_exposure_blocks",
+        positive=True,
+    )
+    serialized_positions = plan_int(
+        stage_a.get("consumed_serialized_target_positions"),
+        "stages.stage_a.consumed_serialized_target_positions",
+        positive=True,
+    )
+    require(
+        planned_steps == stage_a_stop - stage_a_start,
+        "exact Stage-P plan Stage-A step arithmetic mismatch",
+    )
+    require(
+        sampler_endpoint == exposure_endpoint == planned_steps * sequences_per_step,
+        "exact Stage-P plan Stage-A sampler-endpoint arithmetic mismatch",
+    )
+    require(
+        serialized_positions == sampler_endpoint * seq_len,
+        "exact Stage-P plan Stage-A serialized-position arithmetic mismatch",
+    )
+
+    milestones = plan_mapping(exact_plan.get("checkpoint_milestones"), "checkpoint_milestones")
+    require(
+        milestones.get("schema_version") == 1,
+        "exact Stage-P plan checkpoint milestone schema mismatch",
+    )
+    absolute_steps = milestones.get("absolute_steps")
+    require(
+        isinstance(absolute_steps, list)
+        and all(isinstance(value, int) and not isinstance(value, bool) for value in absolute_steps)
+        and absolute_steps.count(stage_a_stop) == 1,
+        "exact Stage-P plan has no unique Stage-A boundary checkpoint milestone",
+    )
+    entries = milestones.get("entries")
+    require(isinstance(entries, list), "exact Stage-P plan milestone entries must be a list")
+    stage_a_end_entries = [
+        entry
+        for entry in entries
+        if isinstance(entry, Mapping)
+        and isinstance(entry.get("reasons"), list)
+        and "stage_a_end" in entry["reasons"]
+    ]
+    require(
+        len(stage_a_end_entries) == 1,
+        "exact Stage-P plan must contain one Stage-A endpoint milestone",
+    )
+    stage_a_end = stage_a_end_entries[0]
+    require(
+        stage_a_end.get("absolute_step") == stage_a_stop
+        and stage_a_end.get("actual_cumulative_consumed_transitions") == serialized_positions,
+        "exact Stage-P plan Stage-A endpoint milestone arithmetic mismatch",
+    )
+
+    require(
+        stage_a_stop == STAGE_A_STOP_STEP,
+        "exact Stage-P plan Stage-A stop differs from the frozen launch boundary",
+    )
+    require(
+        sampler_endpoint == STAGE_A_TERMINAL_RANGE_STOP,
+        "exact Stage-P plan Stage-A sampler endpoint differs from the frozen launch boundary",
+    )
+    return {
+        "stage": "stage_a",
+        "start_step": stage_a_start,
+        "stop_step": stage_a_stop,
+        "sampler_endpoint": sampler_endpoint,
+        "sequences_per_optimizer_step": sequences_per_step,
+        "serialized_target_positions_per_optimizer_step": serialized_positions_per_step,
+        "consumed_serialized_target_positions": serialized_positions,
+    }
+
+
+def load_stage_n_completion_boundary(exact_plan_path: str | Path) -> dict[str, Any]:
+    """Authenticate the accepted plan bytes, then apply the pure Stage-N derivation."""
+
+    path = Path(exact_plan_path)
+    require(path.is_file(), f"exact Stage-P plan not found: {path}")
+    try:
+        snapshot = path.read_bytes()
+        observed_sha = _sha256_bytes(snapshot)
+        exact_plan = json.loads(snapshot.decode("utf-8"))
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise LaunchContractError(
+            f"exact Stage-P plan is not valid JSON: {type(exc).__name__}"
+        ) from exc
+    require(
+        observed_sha == EXACT_RUN_PLAN_SHA256,
+        f"exact Stage-P plan SHA-256 mismatch: expected {EXACT_RUN_PLAN_SHA256}, "
+        f"got {observed_sha}",
+    )
+    boundary = derive_stage_n_completion_boundary(exact_plan)
+    return {
+        **boundary,
+        "exact_plan_path": str(path),
+        "exact_run_plan_sha256": observed_sha,
+    }
+
+
+def validate_stage_n_completion_cross_check(
+    authorization: Mapping[str, Any], boundary: Mapping[str, Any]
+) -> list[str]:
+    """Treat ``stage_n_completion`` as an optional redundant plan cross-check."""
+
+    if "stage_n_completion" not in authorization:
+        return []
+    completion = authorization.get("stage_n_completion")
+    if not isinstance(completion, Mapping):
+        return ["stage_n_completion_must_be_an_object"]
+    if set(completion) != {"expected_final_step"}:
+        return ["stage_n_completion_field_set_mismatch"]
+    expected_step = completion.get("expected_final_step")
+    if not isinstance(expected_step, int) or isinstance(expected_step, bool) or expected_step <= 0:
+        return ["stage_n_completion_expected_final_step_invalid"]
+    if expected_step != boundary.get("stop_step"):
+        return ["stage_n_completion_expected_final_step_differs_from_exact_plan"]
+    return []
+
+
+def validate_stage_n_boundary_agreement(
+    authorization: Mapping[str, Any],
+    boundary: Mapping[str, Any],
+    *,
+    governed_run_contract: Mapping[str, Any] | None = None,
+    checkpoint_step: int | None = None,
+    sampler_state: Mapping[str, Any] | None = None,
+) -> list[str]:
+    """Cross-authenticate execution artifacts against the plan-derived Stage-N endpoint."""
+
+    failures = validate_stage_n_completion_cross_check(authorization, boundary)
+    expected_sha = boundary.get("exact_run_plan_sha256")
+    if authorization.get("exact_run_plan_sha256") != expected_sha:
+        failures.append("stage_n_authorization_exact_plan_sha256_mismatch")
+    if governed_run_contract is not None:
+        for field, expected in (
+            ("stage", "stage_a"),
+            ("stage_start_step", boundary.get("start_step")),
+            ("stage_stop_step", boundary.get("stop_step")),
+            ("exact_run_plan_sha256", expected_sha),
+        ):
+            if governed_run_contract.get(field) != expected:
+                failures.append(f"stage_n_governed_run_contract_boundary_mismatch:{field}")
+        recorded_plan_path = governed_run_contract.get("exact_plan_path")
+        if not _paths_equal(recorded_plan_path, str(boundary.get("exact_plan_path") or "")):
+            failures.append("stage_n_governed_run_contract_boundary_mismatch:exact_plan_path")
+        contract_sampler = governed_run_contract.get("sampler_identity")
+        if not isinstance(contract_sampler, Mapping):
+            failures.append("stage_n_governed_run_contract_sampler_identity_missing")
+        else:
+            for field, expected in (
+                ("stage", "stage_a"),
+                ("range_start_position", 0),
+                ("range_stop_position", boundary.get("sampler_endpoint")),
+            ):
+                if contract_sampler.get(field) != expected:
+                    failures.append(f"stage_n_governed_run_contract_boundary_mismatch:{field}")
+    if checkpoint_step is not None and checkpoint_step != boundary.get("stop_step"):
+        failures.append("stage_n_checkpoint_step_differs_from_exact_plan_boundary")
+    if sampler_state is not None:
+        for field, expected in (
+            ("range_start_position", 0),
+            ("range_stop_position", boundary.get("sampler_endpoint")),
+            ("cursor", boundary.get("sampler_endpoint")),
+        ):
+            if sampler_state.get(field) != expected:
+                failures.append(f"stage_n_sampler_state_differs_from_exact_plan_boundary:{field}")
+    return list(dict.fromkeys(failures))
+
+
 STAGE_N_RESULT_REQUIRED_FIELDS = (
     "schema_version",
     "status",
@@ -4963,6 +5519,27 @@ STAGE_O_REQUIRED_CHAIN_FIELDS = (
     "stage_n_runtime_fingerprint_artifact_sha256",
 )
 
+STAGE_O_SUCCESSOR_BRIDGE_REQUIRED_CHAIN_FIELDS = (
+    *STAGE_O_REQUIRED_CHAIN_FIELDS,
+    "n3_bridge_authorization_path",
+    "n3_bridge_authorization_sha256",
+    "n3_bridge_semantic_comparison_manifest_path",
+    "n3_bridge_semantic_comparison_manifest_sha256",
+    "n3_bridge_governed_run_contract_path",
+    "n3_bridge_governed_run_contract_artifact_sha256",
+    "n3_bridge_governed_run_contract_sha256",
+    "n3_bridge_terminal_checkpoint_path",
+    "n3_bridge_terminal_checkpoint_sha256",
+    "n3_bridge_terminal_checkpoint_step",
+    "stage_n_training_execution_head",
+    "stage_n_training_execution_bundle",
+    "stage_n_compatibility_bridge_head",
+    "stage_n_compatibility_bridge_bundle",
+    "stage_o_execution_head",
+    "stage_o_execution_bundle",
+    "stage_n_source_history",
+)
+
 # Runtime fields Stage O must match against the ACCEPTED Stage-N result, not merely against
 # its own authorization. Changing both the authorization and the runtime cannot evade this.
 STAGE_N_O_RUNTIME_COMPARISON_FIELDS = (
@@ -4990,22 +5567,36 @@ def _paths_equal(recorded: Any, actual: str | Path) -> bool:
     return Path(recorded).resolve() == Path(actual).resolve()
 
 
-def _load_json_mapping_artifact(
+def _load_json_mapping_artifact_snapshot(
     path: str | Path, *, label: str, failures: list[str]
-) -> dict[str, Any] | None:
+) -> tuple[dict[str, Any] | None, str | None]:
+    """Parse and hash one JSON read so callers bind semantics to the same bytes."""
+
     candidate = Path(path)
     if not candidate.is_file():
         failures.append(f"{label}_not_found:{candidate}")
-        return None
+        return None, None
     try:
-        value = json.loads(candidate.read_bytes().decode("utf-8"))
+        snapshot = candidate.read_bytes()
+        value = json.loads(snapshot.decode("utf-8"))
     except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
         failures.append(f"{label}_not_valid_json:{type(exc).__name__}")
-        return None
+        return None, None
     if not isinstance(value, Mapping):
         failures.append(f"{label}_json_not_an_object")
-        return None
-    return dict(value)
+        return None, _sha256_bytes(snapshot)
+    return dict(value), _sha256_bytes(snapshot)
+
+
+def _load_json_mapping_artifact(
+    path: str | Path, *, label: str, failures: list[str]
+) -> dict[str, Any] | None:
+    value, _snapshot_sha256 = _load_json_mapping_artifact_snapshot(
+        path,
+        label=label,
+        failures=failures,
+    )
+    return value
 
 
 def _atomic_publish_json(path: str | Path, document: Mapping[str, Any]) -> dict[str, Any]:
@@ -5556,6 +6147,250 @@ def _validate_stage_n_resume_evidence(
     return list(dict.fromkeys(failures))
 
 
+def _validate_successor_bridge_resume_evidence(
+    evidence: Mapping[str, Any],
+    *,
+    expected_authorization_sha256: str,
+    expected_governed_run_contract_sha256: str,
+    expected_checkpoint_path: str | Path | None,
+    expected_checkpoint_sha256: str | None,
+    expected_checkpoint_step: int | None,
+    expected_runtime_fingerprint_sha256: str,
+    expected_authorization_path: str | Path | None,
+    expected_governed_run_contract_path: str | Path | None,
+    expected_evidence_artifact_path: str | Path,
+) -> list[str]:
+    """Validate the one N3 zero-update resume proof without weakening normal resumes."""
+
+    from pretrain import stage_n_successor_head_compatibility_bridge_v1 as bridge
+
+    failures: list[str] = []
+    required = (
+        "schema_version",
+        "kind",
+        "status",
+        "authorization_path",
+        "authorization_sha256",
+        "semantic_comparison_manifest_path",
+        "semantic_comparison_manifest_sha256",
+        "governed_run_contract_path",
+        "governed_run_contract_artifact_sha256",
+        "governed_run_contract_sha256",
+        "terminal_checkpoint_path",
+        "terminal_checkpoint_sha256",
+        "terminal_checkpoint_step",
+        "runtime_fingerprint_sha256",
+        "source_n2_checkpoint_path",
+        "source_n2_checkpoint_sha256",
+        "execution_counters",
+        "state_equivalence",
+    )
+    for field in required:
+        if evidence.get(field) in (None, ""):
+            failures.append(f"successor_bridge_resume_evidence_missing_field:{field}")
+    for field, expected in (
+        ("schema_version", bridge.BRIDGE_RESUME_EVIDENCE_SCHEMA),
+        ("kind", bridge.BRIDGE_RESUME_EVIDENCE_KIND),
+        ("status", "PASS"),
+        ("authorization_sha256", expected_authorization_sha256),
+        ("governed_run_contract_sha256", expected_governed_run_contract_sha256),
+        ("terminal_checkpoint_sha256", expected_checkpoint_sha256),
+        ("terminal_checkpoint_step", expected_checkpoint_step),
+        ("runtime_fingerprint_sha256", expected_runtime_fingerprint_sha256),
+        ("source_n2_checkpoint_sha256", bridge.N2_TERMINAL_CHECKPOINT_SHA256),
+    ):
+        if expected is not None and evidence.get(field) != expected:
+            failures.append(f"successor_bridge_resume_evidence_mismatch:{field}")
+    for field in (
+        "authorization_sha256",
+        "semantic_comparison_manifest_sha256",
+        "governed_run_contract_artifact_sha256",
+        "governed_run_contract_sha256",
+        "terminal_checkpoint_sha256",
+        "runtime_fingerprint_sha256",
+        "source_n2_checkpoint_sha256",
+    ):
+        if not _is_sha256(evidence.get(field)):
+            failures.append(f"successor_bridge_resume_evidence_invalid_sha256:{field}")
+
+    for field, actual, expected in (
+        ("authorization_path", evidence.get("authorization_path"), expected_authorization_path),
+        (
+            "governed_run_contract_path",
+            evidence.get("governed_run_contract_path"),
+            expected_governed_run_contract_path,
+        ),
+        (
+            "terminal_checkpoint_path",
+            evidence.get("terminal_checkpoint_path"),
+            expected_checkpoint_path,
+        ),
+        (
+            "source_n2_checkpoint_path",
+            evidence.get("source_n2_checkpoint_path"),
+            bridge.HISTORICAL_ARTIFACTS["n2_terminal_checkpoint"]["path"],
+        ),
+    ):
+        if expected is not None and not _paths_equal(actual, expected):
+            failures.append(f"successor_bridge_resume_evidence_path_mismatch:{field}")
+
+    def load_bound_json(path_field: str, sha_field: str, label: str) -> dict[str, Any] | None:
+        value = evidence.get(path_field)
+        if not isinstance(value, str) or not value.strip():
+            return None
+        path = Path(value)
+        document = _load_json_mapping_artifact(
+            path, label=f"successor_bridge_resume_{label}", failures=failures
+        )
+        if path.is_file() and file_sha256(path) != evidence.get(sha_field):
+            failures.append(f"successor_bridge_resume_{label}_artifact_sha256_mismatch")
+        return document
+
+    authorization = load_bound_json("authorization_path", "authorization_sha256", "authorization")
+    manifest = load_bound_json(
+        "semantic_comparison_manifest_path",
+        "semantic_comparison_manifest_sha256",
+        "semantic_manifest",
+    )
+    grc = load_bound_json(
+        "governed_run_contract_path",
+        "governed_run_contract_artifact_sha256",
+        "governed_run_contract",
+    )
+
+    successor: Mapping[str, Any] = {}
+    if authorization is not None:
+        for field, expected in (
+            ("schema_version", bridge.N3_AUTHORIZATION_SCHEMA),
+            ("scope", bridge.N3_SCOPE),
+            ("authorization_status", "AUTHORIZED"),
+            ("authorizes_bridge_execution", True),
+            ("authorizes_training", False),
+            ("one_time_exception", True),
+        ):
+            if authorization.get(field) != expected:
+                failures.append(f"successor_bridge_resume_authorization_mismatch:{field}")
+        successor_value = authorization.get("successor")
+        if not isinstance(successor_value, Mapping):
+            failures.append("successor_bridge_resume_authorization_successor_missing")
+        else:
+            successor = successor_value
+            if successor.get("runtime_fingerprint_sha256") != evidence.get(
+                "runtime_fingerprint_sha256"
+            ):
+                failures.append("successor_bridge_resume_runtime_authorization_mismatch")
+        if authorization.get("semantic_comparison_manifest") != {
+            "path": evidence.get("semantic_comparison_manifest_path"),
+            "sha256": evidence.get("semantic_comparison_manifest_sha256"),
+        }:
+            failures.append("successor_bridge_resume_manifest_authorization_mismatch")
+        destination = authorization.get("destination")
+        if not isinstance(destination, Mapping):
+            failures.append("successor_bridge_resume_authorization_destination_missing")
+        else:
+            for destination_field, evidence_field in (
+                ("governed_run_contract_path", "governed_run_contract_path"),
+                ("terminal_checkpoint_path", "terminal_checkpoint_path"),
+                ("resume_evidence_path", None),
+            ):
+                expected_value = (
+                    evidence.get(evidence_field)
+                    if evidence_field is not None
+                    else expected_evidence_artifact_path
+                )
+                if not _paths_equal(destination.get(destination_field), expected_value):
+                    failures.append(
+                        "successor_bridge_resume_authorization_destination_mismatch:"
+                        f"{destination_field}"
+                    )
+
+    if manifest is not None:
+        failures.extend(
+            bridge.validate_semantic_comparison_manifest(
+                manifest,
+                expected_artifact_sha256=str(
+                    evidence.get("semantic_comparison_manifest_sha256") or ""
+                ),
+                expected_successor_head=str(successor.get("head") or ""),
+                expected_successor_trainer_bundle_sha256=str(
+                    successor.get("trainer_execution_bundle_sha256") or ""
+                ),
+            )
+        )
+
+    if grc is not None:
+        semantic_sha = governed_digest(grc)
+        if grc.get("governed_run_contract_sha256") != semantic_sha:
+            failures.append("successor_bridge_resume_grc_self_digest_mismatch")
+        if semantic_sha != evidence.get("governed_run_contract_sha256"):
+            failures.append("successor_bridge_resume_grc_semantic_digest_mismatch")
+        for field, expected in (
+            ("schema_version", RUN_CONTRACT_SCHEMA),
+            ("kind", GOVERNED_CHECKPOINT_KIND),
+            ("governed", True),
+            ("stage", "stage_a"),
+            ("scope", "STAGE_N"),
+            ("stage_authorization_sha256", expected_authorization_sha256),
+            ("runtime_fingerprint_sha256", evidence.get("runtime_fingerprint_sha256")),
+            ("stage_start_step", STAGE_A_START_STEP),
+            ("stage_stop_step", bridge.COMPLETION_STEP),
+        ):
+            if grc.get(field) != expected:
+                failures.append(f"successor_bridge_resume_grc_mismatch:{field}")
+        if expected_authorization_path is not None and not _paths_equal(
+            grc.get("stage_authorization_path"), expected_authorization_path
+        ):
+            failures.append("successor_bridge_resume_grc_authorization_path_mismatch")
+        for auth_field, grc_field in (
+            ("head", "trainer_head"),
+            ("trainer_execution_bundle_sha256", "trainer_execution_bundle_sha256"),
+            ("bridge_tool_bundle_sha256", "bridge_tool_bundle_sha256"),
+        ):
+            if successor.get(auth_field) != grc.get(grc_field):
+                failures.append(f"successor_bridge_resume_authorization_grc_mismatch:{auth_field}")
+        compatibility = grc.get("compatibility_bridge")
+        if not isinstance(compatibility, Mapping):
+            failures.append("successor_bridge_resume_grc_bridge_record_missing")
+        else:
+            for field in bridge.EXECUTION_COUNTER_FIELDS:
+                if compatibility.get(field) != 0:
+                    failures.append(f"successor_bridge_resume_grc_nonzero:{field}")
+
+    checkpoint_value = evidence.get("terminal_checkpoint_path")
+    if isinstance(checkpoint_value, str) and checkpoint_value.strip():
+        checkpoint = Path(checkpoint_value)
+        if not checkpoint.is_file():
+            failures.append(f"successor_bridge_resume_terminal_checkpoint_not_found:{checkpoint}")
+        elif file_sha256(checkpoint) != evidence.get("terminal_checkpoint_sha256"):
+            failures.append("successor_bridge_resume_terminal_checkpoint_sha256_mismatch")
+    source_value = evidence.get("source_n2_checkpoint_path")
+    if isinstance(source_value, str) and source_value.strip():
+        source = Path(source_value)
+        if not source.is_file():
+            failures.append(f"successor_bridge_resume_source_checkpoint_not_found:{source}")
+        elif file_sha256(source) != evidence.get("source_n2_checkpoint_sha256"):
+            failures.append("successor_bridge_resume_source_checkpoint_sha256_mismatch")
+
+    counters = evidence.get("execution_counters")
+    if not isinstance(counters, Mapping) or dict(counters) != dict(bridge.ZERO_EXECUTION_COUNTERS):
+        failures.append("successor_bridge_resume_execution_counters_not_exact_zero")
+    equivalence = evidence.get("state_equivalence")
+    expected_equivalence = {
+        "schema_version": "petitgpt-stage-n-successor-state-equivalence-v1",
+        "equivalent": True,
+        "failures": [],
+        "model_tensors_compared": bridge.EXPECTED_MODEL_TENSOR_COUNT,
+        "optimizer_state_equivalent": True,
+        "scaler_state_equivalent": True,
+        "rng_state_preserved": True,
+        "global_step": bridge.COMPLETION_STEP,
+        "sampler_cursor": bridge.COMPLETION_SAMPLER_ENDPOINT,
+    }
+    if not isinstance(equivalence, Mapping) or dict(equivalence) != expected_equivalence:
+        failures.append("successor_bridge_resume_state_equivalence_not_exact")
+    return list(dict.fromkeys(failures))
+
+
 def validate_stage_n_check_result(
     document: Mapping[str, Any] | None,
     *,
@@ -5635,18 +6470,40 @@ def validate_stage_n_check_result(
         )
         failures.extend(evidence_failures)
         if evidence is not None:
-            failures.extend(
-                _validate_stage_n_resume_evidence(
-                    evidence,
-                    expected_authorization_sha256=expected_authorization_sha256,
-                    expected_governed_run_contract_sha256=(expected_governed_run_contract_sha256),
-                    expected_checkpoint_path=expected_checkpoint_path,
-                    expected_checkpoint_sha256=expected_checkpoint_sha256,
-                    expected_checkpoint_step=expected_checkpoint_step,
-                    expected_authorization_path=expected_authorization_path,
-                    expected_governed_run_contract_path=(expected_governed_run_contract_path),
+            from pretrain import stage_n_successor_head_compatibility_bridge_v1 as bridge
+
+            if evidence.get("schema_version") == bridge.BRIDGE_RESUME_EVIDENCE_SCHEMA:
+                failures.extend(
+                    _validate_successor_bridge_resume_evidence(
+                        evidence,
+                        expected_authorization_sha256=expected_authorization_sha256,
+                        expected_governed_run_contract_sha256=(
+                            expected_governed_run_contract_sha256
+                        ),
+                        expected_checkpoint_path=expected_checkpoint_path,
+                        expected_checkpoint_sha256=expected_checkpoint_sha256,
+                        expected_checkpoint_step=expected_checkpoint_step,
+                        expected_runtime_fingerprint_sha256=(expected_runtime_fingerprint_sha256),
+                        expected_authorization_path=expected_authorization_path,
+                        expected_governed_run_contract_path=(expected_governed_run_contract_path),
+                        expected_evidence_artifact_path=evidence_value,
+                    )
                 )
-            )
+            else:
+                failures.extend(
+                    _validate_stage_n_resume_evidence(
+                        evidence,
+                        expected_authorization_sha256=expected_authorization_sha256,
+                        expected_governed_run_contract_sha256=(
+                            expected_governed_run_contract_sha256
+                        ),
+                        expected_checkpoint_path=expected_checkpoint_path,
+                        expected_checkpoint_sha256=expected_checkpoint_sha256,
+                        expected_checkpoint_step=expected_checkpoint_step,
+                        expected_authorization_path=expected_authorization_path,
+                        expected_governed_run_contract_path=(expected_governed_run_contract_path),
+                    )
+                )
     return list(dict.fromkeys(failures))
 
 
@@ -5691,11 +6548,22 @@ def publish_stage_n_check_result(
         + "\n  - ".join(failures),
     )
     auth_sha = file_sha256(auth_path)
-    completion = auth.get("stage_n_completion")
+    plan_path_value = grc.get("exact_plan_path")
     require(
-        isinstance(completion, Mapping)
-        and completion.get("expected_final_step") == int(checkpoint_step),
-        "Stage-N check step differs from its source authorization",
+        isinstance(plan_path_value, str) and bool(plan_path_value.strip()),
+        "Stage-N check GRC does not bind the exact Stage-P plan path",
+    )
+    boundary = load_stage_n_completion_boundary(plan_path_value)
+    boundary_failures = validate_stage_n_boundary_agreement(
+        auth,
+        boundary,
+        governed_run_contract=grc,
+        checkpoint_step=int(checkpoint_step),
+    )
+    require(
+        not boundary_failures,
+        "Stage-N check artifacts disagree with the plan-derived completion boundary:\n  - "
+        + "\n  - ".join(boundary_failures),
     )
     canonical_invocation = invocation_directory(
         str(auth.get("allowed_output_root", "")), "stage_a", auth_sha
@@ -5840,10 +6708,27 @@ def publish_stage_n_resume_check_from_verified_invocation(
         and int(completed_step) == expected_step,
         "resume check completion step differs from the verified source checkpoint",
     )
-    completion = source_authorization.get("stage_n_completion")
+    plan_path_value = source_contract.get("exact_plan_path")
     require(
-        isinstance(completion, Mapping) and completion.get("expected_final_step") == expected_step,
-        "source Stage-N authorization does not bind this completion step",
+        isinstance(plan_path_value, str) and bool(plan_path_value.strip()),
+        "source Stage-N GRC does not bind the exact Stage-P plan path",
+    )
+    boundary = load_stage_n_completion_boundary(plan_path_value)
+    boundary_failures = validate_stage_n_boundary_agreement(
+        source_authorization,
+        boundary,
+        governed_run_contract=source_contract,
+        checkpoint_step=expected_step,
+        sampler_state={
+            "range_start_position": source_resume_binding.get("source_range_start_position"),
+            "range_stop_position": source_resume_binding.get("source_range_stop_position"),
+            "cursor": source_resume_binding.get("source_cursor"),
+        },
+    )
+    require(
+        not boundary_failures,
+        "Stage-N resume artifacts disagree with the plan-derived completion boundary:\n  - "
+        + "\n  - ".join(boundary_failures),
     )
     require(
         source_checkpoint.resolve()
@@ -6066,6 +6951,152 @@ STAGE_N_NON_EMPTY_FIELDS = (
 )
 
 
+def validate_successor_stage_n_provenance(
+    document: Mapping[str, Any], *, required: bool = False
+) -> list[str]:
+    """Validate the incident-scoped training/bridge/Stage-O provenance split.
+
+    The ordinary Stage-N schema remains usable for historical results.  Once any successor
+    marker is present -- and unconditionally on the successor Stage-O path -- all eight
+    authorities become load-bearing and are checked against the one immutable N1/N2 history.
+    """
+
+    present = [field in document for field in STAGE_N_SUCCESSOR_PROVENANCE_REQUIRED_FIELDS]
+    if not required and not any(present):
+        return []
+    failures = [
+        f"stage_n_successor_result_missing_field:{field}"
+        for field in STAGE_N_SUCCESSOR_PROVENANCE_REQUIRED_FIELDS
+        if field not in document
+    ]
+    if failures:
+        return failures
+
+    # Imported lazily: the bridge imports this module to reuse the boundary authority.  The
+    # static import is nevertheless discovered by trainer_execution_closure, so Stage O's
+    # bundle honestly binds this validator and the bridge policy it invokes.
+    from pretrain import stage_n_successor_head_compatibility_bridge_v1 as bridge
+
+    exact_source = {
+        "branch": bridge.HISTORICAL_TRAINING_BRANCH,
+        "head": bridge.HISTORICAL_TRAINING_HEAD,
+        "trainer_execution_bundle_sha256": bridge.HISTORICAL_TRAINING_BUNDLE_SHA256,
+    }
+    for field, expected in (
+        ("stage_n_training_execution_head", bridge.HISTORICAL_TRAINING_HEAD),
+        ("stage_n_training_execution_bundle", bridge.HISTORICAL_TRAINING_BUNDLE_SHA256),
+    ):
+        if document.get(field) != expected:
+            failures.append(f"stage_n_successor_provenance_mismatch:{field}")
+
+    bridge_head = document.get("stage_n_compatibility_bridge_head")
+    bridge_bundle = document.get("stage_n_compatibility_bridge_bundle")
+    stage_o_head = document.get("stage_o_execution_head")
+    stage_o_bundle = document.get("stage_o_execution_bundle")
+    for field, value, length in (
+        ("stage_n_compatibility_bridge_head", bridge_head, 40),
+        ("stage_n_compatibility_bridge_bundle", bridge_bundle, 64),
+        ("stage_o_execution_head", stage_o_head, 40),
+        ("stage_o_execution_bundle", stage_o_bundle, 64),
+    ):
+        valid = (
+            isinstance(value, str)
+            and len(value) == length
+            and all(character in "0123456789abcdef" for character in value.lower())
+        )
+        if not valid:
+            failures.append(f"stage_n_successor_provenance_invalid:{field}")
+    if bridge_head == bridge.HISTORICAL_TRAINING_HEAD:
+        failures.append("stage_n_successor_bridge_head_is_historical_training_head")
+    for field, actual, expected in (
+        ("stage_n_compatibility_bridge_head", bridge_head, document.get("trainer_head")),
+        ("stage_o_execution_head", stage_o_head, document.get("trainer_head")),
+        (
+            "stage_o_execution_bundle",
+            stage_o_bundle,
+            document.get("trainer_execution_bundle_sha256"),
+        ),
+    ):
+        if actual != expected:
+            failures.append(f"stage_n_successor_provenance_contradicts_result:{field}")
+
+    history = document.get("stage_n_source_history")
+    if not isinstance(history, Mapping):
+        failures.append("stage_n_successor_source_history_missing_or_malformed")
+    else:
+        expected_history = {
+            "source_execution": exact_source,
+            "exact_run_plan_sha256": bridge.EXACT_RUN_PLAN_SHA256,
+            "pilot_owner_acceptance_sha256": bridge.PILOT_OWNER_ACCEPTANCE_SHA256,
+            "n1_governed_run_contract_semantic_sha256": bridge.N1_GRC_SEMANTIC_SHA256,
+            "n1_base_governed_identity_sha256": bridge.N1_BASE_GOVERNED_IDENTITY_SHA256,
+            "n2_governed_run_contract_semantic_sha256": bridge.N2_GRC_SEMANTIC_SHA256,
+            "source_runtime_fingerprint_sha256": (bridge.HISTORICAL_RUNTIME_FINGERPRINT_SHA256),
+            "artifacts": {
+                name: dict(binding) for name, binding in bridge.HISTORICAL_ARTIFACTS.items()
+            },
+        }
+        if dict(history) != expected_history:
+            failures.append("stage_n_successor_source_history_not_exact")
+
+    bridge_record = document.get("stage_n_compatibility_bridge")
+    if not isinstance(bridge_record, Mapping):
+        failures.append("stage_n_successor_bridge_record_missing_or_malformed")
+        return list(dict.fromkeys(failures))
+    if bridge_record.get("schema_version") != bridge.BRIDGE_RESULT_SCHEMA:
+        failures.append("stage_n_successor_bridge_record_schema_mismatch")
+    for field in STAGE_N_SUCCESSOR_BRIDGE_REQUIRED_FIELDS:
+        if bridge_record.get(field) in (None, ""):
+            failures.append(f"stage_n_successor_bridge_record_missing_field:{field}")
+    for field in (
+        "authorization_sha256",
+        "semantic_comparison_manifest_sha256",
+        "governed_run_contract_artifact_sha256",
+        "governed_run_contract_sha256",
+        "terminal_checkpoint_sha256",
+        "runtime_fingerprint_artifact_sha256",
+        "runtime_fingerprint_sha256",
+        "bridge_tool_bundle_sha256",
+    ):
+        if field in bridge_record and not _is_sha256(bridge_record.get(field)):
+            failures.append(f"stage_n_successor_bridge_record_invalid_sha256:{field}")
+    for field in (
+        "optimizer_updates",
+        "trained_tokens",
+        "sampler_advances",
+        "training_loop_iterations",
+        "backward_calls",
+        "scheduler_advances",
+        "data_batches_consumed",
+    ):
+        if bridge_record.get(field) != 0:
+            failures.append(f"stage_n_successor_bridge_nonzero:{field}")
+    equivalence = bridge_record.get("state_equivalence")
+    if not isinstance(equivalence, Mapping) or equivalence.get("equivalent") is not True:
+        failures.append("stage_n_successor_bridge_state_not_equivalent")
+
+    for bridge_field, result_field in (
+        ("authorization_path", "stage_authorization_path"),
+        ("authorization_sha256", "stage_authorization_sha256"),
+        ("governed_run_contract_path", "governed_run_contract_path"),
+        (
+            "governed_run_contract_artifact_sha256",
+            "governed_run_contract_artifact_sha256",
+        ),
+        ("governed_run_contract_sha256", "governed_run_contract_sha256"),
+        ("terminal_checkpoint_path", "final_checkpoint_path"),
+        ("terminal_checkpoint_sha256", "final_checkpoint_sha256"),
+        ("terminal_checkpoint_step", "final_checkpoint_step"),
+        ("runtime_fingerprint_path", "runtime_fingerprint_path"),
+        ("runtime_fingerprint_artifact_sha256", "runtime_fingerprint_artifact_sha256"),
+        ("runtime_fingerprint_sha256", "runtime_fingerprint_sha256"),
+        ("bridge_tool_bundle_sha256", "stage_n_compatibility_bridge_bundle"),
+    ):
+        if bridge_record.get(bridge_field) != document.get(result_field):
+            failures.append(f"stage_n_successor_bridge_record_contradicts_result:{bridge_field}")
+    return list(dict.fromkeys(failures))
+
+
 def validate_stage_n_result(
     document: Mapping[str, Any] | None, *, require_artifacts: bool = False
 ) -> list[str]:
@@ -6162,6 +7193,7 @@ def validate_stage_n_result(
             expected_governed_run_contract_path=document.get("governed_run_contract_path"),
         )
     )
+    failures.extend(validate_successor_stage_n_provenance(document))
 
     if require_artifacts:
         path = document.get("final_checkpoint_path")
@@ -6645,9 +7677,9 @@ def validate_stage_n_result_against_artifacts(
             if auth.get(field) != expected:
                 failures.append(f"stage_n_authorization_{field}_mismatch")
         completion = auth.get("stage_n_completion")
-        if not isinstance(completion, Mapping):
-            failures.append("stage_n_authorization_completion_binding_missing")
-        else:
+        if completion is not None and not isinstance(completion, Mapping):
+            failures.append("stage_n_completion_must_be_an_object")
+        elif isinstance(completion, Mapping):
             authorized_step = completion.get("expected_final_step")
             if (
                 not isinstance(authorized_step, int)
@@ -6792,6 +7824,24 @@ def validate_stage_n_result_against_artifacts(
             "deterministic_no_replacement_stage_a_b"
         ):
             failures.append("stage_n_exact_plan_schema_or_kind_mismatch")
+        try:
+            boundary = load_stage_n_completion_boundary(plan_path)
+        except LaunchContractError as exc:
+            failures.append(f"stage_n_exact_plan_completion_boundary_invalid:{exc}")
+        else:
+            failures.extend(
+                validate_stage_n_boundary_agreement(
+                    auth or {},
+                    boundary,
+                    governed_run_contract=grc,
+                    checkpoint_step=final_step,
+                    sampler_state={
+                        "range_start_position": result.get("final_sampler_range_start_position"),
+                        "range_stop_position": result.get("final_sampler_range_stop_position"),
+                        "cursor": result.get("final_sampler_cursor"),
+                    },
+                )
+            )
 
     pilot_path = Path(pilot_acceptance_path or (grc or {}).get("pilot_acceptance_path") or "")
     if not _paths_equal(result.get("pilot_acceptance_path"), pilot_path):
@@ -6942,17 +7992,27 @@ def publish_stage_n_completion(
         file_sha256(auth_path) == governed_run_contract.get("stage_authorization_sha256"),
         "Stage-N authorization bytes differ from the governed invocation authority",
     )
-    completion = authorization.get("stage_n_completion")
+    plan_path_value = governed_run_contract.get("exact_plan_path")
     require(
-        isinstance(completion, Mapping)
-        and isinstance(completion.get("expected_final_step"), int)
-        and not isinstance(completion.get("expected_final_step"), bool),
-        "Stage-N authorization must bind stage_n_completion.expected_final_step",
+        isinstance(plan_path_value, str) and bool(plan_path_value.strip()),
+        "Stage-N GRC does not bind the exact Stage-P plan path",
     )
-    authorized_step = int(completion["expected_final_step"])
+    boundary = load_stage_n_completion_boundary(plan_path_value)
     require(
-        int(final_checkpoint_step) == authorized_step,
+        int(final_checkpoint_step) == int(boundary["stop_step"]),
         "caller final checkpoint step differs from the Stage-N authorization",
+    )
+    boundary_failures = validate_stage_n_boundary_agreement(
+        authorization,
+        boundary,
+        governed_run_contract=governed_run_contract,
+        checkpoint_step=int(final_checkpoint_step),
+        sampler_state=final_sampler_state,
+    )
+    require(
+        not boundary_failures,
+        "Stage-N completion artifacts disagree with the plan-derived boundary:\n  - "
+        + "\n  - ".join(boundary_failures),
     )
     canonical_invocation = invocation_directory(
         str(authorization.get("allowed_output_root", "")),
@@ -7091,14 +8151,15 @@ def validate_stage_o_runtime_artifact(
     if not path.is_file():
         return [f"accepted_stage_n_runtime_artifact_not_found:{path}"]
 
-    artifact_sha = file_sha256(path)
+    artifact, artifact_sha = _load_json_mapping_artifact_snapshot(
+        path,
+        label="accepted_stage_n_runtime_artifact",
+        failures=failures,
+    )
     if artifact_sha != stage_n_result.get("runtime_fingerprint_artifact_sha256"):
         failures.append("accepted_stage_n_runtime_artifact_file_sha256_mismatch")
     if artifact_sha != chain.get("stage_n_runtime_fingerprint_artifact_sha256"):
         failures.append("stage_o_chain_runtime_artifact_sha256_contradicts_accepted_result")
-    artifact = _load_json_mapping_artifact(
-        path, label="accepted_stage_n_runtime_artifact", failures=failures
-    )
     if artifact is None:
         return list(dict.fromkeys(failures))
     if artifact.get("schema_version") != STAGE_N_RUNTIME_ARTIFACT_SCHEMA:
@@ -7125,19 +8186,714 @@ def validate_stage_o_runtime_artifact(
     return list(dict.fromkeys(failures))
 
 
+def _observed_successor_stage_o_code_identity() -> dict[str, Any]:
+    """Observe the committed code identity used by a successor Stage-O process.
+
+    Runtime identity is supplied separately by Gate A. Keeping this observation limited to
+    repository bytes avoids a second CUDA probe while still preventing an authorization and
+    accepted result from colluding on an unreviewed second successor.
+    """
+
+    import sys
+
+    from pretrain import stage_n_successor_head_compatibility_bridge_v1 as bridge
+
+    root = repo_root()
+    expected_root = bridge.SUCCESSOR_REPOSITORY_ROOT.resolve()
+    status = subprocess.run(
+        ["git", "-C", str(root), "status", "--porcelain", "--untracked-files=no"],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    loaded_local_modules: dict[str, str] = {}
+    misplaced_local_modules: dict[str, str] = {}
+    for name, module in tuple(sys.modules.items()):
+        if not (
+            name in {"pretrain", "src"} or name.startswith("pretrain.") or name.startswith("src.")
+        ):
+            continue
+        module_file = getattr(module, "__file__", None)
+        if not isinstance(module_file, str) or not module_file:
+            continue
+        resolved = Path(module_file).resolve()
+        loaded_local_modules[name] = str(resolved)
+        try:
+            resolved.relative_to(expected_root)
+        except ValueError:
+            misplaced_local_modules[name] = str(resolved)
+    return {
+        **observed_repository(),
+        "repository_root": str(root.resolve()),
+        "production_module_path": str(Path(__file__).resolve()),
+        "bridge_module_path": str(Path(bridge.__file__).resolve()),
+        "loaded_local_module_paths": dict(sorted(loaded_local_modules.items())),
+        "misplaced_local_module_paths": dict(sorted(misplaced_local_modules.items())),
+        "all_loaded_local_modules_under_repository_root": not misplaced_local_modules,
+        "trainer_execution_bundle_sha256": trainer_execution_bundle_sha256(),
+        "bridge_tool_bundle_sha256": bridge.bridge_tool_bundle_sha256(root),
+        "tracked_clean": status.returncode == 0 and not status.stdout.strip(),
+    }
+
+
+def _stage_o_legacy_chain_is_successor_attempt(chain: Mapping[str, Any]) -> bool:
+    """Detect a successor result hidden under the superseded legacy chain key."""
+
+    if any(
+        field in chain
+        for field in (
+            "n3_bridge_authorization_path",
+            "n3_bridge_terminal_checkpoint_path",
+            "stage_n_compatibility_bridge_head",
+            "stage_n_compatibility_bridge_bundle",
+        )
+    ):
+        return True
+    result_path = chain.get("accepted_stage_n_result_path")
+    if not isinstance(result_path, str) or not result_path:
+        return False
+    try:
+        result = json.loads(Path(result_path).read_bytes().decode("utf-8"))
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError):
+        return False
+    return isinstance(result, Mapping) and any(
+        field in result for field in STAGE_N_SUCCESSOR_PROVENANCE_REQUIRED_FIELDS
+    )
+
+
+def validate_successor_stage_o_chain(
+    authorization: Mapping[str, Any],
+    *,
+    observed_runtime: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Authenticate the one accepted N3 bridge before successor Stage O.
+
+    This is deliberately an incident-specific validator, not a generic cross-HEAD resume
+    mechanism. It reopens the accepted result, owner decision, N3 authorization, semantic
+    manifest, governed run contract, runtime artifact, exact plan, N2 evidence, and terminal
+    checkpoint snapshots. It deserializes only authenticated snapshots to recompute state
+    equivalence; it never invokes the bridge or performs training.
+    """
+
+    from pretrain import stage_n_successor_head_compatibility_bridge_v1 as bridge
+
+    failures: list[str] = []
+    chain = authorization.get("stage_n_successor_bridge_chain")
+    if not isinstance(chain, Mapping):
+        return {
+            "valid": False,
+            "failures": ["stage_o_authorization_missing_stage_n_successor_bridge_chain"],
+            "derived_resume": None,
+            "requires_new_stage_n": False,
+        }
+    if authorization.get("stage_n_chain") is not None:
+        failures.append("stage_o_successor_authorization_contains_legacy_stage_n_chain")
+    for field in STAGE_O_SUCCESSOR_BRIDGE_REQUIRED_CHAIN_FIELDS:
+        if chain.get(field) in (None, ""):
+            failures.append(f"stage_o_successor_chain_missing_field:{field}")
+    if failures:
+        return {
+            "valid": False,
+            "failures": list(dict.fromkeys(failures)),
+            "derived_resume": None,
+            "requires_new_stage_n": False,
+        }
+
+    result_path = Path(str(chain["accepted_stage_n_result_path"]))
+    stage_n, result_sha = _load_json_mapping_artifact_snapshot(
+        result_path,
+        label="accepted_successor_stage_n_result",
+        failures=failures,
+    )
+    if result_sha != chain.get("accepted_stage_n_result_sha256"):
+        failures.append("accepted_successor_stage_n_result_sha256_mismatch")
+    if stage_n is None:
+        return {
+            "valid": False,
+            "failures": list(dict.fromkeys(failures)),
+            "accepted_stage_n_result_sha256": result_sha,
+            "derived_resume": None,
+            "requires_new_stage_n": False,
+        }
+
+    derived_resume: dict[str, Any] | None = None
+    try:
+        derived_resume = derive_stage_o_resume_binding(stage_n)
+    except (KeyError, TypeError, ValueError) as exc:
+        failures.append(f"successor_stage_n_resume_derivation_failed:{type(exc).__name__}")
+
+    failures.extend(validate_stage_n_result(stage_n))
+    failures.extend(validate_successor_stage_n_provenance(stage_n, required=True))
+    if stage_n.get("launch_contract_sha256") != contract_sha256():
+        failures.append("accepted_successor_stage_n_launch_contract_sha256_mismatch")
+    for name in ("smoke", "resume"):
+        path_field = f"{name}_results_path"
+        sha_field = f"{name}_results_sha256"
+        block_field = f"{name}_results"
+        result_artifact_path = Path(str(stage_n.get(path_field) or ""))
+        result_artifact, result_artifact_sha = _load_json_mapping_artifact_snapshot(
+            result_artifact_path,
+            label=f"accepted_successor_stage_n_{name}_result",
+            failures=failures,
+        )
+        if result_artifact_sha != stage_n.get(sha_field):
+            failures.append(f"accepted_successor_stage_n_{name}_result_sha256_mismatch")
+        if result_artifact is not None and result_artifact != stage_n.get(block_field):
+            failures.append(f"accepted_successor_stage_n_{name}_result_content_mismatch")
+
+    acceptance_path = Path(str(chain["stage_n_owner_acceptance_path"]))
+    acceptance, acceptance_sha = _load_json_mapping_artifact_snapshot(
+        acceptance_path,
+        label="successor_stage_n_owner_acceptance",
+        failures=failures,
+    )
+    if acceptance_sha != chain.get("stage_n_owner_acceptance_sha256"):
+        failures.append("successor_stage_n_owner_acceptance_sha256_mismatch")
+    if acceptance is not None:
+        if acceptance.get("accepted_stage_n_result_sha256") != result_sha:
+            failures.append("successor_stage_n_owner_acceptance_does_not_accept_this_result")
+        if acceptance.get("stage_n_result_owner_verdict") != "ACCEPTED":
+            failures.append("successor_stage_n_result_not_owner_accepted")
+
+    for chain_field, result_field in (
+        ("stage_n_authorization_sha256", "stage_authorization_sha256"),
+        ("stage_n_governed_run_contract_sha256", "governed_run_contract_sha256"),
+        (
+            "stage_n_governed_run_contract_artifact_sha256",
+            "governed_run_contract_artifact_sha256",
+        ),
+        ("stage_n_runtime_fingerprint_sha256", "runtime_fingerprint_sha256"),
+        (
+            "stage_n_runtime_fingerprint_artifact_sha256",
+            "runtime_fingerprint_artifact_sha256",
+        ),
+        ("stage_n_runtime_fingerprint", "runtime_fingerprint"),
+        ("stage_n_gpu_uuid", "gpu_uuid"),
+        ("stage_n_gpu_pci_bus_id", "gpu_pci_bus_id"),
+        ("stage_n_trainer_head", "trainer_head"),
+        ("stage_n_trainer_execution_bundle_sha256", "trainer_execution_bundle_sha256"),
+        ("stage_n_exact_run_plan_sha256", "exact_run_plan_sha256"),
+        ("stage_n_final_checkpoint_path", "final_checkpoint_path"),
+        ("stage_n_final_checkpoint_sha256", "final_checkpoint_sha256"),
+        ("stage_n_final_checkpoint_step", "final_checkpoint_step"),
+        ("stage_n_training_execution_head", "stage_n_training_execution_head"),
+        ("stage_n_training_execution_bundle", "stage_n_training_execution_bundle"),
+        ("stage_n_compatibility_bridge_head", "stage_n_compatibility_bridge_head"),
+        ("stage_n_compatibility_bridge_bundle", "stage_n_compatibility_bridge_bundle"),
+        ("stage_o_execution_head", "stage_o_execution_head"),
+        ("stage_o_execution_bundle", "stage_o_execution_bundle"),
+        ("stage_n_source_history", "stage_n_source_history"),
+    ):
+        if chain.get(chain_field) != stage_n.get(result_field):
+            failures.append(f"stage_o_successor_chain_contradicts_accepted_result:{chain_field}")
+
+    bridge_record = stage_n.get("stage_n_compatibility_bridge")
+    if not isinstance(bridge_record, Mapping):
+        failures.append("accepted_successor_stage_n_bridge_record_missing")
+        bridge_record = {}
+    for chain_field, bridge_field in (
+        ("n3_bridge_authorization_path", "authorization_path"),
+        ("n3_bridge_authorization_sha256", "authorization_sha256"),
+        (
+            "n3_bridge_semantic_comparison_manifest_path",
+            "semantic_comparison_manifest_path",
+        ),
+        (
+            "n3_bridge_semantic_comparison_manifest_sha256",
+            "semantic_comparison_manifest_sha256",
+        ),
+        ("n3_bridge_governed_run_contract_path", "governed_run_contract_path"),
+        (
+            "n3_bridge_governed_run_contract_artifact_sha256",
+            "governed_run_contract_artifact_sha256",
+        ),
+        ("n3_bridge_governed_run_contract_sha256", "governed_run_contract_sha256"),
+        ("n3_bridge_terminal_checkpoint_path", "terminal_checkpoint_path"),
+        ("n3_bridge_terminal_checkpoint_sha256", "terminal_checkpoint_sha256"),
+        ("n3_bridge_terminal_checkpoint_step", "terminal_checkpoint_step"),
+    ):
+        actual = chain.get(chain_field)
+        expected = bridge_record.get(bridge_field)
+        matches = (
+            _paths_equal(actual, expected) if bridge_field.endswith("_path") else actual == expected
+        )
+        if not matches:
+            failures.append(f"stage_o_successor_chain_bridge_record_mismatch:{chain_field}")
+
+    def load_chain_json(
+        path_field: str,
+        sha_field: str,
+        label: str,
+    ) -> tuple[Path, dict[str, Any] | None]:
+        path = Path(str(chain[path_field]))
+        document, snapshot_sha256 = _load_json_mapping_artifact_snapshot(
+            path,
+            label=label,
+            failures=failures,
+        )
+        if snapshot_sha256 != chain.get(sha_field):
+            failures.append(f"{label}_sha256_mismatch")
+        return path, document
+
+    n3_auth_path, n3_auth = load_chain_json(
+        "n3_bridge_authorization_path",
+        "n3_bridge_authorization_sha256",
+        "successor_n3_authorization",
+    )
+    semantic_path, semantic_manifest = load_chain_json(
+        "n3_bridge_semantic_comparison_manifest_path",
+        "n3_bridge_semantic_comparison_manifest_sha256",
+        "successor_n3_semantic_manifest",
+    )
+    n3_grc_path, n3_grc = load_chain_json(
+        "n3_bridge_governed_run_contract_path",
+        "n3_bridge_governed_run_contract_artifact_sha256",
+        "successor_n3_governed_run_contract",
+    )
+
+    exact_source = {
+        "branch": bridge.HISTORICAL_TRAINING_BRANCH,
+        "head": bridge.HISTORICAL_TRAINING_HEAD,
+        "trainer_execution_bundle_sha256": bridge.HISTORICAL_TRAINING_BUNDLE_SHA256,
+    }
+    if n3_auth is not None:
+        for field, expected in (
+            ("schema_version", bridge.N3_AUTHORIZATION_SCHEMA),
+            ("scope", bridge.N3_SCOPE),
+            ("authorization_status", "AUTHORIZED"),
+            ("authorizes_bridge_execution", True),
+            ("authorizes_training", False),
+            ("one_time_exception", True),
+        ):
+            if not _checkpoint_values_equal(n3_auth.get(field), expected):
+                failures.append(f"stage_o_successor_n3_authorization_mismatch:{field}")
+        for field in ("authorized_by", "authorized_at"):
+            if not isinstance(n3_auth.get(field), str) or not n3_auth.get(field).strip():
+                failures.append(f"stage_o_successor_n3_authorization_missing:{field}")
+        if n3_auth.get("source_execution") != exact_source:
+            failures.append("stage_o_successor_n3_source_execution_mismatch")
+        expected_history = dict(stage_n.get("stage_n_source_history") or {})
+        expected_history.pop("source_execution", None)
+        if n3_auth.get("history") != expected_history:
+            failures.append("stage_o_successor_n3_history_mismatch")
+        if n3_auth.get("runtime_invariants") != dict(bridge.RUNTIME_INVARIANTS):
+            failures.append("stage_o_successor_n3_runtime_invariants_mismatch")
+        if n3_auth.get("zero_update") != dict(bridge.ZERO_UPDATE_LIMITS):
+            failures.append("stage_o_successor_n3_zero_update_limits_mismatch")
+        expected_source_checkpoint = {
+            **dict(bridge.HISTORICAL_ARTIFACTS["n2_terminal_checkpoint"]),
+            "step": bridge.COMPLETION_STEP,
+            "stage": bridge.COMPLETION_STAGE,
+            "sampler_cursor": bridge.COMPLETION_SAMPLER_ENDPOINT,
+            "sampler_seed": bridge.COMPLETION_SAMPLER_SEED,
+        }
+        if n3_auth.get("source_checkpoint") != expected_source_checkpoint:
+            failures.append("stage_o_successor_n3_source_checkpoint_mismatch")
+
+        successor = n3_auth.get("successor")
+        expected_successor = {
+            "branch": bridge.SUCCESSOR_BRANCH,
+            "repository_root": str(bridge.SUCCESSOR_REPOSITORY_ROOT),
+            "head": stage_n.get("stage_n_compatibility_bridge_head"),
+            "trainer_execution_bundle_sha256": stage_n.get("stage_o_execution_bundle"),
+            "bridge_tool_bundle_sha256": stage_n.get("stage_n_compatibility_bridge_bundle"),
+            "runtime_fingerprint_sha256": stage_n.get("runtime_fingerprint_sha256"),
+        }
+        if successor != expected_successor:
+            failures.append("stage_o_successor_n3_successor_identity_mismatch")
+        expected_manifest_binding = {
+            "path": str(semantic_path),
+            "sha256": chain.get("n3_bridge_semantic_comparison_manifest_sha256"),
+        }
+        if n3_auth.get("semantic_comparison_manifest") != expected_manifest_binding:
+            failures.append("stage_o_successor_n3_semantic_manifest_binding_mismatch")
+
+        destination = n3_auth.get("destination")
+        if not isinstance(destination, Mapping):
+            failures.append("stage_o_successor_n3_destination_missing")
+        else:
+            output_root = Path(str(destination.get("output_root", "")))
+            expected_destination = {
+                "output_root": str(output_root),
+                "governed_run_contract_path": str(output_root / GOVERNED_RUN_CONTRACT_FILENAME),
+                "terminal_checkpoint_path": str(
+                    output_root / f"step_{bridge.COMPLETION_STEP:06d}.pt"
+                ),
+                "runtime_fingerprint_path": str(output_root / STAGE_N_RUNTIME_FILENAME),
+                "smoke_evidence_path": str(output_root / "STAGE_N_BRIDGE_COMPILE_EVIDENCE.json"),
+                "resume_evidence_path": str(output_root / "STAGE_N_BRIDGE_STATE_EQUIVALENCE.json"),
+                "smoke_result_path": str(output_root / "STAGE_N_SMOKE_RESULT.json"),
+                "resume_result_path": str(output_root / "STAGE_N_RESUME_RESULT.json"),
+                "complete_result_path": str(output_root / "STAGE_N_COMPLETE_RESULT.json"),
+                "expected_checkpoint_step": bridge.COMPLETION_STEP,
+            }
+            if not output_root.is_absolute() or dict(destination) != expected_destination:
+                failures.append("stage_o_successor_n3_destination_topology_mismatch")
+            if not _paths_equal(destination.get("complete_result_path"), result_path):
+                failures.append("stage_o_successor_complete_result_path_not_authorized_destination")
+
+    failures.extend(
+        f"stage_o_successor_complete:{failure}"
+        for failure in bridge.validate_successor_complete_result(
+            result_path,
+            expected_result_sha256=result_sha,
+        )
+    )
+
+    if semantic_manifest is not None:
+        failures.extend(
+            bridge.validate_semantic_comparison_manifest(
+                semantic_manifest,
+                expected_artifact_sha256=str(
+                    chain.get("n3_bridge_semantic_comparison_manifest_sha256") or ""
+                ),
+                expected_successor_head=str(stage_n.get("stage_o_execution_head") or ""),
+                expected_successor_trainer_bundle_sha256=str(
+                    stage_n.get("stage_o_execution_bundle") or ""
+                ),
+            )
+        )
+
+    exact_plan_path = str(stage_n.get("exact_plan_path") or "")
+    try:
+        boundary = load_stage_n_completion_boundary(exact_plan_path)
+    except LaunchContractError as exc:
+        failures.append(f"stage_o_successor_completion_boundary_invalid:{exc}")
+        boundary = None
+    pilot_path = Path(str(stage_n.get("pilot_acceptance_path") or ""))
+    if not pilot_path.is_file():
+        failures.append(f"stage_o_successor_pilot_acceptance_not_found:{pilot_path}")
+    elif file_sha256(pilot_path) != bridge.PILOT_OWNER_ACCEPTANCE_SHA256:
+        failures.append("stage_o_successor_pilot_acceptance_sha256_mismatch")
+
+    n2_binding = bridge.HISTORICAL_ARTIFACTS["n2_zero_update_invariance"]
+    n2_path = Path(n2_binding["path"])
+    n2_evidence, n2_evidence_sha = _load_json_mapping_artifact_snapshot(
+        n2_path,
+        label="successor_n3_n2_zero_update_evidence",
+        failures=failures,
+    )
+    if n2_evidence_sha != n2_binding["sha256"]:
+        failures.append("successor_n3_n2_zero_update_evidence_sha256_mismatch")
+    failures.extend(bridge.validate_existing_n2_evidence(n2_evidence))
+
+    if n3_grc is not None:
+        grc_digest = governed_digest(n3_grc)
+        if grc_digest != chain.get("n3_bridge_governed_run_contract_sha256"):
+            failures.append("stage_o_successor_n3_governed_run_contract_digest_mismatch")
+        if n3_grc.get("governed_run_contract_sha256") != grc_digest:
+            failures.append("stage_o_successor_n3_governed_run_contract_self_digest_mismatch")
+        for field, expected in (
+            ("schema_version", RUN_CONTRACT_SCHEMA),
+            ("kind", GOVERNED_CHECKPOINT_KIND),
+            ("governed", True),
+            ("stage", "stage_a"),
+            ("scope", "STAGE_N"),
+            ("stage_authorization_path", str(n3_auth_path)),
+            ("stage_authorization_sha256", chain.get("n3_bridge_authorization_sha256")),
+            ("trainer_branch", bridge.SUCCESSOR_BRANCH),
+            ("successor_repository_root", str(bridge.SUCCESSOR_REPOSITORY_ROOT)),
+            ("trainer_head", stage_n.get("stage_o_execution_head")),
+            (
+                "trainer_execution_bundle_sha256",
+                stage_n.get("stage_o_execution_bundle"),
+            ),
+            (
+                "bridge_tool_bundle_sha256",
+                stage_n.get("stage_n_compatibility_bridge_bundle"),
+            ),
+            ("launch_contract_sha256", contract_sha256()),
+            ("exact_run_plan_sha256", bridge.EXACT_RUN_PLAN_SHA256),
+            ("pilot_owner_acceptance_sha256", bridge.PILOT_OWNER_ACCEPTANCE_SHA256),
+            ("stage_start_step", STAGE_A_START_STEP),
+            ("stage_stop_step", bridge.COMPLETION_STEP),
+            ("runtime_fingerprint", stage_n.get("runtime_fingerprint")),
+            ("runtime_fingerprint_sha256", stage_n.get("runtime_fingerprint_sha256")),
+        ):
+            actual = n3_grc.get(field)
+            matches = (
+                _paths_equal(actual, expected) if field.endswith("_path") else actual == expected
+            )
+            if not matches:
+                failures.append(f"stage_o_successor_n3_governed_run_contract_mismatch:{field}")
+        if stage_n.get("base_governed_identity_sha256") != base_governed_identity_sha256(n3_grc):
+            failures.append("stage_o_successor_n3_base_identity_mismatch")
+
+        destination = n3_auth.get("destination") if n3_auth is not None else None
+        if not isinstance(destination, Mapping):
+            failures.append("stage_o_successor_n3_grc_destination_authority_missing")
+        else:
+            output_root = Path(str(destination.get("output_root", "")))
+            if not _paths_equal(
+                destination.get("governed_run_contract_path"),
+                n3_grc_path,
+            ):
+                failures.append("stage_o_successor_n3_grc_path_not_authorized")
+            if n3_grc_path.resolve().parent != output_root.resolve():
+                failures.append("stage_o_successor_n3_grc_not_in_authorized_output_root")
+            for field in ("governed_run_root", "invocation_root", "out_dir"):
+                if not _paths_equal(n3_grc.get(field), output_root):
+                    failures.append(f"stage_o_successor_n3_grc_topology_mismatch:{field}")
+            if not _paths_equal(n3_grc.get("samples_dir"), output_root / "samples"):
+                failures.append("stage_o_successor_n3_grc_topology_mismatch:samples_dir")
+
+        expected_permutation = permutation_identity(
+            "stage_a",
+            bridge.COMPLETION_SAMPLER_SEED,
+            bridge.COMPLETION_SAMPLER_ENDPOINT,
+        )
+        sampler = n3_grc.get("sampler_identity")
+        if not isinstance(sampler, Mapping):
+            failures.append("stage_o_successor_n3_sampler_identity_missing")
+        else:
+            for field, expected in (
+                ("stage", "stage_a"),
+                ("sampler_seed", bridge.COMPLETION_SAMPLER_SEED),
+                ("permutation_identity", expected_permutation),
+                ("range_start_position", 0),
+                (
+                    "invocation_range_start_position",
+                    bridge.COMPLETION_SAMPLER_ENDPOINT,
+                ),
+                ("range_stop_position", bridge.COMPLETION_SAMPLER_ENDPOINT),
+                ("cursor", bridge.COMPLETION_SAMPLER_ENDPOINT),
+            ):
+                if sampler.get(field) != expected:
+                    failures.append(f"stage_o_successor_n3_sampler_mismatch:{field}")
+        if n3_grc.get("active_stage_sampler_seed") != bridge.COMPLETION_SAMPLER_SEED:
+            failures.append("stage_o_successor_n3_active_sampler_seed_mismatch")
+
+        expected_source_resume = {
+            "mode": "RESUME_EXACT_CHECKPOINT",
+            "checkpoint_path": bridge.HISTORICAL_ARTIFACTS["n2_terminal_checkpoint"]["path"],
+            "checkpoint_sha256": bridge.N2_TERMINAL_CHECKPOINT_SHA256,
+            "expected_step": bridge.COMPLETION_STEP,
+            "stage": "stage_a",
+            "governed_run_contract_sha256": bridge.N2_GRC_SEMANTIC_SHA256,
+            "source_stage_authorization_path": bridge.HISTORICAL_ARTIFACTS["n2_authorization"][
+                "path"
+            ],
+            "source_stage_authorization_sha256": bridge.N2_AUTHORIZATION_SHA256,
+            "source_invocation_run_contract_path": bridge.HISTORICAL_ARTIFACTS[
+                "n2_governed_run_contract"
+            ]["path"],
+            "source_invocation_run_contract_sha256": bridge.N2_GRC_ARTIFACT_SHA256,
+            "source_base_governed_identity_digest": (bridge.N1_BASE_GOVERNED_IDENTITY_SHA256),
+            "source_checkpoint_path": bridge.HISTORICAL_ARTIFACTS["n2_terminal_checkpoint"]["path"],
+            "source_checkpoint_sha256": bridge.N2_TERMINAL_CHECKPOINT_SHA256,
+            "source_checkpoint_step": bridge.COMPLETION_STEP,
+            "source_checkpoint_stage": "stage_a",
+            "source_active_stage": "stage_a",
+            "source_sampler_seed": bridge.COMPLETION_SAMPLER_SEED,
+            "source_permutation_identity": expected_permutation,
+            "source_range_start_position": 0,
+            "source_invocation_range_start_position": (bridge.COMPLETION_SAMPLER_ENDPOINT),
+            "source_range_stop_position": bridge.COMPLETION_SAMPLER_ENDPOINT,
+            "source_cursor": bridge.COMPLETION_SAMPLER_ENDPOINT,
+        }
+        if n3_grc.get("resume") != expected_source_resume:
+            failures.append("stage_o_successor_n3_source_resume_chain_mismatch")
+
+        compile_evidence = n3_grc.get("compile_evidence")
+        failures.extend(
+            f"stage_o_successor_n3_{failure}"
+            for failure in bridge.validate_bridge_compile_evidence_document(compile_evidence)
+        )
+        if not isinstance(compile_evidence, Mapping) or n3_grc.get(
+            "compile_evidence_sha256"
+        ) != compile_evidence.get("compile_evidence_sha256"):
+            failures.append("stage_o_successor_n3_compile_evidence_sha256_mismatch")
+
+        compatibility = n3_grc.get("compatibility_bridge")
+        expected_compatibility = {
+            "schema_version": bridge.BRIDGE_GRC_SCHEMA,
+            "source_head": bridge.HISTORICAL_TRAINING_HEAD,
+            "source_bundle_sha256": bridge.HISTORICAL_TRAINING_BUNDLE_SHA256,
+            "source_checkpoint_sha256": bridge.N2_TERMINAL_CHECKPOINT_SHA256,
+            "successor_repository_root": str(bridge.SUCCESSOR_REPOSITORY_ROOT),
+            "successor_head": stage_n.get("stage_o_execution_head"),
+            "successor_trainer_execution_bundle_sha256": stage_n.get("stage_o_execution_bundle"),
+            "successor_bridge_tool_bundle_sha256": stage_n.get(
+                "stage_n_compatibility_bridge_bundle"
+            ),
+            "successor_runtime_fingerprint_sha256": stage_n.get("runtime_fingerprint_sha256"),
+            "semantic_comparison_manifest_path": str(semantic_path),
+            "semantic_comparison_manifest_sha256": chain.get(
+                "n3_bridge_semantic_comparison_manifest_sha256"
+            ),
+            "start_step": bridge.COMPLETION_STEP,
+            "stop_step": bridge.COMPLETION_STEP,
+            "optimizer_updates": 0,
+            "trained_tokens": 0,
+            "sampler_advances": 0,
+            "training_loop_iterations": 0,
+            "backward_calls": 0,
+            "scheduler_advances": 0,
+            "data_batches_consumed": 0,
+        }
+        if compatibility != expected_compatibility:
+            failures.append("stage_o_successor_n3_compatibility_record_mismatch")
+
+        if boundary is not None and n3_auth is not None:
+            boundary_authorization = {
+                "exact_run_plan_sha256": (n3_auth.get("history") or {}).get(
+                    "exact_run_plan_sha256"
+                ),
+            }
+            if "stage_n_completion" in n3_auth:
+                boundary_authorization["stage_n_completion"] = n3_auth.get("stage_n_completion")
+            failures.extend(
+                validate_stage_n_boundary_agreement(
+                    boundary_authorization,
+                    boundary,
+                    governed_run_contract=n3_grc,
+                    checkpoint_step=stage_n.get("final_checkpoint_step"),
+                    sampler_state={
+                        "range_start_position": stage_n.get("final_sampler_range_start_position"),
+                        "range_stop_position": stage_n.get("final_sampler_range_stop_position"),
+                        "cursor": stage_n.get("final_sampler_cursor"),
+                    },
+                )
+            )
+
+    checkpoint_path = Path(str(chain["n3_bridge_terminal_checkpoint_path"]))
+    checkpoint_sha = file_sha256(checkpoint_path) if checkpoint_path.is_file() else None
+    if checkpoint_sha is None:
+        failures.append(f"stage_o_successor_n3_checkpoint_not_found:{checkpoint_path}")
+    elif checkpoint_sha != chain.get("n3_bridge_terminal_checkpoint_sha256"):
+        failures.append("stage_o_successor_n3_checkpoint_sha256_mismatch")
+    if chain.get("n3_bridge_terminal_checkpoint_step") != bridge.COMPLETION_STEP:
+        failures.append("stage_o_successor_n3_checkpoint_step_mismatch")
+
+    failures.extend(validate_stage_o_runtime_artifact(chain, stage_n, observed_runtime))
+    observed_fp_sha = observed_runtime.get("runtime_fingerprint_sha256") or (
+        runtime_fingerprint_sha256(observed_runtime) if observed_runtime else None
+    )
+    if observed_fp_sha != stage_n.get("runtime_fingerprint_sha256"):
+        failures.append("stage_o_successor_runtime_fingerprint_sha256_mismatch")
+
+    try:
+        observed_code = _observed_successor_stage_o_code_identity()
+    except (OSError, ValueError, TypeError, LaunchContractError) as exc:
+        failures.append(f"stage_o_successor_code_identity_observation_failed:{type(exc).__name__}")
+        observed_code = {}
+    for field, expected in (
+        ("branch", bridge.SUCCESSOR_BRANCH),
+        ("repository_root", str(bridge.SUCCESSOR_REPOSITORY_ROOT)),
+        (
+            "production_module_path",
+            str(bridge.SUCCESSOR_REPOSITORY_ROOT / "pretrain/production_launch_contract_v1.py"),
+        ),
+        (
+            "bridge_module_path",
+            str(
+                bridge.SUCCESSOR_REPOSITORY_ROOT
+                / "pretrain/stage_n_successor_head_compatibility_bridge_v1.py"
+            ),
+        ),
+        ("all_loaded_local_modules_under_repository_root", True),
+        ("head", stage_n.get("stage_o_execution_head")),
+        (
+            "trainer_execution_bundle_sha256",
+            stage_n.get("stage_o_execution_bundle"),
+        ),
+        (
+            "bridge_tool_bundle_sha256",
+            stage_n.get("stage_n_compatibility_bridge_bundle"),
+        ),
+        ("tracked_clean", True),
+    ):
+        if observed_code.get(field) != expected:
+            failures.append(f"stage_o_successor_observed_code_identity_mismatch:{field}")
+
+    if derived_resume is not None:
+        supplied_resume = authorization.get("resume")
+        if supplied_resume != derived_resume:
+            failures.append("stage_o_successor_resume_is_not_mechanically_derived_from_n3_terminal")
+        source_authority = verify_resume_source_authority(
+            derived_resume,
+            transition="A_TO_B",
+        )
+        failures.extend(source_authority["failures"])
+
+    failures = list(dict.fromkeys(failures))
+    return {
+        "valid": not failures,
+        "failures": failures,
+        "accepted_stage_n_result_sha256": result_sha,
+        "derived_resume": derived_resume,
+        "requires_new_stage_n": any(
+            failure.startswith("stage_o_successor_runtime")
+            or failure.startswith("stage_o_successor_observed_code_identity")
+            for failure in failures
+        ),
+    }
+
+
 def validate_stage_o_chain(
     authorization: Mapping[str, Any],
     *,
     observed_runtime: Mapping[str, Any],
 ) -> dict[str, Any]:
     """Authenticate the accepted Stage-N chain and derive the only Stage-O resume binding."""
-    failures: list[str] = []
+    if "stage_n_successor_bridge_chain" in authorization:
+        return validate_successor_stage_o_chain(
+            authorization,
+            observed_runtime=observed_runtime,
+        )
+
+    # This generic validator retains the historical chain path for non-incident callers and
+    # old-head regression tests. A real authorization for the exact reviewed successor
+    # branch is different: Gate A binds repository_branch to the live repository before this
+    # dispatch. The exact historical N2 source identity is checked independently so moving
+    # the same successor HEAD to another branch or detached HEAD cannot select the pre-N3
+    # path either.
     chain = authorization.get("stage_n_chain")
+    exact_incident_source = isinstance(chain, Mapping) and all(
+        (
+            chain.get(field) == expected
+            for field, expected in (
+                ("stage_n_trainer_head", STAGE_N_SUCCESSOR_COMPATIBILITY_SOURCE_HEAD),
+                (
+                    "stage_n_trainer_execution_bundle_sha256",
+                    STAGE_N_SUCCESSOR_COMPATIBILITY_SOURCE_BUNDLE_SHA256,
+                ),
+                ("stage_n_exact_run_plan_sha256", EXACT_RUN_PLAN_SHA256),
+                (
+                    "stage_n_final_checkpoint_sha256",
+                    STAGE_N_SUCCESSOR_COMPATIBILITY_SOURCE_N2_TERMINAL_CHECKPOINT_SHA256,
+                ),
+            )
+        )
+    )
+    if authorization.get("repository_branch") == STAGE_N_SUCCESSOR_COMPATIBILITY_BRANCH or (
+        exact_incident_source
+    ):
+        failure = (
+            "stage_o_successor_branch_requires_stage_n_successor_bridge_chain"
+            if authorization.get("repository_branch") == STAGE_N_SUCCESSOR_COMPATIBILITY_BRANCH
+            else "stage_o_exact_historical_source_requires_stage_n_successor_bridge_chain"
+        )
+        return {
+            "valid": False,
+            "failures": [failure],
+            "derived_resume": None,
+            "requires_new_stage_n": False,
+        }
+
+    failures: list[str] = []
     if not isinstance(chain, Mapping):
         return {
             "valid": False,
             "failures": ["stage_o_authorization_missing_stage_n_chain"],
             "derived_resume": None,
+        }
+    if _stage_o_legacy_chain_is_successor_attempt(chain):
+        return {
+            "valid": False,
+            "failures": ["stage_o_successor_result_requires_stage_n_successor_bridge_chain"],
+            "derived_resume": None,
+            "requires_new_stage_n": False,
         }
     for field in STAGE_O_REQUIRED_CHAIN_FIELDS:
         if chain.get(field) in (None, ""):
@@ -7176,6 +8932,41 @@ def validate_stage_o_chain(
             expected_final_step=int(stage_n.get("final_checkpoint_step", -1)),
         )
     )
+
+    # Reopen the two execution authorities in the Stage-O entry point as well. This keeps
+    # Stage O explicitly dependent on the same plan-derived boundary used by every Stage-N
+    # publisher, rather than on a result document that could merely agree with itself.
+    stage_n_auth = _load_json_mapping_artifact(
+        str(stage_n.get("stage_authorization_path") or ""),
+        label="stage_o_stage_n_authorization",
+        failures=failures,
+    )
+    stage_n_grc = _load_json_mapping_artifact(
+        str(stage_n.get("governed_run_contract_path") or ""),
+        label="stage_o_stage_n_governed_run_contract",
+        failures=failures,
+    )
+    try:
+        stage_n_boundary = load_stage_n_completion_boundary(
+            str(stage_n.get("exact_plan_path") or "")
+        )
+    except LaunchContractError as exc:
+        failures.append(f"stage_o_stage_n_completion_boundary_invalid:{exc}")
+    else:
+        if stage_n_auth is not None:
+            failures.extend(
+                validate_stage_n_boundary_agreement(
+                    stage_n_auth,
+                    stage_n_boundary,
+                    governed_run_contract=stage_n_grc,
+                    checkpoint_step=stage_n.get("final_checkpoint_step"),
+                    sampler_state={
+                        "range_start_position": stage_n.get("final_sampler_range_start_position"),
+                        "range_stop_position": stage_n.get("final_sampler_range_stop_position"),
+                        "cursor": stage_n.get("final_sampler_cursor"),
+                    },
+                )
+            )
 
     acceptance_path = Path(str(chain["stage_n_owner_acceptance_path"]))
     acceptance = _load_json_mapping_artifact(

@@ -494,7 +494,18 @@ def test_stage_o_reopens_runtime_and_derives_the_accepted_checkpoint(
 def test_stage_o_stage_b_crash_restart_authenticates_source_before_gate_a(
     governed,  # noqa: F811
     tmp_path,
+    monkeypatch,
 ):
+    # R2 reserves the live repair branch for the exact successor/N3 path.  This older R4
+    # regression exercises the ordinary non-incident Stage-O chain, so select that policy
+    # explicitly without weakening the production successor-branch dispatch.
+    non_incident_branch = "agent/test-only-non-incident-stage-o"
+    monkeypatch.setattr(C, "STAGE_N_SUCCESSOR_COMPATIBILITY_BRANCH", non_incident_branch)
+    monkeypatch.setattr(
+        TRAINER_C,
+        "STAGE_N_SUCCESSOR_COMPATIBILITY_BRANCH",
+        non_incident_branch,
+    )
     accepted = _stage_n_artifacts(governed, tmp_path)
     source_step = C.STAGE_B_START_STEP + 1
     stage_b = _stage_b_source_invocation(

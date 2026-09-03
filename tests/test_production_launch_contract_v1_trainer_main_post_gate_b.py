@@ -523,6 +523,16 @@ def _stage_o(tmp_path, governed, monkeypatch):  # noqa: F811
     Everything is derived from the SAME live runtime the trainer observes, so the BASE
     identity genuinely matches across the transition rather than matching by construction.
     """
+    # R2 reserves the live repair branch for the exact successor/N3 path.  These older R3
+    # integration tests exercise the ordinary non-incident Stage-O chain, so select that
+    # policy explicitly without weakening the production successor-branch dispatch.
+    non_incident_branch = "agent/test-only-non-incident-stage-o"
+    monkeypatch.setattr(C, "STAGE_N_SUCCESSOR_COMPATIBILITY_BRANCH", non_incident_branch)
+    monkeypatch.setattr(
+        TRAINER_C,
+        "STAGE_N_SUCCESSOR_COMPATIBILITY_BRANCH",
+        non_incident_branch,
+    )
     from .test_production_launch_contract_v1_trainer_main import _stage_n_artifacts
 
     work = tmp_path / "stage_n"
