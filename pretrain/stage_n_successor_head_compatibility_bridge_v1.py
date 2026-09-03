@@ -845,6 +845,14 @@ def _exact_state_equal(left: Any, right: Any) -> bool:
         if type(left) is not type(right) or len(left) != len(right):
             return False
         return all(_exact_state_equal(a, b) for a, b in zip(left, right, strict=True))
+    # Narrow string-subclass rule, deliberately placed BEFORE the strict type-identity check
+    # and nowhere else. torch.__version__ is a TorchVersion (a str subclass), so a live runtime
+    # value and the same value reloaded from canonical JSON have identical text and identical
+    # serialized bytes but different concrete classes. Strings are compared by value; every
+    # non-string value keeps strict concrete-type comparison, so bool/int, int/float and
+    # list/tuple still fail below.
+    if isinstance(left, str) and isinstance(right, str):
+        return str(left) == str(right)
     if type(left) is not type(right):
         return False
     try:

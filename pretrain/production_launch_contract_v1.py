@@ -1242,7 +1242,11 @@ def observed_training_runtime(*, num_workers: int | None = None) -> dict[str, An
         **gpu,
         # Owner clarification 1: num_workers is part of the bound runtime identity.
         "num_workers": num_workers,
-        "torch_version": torch.__version__,
+        # torch.__version__ is a TorchVersion (a str SUBCLASS). Capturing it raw makes a
+        # reloaded JSON fingerprint (builtins.str) compare unequal to a live one under
+        # type-exact comparison, even though both serialize identically. Canonicalize at
+        # capture so the recorded document holds a plain builtins.str.
+        "torch_version": str(torch.__version__),
         "python_version": platform.python_version(),
         "numpy_version": np.__version__,
         "trainer_head": repo["head"],
