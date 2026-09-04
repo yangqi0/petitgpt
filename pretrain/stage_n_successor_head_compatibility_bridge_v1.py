@@ -39,6 +39,49 @@ _SUCCESSOR_LAUNCH_PATH = (
 ).resolve()
 
 
+def _bind_parent_package_attribute(canonical_name: str, module: Any) -> None:
+    """Keep ``import pkg.mod`` + ``pkg.mod.X`` working after a sys.modules rebind.
+
+    Rebinding sys.modules alone satisfies ``from pkg.mod import X`` but not attribute access
+    through the parent package, because the import machinery short-circuits on the cached
+    sys.modules entry and never re-sets the attribute.
+    """
+    parent_name, _, child = canonical_name.rpartition(".")
+    if not parent_name:
+        return
+    parent = sys.modules.get(parent_name)
+    if parent is None:
+        # The parent package may not be imported yet. Import it now, otherwise a later
+        # `import pkg.mod` would short-circuit on the cached child and never set the
+        # attribute, leaving `pkg.mod.X` broken.
+        try:
+            parent = importlib.import_module(parent_name)
+        except ImportError:
+            return
+    setattr(parent, child, module)
+
+
+def _bind_launch_contract_canonical_name(module: Any, origin: Path) -> None:
+    """Bind pretrain.production_launch_contract_v1 to the one loaded successor module object.
+
+    Defined separately from _bind_single_module_object because this loader runs during module
+    import, before that helper's dependencies exist. The successor and historical
+    launch-contract files legitimately differ, so this deliberately does not require byte
+    equality: inside the bridge process the successor implementation is the intended authority,
+    and unifying the name is what makes `except LaunchContractError` work across the boundary.
+    """
+    canonical = "pretrain.production_launch_contract_v1"
+    existing = sys.modules.get(canonical)
+    if existing is module:
+        return
+    if existing is not None:
+        existing_file = getattr(existing, "__file__", None)
+        if existing_file is not None and Path(str(existing_file)).resolve() == origin:
+            return
+    sys.modules[canonical] = module
+    _bind_parent_package_attribute(canonical, module)
+
+
 def _load_exact_successor_launch_contract() -> Any:
     """Load the launch contract by reviewed bytes, never by the process CWD.
 
@@ -63,6 +106,7 @@ def _load_exact_successor_launch_contract() -> Any:
         origin = Path(str(getattr(loaded, "__file__", ""))).resolve()
         if origin != _SUCCESSOR_LAUNCH_PATH:
             raise RuntimeError("successor launch-contract module origin changed")
+        _bind_launch_contract_canonical_name(loaded, origin)
         return loaded
     spec = importlib.util.spec_from_file_location(private_name, _SUCCESSOR_LAUNCH_PATH)
     if spec is None or spec.loader is None:
@@ -77,6 +121,10 @@ def _load_exact_successor_launch_contract() -> Any:
     origin = Path(str(getattr(module, "__file__", ""))).resolve()
     if origin != _SUCCESSOR_LAUNCH_PATH:
         raise RuntimeError("loaded launch-contract origin is not the successor worktree")
+    # Same single-object rule as the dependency loader. This module owns LaunchContractError,
+    # _Missing and ObservedForward; loading it twice makes `except LaunchContractError` fail to
+    # catch an error raised through the other name, which is silent rather than loud.
+    _bind_launch_contract_canonical_name(module, origin)
     return module
 
 
@@ -170,6 +218,45 @@ def _assert_successor_module_origins() -> None:
     )
 
 
+def _canonical_module_name(relative_path: str) -> str:
+    """The dotted name a plain `import` would resolve this file to."""
+    rel = relative_path[:-3] if relative_path.endswith(".py") else relative_path
+    return rel.replace("/", ".")
+
+
+def _bind_single_module_object(canonical_name: str, module: Any, expected: Path) -> None:
+    """Make the canonical dotted name resolve to the SAME module object we just loaded.
+
+    Loading one file under two module names creates two sets of classes. A verifier that does
+    a plain ``from src.optim import Muon`` then rejects an optimizer built from the aliased
+    module, even though both classes come from identical bytes -- which is exactly how N3
+    failed with "optimizer must be the Muon instance, got Muon". The same split also affects
+    GPT, GPTConfig, LaunchContractError, _Missing and ObservedForward, and it silently breaks
+    `except LaunchContractError` across the boundary.
+
+    Binding the canonical name to this one object removes the split at its source. Provenance
+    is not weakened: the module was already origin-verified above, and if some other file is
+    already bound to the canonical name we require it to be byte-identical before rebinding,
+    and fail closed otherwise.
+    """
+    existing = sys.modules.get(canonical_name)
+    if existing is module:
+        return
+    if existing is not None:
+        existing_file = getattr(existing, "__file__", None)
+        if existing_file is not None:
+            existing_path = Path(str(existing_file)).resolve()
+            if existing_path != expected:
+                _require(
+                    existing_path.is_file() and existing_path.read_bytes() == expected.read_bytes(),
+                    f"canonical module {canonical_name} already resolves to "
+                    f"{existing_path}, whose bytes differ from the reviewed successor file "
+                    f"{expected}; refusing to unify two different implementations",
+                )
+    sys.modules[canonical_name] = module
+    _bind_parent_package_attribute(canonical_name, module)
+
+
 def _load_exact_successor_module(private_name: str, relative_path: str) -> Any:
     """Load one realization dependency from the reviewed successor path."""
 
@@ -181,6 +268,7 @@ def _load_exact_successor_module(private_name: str, relative_path: str) -> Any:
             Path(str(getattr(loaded, "__file__", ""))).resolve() == expected,
             f"successor dependency module origin changed:{relative_path}",
         )
+        _bind_single_module_object(_canonical_module_name(relative_path), loaded, expected)
         return loaded
     spec = importlib.util.spec_from_file_location(private_name, expected)
     _require(
@@ -198,6 +286,7 @@ def _load_exact_successor_module(private_name: str, relative_path: str) -> Any:
         Path(str(getattr(module, "__file__", ""))).resolve() == expected,
         f"loaded dependency origin is not successor root:{relative_path}",
     )
+    _bind_single_module_object(_canonical_module_name(relative_path), module, expected)
     return module
 
 
