@@ -1,0 +1,475 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "petitgpt-stage-o-successor-launch-adapter-authorization-v1",
+  "title": "PetitGPT Stage-O successor launch adapter authorization v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "scope",
+    "authorization_status",
+    "authorizes_adapter_execution",
+    "authorizes_training",
+    "accepted_stage_o_trainer",
+    "stage_o_launch_adapter",
+    "canonical_sources",
+    "canonical_cwd",
+    "module_names",
+    "stage_n_chain",
+    "runtime_fingerprint",
+    "num_workers",
+    "stage_o_authorization_binding",
+    "stage_o_command_derivation",
+    "authorized_by",
+    "authorized_at",
+    "note"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "petitgpt-stage-o-successor-launch-adapter-authorization-v1"
+    },
+    "scope": {
+      "const": "STAGE_O_SUCCESSOR_LAUNCH_ADAPTER"
+    },
+    "authorization_status": {
+      "enum": [
+        "NOT_AUTHORIZED",
+        "AUTHORIZED"
+      ]
+    },
+    "authorizes_adapter_execution": {
+      "type": "boolean"
+    },
+    "authorizes_training": {
+      "const": false
+    },
+    "accepted_stage_o_trainer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "worktree_path",
+        "branch",
+        "head",
+        "trainer_execution_bundle_sha256",
+        "tracked_clean_required"
+      ],
+      "properties": {
+        "worktree_path": {
+          "const": "/workspace/petitgpt_stage_n_result_publication_recovery_v1"
+        },
+        "branch": {
+          "const": "agent/stage-n-result-publication-recovery-v1"
+        },
+        "head": {
+          "const": "7686fd811642dd6246ca3a3c21a4bf43bc28cd3b"
+        },
+        "trainer_execution_bundle_sha256": {
+          "const": "1086af0b6821b2fdc4b2850371845c992f831dfcd84a6d504d2938fad003e75d"
+        },
+        "tracked_clean_required": {
+          "const": true
+        }
+      }
+    },
+    "stage_o_launch_adapter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "worktree_path",
+        "branch",
+        "head",
+        "adapter_tool_path",
+        "adapter_tool_sha256",
+        "adapter_tool_closure_count",
+        "adapter_tool_unbound_module_count",
+        "adapter_tool_bundle_sha256",
+        "tracked_clean_required"
+      ],
+      "properties": {
+        "worktree_path": {
+          "const": "/workspace/petitgpt_stage_o_successor_launch_adapter_v1"
+        },
+        "branch": {
+          "const": "agent/stage-o-successor-launch-adapter-v1"
+        },
+        "head": {
+          "$ref": "#/$defs/gitCommit"
+        },
+        "adapter_tool_path": {
+          "const": "/workspace/petitgpt_stage_o_successor_launch_adapter_v1/tools/stage_o_successor_launch_adapter_v1.py"
+        },
+        "adapter_tool_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "adapter_tool_closure_count": {
+          "const": 1
+        },
+        "adapter_tool_unbound_module_count": {
+          "const": 0
+        },
+        "adapter_tool_bundle_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "tracked_clean_required": {
+          "const": true
+        }
+      }
+    },
+    "canonical_sources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "launch_contract",
+        "trainer"
+      ],
+      "properties": {
+        "launch_contract": {
+          "$ref": "#/$defs/launchSource"
+        },
+        "trainer": {
+          "$ref": "#/$defs/trainerSource"
+        }
+      }
+    },
+    "canonical_cwd": {
+      "const": "/workspace/petitgpt"
+    },
+    "module_names": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canonical_launch_contract",
+        "bare_launch_contract",
+        "canonical_trainer",
+        "bare_trainer"
+      ],
+      "properties": {
+        "canonical_launch_contract": {
+          "const": "pretrain.production_launch_contract_v1"
+        },
+        "bare_launch_contract": {
+          "const": "production_launch_contract_v1"
+        },
+        "canonical_trainer": {
+          "const": "pretrain.train_pretrain_with_bench"
+        },
+        "bare_trainer": {
+          "const": "train_pretrain_with_bench"
+        }
+      }
+    },
+    "stage_n_chain": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "complete_result_path",
+        "complete_result_sha256",
+        "owner_acceptance_path",
+        "owner_acceptance_sha256"
+      ],
+      "properties": {
+        "complete_result_path": {
+          "const": "/workspace/petitgpt_stage_n_result_publication_recovery_v1/runs/n3_bridge_output_r3_2026-09-04/STAGE_N_COMPLETE_RESULT.json"
+        },
+        "complete_result_sha256": {
+          "const": "3f2d9029286bf9d0f8abe704aedef60e812d98efdac4049d6fbdff16895398d2"
+        },
+        "owner_acceptance_path": {
+          "const": "/workspace/petitgpt_stage_n_result_publication_recovery_v1/runs/n_stage_n_owner_closeout_and_stage_o_preflight_v1_2026-09-04/STAGE_N_OWNER_ACCEPTANCE.json"
+        },
+        "owner_acceptance_sha256": {
+          "const": "0aec8cffd6e7f3395017b887523ad3a9dc0a109cf7744901a08320d58bfd90a6"
+        }
+      }
+    },
+    "runtime_fingerprint": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/runtimeFingerprint"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "num_workers": {
+      "type": "integer",
+      "const": 2
+    },
+    "stage_o_authorization_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy",
+        "path",
+        "sha256"
+      ],
+      "properties": {
+        "policy": {
+          "const": "EXACT_PATH_AND_SHA256"
+        },
+        "path": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/absolutePath"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sha256": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/sha256"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "stage_o_command_derivation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy",
+        "adapter_python_flags",
+        "trainer_argv_field",
+        "exact_argv_match_required",
+        "adapter_options_before_separator_only"
+      ],
+      "properties": {
+        "policy": {
+          "const": "EXACT_OWNER_BOUND_TRAINER_ARGV_AFTER_DOUBLE_DASH"
+        },
+        "adapter_python_flags": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "const": "-I"
+            },
+            {
+              "const": "-B"
+            }
+          ],
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "trainer_argv_field": {
+          "const": "stage_o_trainer_argv"
+        },
+        "exact_argv_match_required": {
+          "const": true
+        },
+        "adapter_options_before_separator_only": {
+          "const": true
+        }
+      }
+    },
+    "authorized_by": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "authorized_at": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "note": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "authorization_status": {
+            "const": "NOT_AUTHORIZED"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "authorizes_adapter_execution": {
+            "const": false
+          },
+          "authorized_by": {
+            "type": "null"
+          },
+          "authorized_at": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "authorization_status": {
+            "const": "AUTHORIZED"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "authorizes_adapter_execution": {
+            "const": true
+          },
+          "authorized_by": {
+            "type": "string",
+            "minLength": 1
+          },
+          "authorized_at": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "gitCommit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "absolutePath": {
+      "type": "string",
+      "pattern": "^/"
+    },
+    "launchSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "const": "/workspace/petitgpt_stage_n_result_publication_recovery_v1/pretrain/production_launch_contract_v1.py"
+        },
+        "sha256": {
+          "const": "9e858078e7e492bed6de3b3ce34395d44fb81f3f06aab59c9960d447b7bde861"
+        }
+      }
+    },
+    "trainerSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "const": "/workspace/petitgpt_stage_n_result_publication_recovery_v1/pretrain/train_pretrain_with_bench.py"
+        },
+        "sha256": {
+          "const": "d9d7e61e5b30b5e24d49d92b2ea6bfc7557b6361d24a89467fdf06634d774fa4"
+        }
+      }
+    },
+    "runtimeFingerprint": {
+      "type": "object",
+      "required": [
+        "gpu_uuid",
+        "gpu_pci_bus_id",
+        "num_workers",
+        "gpu_name",
+        "visible_cuda_device_count",
+        "total_vram_bytes",
+        "compute_capability",
+        "driver_version",
+        "cuda_runtime_version",
+        "torch_version",
+        "python_version",
+        "numpy_version",
+        "trainer_head",
+        "trainer_execution_bundle_sha256",
+        "canonical_cwd",
+        "runtime_fingerprint_sha256"
+      ],
+      "properties": {
+        "gpu_uuid": {
+          "type": "string",
+          "minLength": 1
+        },
+        "gpu_pci_bus_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "num_workers": {
+          "type": "integer",
+          "const": 2
+        },
+        "gpu_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "visible_cuda_device_count": {
+          "type": "integer",
+          "const": 1
+        },
+        "total_vram_bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "compute_capability": {
+          "type": "string",
+          "minLength": 1
+        },
+        "driver_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "cuda_runtime_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "torch_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "python_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "numpy_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "trainer_head": {
+          "const": "7686fd811642dd6246ca3a3c21a4bf43bc28cd3b"
+        },
+        "trainer_execution_bundle_sha256": {
+          "const": "1086af0b6821b2fdc4b2850371845c992f831dfcd84a6d504d2938fad003e75d"
+        },
+        "canonical_cwd": {
+          "const": "/workspace/petitgpt"
+        },
+        "runtime_fingerprint_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    }
+  }
+}
