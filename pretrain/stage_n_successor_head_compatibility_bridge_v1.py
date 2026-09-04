@@ -17,11 +17,14 @@ execute it against the production checkpoint.
 
 from __future__ import annotations
 
+import _imp
 import argparse
 import ast
 from collections.abc import Mapping, Sequence
 import copy
 import hashlib
+import importlib
+import importlib._bootstrap as _importlib_bootstrap
 import importlib.util
 import io
 import json
@@ -30,105 +33,17 @@ from pathlib import Path
 import subprocess
 import sys
 import tempfile
+from types import ModuleType
 from typing import Any
 
 _BRIDGE_MODULE_PATH = Path(__file__).resolve()
-_SUCCESSOR_CODE_ROOT = _BRIDGE_MODULE_PATH.parent.parent
+_SUCCESSOR_CODE_ROOT = Path("/workspace/petitgpt_stage_n_result_publication_recovery_v1").resolve()
+_EXPECTED_BRIDGE_MODULE_PATH = (
+    _SUCCESSOR_CODE_ROOT / "pretrain/stage_n_successor_head_compatibility_bridge_v1.py"
+).resolve()
 _SUCCESSOR_LAUNCH_PATH = (
     _SUCCESSOR_CODE_ROOT / "pretrain/production_launch_contract_v1.py"
 ).resolve()
-
-
-def _bind_parent_package_attribute(canonical_name: str, module: Any) -> None:
-    """Keep ``import pkg.mod`` + ``pkg.mod.X`` working after a sys.modules rebind.
-
-    Rebinding sys.modules alone satisfies ``from pkg.mod import X`` but not attribute access
-    through the parent package, because the import machinery short-circuits on the cached
-    sys.modules entry and never re-sets the attribute.
-    """
-    parent_name, _, child = canonical_name.rpartition(".")
-    if not parent_name:
-        return
-    parent = sys.modules.get(parent_name)
-    if parent is None:
-        # The parent package may not be imported yet. Import it now, otherwise a later
-        # `import pkg.mod` would short-circuit on the cached child and never set the
-        # attribute, leaving `pkg.mod.X` broken.
-        try:
-            parent = importlib.import_module(parent_name)
-        except ImportError:
-            return
-    setattr(parent, child, module)
-
-
-def _bind_launch_contract_canonical_name(module: Any, origin: Path) -> None:
-    """Bind pretrain.production_launch_contract_v1 to the one loaded successor module object.
-
-    Defined separately from _bind_single_module_object because this loader runs during module
-    import, before that helper's dependencies exist. The successor and historical
-    launch-contract files legitimately differ, so this deliberately does not require byte
-    equality: inside the bridge process the successor implementation is the intended authority,
-    and unifying the name is what makes `except LaunchContractError` work across the boundary.
-    """
-    canonical = "pretrain.production_launch_contract_v1"
-    existing = sys.modules.get(canonical)
-    if existing is module:
-        return
-    if existing is not None:
-        existing_file = getattr(existing, "__file__", None)
-        if existing_file is not None and Path(str(existing_file)).resolve() == origin:
-            return
-    sys.modules[canonical] = module
-    _bind_parent_package_attribute(canonical, module)
-
-
-def _load_exact_successor_launch_contract() -> Any:
-    """Load the launch contract by reviewed bytes, never by the process CWD.
-
-    The incident deliberately runs with ``cwd=/workspace/petitgpt`` while executing code
-    from the successor worktree. A normal namespace-package import can therefore select
-    the historical launch module. Reuse an already-loaded canonical module only when its
-    origin is exact; otherwise load the successor file under a private, collision-free
-    name. A conflicting canonical module is left untouched and can never become this
-    bridge's launch authority.
-    """
-
-    canonical_name = "pretrain.production_launch_contract_v1"
-    loaded = sys.modules.get(canonical_name)
-    if loaded is not None:
-        origin = Path(str(getattr(loaded, "__file__", ""))).resolve()
-        if origin == _SUCCESSOR_LAUNCH_PATH:
-            return loaded
-
-    private_name = "_petitgpt_successor_production_launch_contract_v1"
-    loaded = sys.modules.get(private_name)
-    if loaded is not None:
-        origin = Path(str(getattr(loaded, "__file__", ""))).resolve()
-        if origin != _SUCCESSOR_LAUNCH_PATH:
-            raise RuntimeError("successor launch-contract module origin changed")
-        _bind_launch_contract_canonical_name(loaded, origin)
-        return loaded
-    spec = importlib.util.spec_from_file_location(private_name, _SUCCESSOR_LAUNCH_PATH)
-    if spec is None or spec.loader is None:
-        raise RuntimeError("cannot create the exact successor launch-contract import")
-    module = importlib.util.module_from_spec(spec)
-    sys.modules[private_name] = module
-    try:
-        spec.loader.exec_module(module)
-    except BaseException:
-        sys.modules.pop(private_name, None)
-        raise
-    origin = Path(str(getattr(module, "__file__", ""))).resolve()
-    if origin != _SUCCESSOR_LAUNCH_PATH:
-        raise RuntimeError("loaded launch-contract origin is not the successor worktree")
-    # Same single-object rule as the dependency loader. This module owns LaunchContractError,
-    # _Missing and ObservedForward; loading it twice makes `except LaunchContractError` fail to
-    # catch an error raised through the other name, which is silent rather than loud.
-    _bind_launch_contract_canonical_name(module, origin)
-    return module
-
-
-launch = _load_exact_successor_launch_contract()
 
 
 class CompatibilityBridgeError(RuntimeError):
@@ -138,6 +53,378 @@ class CompatibilityBridgeError(RuntimeError):
 def _require(condition: object, message: str) -> None:
     if not condition:
         raise CompatibilityBridgeError(message)
+
+
+_MISSING_MODULE_BINDING = object()
+_REVIEWED_SUCCESSOR_MODULES: Mapping[str, tuple[Path, str, tuple[str, ...]]] = {
+    "pretrain.production_launch_contract_v1": (
+        _SUCCESSOR_LAUNCH_PATH,
+        "9e858078e7e492bed6de3b3ce34395d44fb81f3f06aab59c9960d447b7bde861",
+        ("_petitgpt_successor_production_launch_contract_v1",),
+    ),
+    "src.model": (
+        (_SUCCESSOR_CODE_ROOT / "src/model.py").resolve(),
+        "2bc9fa8ae16636837c4a2937301a2419d0ac92faa2cc27560dacbd29a5144dc2",
+        ("_petitgpt_successor_src_model",),
+    ),
+    "src.optim": (
+        (_SUCCESSOR_CODE_ROOT / "src/optim.py").resolve(),
+        "13116860174f8557e6ab5a9b21011ecc15dfa0b82e0e6e394fff3554935e264a",
+        ("_petitgpt_successor_src_optim",),
+    ),
+}
+_REVIEWED_PRIVATE_ALIAS_OWNER: Mapping[str, str] = {
+    alias: canonical_name
+    for canonical_name, (_path, _sha256, aliases) in _REVIEWED_SUCCESSOR_MODULES.items()
+    for alias in aliases
+}
+
+
+def _module_file_path(module: object) -> Path | None:
+    """Resolve a loaded module path without treating missing metadata as the CWD."""
+
+    try:
+        value = getattr(module, "__file__", None)
+        if value is None or not os.fspath(value):
+            return None
+        return Path(os.fspath(value)).resolve()
+    except (OSError, RuntimeError, TypeError, ValueError):
+        return None
+
+
+def _validate_reviewed_module_object(
+    module: object,
+    *,
+    canonical_name: str,
+    expected_path: Path,
+    expected_sha256: str,
+    binding_label: str,
+) -> ModuleType:
+    """Validate both governed origin coordinates for an existing module object."""
+
+    _require(
+        isinstance(module, ModuleType),
+        f"{binding_label} for {canonical_name} is not a module object",
+    )
+    actual_path = _module_file_path(module)
+    _require(
+        actual_path == expected_path,
+        f"{binding_label} for {canonical_name} resolves to {actual_path}, not the "
+        f"reviewed successor path {expected_path}",
+    )
+    spec = getattr(module, "__spec__", None)
+    origin = getattr(spec, "origin", None)
+    try:
+        origin_path = Path(os.fspath(origin)).resolve() if origin else None
+    except (OSError, RuntimeError, TypeError, ValueError):
+        origin_path = None
+    _require(
+        origin_path == expected_path,
+        f"{binding_label} for {canonical_name} has unverifiable import origin {origin!r}",
+    )
+    _require(
+        getattr(spec, "name", None) == canonical_name,
+        f"{binding_label} for {canonical_name} was not created with its canonical spec name",
+    )
+    _require(
+        not bool(getattr(spec, "_initializing", False)),
+        f"{binding_label} for {canonical_name} is only partially initialized",
+    )
+    _require(expected_path.is_file(), f"reviewed successor source is missing:{expected_path}")
+    _require(
+        hashlib.sha256(expected_path.read_bytes()).hexdigest() == expected_sha256,
+        f"reviewed successor source SHA changed:{expected_path}",
+    )
+    return module
+
+
+def _exact_path_module_objects(expected_path: Path) -> list[ModuleType]:
+    """Find distinct loaded module objects that claim the reviewed source path."""
+
+    found: list[ModuleType] = []
+    seen: set[int] = set()
+    for module in tuple(sys.modules.values()):
+        if not isinstance(module, ModuleType) or _module_file_path(module) != expected_path:
+            continue
+        if id(module) not in seen:
+            seen.add(id(module))
+            found.append(module)
+    return found
+
+
+def _restore_failed_module_load(
+    *,
+    sys_modules_before: Mapping[str, object],
+    explicit_names: tuple[str, ...],
+    parent_name: str,
+    parent: ModuleType | None,
+    child_name: str,
+    parent_attribute_before: object,
+    attempted_module: ModuleType | None,
+    expected_path: Path,
+) -> None:
+    """Restore every registry and package binding owned by a failed attempt."""
+
+    for name, current in tuple(sys.modules.items()):
+        previous = sys_modules_before.get(name, _MISSING_MODULE_BINDING)
+        if previous is current:
+            continue
+        if current is attempted_module or _module_file_path(current) == expected_path:
+            if previous is _MISSING_MODULE_BINDING:
+                sys.modules.pop(name, None)
+            else:
+                sys.modules[name] = previous  # type: ignore[assignment]
+
+    for name in explicit_names:
+        previous = sys_modules_before.get(name, _MISSING_MODULE_BINDING)
+        if previous is _MISSING_MODULE_BINDING:
+            sys.modules.pop(name, None)
+        else:
+            sys.modules[name] = previous  # type: ignore[assignment]
+
+    previous_parent = sys_modules_before.get(parent_name, _MISSING_MODULE_BINDING)
+    if previous_parent is _MISSING_MODULE_BINDING:
+        sys.modules.pop(parent_name, None)
+    else:
+        sys.modules[parent_name] = previous_parent  # type: ignore[assignment]
+
+    if parent is not None:
+        if parent_attribute_before is _MISSING_MODULE_BINDING:
+            parent.__dict__.pop(child_name, None)
+        else:
+            parent.__dict__[child_name] = parent_attribute_before
+
+
+def _load_reviewed_successor_module(
+    canonical_name: str,
+    *,
+    requested_private_name: str | None = None,
+) -> ModuleType:
+    """Return one canonical module object for one reviewed successor source.
+
+    Canonical, compatibility-private, and parent-package bindings form one
+    transaction. Existing exact canonical objects are reused; uncertain or
+    different origins fail before a second class family can execute.
+    """
+
+    _require(
+        _BRIDGE_MODULE_PATH == _EXPECTED_BRIDGE_MODULE_PATH,
+        f"bridge module origin is not the reviewed successor path:{_BRIDGE_MODULE_PATH}",
+    )
+    _require(
+        canonical_name in _REVIEWED_SUCCESSOR_MODULES,
+        f"unreviewed successor module requested:{canonical_name}",
+    )
+    expected_path, expected_sha256, fixed_private_names = _REVIEWED_SUCCESSOR_MODULES[
+        canonical_name
+    ]
+    parent_name, separator, child_name = canonical_name.rpartition(".")
+    _require(
+        bool(separator and parent_name and child_name),
+        f"module name is not dotted:{canonical_name}",
+    )
+    private_names = tuple(
+        dict.fromkeys(
+            name for name in (*fixed_private_names, requested_private_name) if name is not None
+        )
+    )
+    for private_name in private_names:
+        _require(
+            isinstance(private_name, str)
+            and private_name.startswith("_petitgpt_")
+            and "." not in private_name
+            and private_name not in {canonical_name, parent_name}
+            and private_name not in _REVIEWED_SUCCESSOR_MODULES,
+            f"invalid successor compatibility alias:{private_name!r}",
+        )
+        alias_owner = _REVIEWED_PRIVATE_ALIAS_OWNER.get(private_name)
+        _require(
+            alias_owner is None or alias_owner == canonical_name,
+            f"successor compatibility alias {private_name!r} is reserved for {alias_owner}",
+        )
+    explicit_names = tuple(dict.fromkeys((canonical_name, *private_names)))
+
+    # Participate in importlib's canonical-name lock as well as its short-lived global
+    # registry lock.  A normal import acquires the per-module lock first, so preserving
+    # that order prevents both a reverse-import duplicate execution and lock inversion.
+    canonical_module_lock = _importlib_bootstrap._get_module_lock(canonical_name)
+    canonical_module_lock.acquire()
+    try:
+        _imp.acquire_lock()
+    except BaseException:
+        canonical_module_lock.release()
+        raise
+    sys_modules_before: dict[str, object] = dict(sys.modules)
+    parent: ModuleType | None = None
+    parent_attribute_before: object = _MISSING_MODULE_BINDING
+    attempted_module: ModuleType | None = None
+    try:
+        _require(expected_path.is_file(), f"reviewed successor source is missing:{expected_path}")
+        source = expected_path.read_bytes()
+        _require(
+            hashlib.sha256(source).hexdigest() == expected_sha256,
+            f"reviewed successor source SHA changed:{expected_path}",
+        )
+
+        canonical_was_bound = canonical_name in sys_modules_before
+        canonical_module: ModuleType | None = None
+        for name in explicit_names:
+            if name not in sys.modules:
+                continue
+            validated = _validate_reviewed_module_object(
+                sys.modules[name],
+                canonical_name=canonical_name,
+                expected_path=expected_path,
+                expected_sha256=expected_sha256,
+                binding_label=f"sys.modules[{name!r}]",
+            )
+            if name == canonical_name:
+                canonical_module = validated
+
+        try:
+            imported_parent = importlib.import_module(parent_name)
+        except BaseException as exc:
+            raise CompatibilityBridgeError(
+                f"cannot import parent package {parent_name} for {canonical_name}"
+            ) from exc
+        _require(
+            isinstance(imported_parent, ModuleType) and hasattr(imported_parent, "__path__"),
+            f"parent binding for {canonical_name} is not a package module",
+        )
+        parent = imported_parent
+        parent_attribute_before = parent.__dict__.get(child_name, _MISSING_MODULE_BINDING)
+
+        candidates: list[ModuleType] = []
+        for name in explicit_names:
+            if name not in sys.modules:
+                continue
+            candidates.append(
+                _validate_reviewed_module_object(
+                    sys.modules[name],
+                    canonical_name=canonical_name,
+                    expected_path=expected_path,
+                    expected_sha256=expected_sha256,
+                    binding_label=f"post-parent sys.modules[{name!r}]",
+                )
+            )
+        if parent_attribute_before is not _MISSING_MODULE_BINDING:
+            candidates.append(
+                _validate_reviewed_module_object(
+                    parent_attribute_before,
+                    canonical_name=canonical_name,
+                    expected_path=expected_path,
+                    expected_sha256=expected_sha256,
+                    binding_label=f"{parent_name}.{child_name}",
+                )
+            )
+
+        exact_path_modules = _exact_path_module_objects(expected_path)
+        for module in exact_path_modules:
+            candidates.append(
+                _validate_reviewed_module_object(
+                    module,
+                    canonical_name=canonical_name,
+                    expected_path=expected_path,
+                    expected_sha256=expected_sha256,
+                    binding_label="loaded exact-path module",
+                )
+            )
+
+        if canonical_was_bound:
+            _require(
+                canonical_module is not None
+                and sys.modules.get(canonical_name) is canonical_module,
+                f"canonical binding changed while importing parent:{canonical_name}",
+            )
+            _require(
+                all(candidate is canonical_module for candidate in candidates),
+                f"multiple module objects already define reviewed source:{expected_path}",
+            )
+            module = canonical_module
+        else:
+            _require(
+                not candidates and not exact_path_modules,
+                f"reviewed source is loaded without its canonical binding:{expected_path}",
+            )
+            spec = importlib.util.spec_from_file_location(canonical_name, expected_path)
+            _require(
+                spec is not None and spec.loader is not None,
+                f"cannot create canonical successor import:{canonical_name}",
+            )
+            module = importlib.util.module_from_spec(spec)
+            attempted_module = module
+
+        for name in explicit_names:
+            sys.modules[name] = module
+        parent.__dict__[child_name] = module
+
+        if attempted_module is not None:
+            spec = module.__spec__
+            _require(spec is not None, f"canonical module spec disappeared:{canonical_name}")
+            spec._initializing = True
+            try:
+                exec(
+                    compile(source, str(expected_path), "exec", dont_inherit=True),
+                    module.__dict__,
+                )
+            finally:
+                spec._initializing = False
+
+        module = _validate_reviewed_module_object(
+            module,
+            canonical_name=canonical_name,
+            expected_path=expected_path,
+            expected_sha256=expected_sha256,
+            binding_label="canonical result",
+        )
+        _require(
+            expected_path.read_bytes() == source,
+            f"reviewed successor source changed during import:{expected_path}",
+        )
+        _require(
+            all(sys.modules.get(name) is module for name in explicit_names),
+            f"canonical/private binding changed during import:{canonical_name}",
+        )
+        _require(
+            parent.__dict__.get(child_name) is module,
+            f"parent package binding changed during import:{canonical_name}",
+        )
+        _require(
+            sys.modules.get(parent_name) is parent,
+            f"parent package registry binding changed during import:{canonical_name}",
+        )
+        _require(
+            {id(item) for item in _exact_path_module_objects(expected_path)} == {id(module)},
+            f"reviewed source has more than one loaded module object:{expected_path}",
+        )
+        return module
+    except BaseException:
+        _restore_failed_module_load(
+            sys_modules_before=sys_modules_before,
+            explicit_names=explicit_names,
+            parent_name=parent_name,
+            parent=parent,
+            child_name=child_name,
+            parent_attribute_before=parent_attribute_before,
+            attempted_module=attempted_module,
+            expected_path=expected_path,
+        )
+        raise
+    finally:
+        _imp.release_lock()
+        canonical_module_lock.release()
+
+
+def _load_exact_successor_launch_contract() -> ModuleType:
+    """Load or reuse the one reviewed canonical successor launch-contract object."""
+
+    return _load_reviewed_successor_module(
+        "pretrain.production_launch_contract_v1",
+        requested_private_name="_petitgpt_successor_production_launch_contract_v1",
+    )
+
+
+launch = _load_exact_successor_launch_contract()
 
 
 N3_SCOPE = "STAGE_N_SUCCESSOR_HEAD_COMPATIBILITY_BRIDGE"
@@ -224,70 +511,19 @@ def _canonical_module_name(relative_path: str) -> str:
     return rel.replace("/", ".")
 
 
-def _bind_single_module_object(canonical_name: str, module: Any, expected: Path) -> None:
-    """Make the canonical dotted name resolve to the SAME module object we just loaded.
-
-    Loading one file under two module names creates two sets of classes. A verifier that does
-    a plain ``from src.optim import Muon`` then rejects an optimizer built from the aliased
-    module, even though both classes come from identical bytes -- which is exactly how N3
-    failed with "optimizer must be the Muon instance, got Muon". The same split also affects
-    GPT, GPTConfig, LaunchContractError, _Missing and ObservedForward, and it silently breaks
-    `except LaunchContractError` across the boundary.
-
-    Binding the canonical name to this one object removes the split at its source. Provenance
-    is not weakened: the module was already origin-verified above, and if some other file is
-    already bound to the canonical name we require it to be byte-identical before rebinding,
-    and fail closed otherwise.
-    """
-    existing = sys.modules.get(canonical_name)
-    if existing is module:
-        return
-    if existing is not None:
-        existing_file = getattr(existing, "__file__", None)
-        if existing_file is not None:
-            existing_path = Path(str(existing_file)).resolve()
-            if existing_path != expected:
-                _require(
-                    existing_path.is_file() and existing_path.read_bytes() == expected.read_bytes(),
-                    f"canonical module {canonical_name} already resolves to "
-                    f"{existing_path}, whose bytes differ from the reviewed successor file "
-                    f"{expected}; refusing to unify two different implementations",
-                )
-    sys.modules[canonical_name] = module
-    _bind_parent_package_attribute(canonical_name, module)
-
-
-def _load_exact_successor_module(private_name: str, relative_path: str) -> Any:
-    """Load one realization dependency from the reviewed successor path."""
+def _load_exact_successor_module(private_name: str, relative_path: str) -> ModuleType:
+    """Load or reuse one canonical realization dependency from reviewed bytes."""
 
     _assert_successor_module_origins()
-    expected = (SUCCESSOR_REPOSITORY_ROOT / relative_path).resolve()
-    loaded = sys.modules.get(private_name)
-    if loaded is not None:
-        _require(
-            Path(str(getattr(loaded, "__file__", ""))).resolve() == expected,
-            f"successor dependency module origin changed:{relative_path}",
-        )
-        _bind_single_module_object(_canonical_module_name(relative_path), loaded, expected)
-        return loaded
-    spec = importlib.util.spec_from_file_location(private_name, expected)
+    canonical_name = _canonical_module_name(relative_path)
     _require(
-        spec is not None and spec.loader is not None,
-        f"cannot create successor dependency import:{relative_path}",
+        canonical_name in {"src.model", "src.optim"},
+        f"unreviewed successor dependency requested:{relative_path}",
     )
-    module = importlib.util.module_from_spec(spec)
-    sys.modules[private_name] = module
-    try:
-        spec.loader.exec_module(module)
-    except BaseException:
-        sys.modules.pop(private_name, None)
-        raise
-    _require(
-        Path(str(getattr(module, "__file__", ""))).resolve() == expected,
-        f"loaded dependency origin is not successor root:{relative_path}",
+    return _load_reviewed_successor_module(
+        canonical_name,
+        requested_private_name=private_name,
     )
-    _bind_single_module_object(_canonical_module_name(relative_path), module, expected)
-    return module
 
 
 EXECUTION_COUNTER_FIELDS = (

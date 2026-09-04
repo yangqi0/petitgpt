@@ -1049,18 +1049,19 @@ def test_atomic_directory_publish_never_replaces_a_raced_destination(tmp_path):
     assert marker.read_text(encoding="utf-8") == "preserve"
 
 
-def test_dual_root_import_pins_launch_contract_to_successor_worktree():
+def test_dual_root_bridge_first_pins_launch_contract_to_successor_worktree():
     repair_root = Path(B.__file__).resolve().parent.parent
     canonical_cwd = B.CANONICAL_TRAINING_ROOT.resolve()
     environment = dict(os.environ)
     environment["PYTHONPATH"] = str(repair_root)
     command = (
         "import json; from pathlib import Path; "
-        "from pretrain import production_launch_contract_v1 as historical_launch; "
         "from pretrain import stage_n_successor_head_compatibility_bridge_v1 as B; "
+        "from pretrain import production_launch_contract_v1 as canonical_launch; "
         "print(json.dumps({'cwd': str(Path.cwd().resolve()), "
         "'bridge': str(Path(B.__file__).resolve()), "
-        "'historical_launch': str(Path(historical_launch.__file__).resolve()), "
+        "'canonical_launch': str(Path(canonical_launch.__file__).resolve()), "
+        "'same_object': canonical_launch is B.launch, "
         "'launch': str(Path(B.launch.__file__).resolve())}))"
     )
     completed = subprocess.run(
@@ -1079,9 +1080,10 @@ def test_dual_root_import_pins_launch_contract_to_successor_worktree():
         == (repair_root / "pretrain/stage_n_successor_head_compatibility_bridge_v1.py").resolve()
     )
     assert (
-        Path(observed["historical_launch"])
-        == (canonical_cwd / "pretrain/production_launch_contract_v1.py").resolve()
+        Path(observed["canonical_launch"])
+        == (repair_root / "pretrain/production_launch_contract_v1.py").resolve()
     )
+    assert observed["same_object"] is True
     assert (
         Path(observed["launch"])
         == (repair_root / "pretrain/production_launch_contract_v1.py").resolve()

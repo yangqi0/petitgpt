@@ -106,6 +106,16 @@ def _muon_from_other_bytes(tmpdir: Path):
     return module.Muon
 
 
+def _gpt_from_other_bytes(tmpdir: Path):
+    """A same-name GPT defined by a different file."""
+    other = tmpdir / "impostor_model.py"
+    other.write_text("class GPT:\n    pass\nclass GPTConfig:\n    pass\n")
+    spec = importlib.util.spec_from_file_location("_impostor_model", other)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module.GPT, module.GPTConfig
+
+
 def test_same_name_muon_from_a_different_file_is_not_accepted():
     with tempfile.TemporaryDirectory() as d:
         impostor = _muon_from_other_bytes(Path(d))
@@ -118,6 +128,32 @@ def test_same_name_muon_from_a_different_file_is_not_accepted():
         )
 
 
+def test_same_name_gpt_and_config_from_different_bytes_are_not_accepted():
+    with tempfile.TemporaryDirectory() as d:
+        impostor_gpt, impostor_config = _gpt_from_other_bytes(Path(d))
+        from src.model import GPT, GPTConfig
+
+        assert impostor_gpt.__qualname__ == GPT.__qualname__
+        assert impostor_config.__qualname__ == GPTConfig.__qualname__
+        assert impostor_gpt is not GPT
+        assert impostor_config is not GPTConfig
+        assert not isinstance(impostor_gpt(), GPT)
+        assert not isinstance(impostor_config(), GPTConfig)
+
+
+def test_similar_model_attributes_without_reviewed_realization_fail_gate_b():
+    class GPT:
+        cfg = object()
+        tok_emb = object()
+        lm_head = object()
+
+        def parameters(self):
+            return iter(())
+
+    with pytest.raises(C.LaunchContractError, match="model parameter count"):
+        C.gate_b_post_construction(GPT(), optimizer=None)
+
+
 def test_realized_optimizer_verifier_rejects_a_lookalike():
     """A lookalike with similar attributes must fail the realized-optimizer verifier."""
     with tempfile.TemporaryDirectory() as d:
@@ -126,22 +162,23 @@ def test_realized_optimizer_verifier_rejects_a_lookalike():
         assert verdict["failures"], "a lookalike optimizer must produce failures"
 
 
-def test_loader_refuses_to_unify_a_canonical_name_bound_to_different_bytes():
-    """The unification must fail closed rather than silently adopt foreign bytes."""
+def test_reviewed_origin_validator_rejects_a_module_from_different_bytes():
+    """A foreign module cannot pass the loader's path-and-SHA provenance check."""
     with tempfile.TemporaryDirectory() as d:
         other = Path(d) / "fake_optim.py"
         other.write_text("VALUE = 1\n")
         spec = importlib.util.spec_from_file_location("_fake_canonical_probe", other)
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
-        sys.modules["_fake_canonical_probe"] = module
-        try:
-            with pytest.raises(B.CompatibilityBridgeError, match="refusing to unify"):
-                B._bind_single_module_object(
-                    "_fake_canonical_probe", object(), REPO / "src/optim.py"
-                )
-        finally:
-            sys.modules.pop("_fake_canonical_probe", None)
+        expected_path, expected_sha256, _ = B._REVIEWED_SUCCESSOR_MODULES["src.optim"]
+        with pytest.raises(B.CompatibilityBridgeError, match="reviewed successor path"):
+            B._validate_reviewed_module_object(
+                module,
+                canonical_name="src.optim",
+                expected_path=expected_path,
+                expected_sha256=expected_sha256,
+                binding_label="test canonical binding",
+            )
 
 
 # ------------------------------------------------------- framework strictness unchanged
