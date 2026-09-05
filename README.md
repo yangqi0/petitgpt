@@ -67,11 +67,35 @@ RoPE       = enabled
 precision  = bf16
 ```
 
-The tokenizer is a 32k BPE tokenizer stored at:
+The tokenizer is the canonical 32k byte-level BPE release used by the final retraining run,
+checked in at:
 
 ```text
-tokenizer/tokenizer.json
+tokenizer/releases/tokenizer_v1/
+├── tokenizer.json            # the tokenizer itself (sha256 d8f84df5…)
+├── tokenizer_config.json
+├── special_tokens_map.json
+├── vocab.json
+├── merges.txt
+└── SHA256SUMS
 ```
+
+It has exactly 32,000 ids, no normalizer, no automatic post-processor, `add_prefix_space=False`,
+and exactly seven registered special tokens at fixed ids:
+`[PAD]=0 [UNK]=1 [BOS]=2 [EOS]=3 <|system|>=4 <|user|>=5 <|assistant|>=6`.
+Chat encoding lives only in `src/chat_template.py`, so `tokenizer_config.json` deliberately
+carries no Hugging Face `chat_template`.
+
+Verify a copy with:
+
+```bash
+cd tokenizer/releases/tokenizer_v1 && sha256sum -c SHA256SUMS
+```
+
+The older four-token artifacts still present directly under `tokenizer/`
+(`tokenizer_12layers.json`, `tokenizer_pretrain_nospecial.json` and the four-token
+`tokenizer_config.json` / `special_tokens_map.json`) are retained legacy inputs from before the
+chat-encoding rework and are deliberately rejected by the production entry points.
 
 The architecture is a LLaMA-style modernized GPT: pre-norm with RMSNorm, RoPE, SwiGLU MLPs, fused QKV projection with grouped-query attention using `F.scaled_dot_product_attention`, tied input/output embeddings, and GPT-2 depth-scaled residual initialization. See `src/model.py`.
 
@@ -125,7 +149,7 @@ The repository is organized approximately as follows:
 ```text
 petitgpt/
 ├── tokenizer/                 # BPE tokenizer + training/sanity-check scripts
-│   └── tokenizer.json
+│   └── releases/tokenizer_v1/ # canonical 32k release (tokenizer.json, configs, vocab, merges)
 ├── configs/                   # declarative SFT mix configs (sft_mix_*.yaml)
 ├── pretrain/                  # source inspection, shard building, training, evaluation
 │   ├── build_pretrain_shards.py
