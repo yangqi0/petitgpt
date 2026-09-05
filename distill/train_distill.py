@@ -22,7 +22,12 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
 
-from sft.train_sft import main  # noqa: E402
+from sft.train_sft import main as _sft_main  # noqa: E402
+
+
+def main(argv: list[str] | None = None) -> None:
+    _sft_main(argv, stage_kind="distill")
+
 
 if __name__ == "__main__":
     main()

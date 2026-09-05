@@ -1,6 +1,8 @@
 """Shared fixtures/helpers for the test suite. All tests run on CPU with tiny
 models — no GPU required."""
 
+import json
+
 import pytest
 from tokenizers import Tokenizer, pre_tokenizers
 from tokenizers.decoders import ByteLevel as ByteLevelDecoder
@@ -46,6 +48,19 @@ def chat_tok() -> Tokenizer:
     return configure_chat_tokenizer(tok)
 
 
+@pytest.fixture(scope="session")
+def production_chat_tok(chat_tok: Tokenizer) -> Tokenizer:
+    """Canonical 32k variant used by production data-pipeline guards."""
+    payload = json.loads(chat_tok.to_str())
+    vocab = payload["model"]["vocab"]
+    next_id = max(vocab.values()) + 1
+    for token_id in range(next_id, 32_000):
+        vocab[f"__unused_test_token_{token_id}__"] = token_id
+    tok = Tokenizer.from_str(json.dumps(payload))
+    assert tok.get_vocab_size(with_added_tokens=True) == 32_000
+    return tok
+
+
 @pytest.fixture(autouse=True)
 def _deterministic():
     """Make every test deterministic and fast."""
@@ -61,6 +76,7 @@ def tiny_cfg() -> GPTConfig:
         n_layers=3,
         d_model=64,
         n_heads=4,
+        n_kv_heads=2,  # GQA, like the canonical config
         d_ff=160,
         max_seq_len=64,
         dropout=0.0,

@@ -14,18 +14,20 @@ supervised span = every assistant answer + its trailing EOS.
 from __future__ import annotations
 
 import argparse
+from collections.abc import Mapping
+from dataclasses import asdict
 import json
 import math
 import os
+from pathlib import Path
 import random
 
 # Make imports work no matter where you run from
 import sys
 import time
-from dataclasses import asdict
-from pathlib import Path
-from typing import Any, List
+from typing import Any
 
+import numpy as np
 import torch
 import torch.nn.functional as F
 from torch.utils.data import DataLoader, Dataset
@@ -35,14 +37,34 @@ if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
 
 from src.chat_template import (  # noqa: E402
+    IGNORE_INDEX,
     build_example,
     decode_completion,
+    encode_chat,
     encode_prompt,
     extract_last_user_and_ref,
     load_chat_tokenizer,
+    prepare_prompt_messages,
+    truncate_chat_sequence,
 )
-from src.model import GPT, GPTConfig  # noqa: E402
+from src.model import GPT, GPTConfig, gpt_config_from_checkpoint_dict  # noqa: E402
 from src.optim import build_optimizer  # noqa: E402
+from src.posttrain_preflight import (  # noqa: E402
+    require_preflight_passed,
+    run_jsonl_preflight,
+)
+from src.posttrain_resume import (  # noqa: E402
+    DeterministicEpochBatchSampler,
+    build_resume_contract_base,
+    capture_rng_state,
+    make_loader_generator,
+    require_resume_step,
+    restore_rng_state,
+    restore_training_state,
+    resume_contract_for_step,
+    validate_resume_contract,
+    validate_training_controls,
+)
 from src.special_tokens import EOS_ID, PAD_ID  # noqa: E402
 from src.tracking import Tracker  # noqa: E402
 
@@ -82,6 +104,43 @@ def read_jsonl(path: str) -> list[dict[str, Any]]:
             if line:
                 rows.append(json.loads(line))
     return rows
+
+
+def preflight_sft_record(
+    split: str,
+    example: dict[str, Any],
+    *,
+    tok,
+    seq_len: int,
+    default_system: str,
+) -> dict[str, int]:
+    """Validate one full SFT row, or one prompt-only sampling row."""
+    messages = example.get("messages")
+    if not isinstance(messages, list):
+        raise ValueError("missing messages list")
+
+    if split == "sample_eval":
+        prompt_messages = prepare_prompt_messages(messages, default_system)
+        ids = encode_prompt(tok, prompt_messages, default_system="", mode="full_context")
+        kept_ids, _ = truncate_chat_sequence(ids, labels=None, max_len=seq_len - 1)
+        return {
+            "encoded_prompt_tokens": len(ids),
+            "retained_prompt_tokens": len(kept_ids),
+            "truncated_examples": int(len(kept_ids) != len(ids)),
+        }
+
+    ids, labels = encode_chat(tok, messages, default_system)
+    kept_ids, kept_labels = truncate_chat_sequence(ids, labels, max_len=seq_len)
+    assert kept_labels is not None
+    supervised = sum(label != IGNORE_INDEX for label in kept_labels)
+    if supervised == 0:
+        raise ValueError("SFT example retained no supervised assistant target")
+    return {
+        "encoded_tokens": len(ids),
+        "retained_tokens": len(kept_ids),
+        "supervised_tokens": supervised,
+        "truncated_examples": int(len(kept_ids) != len(ids)),
+    }
 
 
 # -------------------------
@@ -240,13 +299,20 @@ def build_arg_parser() -> argparse.ArgumentParser:
     ap.add_argument("--save_every", type=int, default=2000)
 
     ap.add_argument("--init_from_pretrain", default="")
-    ap.add_argument("--resume", default="")
+    ap.add_argument(
+        "--resume",
+        default="",
+        help="Exact continuation from this run's own stage checkpoint. Requires "
+        "matching arguments, inputs, runtime, optimizer/scaler, RNG, loop state, "
+        "and deterministic data cursor; use --init_from_pretrain for weights-only.",
+    )
     ap.add_argument("--default_system", default="You are a helpful assistant.")
 
-    ap.add_argument("--n_layers", type=int, default=16)
-    ap.add_argument("--d_model", type=int, default=768)
-    ap.add_argument("--n_heads", type=int, default=12)
-    ap.add_argument("--d_ff", type=int, default=1920)
+    ap.add_argument("--n_layers", type=int, default=30)
+    ap.add_argument("--d_model", type=int, default=576)
+    ap.add_argument("--n_heads", type=int, default=9)
+    ap.add_argument("--n_kv_heads", type=int, default=3)
+    ap.add_argument("--d_ff", type=int, default=1536)
     ap.add_argument("--dropout", type=float, default=0.0)
     ap.add_argument("--tie_embeddings", action="store_true")
 
@@ -336,13 +402,42 @@ def build_arg_parser() -> argparse.ArgumentParser:
     return ap
 
 
-def main(argv: list[str] | None = None):
-    args = build_arg_parser().parse_args(argv)
+def validate_sft_args(args: argparse.Namespace) -> None:
+    validate_training_controls(
+        args,
+        positive_fields=(
+            "micro_bsz",
+            "grad_accum",
+            "eval_batches",
+            "sample_max_new_tokens",
+        ),
+        nonnegative_fields=(
+            "num_workers",
+            "eval_every",
+            "save_every",
+            "sample_every",
+            "sample_in_domain_n",
+        ),
+    )
+    if args.seq_len <= 1:
+        raise ValueError("--seq_len must be greater than 1")
+    if args.resume and args.sample_only_ckpt:
+        raise ValueError("--resume and --sample_only_ckpt are mutually exclusive")
 
+
+def main(
+    argv: list[str] | None = None, *, stage_kind: str = "sft"
+) -> None:
+    if stage_kind not in {"sft", "distill"}:
+        raise ValueError("stage_kind must be 'sft' or 'distill'")
+    args = build_arg_parser().parse_args(argv)
+    validate_sft_args(args)
+    run_args = {**vars(args), "stage_kind": stage_kind}
     os.makedirs(args.out_dir, exist_ok=True)
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
     random.seed(args.seed)
+    np.random.seed(args.seed)
     torch.manual_seed(args.seed)
     if device == "cuda":
         torch.cuda.manual_seed_all(args.seed)
@@ -351,7 +446,75 @@ def main(argv: list[str] | None = None):
     vocab_size = tok.get_vocab_size()
 
     tracker = Tracker(args.out_dir)
-    tracker.log_run_start(vars(args), args.tokenizer_path)
+    tracker.log_run_start(run_args, args.tokenizer_path)
+
+    preflight_datasets = {
+        "train": args.train_jsonl,
+        "val": args.val_jsonl,
+    }
+    if args.sample_eval_jsonl:
+        preflight_datasets["sample_eval"] = args.sample_eval_jsonl
+    report = run_jsonl_preflight(
+        stage=stage_kind,
+        datasets=preflight_datasets,
+        validate_record=lambda split, record: preflight_sft_record(
+            split,
+            record,
+            tok=tok,
+            seq_len=args.seq_len,
+            default_system=args.default_system,
+        ),
+        report_path=os.path.join(args.out_dir, "posttrain_preflight.json"),
+        metadata={"seq_len": args.seq_len, "default_system": args.default_system},
+    )
+    tracker.log(
+        "preflight",
+        0,
+        stage=stage_kind,
+        status=report["status"],
+        records=report["total_records"],
+        valid=report["total_valid"],
+        rejected=report["total_rejected"],
+    )
+    require_preflight_passed(report)
+
+    resume_checkpoint: Mapping[str, Any] | None = None
+    start_step = 0
+    if args.resume:
+        loaded_resume = load_ckpt(args.resume)
+        if not isinstance(loaded_resume, Mapping):
+            raise RuntimeError("--resume checkpoint must be a mapping")
+        resume_checkpoint = loaded_resume
+        start_step = require_resume_step(
+            resume_checkpoint,
+            stage=stage_kind,
+            weights_only_hint="--init_from_pretrain",
+        )
+
+    resume_inputs: dict[str, str] = {
+        "tokenizer": args.tokenizer_path,
+        "train_jsonl": args.train_jsonl,
+        "val_jsonl": args.val_jsonl,
+    }
+    if args.sample_eval_jsonl:
+        resume_inputs["sample_eval_jsonl"] = args.sample_eval_jsonl
+    if args.init_from_pretrain:
+        resume_inputs["init_from_pretrain"] = args.init_from_pretrain
+    resume_contract_base = build_resume_contract_base(
+        stage=stage_kind,
+        args=run_args,
+        input_paths=resume_inputs,
+        dataset_size=int(report["splits"]["train"]["records"]),
+        batch_size=args.micro_bsz,
+        batches_per_step=args.grad_accum,
+        seed=args.seed,
+    )
+    if resume_checkpoint is not None:
+        validate_resume_contract(
+            resume_checkpoint,
+            resume_contract_for_step(resume_contract_base, start_step),
+            weights_only_hint="--init_from_pretrain",
+        )
 
     refusal_patterns = [
         p.strip() for p in args.refusal_patterns.split(",") if p.strip()
@@ -367,7 +530,7 @@ def main(argv: list[str] | None = None):
         cfg_dict = dict(cfg_dict)
         cfg_dict["vocab_size"] = vocab_size
         cfg_dict["max_seq_len"] = args.seq_len
-        cfg = GPTConfig(**cfg_dict)
+        cfg = gpt_config_from_checkpoint_dict(cfg_dict)
         model = GPT(cfg).to(device)
 
         sd = ck.get("model")
@@ -376,15 +539,15 @@ def main(argv: list[str] | None = None):
         if any(k.startswith("_orig_mod.") for k in sd.keys()):
             sd = {k[len("_orig_mod.") :]: v for k, v in sd.items()}
 
-        missing, unexpected = model.load_state_dict(sd, strict=False)
+        model.load_state_dict(sd, strict=True)
         print(f"[*] initialized from pretrain: {args.init_from_pretrain}")
-        print(f"    missing keys: {len(missing)}, unexpected keys: {len(unexpected)}")
     else:
         cfg = GPTConfig(
             vocab_size=vocab_size,
             n_layers=args.n_layers,
             d_model=args.d_model,
             n_heads=args.n_heads,
+            n_kv_heads=args.n_kv_heads,
             d_ff=args.d_ff,
             max_seq_len=args.seq_len,
             dropout=args.dropout,
@@ -408,31 +571,14 @@ def main(argv: list[str] | None = None):
     )
     scaler = torch.amp.GradScaler("cuda", enabled=use_fp16)
 
-    start_step = 0
-    if args.resume and os.path.exists(args.resume):
-        ck = load_ckpt(args.resume)
-        sd = ck.get("model")
-        if sd is None:
-            raise RuntimeError("resume ckpt missing 'model'")
-
-        if any(k.startswith("_orig_mod.") for k in sd.keys()):
-            sd = {k[len("_orig_mod.") :]: v for k, v in sd.items()}
-
-        model.load_state_dict(sd, strict=False)
-
-        opt = ck.get("optimizer") or ck.get("optim")
-        if opt is not None:
-            try:
-                optimizer.load_state_dict(opt)
-            except ValueError as e:
-                print(f"[warn] optimizer state incompatible (ckpt saved with a different "
-                      f"--optimizer?); starting with fresh optimizer state: {e}")
-
-        sc = ck.get("scaler")
-        if sc is not None and use_fp16:
-            scaler.load_state_dict(sc)
-
-        start_step = int(ck.get("step", ck.get("global_step", 0)))
+    if resume_checkpoint is not None:
+        restore_training_state(
+            resume_checkpoint,
+            model=model,
+            optimizer=optimizer,
+            scaler=scaler,
+            use_fp16=use_fp16,
+        )
         print(f"[*] resumed: {args.resume} at step={start_step}")
 
     train_ds = JsonlOffsetsDataset(args.train_jsonl)
@@ -453,10 +599,16 @@ def main(argv: list[str] | None = None):
         f"[*] refusal downweight: mode={args.refusal_mode} downweight={args.refusal_downweight} patterns={len(refusal_patterns)}"
     )
 
+    train_batch_sampler = DeterministicEpochBatchSampler(
+        len(train_ds),
+        args.micro_bsz,
+        seed=args.seed,
+        start_batch=start_step * args.grad_accum,
+        drop_last=True,
+    )
     train_loader = DataLoader(
         train_ds,
-        batch_size=args.micro_bsz,
-        shuffle=True,
+        batch_sampler=train_batch_sampler,
         num_workers=args.num_workers,
         pin_memory=(device == "cuda"),
         collate_fn=collate_fn_builder(
@@ -468,7 +620,7 @@ def main(argv: list[str] | None = None):
             refusal_patterns,
             args.refusal_mode,
         ),
-        drop_last=True,
+        generator=make_loader_generator(args.seed, 1),
     )
     val_loader = DataLoader(
         val_ds,
@@ -486,6 +638,7 @@ def main(argv: list[str] | None = None):
             args.refusal_mode,
         ),
         drop_last=False,
+        generator=make_loader_generator(args.seed, 2),
     )
 
     def get_lr(step: int) -> float:
@@ -499,15 +652,18 @@ def main(argv: list[str] | None = None):
     def sample_from_ids(prompt_ids: list[int]) -> str:
         """Generate a completion for an already-encoded prompt (which ends with
         the <|assistant|> cue) and decode ONLY the generated tokens."""
+        was_training = model.training
         model.eval()
 
-        if not prompt_ids:
-            return ""
-        if len(prompt_ids) >= args.seq_len:
-            prompt_ids = prompt_ids[-(args.seq_len - 1) :]
+        prompt_ids, _ = truncate_chat_sequence(
+            prompt_ids, labels=None, max_len=args.seq_len - 1
+        )
 
         ids = torch.tensor(prompt_ids, device=device, dtype=torch.long)[None, :]
         prompt_len = ids.size(1)
+        generation_steps = min(
+            args.sample_max_new_tokens, args.seq_len - prompt_len
+        )
         g = torch.Generator(device=device)
         g.manual_seed(args.sample_seed)
 
@@ -569,9 +725,7 @@ def main(argv: list[str] | None = None):
                         logits_1d[t] = -1e10
             return logits_1d
 
-        for _ in range(args.sample_max_new_tokens):
-            if ids.size(1) > args.seq_len:
-                ids = ids[:, -args.seq_len :]
+        for _ in range(generation_steps):
             logits = model(ids)
             next_logits = logits[0, -1, :].float()
 
@@ -604,7 +758,10 @@ def main(argv: list[str] | None = None):
             if nxt == EOS_ID:
                 break
 
-        return decode_completion(tok, ids[0, prompt_len:].tolist())
+        completion = decode_completion(tok, ids[0, prompt_len:].tolist())
+        if was_training:
+            model.train()
+        return completion
 
     def build_fixed_prompt_ids(user_q: str) -> list[int]:
         return encode_prompt(
@@ -618,7 +775,7 @@ def main(argv: list[str] | None = None):
         """
         Returns:
           eval_name: str
-          rows: List[(tag, example_dict)]
+          rows: list[(tag, example_dict)]
         """
         rows: list[tuple[str, dict[str, Any]]] = []
         if sample_eval_ds:
@@ -638,12 +795,6 @@ def main(argv: list[str] | None = None):
 
         return "", rows
 
-    model.train()
-    t0 = time.time()
-    running_loss = 0.0
-    step = start_step
-    train_iter = iter(train_loader)
-
     in_rng = random.Random(args.sample_in_domain_seed)
 
     @torch.no_grad()
@@ -652,7 +803,7 @@ def main(argv: list[str] | None = None):
         Path(sdir).mkdir(parents=True, exist_ok=True)
         out_path = os.path.join(sdir, f"{step_tag}.txt")
 
-        lines: List[str] = []
+        lines: list[str] = []
         lines.append(f"step={step_tag}\n")
         lines.append(
             f"sampling: temp={args.sample_temperature} top_p={args.sample_top_p} top_k={args.sample_top_k} max_new={args.sample_max_new_tokens}\n"
@@ -688,8 +839,9 @@ def main(argv: list[str] | None = None):
                 if not user_q:
                     continue
 
+                prompt_messages = prepare_prompt_messages(msgs, args.default_system)
                 prompt_ids = encode_prompt(
-                    tok, msgs, args.default_system, args.sample_in_domain_mode
+                    tok, prompt_messages, "", args.sample_in_domain_mode
                 )
                 ans = sample_from_ids(prompt_ids)
 
@@ -725,13 +877,69 @@ def main(argv: list[str] | None = None):
             raise RuntimeError("sample_only_ckpt missing 'model'")
         if any(k.startswith("_orig_mod.") for k in sd.keys()):
             sd = {k[len("_orig_mod.") :]: v for k, v in sd.items()}
-        missing, unexpected = model.load_state_dict(sd, strict=False)
+        model.load_state_dict(sd, strict=True)
         print(f"[*] sample-only loaded: {args.sample_only_ckpt}")
-        print(f"    missing keys: {len(missing)}, unexpected keys: {len(unexpected)}")
         model.eval()
         emit_samples(Path(args.sample_only_ckpt).stem)
         print("[done]")
         return
+
+    running_loss = 0.0
+    if resume_checkpoint is not None:
+        loop_state = resume_checkpoint.get("loop_state")
+        if not isinstance(loop_state, Mapping):
+            raise RuntimeError("SFT exact resume checkpoint lacks loop_state")
+        try:
+            running_loss = float(loop_state["running_loss"])
+        except (KeyError, TypeError, ValueError) as exc:
+            raise RuntimeError(
+                "SFT exact resume has invalid running_loss state"
+            ) from exc
+        if not math.isfinite(running_loss):
+            raise RuntimeError("SFT exact resume running_loss must be finite")
+
+        aux_rng_state = resume_checkpoint.get("aux_rng_state")
+        if not isinstance(aux_rng_state, Mapping):
+            raise RuntimeError("SFT exact resume checkpoint lacks auxiliary RNG state")
+        try:
+            in_rng.setstate(aux_rng_state["sample_in_domain"])
+        except (KeyError, TypeError, ValueError) as exc:
+            raise RuntimeError(
+                "SFT exact resume has invalid in-domain sampling RNG state"
+            ) from exc
+        restore_rng_state(resume_checkpoint["rng_state"])
+
+    model.train()
+    t0 = time.time()
+    step = start_step
+    last_saved_step: int | None = None
+
+    def save_training_checkpoint(checkpoint_step: int) -> None:
+        nonlocal last_saved_step
+        if last_saved_step == checkpoint_step:
+            return
+        ckpt_path = os.path.join(args.out_dir, f"step_{checkpoint_step:06d}.pt")
+        ckpt = {
+            "step": checkpoint_step,
+            "model": model.state_dict(),
+            "optimizer": optimizer.state_dict(),
+            "scaler": scaler.state_dict() if use_fp16 else None,
+            "cfg": asdict(cfg) if cfg is not None else None,
+            "args": run_args,
+            "kind": stage_kind,
+            "resume_contract": resume_contract_for_step(
+                resume_contract_base, checkpoint_step
+            ),
+            "rng_state": capture_rng_state(),
+            "aux_rng_state": {"sample_in_domain": in_rng.getstate()},
+            "loop_state": {"running_loss": running_loss},
+        }
+        save_checkpoint_atomic(ckpt_path, ckpt)
+        save_checkpoint_atomic(os.path.join(args.out_dir, "latest.pt"), ckpt)
+        last_saved_step = checkpoint_step
+        print(f"[ckpt] saved {ckpt_path}")
+
+    train_iter = iter(train_loader)
 
     while step < args.max_steps:
         optimizer.zero_grad(set_to_none=True)
@@ -827,20 +1035,6 @@ def main(argv: list[str] | None = None):
             tracker.render()
             model.train()
 
-        if args.save_every > 0 and step % args.save_every == 0:
-            ckpt_path = os.path.join(args.out_dir, f"step_{step:06d}.pt")
-            ckpt = {
-                "step": step,
-                "model": model.state_dict(),
-                "optimizer": optimizer.state_dict(),
-                "scaler": scaler.state_dict() if use_fp16 else None,
-                "cfg": asdict(cfg) if cfg is not None else None,
-                "args": vars(args),
-            }
-            save_checkpoint_atomic(ckpt_path, ckpt)
-            save_checkpoint_atomic(os.path.join(args.out_dir, "latest.pt"), ckpt)
-            print(f"[ckpt] saved {ckpt_path}")
-
         # ---- Sampling (fixed + in-domain) ----
         if (
             args.sample_every
@@ -849,6 +1043,10 @@ def main(argv: list[str] | None = None):
         ):
             emit_samples(f"step_{step:06d}")
 
+        if args.save_every > 0 and step % args.save_every == 0:
+            save_training_checkpoint(step)
+
+    save_training_checkpoint(step)
     tracker.render()
     print("[done]")
 

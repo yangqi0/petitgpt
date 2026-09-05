@@ -7,11 +7,19 @@ invariance of the q·k inner product). The RoPE tests would FAIL against the old
 interleaved/half-split mismatch and PASS after the fix.
 """
 
+from dataclasses import asdict
 import math
 
+import pytest
 import torch
 
-from src.model import GPT, GPTConfig, RotaryEmbedding
+from src.model import (
+    GPT,
+    GPTConfig,
+    RotaryEmbedding,
+    expected_gpt_parameter_count,
+    gpt_config_from_checkpoint_dict,
+)
 
 
 def test_forward_shape(tiny_cfg):
@@ -41,6 +49,7 @@ def test_tied_embeddings_share_storage():
         n_layers=2,
         d_model=32,
         n_heads=4,
+        n_kv_heads=4,  # explicit MHA coverage
         d_ff=80,
         max_seq_len=32,
         tie_embeddings=True,
@@ -57,6 +66,7 @@ def test_untied_embeddings_are_separate():
         n_layers=2,
         d_model=32,
         n_heads=4,
+        n_kv_heads=4,
         d_ff=80,
         max_seq_len=32,
         tie_embeddings=False,
@@ -176,3 +186,108 @@ def test_residual_projection_depth_scaling(tiny_cfg):
         for w in (blk.attn.proj.weight, blk.mlp.w2.weight):
             # generous tolerance: it's a random draw, just check the right ballpark
             assert 0.3 * expected < w.std().item() < 3.0 * expected
+
+
+# --------------------------------------------------------------------------
+# GQA (grouped-query attention)
+# --------------------------------------------------------------------------
+def _gqa_cfg(n_kv_heads: int) -> GPTConfig:
+    return GPTConfig(
+        vocab_size=128,
+        n_layers=2,
+        d_model=64,
+        n_heads=4,
+        n_kv_heads=n_kv_heads,
+        d_ff=160,
+        max_seq_len=32,
+        tie_embeddings=True,
+    )
+
+
+@pytest.mark.parametrize("n_kv_heads", [1, 2, 4])
+def test_parameter_count_matches_derivation_across_kv_heads(n_kv_heads):
+    """MQA (1), GQA (2) and MHA (4) all instantiate exactly the derived count."""
+    cfg = _gqa_cfg(n_kv_heads)
+    model = GPT(cfg)
+    actual = sum(p.numel() for p in model.parameters())
+    assert actual == expected_gpt_parameter_count(cfg)
+
+
+def test_gqa_fused_projection_layout():
+    """K/V are n_kv_heads wide; n_kv_heads == n_heads reproduces the historical
+    fused 3*d_model layout, keeping pre-GQA MHA checkpoints loadable."""
+    head_dim = 64 // 4
+    gqa = GPT(_gqa_cfg(2))
+    assert gqa.blocks[0].attn.qkv.weight.shape == (64 + 2 * 2 * head_dim, 64)
+    mha = GPT(_gqa_cfg(4))
+    assert mha.blocks[0].attn.qkv.weight.shape == (3 * 64, 64)
+
+
+@pytest.mark.parametrize("n_kv_heads", [2, 4])
+def test_fused_qkv_row_order_matches_attention(n_kv_heads):
+    """Pins the [Q; K; V] row order of the fused projection — the semantic half
+    of the legacy-checkpoint guarantee that weight shapes alone cannot enforce.
+    Recomputes attention manually from qkv.weight slices assuming that order;
+    any reordering of the fused split makes this fail."""
+    cfg = _gqa_cfg(n_kv_heads)
+    attn = GPT(cfg).eval().blocks[0].attn
+    B, T, C = 2, 12, cfg.d_model
+    head_dim = C // cfg.n_heads
+    kv_dim = n_kv_heads * head_dim
+    torch.manual_seed(3)
+    x = torch.randn(B, T, C)
+    with torch.no_grad():
+        W = attn.qkv.weight
+        q = (x @ W[:C].T).view(B, T, cfg.n_heads, head_dim).transpose(1, 2)
+        k = (x @ W[C : C + kv_dim].T).view(B, T, n_kv_heads, head_dim).transpose(1, 2)
+        v = (x @ W[C + kv_dim :].T).view(B, T, n_kv_heads, head_dim).transpose(1, 2)
+        q, k = attn.rope(q, k, seq_len=T)
+        if n_kv_heads != cfg.n_heads:
+            rep = cfg.n_heads // n_kv_heads
+            k = k.repeat_interleave(rep, dim=1)
+            v = v.repeat_interleave(rep, dim=1)
+        att = (q @ k.transpose(-2, -1)) / math.sqrt(head_dim)
+        causal = torch.triu(torch.ones(T, T, dtype=torch.bool), diagonal=1)
+        att = att.masked_fill(causal, float("-inf")).softmax(dim=-1)
+        ref = (att @ v).transpose(1, 2).reshape(B, T, C) @ attn.proj.weight.T
+        got = attn(x)
+    assert torch.allclose(got, ref, atol=1e-5)
+
+
+def test_config_from_checkpoint_dict_defaults_legacy_to_mha():
+    """Pre-GQA checkpoint config dicts (no n_kv_heads) must rebuild as plain
+    MHA; modern dicts keep their stored value."""
+    legacy = asdict(_gqa_cfg(4))
+    del legacy["n_kv_heads"]
+    cfg = gpt_config_from_checkpoint_dict(legacy)
+    assert cfg.n_kv_heads == cfg.n_heads == 4
+    assert GPT(cfg).blocks[0].attn.qkv.weight.shape == (3 * cfg.d_model, cfg.d_model)
+    assert gpt_config_from_checkpoint_dict(asdict(_gqa_cfg(2))).n_kv_heads == 2
+
+
+def test_invalid_kv_heads_rejected():
+    with pytest.raises(AssertionError):
+        GPT(GPTConfig(vocab_size=128, n_layers=1, d_model=64, n_heads=4, n_kv_heads=3, d_ff=160))
+    with pytest.raises(ValueError):
+        expected_gpt_parameter_count(
+            GPTConfig(vocab_size=128, n_layers=1, d_model=64, n_heads=4, n_kv_heads=3, d_ff=160)
+        )
+
+
+@pytest.mark.parametrize("n_kv_heads", [1, 2, 4])
+def test_gqa_causality_no_future_leak(n_kv_heads):
+    """Strict causality must hold for MQA, GQA, and the plain-MHA branch
+    (n_kv_heads == n_heads skips the KV expansion entirely)."""
+    cfg = _gqa_cfg(n_kv_heads)
+    model = GPT(cfg).eval()
+    T = 24
+    ids = torch.randint(0, cfg.vocab_size, (1, T))
+    with torch.no_grad():
+        logits1 = model(ids)
+        ids2 = ids.clone()
+        pos = 15
+        ids2[0, pos] = (ids2[0, pos] + 7) % cfg.vocab_size
+        logits2 = model(ids2)
+    max_diff = (logits1[:, :pos] - logits2[:, :pos]).abs().max().item()
+    assert max_diff < 1e-5, f"future token leaked into past logits: {max_diff}"
+    assert (logits1[:, pos] - logits2[:, pos]).abs().max().item() > 0

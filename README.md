@@ -12,7 +12,7 @@ The project covers:
 - DPO (Direct Preference Optimization) post-training,
 - GRPO (Group Relative Policy Optimization) online RL post-training.
 
-The current dense model has approximately **137M parameters**. The entire training process can be run on a single RTX 4090 GPU. A **Mixture-of-Experts (MoE)** variant (`src/model_moe.py`) and a **Muon** optimizer (`src/optim.py`, now the default) have also been added — see [Section 3](#3-model-overview).
+The canonical 32k-vocabulary dense model has exactly **124,635,456 parameters** (about **125M**; the MobileLLM/SmolLM2-style deep-thin GQA shape adopted 2026-08-15 — the historical runs described below used the earlier 16-layer/768-dim MHA config with 133,128,960 parameters). The training process targets one owner-selected NVIDIA CUDA GPU; the pilot authorization binds the actual hardware and runtime. A **Mixture-of-Experts (MoE)** variant (`src/model_moe.py`) and a **Muon** optimizer (`src/optim.py`, now the default) have also been added — see [Section 3](#3-model-overview).
 
 ---
 
@@ -48,21 +48,19 @@ The project has completed several major stages:
 - General answer verification, AST + unit-test verification for code data,
 - Multiple targeted distillation runs and checkpoint comparisons,
 - DPO preference post-training on open preference data,
-- A full pipeline review and rework aligning the training stack with current mainstream practice (token-level chat template with role special tokens, lossless tokenizer, cosine pretraining schedule, unified single-source chat encoding — see [Section 3.5](#35-chat-encoding-rework-token-level-template-2026-08)) in preparation for a from-scratch retrain.
+- A full pipeline review and rework aligning the training stack with current mainstream practice (token-level chat template with role special tokens, lossless tokenizer, planner-bound warmup-stable-decay pretraining with cosine retained as a named control, unified single-source chat encoding — see [Section 3.5](#35-chat-encoding-rework-token-level-template-2026-08)) in preparation for a from-scratch retrain.
 
 ---
 
 ## 3. Model Overview
 
-The main model is a GPT-style decoder-only Transformer, roughly 137M parameters.
-
-A typical configuration used in the project is close to:
+The main model is a GPT-style decoder-only Transformer with 124,635,456 parameters in the canonical configuration (since 2026-08-15; the historical runs in this README used the earlier 16L × 768d × 12h MHA config with 133,128,960 parameters):
 
 ```text
-n_layers   = 16
-d_model    = 768
-n_heads    = 12
-d_ff       = 1920
+n_layers   = 30
+d_model    = 576
+n_heads    = 9   (3 KV heads, GQA)
+d_ff       = 1536
 seq_len    = 2048
 vocab_size = 32000
 RoPE       = enabled
@@ -75,7 +73,7 @@ The tokenizer is a 32k BPE tokenizer stored at:
 tokenizer/tokenizer.json
 ```
 
-The architecture is a LLaMA-style modernized GPT: pre-norm with RMSNorm, RoPE, SwiGLU MLPs, fused QKV projection using `F.scaled_dot_product_attention`, tied input/output embeddings, and GPT-2 depth-scaled residual initialization. See `src/model.py`.
+The architecture is a LLaMA-style modernized GPT: pre-norm with RMSNorm, RoPE, SwiGLU MLPs, fused QKV projection with grouped-query attention using `F.scaled_dot_product_attention`, tied input/output embeddings, and GPT-2 depth-scaled residual initialization. See `src/model.py`.
 
 ### 3.1 Mixture-of-Experts variant
 
@@ -93,10 +91,10 @@ An earlier version of `src/model.py` mixed two incompatible RoPE conventions: `_
 
 All training stages build their optimizer through `src/optim.py:build_optimizer`, selected with `--optimizer {muon,adamw}` (default **muon**):
 
-- **Muon** applies Newton–Schulz-orthogonalized momentum updates to the hidden 2D weight matrices, while embeddings, the `lm_head`, RMSNorm gains, and MoE router gates keep an AdamW update. It uses Moonlight-style RMS matching (the orthogonalized update is scaled by `0.2·sqrt(max(fan_in, fan_out))`) so the AdamW-tuned `--lr` / `--weight_decay` transfer directly with no re-tuning. Both halves live in a single optimizer instance, so the checkpoint schema is unchanged.
+- **Muon** applies Newton–Schulz-orthogonalized momentum updates to the hidden 2D weight matrices, while embeddings, the `lm_head`, RMSNorm gains, and MoE router gates keep an AdamW update. Moonlight-style RMS matching (the orthogonalized update is scaled by `0.2·sqrt(max(fan_in, fan_out))`) supplies a sensible starting scale, not proof that AdamW hyperparameters transfer optimally. Production AdamW and Muon configurations therefore receive separate matched LR/hyperparameter pilots before one is frozen. Both halves live in a single optimizer instance, so the checkpoint schema is unchanged.
 - **AdamW** was also corrected: weight decay is applied only to matrices/embeddings (never to 1-D norm gains and biases), with betas `(0.9, 0.95)` and the fused CUDA kernel.
 
-Resuming a checkpoint whose optimizer state does not match the current `--optimizer` prints a warning and continues with fresh optimizer state (model weights still load).
+Production `--resume` is exact and full-state: optimizer/scaler, RNG, data cursor, tokenizer/data/run contracts, and schedule must match, and incompatibility is fatal. An intentional weights-only initialization or branch must use the stage's explicit initialization path and a new run identity; it is never disguised as a resume.
 
 ### 3.4 Incremental decoding (KV cache)
 
@@ -116,7 +114,7 @@ The fix replaces the plain-text markers with **role special tokens**, making the
 
 Special tokens are hard BPE boundaries, so the generation prompt is now *guaranteed* to be a token-exact prefix of the training encoding — the entire mismatch class is eliminated by construction, and the guarantee is pinned by a contract test. `[EOS]` appears only after assistant turns, keeping a single stop semantics shared with pretraining document ends, so no sampling/stop logic changed. The encoding lives in one module (`src/chat_template.py`) imported by the SFT, distillation, DPO, and GRPO trainers and their samplers, replacing seven previously duplicated copies (`distill/train_distill.py` itself became a thin wrapper over the SFT trainer, removing an 1100-line verbatim clone).
 
-The same rework hardened two adjacent issues: tokenizers are loaded with `encode_special_tokens=True`, so a literal `"[EOS]"` string inside corpus or user text can no longer inject a real control token; and pretraining shards no longer insert a legacy `"\n\n"` separator between documents — documents are delimited by `[EOS]`/`[BOS]` alone, so the model is never supervised to predict text after a document ends. The tokenizer itself dropped its NFKC normalizer (full-width unicode in code string literals is now preserved verbatim, keeping `decode(encode(x)) == x` exact), and its special-token layout — `[PAD]=0 [UNK]=1 [BOS]=2 [EOS]=3 <|system|>=4 <|user|>=5 <|assistant|>=6` — is asserted at startup by every pipeline script.
+The same rework hardened two adjacent issues: tokenizers are loaded with `encode_special_tokens=True`, so a literal `"[EOS]"` string inside corpus or user text can no longer inject a real control token; and pretraining shards no longer insert a legacy `"\n\n"` separator between documents — documents are delimited by `[EOS]`/`[BOS]` alone, so the model is never supervised to predict text after a document ends. The final tokenizer recipe removes NFKC (full-width Unicode in code string literals is preserved verbatim, keeping `decode(encode(x)) == x` exact) and fixes the layout to `[PAD]=0 [UNK]=1 [BOS]=2 [EOS]=3 <|system|>=4 <|user|>=5 <|assistant|>=6`; production entry points assert the full 32k/seven-token contract at startup. The checked-in four-token/NFKC tokenizer artifacts remain legacy inputs and are deliberately rejected until a fresh canonical tokenizer release is built.
 
 ---
 
@@ -129,7 +127,13 @@ petitgpt/
 ├── tokenizer/                 # BPE tokenizer + training/sanity-check scripts
 │   └── tokenizer.json
 ├── configs/                   # declarative SFT mix configs (sft_mix_*.yaml)
-├── pretrain/                  # shard building, pretraining, sampling, bench eval
+├── pretrain/                  # source inspection, shard building, training, evaluation
+│   ├── inspect_python_sources.py  # bounded, revision-pinned inspection; not a corpus downloader
+│   ├── python_source_adapters.py  # normalized schemas for matched Python-source arms
+│   ├── collect_python_p1.py       # bounded, policy-bound collection + offline cache replay
+│   ├── python_quality.py          # redacted aggregate Python quality/funnel statistics
+│   ├── analyze_python_p1.py       # offline, redacted per-arm analysis
+│   ├── compare_python_p1.py       # matched aggregate comparison; never auto-selects a source
 │   ├── build_pretrain_shards.py
 │   ├── train_pretrain_with_bench.py
 │   ├── eval_bench_v5.py
@@ -163,6 +167,12 @@ petitgpt/
 └── README.md
 ```
 
+### 4.1 Bounded Python-source inspection
+
+Before any bulk Python corpus build, the retraining workflow runs a matched P1 inspection of the pinned `smollm-corpus/python-edu` and `stack-edu/Python` snapshots. Both arms share one policy, deterministic 500-row metadata sampling and 300 distinct content selections. Collection, offline replay, analysis and comparison are separate commands; private cache/evidence directories must be Git-ignored, reports expose no source characters, and every command must receive the separately frozen `<FROZEN_POLICY_SHA256>` rather than trusting a mutable policy path.
+
+The comparison is deliberately limited to `SOURCE_COMPARISON_NOT_FINAL_TOKEN_APPROVAL`. It checks acquisition fidelity, Python structure, duplication/concentration, provenance-field coverage and pre-tokenizer yield sensitivity, but it does not choose a source, grant legal clearance or establish the final token quota. In particular, automated license fields are metadata coverage rather than permission. The current [Stack-Edu dataset card](https://huggingface.co/datasets/HuggingFaceTB/stack-edu), [The Stack v2 terms](https://huggingface.co/datasets/bigcode/the-stack-v2), removal/opt-out obligations, per-file licenses/attribution and the approved acquisition path remain independent production blockers until explicitly reviewed and frozen.
+
 ---
 
 ## 5. Setup
@@ -187,12 +197,14 @@ The test suite is **CPU-only** and needs no GPU or checkpoints — it exercises 
 
 ```bash
 pip install -r requirements-test.txt   # CPU torch + pytest + ruff + tokenizers
-pytest                                  # a few seconds, ~90 tests
+pytest                                  # runs the complete CPU-only test suite
 ```
 
 ---
 
 ## 6. Pretraining
+
+> **Historical provenance note:** Sections 6–10 record earlier experiments. Their tokenizer/checkpoint paths and representative commands are not canonical-retrain launch instructions: the checked-in legacy tokenizer and checkpoints must not be mixed with the new seven-token pipeline. Canonical launches use the private `PLAYBOOK.md` together with fresh strict-release artifacts.
 
 The pretraining stage uses a mixed corpus with general web text, educational text, Python code, Wikipedia-style text, math, and algebraic/proof-related data.
 
@@ -462,7 +474,7 @@ Rewards are pluggable via a small registry in `grpo/rewards.py` (`fn(completion,
 - rule-based rewards: `nonempty`, `length`, `no_repeat`, `reference_exact`, `reference_contains`;
 - `code` — a **verifiable reward (RLVR)** that reuses the distillation verifier (`distill/code_utils.py`): extract the function, check its AST structure, and run the example's unit tests in the restricted sandbox. This is the natural reward for the project's coding target.
 
-Data is one prompt per line (`{"messages": [...], "reference": "...", "tests": [...]}`), rendered with the same plain chat template as the other stages. `grpo/prepare_grpo_data.py` assembles such a bank from the project's own local data (no downloads): it converts distillation code-prompt banks (carrying `entry_point`/`tests` for the `code` reward) and/or SFT-style `messages` JSONL (keeping the prompt up to the last user turn) into deduplicated, length-filtered `train.jsonl` / `val.jsonl`. Representative commands:
+Data is one prompt per line (`{"messages": [...], "reference": "...", "tests": [...]}`), encoded with the same canonical token-level role-special helper as the other post-training stages. `grpo/prepare_grpo_data.py` assembles such a bank from the project's own local data (no downloads): it converts distillation code-prompt banks (carrying `entry_point`/`tests` for the `code` reward) and/or SFT-style `messages` JSONL (keeping the prompt up to the last user turn) into deduplicated, length-filtered `train.jsonl` / `val.jsonl`. Representative commands:
 
 ```bash
 python grpo/prepare_grpo_data.py \

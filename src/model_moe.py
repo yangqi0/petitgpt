@@ -247,9 +247,9 @@ class MoEGPT(nn.Module):
     @torch.no_grad()
     def num_parameters(self) -> dict[str, int]:
         """Total params vs. params activated per token (top-k of the experts)."""
+        # parameters() already deduplicates the tied tok_emb/lm_head weight,
+        # so the sum is the unique count — no adjustment needed.
         total = sum(p.numel() for p in self.parameters())
-        if self.cfg.tie_embeddings:
-            total -= self.lm_head.weight.numel()  # counted once via tok_emb
 
         expert_params = 0
         for blk in self.blocks:

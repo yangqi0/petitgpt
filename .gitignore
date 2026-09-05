@@ -1,0 +1,58 @@
+__pycache__/
+*.pt
+*.bin
+*.ckpt
+*.safetensors
+*.tmp
+/data/
+/dataset/
+/datasets/
+/runs/
+/outputs/
+/samples/
+/wandb/
+.env
+/venv/
+.ipynb_checkpoints/
+.github/copilot-instructions.md
+/.venv/
+/checkpoints/
+.pytest_cache/
+.ruff_cache/
+# Ignore everything under .github/ EXCEPT the CI workflows, which must be
+# committed for GitHub Actions to run.
+.github/*
+!.github/workflows/
+/env/
+/build/
+/dist/
+*.egg-info/
+*.py[cod]
+*.log
+*.log.*
+*.bak
+*.orig
+*.rej
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+eval/results_*.json
+eval/shards_sanity_*.json
+.idea/
+CLAUDE.md
+NOTES.md
+# Personal decision log + operating playbook — blog material, keep local
+DECISIONS.md
+PLAYBOOK.md
+ARCH_DECISION_2026-08-15.md
+# Local retraining plan — keep local, never upload
+RETRAIN_PLAN.md*
+.claude/
+# Personal resume (all versions) — keep local, never upload
+yang_qi_ai_resume*
+data_design.md
+
+# Private RunPod continuation records; keep local and checksum them.
+CORPUS_GATE_E_HANDOFF_*.md
+CORPUS_GATE_E_HANDOFF_*.sha256
+CORPUS_STRATEGY_REVIEW_*.md
