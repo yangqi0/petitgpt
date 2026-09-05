@@ -3,9 +3,12 @@
 
 import math
 
+import pytest
 import torch
 
-from dpo.dpo import dpo_loss, sequence_logps
+from dpo.dpo import build_completion_example, dpo_loss, sequence_logps
+from src.chat_template import encode_completion
+from src.special_tokens import PAD_ID
 
 
 def test_dpo_loss_at_zero_margin_is_log2():
@@ -67,6 +70,22 @@ def test_sequence_logps_matches_manual_logsoftmax():
         if y != -100:
             total += logp[0, t, y].item()
     assert abs(got.item() - total) < 1e-5
+
+
+def test_dpo_example_rejects_cutting_latest_completion(chat_tok):
+    messages = [{"role": "user", "content": "Explain this carefully"}]
+    ids, _ = encode_completion(
+        chat_tok, messages, "A complete answer that must remain whole.", "System policy."
+    )
+    with pytest.raises(ValueError, match="latest user-led suffix"):
+        build_completion_example(
+            messages,
+            "A complete answer that must remain whole.",
+            chat_tok,
+            seq_len=len(ids) - 1,
+            pad_id=PAD_ID,
+            default_system="System policy.",
+        )
 
 
 def test_sequence_logps_ignores_masked_positions():

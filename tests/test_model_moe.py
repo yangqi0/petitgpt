@@ -15,6 +15,7 @@ def _cfg(**overrides) -> MoEConfig:
         n_layers=4,
         d_model=64,
         n_heads=4,
+        n_kv_heads=2,
         d_ff=128,
         max_seq_len=64,
         n_experts=6,
@@ -22,6 +23,15 @@ def _cfg(**overrides) -> MoEConfig:
     )
     base.update(overrides)
     return MoEConfig(**base)
+
+
+def test_num_parameters_total_is_unique_parameter_count():
+    """num_parameters()['total'] must equal the deduplicated parameter sum for a
+    tied model (parameters() already counts the shared embedding once)."""
+    model = MoEGPT(_cfg())
+    counts = model.num_parameters()
+    assert counts["total"] == sum(p.numel() for p in model.parameters())
+    assert counts["active_per_token"] < counts["total"]
 
 
 def test_config_roundtrips_through_asdict():
