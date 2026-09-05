@@ -15,13 +15,12 @@ if _inserted_pretrain_path:
     sys.path.insert(0, PRETRAIN_DIR)
 try:
     train = importlib.import_module("train_pretrain")
-    train_bench = importlib.import_module("train_pretrain_with_bench")
 finally:
     if _inserted_pretrain_path:
         sys.path.remove(PRETRAIN_DIR)
 
 
-MODULES = [train, train_bench]
+MODULES = [train]
 REQUIRED_ARGS = [
     "--train_dir",
     "train",

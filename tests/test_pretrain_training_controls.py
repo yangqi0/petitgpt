@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import argparse
 import importlib
-import math
 from pathlib import Path
 import sys
 
@@ -18,7 +17,6 @@ if _inserted_pretrain_path:
     sys.path.insert(0, PRETRAIN_DIR)
 try:
     train = importlib.import_module("train_pretrain")
-    train_bench = importlib.import_module("train_pretrain_with_bench")
 finally:
     if _inserted_pretrain_path:
         sys.path.remove(PRETRAIN_DIR)
@@ -70,7 +68,7 @@ def _validation_args(**overrides):
     return argparse.Namespace(**values)
 
 
-@pytest.mark.parametrize("module", [train, train_bench])
+@pytest.mark.parametrize("module", [train])
 def test_parameter_count_audit_locks_canonical_and_allows_explicit_experiments(module):
     canonical_cfg = GPTConfig()
     with torch.device("meta"):
@@ -106,7 +104,7 @@ def test_parameter_count_audit_locks_canonical_and_allows_explicit_experiments(m
     assert experiment["canonical_match"] is False
 
 
-@pytest.mark.parametrize("module", [train, train_bench])
+@pytest.mark.parametrize("module", [train])
 def test_wsd_uses_one_absolute_continuous_timeline_across_stage_boundary(module):
     base_lr = 1e-3
     values = [
@@ -130,7 +128,7 @@ def test_wsd_uses_one_absolute_continuous_timeline_across_stage_boundary(module)
     assert values[12] == values[13] == pytest.approx(base_lr * 0.1)
 
 
-@pytest.mark.parametrize("module", [train, train_bench])
+@pytest.mark.parametrize("module", [train])
 def test_schedule_branch_accepts_future_only_change_and_rejects_changed_history(module):
     saved = _schedule_spec()
     future_only = _schedule_spec(decay_start_step=10)
@@ -150,7 +148,7 @@ def test_schedule_branch_accepts_future_only_change_and_rejects_changed_history(
         )
 
 
-@pytest.mark.parametrize("module", [train, train_bench])
+@pytest.mark.parametrize("module", [train])
 def test_save_steps_accept_repeatable_csv_and_full_global_horizon(module):
     args = _validation_args(
         max_steps=8,
@@ -165,7 +163,7 @@ def test_save_steps_accept_repeatable_csv_and_full_global_horizon(module):
     assert args.save_steps[-1] > args.max_steps
 
 
-@pytest.mark.parametrize("module", [train, train_bench])
+@pytest.mark.parametrize("module", [train])
 @pytest.mark.parametrize(
     ("save_steps", "message"),
     [
@@ -184,7 +182,7 @@ def test_save_steps_reject_invalid_contract(module, save_steps, message):
         module.validate_training_args(args)
 
 
-@pytest.mark.parametrize("module", [train, train_bench])
+@pytest.mark.parametrize("module", [train])
 def test_checkpoint_trigger_is_union_of_periodic_and_explicit_steps(module):
     explicit = [3, 8, 11]
 
@@ -201,7 +199,7 @@ def test_checkpoint_trigger_is_union_of_periodic_and_explicit_steps(module):
     assert module.should_retain_step_checkpoint(12, save_steps=explicit, invocation_final_step=12)
 
 
-@pytest.mark.parametrize("module", [train, train_bench])
+@pytest.mark.parametrize("module", [train])
 def test_checkpoint_writer_retains_only_named_or_final_steps(module, tmp_path, monkeypatch):
     model = torch.nn.Linear(2, 2)
     optim = torch.optim.AdamW(model.parameters(), lr=1e-3)
@@ -238,19 +236,7 @@ def test_checkpoint_writer_retains_only_named_or_final_steps(module, tmp_path, m
     assert all(payload["checkpoint_retention"] == {"retain_step": True} for payload, _ in writes)
 
 
-def test_two_trainers_have_identical_save_step_controls():
-    raw = ["1,3", "6,8,10,12"]
-    left = train.normalize_save_steps(raw, schedule_total_steps=12)
-    right = train_bench.normalize_save_steps(raw, schedule_total_steps=12)
-    assert left == right == [1, 3, 6, 8, 10, 12]
-
-    for step in range(1, 14):
-        assert train.should_save_checkpoint(
-            step, save_every=5, save_steps=left
-        ) == train_bench.should_save_checkpoint(step, save_every=5, save_steps=right)
-
-
-@pytest.mark.parametrize("module", [train, train_bench])
+@pytest.mark.parametrize("module", [train])
 def test_stage_b_and_schedule_branch_require_full_state_resume(module):
     stage_b_weights_only = _validation_args(
         data_stage_start_step=8,
@@ -271,7 +257,7 @@ def test_stage_b_and_schedule_branch_require_full_state_resume(module):
         module.validate_training_args(schedule_branch_weights_only)
 
 
-@pytest.mark.parametrize("module", [train, train_bench])
+@pytest.mark.parametrize("module", [train])
 def test_same_stage_resume_restores_verified_committed_sampler_suffix(module):
     dataset = range(11)
     saved = ResumablePermutationSampler(dataset, seed=7, num_samples=16)
@@ -305,7 +291,7 @@ def test_same_stage_resume_restores_verified_committed_sampler_suffix(module):
     assert list(current) == list(saved)
 
 
-@pytest.mark.parametrize("module", [train, train_bench])
+@pytest.mark.parametrize("module", [train])
 def test_same_stage_resume_rejects_sampler_gap_or_replay(module):
     dataset = range(11)
     current = ResumablePermutationSampler(
@@ -337,7 +323,7 @@ def test_same_stage_resume_rejects_sampler_gap_or_replay(module):
         )
 
 
-@pytest.mark.parametrize("module", [train, train_bench])
+@pytest.mark.parametrize("module", [train])
 def test_new_stage_boundary_intentionally_starts_new_sampler_at_zero(module):
     current = ResumablePermutationSampler(range(13), seed=9, num_samples=8)
     completed_previous = ResumablePermutationSampler(range(7), seed=1, num_samples=20)
@@ -365,7 +351,7 @@ def test_new_stage_boundary_intentionally_starts_new_sampler_at_zero(module):
     assert len(current) == 8
 
 
-@pytest.mark.parametrize("module", [train, train_bench])
+@pytest.mark.parametrize("module", [train])
 def test_new_stage_boundary_rejects_incomplete_previous_stage(module):
     current = ResumablePermutationSampler(range(13), seed=9, num_samples=8)
     incomplete = ResumablePermutationSampler(range(7), seed=1, num_samples=20)
@@ -389,28 +375,3 @@ def test_new_stage_boundary_rejects_incomplete_previous_stage(module):
             data_stage_start_step=10,
             strict=True,
         )
-
-
-def test_two_trainers_have_identical_core_training_control_results():
-    for step in range(16):
-        left = train.lr_schedule(
-            step,
-            2,
-            1e-3,
-            schedule="wsd",
-            schedule_total_steps=12,
-            decay_start_step=8,
-            decay_end_step=12,
-            min_lr_ratio=0.1,
-        )
-        right = train_bench.lr_schedule(
-            step,
-            2,
-            1e-3,
-            schedule="wsd",
-            schedule_total_steps=12,
-            decay_start_step=8,
-            decay_end_step=12,
-            min_lr_ratio=0.1,
-        )
-        assert math.isclose(left, right, rel_tol=0.0, abs_tol=0.0)

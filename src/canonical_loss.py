@@ -1,6 +1,7 @@
 """Canonical masked, weighted cross-entropy primitives.
 
-Extracted verbatim from ``pretrain/train_pretrain_with_bench.py`` so the production trainer and
+Extracted verbatim from the accepted production trainer preserved on the historical branch
+``agent/stage-o-successor-launch-adapter-v1`` so that trainer and
 the P-PILOT-CONTRACT-V2.3 pilot executor share **one** implementation rather than two that could drift. The mathematics is unchanged: this is a pure move, and
 ``tests/test_canonical_loss.py`` pins parity against the previous production behaviour.
 

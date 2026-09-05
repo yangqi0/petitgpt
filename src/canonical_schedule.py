@@ -1,6 +1,7 @@
 """Canonical absolute-step learning-rate schedule.
 
-Extracted verbatim from ``pretrain/train_pretrain_with_bench.py`` so the production trainer and
+Extracted verbatim from the accepted production trainer preserved on the historical branch
+``agent/stage-o-successor-launch-adapter-v1`` so that trainer and
 the P-PILOT-CONTRACT-V2.3 pilot verification share one implementation. The mathematics is
 unchanged -- in particular the WSD decay is **cosine**, not linear -- and
 ``tests/test_canonical_schedule.py`` pins parity.

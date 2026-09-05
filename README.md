@@ -128,14 +128,8 @@ petitgpt/
 │   └── tokenizer.json
 ├── configs/                   # declarative SFT mix configs (sft_mix_*.yaml)
 ├── pretrain/                  # source inspection, shard building, training, evaluation
-│   ├── inspect_python_sources.py  # bounded, revision-pinned inspection; not a corpus downloader
-│   ├── python_source_adapters.py  # normalized schemas for matched Python-source arms
-│   ├── collect_python_p1.py       # bounded, policy-bound collection + offline cache replay
-│   ├── python_quality.py          # redacted aggregate Python quality/funnel statistics
-│   ├── analyze_python_p1.py       # offline, redacted per-arm analysis
-│   ├── compare_python_p1.py       # matched aggregate comparison; never auto-selects a source
 │   ├── build_pretrain_shards.py
-│   ├── train_pretrain_with_bench.py
+│   ├── train_pretrain.py
 │   ├── eval_bench_v5.py
 │   └── sample.py
 ├── sft/                       # SFT mix preparation + training

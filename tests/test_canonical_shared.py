@@ -1,42 +1,19 @@
-"""Parity tests for the primitives extracted into src/canonical_loss.py and
-src/canonical_schedule.py.
+"""Tests for the primitives in src/canonical_loss.py and src/canonical_schedule.py.
 
-The extraction was a pure move: these pin that the production trainer and the pilot both use
-the same objects, and that the mathematics is unchanged.
+These pin the exact loss and schedule mathematics used by the accepted pretraining run,
+independently of any trainer module.
 """
 
 from __future__ import annotations
 
-import importlib.util
 import math
-from pathlib import Path
-import sys
 
 import pytest
 import torch
 import torch.nn.functional as F  # noqa: N812
 
-from src.canonical_loss import masked_weighted_ce_components, masked_weighted_ce_loss
+from src.canonical_loss import masked_weighted_ce_components
 from src.canonical_schedule import lr_schedule
-
-REPO_ROOT = Path(__file__).resolve().parent.parent
-
-
-@pytest.fixture(scope="module")
-def trainer():
-    sys.path.insert(0, str(REPO_ROOT / "pretrain"))
-    spec = importlib.util.spec_from_file_location(
-        "_trainer_parity", REPO_ROOT / "pretrain" / "train_pretrain_with_bench.py"
-    )
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
-
-
-def test_trainer_uses_the_shared_objects(trainer):
-    assert trainer.lr_schedule is lr_schedule
-    assert trainer.masked_weighted_ce_loss is masked_weighted_ce_loss
-    assert trainer.masked_weighted_ce_components is masked_weighted_ce_components
 
 
 def test_loss_matches_an_independent_reference():
