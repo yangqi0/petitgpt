@@ -497,6 +497,43 @@ Longer or differently scheduled instruction training; larger or more diverse ins
 
 Nothing here supports: that all negative methods are generally ineffective; that 124.6M parameters constitute a capacity ceiling; that the architecture or tokenizer failed; that weight interpolation is universally unhelpful; or that the model lacks useful signal. What the record supports is narrower: *these particular configurations, at this scale, under these protocols, produced these results.*
 
+### 10.5 Post-training as gated capability updates: a workflow abstraction
+
+A post-training intervention is a **proposed model update**. Completing training, lowering loss or improving its target metric does not by itself establish that the update is worth keeping. Model selection must ask both what it improved and what it damaged or failed to preserve.
+
+**Target capability and retention set.** Target metrics measure the behaviour an intervention aims to improve; retention metrics measure behaviours it is expected to preserve within accepted limits. P3 targeted procedural instruction following: P2 → P3 step 320 raised dev512 from **4/512 to 484/512**, while the same val500 NLL worsened from **1.322110 to 1.400923** (`C-P3-04`). Broader P3-era diagnostics also regressed: at step 640, ARC-Easy fell **58.46% → 56.36%** and PIQA **64.04% → 63.33%** relative to P2 (`C-P3-03`). These are the historical diagnostics in §5.2, not the later public FP32 campaign. A target gain therefore did not establish overall improvement.
+
+**Promotion gate.** Conceptually, promote a candidate only when its intended target improvement is sufficient **and** all required retention constraints remain satisfied. The evaluation contract specifies both what the update should gain and what it may not trade away. This is an engineering/model-selection rule. R1 and DP1 stopped at predeclared practical-retention screens; RKD1 and RKD2 also stopped despite better fitting, with RKD2 even gaining procedural passes (`C-RES-01`, `C-RES-02`, `C-RES-14`, `C-RES-15`). Success on an optimization objective can coexist with rejection for promotion. Suites, thresholds and score versions were branch-specific, not one identical contract applied retrospectively to every experiment (`C-RES-17`). Passing a finite retention set does not guarantee preservation of unmeasured capabilities.
+
+**Multi-axis trade-off inspection.** The comparisons in §5.3 and §7 retain separate axes rather than assigning one hand-chosen weighted quality score. Arbitrary weights can hide which capability was gained and which was sacrificed; NLL, procedural passes and practical-task correctness are not interchangeable units. This is **Pareto-style inspection of the measured trade-off**, not formal Pareto-front optimization, an estimated continuous frontier or a proof of Pareto optimality. Constraints determine admissibility; inspecting the remaining trade-offs informs selection.
+
+**Interpolation as measured recovery.** The P2/P3 experiment supplies a concrete compromise mechanism:
+
+> `theta(alpha) = theta_P2 + alpha * (theta_P3_step320 - theta_P2)`
+
+Here `theta_P2` is P2 step 750. The later adaptation defines a parameter-space direction from that ancestor; interpolation moves partway along it, without further optimization (`C-INT-01`). The released working reference uses **alpha = 0.75**. Relative to P3 step 320, it recovered some earlier-reference behaviour, reducing val500 NLL **1.400923 → 1.365311**, while preserving the procedural gain at **487/512**. It remained worse than P2 on NLL and lost strict dev100 passes, **20/100 → 16/100**, relative to step 320 (`C-INT-03`). Alpha075 was a measured working compromise among evaluated points, not a globally optimal model. Interpolation does not guarantee improvement across capabilities; the later A/B blends likewise failed their screens (§7.5).
+
+**Diagnosis, targeted repair and reevaluation.** Several components were empirically exercised across separate branches: multi-axis regression diagnosis, retention-gated stopping/rejection, targeted follow-up interventions, reevaluation on target and retention axes, and interpolation as a concrete recovery mechanism. The [experiment ledger](tables/RESEARCH_EXPERIMENT_LEDGER.csv) records P4 natural-task micro-calibration, the controlled QA increment and R1's behaviour curriculum as task-specific interventions. The DPO/chosen-answer control and response-distillation branches explored other responses to limited generation quality (§7.1–§7.3; `C-RES-02`, `C-RES-13`, `C-RES-14`, `C-RES-15`). These interventions had mixed or negative outcomes; calling them repair-oriented does not imply successful restoration. Nor does their sequence establish that a particular failed gate mechanically triggered each later experiment. Diagnosis here identifies which measured axes regressed, not an established causal explanation for the damage.
+
+The research workflow can be summarized by the following abstraction. **Repair/revision is a first-class lifecycle state**: a failed candidate can motivate a revised proposal, which must earn promotion through reevaluation. It cannot be accepted merely because a repair was attempted.
+
+```mermaid
+graph TD
+  PROPOSE["Propose update"] --> TRAIN["Train / adapt"]
+  TRAIN --> EVAL["Evaluate target + retention"]
+  EVAL -->|contract satisfied| PROMOTE["Promote"]
+  EVAL -->|target shortfall or retention failure| DIAGNOSE["Diagnose regressions / deficiencies"]
+  DIAGNOSE --> REJECT["Reject"]
+  DIAGNOSE --> REPAIR["Targeted repair or revision"]
+  REPAIR --> REEVAL["Reevaluate revised candidate<br/>on target + retention"]
+  REEVAL -->|contract satisfied| PROMOTE
+  REEVAL -->|contract not satisfied| DIAGNOSE
+```
+
+**Proposed generalization, not a completed controller.** PetitGPT did **not** implement this as a single fully automated closed loop. Diagnosis and repair-design decisions were researcher-guided across separate experiments. The system did not automatically infer the damaged capability from a failed gate, construct a repair dataset from that diagnosis, select the repair dose or data mixture, or retrain and iterate until promotion. A unified controller mapping a failed retention contract through those steps to reevaluation and eventual promotion/rejection remains a proposed engineering extension. The observed components motivate that abstraction; they do not validate a general automatic repair algorithm or guarantee eventual acceptance.
+
+This is a project-level methodological synthesis of observed failure modes and model-selection decisions, not an additional experiment or a new training algorithm. Retention-aware training, regression/forgetting, checkpoint interpolation and multi-objective reasoning are established ideas; no novelty, theoretical guarantee or universal optimality is claimed for this lifecycle.
+
 ---
 
 ## 11. Limitations and intended use
@@ -520,6 +557,8 @@ Nothing here supports: that all negative methods are generally ineffective; that
 PetitGPT demonstrates a complete small-model pipeline on one consumer GPU: a validated tokenizer, explicit data accounting, full-state pretraining handover, instruction adaptation, and an export with exact tensor parity. Under the recorded likelihood protocols, its 124.6M-parameter model leads both evaluated 135M instruct baselines on ARC-Easy and ARC-Challenge and trails both on PIQA and HellaSwag. On IFEval, alpha075 lies between SmolLM and SmolLM2.
 
 The generation-quality problem remains unresolved. Procedural transfer and reference-token prediction improved, but later adaptation often reduced natural-task retention. The full-answer review's 42/46 correct Python interfaces versus 0/46 correct whole answers captures that gap particularly clearly. The evidence supports the reported comparisons and trade-offs, not a general claim that the tested adaptation methods cannot work.
+
+The post-training record suggests treating each intervention as a proposed capability update, judged jointly on target gains and required retention (§10.5). Researcher-guided diagnosis, targeted follow-up interventions and reevaluation exercised components of a repair-oriented workflow; a unified automatic repair loop remains a proposed extension.
 
 Useful next experiments would include an evaluation set frozen before candidate selection, multi-seed replication of the loss-allocation A/B, an instruction-data scaling study varying one factor at a time, and a matched objective/retention control for preference training.
 
