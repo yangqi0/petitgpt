@@ -29,7 +29,7 @@ The released **research-v1** checkpoint is **alpha075**.
 
 ## What this project investigates
 
-The central question is not just whether a training loss decreases, but whether the model completes new tasks correctly while retaining earlier capabilities.
+The central question is whether the model completes new tasks correctly while retaining earlier capabilities.
 
 The experiments cover supervised fine-tuning, preference optimization, response distillation, a separate shared-tokenizer soft-distillation lab, LoRA adaptation, loss allocation, and parameter interpolation. Several runs improved fitting or individual tasks without delivering a balanced improvement over the selected reference. Those results are retained rather than presented as successful upgrades.
 
