@@ -20,7 +20,7 @@ The released **research-v1** checkpoint is **alpha075**.
 | Architecture | RoPE, RMSNorm, SwiGLU, tied input/output embeddings |
 | Tokenizer | Custom 32,000-token byte-level BPE |
 | Context | 2,048 tokens, including the generation budget |
-| Pretraining | Approximately 13B positions; one NVIDIA RTX 4090 |
+| Pretraining | Approximately 13B tokens; one NVIDIA RTX 4090 |
 | Released inference | Native PyTorch on CUDA; stored FP32 weights |
 
 ![PetitGPT reference validation loss across Stage A and Stage B, with a Stage B detail panel](docs/petitgpt-v1/figures/pretraining_validation.png)
