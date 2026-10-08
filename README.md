@@ -6,7 +6,7 @@
 
 [Model and tokenizer](https://huggingface.co/yqi0/petitgpt) · [Tokenizer files](tokenizer/README.md) · [Technical report](docs/petitgpt-v1/TECHNICAL_REPORT.md) · [Reproducibility](TRAINING_AND_REPRODUCIBILITY.md) · [Run guide](docs/petitgpt-v1/RUN_GUIDE.md) · [Model card](docs/petitgpt-v1/MODEL_CARD.md)
 
-PetitGPT explores what can be learned by building and evaluating a small language model under a limited training budget. The project includes a custom byte-level BPE tokenizer, approximately 13 billion pretraining positions, controlled post-training experiments, and evaluations that distinguish reference-answer fit from complete generated-answer correctness.
+PetitGPT explores what can be learned by building and evaluating a small language model under a limited training budget. The project includes a custom byte-level BPE tokenizer, approximately 13 billion pretraining tokens, controlled post-training experiments, and evaluations that distinguish reference-answer fit from complete generated-answer correctness.
 
 The released **research-v1** checkpoint is **alpha075**.
 
