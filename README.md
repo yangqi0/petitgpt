@@ -2,7 +2,7 @@
 
 **A 124.6M-parameter language-model research project, from tokenizer training and pretraining to post-training, evaluation, and native inference.**
 
-**Author:** Yang Qi
+<!-- **Author:** Yang Qi -->
 
 [Model and tokenizer](https://huggingface.co/yqi0/petitgpt) · [Tokenizer files](tokenizer/README.md) · [Technical report](docs/petitgpt-v1/TECHNICAL_REPORT.md) · [Reproducibility](TRAINING_AND_REPRODUCIBILITY.md) · [Run guide](docs/petitgpt-v1/RUN_GUIDE.md) · [Model card](docs/petitgpt-v1/MODEL_CARD.md)
 
